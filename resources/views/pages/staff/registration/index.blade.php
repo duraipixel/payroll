@@ -1,0 +1,255 @@
+ <!--begin::Navbar-->
+ @extends('layouts.template')
+ @section('content')
+     <link rel="stylesheet" href="{{ asset('assets/css/registration.css') }}">
+     <script src="{{ asset('assets/js/tamil-search.js') }}"></script>
+     <script src="{{ asset('assets/js/tamil-keyboard.js') }} "></script>
+     <link rel="stylesheet" href="{{ asset('assets/css/bd-wizard.css') }}">
+     <!--begin::Card-->
+     <div class="card">
+         <!--begin::Card body-->
+         <div class="card-body">
+             <!--begin::Stepper-->
+             <div id="wizard">
+                 <h3>
+                     <div class="media">
+                         <div class="bd-wizard-step-icon text-center">
+                             <i class="icon-xl la la-user-check"></i>
+                         </div>
+                         <div class="media-body text-center">
+                             <div class="bd-wizard-step-title">Personal Information</div>
+                         </div>
+                     </div>
+                 </h3>
+                 <section>
+                     <div class="">
+                        @include('pages.staff.registration.personal_info')
+                     </div>
+                 </section>
+                <h3>
+                    <div class="media">
+                        <div class="bd-wizard-step-icon text-center">
+                            <i class="icon-xl la la-edit"></i>
+                        </div>
+                        <div class="media-body text-center">
+                            <div class="bd-wizard-step-title">KYC Information</div>
+                        </div>
+                    </div>
+                </h3>
+                <section>
+                    <div class="">
+                    @include('pages.staff.registration.kyc')
+                    </div>
+                </section>
+                <h3>
+                    <div class="media">
+                        <div class="bd-wizard-step-icon text-center">
+                            <i class="icon-xl la la-user-tag"></i>
+                        </div>
+                        <div class="media-body text-center">
+                            <div class="bd-wizard-step-title">Employee Position </div>
+                        </div>
+                    </div>
+                </h3>
+                <section>
+                    <div class="">
+                        @include('pages.staff.registration.employee_details')
+                    </div>
+                </section>
+                <h3>
+                    <div class="media">
+                        <div class="bd-wizard-step-icon text-center">
+                            <i class="icon-xl la la-book-open"></i>
+                        </div>
+                        <div class="media-body text-center">
+                            <div class="bd-wizard-step-title">Education Qualification</div>
+                        </div>
+                    </div>
+                </h3>
+                <section>
+                    <div class="">
+                        @include('pages.staff.registration.education_details')
+                    </div>
+                </section>
+
+                 <h3>
+                     <div class="media">
+                         <div class="bd-wizard-step-icon text-center">
+                             <i class="icon-xl la la-users"></i>
+                         </div>
+                         <div class="media-body text-center">
+                             <div class="bd-wizard-step-title">Family Information</div>
+                         </div>
+                     </div>
+                 </h3>
+                 <section>
+                     <div class="">
+                         @include('pages.staff.registration.family_information')
+                     </div>
+                 </section>
+
+                 <h3>
+                     <div class="media">
+                         <div class="bd-wizard-step-icon text-center">
+                             <i class="icon-xl la la-briefcase-medical"></i>
+                         </div>
+                         <div class="media-body text-center">
+                             <div class="bd-wizard-step-title"> Medical Information </div>
+                         </div>
+                     </div>
+                 </h3>
+                 <section>
+                     <div class="">
+                         @include('pages.staff.registration.medical_info')
+                     </div>
+                 </section>
+
+                 <h3>
+                     <div class="media">
+                         <div class="bd-wizard-step-icon text-center">
+                             <i class="icon-xl la la-briefcase-medical"></i>
+                         </div>
+                         <div class="media-body text-center">
+                             <div class="bd-wizard-step-title"> Appointment Information </div>
+                         </div>
+                     </div>
+                 </h3>
+                 <section>
+                     <div class="">
+                         @include('pages.staff.registration.appointment_details')
+                     </div>
+                 </section>
+             </div>
+             <!--end::Stepper-->
+         </div>
+         <!--end::Card body-->
+     </div>
+     <script>
+         
+
+
+
+
+         function checkGoFurther(form_no) {
+             switch (form_no) {
+                 case 0:
+                    return validatePersonalForm();
+                    break;
+
+                 case 1:
+
+                     break;
+                 case 2:
+
+                     break;
+
+                 case 3:
+
+                     break;
+
+                 case 4:
+
+                     break;
+
+                 case 5:
+
+                     break;
+
+                 case 6:
+
+                     break;
+
+                 case 7:
+
+                     break;
+
+                 default:
+                     break;
+             }
+             console.log(form_no, 'form_no');
+             return true;
+         }
+     </script>
+     <script src="{{ asset('assets/js/jquery.steps.min.js') }}"></script>
+     <script src="{{ asset('assets/js/bd-wizard.js') }}"></script>
+     <!--end::Card-->
+ @endsection
+
+ @section('add_on_script')
+     <script>
+         var hostUrl = "../assets/index.html";
+     </script>
+
+     <script src="{{ asset('assets/js/plugins/datatables.bundle.js') }}"></script>
+     <script src="{{ asset('assets/js/custom/formrepeater/formrepeater.bundle.js') }}"></script>
+
+     <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
+     <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
+
+     <script src="{{ asset('assets/js/custom/utilities/modals/create-account.js') }}"></script>
+     <script src="{{ asset('assets/js/custom/apps/save-product.js') }}"></script>
+     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+
+     <script>
+         function submitForm(form) {
+
+             event.preventDefault();
+             return;
+             // var button = $(form).attr('href');
+
+             // if( button == '#next') {
+             //     return false;
+             //     // loading();
+             //     // console.log(button);
+             //     // form submit
+             // }
+             console.log('clicked');
+         }
+
+         $('#classes, #reporting_manager_id').select2();
+
+         function openAddModel(form_type) {
+
+             $.ajaxSetup({
+                 headers: {
+                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                 }
+             });
+             $.ajax({
+                 url: "{{ route('modal.open') }}",
+                 type: 'POST',
+                 data: {
+                     form_type: form_type
+                 },
+                 success: function(res) {
+                     $('#kt_dynamic_app').modal('show');
+                     $('#kt_dynamic_app').html(res);
+                 }
+             })
+         }
+
+         function getInstituteCode(id) {
+             var institute_id = $(id).val();
+             $.ajaxSetup({
+                 headers: {
+                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                 }
+             });
+             $.ajax({
+                 url: "{{ route('institute.staff.code') }}",
+                 type: "POST",
+                 data: {
+                     institute_id: institute_id
+                 },
+                 success: function(res) {
+                     if (res) {
+                         $('#institute_code').val(res);
+                     } else {
+
+                         $('#institute_code').val('');
+                     }
+                 }
+             })
+         }
+     </script>
+ @endsection

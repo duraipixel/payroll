@@ -1,0 +1,34 @@
+#classes + .select2-container > .selection > span.select2-selection.select2-selection--multiple {
+    height: 42px;
+    border: none;
+    background: #f5f8fa;
+}
+
+#reporting_manager_id + .select2-container > .selection > span.select2-selection.select2-selection--single {
+    border:none;
+    background:#f5f8fa;
+    height:42px;
+}
+
+span#select2-reporting_manager_id-container {
+    padding: 8px 15px;
+    color: #565555;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.toastr-success {
+    background-color: green;
+}
+#toast-container .toastr {
+    background-color: green !important;
+}
+
+#classes + .fv-plugins-message-container.personal-form-errors.invalid-feedback {
+    position: absolute;
+    bottom: -28px;
+}
+
+.select2-container .select2-selection--multiple {
+    min-height: 42px;
+}
