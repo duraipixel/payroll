@@ -2,10 +2,10 @@
    
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
-            Division Name
+            Community
         </label>
         <div >
-            <input type="text" class="form-control" name="division_name" id="division_name" required >
+            <input type="text" class="form-control" name="community" id="community" required >
         </div>
     </div>
    
@@ -27,7 +27,7 @@
 
 <script>
 
-var KTAppEcommerceSaveInstitute = function () {
+var KTAppEcommerceSaveReligion = function () {
 
     const handleSubmit = () => {
         // Define variables
@@ -40,10 +40,10 @@ var KTAppEcommerceSaveInstitute = function () {
             form,
             {
                 fields: {
-                    'division_name': {
+                    'community': {
 						validators: {
 							notEmpty: {
-								message: 'Division is required'
+								message: 'Community is required'
 							},
 						}
 					},
@@ -66,14 +66,13 @@ var KTAppEcommerceSaveInstitute = function () {
             // Validate form before submit
             if (validator) {
                 validator.validate().then(function (status) {
-                    console.log('validated!');
 
                     if (status == 'Valid') {
 
                         var forms = $('#dynamic_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url:"{{ route('save.division') }}",
+                            url:"{{ route('save.community') }}",
                             type:"POST",
                             data: formData,
                             processData: false,
@@ -89,11 +88,11 @@ var KTAppEcommerceSaveInstitute = function () {
                                         });
                                     }
                                 } else{
-                                    toastr.success("Divisions added successfully");
+                                    toastr.success("Community added successfully");
                                     if( res.inserted_data ) {
                                         $('#kt_dynamic_app').modal('hide');
-                                        $('#division_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                        $('#division_id').val(res.inserted_data.id);
+                                        $('#community_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
+                                        $('#community_id').val(res.inserted_data.id).trigger('change');
                                     }
                                 }
                             }
@@ -113,7 +112,7 @@ var KTAppEcommerceSaveInstitute = function () {
 }();
 
 KTUtil.onDOMContentLoaded(function () {
-    KTAppEcommerceSaveInstitute.init();
+    KTAppEcommerceSaveReligion.init();
 });
     
     

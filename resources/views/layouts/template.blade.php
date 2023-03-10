@@ -52,12 +52,12 @@
                             </div>
                         </div>
 
-                        <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
+                        {{-- <div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
                             <a href="../index.html" class="d-lg-none">
                                 <img alt="Logo" src="{{ asset('assets/images/needs/logo-2.svg') }}"
                                     class="h-30px" />
                             </a>
-                        </div>
+                        </div> --}}
 
                         @include('layouts.topbar')
                         <!--end::Wrapper-->
@@ -95,7 +95,7 @@
 
     @include('layouts.drawer.chat')
 
-    @include('layouts.drawer.engage')
+    {{-- @include('layouts.drawer.engage') --}}
 
     <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
         <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->

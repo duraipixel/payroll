@@ -2,15 +2,37 @@
    
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
-            Division Name
+            Bank
         </label>
         <div >
-            <input type="text" class="form-control" name="division_name" id="division_name" required >
+            <input type="text" class="form-control" name="bank_name" id="bank_name" value="{{ $banks->name }}" readonly >
+            <input type="hidden" name="bank_id" id="bank_id" value="{{ $banks->id }}">
         </div>
     </div>
    
+    <div class="fv-row form-group mb-10">
+        <label class="form-label required" for="">
+            Branch 
+        </label>
+        <div >
+            <input type="text" class="form-control" name="branch_name" id="branch_name" >
+        </div>
+    </div>
+    <div class="fv-row form-group mb-10">
+        <label class="form-label" for="">
+            IFSC Code
+        </label>
+        <div >
+            <input type="text" class="form-control" name="ifsc_code" id="ifsc_code" >
+        </div>
+    </div>
     <div class="form-group mb-10">
-       
+        <label class="form-label" for="">
+            Address
+        </label>
+        <div >
+            <textarea class="form-control" name="address" id="address"></textarea>
+        </div>
     </div>
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
@@ -27,7 +49,7 @@
 
 <script>
 
-var KTAppEcommerceSaveInstitute = function () {
+var KTAppEcommerceSaveBranch = function () {
 
     const handleSubmit = () => {
         // Define variables
@@ -40,10 +62,10 @@ var KTAppEcommerceSaveInstitute = function () {
             form,
             {
                 fields: {
-                    'division_name': {
+                    'branch_name': {
 						validators: {
 							notEmpty: {
-								message: 'Division is required'
+								message: 'Branch Name is required'
 							},
 						}
 					},
@@ -62,18 +84,16 @@ var KTAppEcommerceSaveInstitute = function () {
         // Handle submit button
         submitButton.addEventListener('click', e => {
             e.preventDefault();
-
             // Validate form before submit
             if (validator) {
                 validator.validate().then(function (status) {
-                    console.log('validated!');
 
                     if (status == 'Valid') {
 
                         var forms = $('#dynamic_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url:"{{ route('save.division') }}",
+                            url:"{{ route('save.branch') }}",
                             type:"POST",
                             data: formData,
                             processData: false,
@@ -89,11 +109,19 @@ var KTAppEcommerceSaveInstitute = function () {
                                         });
                                     }
                                 } else{
-                                    toastr.success("Divisions added successfully");
+                                    toastr.success("Bank Branch added successfully");
                                     if( res.inserted_data ) {
                                         $('#kt_dynamic_app').modal('hide');
-                                        $('#division_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                        $('#division_id').val(res.inserted_data.id);
+                                        var option = '';
+                                        res.branch_data.forEach(element => {
+                                            let selected = '';
+                                            if( res.inserted_data.id == element.id ) {
+                                                selected = 'selected';
+                                            }
+                                            option += `<option value="${element.id}" ${selected}>${element.name}</option>`;
+                                        });
+                                        $('#branch_id').html(option);
+                                        
                                     }
                                 }
                             }
@@ -113,7 +141,7 @@ var KTAppEcommerceSaveInstitute = function () {
 }();
 
 KTUtil.onDOMContentLoaded(function () {
-    KTAppEcommerceSaveInstitute.init();
+    KTAppEcommerceSaveBranch.init();
 });
     
     

@@ -28,7 +28,17 @@ Route::post('/get/institution/staff/code', [App\Http\Controllers\Master\Institut
 
 Route::post('/save/division', [App\Http\Controllers\Master\DivisionController::class, 'save'])->name('save.division');
 Route::post('/save/class', [App\Http\Controllers\Master\ClassesController::class, 'save'])->name('save.class');
+Route::post('/save/language', [App\Http\Controllers\Master\LanguageController::class, 'save'])->name('save.language');
+Route::post('/save/place', [App\Http\Controllers\Master\PlaceController::class, 'save'])->name('save.place');
+Route::post('/save/nationality', [App\Http\Controllers\Master\NationalityController::class, 'save'])->name('save.nationality');
+Route::post('/save/religion', [App\Http\Controllers\Master\ReligionController::class, 'save'])->name('save.religion');
+Route::post('/save/caste', [App\Http\Controllers\Master\CasteController::class, 'save'])->name('save.caste');
+Route::post('/save/community', [App\Http\Controllers\Master\CommunityController::class, 'save'])->name('save.community');
+Route::post('/save/bank', [App\Http\Controllers\Master\BankController::class, 'save'])->name('save.bank');
+Route::post('/save/branch', [App\Http\Controllers\Master\BankBranchController::class, 'save'])->name('save.branch');
+Route::post('/get/branch', [App\Http\Controllers\Master\BankBranchController::class, 'getBankBranches'])->name('branch.all');
 
 Route::get('staff/register/{id?}', [App\Http\Controllers\StaffController::class, 'register'])->name('staff.register');
 Route::post('staff/add/personal', [App\Http\Controllers\StaffController::class, 'insertPersonalData'])->name('staff.save.personal');
+Route::post('staff/add/kyc', [App\Http\Controllers\StaffController::class, 'insertKycData'])->name('staff.save.kyc');
 Route::post('staff/get/draftData', [App\Http\Controllers\StaffController::class, 'getStaffDraftData'])->name('staff.get.draft.data');

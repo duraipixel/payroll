@@ -2,15 +2,28 @@
    
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
-            Division Name
+            Bank Name
         </label>
         <div >
-            <input type="text" class="form-control" name="division_name" id="division_name" required >
+            <input type="text" class="form-control" name="bank_name" id="bank_name" required >
         </div>
     </div>
    
     <div class="form-group mb-10">
-       
+        <label class="form-label" for="">
+            Bank Code
+        </label>
+        <div >
+            <input type="text" class="form-control" name="code" id="code" >
+        </div>
+    </div>
+    <div class="form-group mb-10">
+        <label class="form-label" for="">
+            Bank Short Name
+        </label>
+        <div >
+            <input type="text" class="form-control" name="short_name" id="short_name" >
+        </div>
     </div>
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
@@ -27,7 +40,7 @@
 
 <script>
 
-var KTAppEcommerceSaveInstitute = function () {
+var KTAppEcommerceSaveReligion = function () {
 
     const handleSubmit = () => {
         // Define variables
@@ -40,10 +53,10 @@ var KTAppEcommerceSaveInstitute = function () {
             form,
             {
                 fields: {
-                    'division_name': {
+                    'bank_name': {
 						validators: {
 							notEmpty: {
-								message: 'Division is required'
+								message: 'Bank Name is required'
 							},
 						}
 					},
@@ -62,18 +75,16 @@ var KTAppEcommerceSaveInstitute = function () {
         // Handle submit button
         submitButton.addEventListener('click', e => {
             e.preventDefault();
-
             // Validate form before submit
             if (validator) {
                 validator.validate().then(function (status) {
-                    console.log('validated!');
 
                     if (status == 'Valid') {
 
                         var forms = $('#dynamic_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url:"{{ route('save.division') }}",
+                            url:"{{ route('save.bank') }}",
                             type:"POST",
                             data: formData,
                             processData: false,
@@ -89,11 +100,11 @@ var KTAppEcommerceSaveInstitute = function () {
                                         });
                                     }
                                 } else{
-                                    toastr.success("Divisions added successfully");
+                                    toastr.success("Bank added successfully");
                                     if( res.inserted_data ) {
                                         $('#kt_dynamic_app').modal('hide');
-                                        $('#division_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                        $('#division_id').val(res.inserted_data.id);
+                                        $('#bank_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
+                                        $('#bank_id').val(res.inserted_data.id).trigger('change');
                                     }
                                 }
                             }
@@ -113,7 +124,7 @@ var KTAppEcommerceSaveInstitute = function () {
 }();
 
 KTUtil.onDOMContentLoaded(function () {
-    KTAppEcommerceSaveInstitute.init();
+    KTAppEcommerceSaveReligion.init();
 });
     
     

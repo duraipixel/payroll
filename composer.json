@@ -31,7 +31,8 @@
         },
         "files":[
             "app/helper.php",
-            "app/uniqueHelper.php"
+            "app/uniqueHelper.php",
+            "app/svghelper.php"
         ]
     },
     "autoload-dev": {

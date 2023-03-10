@@ -13,7 +13,7 @@
        
     </div>
     <div class="form-group mb-10 text-end">
-        <button type="button" class="btn btn-light-primary"> Cancel </button>
+        <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn"> 
             <span class="indicator-label">
                 Submit

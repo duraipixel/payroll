@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Master\Bank;
+use App\Models\Master\Caste;
 use App\Models\Master\Classes;
+use App\Models\Master\Community;
 use App\Models\Master\Division;
 use App\Models\Master\DocumentType;
 use App\Models\Master\Institution;
+use App\Models\Master\Language;
+use App\Models\Master\Nationality;
+use App\Models\Master\OtherSchoolPlace;
+use App\Models\Master\Religion;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
 use App\Models\User;
@@ -35,15 +42,32 @@ class StaffController extends Controller
         $reporting_managers = User::where('status', 'active')->where('is_super_admin', '!=', 1)->get();
         $divisions = Division::where('status', 'active')->get();
         $classes = Classes::where('status', 'active')->get();
+        $mother_tongues = Language::where('status', 'active')->get();
+        $nationalities = Nationality::where('status', 'active')->get();
+        $places = OtherSchoolPlace::where('status', 'active')->get();
+        $religions = Religion::where('status', 'active')->get();
+        $castes = Caste::where('status', 'active')->get();
+        $communities = Community::where('status', 'active')->get();
+        $banks = Bank::where('status', 'active')->get();
+
         $params = array(
             'institutions' => $institutions,
             'reporting_managers' => $reporting_managers,
             'divisions' => $divisions,
             'classes' => $classes,
             'staff_details' => $staff_details ?? '',
-            'used_classes' => $used_classes
+            'used_classes' => $used_classes,
+            'mother_tongues' => $mother_tongues,
+            'nationalities' => $nationalities,
+            'religions' => $religions,
+            'castes' => $castes,
+            'communities' => $communities,
+            'banks' => $banks,
+            'places' => $places
         );
+
         return view('pages.staff.registration.index', $params);
+
     }
 
     public function insertPersonalData(Request $request)
@@ -355,6 +379,44 @@ class StaffController extends Controller
         $staff_details = User::where('verification_status', $code)
                                 ->where('emp_code', 'like', '%%')->get();
         dd( $staff_details );
+    }
+
+    public function insertKycData(Request $request)
+    {
+
+        $id = $request->id ?? '';
+        $data = '';
+        $validator      = Validator::make($request->all(), [
+            'date_of_birth' => 'required',
+            'gender' => 'required',
+            'marital_status' => 'required',
+            'marriage_date' => 'required_if:marital_status,==,married',
+            'language_id' => 'required',
+            'place_of_birth_id' => 'required',
+            'nationality_id' => 'required',
+            'religion_id' => 'required',
+            'caste_id' => 'required',
+            'community_id' => 'required',
+            'phone_no' => 'required|numeric|digits:10',
+            'emergency_no' => 'required|numeric|digits:10',
+            'contact_address' => 'required',
+            'permanent_address' => 'required',            
+        ]);
+
+        if ($validator->passes()) {
+        
+            dd( $request->all() );
+
+            
+            $error = 0;
+            $message = '';
+
+        } else {
+            $error = 1;
+            $message = $validator->errors()->all();
+        }
+        return response()->json(['error' => $error, 'message' => $message, 'id' => $id ?? '']);
+
     }
 
 
