@@ -127,6 +127,12 @@
         <!--end::Modal dialog-->
     </div>
 
+    <div class="modal fade" id="kt_dynamic_rightside" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        @include('layouts.modal.dynamic_side_modal')
+        <!--end::Modal dialog-->
+    </div>
+
     <div class="modal fade" id="kt_modal_offer_a_deal" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         @include('layouts.modal.offer_deal')

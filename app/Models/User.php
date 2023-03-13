@@ -4,8 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
+use App\Models\Staff\StaffPersonalInfo;
+use App\Models\Staff\StaffPfEsiDetail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -95,5 +98,26 @@ class User extends Authenticatable implements Auditable
     public function passport() {
         return $this->hasOne(StaffDocument::class, 'staff_id', 'id')->select('staff_documents.*')->join('document_types', 'document_types.id', '=', 'staff_documents.document_type_id')->where('name', 'Passport');
     }
+
+    public function personal()
+    {
+        return $this->hasOne(StaffPersonalInfo::class, 'staff_id', 'id');
+    }
+
+    public function bank()
+    {
+        return $this->hasOne(StaffBankDetail::class, 'staff_id', 'id');
+    }
+
+    public function pf()
+    {
+        return $this->hasOne(StaffPfEsiDetail::class, 'staff_id', 'id')->where('type', 'pf');
+    }
+
+    public function esi()
+    {
+        return $this->hasOne(StaffPfEsiDetail::class, 'staff_id', 'id')->where('type', 'esi');
+    }
+
     
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AcademicYear;
+use App\Models\Staff\StaffPersonalInfo;
 use App\Models\User;
 
 if (!function_exists('academicYearId')) {
@@ -10,6 +11,27 @@ if (!function_exists('academicYearId')) {
         return $data->id;
     }
 }
+
+if (!function_exists('getRegistrationSteps')) {
+    function getRegistrationSteps($staff_id)
+    {
+        $response = false;
+        $info = User::find($staff_id);
+        $step = 0;
+        if( $info ) {
+            $step = $step + 1;
+
+            $personalInfo = StaffPersonalInfo::where('staff_id', $staff_id)->first();
+            if( $personalInfo ) {
+                $step = $step + 1;
+            }
+
+        }
+        return $step;
+
+    }
+}
+
 
 if (!function_exists('isPersonalWizardCompleted')) {
     function isPersonalWizardCompleted($staff_id)

@@ -1,6 +1,10 @@
  <!--begin::Navbar-->
  @extends('layouts.template')
  @section('content')
+ <script>
+    var formStep = '{{ $step }}';
+    formStep = parseInt(formStep) - 1;
+ </script>
      <link rel="stylesheet" href="{{ asset('assets/css/registration.css') }}">
      <script src="{{ asset('assets/js/tamil-search.js') }}"></script>
      <script src="{{ asset('assets/js/tamil-keyboard.js') }} "></script>

@@ -45,6 +45,9 @@ class CommonController extends Controller
             case 'places':
                 $content = view('pages.masters.places.add_edit_form');
                 break;
+            case 'other_places':
+                $content = view('pages.masters.other_places.add_edit_form');
+                break;
             
             case 'nationality':
                 $content = view('pages.masters.nationality.add_edit_form');
@@ -70,6 +73,30 @@ class CommonController extends Controller
                 $content = view('pages.masters.bankbranch.add_edit_form', compact('banks'));
                 break;
 
+            case 'designation':
+                $content = view('pages.masters.designation.add_edit_form');
+                break;
+            
+            case 'department':
+                $content = view('pages.masters.department.add_edit_form');
+                break;
+            
+            case 'subject':
+                $content = view('pages.masters.subject.add_edit_form');
+                break;
+            
+            case 'scheme':
+                $content = view('pages.masters.scheme.add_edit_form');
+                break;
+            case 'duty_class':
+                $content = view('pages.masters.duty_classes.add_edit_form');
+                break;
+            case 'duty_type':
+                $content = view('pages.masters.duty_types.add_edit_form');
+                break;
+            case 'other_school':
+                $content = view('pages.masters.other_schools.add_edit_form');
+                break;
             default:
                 # code...
                 break;

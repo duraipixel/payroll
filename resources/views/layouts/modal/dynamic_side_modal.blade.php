@@ -1,10 +1,10 @@
-<div class="modal-dialog modal-dialog-centered mw-900px">
+<div class="modal-dialog modal-dialog-centered mw-900px modal-right">
     <!--begin::Modal content-->
     <div class="modal-content">
         <!--begin::Modal header-->
         <div class="modal-header">
             <!--begin::Modal title-->
-            <h2>{{ isset($title)  ? ucwords( str_replace(['-','_'], ' ',$title ) ) : 'Add Form' }}</h2>
+            <h2>{{ $title ?? 'Add Form' }}</h2>
             <!--end::Modal title-->
             <!--begin::Close-->
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
