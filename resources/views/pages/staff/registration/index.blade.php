@@ -1,10 +1,18 @@
  <!--begin::Navbar-->
  @extends('layouts.template')
  @section('content')
- <script>
-    var formStep = '{{ $step }}';
-    formStep = parseInt(formStep) - 1;
- </script>
+    @if(isset($staff_details) && !empty( $staff_details))
+    <script>
+         var formStep = '{{ $step }}';
+        formStep = parseInt(formStep) - 1;
+        
+        </script>
+    @else
+    <script>
+            var formStep = 0;
+           
+        </script>
+    @endif
      <link rel="stylesheet" href="{{ asset('assets/css/registration.css') }}">
      <script src="{{ asset('assets/js/tamil-search.js') }}"></script>
      <script src="{{ asset('assets/js/tamil-keyboard.js') }} "></script>

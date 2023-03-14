@@ -1,11 +1,11 @@
 <div data-kt-stepper-element="content">
-    
+
     <div class="w-100">
-        
+
         <div class="pb-5 pb-lg-5">
             <h2 class="fw-bolder text-dark">Employee Details</h2>
         </div>
-       
+
         <div class="row">
             <div class="col-lg-4 mb-5">
                 <label class="form-label required">Designation</label>
@@ -76,8 +76,7 @@
             <div class="col-lg-4 mb-5">
                 <label class="form-label required">Attendance Scheme</label>
                 <div class="position-relative">
-                    <select name="scheme_id" autofocus id="scheme_id"
-                        class="form-select form-select-lg select2-option">
+                    <select name="scheme_id" autofocus id="scheme_id" class="form-select form-select-lg select2-option">
                         <option value="">--Select Scheme--</option>
                         @isset($scheme)
                             @foreach ($scheme as $item)
@@ -93,7 +92,7 @@
                     </span>
                 </div>
             </div>
-            
+
             <hr class="bg-lt-clr mt-3">
             </hr>
             <!--begin::Tables Widget 13-->
@@ -104,7 +103,7 @@
                         <span class="card-label fw-bolder fs-3 mb-1">Subject studied upto </span>
                     </h3>
                 </div>
-          
+
                 <div class="card-body py-0">
                     <!--begin::Table container-->
                     <div class="table-responsive" id="studied_pane">
@@ -119,34 +118,30 @@
 
             <!--begin::Tables Widget 13-->
             <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
-                <!--begin::Header-->
+
                 <div class="card-header border-0 pt-0">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder fs-3 mb-1">Invigilation Duty Details</span>
                     </h3>
 
-                    <button id="kt_new_data_toggle_duty"
+                    <button id="kt_new_data_toggle_duty" onclick="resetInviligationForm()"
                         class="engage-demos-toggle btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5"
-                        title="Click Here to add More" data-bs-toggle="tooltip"
-                        data-bs-placement="left" data-bs-dismiss="click" data-bs-trigger="hover">
+                        title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
+                        data-bs-dismiss="click" data-bs-trigger="hover">
                         <span id="kt_engage_demos_label"><span class="svg-icon svg-icon-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" viewBox="0 0 24 24" fill="none">
-                                    <rect opacity="0.5" x="11.364" y="20.364"
-                                        width="16" height="2" rx="1"
-                                        transform="rotate(-90 11.364 20.364)" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2"
+                                        rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor">
                                     </rect>
-                                    <rect x="4.36396" y="11.364" width="16"
-                                        height="2" rx="1" fill="currentColor"></rect>
+                                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1"
+                                        fill="currentColor"></rect>
                                 </svg>
                             </span> Add New</span>
                     </button>
-                    <!--begin::Help drawer-->
-                   
-                    <!--end::Help drawer-->
+
                 </div>
-                <!--end::Header-->
-                <!--begin::Body-->
+
                 <div class="card-body py-3" id="invigilation-pane">
                     <!--begin::Table container-->
                     @include('pages.staff.registration.emp_position.invigilation_list')
@@ -154,11 +149,7 @@
                 </div>
                 <!--begin::Body-->
             </div>
-            <!--end::Tables Widget 13-->
 
-
-
-            <!--begin::Tables Widget 13-->
             <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
                 <!--begin::Header-->
                 <div class="card-header border-0 pt-0">
@@ -168,28 +159,25 @@
 
                     <button id="kt_new_data_toggle_train"
                         class="engage-demos-toggle btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5"
-                        title="Click Here to add More" data-bs-toggle="tooltip"
-                        data-bs-placement="left" data-bs-dismiss="click" data-bs-trigger="hover">
+                        title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
+                        data-bs-dismiss="click" data-bs-trigger="hover">
                         <span id="kt_engage_demos_label"><span class="svg-icon svg-icon-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                    height="24" viewBox="0 0 24 24" fill="none">
-                                    <rect opacity="0.5" x="11.364" y="20.364"
-                                        width="16" height="2" rx="1"
-                                        transform="rotate(-90 11.364 20.364)" fill="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="11.364" y="20.364" width="16"
+                                        height="2" rx="1" transform="rotate(-90 11.364 20.364)"
+                                        fill="currentColor">
                                     </rect>
-                                    <rect x="4.36396" y="11.364" width="16"
-                                        height="2" rx="1" fill="currentColor"></rect>
+                                    <rect x="4.36396" y="11.364" width="16" height="2"
+                                        rx="1" fill="currentColor"></rect>
                                 </svg>
                             </span> Add New</span>
                     </button>
                     <!--begin::Help drawer-->
-                    <div id="kt_help" class="bg-body" data-kt-drawer="true"
-                        data-kt-drawer-name="help" data-kt-drawer-activate="true"
-                        data-kt-drawer-overlay="true"
-                        data-kt-drawer-width="{default:'350px', 'md': '725px'}"
-                        data-kt-drawer-direction="end"
-                        data-kt-drawer-toggle="#kt_new_data_toggle_train"
-                        data-kt-drawer-close="#kt_help_close">
+                    <div id="kt_help"  class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help"
+                        data-kt-drawer-activate="true" data-kt-drawer-overlay="true"
+                        data-kt-drawer-width="{default:'350px', 'md': '725px'}" data-kt-drawer-direction="end"
+                        data-kt-drawer-toggle="#kt_new_data_toggle_train" data-kt-drawer-close="#kt_help_close">
                         <!--begin::Card-->
                         <div class="card shadow-none rounded-0 w-100">
                             <!--begin::Header-->
@@ -197,22 +185,17 @@
                                 <h5 class="card-title fw-bold text-gray-600">Add your Training
                                     Details</h5>
                                 <div class="card-toolbar">
-                                    <button type="button"
-                                        class="btn btn-sm btn-icon explore-btn-dismiss me-n5"
+                                    <button type="button" class="btn btn-sm btn-icon explore-btn-dismiss me-n5"
                                         id="kt_help_close">
                                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                                         <span class="svg-icon svg-icon-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                height="24" viewBox="0 0 24 24"
-                                                fill="none">
-                                                <rect opacity="0.5" x="6"
-                                                    y="17.3137" width="16" height="2"
-                                                    rx="1"
-                                                    transform="rotate(-45 6 17.3137)"
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none">
+                                                <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
                                                     fill="currentColor" />
-                                                <rect x="7.41422" y="6"
-                                                    width="16" height="2" rx="1"
-                                                    transform="rotate(45 7.41422 6)"
+                                                <rect x="7.41422" y="6" width="16" height="2"
+                                                    rx="1" transform="rotate(45 7.41422 6)"
                                                     fill="currentColor" />
                                             </svg>
                                         </span>
@@ -234,8 +217,7 @@
                                             <!--begin::Icon-->
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
                                             <span class="svg-icon svg-icon-2 position-absolute mx-4">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    width="24" height="24"
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none">
                                                     <path opacity="0.3"
                                                         d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z"
@@ -266,8 +248,7 @@
                                             <!--begin::Icon-->
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
                                             <span class="svg-icon svg-icon-2 position-absolute mx-4">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    width="24" height="24"
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none">
                                                     <path opacity="0.3"
                                                         d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z"
@@ -327,20 +308,17 @@
                                     <div class="d-flex flex-stack pt-5">
                                         <!--begin::Wrapper-->
                                         <div>
-                                            <button type="button"
-                                                class="btn btn-lg btn-primary me-3 d-inline-block"
+                                            <button type="button" class="btn btn-lg btn-primary me-3 d-inline-block"
                                                 data-kt-stepper-action="submit">
                                                 <span class="indicator-label">Add
                                                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                                                     <span class="svg-icon svg-icon-3 ms-2 me-0">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            width="24" height="24"
-                                                            viewBox="0 0 24 24" fill="none">
-                                                            <rect opacity="0.5" x="18"
-                                                                y="13" width="13"
-                                                                height="2" rx="1"
-                                                                transform="rotate(-180 18 13)"
-                                                                fill="currentColor"></rect>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                            height="24" viewBox="0 0 24 24" fill="none">
+                                                            <rect opacity="0.5" x="18" y="13"
+                                                                width="13" height="2" rx="1"
+                                                                transform="rotate(-180 18 13)" fill="currentColor">
+                                                            </rect>
                                                             <path
                                                                 d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z"
                                                                 fill="currentColor"></path>
@@ -370,8 +348,7 @@
                     <!--begin::Table container-->
                     <div class="table-responsive">
                         <!--begin::Table-->
-                        <table
-                            class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+                        <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
                             <!--begin::Table head-->
                             <thead>
                                 <tr class="fw-bolder text-muted">
@@ -389,8 +366,7 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <a href="#"
-                                            class="text-dark fw-bolder text-hover-primary fs-6">1</a>
+                                        <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">1</a>
                                     </td>
                                     <td class="text-dark fw-bolder text-hover-primary fs-6">Brazil
                                     </td>
@@ -406,8 +382,7 @@
                                             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                                             <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
                                             <span class="svg-icon svg-icon-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    width="24" height="24"
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none">
                                                     <path opacity="0.3"
                                                         d="M21.4 8.35303L19.241 10.511L13.485 4.755L15.643 2.59595C16.0248 2.21423 16.5426 1.99988 17.0825 1.99988C17.6224 1.99988 18.1402 2.21423 18.522 2.59595L21.4 5.474C21.7817 5.85581 21.9962 6.37355 21.9962 6.91345C21.9962 7.45335 21.7817 7.97122 21.4 8.35303ZM3.68699 21.932L9.88699 19.865L4.13099 14.109L2.06399 20.309C1.98815 20.5354 1.97703 20.7787 2.03189 21.0111C2.08674 21.2436 2.2054 21.4561 2.37449 21.6248C2.54359 21.7934 2.75641 21.9115 2.989 21.9658C3.22158 22.0201 3.4647 22.0084 3.69099 21.932H3.68699Z"
@@ -423,8 +398,7 @@
                                             class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
                                             <span class="svg-icon svg-icon-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    width="24" height="24"
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none">
                                                     <path
                                                         d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
@@ -460,8 +434,7 @@
                 <label class="fs-6 fw-bold form-label required">Contact Email</label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <input name="business_email"
-                    class="form-control form-control-lg form-control-solid"
+                <input name="business_email" class="form-control form-control-lg form-control-solid"
                     value="corp@support.com" />
                 <!--end::Input-->
             </div>
@@ -470,14 +443,144 @@
     </div>
     <!--end::Wrapper-->
 </div>
-<div id="kt_help" class="bg-body" data-kt-drawer="true"
-data-kt-drawer-name="help" data-kt-drawer-activate="true"
-data-kt-drawer-overlay="true"
-data-kt-drawer-width="{default:'350px', 'md': '725px'}"
-data-kt-drawer-direction="end"
-data-kt-drawer-toggle="#kt_new_data_toggle_duty"
-data-kt-drawer-close="#kt_help_close">
-<!--begin::Card-->
-@include('pages.staff.registration.emp_position.add_invigilation')
-<!--end::Card-->
+<div id="kt_help" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help" data-kt-drawer-activate="true"
+    data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}"
+    data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_new_data_toggle_duty"
+    data-kt-drawer-close="#kt_help_close">
+    <!--begin::Card-->
+    @include('pages.staff.registration.emp_position.add_invigilation')
+    <!--end::Card-->
 </div>
+<script>
+    function editDuty(duty_id) {
+        $('#kt_new_data_toggle_duty').click();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('form.invigilation.content') }}",
+            type: "POST",
+            data: {
+                duty_id: duty_id
+            },
+            success: function(res) {
+
+                $('#invigilation').html(res);
+                $('#drawer_title').html('Update Your Duty Details');
+            }
+        })
+    }
+
+    function deleteDuty(duty_id) {
+        Swal.fire({
+            text: "Sorry, looks like there are some errors detected, please try again.",
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: "Ok, got it!",
+            customClass: {
+                confirmButton: "btn btn-light"
+            }
+        }).then(function () {
+            //KTUtil.scrollTop();
+        });
+    }
+
+    function resetInviligationForm() {
+
+        $('#invigilation')[0].reset();
+    }
+
+    $('#kt_new_data_toggle_duty').click(function(){
+        $('#invigilation')[0].reset();
+
+    })
+   
+
+    function staffInvigilationList(staff_id) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('staff.invigilation.list') }}",
+            type: "POST",
+            data: {
+                staff_id: staff_id
+            },
+            success: function(res) {
+                $('#invigilation-pane').html(res);
+            }
+        })
+    }
+
+    function submitInvigilationForm() {
+        var invigilationErrors = false;
+        let key_name = [
+            'duty_classes',
+            'duty_type',
+            'duty_other_school',
+            'duty_other_place_id',
+            'inv_from_date',
+            'inv_to_date',
+            'duty_facility'
+        ];
+        $('.invigilation-form-errors').remove();
+        $('.form-control,.form-select').removeClass('border-danger');
+
+        key_name.forEach(element => {
+            var name_input = document.getElementById(element).value;
+
+            if (name_input == '' || name_input == undefined) {
+                invigilationErrors = true;
+                var name_input_error =
+                    '<div class="fv-plugins-message-container invigilation-form-errors invalid-feedback"><div data-validator="notEmpty">' +
+                    element.replace('_', ' ').toUpperCase() + ' is required</div></div>';
+                // $('#' + element).after(name_input_error);
+                $('#' + element).addClass('border-danger')
+                $('#' + element).focus();
+            }
+        });
+
+        if (!invigilationErrors) {
+            var staff_id = $('#staff_id').val();
+            var forms = $('#invigilation')[0];
+            var formData = new FormData(forms);
+            formData.append('staff_id', staff_id);
+            $.ajax({
+                url: "{{ route('save.invigilation') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(res) {
+                    // Disable submit button whilst loading
+                   
+                    if (res.error == 1) {
+                        if (res.message) {
+                            res.message.forEach(element => {
+                                toastr.error("Error",
+                                    element);
+                            });
+                        }
+                    } else {
+                        toastr.success(
+                            "Invigilation duty added successfully"
+                        );
+
+                        $('#kt_help_close').click();
+                        staffInvigilationList(staff_id);
+                    }
+                }
+            })
+        }
+    }
+</script>
+@if (isset($staff_details->id))
+    <script>
+        staffInvigilationList('{{ $staff_details->id }}');
+    </script>
+@endif

@@ -13,7 +13,7 @@
                         {!! dobSVG() !!}
                         <input class="form-control  ps-12" autocomplete="off" placeholder="Select a date"
                             name="date_of_birth" id="date_of_birth" autofocus
-                            value="{{ $staff_details->personal ? date('d-m-Y', strtotime($staff_details->personal->dob)) : null }}" />
+                            value="{{ isset($staff_details->personal) ? date('d-m-Y', strtotime($staff_details->personal->dob)) : null }}" />
                     </div>
                 </div>
                 <div class="mb-5 col-lg-4 fv-row">
@@ -55,7 +55,7 @@
                         {!! dobSVG() !!}
                         <input class="form-control  ps-12" placeholder="Select a date" name="marriage_date"
                             id="marriage_date"
-                            value="{{ $staff_details->personal->marriage_date ? date('d-m-Y', strtotime($staff_details->personal->marriage_date)) : '' }}" />
+                            value="{{ isset($staff_details->personal->marriage_date) ? date('d-m-Y', strtotime($staff_details->personal->marriage_date)) : '' }}" />
                     </div>
                 </div>
                 <div class="col-lg-4 mb-5">
@@ -384,7 +384,7 @@
                                     {!! dobSVG() !!}
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="Start date"
                                         name="uan_start_date" id="uan_start_date"
-                                        value="{{ $staff_details->pf->start_date ? date('d-m-Y', strtotime($staff_details->pf->start_date)) : '' }}"
+                                        value="{{ isset($staff_details->pf->start_date) ? date('d-m-Y', strtotime($staff_details->pf->start_date)) : '' }}"
                                         autofocus />
                                 </div>
 
@@ -408,7 +408,7 @@
                                     {!! dobSVG() !!}
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="Start date"
                                         name="esi_start_date" id="esi_start_date" autofocus
-                                        value="{{ $staff_details->esi->start_date ? date('d-m-Y', strtotime($staff_details->esi->start_date)) : '' }}" />
+                                        value="{{ isset($staff_details->esi->start_date) ? date('d-m-Y', strtotime($staff_details->esi->start_date)) : '' }}" />
                                 </div>
                             </div>
                             <div class="col-3">
@@ -416,7 +416,7 @@
                                     {!! dobSVG() !!}
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="End date"
                                         name="esi_end_date" id="esi_end_date" autofocus
-                                        value="{{ $staff_details->esi->start_date ? date('d-m-Y', strtotime($staff_details->esi->start_date)) : '' }}" />
+                                        value="{{ isset($staff_details->esi->start_date) ? date('d-m-Y', strtotime($staff_details->esi->start_date)) : '' }}" />
                                 </div>
                             </div>
                             <div class="col-3">

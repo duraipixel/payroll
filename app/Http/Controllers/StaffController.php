@@ -24,6 +24,7 @@ use App\Models\Master\TypeOfDuty;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
+use App\Models\Staff\StaffInvigilationDuty;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffPfEsiDetail;
 use App\Models\User;
@@ -49,6 +50,9 @@ class StaffController extends Controller
                 
                 $branch_details = BankBranch::where('bank_id', $staff_details->bank->bank_id)->get();
             }
+
+            $invigilation_details = StaffInvigilationDuty::where('status', 'active')
+                                    ->where('staff_id', $id)->get();
         }
         
         $institutions = Institution::where('status', 'active')->get();
@@ -71,6 +75,7 @@ class StaffController extends Controller
         $department = Department::where('status', 'active')->get();
         $subjects = Subject::where('status', 'active')->get();
         $scheme = AttendanceScheme::where('status', 'active')->get();
+        
 
         $step = getRegistrationSteps($id);
 
@@ -98,6 +103,8 @@ class StaffController extends Controller
             'duty_classes' => $duty_classes,
             'duty_types' => $duty_types,
             'other_schools' => $other_schools,
+            'invigilation_details' => $invigilation_details ?? [],
+            'duty_info' => ''
         );
         
         return view('pages.staff.registration.index', $params);
