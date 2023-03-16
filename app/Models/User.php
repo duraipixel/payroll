@@ -7,8 +7,11 @@ namespace App\Models;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
+use App\Models\Staff\StaffExperiencedSubject;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffPfEsiDetail;
+use App\Models\Staff\StaffProfessionalData;
+use App\Models\Staff\StaffStudiedSubject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -117,6 +120,21 @@ class User extends Authenticatable implements Auditable
     public function esi()
     {
         return $this->hasOne(StaffPfEsiDetail::class, 'staff_id', 'id')->where('type', 'esi');
+    }
+
+    public function position()
+    {
+        return $this->hasOne(StaffProfessionalData::class, 'staff_id', 'id');
+    }
+
+    public function studiedSubject()
+    {
+        return $this->hasMany(StaffStudiedSubject::class, 'staff_id', 'id');
+    }
+
+    public function experiencedSubject()
+    {
+        return $this->hasMany(StaffExperiencedSubject::class, 'staff_id', 'id');
     }
 
     

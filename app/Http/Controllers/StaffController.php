@@ -20,13 +20,18 @@ use App\Models\Master\OtherSchool;
 use App\Models\Master\OtherSchoolPlace;
 use App\Models\Master\Religion;
 use App\Models\Master\Subject;
+use App\Models\Master\TopicTraining;
 use App\Models\Master\TypeOfDuty;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
+use App\Models\Staff\StaffExperiencedSubject;
 use App\Models\Staff\StaffInvigilationDuty;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffPfEsiDetail;
+use App\Models\Staff\StaffProfessionalData;
+use App\Models\Staff\StaffStudiedSubject;
+use App\Models\Staff\StaffTrainingDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -39,6 +44,7 @@ class StaffController extends Controller
     public function register(Request $request, $id = null)
     {
         $used_classes = [];
+        $used_exp_subjects = [];
         if ($id) {
             $staff_details = User::find($id);
             if (isset($staff_details->staffClasses) && !empty($staff_details->staffClasses)) {
@@ -46,13 +52,18 @@ class StaffController extends Controller
                     $used_classes[] = $items->class_id;
                 }
             }
-            if( isset( $staff_details->bank->bank_branch_id ) && !empty( $staff_details->bank->bank_branch_id ) ) {
-                
+            if( isset( $staff_details->experiencedSubject ) && !empty( $staff_details->experiencedSubject ) ) {
+                foreach ( $staff_details->experiencedSubject  as $item ) {
+                    $used_exp_subjects[] = $item->subject_id;
+                }
+            }
+            if( isset( $staff_details->bank->bank_branch_id ) && !empty( $staff_details->bank->bank_branch_id ) ) {                
                 $branch_details = BankBranch::where('bank_id', $staff_details->bank->bank_id)->get();
             }
 
             $invigilation_details = StaffInvigilationDuty::where('status', 'active')
                                     ->where('staff_id', $id)->get();
+            $training_details = StaffTrainingDetail::where('status', 'active')->where('staff_id', $id)->get();
         }
         
         $institutions = Institution::where('status', 'active')->get();
@@ -75,7 +86,7 @@ class StaffController extends Controller
         $department = Department::where('status', 'active')->get();
         $subjects = Subject::where('status', 'active')->get();
         $scheme = AttendanceScheme::where('status', 'active')->get();
-        
+        $training_topics = TopicTraining::where('status', 'active')->get();        
 
         $step = getRegistrationSteps($id);
 
@@ -104,7 +115,10 @@ class StaffController extends Controller
             'duty_types' => $duty_types,
             'other_schools' => $other_schools,
             'invigilation_details' => $invigilation_details ?? [],
-            'duty_info' => ''
+            'duty_info' => '',
+            'training_topics' => $training_topics ?? [],
+            'training_details' => $training_details ?? [],
+            'used_exp_subjects' => $used_exp_subjects
         );
         
         return view('pages.staff.registration.index', $params);
@@ -535,5 +549,87 @@ class StaffController extends Controller
             $message    = $validator->errors()->all();
         }
         return response()->json(['error' => $error, 'message' => $message, 'id' => $id ?? '']);
+    }
+
+    public function insertEmployeePosition(Request $request)
+    {
+        // dd( $request->all() );
+        #subjectid_classid
+        $id = $request->id ?? '';
+        $data = '';
+        $validator      = Validator::make($request->all(), [
+            'designation_id' => 'required',
+            'department_id' => 'required',
+            'subject' => 'required',
+            'scheme_id' => 'required',          
+            
+        ]);
+
+        if ($validator->passes()) {
+
+            $academic_id = academicYearId();
+            /***
+             * 1. insert in staff_professional_datas
+             * 2. insert in staff_experienced_subjects
+             * 3. insert in staff_studied_subjects
+             */
+            $ins['academic_id'] = $academic_id;
+            $ins['staff_id'] = $id;
+            $ins['designation_id'] = $request->designation_id;
+            $ins['department_id'] = $request->department_id;
+            
+            $ins['attendance_scheme_id'] = $request->scheme_id;
+            $ins['status'] = 'active';
+            StaffProfessionalData::updateOrCreate(['staff_id' => $id], $ins);
+
+            if( $request->subject && !empty( $request->subject ) ) {
+                StaffExperiencedSubject::where('staff_id', $id)->delete();
+                foreach ( $request->subject as $items ) {
+                    $ins1 = [];
+                    $ins1['academic_id'] = $academic_id;
+                    $ins1['staff_id'] = $id;
+                    $ins1['subject_id'] = $items;
+                    $ins1['status'] = 'active';
+                    StaffExperiencedSubject::create($ins1);
+                }
+            }
+
+            if( $request->studied && !empty($request->studied)) {
+                StaffStudiedSubject::where('staff_id', $id)->delete();
+                foreach ( $request->studied as $item ) {
+                    $ids = explode('_', $item);
+                    $class_id = $ids[1]; $subject_id = $ids[0];
+                    $ins2 = [];
+                    $ins2['academic_id'] = $academic_id;
+                    $ins2['staff_id'] = $id;
+                    $ins2['subject_id'] = $subject_id;
+                    $ins2['class_id'] = $class_id;
+                    $ins2['status'] = 'active';
+                    StaffStudiedSubject::create($ins2);
+                }
+            }
+
+            if( $request->no_studied && !empty( $request->no_studied ) ) {
+                foreach ( $request->no_studied as $item ) {
+                    
+                    $ins2 = [];
+                    $ins2['academic_id'] = $academic_id;
+                    $ins2['staff_id'] = $id;
+                    $ins2['subject_id'] = $item;
+                    $ins2['status'] = 'active';
+                    StaffStudiedSubject::create($ins2);
+
+                }
+            }
+
+            $error      = 0;
+            $message    = '';
+
+        } else {
+            $error      = 1;
+            $message    = $validator->errors()->all();
+        }
+        return response()->json(['error' => $error, 'message' => $message, 'id' => $id ?? '']);
+
     }
 }

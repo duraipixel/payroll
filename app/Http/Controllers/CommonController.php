@@ -97,6 +97,9 @@ class CommonController extends Controller
             case 'other_school':
                 $content = view('pages.masters.other_schools.add_edit_form');
                 break;
+            case 'training_topic':
+                $content = view('pages.masters.training_topic.add_edit_form');
+                break;
             default:
                 # code...
                 break;

@@ -23,14 +23,14 @@
                     @foreach ($classes as $item)
                     <td>
                         <div class="form-check form-check-sm form-check-custom form-check-solid">
-                            <input class="form-check-input widget-13-check" name="studied[]" id="subject_class" type="checkbox" value="{{ $items->id }}_{{ $item->id }}" />
+                            <input class="form-check-input widget-13-check" name="studied[]" id="subject_class" type="checkbox" value="{{ $items->id }}_{{ $item->id }}" @if( isset($staff_details->id) && getStudiedSubjects( $staff_details->id, $items->id, $item->id )) checked @endif/>
                         </div>
                     </td>
                     @endforeach
                 @endisset
                 <td>
                     <div class="form-check form-check-sm form-check-custom form-check-solid">
-                        <input class="form-check-input widget-13-check" type="checkbox" name="no_studied[]" value="{{ $items->id }}" />
+                        <input class="form-check-input widget-13-check" type="checkbox" @if( isset($staff_details->id) && getStudiedSubjects( $staff_details->id, $items->id) && getStudiedSubjects( $staff_details->id, $items->id)->class_id == null ) checked @endif name="no_studied[]" value="{{ $items->id }}" />
                     </div>
                 </td>
             </tr>

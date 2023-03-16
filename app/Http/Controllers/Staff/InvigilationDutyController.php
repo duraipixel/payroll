@@ -85,4 +85,13 @@ class InvigilationDutyController extends Controller
 
         return view('pages.staff.registration.emp_position.invigilation_list', $params);
     }
+
+    public function deleteStaffInvigilation(Request $request)
+    {
+        $duty_id = $request->duty_id;
+        StaffInvigilationDuty::where('id', $duty_id)->delete();
+
+        return response()->json(['error' => 1]);
+
+    }
 }

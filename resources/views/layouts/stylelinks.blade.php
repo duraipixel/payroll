@@ -24,5 +24,21 @@ div#loading {
     align-items: center;
     justify-content: center;
 }
+
+.swal2-popup.swal2-modal.swal2-icon-warning.swal2-show {
+    background: white;
+}
+
+.swal2-popup.swal2-modal.swal2-icon-success.swal2-show {
+    background: white;
+}
+
+.swal2-success-line-tip {
+    background: green !important;
+}
+.swal2-success-line-long {
+    background: green !important;
+}
+
 </style>
 

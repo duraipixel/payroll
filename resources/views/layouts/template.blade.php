@@ -28,7 +28,7 @@
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
                 @include('layouts.header')
-
+                
                 <div id="kt_header" style="" class="header align-items-stretch">
                     <!--begin::Container-->
                     <div class="container-fluid d-flex align-items-stretch justify-content-between">
@@ -63,6 +63,7 @@
                         <!--end::Wrapper-->
                     </div>
                     <!--end::Container-->
+                   
                 </div>
 
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">

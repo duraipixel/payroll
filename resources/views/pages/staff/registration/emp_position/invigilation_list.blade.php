@@ -51,7 +51,7 @@
                             </span>
                             <!--end::Svg Icon-->
                         </a>
-                        <a href="javascript:void(0)" onclick="return deleteDuty('{{ $item->id }}')" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                        <a href="javascript:void(0)" onclick="return deleteDuty('{{ $item->id }}', '{{ $item->staff_id }}')" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
                             <span class="svg-icon svg-icon-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

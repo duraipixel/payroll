@@ -151,7 +151,7 @@
                     return validateKycForm();
                     break;
                 case 2:
-
+                    return validateEmployeePosition();
                     break;
 
                 case 3:

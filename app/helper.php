@@ -2,6 +2,8 @@
 
 use App\Models\AcademicYear;
 use App\Models\Staff\StaffPersonalInfo;
+use App\Models\Staff\StaffProfessionalData;
+use App\Models\Staff\StaffStudiedSubject;
 use App\Models\User;
 
 if (!function_exists('academicYearId')) {
@@ -19,11 +21,16 @@ if (!function_exists('getRegistrationSteps')) {
         $info = User::find($staff_id);
         $step = 0;
         if( $info ) {
-            $step = $step + 1;
+            $step = 1;
 
             $personalInfo = StaffPersonalInfo::where('staff_id', $staff_id)->first();
             if( $personalInfo ) {
-                $step = $step + 1;
+                $step = 2;
+            }
+
+            $professional_data = StaffProfessionalData::where('staff_id', $staff_id)->first();
+            if( $professional_data ) {
+                $step = 3;
             }
 
         }
@@ -33,11 +40,14 @@ if (!function_exists('getRegistrationSteps')) {
 }
 
 
-if (!function_exists('isPersonalWizardCompleted')) {
-    function isPersonalWizardCompleted($staff_id)
+if (!function_exists('getStudiedSubjects')) {
+    function getStudiedSubjects( $staff_id, $subject_id, $class_id = '' )
     {
-        $response = false;
-        $info = User::find($staff_id);
+        return StaffStudiedSubject::where('staff_id', $staff_id)
+                ->where('subject_id', $subject_id)
+                ->when($class_id != '', function($q) use($class_id){
+            return $q->where('class_id', $class_id);
+        })->first();
     }
 }
 
@@ -75,5 +85,6 @@ if (!function_exists('isAppointmentWizardCompleted')) {
         
     }
 }
+
 
 

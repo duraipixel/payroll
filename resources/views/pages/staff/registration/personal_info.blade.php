@@ -487,7 +487,7 @@
                 $('#' + element).focus();
             }
         });
-
+        console.log(personsal_error, 'personsal_error');
         if (!personsal_error) {
             
             var forms = $('#personal_form')[0];

@@ -41,6 +41,7 @@ Route::post('/get/branch', [App\Http\Controllers\Master\BankBranchController::cl
 Route::get('staff/register/{id?}', [App\Http\Controllers\StaffController::class, 'register'])->name('staff.register');
 Route::post('staff/add/personal', [App\Http\Controllers\StaffController::class, 'insertPersonalData'])->name('staff.save.personal');
 Route::post('staff/add/kyc', [App\Http\Controllers\StaffController::class, 'insertKycData'])->name('staff.save.kyc');
+Route::post('staff/add/position', [App\Http\Controllers\StaffController::class, 'insertEmployeePosition'])->name('staff.save.employee_position');
 Route::post('staff/get/draftData', [App\Http\Controllers\StaffController::class, 'getStaffDraftData'])->name('staff.get.draft.data');
 
 
@@ -55,3 +56,11 @@ Route::post('/save/other/school', [App\Http\Controllers\Master\OtherSchoolContro
 Route::post('/save/invigilation', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'save'])->name('save.invigilation');
 Route::post('/form/invigilation/content', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'formContent'])->name('form.invigilation.content');
 Route::post('/invigilation/list', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'getStaffInvigilationList'])->name('staff.invigilation.list');
+Route::post('/invigilation/delete', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'deleteStaffInvigilation'])->name('staff.invigilation.delete');
+
+Route::post('/save/training/topic', [App\Http\Controllers\Master\TrainingTopicController::class, 'save'])->name('save.training.topic');
+Route::post('/save/staff/training', [App\Http\Controllers\Staff\StaffTrainingController::class, 'save'])->name('save.staff.training');
+Route::post('/form/training/content', [App\Http\Controllers\Staff\StaffTrainingController::class, 'formContent'])->name('form.training.content');
+Route::post('/training/list', [App\Http\Controllers\Staff\StaffTrainingController::class, 'getStaffTrainingList'])->name('staff.training.list');
+Route::post('/training/delete', [App\Http\Controllers\Staff\StaffTrainingController::class, 'deleteStaffTraining'])->name('staff.training.delete');
+
