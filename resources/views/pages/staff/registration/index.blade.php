@@ -39,6 +39,7 @@
                  </h3>
                  <section>
                      <div class="">
+                        <input type="hidden" name="staff_id" id="outer_staff_id" value="{{ $staff_details->id ?? '' }}">
                          @include('pages.staff.registration.personal_info')
                      </div>
                  </section>
@@ -155,7 +156,7 @@
                     break;
 
                 case 3:
-
+                    return validateEducationDetails();
                     break;
 
                 case 4:

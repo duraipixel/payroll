@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             SocietySeeder::class,
             AcademicYearSeeder::class,    
             UserSeeder::class,
-            SiteSettingsSeeder::class
+            SiteSettingsSeeder::class,
+            DocumentTypesSeeder::class
         ]);
     }
 }

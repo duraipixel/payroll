@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Master\BoardController;
 use App\Models\Master\AttendanceScheme;
 use App\Models\Master\Bank;
 use App\Models\Master\BankBranch;
+use App\Models\Master\Board;
 use App\Models\Master\Caste;
 use App\Models\Master\Classes;
 use App\Models\Master\Community;
@@ -18,6 +20,7 @@ use App\Models\Master\Language;
 use App\Models\Master\Nationality;
 use App\Models\Master\OtherSchool;
 use App\Models\Master\OtherSchoolPlace;
+use App\Models\Master\ProfessionType;
 use App\Models\Master\Religion;
 use App\Models\Master\Subject;
 use App\Models\Master\TopicTraining;
@@ -25,6 +28,7 @@ use App\Models\Master\TypeOfDuty;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
+use App\Models\Staff\StaffEducationDetail;
 use App\Models\Staff\StaffExperiencedSubject;
 use App\Models\Staff\StaffInvigilationDuty;
 use App\Models\Staff\StaffPersonalInfo;
@@ -86,7 +90,12 @@ class StaffController extends Controller
         $department = Department::where('status', 'active')->get();
         $subjects = Subject::where('status', 'active')->get();
         $scheme = AttendanceScheme::where('status', 'active')->get();
-        $training_topics = TopicTraining::where('status', 'active')->get();        
+        $training_topics = TopicTraining::where('status', 'active')->get();   
+        
+        #phase4
+        $boards = Board::where('status', 'active')->get();
+        $types = ProfessionType::where('status', 'active')->get();
+        $course_details = StaffEducationDetail::where('status', 'active')->get();
 
         $step = getRegistrationSteps($id);
 
@@ -118,7 +127,10 @@ class StaffController extends Controller
             'duty_info' => '',
             'training_topics' => $training_topics ?? [],
             'training_details' => $training_details ?? [],
-            'used_exp_subjects' => $used_exp_subjects
+            'used_exp_subjects' => $used_exp_subjects,
+            'boards' => $boards ?? [],
+            'types' => $types ?? [],
+            'course_details' => $course_details ?? []
         );
         
         return view('pages.staff.registration.index', $params);
@@ -134,7 +146,7 @@ class StaffController extends Controller
             'email' => 'required|string|unique:users,email,' . $id,
             'class_id' => 'required',
             'division_id' => 'required',
-            'previous_code' => 'required',
+            'previous_code' => 'required'            
             // 'previous_code' => 'required|string|unique:users,emp_code,'.$id,
         ]);
 
@@ -426,7 +438,7 @@ class StaffController extends Controller
     public function insertKycData(Request $request)
     {
 
-        $id = $request->id ?? '';
+        $id = $request->outer_staff_id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
             'date_of_birth' => 'required',
@@ -446,6 +458,7 @@ class StaffController extends Controller
             'whatsapp_no' => 'nullable|numeric|digits:10',
             'contact_address' => 'required',
             'permanent_address' => 'required',
+            'outer_staff_id' => 'required'
         ]);
 
         if ($validator->passes()) {

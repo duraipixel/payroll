@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Http\Controllers\Staff;
+
+use App\Http\Controllers\Controller;
+use App\Models\Staff\StaffEducationDetail;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
+class StaffEducationController extends Controller
+{
+    public function save(Request $request)
+    {
+        
+        $id = $request->training_id ?? '';
+        $data = '';
+        $validator = Validator::make($request->all(), [
+                                'course_started_year' => 'required',
+                                'course_completed_year' => 'required',
+                                'main_subject_id' => 'required',
+                                'ancillary_subject_id' => 'required',
+                                'course_certificate_no' => 'required',
+                                'course_submitted_date' => 'required',
+                                'staff_id' => 'required',
+                            ]);
+
+        if ($validator->passes()) {
+            
+            $staff_id = $request->staff_id;
+            $staff_info = User::find($staff_id);
+            $ins['academic_id'] = academicYearId();
+            $ins['staff_id'] = $staff_id;
+            $ins['course_started_year'] = date('Y-m-d', strtotime($request->course_started_year));
+            $ins['course_completed_year'] = date('Y-m-d', strtotime($request->course_completed_year));
+            $ins['board_id'] = $request->board_id;
+            $ins['main_subject_id'] = $request->main_subject_id;
+            $ins['ancillary_subject_id'] = $request->ancillary_subject_id;
+            $ins['certificate_no'] = $request->course_certificate_no;
+            $ins['submitted_date'] = date('Y-m-d', strtotime($request->course_submitted_date));
+            $ins['education_type'] = $request->course_professional_type;
+
+            if ($request->hasFile('course_file')) {
+    
+                $files = $request->file('course_file');
+                $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
+
+                $directory = 'staff/' . $staff_info->emp_code . '/course';
+                $filename  = $directory . '/' . $imageName;
+
+                Storage::disk('public')->put($filename, File::get($files));
+                $ins['doc_file'] = $filename;
+            }
+            
+            $ins['status'] = 'active';
+            $data = StaffEducationDetail::updateOrCreate(['id' => $id], $ins);
+            $error = 0;
+            $message = 'Added Successfully';
+           
+        } else {
+            $error = 1;
+            $message = $validator->errors()->all();
+        }
+        return response()->json(['error' => $error, 'message' => $message]);
+    }
+}

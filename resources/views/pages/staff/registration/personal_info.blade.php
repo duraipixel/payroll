@@ -460,9 +460,11 @@
 </div>
 
 <script>
-    var personsal_error = false;
+    
 
     function validatePersonalForm() {
+        var personsal_error = false;
+
         var key_name = [
             'institute_name',
             'name',
@@ -476,7 +478,7 @@
 
         key_name.forEach(element => {
             var name_input = document.getElementById(element).value;
-
+            
             if (name_input == '' || name_input == undefined) {
                 personsal_error = true;
                 var name_input_error =
@@ -487,7 +489,7 @@
                 $('#' + element).focus();
             }
         });
-        console.log(personsal_error, 'personsal_error');
+        
         if (!personsal_error) {
             
             var forms = $('#personal_form')[0];
@@ -505,7 +507,11 @@
                 success: function(res) {
                     unloading();
                     if (res.id) {
-                        $('#staff_id').val(res.id);
+                        setTimeout(() => {
+                            console.log('id mapping,', res.id);
+                            $('#staff_id').val(res.id);
+                            $('#outer_staff_id').val(res.id);
+                        }, 1000);
                     }
                     if (res.error == 1) {
                         if (res.message) {

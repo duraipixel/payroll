@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('academic_id')->nullable();
             $table->unsignedBigInteger('staff_id');
-            $table->date('course_started_year');
+            $table->string('course_name');
             $table->date('course_completed_year');
             $table->unsignedBigInteger('board_id');
             $table->unsignedBigInteger('main_subject_id');

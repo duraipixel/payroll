@@ -133,8 +133,9 @@
                                         toastr.success("Institution added successfully");
                                         if( res.inserted_data ) {
                                             $('#kt_dynamic_app').modal('hide');
-                                            $('#institue_name').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                            $('#institue_name').val(res.inserted_data.id);
+                                            
+                                            $('#institute_name').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
+                                            $('#institute_name').val(res.inserted_data.id)
 
                                             if( res.code ) {
                                                 $('#institute_code').val(res.code);

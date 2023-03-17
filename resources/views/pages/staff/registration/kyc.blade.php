@@ -526,6 +526,8 @@
 
             var forms = $('#kyc-form')[0];
             var formData = new FormData(forms);
+            var staff_id = $('#outer_staff_id').val();
+            formData.append('outer_staff_id', staff_id);
             $.ajax({
                 url: "{{ route('staff.save.kyc') }}",
                 type: "POST",
@@ -540,10 +542,12 @@
                     unloading();
 
                     if (res.error == 1) {
+                        var err_message = '';
                         if (res.message) {
                             res.message.forEach(element => {
-                                toastr.error("Error", element);
+                                err_message += '<p>'+element+'</p>';
                             });
+                            toastr.error("Error", err_message);
                         }
                         // console.log('form erorro occurres');
                         return true;
@@ -556,7 +560,7 @@
                     console.log('resoponse recevied');
                 }
             })
-            // return true;
+            return true;
         } else {
 
             return true;
