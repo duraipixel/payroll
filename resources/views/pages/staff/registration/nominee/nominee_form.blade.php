@@ -1,8 +1,9 @@
 <div class="card shadow-none rounded-0 w-100">
     <!--begin::Header-->
     <div class="card-header" id="kt_help_header">
-        <h5 class="card-title fw-bold text-gray-600">Add your Nominee
-            Details</h5>
+        <h5 class="card-title fw-bold text-gray-600" id="nominee_form_title">
+            Add Your Nominee Details
+        </h5>
         <div class="card-toolbar">
             <button type="button"
                 class="btn btn-sm btn-icon explore-btn-dismiss me-n5"

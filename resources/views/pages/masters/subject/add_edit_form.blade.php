@@ -93,6 +93,8 @@ var KTAppEcommerceSaveSubject = function () {
                                         subject.push(res.inserted_data.id.toString());
                                         $('#subject').val(subject).trigger('change');
 
+                                        getStudiedSubjectElements();
+
                                     }
                                 }
                             }

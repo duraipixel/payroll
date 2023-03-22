@@ -6,7 +6,7 @@
             <h2 class="fw-bolder text-dark">Employee Details</h2>
         </div>
         <form id="position_form">
-
+            @csrf
             <div class="row">
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Designation</label>
@@ -235,6 +235,23 @@
     /**
      * Training functions starts here
      * **/
+    function getStudiedSubjectElements() {
+        var staff_id = $('#outer_staff_id').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('get.studied.subject') }}",
+            type: "POST",
+            data: {staff_id:staff_id},
+            success: function(res) {
+                $('#studied_pane').html(res);
+            }
+        })
+    }
+    
     function openTrainingForm() {
         $('#kt_new_data_toggle_train').click();
 
@@ -245,6 +262,7 @@
             $('#trainer_name').val('');
             $('#training_remarks').val('');
             $('#training_topic').val('').trigger('change');
+            $('#training_id').val('');
         }, 100);
 
         event.preventDefault();
@@ -340,6 +358,7 @@
             $('#duty_other_place_id').val('').trigger('change');
             $('#inv_from_date').val('');
             $('#inv_to_date').val('');
+            $('#duty_id').val('');
             $('#drawer_title').html('Add Your Duty Details');
         }, 100);
         event.preventDefault();
@@ -547,7 +566,7 @@
 
     }
 
-    function validateEmployeePosition() {
+    async function validateEmployeePosition() {
         event.preventDefault();
         var emp_position_errors = false;
 
@@ -559,7 +578,6 @@
             'nationality_id',
             'religion_id',
             'caste_id',
-
         ];
 
         $('.kyc-form-errors').remove();
@@ -585,39 +603,32 @@
         });
 
         if (!emp_position_errors) {
-
+            loading();
             var forms = $('#position_form')[0];
             var formData = new FormData(forms);
-            $.ajax({
-                url: "{{ route('staff.save.employee_position') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                async: false,
-                beforeSend: function() {
-                    loading();
-                },
-                success: function(res) {
-                    unloading();
 
-                    if (res.error == 1) {
-                        if (res.message) {
-                            res.message.forEach(element => {
+            const employeeResponse = await fetch("{{ route('staff.save.employee_position') }}", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    unloading();
+                    
+                    if (data.error == 1) {
+                        if (data.message) {
+                            data.message.forEach(element => {
                                 toastr.error("Error", element);
                             });
-                        }
-                        // console.log('form erorro occurres');
+                        }                        
                         return true;
-
                     } else {
-                        event.preventDefault();
-                        console.log('form submit success');
                         return false;
                     }
-                    console.log('resoponse recevied');
-                }
-            })
+
+                });
+            return employeeResponse;
+            
         } else {
 
             return true;

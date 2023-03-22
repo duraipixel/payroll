@@ -2,7 +2,7 @@
     <!--begin::Wrapper-->
     <div class="w-100">
         <form id="educateStaffform" class="w-100">
-
+            @csrf
             <div class="pb-5 pb-lg-5">
                 <h2 class="fw-bolder text-dark">Education Details</h2>
             </div>
@@ -220,6 +220,7 @@
 <!--end::Help drawer-->
 <script>
     function openEducationForm() {
+        event.preventDefault();
         $('#kt_new_data_toggle_educate').click();
 
         setTimeout(() => {
@@ -233,11 +234,13 @@
             $('#course_submitted_date').val('');
             $('#course_professional_type').val('').trigger('change');
             $('#course_file').val('');
+            $('#course_id').val('');
         }, 100);
 
     }
 
     function editCourse(staff_id, course_id) {
+        event.preventDefault();
         $('#kt_new_data_toggle_educate').click();
 
         $.ajaxSetup({
@@ -387,7 +390,7 @@
      *  Past experince starts
      * ***/
     function openExperienceForm() {
-
+        event.preventDefault();
         $('#kt_new_data1_toggle').click();
 
         setTimeout(() => {
@@ -399,11 +402,13 @@
             $('#experince_institute_address').val('');
             $('#salary_drawn').val('');
             $('#experience_year').val('');
+            $('#experience_id').val('');
         }, 100);
 
     }
 
     function editExperience(staff_id, experience_id) {
+        event.preventDefault();
         $('#kt_new_data1_toggle').click();
 
         $.ajaxSetup({
@@ -421,7 +426,7 @@
             success: function(res) {
 
                 $('#experience_form').html(res);
-                $('#education_title').html('Update Your Education Details');
+                $('#experience_title').html('Update Your Education Details');
             }
         })
     }
@@ -551,14 +556,37 @@
     /*
     starts phase model submits
     */
-    function validateEducationDetails() {
+    async function validateEducationDetails() {
         event.preventDefault();
         var education_staff_errors = false;
 
         if (!education_staff_errors) {
+            loading();
 
             var forms = $('#educateStaffform')[0];
             var formData = new FormData(forms);
+
+            const eduResponse = await fetch("{{ route('staff.save.education_details') }}", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    unloading();
+                    if (data.error == 1) {
+                        if (data.message) {
+                            data.message.forEach(element => {
+                                toastr.error("Error", element);
+                            });
+                        }
+                        return true;
+
+                    } else {
+                        return false;
+                    }
+                });
+            return eduResponse
+
             $.ajax({
                 url: "{{ route('staff.save.education_details') }}",
                 type: "POST",
@@ -567,7 +595,7 @@
                 contentType: false,
                 async: false,
                 beforeSend: function() {
-                    loading();
+                    
                 },
                 success: function(res) {
                     unloading();

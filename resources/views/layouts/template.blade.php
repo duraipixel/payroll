@@ -54,11 +54,20 @@
             <!--end::Wrapper-->
         </div>
         <!--end::Page-->
-        <div id="loading" >
+        <div id="staff-loading" >
             <img src="{{ asset('assets/images/needs/loadingbook.gif') }}" alt="">
         </div>
     </div>
+    <script>
+        var loadingElement = document.getElementById('staff-loading');
+        function loading() {
+            loadingElement.style.display = 'flex';
+        }
     
+        function unloading() {
+            loadingElement.style.display = 'none';
+        }
+    </script>
     @include('layouts.drawer.activities')
 
     @include('layouts.drawer.chat')
@@ -80,12 +89,12 @@
     </div>
 
     <div class="modal fade" id="kt_modal_upgrade_plan" tabindex="-1" aria-hidden="true">
-        @include('layouts.modal.upgrade_plan')
+        {{-- @include('layouts.modal.upgrade_plan') --}}
     </div>
 
     <div class="modal fade" id="kt_modal_create_app" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        @include('layouts.modal.create_app')
+        {{-- @include('layouts.modal.create_app') --}}
         <!--end::Modal dialog-->
     </div>
 
@@ -103,18 +112,18 @@
 
     <div class="modal fade" id="kt_modal_offer_a_deal" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        @include('layouts.modal.offer_deal')
+        {{-- @include('layouts.modal.offer_deal') --}}
     </div>
 
     <div class="modal fade" id="kt_modal_users_search" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        @include('layouts.modal.user_search')
+        {{-- @include('layouts.modal.user_search') --}}
         <!--end::Modal dialog-->
     </div>
 
     <div class="modal fade" id="kt_modal_invite_friends" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        @include('layouts.modal.invite_friends')
+        {{-- @include('layouts.modal.invite_friends') --}}
         <!--end::Modal dialog-->
     </div>
     @yield('add_on_script')
@@ -175,6 +184,10 @@
         $(".DA_radio_holder .radio-btn").change(function() {
             $(this).closest(".question").next().toggle(this.value === 'yes');
         });
+
+    $(".number_only").keypress(function(e) {
+        if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
+    });
     </script>
 </body>
 
