@@ -84,7 +84,7 @@ var KTAppEcommerceSaveDesignation = function () {
                                         });
                                     }
                                 } else{
-                                    toastr.success("Bank added successfully");
+                                    toastr.success("Designation added successfully");
                                     if( res.inserted_data ) {
                                         $('#kt_dynamic_app').modal('hide');
                                         $('#designation_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)

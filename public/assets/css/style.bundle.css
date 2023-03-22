@@ -12,6 +12,8 @@
     font-display: swap;
 }
 
+
+
 :root {
   --bs-blue: #009ef6;
   --bs-indigo: #6610f2;
@@ -585,7 +587,7 @@ progress {
   color: #7E8299;
 }
 .blockquote-footer::before {
-  content: "â€”Â ";
+  content: "— ";
 }
 
 .img-fluid {
@@ -37319,7 +37321,7 @@ a:hover {
 }
 
 .breadcrumb-dot .breadcrumb-item:after {
-  content: "â€¢";
+  content: "•";
 }
 
 .breadcrumb-separatorless .breadcrumb-item:after {
@@ -47038,7 +47040,7 @@ label.rating-label:hover ~ .rating-label > i, label.rating-label:hover ~ .rating
 .stepper.stepper-links .stepper-nav .stepper-item {
   position: relative;
   flex-shrink: 0;
-  margin: 1rem 1.2rem;
+  margin: 1rem 1.7rem;
 }
 .stepper.stepper-links .stepper-nav .stepper-item:after {
   content: " ";
@@ -47053,7 +47055,7 @@ label.rating-label:hover ~ .rating-label > i, label.rating-label:hover ~ .rating
 .stepper.stepper-links .stepper-nav .stepper-item .stepper-title {
   color: #B5B5C3;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
 }
 .stepper.stepper-links .stepper-nav .stepper-item.current {
   transition: color 0.2s ease, background-color 0.2s ease;
@@ -47575,7 +47577,7 @@ body {
   }
   .aside-enabled.aside-fixed .wrapper {
     transition: padding-left 0.3s ease;
-    padding-left: 0px;
+    padding-left: 265px;
   }
   .aside-enabled.aside-fixed[data-kt-aside-minimize=on] .wrapper {
     transition: padding-left 0.3s ease;
@@ -47635,7 +47637,7 @@ body {
     box-shadow: none;
   }
   .aside-enabled.aside-fixed.header-fixed .header {
-    left: 0px;
+    left: 265px;
     transition: left 0.3s ease;
   }
   .aside-enabled.aside-fixed.header-fixed[data-kt-aside-minimize=on] .header {
@@ -47703,7 +47705,7 @@ body {
     border-top: 1px solid #EFF2F5;
   }
   .aside-enabled.aside-fixed.toolbar-fixed .toolbar {
-    left: 0;
+    left: 265px;
     transition: left 0.3s ease;
   }
   .aside-enabled.aside-fixed.toolbar-fixed[data-kt-aside-minimize=on] .toolbar {
@@ -47812,7 +47814,6 @@ body {
     left: 0;
     z-index: 101;
     overflow: hidden;
-	display:none;
   }
   .aside-static .aside {
     position: relative;
@@ -48546,4 +48547,3 @@ display: inline-block;}
 	
 	.choices__list--multiple .choices__item{    background-color: #1049a5;
     border: 1px solid #1049a5;} 
-

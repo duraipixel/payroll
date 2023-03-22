@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Models\Master\Board;
+use App\Models\Master\ProfessionType;
+use App\Models\Master\Subject;
 use App\Models\Staff\StaffEducationDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,10 +19,10 @@ class StaffEducationController extends Controller
     public function save(Request $request)
     {
         
-        $id = $request->training_id ?? '';
+        $id = $request->course_id ?? '';
         $data = '';
         $validator = Validator::make($request->all(), [
-                                'course_started_year' => 'required',
+                                'course_name' => 'required',
                                 'course_completed_year' => 'required',
                                 'main_subject_id' => 'required',
                                 'ancillary_subject_id' => 'required',
@@ -34,7 +37,7 @@ class StaffEducationController extends Controller
             $staff_info = User::find($staff_id);
             $ins['academic_id'] = academicYearId();
             $ins['staff_id'] = $staff_id;
-            $ins['course_started_year'] = date('Y-m-d', strtotime($request->course_started_year));
+            $ins['course_name'] = $request->course_name;
             $ins['course_completed_year'] = date('Y-m-d', strtotime($request->course_completed_year));
             $ins['board_id'] = $request->board_id;
             $ins['main_subject_id'] = $request->main_subject_id;
@@ -66,4 +69,44 @@ class StaffEducationController extends Controller
         }
         return response()->json(['error' => $error, 'message' => $message]);
     }
+
+    public function list(Request $request)
+    {
+        $staff_id = $request->staff_id;
+        $course_details = StaffEducationDetail::where('status', 'active')
+                                ->where('staff_id', $staff_id)                                
+                                ->get();
+        $params = array('course_details' => $course_details);
+
+        return view('pages.staff.registration.education.course', $params);
+    }
+
+    public function formContent(Request $request)
+    {
+        $staff_id = $request->staff_id;
+        $course_id = $request->course_id;
+        $boards = Board::where('status', 'active')->get();
+        $types = ProfessionType::where('status', 'active')->get();
+        $course_details = StaffEducationDetail::where('status', 'active')->get();
+        $subjects = Subject::where('status', 'active')->get();
+        
+        $course_info = StaffEducationDetail::where('staff_id', $staff_id)->where('id', $course_id)->first();
+
+        $params = array(
+            'course_info' => $course_info,
+            'course_details' => $course_details,
+            'types' => $types,
+            'boards' => $boards,
+            'subjects' => $subjects
+        );
+        return view('pages.staff.registration.education.course_form_content', $params );
+    }
+
+    public function deleteStaffCourse(Request $request)
+    {
+        $course_id = $request->course_id;
+        StaffEducationDetail::where('id', $course_id)->delete();
+        return response()->json(['error' => 1]);
+    }
+
 }

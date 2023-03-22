@@ -6,6 +6,7 @@ use App\Http\Controllers\Master\BoardController;
 use App\Models\Master\AttendanceScheme;
 use App\Models\Master\Bank;
 use App\Models\Master\BankBranch;
+use App\Models\Master\BloodGroup;
 use App\Models\Master\Board;
 use App\Models\Master\Caste;
 use App\Models\Master\Classes;
@@ -21,6 +22,8 @@ use App\Models\Master\Nationality;
 use App\Models\Master\OtherSchool;
 use App\Models\Master\OtherSchoolPlace;
 use App\Models\Master\ProfessionType;
+use App\Models\Master\Qualification;
+use App\Models\Master\RelationshipType;
 use App\Models\Master\Religion;
 use App\Models\Master\Subject;
 use App\Models\Master\TopicTraining;
@@ -30,12 +33,16 @@ use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
 use App\Models\Staff\StaffEducationDetail;
 use App\Models\Staff\StaffExperiencedSubject;
+use App\Models\Staff\StaffFamilyMember;
 use App\Models\Staff\StaffInvigilationDuty;
+use App\Models\Staff\StaffKnownLanguage;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffPfEsiDetail;
 use App\Models\Staff\StaffProfessionalData;
 use App\Models\Staff\StaffStudiedSubject;
+use App\Models\Staff\StaffTalent;
 use App\Models\Staff\StaffTrainingDetail;
+use App\Models\Staff\StaffWorkExperience;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -56,20 +63,24 @@ class StaffController extends Controller
                     $used_classes[] = $items->class_id;
                 }
             }
-            if( isset( $staff_details->experiencedSubject ) && !empty( $staff_details->experiencedSubject ) ) {
-                foreach ( $staff_details->experiencedSubject  as $item ) {
+            if (isset($staff_details->experiencedSubject) && !empty($staff_details->experiencedSubject)) {
+                foreach ($staff_details->experiencedSubject  as $item) {
                     $used_exp_subjects[] = $item->subject_id;
                 }
             }
-            if( isset( $staff_details->bank->bank_branch_id ) && !empty( $staff_details->bank->bank_branch_id ) ) {                
+            if (isset($staff_details->bank->bank_branch_id) && !empty($staff_details->bank->bank_branch_id)) {
                 $branch_details = BankBranch::where('bank_id', $staff_details->bank->bank_id)->get();
             }
 
             $invigilation_details = StaffInvigilationDuty::where('status', 'active')
-                                    ->where('staff_id', $id)->get();
+                ->where('staff_id', $id)->get();
             $training_details = StaffTrainingDetail::where('status', 'active')->where('staff_id', $id)->get();
+            $course_details = StaffEducationDetail::where('status', 'active')->where('staff_id', $id)->get();
+            $experience_details = StaffWorkExperience::where('status', 'active')->where('staff_id', $id)->get();
+            $known_languages = StaffKnownLanguage::where('status', 'active')->where('staff_id', $id)->get();
+            $member_details = StaffFamilyMember::where('status', 'active')->where('staff_id', $id)->get();
         }
-        
+
         $institutions = Institution::where('status', 'active')->get();
         $reporting_managers = User::where('status', 'active')->where('is_super_admin', '!=', 1)->get();
         $divisions = Division::where('status', 'active')->get();
@@ -90,12 +101,16 @@ class StaffController extends Controller
         $department = Department::where('status', 'active')->get();
         $subjects = Subject::where('status', 'active')->get();
         $scheme = AttendanceScheme::where('status', 'active')->get();
-        $training_topics = TopicTraining::where('status', 'active')->get();   
-        
+        $training_topics = TopicTraining::where('status', 'active')->get();
+
         #phase4
         $boards = Board::where('status', 'active')->get();
         $types = ProfessionType::where('status', 'active')->get();
-        $course_details = StaffEducationDetail::where('status', 'active')->get();
+
+        #phase5
+        $relation_types = RelationshipType::where('status', 'active')->get();
+        $blood_groups = BloodGroup::where('status', 'active')->get();
+        $qualificaiton = Qualification::where('status', 'active')->get();
 
         $step = getRegistrationSteps($id);
 
@@ -130,9 +145,15 @@ class StaffController extends Controller
             'used_exp_subjects' => $used_exp_subjects,
             'boards' => $boards ?? [],
             'types' => $types ?? [],
-            'course_details' => $course_details ?? []
+            'course_details' => $course_details ?? [],
+            'experience_details' => $experience_details ?? [],
+            'known_languages' => $known_languages ?? [],
+            'relation_types' => $relation_types ?? [],
+            'blood_groups' => $blood_groups ?? [],
+            'qualificaiton' => $qualificaiton ?? [],
+            'member_details' => $member_details ?? []
         );
-        
+
         return view('pages.staff.registration.index', $params);
     }
 
@@ -146,7 +167,7 @@ class StaffController extends Controller
             'email' => 'required|string|unique:users,email,' . $id,
             'class_id' => 'required',
             'division_id' => 'required',
-            'previous_code' => 'required'            
+            'previous_code' => 'required'
             // 'previous_code' => 'required|string|unique:users,emp_code,'.$id,
         ]);
 
@@ -491,32 +512,31 @@ class StaffController extends Controller
             $ins['status'] = 'active';
 
             StaffPersonalInfo::updateOrCreate(['staff_id' => $id], $ins);
-            if( !empty( $request->uan_no ) ) {
+            if (!empty($request->uan_no)) {
 
                 $insEsi['academic_id'] = $academic_id;
                 $insEsi['staff_id'] = $id;
                 $insEsi['ac_number'] = $request->uan_no;
                 $insEsi['type'] = 'esi';
-                $insEsi['start_date'] = $request->uan_start_date ? date('Y-m-d', strtotime($request->uan_start_date) ) : null;
+                $insEsi['start_date'] = $request->uan_start_date ? date('Y-m-d', strtotime($request->uan_start_date)) : null;
                 $insEsi['location'] = $request->uan_area;
                 $insEsi['status'] = 'active';
                 StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'esi'], $insEsi);
             }
-            if( !empty( $request->esi_no ) ) {
+            if (!empty($request->esi_no)) {
 
                 $insEsi['academic_id'] = $academic_id;
                 $insEsi['staff_id'] = $id;
                 $insEsi['ac_number'] = $request->esi_no;
                 $insEsi['type'] = 'pf';
-                $insEsi['start_date'] = isset($request->esi_start_date) && !empty( $request->esi_start_date ) ? date('Y-m-d', strtotime($request->esi_start_date) ) : null;
-                $insEsi['end_date'] = isset($request->esi_end_date) && !empty($request->esi_end_date) ? date('Y-m-d', strtotime($request->esi_end_date) ) : null;
+                $insEsi['start_date'] = isset($request->esi_start_date) && !empty($request->esi_start_date) ? date('Y-m-d', strtotime($request->esi_start_date)) : null;
+                $insEsi['end_date'] = isset($request->esi_end_date) && !empty($request->esi_end_date) ? date('Y-m-d', strtotime($request->esi_end_date)) : null;
                 $insEsi['location'] = $request->esi_address;
                 $insEsi['status'] = 'active';
                 StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'pf'], $insEsi);
-
             }
 
-            if( $request->bank_id ) {
+            if ($request->bank_id) {
 
                 $insBank['academic_id'] = $academic_id;
                 $insBank['staff_id'] = $id;
@@ -528,33 +548,33 @@ class StaffController extends Controller
                  *  check file is exists
                  */
                 if ($request->hasFile('bank_passbook')) {
-    
+
                     $files = $request->file('bank_passbook');
                     $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
-    
+
                     $directory              = 'staff/' . $staff_info->emp_code . '/bank';
                     $filename               = $directory . '/' . $imageName;
-    
+
                     Storage::disk('public')->put($filename, File::get($files));
                     $insBank['passbook_image'] = $filename;
                 }
-    
+
                 if ($request->hasFile('cancelled_cheque')) {
-    
+
                     $files = $request->file('cancelled_cheque');
                     $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
-    
+
                     $directory              = 'staff/' . $staff_info->emp_code . '/bank';
                     $filename               = $directory . '/' . $imageName;
-    
+
                     Storage::disk('public')->put($filename, File::get($files));
                     $insBank['cancelled_cheque'] = $filename;
                 }
                 $insBank['status'] = 'active';
-    
+
                 StaffBankDetail::updateOrCreate(['staff_id' => $id], $insBank);
             }
-            
+
             $error      = 0;
             $message    = '';
         } else {
@@ -574,8 +594,8 @@ class StaffController extends Controller
             'designation_id' => 'required',
             'department_id' => 'required',
             'subject' => 'required',
-            'scheme_id' => 'required',          
-            
+            'scheme_id' => 'required',
+
         ]);
 
         if ($validator->passes()) {
@@ -590,14 +610,14 @@ class StaffController extends Controller
             $ins['staff_id'] = $id;
             $ins['designation_id'] = $request->designation_id;
             $ins['department_id'] = $request->department_id;
-            
+
             $ins['attendance_scheme_id'] = $request->scheme_id;
             $ins['status'] = 'active';
             StaffProfessionalData::updateOrCreate(['staff_id' => $id], $ins);
 
-            if( $request->subject && !empty( $request->subject ) ) {
+            if ($request->subject && !empty($request->subject)) {
                 StaffExperiencedSubject::where('staff_id', $id)->delete();
-                foreach ( $request->subject as $items ) {
+                foreach ($request->subject as $items) {
                     $ins1 = [];
                     $ins1['academic_id'] = $academic_id;
                     $ins1['staff_id'] = $id;
@@ -607,11 +627,12 @@ class StaffController extends Controller
                 }
             }
 
-            if( $request->studied && !empty($request->studied)) {
+            if ($request->studied && !empty($request->studied)) {
                 StaffStudiedSubject::where('staff_id', $id)->delete();
-                foreach ( $request->studied as $item ) {
+                foreach ($request->studied as $item) {
                     $ids = explode('_', $item);
-                    $class_id = $ids[1]; $subject_id = $ids[0];
+                    $class_id = $ids[1];
+                    $subject_id = $ids[0];
                     $ins2 = [];
                     $ins2['academic_id'] = $academic_id;
                     $ins2['staff_id'] = $id;
@@ -622,27 +643,111 @@ class StaffController extends Controller
                 }
             }
 
-            if( $request->no_studied && !empty( $request->no_studied ) ) {
-                foreach ( $request->no_studied as $item ) {
-                    
+            if ($request->no_studied && !empty($request->no_studied)) {
+                foreach ($request->no_studied as $item) {
+
                     $ins2 = [];
                     $ins2['academic_id'] = $academic_id;
                     $ins2['staff_id'] = $id;
                     $ins2['subject_id'] = $item;
                     $ins2['status'] = 'active';
                     StaffStudiedSubject::create($ins2);
-
                 }
             }
 
             $error      = 0;
             $message    = '';
-
         } else {
             $error      = 1;
             $message    = $validator->errors()->all();
         }
         return response()->json(['error' => $error, 'message' => $message, 'id' => $id ?? '']);
+    }
+
+    public function insertEducationDetails(Request $request)
+    {
+        /**
+         * 1. insert known languages
+         */
+        $staff_id = $request->id;
+        $academic_id = academicYearId();
+        StaffKnownLanguage::where('staff_id', $staff_id)->delete();
+        if ($request->speak && !empty($request->speak)) {
+            foreach ($request->speak as $item) {
+                $ins = [];
+                $ins['academic_id'] = $academic_id;
+                $ins['staff_id'] = $staff_id;
+                $ins['language_id'] = $item;
+                $ins['speak'] = true;
+                $ins['status'] = 'active';
+
+                StaffKnownLanguage::updateOrCreate(['staff_id' => $staff_id, 'language_id' => $item], $ins);
+            }
+        }
+        
+
+        if ($request->read && !empty($request->read)) {
+            foreach ($request->read as $item) {
+                $ins = [];
+                $ins['academic_id'] = $academic_id;
+                $ins['staff_id'] = $staff_id;
+                $ins['language_id'] = $item;
+                $ins['read'] = true;
+                $ins['status'] = 'active';
+
+                StaffKnownLanguage::updateOrCreate(['staff_id' => $staff_id, 'language_id' => $item], $ins);
+            }
+        }
+
+        if ($request->write && !empty($request->write)) {
+            foreach ($request->write as $item) {
+                $ins = [];
+                $ins['academic_id'] = $academic_id;
+                $ins['staff_id'] = $staff_id;
+                $ins['language_id'] = $item;
+                $ins['write'] = true;
+                $ins['status'] = 'active';
+
+                StaffKnownLanguage::updateOrCreate(['staff_id' => $staff_id, 'language_id' => $item], $ins);
+            }
+        }
+
+        $sports = $request->sports;
+        $fine_arts = $request->fine_arts;
+        $vocational = $request->vocational;
+        $others = $request->others;
+
+        $ins1['academic_id'] = $academic_id;
+        $ins1['staff_id'] = $staff_id;
+        $ins1['status'] = 'active';
+
+        if( isset( $sports ) && !empty($sports ) ) {
+            $ins1['talent_fields'] = 'sports';
+            $ins1['talent_descriptions'] = $request->sports;
+            StaffTalent::updateOrCreate(['staff_id' => $staff_id, 'talent_fields' => 'sports'], $ins1);
+        }
+
+        if( isset( $fine_arts ) && !empty($fine_arts ) ) {
+            $ins1['talent_fields'] = 'fine_arts';
+            $ins1['talent_descriptions'] = $request->fine_arts;
+            StaffTalent::updateOrCreate(['staff_id' => $staff_id, 'talent_fields' => 'fine_arts'], $ins1);
+        }
+
+        if( isset( $vocational ) && !empty($vocational ) ) {
+            $ins1['talent_fields'] = 'vocational';
+            $ins1['talent_descriptions'] = $request->vocational;
+            StaffTalent::updateOrCreate(['staff_id' => $staff_id, 'talent_fields' => 'vocational'], $ins1);
+        }
+
+        if( isset( $others ) && !empty($others ) ) {
+            $ins1['talent_fields'] = 'others';
+            $ins1['talent_descriptions'] = $request->others;
+            StaffTalent::updateOrCreate(['staff_id' => $staff_id, 'talent_fields' => 'others'], $ins1);
+        }
+
+        return response()->json(['error' => 0, 'message' => 'Added success']);
 
     }
+
+
 }

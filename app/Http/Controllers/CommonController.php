@@ -41,16 +41,25 @@ class CommonController extends Controller
     
                 $content = view('pages.masters.languages.add_edit_form');
                 break;
+            case 'new_language':
+
+                $content = view('pages.masters.new_languages.add_edit_form');
+                break;
             
             case 'places':
                 $content = view('pages.masters.places.add_edit_form');
                 break;
+
             case 'other_places':
                 $content = view('pages.masters.other_places.add_edit_form');
                 break;
             
             case 'nationality':
                 $content = view('pages.masters.nationality.add_edit_form');
+                break;
+                
+            case 'family_nationality':
+                $content = view('pages.masters.nationality.add_edit_form1');
                 break;
             
             case 'religion':
@@ -76,6 +85,9 @@ class CommonController extends Controller
             case 'designation':
                 $content = view('pages.masters.designation.add_edit_form');
                 break;
+            case 'experience_designation':
+                $content = view('pages.masters.experience_designation.add_edit_form');
+                break;
             
             case 'department':
                 $content = view('pages.masters.department.add_edit_form');
@@ -97,6 +109,9 @@ class CommonController extends Controller
             case 'other_school':
                 $content = view('pages.masters.other_schools.add_edit_form');
                 break;
+            case 'experience_institute_name':
+                $content = view('pages.masters.exp_institutes.add_edit_form');
+                break;
             case 'training_topic':
                 $content = view('pages.masters.training_topic.add_edit_form');
                 break;
@@ -111,6 +126,15 @@ class CommonController extends Controller
                 break;
             case 'professional_type':
                 $content = view('pages.masters.professional_type.add_edit_form');
+                break;
+            case 'relationship':
+                $content = view('pages.masters.relation_type.add_edit_form');
+                break;
+            case 'qualification':
+                $content = view('pages.masters.qualification.add_edit_form');
+                break;
+            case 'blood_group':
+                $content = view('pages.masters.blood_group.add_edit_form');
                 break;
 
             default:

@@ -5,11 +5,10 @@
        
         <label class="required fs-6 fw-bold mb-2">Course Started</label>
         <!--begin::Input-->
-        <div class="position-relative d-flex align-items-center">
-         
-           {!! dobSVG() !!}
-            <input class="form-control form-control-solid ps-12" placeholder="Select a date"
-                name="course_started_year" required id="course_started_year" value="{{ isset($duty_info->from_date) && !empty( $duty_info->from_date ) ? date('d-m-Y', strtotime($duty_info->from_date)) : ''  }}" />
+        <div class="position-relative">
+           
+            <input class="form-control form-control-solid ps-12" placeholder="Course Name"
+                name="course_name" required id="course_name" value="{{ $course_info->course_name ?? '' }}" />
         </div>
     </div>
     <!--end::Input group-->
@@ -18,12 +17,11 @@
        
         <label class="form-label required"> Board/University </label>
         <div class="position-relative">
-            <select name="board_id" autofocus id="board_id"
-                class="form-select form-select-lg select2-option" required>
-                <option value="">--Select Board --</option>
+            <select name="board_id" autofocus id="board_id" class="form-select form-select-lg select2-option" required>
+                <option value="">-- Select Board --</option>
                 @isset($boards)
                     @foreach ($boards as $item)
-                        <option value="{{ $item->id }}" @if (isset($duty_info->school_place_id) && $duty_info->school_place_id == $item->id) selected @endif>
+                        <option value="{{ $item->id }}" @if (isset($course_info->board_id) && $course_info->board_id == $item->id) selected @endif>
                             {{ $item->name }}
                         </option>
                     @endforeach
@@ -40,12 +38,10 @@
     <!--begin::Input group-->
     <div class="col-lg-6 mb-5">
         <label class="required fs-6 fw-bold mb-2">Course Completed</label>
-        <!--begin::Input-->
         <div class="position-relative d-flex align-items-center">
-         
-           {!! dobSVG() !!}
+            {!! dobSVG() !!}
             <input class="form-control form-control-solid ps-12" placeholder="Select a date"
-                name="course_completed_year" required id="course_completed_year" value="{{ isset($duty_info->from_date) && !empty( $duty_info->from_date ) ? date('d-m-Y', strtotime($duty_info->from_date)) : ''  }}" />
+                name="course_completed_year" required id="course_completed_year" value="{{ isset($course_info->course_completed_year) && !empty( $course_info->course_completed_year ) ? date('d-m-Y', strtotime($course_info->course_completed_year)) : ''  }}" />
         </div>
     </div>
     <!--end::Input group-->
@@ -58,7 +54,7 @@
                 <option value="">--Select Main Subject --</option>
                 @isset($subjects)
                     @foreach ($subjects as $item)
-                        <option value="{{ $item->id }}" @if (isset($duty_info->school_place_id) && $duty_info->school_place_id == $item->id) selected @endif>
+                        <option value="{{ $item->id }}" @if (isset($course_info->main_subject_id) && $course_info->main_subject_id == $item->id) selected @endif>
                             {{ $item->name }}
                         </option>
                     @endforeach
@@ -81,7 +77,7 @@
                 <option value="">--Select Ancillary Subject --</option>
                 @isset($subjects)
                     @foreach ($subjects as $item)
-                        <option value="{{ $item->id }}" @if (isset($duty_info->school_place_id) && $duty_info->school_place_id == $item->id) selected @endif>
+                        <option value="{{ $item->id }}" @if (isset($course_info->ancillary_subject_id) && $course_info->ancillary_subject_id == $item->id) selected @endif>
                             {{ $item->name }}
                         </option>
                     @endforeach
@@ -100,7 +96,7 @@
         <label class="form-label required">Certificate No</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <input name="course_certificate_no" id="course_certificate_no" class="form-control form-control-lg form-control-solid" />
+        <input name="course_certificate_no" id="course_certificate_no" value="{{ $course_info->certificate_no ?? '' }}" class="form-control form-control-lg form-control-solid" />
         <!--end::Input-->
     </div>
     <!--end::Input group-->
@@ -110,14 +106,14 @@
         <div class="position-relative d-flex align-items-center">
            {!! dobSVG() !!}
             <input class="form-control form-control-solid ps-12" placeholder="Select a date"
-                name="course_submitted_date" required id="course_submitted_date" value="{{ isset($duty_info->from_date) && !empty( $duty_info->from_date ) ? date('d-m-Y', strtotime($duty_info->from_date)) : ''  }}" />
+                name="course_submitted_date" required id="course_submitted_date" value="{{ isset($course_info->submitted_date) && !empty( $course_info->submitted_date ) ? date('d-m-Y', strtotime($course_info->submitted_date)) : ''  }}" />
         </div>
     </div>
     <!--end::Input group-->
 
     <!--begin::Input group-->
     <div class="col-lg-6 mb-5">
-
+        <input type="hidden" name="course_id" id="course_id" value="{{ $course_info->id ?? '' }}">
         <label class="form-label required"> Type </label>
         <div class="position-relative">
             <select name="course_professional_type" autofocus id="course_professional_type"
@@ -125,14 +121,13 @@
                 <option value="">--Select Type --</option>
                 @isset($types)
                     @foreach ($types as $item)
-                        <option value="{{ $item->id }}" @if (isset($duty_info->school_place_id) && $duty_info->school_place_id == $item->id) selected @endif>
+                        <option value="{{ $item->id }}" @if (isset($course_info->education_type) && $course_info->education_type == $item->id) selected @endif>
                             {{ $item->name }}
                         </option>
                     @endforeach
                 @endisset
             </select>
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                onclick="return openAddModel('professional_type')">
+            <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('professional_type')">
                 <i class="fa fa-plus"></i>
             </span>
         </div>
@@ -146,32 +141,47 @@
             <label class="col-lg-12 col-form-label text-lg-right">Upload
                 File:</label>
             <div class="col-lg-12">
-                <div class="uppy" id="kt_uppy_5">
-                    <div class="uppy-wrapper">
-                        <div class="uppy-Root uppy-FileInput-container">
-                            <input class="uppy-FileInput-input uppy-input-control" style=""
-                                type="file" name="course_file"
-                                id="course_file">
-                                <label
-                                class="uppy-input-label btn btn-light-primary btn-sm btn-bold"
-                                for="course_file">Attach
-                                files</label>
-                        </div><span class="form-text text-dark">Maximum file size
-                            1MB</span>
-                    </div>
-                    <div class="uppy-list"></div>
-                    <div class="uppy-status">
-                        <div class="uppy-Root uppy-StatusBar is-waiting" aria-hidden="true"
-                            dir="ltr">
-                            <div class="uppy-StatusBar-progress" style="width: 0%;" role="progressbar"
-                                aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
-                            <div class="uppy-StatusBar-actions"></div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="uppy" id="kt_uppy_5">
+                            <div class="uppy-wrapper">
+                                <div class="uppy-Root uppy-FileInput-container">
+                                    <input class="uppy-FileInput-input uppy-input-control" style=""
+                                        type="file" name="course_file"
+                                        id="course_file">
+                                        <label
+                                        class="uppy-input-label btn btn-light-primary btn-sm btn-bold"
+                                        for="course_file">Attach
+                                        files</label>
+                                </div><span class="form-text text-dark">Maximum file size
+                                    1MB</span>
+                            </div>
+                            <div class="uppy-list"></div>
+                            <div class="uppy-status">
+                                <div class="uppy-Root uppy-StatusBar is-waiting" aria-hidden="true"
+                                    dir="ltr">
+                                    <div class="uppy-StatusBar-progress" style="width: 0%;" role="progressbar"
+                                        aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+                                    <div class="uppy-StatusBar-actions"></div>
+                                </div>
+                            </div>
+                            <div class="uppy-informer uppy-informer-min">
+                                <div class="uppy uppy-Informer" aria-hidden="true">
+                                    <p role="alert"> </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="uppy-informer uppy-informer-min">
-                        <div class="uppy uppy-Informer" aria-hidden="true">
-                            <p role="alert"> </p>
-                        </div>
+                    <div class="col-sm-6 text-end">
+                        @isset($course_info->doc_file)
+                        @php
+                            $path = Storage::url($course_info->doc_file);
+                        @endphp
+                        <a href="{{ asset($path) }}" target="_blank" class="btn btn-sm btn-primary">
+                            View File
+                        </a>
+                        @endisset
+
                     </div>
                 </div>
 

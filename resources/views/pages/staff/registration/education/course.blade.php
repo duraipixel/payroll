@@ -7,7 +7,7 @@
         <thead>
             <tr class="fw-bolder text-muted">
                 <th class="min-w-50px">Sl.No</th>
-                <th class="min-w-140px">Course Started</th>
+                <th class="min-w-140px">Course</th>
                 <th class="min-w-120px">Board/University</th>
                 <th class="min-w-120px">Year of Completion</th>
                 <th class="min-w-120px">Main Subject</th>
@@ -23,12 +23,12 @@
         <tbody>
             @isset($course_details)
                 @foreach ($course_details as $item)
-                {{-- {{ dump( $item ) }} --}}
+                
                 <tr>
                     <td>
-                        {{-- <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">{{ $loop->item }}</a> --}}
+                        <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">{{ $loop->index + 1 }}</a>
                     </td>
-                    <td class="text-dark fw-bolder text-hover-primary fs-6">{{ date('d-m-Y', strtotime($item->course_started_year)) }}</td>
+                    <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->course_name ?? '' }}</td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->boards->name ?? '' }}</td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ date('d-m-Y', strtotime($item->course_completed_year)) }}</td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->mainSubject->name ?? '' }}</td>
@@ -41,14 +41,13 @@
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">
                         @php
-                            $path = Storage::url($item);
+                            $path = Storage::url($item->doc_file);
                         @endphp
                         @isset($item->doc_file)
                             <a href="{{ asset($path) }}" target="_blank"> Download File </a></td>
                         @endisset
                     <td class="text-end">
-                        <a href="#"
-                            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
+                        <a href="javascript:void(0)" onclick="return editCourse('{{ $item->staff_id }}', '{{ $item->id }}')" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">
                             <!--begin::Svg Icon | path: icons/duotune/art/art005.svg-->
                             <span class="svg-icon svg-icon-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
@@ -64,9 +63,7 @@
                             </span>
                             <!--end::Svg Icon-->
                         </a>
-                        <a href="#"
-                            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
-                            <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                        <a href="javascript:void(0)" onclick="return deleteCourse('{{ $item->staff_id }}', '{{ $item->id }}')"  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">                            
                             <span class="svg-icon svg-icon-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24"
                                     height="24" viewBox="0 0 24 24"
@@ -81,8 +78,7 @@
                                         d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
                                         fill="currentColor" />
                                 </svg>
-                            </span>
-                            <!--end::Svg Icon-->
+                            </span>                            
                         </a>
                     </td>
                 </tr>    

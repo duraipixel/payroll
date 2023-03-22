@@ -246,6 +246,8 @@
             $('#training_remarks').val('');
             $('#training_topic').val('').trigger('change');
         }, 100);
+
+        event.preventDefault();
     }
 
     function editTraining(training_id) {
@@ -340,6 +342,7 @@
             $('#inv_to_date').val('');
             $('#drawer_title').html('Add Your Duty Details');
         }, 100);
+        event.preventDefault();
 
     }
 
@@ -427,7 +430,7 @@
         let key_name = [
             'duty_classes',
             'duty_type',
-            'duty_other_school',
+            'other_school',
             'duty_other_place_id',
             'inv_from_date',
             'inv_to_date',
@@ -451,7 +454,7 @@
         });
 
         if (!invigilationErrors) {
-            var staff_id = $('#staff_id').val();
+            var staff_id = $('#outer_staff_id').val();
             var forms = $('#invigilation')[0];
             var formData = new FormData(forms);
             formData.append('staff_id', staff_id);

@@ -15,7 +15,7 @@ class StaffEducationDetail extends Model
     protected $fillable = [
         'academic_id',
         'staff_id',
-        'course_started_year',	
+        'course_name',	
         'course_completed_year',	
         'board_id',	
         'main_subject_id',	

@@ -1,9 +1,11 @@
 <?php
 
 use App\Models\AcademicYear;
+use App\Models\Staff\StaffKnownLanguage;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffProfessionalData;
 use App\Models\Staff\StaffStudiedSubject;
+use App\Models\Staff\StaffTalent;
 use App\Models\User;
 
 if (!function_exists('academicYearId')) {
@@ -33,6 +35,8 @@ if (!function_exists('getRegistrationSteps')) {
                 $step = 3;
             }
 
+            $step = 6;
+
         }
         return $step;
 
@@ -51,40 +55,29 @@ if (!function_exists('getStudiedSubjects')) {
     }
 }
 
-if (!function_exists('isKycWizardCompleted')) {
-    function isKycWizardCompleted($staff_id)
+if (!function_exists('getStaffKnownLanguages')) {
+    function getStaffKnownLanguages($staff_id, $language_id, $type)
     {
-        
+        return StaffKnownLanguage::where('status', 'active')
+                                    ->where('staff_id', $staff_id)
+                                    ->where('language_id', $language_id)
+                                    ->where($type, true)
+                                    ->first();
     }
 }
 
-if (!function_exists('isEmpPositionWizardCompleted')) {
-    function isEmpPositionWizardCompleted($staff_id)
+if (!function_exists('getTalents')) {
+    function getTalents($staff_id, $talent_fields)
     {
-        
+        return StaffTalent::where('status', 'active')
+                                    ->where('staff_id', $staff_id)
+                                    ->where('talent_fields', $talent_fields)
+                                    ->first();
     }
 }
 
-if (!function_exists('isFamilyInfoWizardCompleted')) {
-    function isFamilyInfoWizardCompleted($staff_id)
-    {
-        
-    }
-}
 
-if (!function_exists('isMedicInfoWizardCompleted')) {
-    function isMedicInfoWizardCompleted($staff_id)
-    {
-        
-    }
-}
 
-if (!function_exists('isAppointmentWizardCompleted')) {
-    function isAppointmentWizardCompleted($staff_id)
-    {
-        
-    }
-}
 
 
 

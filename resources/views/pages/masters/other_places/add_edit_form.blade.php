@@ -91,8 +91,8 @@ var KTAppEcommerceSavePlace = function () {
                                     toastr.success("Place added successfully");
                                     if( res.inserted_data ) {
                                         $('#kt_dynamic_app').modal('hide');
-                                        $('#other_place_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                        $('#other_place_id').val(res.inserted_data.id).trigger('change');
+                                        $('#duty_other_place_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
+                                        $('#duty_other_place_id').val(res.inserted_data.id).trigger('change');
                                     }
                                 }
                             }

@@ -9,9 +9,9 @@
         <div class="col-6">
             <div class="text-light lst-typ text-end">
                 <ul>
-                    <li><img alt="Logo" src="{{ asset('assets/images/needs/user-logo.png') }}"
+                    <li><img alt="Logo" src="{{ asset('assets/media/logos/user-logo.png') }}"
                             class="h-45px logo" /></li>
-                    <li><img alt="Logo" src="{{ asset('assets/images/needs/user-logo-1.png') }}"
+                    <li><img alt="Logo" src="{{ asset('assets/media/logos/user-logo-1.png') }}"
                             class="h-45px logo" /></li>
                 </ul>
             </div>

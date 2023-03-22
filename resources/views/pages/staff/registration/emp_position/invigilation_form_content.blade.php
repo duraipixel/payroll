@@ -5,7 +5,6 @@
        @include('pages.staff.registration.emp_position.invigilation_form_content')
     </div> --}}
     <div class="col-lg-6 mb-5">
-        
         <label class="form-label required">Class</label>
         <input type="hidden" name="duty_id" id="duty_id" value="{{ $duty_info->id ?? '' }}">
         <div class="position-relative">
@@ -50,7 +49,7 @@
     <div class="col-lg-6 mb-5">
         <label class="form-label required">Name Of School</label>
         <div class="position-relative">
-            <select name="duty_other_school" autofocus id="duty_other_school"
+            <select name="duty_other_school" autofocus id="other_school"
                 class="form-select form-select-lg select2-option" required>
                 <option value="">--Select School --</option>
                 @isset($other_schools)
@@ -160,7 +159,7 @@
     <div class="d-flex flex-stack pt-5">
         <!--begin::Wrapper-->
         <div>
-            <button type="button"  onClick="submitInvigilationForm()"  class="btn btn-lg btn-primary me-3 d-inline-block">
+            <button type="button"  onClick="return submitInvigilationForm()"  class="btn btn-lg btn-primary me-3 d-inline-block">
                 <span class="indicator-label" > 
                     Submit
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->

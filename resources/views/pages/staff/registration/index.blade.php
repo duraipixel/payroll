@@ -1,21 +1,18 @@
  <!--begin::Navbar-->
  @extends('layouts.template')
  @section('content')
-    @if(isset($staff_details) && !empty( $staff_details))
-    <script>
-         var formStep = '{{ $step }}';
-        formStep = parseInt(formStep) - 1;
-        
-        </script>
-    @else
-    <script>
-            var formStep = 0;
-           
-        </script>
-    @endif
+     @if (isset($staff_details) && !empty($staff_details))
+         <script>
+             var formStep = '{{ $step }}';
+             formStep = parseInt(formStep) - 1;
+         </script>
+     @else
+         <script>
+             var formStep = 0;
+         </script>
+     @endif
      <link rel="stylesheet" href="{{ asset('assets/css/registration.css') }}">
-     <script src="{{ asset('assets/js/tamil-search.js') }}"></script>
-     <script src="{{ asset('assets/js/tamil-keyboard.js') }} "></script>
+
      <link rel="stylesheet" href="{{ asset('assets/css/bd-wizard.css') }}">
      <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
      <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -39,7 +36,7 @@
                  </h3>
                  <section>
                      <div class="">
-                        <input type="hidden" name="staff_id" id="outer_staff_id" value="{{ $staff_details->id ?? '' }}">
+                         <input type="hidden" name="staff_id" id="outer_staff_id" value="{{ $staff_details->id ?? '' }}">
                          @include('pages.staff.registration.personal_info')
                      </div>
                  </section>
@@ -141,46 +138,50 @@
          </div>
          <!--end::Card body-->
      </div>
-    <script>
-        function checkGoFurther(form_no) {
-            switch (form_no) {
-                case 0:
-                    return validatePersonalForm();
-                    break;
+     <script>
+         function checkGoFurther(form_no) {
+             switch (form_no) {
+                 case 0:
+                     $return = validatePersonalForm();
+                     if ($return == undefined || $return == 'undefined') {
+                         $return = true;
+                     }
+                     return $return;
+                     break;
 
-                case 1:
-                    return validateKycForm();
-                    break;
-                case 2:
-                    return validateEmployeePosition();
-                    break;
+                 case 1:
+                     return validateKycForm();
+                     break;
+                 case 2:
+                     return validateEmployeePosition();
+                     break;
 
-                case 3:
-                    return validateEducationDetails();
-                    break;
+                 case 3:
+                     return validateEducationDetails();
+                     break;
 
-                case 4:
+                 case 4:
+                     return validateFamilyPhase();
+                     break;
 
-                    break;
+                 case 5:
 
-                case 5:
+                     break;
 
-                    break;
+                 case 6:
 
-                case 6:
+                     break;
 
-                    break;
+                 case 7:
 
-                case 7:
+                     break;
 
-                    break;
-
-                default:
-                    break;
-            }
-            console.log(form_no, 'form_no');
-            return true;
-        }
+                 default:
+                     break;
+             }
+             console.log(form_no, 'form_no');
+             return true;
+         }
      </script>
      <script src="{{ asset('assets/js/jquery.steps.min.js') }}"></script>
      <script src="{{ asset('assets/js/bd-wizard.js') }}"></script>
@@ -188,37 +189,33 @@
  @endsection
 
  @section('add_on_script')
-     <script>
-         var hostUrl = "../assets/index.html";
-     </script>
 
-     <script src="{{ asset('assets/js/plugins/datatables.bundle.js') }}"></script>
-     <script src="{{ asset('assets/js/custom/formrepeater/formrepeater.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/datatables.bundle.js') }}"></script>
+    {{-- <script src="{{ asset('assets/js/custom/formrepeater/formrepeater.bundle.js') }}"></script> --}}
 
-     <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
-     <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
+    <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
+    <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
 
-     <script src="{{ asset('assets/js/custom/utilities/modals/create-account.js') }}"></script>
-     <script src="{{ asset('assets/js/custom/apps/save-product.js') }}"></script>
-     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+    {{-- <script src="{{ asset('assets/js/custom/utilities/modals/create-account.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/js/custom/apps/save-product.js') }}"></script> --}}
+    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 
-     <script>
+    <script>
         function submitForm(form) {
-
-        event.preventDefault();
-        return;
+            event.preventDefault();
+            return;
 
         }
 
-         $('#classes, #reporting_manager_id').select2();
+        $('#classes, #reporting_manager_id').select2();
 
 
         function openAddModel(form_type) {
-            
+
             var bank = '';
-            if( form_type == 'bankbranch') {
+            if (form_type == 'bankbranch') {
                 var bank_id = $('#bank_id').val();
-                if( bank_id == '' || bank_id == undefined || bank_id == null )  {
+                if (bank_id == '' || bank_id == undefined || bank_id == null) {
                     toastr.error('Error', 'Bank is required');
                     return false;
                 } else {
@@ -234,7 +231,8 @@
                 url: "{{ route('modal.open') }}",
                 type: 'POST',
                 data: {
-                    form_type: form_type, bank_id: bank
+                    form_type: form_type,
+                    bank_id: bank
                 },
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');
@@ -243,28 +241,28 @@
             })
         }
 
-         function getInstituteCode(id) {
-             var institute_id = $(id).val();
-             $.ajaxSetup({
-                 headers: {
-                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                 }
-             });
-             $.ajax({
-                 url: "{{ route('institute.staff.code') }}",
-                 type: "POST",
-                 data: {
-                     institute_id: institute_id
-                 },
-                 success: function(res) {
-                     if (res) {
-                         $('#institute_code').val(res);
-                     } else {
+        function getInstituteCode(id) {
+            var institute_id = $(id).val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('institute.staff.code') }}",
+                type: "POST",
+                data: {
+                    institute_id: institute_id
+                },
+                success: function(res) {
+                    if (res) {
+                        $('#institute_code').val(res);
+                    } else {
 
-                         $('#institute_code').val('');
-                     }
-                 }
-             })
-         }
-     </script>
+                        $('#institute_code').val('');
+                    }
+                }
+            })
+        }
+    </script>
  @endsection
