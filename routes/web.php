@@ -88,4 +88,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/member/save', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'save'])->name('staff.member.save');
     Route::post('/member/form/content', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'formContent'])->name('form.family.content');
     Route::post('/member/delete', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'deleteStaffFamilyMember'])->name('staff.family.delete');
+
+    //Bulk upload for staff information
+    Route::get('/staff/bulk', [App\Http\Controllers\Staff\BulkUploadController::class, 'index'])->name('staff.bulk'); 
+    Route::post('/bulk/save', [App\Http\Controllers\Staff\BulkUploadController::class, 'store'])->name('staff.save'); 
 });
