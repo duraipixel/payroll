@@ -49,7 +49,7 @@
                         <option value="divorced" @if (isset($staff_details->personal) && $staff_details->personal->marital_status == 'divorced') selected @endif>Divorced</option>
                     </select>
                 </div>
-                <div class="col-md-4 fv-row mb-5">
+                <div class="col-md-4 fv-row mb-5" id="marriage_data" @if (isset($staff_details->personal) && $staff_details->personal->marital_status == 'married') style="display:block" @else style="display:none;" @endif>
                     <label class="fs-6 fw-bold mb-2">Marriage Date</label>
                     <div class="position-relative d-flex align-items-center">
                         {!! dobSVG() !!}
@@ -219,7 +219,7 @@
                     <textarea name="permanent_address" autofocus id="permanent_address" class="form-control form-control-lg "
                         rows="3" required>{{ $staff_details->personal->permanent_address ?? '' }}</textarea>
                 </div>
-
+                <hr>
                 <div class="row mb-5">
                     <div class="col-md-12 fv-row">
                         <label class="fs-6 fw-bold form-label mb-2">Bank Details</label>
@@ -368,6 +368,7 @@
                         </div>
                     </div>
                 </div>
+                <hr>
                 <div class="row mb-10">
                     <div class="col-md-12 mb-7 fv-row">
                         <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
@@ -433,6 +434,14 @@
 
 <script>
     const datepicker = document.getElementById('dob');
+    const marital_status = document.getElementById('marital_status');
+    marital_status.addEventListener('change', function() {
+        if( this.value == 'married') {
+            document.getElementById('marriage_data').style.display = 'block';
+        } else {
+            document.getElementById('marriage_data').style.display = 'none';
+        }
+    });
 
     function getBranchDetails(bank_id) {
         $.ajaxSetup({
@@ -481,7 +490,7 @@
     });
 
 
-    function validateKycForm() {
+    async function validateKycForm() {
         event.preventDefault();
         var kyc_error = false;
         
@@ -523,52 +532,40 @@
         });
 
         if (!kyc_error) {
-
+            loading();
             var forms = $('#kyc-form')[0];
             var formData = new FormData(forms);
             var staff_id = $('#outer_staff_id').val();
             formData.append('outer_staff_id', staff_id);
-            $.ajax({
-                url: "{{ route('staff.save.kyc') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                async: false,
-                beforeSend: function() {
-                    loading();
-                },
-                success: function(res) {
+
+            const kycResponse = await fetch("{{ route('staff.save.kyc') }}", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then((response) => response.json())
+                .then((data) => {
                     unloading();
 
-                    if (res.error == 1) {
+                    if (data.error == 1) {
                         var err_message = '';
-                        if (res.message) {
-                            res.message.forEach(element => {
+                        if (data.message) {
+                            data.message.forEach(element => {
                                 err_message += '<p>'+element+'</p>';
                             });
                             toastr.error("Error", err_message);
                         }
-                        // console.log('form erorro occurres');
                         return true;
-
                     } else {
-                        event.preventDefault();
-                        console.log('form submit success');
                         return false;
                     }
-                    console.log('resoponse recevied');
-                }
-            })
-            // return true;
+                    
+                });
+            return kycResponse;
+
         } else {
 
             return true;
         }
     }
 
-    function callbackFormData() {
-        alert();
-        console.log(false);
-    }
 </script>

@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/save/designation', [App\Http\Controllers\Master\DesignationController::class, 'save'])->name('save.designation');
     Route::post('/save/department', [App\Http\Controllers\Master\DepartmentController::class, 'save'])->name('save.department');
     Route::post('/save/subject', [App\Http\Controllers\Master\SubjectController::class, 'save'])->name('save.subject');
+    Route::post('/list/subject/studied', [App\Http\Controllers\Master\SubjectController::class, 'getSubjectStudied'])->name('get.studied.subject');
     Route::post('/save/scheme', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'save'])->name('save.scheme');
     Route::post('/save/duty/class', [App\Http\Controllers\Master\DutyClassController::class, 'save'])->name('save.duty.class');
     Route::post('/save/duty/type', [App\Http\Controllers\Master\DutyTypeController::class, 'save'])->name('save.duty.type');
@@ -92,4 +93,11 @@ Route::group(['middleware' => 'auth'],  function () {
     //Bulk upload for staff information
     Route::get('/staff/bulk', [App\Http\Controllers\Staff\BulkUploadController::class, 'index'])->name('staff.bulk'); 
     Route::post('/bulk/save', [App\Http\Controllers\Staff\BulkUploadController::class, 'store'])->name('staff.save'); 
+    Route::post('/staff/nominee/get', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNominee'])->name('staff.nominee.get');
+    Route::post('/staff/nominee/info', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNomineeInfo'])->name('staff.nominee.info');
+    Route::post('/staff/nominee/save', [App\Http\Controllers\Staff\StaffNomineeController::class, 'save'])->name('staff.nominee.save');
+    Route::post('/content/nominee/form', [App\Http\Controllers\Staff\StaffNomineeController::class, 'formContent'])->name('staff.nominee.form.content');
+    Route::post('/staff/nominee/list', [App\Http\Controllers\Staff\StaffNomineeController::class, 'list'])->name('staff.nominee.list');
+    Route::post('/staff/nominee/delete', [App\Http\Controllers\Staff\StaffNomineeController::class, 'deleteStaffNominee'])->name('staff.nominee.delete');
+
 });

@@ -12,8 +12,7 @@
         position: relative;
     }
 
-    div#loading {
-
+    div#staff-loading {
         position: fixed;
         top: 0;
         background-color: #f5f8facc;

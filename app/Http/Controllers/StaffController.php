@@ -36,6 +36,7 @@ use App\Models\Staff\StaffExperiencedSubject;
 use App\Models\Staff\StaffFamilyMember;
 use App\Models\Staff\StaffInvigilationDuty;
 use App\Models\Staff\StaffKnownLanguage;
+use App\Models\Staff\StaffNominee;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffPfEsiDetail;
 use App\Models\Staff\StaffProfessionalData;
@@ -79,6 +80,7 @@ class StaffController extends Controller
             $experience_details = StaffWorkExperience::where('status', 'active')->where('staff_id', $id)->get();
             $known_languages = StaffKnownLanguage::where('status', 'active')->where('staff_id', $id)->get();
             $member_details = StaffFamilyMember::where('status', 'active')->where('staff_id', $id)->get();
+            $nominee_details = StaffNominee::where('staff_id', $id)->get();
         }
 
         $institutions = Institution::where('status', 'active')->get();
@@ -151,7 +153,8 @@ class StaffController extends Controller
             'relation_types' => $relation_types ?? [],
             'blood_groups' => $blood_groups ?? [],
             'qualificaiton' => $qualificaiton ?? [],
-            'member_details' => $member_details ?? []
+            'member_details' => $member_details ?? [],
+            'nominee_details' => $nominee_details ?? []
         );
 
         return view('pages.staff.registration.index', $params);
@@ -159,6 +162,7 @@ class StaffController extends Controller
 
     public function insertPersonalData(Request $request)
     {
+        
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [

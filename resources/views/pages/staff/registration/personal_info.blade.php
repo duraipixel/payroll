@@ -9,15 +9,13 @@
             <div class="fv-row  row">
                 <div class="col-lg-4 mb-5 rd-only">
                     <label class="form-label">Employee Code</label>
-                    <input name="society_employee_code" id="society_employee_code"
-                        class="form-control form-control-lg "
+                    <input name="society_employee_code" id="society_employee_code" class="form-control form-control-lg "
                         value="{{ $staff_details->society_emp_code ?? 'Draft' }}" readonly />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Institution Name</label>
                     <div class="position-relative">
-                        <select name="institute_name" id="institute_name"
-                            class="form-select form-select-lg ">
+                        <select name="institute_name" id="institute_name" class="form-select form-select-lg ">
                             <option value="">--Select Institution--</option>
                             @isset($institutions)
                                 @foreach ($institutions as $item)
@@ -34,14 +32,12 @@
                 </div>
                 <div class="col-lg-2 mb-5 rd-only">
                     <label class="form-label">Institution Code</label>
-                    <input name="institute_code" id="institute_code"
-                        class="form-control form-control-lg "
+                    <input name="institute_code" id="institute_code" class="form-control form-control-lg "
                         value="{{ $staff_details->institute_emp_code ?? 'Draft' }}" readonly />
                 </div>
                 <div class="col-lg-2 mb-5 rd-only position-relative">
                     <label class="form-label required">Previous Code</label>
-                    <input name="previous_code" id="previous_code"
-                        class="form-control form-control-lg "
+                    <input name="previous_code" id="previous_code" class="form-control form-control-lg "
                         value="{{ $staff_details->emp_code ?? '' }}" />
                 </div>
 
@@ -73,7 +69,8 @@
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Class Handling</label>
                     <div class="position-relative">
-                        <select id="classes" name="class_id[]" class="form-control big_box select2-option" placeholder="" multiple>
+                        <select id="classes" name="class_id[]" class="form-control big_box select2-option"
+                            placeholder="" multiple>
                             @isset($classes)
                                 @foreach ($classes as $item)
                                     <option value="{{ $item->id }}" @if (isset($used_classes) && in_array($item->id, $used_classes)) selected @endif>
@@ -91,8 +88,7 @@
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Division</label>
                     <div class="position-relative">
-                        <select name="division_id" id="division_id"
-                            class="form-select form-select-lg ">
+                        <select name="division_id" id="division_id" class="form-select form-select-lg ">
                             <option value="">--Select Division--</option>
                             @isset($divisions)
                                 @foreach ($divisions as $item)
@@ -110,8 +106,7 @@
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label">Reporting Manager</label>
-                    <select name="reporting_manager_id" id="reporting_manager_id"
-                        class="form-select form-select-lg ">
+                    <select name="reporting_manager_id" id="reporting_manager_id" class="form-select form-select-lg ">
                         <option value=""> --Select Reporting Manager-- </option>
                         @isset($reporting_managers)
                             @foreach ($reporting_managers as $item)
@@ -130,11 +125,11 @@
                             <div class="col-4">
                                 <input name="aadhar_name" id="aadhar_name"
                                     value="{{ $staff_details->aadhaar->description ?? '' }}"
-                                    class="form-control form-control-lg " placeholder="Name" />
+                                    class="form-control form-control-sm " placeholder="Name" />
                             </div>
                             <div class="col-4">
-                                <input name="aadhar_no" class="form-control form-control-lg "
-                                    placeholder="Number" value="{{ $staff_details->aadhaar->doc_number ?? '' }}" />
+                                <input name="aadhar_no" class="form-control form-control-sm " placeholder="Number"
+                                    value="{{ $staff_details->aadhaar->doc_number ?? '' }}" />
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -143,7 +138,7 @@
                                             File:</label>
                                     </div>
                                     <div class="col-8 mb-1">
-                                        <input class="form-control" style="" type="file" name="aadhar[]"
+                                        <input class="form-control form-control-sm" style="" type="file" name="aadhar[]"
                                             multiple="">
                                     </div>
                                     @isset($staff_details->aadhaar->multi_file)
@@ -160,7 +155,7 @@
                                                         @endphp
 
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-outline-info" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->aadhaar->id }}'', '{{ $item }}')">
@@ -184,12 +179,12 @@
                         <label class="fs-6 fw-bold form-label mb-2">Pan Card</label>
                         <div class="row fv-row">
                             <div class="col-4">
-                                <input name="pancard_name" class="form-control form-control-lg "
-                                    placeholder="Name" value="{{ $staff_details->pan->description ?? '' }}" />
+                                <input name="pancard_name" class="form-control form-control-sm " placeholder="Name"
+                                    value="{{ $staff_details->pan->description ?? '' }}" />
                             </div>
                             <div class="col-4">
-                                <input name="pancard_no" class="form-control form-control-lg "
-                                    placeholder="Number" value="{{ $staff_details->pan->doc_number ?? '' }}" />
+                                <input name="pancard_no" class="form-control form-control-sm " placeholder="Number"
+                                    value="{{ $staff_details->pan->doc_number ?? '' }}" />
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -198,7 +193,7 @@
                                             File:</label>
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" style="" type="file" name="pancard[]"
+                                        <input class="form-control form-control-sm" style="" type="file" name="pancard[]"
                                             multiple="">
                                     </div>
                                     @isset($staff_details->pan->multi_file)
@@ -215,7 +210,7 @@
                                                         @endphp
 
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-outline-info" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->pan->id }}'', '{{ $item }}')">
@@ -238,13 +233,12 @@
                         <label class="fs-6 fw-bold form-label mb-2">Ration Card</label>
                         <div class="row fv-row">
                             <div class="col-4">
-                                <input name="ration_card_name" class="form-control form-control-lg "
-                                    placeholder="Name" value="{{ $staff_details->ration->description ?? '' }}"  />
+                                <input name="ration_card_name" class="form-control form-control-sm "
+                                    placeholder="Name" value="{{ $staff_details->ration->description ?? '' }}" />
                             </div>
                             <div class="col-4">
-                                <input name="ration_card_number"
-                                    class="form-control form-control-lg " placeholder="Number"
-                                    value="{{ $staff_details->ration->doc_number ?? '' }}" />
+                                <input name="ration_card_number" class="form-control form-control-sm "
+                                    placeholder="Number" value="{{ $staff_details->ration->doc_number ?? '' }}" />
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -253,7 +247,7 @@
                                             File:</label>
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" style="" type="file"
+                                        <input class="form-control form-control-sm" style="" type="file"
                                             name="ration_card[]" multiple="">
                                     </div>
                                     @isset($staff_details->ration->multi_file)
@@ -270,7 +264,7 @@
                                                         @endphp
 
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-outline-info" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->ration->id }}'', '{{ $item }}')">
@@ -293,12 +287,13 @@
                         <label class="fs-6 fw-bold form-label mb-2">Driving Licence</label>
                         <div class="row fv-row">
                             <div class="col-4">
-                                <input name="license_name" class="form-control form-control-lg "
-                                    placeholder="Name" value="{{ $staff_details->driving_license->description ?? '' }}" />
+                                <input name="license_name" class="form-control form-control-sm " placeholder="Name"
+                                    value="{{ $staff_details->driving_license->description ?? '' }}" />
                             </div>
                             <div class="col-4">
-                                <input name="license_number" class="form-control form-control-lg "
-                                    placeholder="Number" value="{{ $staff_details->driving_license->doc_number ?? '' }}" />
+                                <input name="license_number" class="form-control form-control-sm "
+                                    placeholder="Number"
+                                    value="{{ $staff_details->driving_license->doc_number ?? '' }}" />
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -308,7 +303,7 @@
                                             File:</label>
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" style="" type="file"
+                                        <input class="form-control form-control-sm" style="" type="file"
                                             name="driving_license[]" multiple="">
                                     </div>
                                     @isset($staff_details->driving_license->multi_file)
@@ -325,7 +320,7 @@
                                                         @endphp
 
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-outline-info" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->driving_license->id }}'', '{{ $item }}')">
@@ -348,12 +343,12 @@
                         <label class="fs-6 fw-bold form-label mb-2">Voter ID</label>
                         <div class="row fv-row">
                             <div class="col-4">
-                                <input name="voter_name" class="form-control form-control-lg "
-                                    placeholder="Name" value="{{ $staff_details->voter->description ?? '' }}" />
+                                <input name="voter_name" class="form-control form-control-sm " placeholder="Name"
+                                    value="{{ $staff_details->voter->description ?? '' }}" />
                             </div>
                             <div class="col-4">
-                                <input name="voter_number" class="form-control form-control-lg "
-                                    placeholder="Number" value="{{ $staff_details->voter->doc_number ?? '' }}" />
+                                <input name="voter_number" class="form-control form-control-sm " placeholder="Number"
+                                    value="{{ $staff_details->voter->doc_number ?? '' }}" />
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -362,7 +357,7 @@
                                             File:</label>
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" style="" type="file" name="voter[]"
+                                        <input class="form-control form-control-sm" style="" type="file" name="voter[]"
                                             multiple="">
                                     </div>
                                     @isset($staff_details->voter->multi_file)
@@ -378,7 +373,7 @@
                                                             $url = Storage::url($item);
                                                         @endphp
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-outline-info" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->voter->id }}'', '{{ $item }}')">
@@ -401,18 +396,19 @@
                         <label class="fs-6 fw-bold form-label mb-2">Passport</label>
                         <div class="row fv-row">
                             <div class="col-3">
-                                <input name="passport_name" id="passport_name"
-                                    class="form-control form-control-lg "
-                                    placeholder="Passport Name" value="{{ $staff_details->passport->description ?? '' }}"  />
+                                <input name="passport_name" id="passport_name" class="form-control form-control-sm "
+                                    placeholder="Passport Name"
+                                    value="{{ $staff_details->passport->description ?? '' }}" />
                             </div>
                             <div class="col-3">
-                                <input name="passport_number" class="form-control form-control-lg "
-                                    placeholder="Passport Number" value="{{ $staff_details->passport->doc_number ?? '' }}" />
+                                <input name="passport_number" class="form-control form-control-sm "
+                                    placeholder="Passport Number"
+                                    value="{{ $staff_details->passport->doc_number ?? '' }}" />
                             </div>
                             <div class="col-2">
                                 <input type="date" name="passport_valid_upto"
-                                    class="form-control form-control-lg "
-                                    placeholder="Valid Upto" value="{{ $staff_details->passport->doc_date ?? '' }}" />
+                                    class="form-control form-control-sm " placeholder="Valid Upto"
+                                    value="{{ $staff_details->passport->doc_date ?? '' }}" />
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -421,7 +417,7 @@
                                             File:</label>
                                     </div>
                                     <div class="col-8">
-                                        <input class="form-control" style="" type="file" name="passport[]"
+                                        <input class="form-control form-control-sm" style="" type="file" name="passport[]"
                                             multiple="">
                                     </div>
                                     @isset($staff_details->passport->multi_file)
@@ -437,7 +433,7 @@
                                                             $url = Storage::url($item);
                                                         @endphp
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-outline-info" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->passport->id }}'', '{{ $item }}')">
@@ -460,9 +456,8 @@
 </div>
 
 <script>
-    
+    async function validatePersonalForm() {
 
-    function validatePersonalForm() {
         var personsal_error = false;
 
         var key_name = [
@@ -478,7 +473,7 @@
 
         key_name.forEach(element => {
             var name_input = document.getElementById(element).value;
-            
+
             if (name_input == '' || name_input == undefined) {
                 personsal_error = true;
                 var name_input_error =
@@ -489,49 +484,45 @@
                 $('#' + element).focus();
             }
         });
-        
+
         if (!personsal_error) {
-            
+            var formHasValidated = true;
             var forms = $('#personal_form')[0];
             var formData = new FormData(forms);
-            $.ajax({
-                url: "{{ route('staff.save.personal') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                async: false,
-                beforeSend: function() {
-                    loading();
-                },
-                success: function(res) {
+
+            loading();
+
+            const urlRespon = await fetch("{{ route('staff.save.personal') }}", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then((response) => response.json())
+                .then((data) => {
                     unloading();
-                    if (res.id) {
+                    if (data.id) {
                         setTimeout(() => {
-                            console.log('id mapping,', res.id);
-                            $('#staff_id').val(res.id);
-                            $('#outer_staff_id').val(res.id);
+                            $('#staff_id').val(data.id);
+                            $('#outer_staff_id').val(data.id);
                         }, 1000);
                     }
-                    if (res.error == 1) {
-                        if (res.message) {
-                            res.message.forEach(element => {
+                    if (data.error == 1) {
+
+                        if (data.message) {
+                            data.message.forEach(element => {
                                 toastr.error("Error", element);
                             });
                         }
-                        console.log('form erorro occurres');
                         return true;
 
                     } else {
 
-                        console.log('form submit success');
-
                         return false;
+
                     }
-                    return true;
-                    console.log('resoponse recevied');
-                }
-            })
+                });
+            return urlRespon
+
+
         } else {
 
             return true;
