@@ -17,11 +17,17 @@ class BulkUploadController extends Controller
     }
     public function index()
     {
+        
         return view('pages.bulk_upload.index'); 
     }
     public function store(Request $request)
     {
-        Excel::import(new BulkImport, $request->file);
+        $exampleImport = new BulkImport;
+       
+            $data=Excel::import($exampleImport, $request->file);
+          
+           return back();
+     
        
     } 
 }

@@ -13,6 +13,7 @@
      <div class="card">
          <!--begin::Card body-->
          <div class="card-body">
+          
             <form action="{{ route('staff.save') }}" method="post" enctype="multipart/form-data" >
                 @csrf
              <div class="row">
@@ -37,6 +38,17 @@
           
          </div>
         </form>
+        @if($errors->any())
+        <?php $i=1;?>
+         @foreach($errors->all() as $error)
+         <li style="list-style:none;color:red ">{{$i}}. {{$error}}</li>
+        <?php $i++;?>
+         @endforeach
+         @endif
+
+         @if ($errors->isEmpty())
+        
+         @endif
          <!--end::Card body-->
      </div>
     
