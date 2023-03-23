@@ -38,4 +38,12 @@
     .swal2-success-line-long {
         background: green !important;
     }
+
+    .toastr.toastr-error {
+        background:red;
+        
+    }
+    #toastr-container > div {
+        opacity: 1;
+    }
 </style>

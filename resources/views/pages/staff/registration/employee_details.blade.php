@@ -120,7 +120,7 @@
                 <!--begin::Tables Widget 13-->
                 <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
     
-                    <div class="card-header border-0 pt-0">
+                    <div class="card-header bg-primary border-0 pt-0">
                         <h3 class="card-title align-items-start flex-column">
                             <span class="card-label fw-bolder fs-3 mb-1">Invigilation Duty Details</span>
                         </h3>
@@ -159,7 +159,7 @@
     
                 <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
                     <!--begin::Header-->
-                    <div class="card-header border-0 pt-0">
+                    <div class="card-header bg-primary border-0 pt-0">
                         <h3 class="card-title align-items-start flex-column">
                             <span class="card-label fw-bolder fs-3 mb-1">Training Details</span>
                         </h3>

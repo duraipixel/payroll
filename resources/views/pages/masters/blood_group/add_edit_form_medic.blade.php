@@ -2,13 +2,13 @@
    
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
-            Subject Name
+            Blood Group
         </label>
-        <div >
-            <input type="text" class="form-control" name="subject_name" id="subject_name" required >
+        <div>
+            <input type="text" class="form-control" name="blood_group" id="blood_group" required >
         </div>
     </div>
-   
+
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn"> 
@@ -24,7 +24,7 @@
 
 <script>
 
-var KTAppEcommerceSaveSubject = function () {
+var KTAppEcommerceSavePlace = function () {
 
     const handleSubmit = () => {
         // Define variables
@@ -37,10 +37,10 @@ var KTAppEcommerceSaveSubject = function () {
             form,
             {
                 fields: {
-                    'subject_name': {
+                    'blood_group': {
 						validators: {
 							notEmpty: {
-								message: 'Subject Name is required'
+								message: 'Blood Group is required'
 							},
 						}
 					},
@@ -59,6 +59,7 @@ var KTAppEcommerceSaveSubject = function () {
         // Handle submit button
         submitButton.addEventListener('click', e => {
             e.preventDefault();
+
             // Validate form before submit
             if (validator) {
                 validator.validate().then(function (status) {
@@ -68,7 +69,7 @@ var KTAppEcommerceSaveSubject = function () {
                         var forms = $('#dynamic_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url:"{{ route('save.subject') }}",
+                            url:"{{ route('save.blood_group') }}",
                             type:"POST",
                             data: formData,
                             processData: false,
@@ -84,17 +85,11 @@ var KTAppEcommerceSaveSubject = function () {
                                         });
                                     }
                                 } else{
-                                    toastr.success("Subject added successfully");
+                                    toastr.success("Blood Group added successfully");
                                     if( res.inserted_data ) {
                                         $('#kt_dynamic_app').modal('hide');
-
-                                        var subject = $('#subject').val() || [];
-                                        $('#subject').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                        subject.push(res.inserted_data.id.toString());
-                                        $('#subject').val(subject).trigger('change');
-
-                                        getStudiedSubjectElements();
-
+                                        $('#medical_blood_group_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
+                                        $('#medical_blood_group_id').val(res.inserted_data.id).trigger('change');
                                     }
                                 }
                             }
@@ -114,7 +109,7 @@ var KTAppEcommerceSaveSubject = function () {
 }();
 
 KTUtil.onDOMContentLoaded(function () {
-    KTAppEcommerceSaveSubject.init();
+    KTAppEcommerceSavePlace.init();
 });
     
     

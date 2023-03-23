@@ -4,10 +4,12 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Master\Institution;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
 use App\Models\Staff\StaffExperiencedSubject;
+use App\Models\Staff\StaffHealthDetail;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffPfEsiDetail;
 use App\Models\Staff\StaffProfessionalData;
@@ -135,6 +137,16 @@ class User extends Authenticatable implements Auditable
     public function experiencedSubject()
     {
         return $this->hasMany(StaffExperiencedSubject::class, 'staff_id', 'id');
+    }
+
+    public function institute()
+    {
+        return $this->hasOne(Institution::class, 'id', 'institute_id');
+    }
+
+    public function healthDetails()
+    {
+        return $this->hasOne(StaffHealthDetail::class, 'staff_id', 'id');
     }
 
     

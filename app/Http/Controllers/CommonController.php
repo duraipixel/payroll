@@ -136,7 +136,13 @@ class CommonController extends Controller
             case 'blood_group':
                 $content = view('pages.masters.blood_group.add_edit_form');
                 break;
-
+            case 'medic_blood_group':
+                $content = view('pages.masters.blood_group.add_edit_form_medic');
+                break;
+            case 'relationship_working_type':
+                $content = view('pages.masters.working_relationship_type.add_edit_form');
+                break;
+            
             default:
                 # code...
                 break;

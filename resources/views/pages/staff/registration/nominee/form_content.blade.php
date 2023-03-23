@@ -88,7 +88,7 @@
 </script>
 
 <script>
-    console.log(edit_nominee_id, 'edit_nominee_id');
+    
     function getNominee() {
 
         var staff_id = $('#outer_staff_id').val();
