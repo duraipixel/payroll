@@ -11,7 +11,7 @@
         </div>
         <div class="tble-fnton card mt-0 mb-5 mb-xl-8">
             <!--begin::Header-->
-            <div class="card-header border-0 pt-0">
+            <div class="card-header bg-primary border-0 pt-0">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="card-label fw-bolder fs-3 mb-1">Family Details</span>
                 </h3>
@@ -64,20 +64,27 @@
 </div>
 <!--begin::Help drawer-->
 <div id="kt_help" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help" data-kt-drawer-activate="true"
-    data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}"
-    data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_new_family_toggle"
-    data-kt-drawer-close="#kt_help_close">
+    data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}" data-kt-drawer-direction="end"
+    data-kt-drawer-toggle="#kt_new_family_toggle" data-kt-drawer-close="#kt_help_close">
     @include('pages.staff.registration.family.family_form')
 </div>
 <!--end::Help drawer-->
 
 <!--begin::Help drawer-->
 <div id="kt_help" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help" data-kt-drawer-activate="true"
-    data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}"
-    data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_new_nominiee_toggle"
-    data-kt-drawer-close="#kt_help_close">
+    data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}" data-kt-drawer-direction="end"
+    data-kt-drawer-toggle="#kt_new_nominiee_toggle" data-kt-drawer-close="#kt_help_close">
     <!--begin::Card-->
     @include('pages.staff.registration.nominee.nominee_form')
+    <!--end::Card-->
+</div>
+<!--end::Help drawer-->
+<!--begin::Help drawer-->
+<div id="kt_help" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help" data-kt-drawer-activate="true"
+    data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}" data-kt-drawer-direction="end"
+    data-kt-drawer-toggle="#kt_new_aews_toggle" data-kt-drawer-close="#kt_help_close">
+    <!--begin::Card-->
+    @include('pages.staff.registration.relation_working.relation_working_form')
     <!--end::Card-->
 </div>
 <!--end::Help drawer-->
@@ -86,231 +93,50 @@
     var deleteStaffFamilyDetailsUrl = "{{ route('staff.family.delete') }}";
     var insertFamilyMemberUrl = "{{ route('staff.member.save') }}";
     var staffMemberList = "{{ route('staff.member.list') }}";
+    var nomineeFormContentUrl = "{{ route('staff.nominee.form.content') }}";
+    var insertNomineeUrl = "{{ route('staff.nominee.save') }}";
+    var staffNomineeList = "{{ route('staff.nominee.list') }}";
+    var deleteStaffNomineeUrl = "{{ route('staff.nominee.delete') }}";
+    var relationWorkingFormContentUrl = "{{ route('staff.working.relation.content') }}";
+    var insertRelationWorkingDetailUrl = "{{ route('staff.save.working_relationship') }}";
+    var StaffRelationWorkingListUrl = "{{ route('staff.working.relation.list') }}";
+    var deleteStaffRelationWorkingUrl = "{{ route('staff.relation.working.delete') }}";
 </script>
 <script src="{{ asset('assets/js/form/registration/validateFamilyFrom.js') }}"></script>
+<script src="{{ asset('assets/js/form/registration/nomineeForm.js') }}"></script>
+<script src="{{ asset('assets/js/form/registration/workingRelationForm.js') }}"></script>
 <script>
-
-    function openNomineeForm() {
-        event.preventDefault();
-        $('#kt_new_nominiee_toggle').click();
-        $('#nominee_id').val('');
-        $('#nominee_age').val('');
-        $('#share').val('');
-        $('#minor_name').val('');
-        $('#minor_contact').val('');
-        $('#minor_address').val('');
-        $('#staff_nominee_id').val('');
-    }
-
-    function editNomineeForm(staff_id, nominee_id ){
-        event.preventDefault();
-        $('#kt_new_nominiee_toggle').click();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: "{{ route('staff.nominee.form.content') }}",
-            type: "POST",
-            data: {
-                nominee_id: nominee_id
-            },
-            success: function(res) {
-                $('#nominee_form').html(res);
-                $('#nominee_form_title').html('Update Your Nominee Details');
-            }
-        })
-
-    }
-
-    function addNominee() {
-        var nomineeErrors = false;
-        let key_name = [
-            'nominee_id',
-            'nominee_age',
-            'share'           
-        ];
-        $('.nominee-form-errors').remove();
-        $('.form-control,.form-select').removeClass('border-danger');
-
-        key_name.forEach(element => {
-            var name_input = document.getElementById(element).value;
-
-            if (name_input == '' || name_input == undefined) {
-                nomineeErrors = true;
-                var name_input_error =
-                    '<div class="fv-plugins-message-container nominee-form-errors invalid-feedback"><div data-validator="notEmpty">' +
-                    element.replace('_', ' ').toUpperCase() + ' is required</div></div>';
-                // $('#' + element).after(name_input_error);
-                $('#' + element).addClass('border-danger')
-                $('#' + element).focus();
-            }
-        });
-
-        if (!nomineeErrors) {
-            var staff_id = $('#outer_staff_id').val();
-            var forms = $('#nominee_form')[0];
-            var formData = new FormData(forms);
-            formData.append('staff_id', staff_id);
-            $.ajax({
-                url: "{{ route('staff.nominee.save') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(res) {
-                    if (res.error == 1) {
-                        if (res.message) {
-                            res.message.forEach(element => {
-                                toastr.error("Error",
-                                    element);
-                            });
-                        }
-                    } else {
-                        toastr.success(
-                            "Staff Nominee added successfully"
-                        );
-                        $('#kt_help_close').click();
-                        getStaffNomineeList(staff_id);
-                    }
-                }
-            })
-        }
-    }
-
-    function getStaffNomineeList(staff_id) {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: "{{ route('staff.nominee.list') }}",
-            type: "POST",
-            data: {
-                staff_id: staff_id
-            },
-            success: function(res) {
-                $('#nominee-list-pane').html(res);
-            }
-        })
-    }
-
-    function deleteNominee(staff_id, nominee_id) {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{ route('staff.nominee.delete') }}",
-                    type: "POST",
-                    data: {
-                        nominee_id: nominee_id
-                    },
-                    success: function(res) {
-
-                        getStaffNomineeList(staff_id);
-
-                        Swal.fire(
-                            'Deleted!',
-                            'Your Nominee data has been deleted.',
-                            'success'
-                        )
-                    }
-                })
-
-            }
-        })
-    }
+    
 
     async function validateFamilyPhase() {
         event.preventDefault();
-        var emp_position_errors = false;
+        var staff_id = $('#outer_staff_id').val();
 
-        var key_name = [
-            'designation_id',
-            'department_id',
-            'subject',
-            'scheme_id',
-            'nationality_id',
-            'religion_id',
-            'caste_id',
-
-        ];
-
-        $('.kyc-form-errors').remove();
-        $('.form-control,.form-select').removeClass('border-danger');
-
-        const pattern = /_/gi;
-        const replacement = " ";
-
-        key_name.forEach(element => {
-            var name_input = document.getElementById(element).value;
-
-            if (name_input == '' || name_input == undefined) {
-
-                emp_position_errors = true;
-                var elementValues = element.replace(pattern, replacement);
-                var name_input_error =
-                    '<div class="fv-plugins-message-container kyc-form-errors invalid-feedback"><div data-validator="notEmpty">' +
-                    elementValues.toUpperCase() + ' is required</div></div>';
-                // $('#' + element).after(name_input_error);
-                $('#' + element).addClass('border-danger')
-                $('#' + element).focus();
-            }
-        });
-
-        if (!emp_position_errors) {
-
-            var forms = $('#position_form')[0];
-            var formData = new FormData(forms);
-            $.ajax({
-                url: "{{ route('staff.save.employee_position') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                async: false,
-                beforeSend: function() {
-                    loading();
-                },
-                success: function(res) {
+        const employeeResponse = await fetch("{{ route('staff.save.familyPhase') }}", {
+                    method: 'POST',
+                    body: JSON.stringify({staff_id:staff_id}),
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        "Content-Type": "application/json",
+                    }
+                })
+                .then((response) => response.json())
+                .then((data) => {
                     unloading();
-
-                    if (res.error == 1) {
-                        if (res.message) {
-                            res.message.forEach(element => {
+                    
+                    if (data.error == 1) {
+                        if (data.message) {
+                            data.message.forEach(element => {
                                 toastr.error("Error", element);
                             });
-                        }
-                        // console.log('form erorro occurres');
+                        }                        
                         return true;
-
                     } else {
-                        event.preventDefault();
-                        console.log('form submit success');
                         return false;
                     }
-                    console.log('resoponse recevied');
-                }
-            })
-        } else {
 
-            return true;
-        }
+                });
+            return employeeResponse;
+        
     }
 </script>

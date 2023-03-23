@@ -9,7 +9,7 @@
 
             <div class="tble-fnton card mb-5 mb-xl-8">
 
-                <div class="card-header border-0 pt-0">
+                <div class="card-header bg-primary border-0 pt-0">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder fs-3 mb-1"> Completed / Under going </span>
                     </h3>
@@ -46,7 +46,7 @@
             <!--begin::Tables Widget 13-->
             <div class="card mb-0 mb-xl-0 wdth-30percent">
                 <!--begin::Header-->
-                <div class="card-header border-0 pt-0">
+                <div class="card-header bg-primary border-0 pt-0">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder fs-3 mb-1">Languages Known</span>
 
@@ -70,7 +70,7 @@
             <!--begin::Tables Widget 13-->
             <div class="tble-fnton card mt-10 mb-5 mb-xl-8">
                 <!--begin::Header-->
-                <div class="card-header border-0 pt-0">
+                <div class="card-header bg-primary border-0 pt-0">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder fs-3 mb-1">Past Experience</span>
                     </h3>
@@ -109,7 +109,7 @@
 
             {{-- <div class="tble-fnton card mt-10 mb-5 mb-xl-8">
                 <!--begin::Header-->
-                <div class="card-header border-0 pt-0">
+                <div class="card-header order-0 pt-0">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder fs-3 mb-1">
                             Certificate Request

@@ -186,28 +186,24 @@
 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Phone No.</label>
-                    <input name="phone_no" autofocus id="phone_no" class="form-control form-control-lg "
+                    <input name="phone_no" autofocus id="phone_no" maxlength="10" class="number_only form-control form-control-lg "
                         value="{{ $staff_details->personal->phone_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label">Mobile No - 1</label>
-                    <input name="mobile_no_1" class="form-control form-control-lg "
-                        value="{{ $staff_details->personal->mobile_no1 ?? '' }}" />
+                    <input name="mobile_no_1" class="form-control form-control-lg number_only" maxlength="10" value="{{ $staff_details->personal->mobile_no1 ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label ">Mobile No - 2</label>
-                    <input name="mobile_no_2" class="form-control form-control-lg "
-                        value="{{ $staff_details->personal->mobile_no2 ?? '' }}" />
+                    <input name="mobile_no_2" class="form-control form-control-lg number_only" maxlength="10" value="{{ $staff_details->personal->mobile_no2 ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label ">Whatsapp No.</label>
-                    <input name="whatsapp_no" class="form-control form-control-lg "
-                        value="{{ $staff_details->personal->whatsapp_no ?? '' }}" />
+                    <input name="whatsapp_no" class="form-control form-control-lg number_only" maxlength="10" value="{{ $staff_details->personal->whatsapp_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Emergency No.</label>
-                    <input name="emergency_no" autofocus id="emergency_no" class="form-control form-control-lg "
-                        value="{{ $staff_details->personal->emergency_no ?? '' }}" />
+                    <input name="emergency_no" autofocus id="emergency_no" class="form-control form-control-lg number_only" maxlength="10" value="{{ $staff_details->personal->emergency_no ?? '' }}" />
                 </div>
                 <div class="col-lg-6 mb-5">
                     <label class="form-label required">Contact Address</label>
@@ -274,7 +270,7 @@
                             </div>
 
                             <div class="col-3">
-                                <input name="account_no" class="form-control form-control-lg "
+                                <input name="account_no" class="number_only form-control form-control-lg "
                                     placeholder="Account Number"
                                     value="{{ $staff_details->bank->account_number ?? '' }}" />
                             </div>

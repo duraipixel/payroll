@@ -68,12 +68,12 @@
 
     <div class="col-lg-6 mb-5">
         <label class="form-label required"> Salary drawn</label>
-        <input name="salary_drawn" id="salary_drawn" value="{{ $experience_info->salary_drawn ?? '' }}" class="form-control form-control-lg form-control-solid" />
+        <input name="salary_drawn" id="salary_drawn" value="{{ $experience_info->salary_drawn ?? '' }}" class="form-control form-control-lg form-control-solid price" />
     </div>
 
     <div class="col-lg-6 mb-5">
         <label class="form-label required"> Years of Experience </label>
-        <input name="experience_year" id="experience_year" type="number" value="{{ $experience_info->experience_year ?? '' }}" min="0" class="form-control form-control-lg form-control-solid" />
+        <input name="experience_year" id="experience_year" type="text" maxlength="2" value="{{ $experience_info->experience_year ?? '' }}" min="0" class="form-control form-control-lg form-control-solid number_only" />
     </div>
 
     <div class="col-lg-6 mb-5">

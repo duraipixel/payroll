@@ -68,7 +68,7 @@
             loadingElement.style.display = 'none';
         }
     </script>
-    @include('layouts.drawer.activities')
+    {{-- @include('layouts.drawer.activities') --}}
 
     @include('layouts.drawer.chat')
 
@@ -181,12 +181,16 @@
         });
     </script>
     <script>
-        $(".DA_radio_holder .radio-btn").change(function() {
-            $(this).closest(".question").next().toggle(this.value === 'yes');
-        });
+    $(".DA_radio_holder .radio-btn").change(function() {
+        $(this).closest(".question").next().toggle(this.value === 'yes');
+    });
 
     $(".number_only").keypress(function(e) {
         if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
+    });
+
+    $(".price").keypress(function(e) {
+        if (String.fromCharCode(e.keyCode).match(/[^.0-9]/g)) return false;
     });
     </script>
 </body>

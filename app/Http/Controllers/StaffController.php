@@ -36,6 +36,7 @@ use App\Models\Staff\StaffExperiencedSubject;
 use App\Models\Staff\StaffFamilyMember;
 use App\Models\Staff\StaffInvigilationDuty;
 use App\Models\Staff\StaffKnownLanguage;
+use App\Models\Staff\StaffMedicalRemark;
 use App\Models\Staff\StaffNominee;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffPfEsiDetail;
@@ -44,8 +45,10 @@ use App\Models\Staff\StaffStudiedSubject;
 use App\Models\Staff\StaffTalent;
 use App\Models\Staff\StaffTrainingDetail;
 use App\Models\Staff\StaffWorkExperience;
+use App\Models\Staff\StaffWorkingRelation;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -81,8 +84,19 @@ class StaffController extends Controller
             $known_languages = StaffKnownLanguage::where('status', 'active')->where('staff_id', $id)->get();
             $member_details = StaffFamilyMember::where('status', 'active')->where('staff_id', $id)->get();
             $nominee_details = StaffNominee::where('staff_id', $id)->get();
+            $working_details = StaffWorkingRelation::where('status', 'active')->where('staff_id', $id)->get();
+            $medical_remarks = StaffMedicalRemark::where('staff_id', $id)->get();
         }
+        
+        $other_staff = User::with('institute')->where('status', 'active')
+                        ->where('is_super_admin', null)
+                        ->when($id != null, function($q) use($id){
+                            $q->where('id', '!=', $id);
+                        })
+                        ->get();
 
+        
+        
         $institutions = Institution::where('status', 'active')->get();
         $reporting_managers = User::where('status', 'active')->where('is_super_admin', '!=', 1)->get();
         $divisions = Division::where('status', 'active')->get();
@@ -113,6 +127,9 @@ class StaffController extends Controller
         $relation_types = RelationshipType::where('status', 'active')->get();
         $blood_groups = BloodGroup::where('status', 'active')->get();
         $qualificaiton = Qualification::where('status', 'active')->get();
+
+        #phase5
+        
 
         $step = getRegistrationSteps($id);
 
@@ -154,9 +171,12 @@ class StaffController extends Controller
             'blood_groups' => $blood_groups ?? [],
             'qualificaiton' => $qualificaiton ?? [],
             'member_details' => $member_details ?? [],
-            'nominee_details' => $nominee_details ?? []
+            'nominee_details' => $nominee_details ?? [],
+            'other_staff' => $other_staff ?? [],
+            'working_details' => $working_details ?? [],
+            'medical_remarks' => $medical_remarks ?? [],
         );
-
+        
         return view('pages.staff.registration.index', $params);
     }
 
@@ -751,6 +771,24 @@ class StaffController extends Controller
 
         return response()->json(['error' => 0, 'message' => 'Added success']);
 
+    }
+
+    public function checkFamilyData(Request $request)
+    {
+        $staff_id = $request->staff_id;
+
+        $members = StaffFamilyMember::where('status', 'active')->where('staff_id', $staff_id)->get();
+        $nominees = StaffNominee::where('staff_id', $staff_id)->get();
+      
+        if( isset( $members ) && count($members ) > 0 && isset($nominees) && count( $nominees ) > 0 ) {
+            $error = '0';
+            $message = 'Added Success';
+        } else {
+            $error = '1';
+            $message = 'Family Details and Nominee Details are required';
+        }
+
+        return response()->json(['error' => $error, 'message' => [$message]]);
     }
 
 

@@ -122,7 +122,7 @@
     
     <div class="col-lg-6 mb-5">
         <label class="form-label required">Contact No</label>
-        <input name="family_contact_no" id="family_contact_no" value="{{ $family_details->contact_no ?? '' }}" class="form-control form-control-lg form-control-solid" />
+        <input name="family_contact_no" id="family_contact_no" maxlength="10" value="{{ $family_details->contact_no ?? '' }}" class="number_only form-control form-control-lg form-control-solid" />
     </div>
     <input type="hidden" name="family_id" id="family_id" value="{{ $family_details->id ?? '' }}">
     <div class="col-lg-6 mb-5">
