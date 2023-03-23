@@ -17,7 +17,7 @@ class BulkUploadController extends Controller
     }
     public function index()
     {
-        return view('pages.bulk_upload.index');
+        return view('pages.bulk_upload.index'); 
     }
     public function store(Request $request)
     {
