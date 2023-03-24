@@ -62,7 +62,7 @@
                             
                             <div class="col-lg-4 mb-5">
                                 <label class="form-label">Family Doctor Contact No</label>
-                                <input name="doctor_contact_no" id="doctor_contact_no" class="form-control form-control-lg " value="{{ $staff_details->healthDetails->family_doctor_contact_no ?? ''  }}" />
+                                <input name="doctor_contact_no" id="doctor_contact_no" class="form-control form-control-lg number_only" maxlength="10" value="{{ $staff_details->healthDetails->family_doctor_contact_no ?? ''  }}" />
                             </div>
                             <div class="row">
 
@@ -77,23 +77,23 @@
                                                 class="form-check form-check-custom form-check-solid me-10">
                                                 <input class="form-check-input h-20px w-20px radio-btn"
                                                     type="radio" name="allergy" id="allergy_yes"
-                                                    value="yes" @if( isset($staff_details->healthDetails->disease_allergy) && !empty( $staff_details->healthDetails->disease_allergy ) ) checked @endif />
+                                                    value="yes" @if( isset($staff_details->healthDetails->disease_allergy_name) && !empty( $staff_details->healthDetails->disease_allergy_name ) ) checked @endif />
                                                 <span class="form-check-label fw-bold fl">Yes</span>
                                             </label>
                                             <label
                                                 class="form-check form-check-custom form-check-solid me-10">
                                                 <input class="form-check-input h-20px w-20px radio-btn"
                                                     type="radio" name="allergy" id="allergy_no"
-                                                    value="no" @if( isset($staff_details->healthDetails->disease_allergy) && empty( $staff_details->healthDetails->disease_allergy ) ) checked @endif />
+                                                    value="no" @if( isset($staff_details->healthDetails->disease_allergy_name) && empty( $staff_details->healthDetails->disease_allergy_name ) ) checked @endif />
                                                 <span class="form-check-label fw-bold f1">No</span>
                                             </label>
                                         </div>
                                     </div>
         
-                                    <div class="DA_holder textField">
+                                    <div class="DA_holder textField" @if( isset($staff_details->healthDetails->disease_allergy_name) && !empty( $staff_details->healthDetails->disease_allergy_name ) ) style="display:block" @endif>
                                         <div class="col-lg-12 mb-5">
                                             <label class="form-label"> </label>
-                                            <input name="allergy_name" id="allergry_name" class="form-control form-control-lg " 
+                                            <input name="allergy_name" id="allergry_name" value="{{ $staff_details->healthDetails->disease_allergy_name ?? '' }}" class="form-control form-control-lg " 
                                             placeholder="Disease Allergy Name"/>
                                         </div>
                                     </div>
@@ -109,24 +109,24 @@
                                             <label
                                                 class="form-check form-check-custom form-check-solid me-10">
                                                 <input class="form-check-input h-20px w-20px radio-btn"
-                                                    type="radio" name="diff_abled" id="diff_abled_yes" @if( isset($staff_details->healthDetails->differently_abled) && !empty( $staff_details->healthDetails->differently_abled ) ) checked @endif
+                                                    type="radio" name="diff_abled" id="diff_abled_yes" @if( isset($staff_details->healthDetails->differently_abled_name) && !empty( $staff_details->healthDetails->differently_abled_name ) ) checked @endif
                                                     value="yes" />
                                                 <span class="form-check-label fw-bold fl">Yes</span>
                                             </label>
                                             <label
                                                 class="form-check form-check-custom form-check-solid me-10">
                                                 <input class="form-check-input h-20px w-20px radio-btn"
-                                                    type="radio" name="diff_abled" id="diff_abled_no" @if( isset($staff_details->healthDetails->differently_abled) && empty( $staff_details->healthDetails->differently_abled ) ) checked @endif
+                                                    type="radio" name="diff_abled" id="diff_abled_no" @if( isset($staff_details->healthDetails->differently_abled_name) && empty( $staff_details->healthDetails->differently_abled_name ) ) checked @endif
                                                     value="no" />
                                                 <span class="form-check-label fw-bold f1">No</span>
                                             </label>
                                         </div>
                                     </div>
         
-                                    <div class="DA_holder textField">
+                                    <div class="DA_holder textField" @if( isset($staff_details->healthDetails->differently_abled_name) && !empty( $staff_details->healthDetails->differently_abled_name ) ) style="display:block" @endif>
                                         <div class="col-lg-12 mb-5">
                                             <label class="form-label"> </label>
-                                            <input name="abled_name" id="abled_name" placeholder="Differently abled name"
+                                            <input name="abled_name" id="abled_name" value="{{ $staff_details->healthDetails->differently_abled_name ?? '' }}" placeholder="Differently abled name"
                                                 class="form-control form-control-lg " />
                                         </div>
                                     </div>

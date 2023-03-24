@@ -142,6 +142,21 @@ class CommonController extends Controller
             case 'relationship_working_type':
                 $content = view('pages.masters.working_relationship_type.add_edit_form');
                 break;
+            case 'staff_category':
+                $content = view('pages.masters.staff_category.add_edit_form');
+                break;
+            case 'nature_of_employeement':
+                $content = view('pages.masters.nature_of_employeement.add_edit_form');
+                break;
+            case 'teaching_type':
+                $content = view('pages.masters.teaching_type.add_edit_form');
+                break;
+            case 'place_of_work':
+                $content = view('pages.masters.place_of_work.add_edit_form');
+                break;
+            case 'order_model':
+                $content = view('pages.masters.appointment_order_model.add_edit_form');
+                break;
             
             default:
                 # code...

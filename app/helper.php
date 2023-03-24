@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AcademicYear;
+use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Staff\StaffKnownLanguage;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffProfessionalData;
@@ -36,6 +37,10 @@ if (!function_exists('getRegistrationSteps')) {
             }
 
             $step = 6;
+            $appointment_data = StaffAppointmentDetail::where('staff_id', $staff_id)->first();
+            if( $appointment_data ) {
+                $step = 7;
+            }
 
         }
         return $step;

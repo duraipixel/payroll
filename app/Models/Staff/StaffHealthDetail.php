@@ -4,10 +4,12 @@ namespace App\Models\Staff;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class StaffHealthDetail extends Model
+class StaffHealthDetail extends Model implements Auditable
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'staff_health_details';
 
@@ -23,6 +25,8 @@ class StaffHealthDetail extends Model
         'disease_allergy',	
         'differently_abled',	
         'family_doctor_name',	
-        'family_doctor_contact_no'
+        'family_doctor_contact_no',
+        'disease_allergy_name',
+        'differently_abled_name'
     ];
 }

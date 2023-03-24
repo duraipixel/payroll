@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\Master\Institution;
+use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
@@ -25,11 +26,6 @@ class User extends Authenticatable implements Auditable
     use HasApiTokens, HasFactory, Notifiable;
     use \OwenIt\Auditing\Auditable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
@@ -147,6 +143,10 @@ class User extends Authenticatable implements Auditable
     public function healthDetails()
     {
         return $this->hasOne(StaffHealthDetail::class, 'staff_id', 'id');
+    }
+
+    public function appointment() {
+        return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'id');
     }
 
     

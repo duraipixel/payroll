@@ -1,5 +1,8 @@
 <!--begin::Navbar-->
 @extends('layouts.template')
+@section('breadcrum')
+    @include('layouts.parts.breadcrum')
+@endsection
 @section('content')
     @if (isset($staff_details) && !empty($staff_details))
         <script>
@@ -144,6 +147,7 @@
         }
 
         async function checkGoFurther(form_no) {
+            console.log(form_no, 'form_no');
             switch (form_no) {
                 case 0:
                     return await validatePersonalForm();
@@ -169,7 +173,7 @@
                     break;
 
                 case 6:
-
+                    return await validateAppointmentForm();
                     break;
 
                 case 7:
@@ -200,11 +204,6 @@
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 
     <script>
-        function submitForm(form) {
-            event.preventDefault();
-            return;
-
-        }
 
         $('#classes, #reporting_manager_id').select2();
 

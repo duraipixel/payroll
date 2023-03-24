@@ -6,10 +6,12 @@ use App\Models\Master\Designation;
 use App\Models\Master\OtherSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class StaffWorkExperience extends Model
+class StaffWorkExperience extends Model implements Auditable
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'academic_id', 
