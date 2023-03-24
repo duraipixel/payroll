@@ -11,6 +11,40 @@
 
      <!--begin::Card-->
      <div class="card">
+        @if ($message = Session::get('success'))
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>{{ $message }}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif 
+    
+@if ($message = Session::get('error'))
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <strong>{{ $message }}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
+     
+@if ($message = Session::get('warning'))
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>{{ $message }}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
+     
+@if ($message = Session::get('info'))
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+  <strong>{{ $message }}</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
+    
+@if ($errors->any())
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  <strong>Please check the form below for errors</strong>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
          <!--begin::Card body-->
          <div class="card-body">
           
@@ -27,12 +61,12 @@
                 <div class="col-lg-6 mb-5">
                 
                     <label class="form-label">Download Sample Excel</label>  <br>             
-                  <a href="#"><button type="button" class="btn btn-primary">Download</button></a>
+                  <a href="{{public_path().'\Excel_Format\sample_format.xlsx'}}"><button type="button" class="btn btn-primary">Download</button></a>
                 
                 </div>
                 <div class="col-lg-6 mb-12">              
                         
-               <button type="submit" class="btn btn-primary">Submit</button>
+               <button type="submit" class="btn btn-success">Submit</button>
                 
                 </div>
           
@@ -44,10 +78,6 @@
          <li style="list-style:none;color:red ">{{$i}}. {{$error}}</li>
         <?php $i++;?>
          @endforeach
-         @endif
-
-         @if ($errors->isEmpty())
-        
          @endif
          <!--end::Card body-->
      </div>
