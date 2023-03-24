@@ -48,7 +48,6 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('staff/get/draftData', [App\Http\Controllers\StaffController::class, 'getStaffDraftData'])->name('staff.get.draft.data');
     Route::post('staff/add/familyData', [App\Http\Controllers\StaffController::class, 'checkFamilyData'])->name('staff.save.familyPhase');
 
-
     Route::post('/save/designation', [App\Http\Controllers\Master\DesignationController::class, 'save'])->name('save.designation');
     Route::post('/save/department', [App\Http\Controllers\Master\DepartmentController::class, 'save'])->name('save.department');
     Route::post('/save/subject', [App\Http\Controllers\Master\SubjectController::class, 'save'])->name('save.subject');
@@ -80,7 +79,6 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/form/content/course', [App\Http\Controllers\Staff\StaffEducationController::class, 'formContent'])->name('form.course.content');
     Route::post('/course/delete', [App\Http\Controllers\Staff\StaffEducationController::class, 'deleteStaffCourse'])->name('staff.course.delete');
 
-
     Route::post('/save/staff/experience', [App\Http\Controllers\Staff\StaffWorkExperienceController::class, 'save'])->name('save.staff.experience');
     Route::post('/save/list/experience', [App\Http\Controllers\Staff\StaffWorkExperienceController::class, 'getStaffExperienceList'])->name('staff.experience.list');
     Route::post('/form/content/experience', [App\Http\Controllers\Staff\StaffWorkExperienceController::class, 'formContent'])->name('form.experience.content');
@@ -97,7 +95,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/staff/nominee/get', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNominee'])->name('staff.nominee.get');
     Route::post('/staff/nominee/info', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNomineeInfo'])->name('staff.nominee.info');
     Route::post('/staff/nominee/save', [App\Http\Controllers\Staff\StaffNomineeController::class, 'save'])->name('staff.nominee.save');
-    Route::post('/content/nominee/form', [App\Http\Controllers\Staff\StaffNomineeController::class, 'formContent'])->name('staff.nominee.form.content');
+    Route::post('/staff/content/nominee/form', [App\Http\Controllers\Staff\StaffNomineeController::class, 'formContent'])->name('staff.nominee.form.content');
     Route::post('/staff/nominee/list', [App\Http\Controllers\Staff\StaffNomineeController::class, 'list'])->name('staff.nominee.list');
     Route::post('/staff/nominee/delete', [App\Http\Controllers\Staff\StaffNomineeController::class, 'deleteStaffNominee'])->name('staff.nominee.delete');
 
@@ -113,6 +111,16 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/staff/medical/remark/content', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'formContent'])->name('form.medic.remark.content');
     Route::post('/staff/medical/remark/delete', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'deleteStaffMedcialRemarks'])->name('delete.medic.remark');
 
+    Route::post('/staff/category/save', [App\Http\Controllers\Master\StaffCategoryController::class, 'save'])->name('save.staff_category');
+    Route::post('/staff/nature/save', [App\Http\Controllers\Master\NatureOfEmploymentController::class, 'save'])->name('save.nature_of_employeement');
+    Route::post('/staff/teaching_type/save', [App\Http\Controllers\Master\TeachingTypeController::class, 'save'])->name('save.teaching_type');
+    Route::post('/staff/workplace/save', [App\Http\Controllers\Master\PlaceOfWorkController::class, 'save'])->name('save.work_place');
+    Route::post('/staff/ordermodel/save', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'save'])->name('save.order_model');
+
+    Route::post('/staff/appointment/save', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'save'])->name('staff.save.appointment');
+
+    // staff list
+    Route::get('/staff/list', [App\Http\Controllers\StaffController::class, 'list'])->name('staff.list');
 
 
 });

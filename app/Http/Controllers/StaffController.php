@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Master\BoardController;
+use App\Models\Master\AppointmentOrderModel;
 use App\Models\Master\AttendanceScheme;
 use App\Models\Master\Bank;
 use App\Models\Master\BankBranch;
@@ -19,15 +20,20 @@ use App\Models\Master\DutyClass;
 use App\Models\Master\Institution;
 use App\Models\Master\Language;
 use App\Models\Master\Nationality;
+use App\Models\Master\NatureOfEmployment;
 use App\Models\Master\OtherSchool;
 use App\Models\Master\OtherSchoolPlace;
+use App\Models\Master\PlaceOfWork;
 use App\Models\Master\ProfessionType;
 use App\Models\Master\Qualification;
 use App\Models\Master\RelationshipType;
 use App\Models\Master\Religion;
+use App\Models\Master\StaffCategory;
 use App\Models\Master\Subject;
+use App\Models\Master\TeachingType;
 use App\Models\Master\TopicTraining;
 use App\Models\Master\TypeOfDuty;
+use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
@@ -58,6 +64,15 @@ class StaffController extends Controller
 {
     public function register(Request $request, $id = null)
     {
+
+        $breadcrums = array(
+            'title' => 'Staff Registration Wizard',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => 'Staff Registration'
+                ),
+            )
+        );
         $used_classes = [];
         $used_exp_subjects = [];
         if ($id) {
@@ -93,9 +108,7 @@ class StaffController extends Controller
                         ->when($id != null, function($q) use($id){
                             $q->where('id', '!=', $id);
                         })
-                        ->get();
-
-        
+                        ->get();        
         
         $institutions = Institution::where('status', 'active')->get();
         $reporting_managers = User::where('status', 'active')->where('is_super_admin', '!=', 1)->get();
@@ -128,12 +141,17 @@ class StaffController extends Controller
         $blood_groups = BloodGroup::where('status', 'active')->get();
         $qualificaiton = Qualification::where('status', 'active')->get();
 
-        #phase5
-        
+        #phase7
+        $staff_category = StaffCategory::where('status', 'active')->get();
+        $employments = NatureOfEmployment::where('status', 'active')->get();
+        $teaching_types = TeachingType::where('status', 'active')->get();
+        $place_of_works = PlaceOfWork::where('status', 'active')->get();
+        $order_models = AppointmentOrderModel::where('status', 'active')->get();
 
         $step = getRegistrationSteps($id);
 
         $params = array(
+            'breadcrums' => $breadcrums,
             'institutions' => $institutions,
             'reporting_managers' => $reporting_managers,
             'divisions' => $divisions,
@@ -175,6 +193,11 @@ class StaffController extends Controller
             'other_staff' => $other_staff ?? [],
             'working_details' => $working_details ?? [],
             'medical_remarks' => $medical_remarks ?? [],
+            'staff_category' => $staff_category ?? [],
+            'employments' => $employments ?? [],
+            'teaching_types' => $teaching_types ?? [],
+            'place_of_works' => $place_of_works ?? [],
+            'order_models' => $order_models ?? [],
         );
         
         return view('pages.staff.registration.index', $params);
@@ -541,23 +564,23 @@ class StaffController extends Controller
                 $insEsi['academic_id'] = $academic_id;
                 $insEsi['staff_id'] = $id;
                 $insEsi['ac_number'] = $request->uan_no;
-                $insEsi['type'] = 'esi';
+                $insEsi['type'] = 'pf';
                 $insEsi['start_date'] = $request->uan_start_date ? date('Y-m-d', strtotime($request->uan_start_date)) : null;
                 $insEsi['location'] = $request->uan_area;
                 $insEsi['status'] = 'active';
-                StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'esi'], $insEsi);
+                StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'pf'], $insEsi);
             }
             if (!empty($request->esi_no)) {
 
                 $insEsi['academic_id'] = $academic_id;
                 $insEsi['staff_id'] = $id;
                 $insEsi['ac_number'] = $request->esi_no;
-                $insEsi['type'] = 'pf';
+                $insEsi['type'] = 'esi';
                 $insEsi['start_date'] = isset($request->esi_start_date) && !empty($request->esi_start_date) ? date('Y-m-d', strtotime($request->esi_start_date)) : null;
                 $insEsi['end_date'] = isset($request->esi_end_date) && !empty($request->esi_end_date) ? date('Y-m-d', strtotime($request->esi_end_date)) : null;
                 $insEsi['location'] = $request->esi_address;
                 $insEsi['status'] = 'active';
-                StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'pf'], $insEsi);
+                StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'esi'], $insEsi);
             }
 
             if ($request->bank_id) {
@@ -789,6 +812,11 @@ class StaffController extends Controller
         }
 
         return response()->json(['error' => $error, 'message' => [$message]]);
+    }
+
+    public function list(Request $request)
+    {
+        return view('pages.staff.list');
     }
 
 

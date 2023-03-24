@@ -46,4 +46,8 @@
     #toastr-container > div {
         opacity: 1;
     }
+
+    .text-small {
+        font-size:10px;
+    }
 </style>

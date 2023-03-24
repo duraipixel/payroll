@@ -8,10 +8,12 @@ use App\Models\Master\OtherSchoolPlace;
 use App\Models\Master\TypeOfDuty;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class StaffInvigilationDuty extends Model
+class StaffInvigilationDuty extends Model implements Auditable
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'academic_id',

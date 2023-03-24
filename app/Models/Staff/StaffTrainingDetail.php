@@ -5,10 +5,12 @@ namespace App\Models\Staff;
 use App\Models\Master\TopicTraining;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class StaffTrainingDetail extends Model
+class StaffTrainingDetail extends Model implements Auditable
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'academic_id', 

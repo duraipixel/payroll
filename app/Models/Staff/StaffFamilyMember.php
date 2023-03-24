@@ -8,10 +8,12 @@ use App\Models\Master\Qualification;
 use App\Models\Master\RelationshipType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class StaffFamilyMember extends Model
+class StaffFamilyMember extends Model implements Auditable
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'staff_family_members';
     protected $fillable = [

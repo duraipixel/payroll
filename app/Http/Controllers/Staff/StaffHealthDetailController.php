@@ -31,8 +31,8 @@ class StaffHealthDetailController extends Controller
             $ins['identification_mark'] = $request->identification_mark;
             $ins['identification_mark1'] = $request->identification_mark1;
             $ins['identification_mark2'] = $request->identification_mark2;
-            $ins['disease_allergy'] = isset($request->allergy) && $request->allergy == 'yes' ? $request->allergy_name : null;
-            $ins['differently_abled'] = isset($request->diff_abled) && $request->diff_abled == 'yes' ? $request->abled_name : null;
+            $ins['disease_allergy_name'] = isset($request->allergy) && $request->allergy == 'yes' ? $request->allergy_name : null;
+            $ins['differently_abled_name'] = isset($request->diff_abled) && $request->diff_abled == 'yes' ? $request->abled_name : null;
             $ins['family_doctor_name'] = $request->family_doctor_name;
             $ins['family_doctor_contact_no'] = $request->doctor_contact_no;
             
