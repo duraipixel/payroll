@@ -89,9 +89,11 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/member/form/content', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'formContent'])->name('form.family.content');
     Route::post('/member/delete', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'deleteStaffFamilyMember'])->name('staff.family.delete');
 
-    //Bulk upload for staff information
+    //Bulk upload for staff information staff
     Route::get('/staff/bulk', [App\Http\Controllers\Staff\BulkUploadController::class, 'index'])->name('staff.bulk'); 
     Route::post('/bulk/save', [App\Http\Controllers\Staff\BulkUploadController::class, 'store'])->name('staff.save'); 
+     //Bulk upload for staff information End
+
     Route::post('/staff/nominee/get', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNominee'])->name('staff.nominee.get');
     Route::post('/staff/nominee/info', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNomineeInfo'])->name('staff.nominee.info');
     Route::post('/staff/nominee/save', [App\Http\Controllers\Staff\StaffNomineeController::class, 'save'])->name('staff.nominee.save');
@@ -122,5 +124,8 @@ Route::group(['middleware' => 'auth'],  function () {
     // staff list
     Route::get('/staff/list', [App\Http\Controllers\StaffController::class, 'list'])->name('staff.list');
 
+    //Page Permission Start 
+    Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission'); 
+    //Page Permission End
 
 });
