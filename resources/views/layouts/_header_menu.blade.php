@@ -39,7 +39,7 @@
                 data-kt-swapper="true" data-kt-swapper-mode="prepend"
                 data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}">
                 <!--begin::Menu-->
-                <div class="menu menu-lg-rounded menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch"
+                {{-- <div class="menu menu-lg-rounded menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch"
                     id="#kt_header_menu" data-kt-menu="true">
                     <div class="menu-item d-flex my-0">
                         <!--begin::Select-->
@@ -71,7 +71,7 @@
                         <input type="text" class="form-control form-control-solid ps-10"
                             name="search" value="" placeholder="Search" />
                     </div>
-                </div>
+                </div> --}}
             </div>
             <!--end::Menu-->
             <!--begin::Menu-->

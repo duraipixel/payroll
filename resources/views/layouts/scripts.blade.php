@@ -2,4 +2,5 @@
 <script src="{{ asset('assets/js/plugins/scripts.bundle.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
 

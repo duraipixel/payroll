@@ -123,6 +123,8 @@ Route::group(['middleware' => 'auth'],  function () {
 
     // staff list
     Route::get('/staff/list', [App\Http\Controllers\StaffController::class, 'list'])->name('staff.list');
+    Route::post('/staff/change/status', [App\Http\Controllers\StaffController::class, 'changeStatus'])->name('staff.change.status');
+    Route::get('/staff/generate/overview', [App\Http\Controllers\StaffController::class, 'generateOverviewPdf'])->name('staff.generate.overview');
 
     //Page Permission Start 
     Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission'); 

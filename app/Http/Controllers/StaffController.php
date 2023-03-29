@@ -59,6 +59,9 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use DataTables;
+use Carbon\Carbon;
+use PDF;
 
 class StaffController extends Controller
 {
@@ -68,9 +71,8 @@ class StaffController extends Controller
         $breadcrums = array(
             'title' => 'Staff Registration Wizard',
             'breadcrums' => array(
-                array(
-                    'link' => '', 'title' => 'Staff Registration'
-                ),
+                array('link' => route('staff.list'), 'title' => 'Staff Management'),
+                array('link' => '', 'title' => 'Staff Registration')
             )
         );
         $used_classes = [];
@@ -102,14 +104,14 @@ class StaffController extends Controller
             $working_details = StaffWorkingRelation::where('status', 'active')->where('staff_id', $id)->get();
             $medical_remarks = StaffMedicalRemark::where('staff_id', $id)->get();
         }
-        
+
         $other_staff = User::with('institute')->where('status', 'active')
-                        ->where('is_super_admin', null)
-                        ->when($id != null, function($q) use($id){
-                            $q->where('id', '!=', $id);
-                        })
-                        ->get();        
-        
+            ->where('is_super_admin', null)
+            ->when($id != null, function ($q) use ($id) {
+                $q->where('id', '!=', $id);
+            })
+            ->get();
+
         $institutions = Institution::where('status', 'active')->get();
         $reporting_managers = User::where('status', 'active')->where('is_super_admin', '!=', 1)->get();
         $divisions = Division::where('status', 'active')->get();
@@ -199,13 +201,12 @@ class StaffController extends Controller
             'place_of_works' => $place_of_works ?? [],
             'order_models' => $order_models ?? [],
         );
-        
         return view('pages.staff.registration.index', $params);
     }
 
     public function insertPersonalData(Request $request)
     {
-        
+
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
@@ -731,7 +732,7 @@ class StaffController extends Controller
                 StaffKnownLanguage::updateOrCreate(['staff_id' => $staff_id, 'language_id' => $item], $ins);
             }
         }
-        
+
 
         if ($request->read && !empty($request->read)) {
             foreach ($request->read as $item) {
@@ -768,32 +769,31 @@ class StaffController extends Controller
         $ins1['staff_id'] = $staff_id;
         $ins1['status'] = 'active';
 
-        if( isset( $sports ) && !empty($sports ) ) {
+        if (isset($sports) && !empty($sports)) {
             $ins1['talent_fields'] = 'sports';
             $ins1['talent_descriptions'] = $request->sports;
             StaffTalent::updateOrCreate(['staff_id' => $staff_id, 'talent_fields' => 'sports'], $ins1);
         }
 
-        if( isset( $fine_arts ) && !empty($fine_arts ) ) {
+        if (isset($fine_arts) && !empty($fine_arts)) {
             $ins1['talent_fields'] = 'fine_arts';
             $ins1['talent_descriptions'] = $request->fine_arts;
             StaffTalent::updateOrCreate(['staff_id' => $staff_id, 'talent_fields' => 'fine_arts'], $ins1);
         }
 
-        if( isset( $vocational ) && !empty($vocational ) ) {
+        if (isset($vocational) && !empty($vocational)) {
             $ins1['talent_fields'] = 'vocational';
             $ins1['talent_descriptions'] = $request->vocational;
             StaffTalent::updateOrCreate(['staff_id' => $staff_id, 'talent_fields' => 'vocational'], $ins1);
         }
 
-        if( isset( $others ) && !empty($others ) ) {
+        if (isset($others) && !empty($others)) {
             $ins1['talent_fields'] = 'others';
             $ins1['talent_descriptions'] = $request->others;
             StaffTalent::updateOrCreate(['staff_id' => $staff_id, 'talent_fields' => 'others'], $ins1);
         }
 
         return response()->json(['error' => 0, 'message' => 'Added success']);
-
     }
 
     public function checkFamilyData(Request $request)
@@ -802,8 +802,8 @@ class StaffController extends Controller
 
         $members = StaffFamilyMember::where('status', 'active')->where('staff_id', $staff_id)->get();
         $nominees = StaffNominee::where('staff_id', $staff_id)->get();
-      
-        if( isset( $members ) && count($members ) > 0 && isset($nominees) && count( $nominees ) > 0 ) {
+
+        if (isset($members) && count($members) > 0 && isset($nominees) && count($nominees) > 0) {
             $error = '0';
             $message = 'Added Success';
         } else {
@@ -816,8 +816,97 @@ class StaffController extends Controller
 
     public function list(Request $request)
     {
-        return view('pages.staff.list');
+        $breadcrums = array(
+            'title' => 'Staff Management',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => 'Staff List'
+                ),
+            )
+        );
+        if ($request->ajax()) {
+
+            $data = User::with(['institute'])->where('is_super_admin', '=', null);
+            $status = $request->get('status');
+            $datatable_search = $request->datatable_search ?? '';
+            $keywords = $datatable_search;
+            $datatables =  Datatables::of($data)
+                ->filter(function ($query) use ($keywords, $status) {
+                    if ($status) {
+                        return $query->where('banners.status', '=', "$status");
+                    }
+                    if ($keywords) {
+                        $date = date('Y-m-d', strtotime($keywords));
+                        return $query->where(function ($q) use ($keywords, $date) {
+
+                            $q->where('users.name', 'like', "%{$keywords}%")
+                                ->orWhere('users.status', 'like', "%{$keywords}%")
+                                ->orWhere('users.email', 'like', "%{$keywords}%")
+                                ->orWhere('users.emp_code', 'like', "%{$keywords}%")
+                                ->orWhere('users.first_name_tamil', 'like', "%{$keywords}%")
+                                ->orWhereDate("users.created_at", $date);
+                        });
+                    }
+                })
+                ->addIndexColumn()
+
+                ->editColumn('verification_status', function ($row) {
+                    $status = '
+                            <div class="d-flex align-items-center w-100px w-sm-200px flex-column mt-3">
+                                <div class="d-flex justify-content-between w-100 mt-auto">
+                                    <span class="fw-semibold fs-6 text-gray-400">' . ucwords($row->verification_status) . '</span>
+                                    <span class="fw-bold fs-6">' . getStaffProfileCompilation($row->id) . '%</span>
+                                </div>
+                                <div class="h-5px mx-3 w-100 bg-light">
+                                    <div class="bg-success rounded h-5px" role="progressbar" aria-valuenow="' . getStaffProfileCompilation($row->id) . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . getStaffProfileCompilation($row->id) . '%;"></div>
+                                </div>
+                            </div>';
+                    return $status;
+                })
+                ->editColumn('status', function ($row) {
+                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return staffChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                    return $status;
+                })
+                ->editColumn('institute_name', function ($row) {
+                    return $row->institute->name;
+                })
+
+                ->editColumn('created_at', function ($row) {
+                    $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
+                    return $created_at;
+                })
+
+                ->addColumn('action', function ($row) {
+                    $edit_btn = '<a href="' . route('staff.register', ['id' => $row->id]) . '"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                    <i class="fa fa-edit"></i>
+                </a>';
+                    $del_btn = '<a href="javascript:void(0);" onclick="deleteStaff(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                <i class="fa fa-trash"></i></a>';
+
+                    return $edit_btn . $del_btn;
+                })
+                ->rawColumns(['action', 'status', 'verification_status']);
+            return $datatables->make(true);
+        }
+        return view('pages.staff.list', compact('breadcrums'));
     }
 
+    public function changeStatus(Request $request)
+    {
+        $id             = $request->id;
+        $status         = $request->status;
+        $info           = User::find($id);
+        $info->status   = $status;
+        $info->update();
+        return response()->json(['message' => "You changed the Staff status!", 'status' => 1]);
+    }
 
+    public function generateOverviewPdf(Request $request)
+    {
+        // retreive all records from db
+        $data = User::all();
+        $pdf = PDF::loadView('pages.staff.pdf.staff_overview',array('data' => $data))->setPaper('a4', 'landscape');
+        // download PDF file with download method
+        return $pdf->download('pdf_file.pdf');
+    }
 }

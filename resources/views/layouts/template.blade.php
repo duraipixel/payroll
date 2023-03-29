@@ -132,7 +132,7 @@
     <script src="{{ asset('assets/js/tamil-keyboard.js') }}"></script>
     <!--end::Global Javascript Bundle-->
     <!--begin::Page Vendors Javascript(used by this page)-->
-    <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
+    
     <script src="{{ asset('assets/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
     <!--end::Page Vendors Javascript-->
     <!--begin::Page Custom Javascript(used by this page)-->
@@ -150,14 +150,14 @@
     <!--end::Page Custom Javascript-->
     <!--end::Javascript-->
     <script type="text/javascript">
-        $(document).ready(function() {
-            var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-                removeItemButton: true,
-                maxItemCount: 12,
-                searchResultLimit: 12,
-                renderChoiceLimit: 12
-            });
-        });
+        // $(document).ready(function() {
+        //     var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+        //         removeItemButton: true,
+        //         maxItemCount: 12,
+        //         searchResultLimit: 12,
+        //         renderChoiceLimit: 12
+        //     });
+        // });
     </script>
     <script>
         $(document).ready(function() {
