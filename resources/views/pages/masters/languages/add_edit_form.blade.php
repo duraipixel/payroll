@@ -26,7 +26,7 @@
 </form>
 
 <script>
-var from = '{{ $from ?? '' }}';
+var fromData = '{{ $from ?? '' }}';
 var KTAppEcommerceSaveLanguage = function () {
 
     const handleSubmit = () => {
@@ -90,7 +90,7 @@ var KTAppEcommerceSaveLanguage = function () {
                                 } else{
                                     toastr.success("Language added successfully");
                                     $('#kt_dynamic_app').modal('hide');
-                                    if(form)
+                                    if(fromData)
                                     {
                                         dtTable.draw();
                                     }
