@@ -129,5 +129,18 @@ Route::group(['middleware' => 'auth'],  function () {
     //Page Permission Start 
     Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission'); 
     //Page Permission End
+    $routeArray = array(
+        'institutions' => App\Http\Controllers\Master\InstitutionController::class,
+    );
+    foreach($routeArray as $key=>$value)
+    {
+        Route::prefix($key)->group(function() use($key,$value) {
+            Route::get('/',[$value,'index'])->name($key);
+            Route::post('/edit',[$value,'add_edit'])->name($key.'.add_edit');
+            Route::post('/change/status', [$value, 'changeStatus'])->name($key.'.change.status');
+            Route::post('/change/delete', [$value, 'delete'])->name($key.'.delete');
+            Route::get('/export', [$value, 'export'])->name($key.'.export');
+        });
+    }
 
 });

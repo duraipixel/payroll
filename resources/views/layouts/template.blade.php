@@ -39,7 +39,7 @@
                     <div class="post d-flex flex-column-fluid" id="kt_post">
                         <!--begin::Container-->
                         <div id="kt_content_container" class="container-xxl">
-                           @yield('content')
+                            @yield('content')
                         </div>
                         <!--end::Container-->
                     </div>
@@ -53,16 +53,17 @@
             <!--end::Wrapper-->
         </div>
         <!--end::Page-->
-        <div id="staff-loading" >
+        <div id="staff-loading">
             <img src="{{ asset('assets/images/needs/loadingbook.gif') }}" alt="">
         </div>
     </div>
     <script>
         var loadingElement = document.getElementById('staff-loading');
+
         function loading() {
             loadingElement.style.display = 'flex';
         }
-    
+        
         function unloading() {
             loadingElement.style.display = 'none';
         }
@@ -126,13 +127,13 @@
         <!--end::Modal dialog-->
     </div>
     @yield('add_on_script')
-    
+
     <!--begin::Global Javascript Bundle(used by all pages)-->
     <script src="{{ asset('assets/js/tamil-search.js') }}"></script>
     <script src="{{ asset('assets/js/tamil-keyboard.js') }}"></script>
     <!--end::Global Javascript Bundle-->
     <!--begin::Page Vendors Javascript(used by this page)-->
-    
+
     <script src="{{ asset('assets/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
     <!--end::Page Vendors Javascript-->
     <!--begin::Page Custom Javascript(used by this page)-->
@@ -180,17 +181,19 @@
         });
     </script>
     <script>
-    $(".DA_radio_holder .radio-btn").change(function() {
-        $(this).closest(".question").next().toggle(this.value === 'yes');
-    });
+        $(".DA_radio_holder .radio-btn").change(function() {
+            $(this).closest(".question").next().toggle(this.value === 'yes');
+        });
 
-    $(".number_only").keypress(function(e) {
-        if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
-    });
+        $(".number_only").keypress(function(e) {
+            if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
+        });
 
-    $(".price").keypress(function(e) {
-        if (String.fromCharCode(e.keyCode).match(/[^.0-9]/g)) return false;
-    });
+        $(".price").keypress(function(e) {
+            if (String.fromCharCode(e.keyCode).match(/[^.0-9]/g)) return false;
+        });
+
+        
     </script>
 </body>
 
