@@ -26,7 +26,7 @@
 </form>
 
 <script>
-
+var from = '{{ $from ?? '' }}';
 var KTAppEcommerceSaveInstitute = function () {
 
     const handleSubmit = () => {
@@ -80,7 +80,7 @@ var KTAppEcommerceSaveInstitute = function () {
                             contentType: false,
                             success: function(res) {
                                 // Disable submit button whilst loading
-                                dtTable.draw();
+                              
                                 submitButton.disabled = false;
                                 submitButton.removeAttribute('data-kt-indicator');
                                 if( res.error == 1 ) {
@@ -91,17 +91,23 @@ var KTAppEcommerceSaveInstitute = function () {
                                     }
                                 } else{
                                     toastr.success("Divisions added successfully");
-                                    if( res.inserted_data ) {
-                                        $('#kt_dynamic_app').modal('hide');
-                                        $('#classes').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                        var classes = $('#classes').val();
-                                        // var category = $('#classes').select2("val");
-                                        classes.push(res.inserted_data.id.toString());
-                                        dtTable.draw();
-                                        console.log(classes, 'classes');
-                                        $('#classes').val(classes).trigger('change');
-                                        // console.log(category, 'category');
-                                    }
+                                      $('#kt_dynamic_app').modal('hide');
+                                     if (from) {
+                                            dtTable.draw();
+                                        } else {
+                                            if( res.inserted_data ) {
+                                              
+                                                $('#classes').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
+                                                var classes = $('#classes').val();
+                                                // var category = $('#classes').select2("val");
+                                                classes.push(res.inserted_data.id.toString());
+                                                
+                                                console.log(classes, 'classes');
+                                                $('#classes').val(classes).trigger('change');
+                                            }
+
+                                        }
+                                    
                                 }
                             }
                         })

@@ -1,4 +1,4 @@
-<h1>classs</h1>@extends('layouts.template')
+@extends('layouts.template')
 @section('breadcrum')
     @include('layouts.parts.breadcrum')
 @endsection

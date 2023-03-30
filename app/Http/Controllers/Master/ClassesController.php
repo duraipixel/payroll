@@ -75,13 +75,14 @@ class ClassesController extends Controller
         $id = $request->id;
         $info = [];
         $title = 'Add Class';
+        $from = 'master';
         if(isset($id) && !empty($id))
         {
             $info = Classes::find($id);
             $title = 'Update Class';
         }
 
-         $content = view('pages.masters.classes.add_edit_form',compact('info','title'));
+         $content = view('pages.masters.classes.add_edit_form',compact('info','title','from'));
          return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
     public function save(Request $request)
