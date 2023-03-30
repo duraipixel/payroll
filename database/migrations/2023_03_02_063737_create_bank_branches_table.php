@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->integer('sort_order')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

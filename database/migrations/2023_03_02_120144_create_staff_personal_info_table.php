@@ -36,6 +36,7 @@ return new class extends Migration
             $table->text('contact_address')->nullable();
             $table->text('permanent_address')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

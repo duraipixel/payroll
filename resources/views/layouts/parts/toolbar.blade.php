@@ -5,7 +5,7 @@
         @yield('breadcrum')
         <!--end::Page title-->
         <!--begin::Actions-->
-        @include('layouts.parts._common_button')
+        {{-- @include('layouts.parts._common_button') --}}
         <!--end::Actions-->
     </div>
     <!--end::Container-->

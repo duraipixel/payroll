@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('belonger_id');
             $table->unsignedBigInteger('belonger_code')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

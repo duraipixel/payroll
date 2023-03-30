@@ -26,6 +26,7 @@ return new class extends Migration
             $table->float('share')->nullable();
             $table->text('minor_address')->nullable();
             $table->string('minor_contact_no')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -5,10 +5,12 @@ namespace App\Models\Master;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Master\Society;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Institution extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
     use \OwenIt\Auditing\Auditable;
     
     protected $fillable = [
@@ -33,4 +35,8 @@ class Institution extends Model implements Auditable
         'address',
         'status'
     ];
+    public function society()
+    {
+        return $this->belongsTo(Society::class,'society_id','id');
+    }
 }

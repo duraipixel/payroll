@@ -30,7 +30,7 @@ return new class extends Migration
             $table->integer('experience_month')->nullable();
             $table->text('remarks')->nullable();
             $table->text('doc_file')->nullable();
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

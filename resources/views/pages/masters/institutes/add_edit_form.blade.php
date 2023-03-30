@@ -1,7 +1,9 @@
 <form id="dynamic_form">
     @csrf
     <div class="fv-row form-group mb-10">
+        
         <label class="form-label required" for="">
+
             Society
         </label>
         <div>
@@ -9,18 +11,19 @@
                 <option value="">--select--</option>
                 @isset($society)
                     @foreach ($society as $item)
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        <option value="{{ $item->id }}" @if( isset( $info->society_id ) && $info->society_id == $item->id) selected @endif>{{ $item->name }}</option>
                     @endforeach
                 @endisset
             </select>
         </div>
     </div>
+    <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
             Institute Name
         </label>
         <div>
-            <input type="text" class="form-control" name="institute_name" id="institute_name" required>
+            <input type="text" class="form-control" name="institute_name" id="institute_name" value="{{ $info->name ?? '' }}" required>
         </div>
     </div>
     <div class="fv-row form-group mb-10">
@@ -28,7 +31,7 @@
             Institute Code
         </label>
         <div>
-            <input type="text" class="form-control" name="institute_code" id="institute_code" required>
+            <input type="text" class="form-control" name="institute_code" id="institute_code" value="{{ $info->code ?? '' }}" required>
         </div>
     </div>
     <div class="form-group mb-10">
@@ -36,7 +39,7 @@
             Institute Address
         </label>
         <div>
-            <textarea class="form-control" name="address" id="address"></textarea>
+            <textarea class="form-control" name="address" id="address">{{ $info->address ?? '' }}</textarea>
         </div>
     </div>
     <div class="form-group mb-10 text-end">
@@ -101,15 +104,15 @@
             // Handle submit button
             submitButton.addEventListener('click', e => {
                 e.preventDefault();
-                submitButton.disabled = true;
-                submitButton.setAttribute('data-kt-indicator', 'on');
+                
 
                 // Validate form before submit
                 if (validator) {
                     validator.validate().then(function(status) {
 
-
                         if (status == 'Valid') {
+                            submitButton.disabled = true;
+                            submitButton.setAttribute('data-kt-indicator', 'on');
                             var forms = $('#dynamic_form')[0];
                             var formData = new FormData(forms);
                             $.ajax({
@@ -131,16 +134,8 @@
                                         }
                                     } else{
                                         toastr.success("Institution added successfully");
-                                        if( res.inserted_data ) {
-                                            $('#kt_dynamic_app').modal('hide');
-                                            
-                                            $('#institute_name').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                            $('#institute_name').val(res.inserted_data.id)
-
-                                            if( res.code ) {
-                                                $('#institute_code').val(res.code);
-                                            }
-                                        }
+                                        $('#kt_dynamic_app').modal('hide');
+                                        dtTable.draw();
                                     }
                                 }
                             })

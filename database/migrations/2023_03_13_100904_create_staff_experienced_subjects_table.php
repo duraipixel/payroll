@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('staff_id');
             $table->unsignedBigInteger('subject_id');
             $table->enum('status', ['active', 'inactive']);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -60,7 +60,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="../../account/overview.html">
+                            <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -68,7 +68,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="../../account/settings.html">
+                            <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -76,39 +76,16 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="../../account/security.html">
+                            <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title">Security</span>
                             </a>
-                        </div>
+                        </div>                                            
+                     
                         <div class="menu-item">
-                            <a class="menu-link" href="../../account/billing.html">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Billing</span>
-                            </a>
-                        </div>
-                        <div class="menu-item">
-                            <a class="menu-link" href="../../account/statements.html">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Statements</span>
-                            </a>
-                        </div>
-                        <div class="menu-item">
-                            <a class="menu-link" href="../../account/referrals.html">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Referrals</span>
-                            </a>
-                        </div>
-                        <div class="menu-item">
-                            <a class="menu-link" href="../../account/api-keys.html">
+                            <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -116,7 +93,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="../../account/logs.html">
+                            <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -271,7 +248,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="javascript:void(0)">
+                            <a class="menu-link" href="{{ route('class') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -343,7 +320,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="javascript:void(0)">
+                            <a class="menu-link" href="{{ route('institutions') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>

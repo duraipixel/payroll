@@ -40,14 +40,19 @@
     }
 
     .toastr.toastr-error {
-        background:red;
-        
+        background: red;
+
     }
-    #toastr-container > div {
+
+    #toastr-container>div {
         opacity: 1;
     }
 
     .text-small {
-        font-size:10px;
+        font-size: 10px;
+    }
+
+    div.dataTables_length+div.dataTables_info {
+        margin-left: 6rem;
     }
 </style>

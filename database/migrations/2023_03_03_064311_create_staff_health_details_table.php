@@ -27,6 +27,7 @@ return new class extends Migration
             $table->enum('differently_abled', ['yes', 'no']);
             $table->string('family_doctor_name')->nullable();
             $table->string('family_doctor_contact_no')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

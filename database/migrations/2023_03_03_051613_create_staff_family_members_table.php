@@ -32,6 +32,7 @@ return new class extends Migration
             $table->text('residential_address')->nullable();
             $table->text('occupational_address')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
