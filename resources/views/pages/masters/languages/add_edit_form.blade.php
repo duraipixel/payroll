@@ -1,11 +1,11 @@
 <form action="" class="" id="dynamic_form">
-   
+   <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
             Language
         </label>
         <div >
-            <input type="text" class="form-control" name="language" id="language" required >
+            <input type="text" class="form-control" name="language" id="language" value="{{ $info->name ?? '' }}" required >
         </div>
     </div>
    
@@ -26,7 +26,7 @@
 </form>
 
 <script>
-
+var from = '{{ $from ?? '' }}';
 var KTAppEcommerceSaveLanguage = function () {
 
     const handleSubmit = () => {
@@ -89,11 +89,19 @@ var KTAppEcommerceSaveLanguage = function () {
                                     }
                                 } else{
                                     toastr.success("Language added successfully");
-                                    if( res.inserted_data ) {
-                                        $('#kt_dynamic_app').modal('hide');
-                                        $('#language_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                        $('#language_id').val(res.inserted_data.id).trigger('change');
+                                    $('#kt_dynamic_app').modal('hide');
+                                    if(form)
+                                    {
+                                        dtTable.draw();
                                     }
+                                    else{
+                                        if( res.inserted_data ) {
+                                       
+                                       $('#language_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
+                                       $('#language_id').val(res.inserted_data.id).trigger('change');
+                                        }
+                                    }
+                                    
                                 }
                             }
                         })

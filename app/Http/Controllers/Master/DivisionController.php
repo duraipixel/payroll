@@ -27,7 +27,7 @@ class DivisionController extends Controller
         );
         if($request->ajax())
         {
-            $data = Division::orderBy('id','desc');
+            $data = Division::select('*');
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;

@@ -22,7 +22,7 @@
                     </svg>
                 </span>
                 <!--end::Svg Icon-->
-                <input type="text" data-kt-user-table-filter="search" id="division_datable_search"
+                <input type="text" data-kt-user-table-filter="search" id="language_datable_search"
                     class="form-control form-control-solid w-250px ps-14" placeholder="Search Institutions">
             </div>
             <!--end::Search-->
@@ -33,7 +33,7 @@
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
-                <a type="button" class="btn btn-light-primary me-3" href="{{ route('division.export') }}">
+                <a type="button" class="btn btn-light-primary me-3" href="{{ route('language.export') }}">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -51,8 +51,8 @@
                     <!--end::Svg Icon-->Export
                 </a>
 
-                <button type="button" class="btn btn-primary" id="add_modal" onclick="getDivisionsModal()">
-                    {!! plusSvg() !!} Add Division
+                <button type="button" class="btn btn-primary" id="add_modal" onclick="getLanguageModal()">
+                    {!! plusSvg() !!} Add Language
                 </button>
 
             </div>
@@ -73,14 +73,14 @@
         <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="table-responsive">
                 <table class="table align-middle table-hover table-row-dashed fs-6 dataTable no-footer"
-                    id="division_table">
+                    id="language_table">
                     <thead>
                         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
 
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
                                 colspan="1" style="width: 355.733px;"
                                 aria-label="User: activate to sort column ascending">
-                                Division Name
+                                Language Name
                             </th>
 
                         
@@ -112,16 +112,16 @@
 @section('add_on_script')
 
 <script>
-    var dtTable = $('#division_table').DataTable({
+    var dtTable = $('#language_table').DataTable({
 
         processing: true,
         serverSide: true,
         order :[0, 'asc'],
         type: 'POST',
         ajax: {
-            "url": "{{ route('division') }}",
+            "url": "{{ route('language') }}",
             "data": function(d) {
-                d.datatable_search = $('#division_datable_search').val();
+                d.datatable_search = $('#language_datable_search').val();
             }
         },
 
@@ -156,7 +156,7 @@
         $('.dataTables_filter').addClass('position-absolute end-0 top-0');
         $('.dataTables_length label select').addClass('form-control form-control-solid');
 
-        document.querySelector('#division_datable_search').addEventListener("keyup", function(e) {
+        document.querySelector('#language_datable_search').addEventListener("keyup", function(e) {
             dtTable.draw();
         }),
 
@@ -170,7 +170,7 @@
         dtTable.draw();
         e.preventDefault();
         });
-        function getDivisionsModal( id = '') {
+        function getLanguageModal( id = '') {
 
             $.ajaxSetup({
                 headers: {
@@ -178,7 +178,7 @@
                 }
             });
             $.ajax({
-                url: "{{ route('division.add_edit') }}",
+                url: "{{ route('language.add_edit') }}",
                 type: 'POST',
                 data: {
                     id: id,
@@ -190,7 +190,7 @@
             })
 
         }
-        function divisionsChangeStatus(id, status) {
+        function languageChangeStatus(id, status) {
 
     Swal.fire({
         text: "Are you sure you would like to change status?",
@@ -212,7 +212,7 @@
         });
 
         $.ajax({
-            url: "{{ route('division.change.status') }}",
+            url: "{{ route('language.change.status') }}",
             type: 'POST',
             data: {
                 id: id,
@@ -241,7 +241,7 @@
     }
 });
 }
-        function deleteDivisions(id) {
+        function deleteLanguage(id) {
             Swal.fire({
                 text: "Are you sure you would like to delete record?",
                 icon: "warning",
@@ -262,7 +262,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('division.delete') }}",
+                        url: "{{ route('language.delete') }}",
                         type: 'POST',
                         data: {
                             id: id,
