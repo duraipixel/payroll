@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('talent_fields');
             $table->text('talent_descriptions');
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

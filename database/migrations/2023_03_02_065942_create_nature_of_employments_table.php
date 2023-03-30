@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('sort_order')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->date('to_date');
             $table->string('facility');
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

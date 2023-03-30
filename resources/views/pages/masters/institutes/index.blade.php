@@ -120,11 +120,7 @@
 @endsection
 
 @section('add_on_script')
-    <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
-    <script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
 
-    {{-- <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/custom/widgets.js') }}"></script> --}}
     <script>
         var dtTable = $('#institution_table').DataTable({
 

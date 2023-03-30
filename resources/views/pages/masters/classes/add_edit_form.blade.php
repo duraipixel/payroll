@@ -1,11 +1,11 @@
 <form action="" class="" id="dynamic_form">
-   
+   <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
             Class Name
         </label>
         <div >
-            <input type="text" class="form-control" name="class_name" id="class_name" required >
+            <input type="text" class="form-control" name="class_name" id="class_name" value="{{ $info->name ?? '' }}" required >
         </div>
     </div>
    
@@ -80,6 +80,7 @@ var KTAppEcommerceSaveInstitute = function () {
                             contentType: false,
                             success: function(res) {
                                 // Disable submit button whilst loading
+                                dtTable.draw();
                                 submitButton.disabled = false;
                                 submitButton.removeAttribute('data-kt-indicator');
                                 if( res.error == 1 ) {
@@ -96,7 +97,7 @@ var KTAppEcommerceSaveInstitute = function () {
                                         var classes = $('#classes').val();
                                         // var category = $('#classes').select2("val");
                                         classes.push(res.inserted_data.id.toString());
-
+                                        dtTable.draw();
                                         console.log(classes, 'classes');
                                         $('#classes').val(classes).trigger('change');
                                         // console.log(category, 'category');

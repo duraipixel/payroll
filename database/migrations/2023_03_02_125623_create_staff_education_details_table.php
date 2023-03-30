@@ -28,6 +28,7 @@ return new class extends Migration
             $table->text('doc_file')->nullable();
             $table->text('multi_file')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

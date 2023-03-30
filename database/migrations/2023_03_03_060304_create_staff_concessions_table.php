@@ -34,6 +34,7 @@ return new class extends Migration
             $table->float('total_fees_after_concession')->nullable();
             $table->text('file')->nullable();
             $table->enum('approval_status', ['approved', 'rejected', 'pending']);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

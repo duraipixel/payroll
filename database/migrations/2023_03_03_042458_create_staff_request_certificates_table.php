@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('file')->nullable();
             $table->enum('approval_status', ['pending', 'rejected', 'cancelled', 'approved', 'requested']);
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

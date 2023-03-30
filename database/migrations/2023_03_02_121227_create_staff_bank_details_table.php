@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('passbook_image')->nullable();
             $table->text('cancelled_cheque')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

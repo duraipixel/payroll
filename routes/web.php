@@ -131,6 +131,7 @@ Route::group(['middleware' => 'auth'],  function () {
     //Page Permission End
     $routeArray = array(
         'institutions' => App\Http\Controllers\Master\InstitutionController::class,
+        'class' => App\Http\Controllers\Master\ClassesController::class,
     );
     foreach($routeArray as $key=>$value)
     {
@@ -141,6 +142,7 @@ Route::group(['middleware' => 'auth'],  function () {
             Route::post('/change/delete', [$value, 'delete'])->name($key.'.delete');
             Route::get('/export', [$value, 'export'])->name($key.'.export');
         });
+
     }
 
 });

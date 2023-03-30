@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('multi_file')->nullable();
             $table->string('verification_status')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

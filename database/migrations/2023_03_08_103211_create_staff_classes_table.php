@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('academic_id')->nullable();
             $table->unsignedBigInteger('staff_id');
             $table->unsignedBigInteger('class_id');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

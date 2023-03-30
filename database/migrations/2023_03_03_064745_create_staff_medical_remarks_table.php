@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('medic_date');
             $table->text('reason');
             $table->text('medic_documents');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
