@@ -4,8 +4,9 @@
         <label class="form-label required" for="">
             Division Name
         </label>
+        <input type="hidden" name="id" id="id" value="{{ $info->id }}">
         <div >
-            <input type="text" class="form-control" name="division_name" id="division_name" required >
+            <input type="text" class="form-control" name="division_name" id="division_name" value="{{ $info->name }}" required >
         </div>
     </div>
    
@@ -90,6 +91,7 @@ var KTAppEcommerceSaveInstitute = function () {
                                     }
                                 } else{
                                     toastr.success("Divisions added successfully");
+                                    dtTable.draw();
                                     if( res.inserted_data ) {
                                         $('#kt_dynamic_app').modal('hide');
                                         $('#division_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
