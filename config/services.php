@@ -58,5 +58,9 @@ return [
         //'Society' => 'Society',
         'StaffCategory' => 'Staff Category',
         'Subject' => 'Subject',
+        'TeachingType' => 'Teaching Type',
+        'TopicTraining' => 'Training Topic',
+        'Board' => 'University/Boards',
+        
     ]
 ];

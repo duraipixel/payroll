@@ -497,7 +497,7 @@ class BulkImport implements ToCollection, WithHeadingRow, WithValidation
             'institute_name'                => 'required',
             'institution_code'              => 'required',
             'name_in_english'               => 'required',
-            'email_id'                      => 'required|string|unique:users,email',
+            'email_id'                      => 'required',
             'class_handling'                => 'required',
             'division'                      => 'required',
             'date_of_birth'                 => 'required',
