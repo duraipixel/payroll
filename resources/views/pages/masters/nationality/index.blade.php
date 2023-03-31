@@ -23,7 +23,7 @@
                 </span>
                 <!--end::Svg Icon-->
                 <input type="text" data-kt-user-table-filter="search" id="nationality_datable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Institutions">
+                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Nationality">
             </div>
             <!--end::Search-->
         </div>
@@ -80,7 +80,7 @@
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
                                 colspan="1" style="width: 355.733px;"
                                 aria-label="User: activate to sort column ascending">
-                                Division Name
+                                Nationality Name
                             </th>
 
                         
