@@ -1,17 +1,26 @@
 <form action="" class="" id="dynamic_form">
-   
+    
+    <input type="hidden" name="id" id="id" value="{{ $info->id ?? '' }}">
+    <input type="hidden" name="form_type" id="form_type" value="{{ $from ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
             Nationality
         </label>
         <div >
-            <input type="text" class="form-control" name="nationality" id="nationality" required >
+            <input type="text" class="form-control" name="nationality" value="{{ $info->name ?? '' }}" id="nationality" required >
         </div>
     </div>
    
-    <div class="form-group mb-10">
-       
-    </div>
+    @if(isset($from) && !empty($from))
+        <div class="fv-row form-group mb-10">
+            <label class="form-label" for="">
+                Status
+            </label>
+            <div >
+                <input type="checkbox" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked  @endif >
+            </div>
+        </div>
+    @endif
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn"> 
@@ -26,6 +35,7 @@
 </form>
 
 <script>
+var from = '{{ $from ?? '' }}';
 
 var KTAppEcommerceSaveNationality = function () {
 
@@ -89,10 +99,14 @@ var KTAppEcommerceSaveNationality = function () {
                                     }
                                 } else{
                                     toastr.success("Nationality added successfully");
-                                    if( res.inserted_data ) {
-                                        $('#kt_dynamic_app').modal('hide');
-                                        $('#nationality_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                        $('#nationality_id').val(res.inserted_data.id).trigger('change');
+                                    $('#kt_dynamic_app').modal('hide');
+                                    if (from) {
+                                            dtTable.draw();
+                                        } else {
+                                        if( res.inserted_data ) {
+                                            $('#nationality_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
+                                            $('#nationality_id').val(res.inserted_data.id).trigger('change');
+                                        }
                                     }
                                 }
                             }

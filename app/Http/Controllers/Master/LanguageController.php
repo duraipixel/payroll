@@ -125,7 +125,7 @@ class LanguageController extends Controller
         $info           = Language::find($id);
         $info->status   = $status;
         $info->update();
-        return response()->json(['message' => "You changed the division status!", 'status' => 1]);
+        return response()->json(['message' => "You changed the Language status!", 'status' => 1]);
     }
 
     public function delete(Request $request)
