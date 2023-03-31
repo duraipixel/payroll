@@ -95,7 +95,19 @@ class LanguageController extends Controller
         if ($validator->passes()) {
             $ins['academic_id'] = academicYearId();
             $ins['name'] = $request->language;
-            $ins['status'] = 'active';
+            if(isset($request->form_type))
+            {
+                if($request->status)
+                {
+                    $ins['status'] = 'active';
+                }
+                else{
+                    $ins['status'] = 'inactive';
+                }
+            }
+            else{
+                $ins['status'] = 'active';
+            }
             $data = Language::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';

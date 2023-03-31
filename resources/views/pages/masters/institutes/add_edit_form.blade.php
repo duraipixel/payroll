@@ -1,5 +1,7 @@
 <form id="dynamic_form">
     @csrf
+    <input type="hidden" name="id" id="id" value="{{ $info->id ?? '' }}">
+    <input type="hidden" name="form_type" id="form_type" value="{{ $from ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
             Society
@@ -9,18 +11,20 @@
                 <option value="">--select--</option>
                 @isset($society)
                     @foreach ($society as $item)
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        <option value="{{ $item->id }}"  @if( isset( $info->society_id ) && $info->society_id == $item->id) selected @endif>{{ $item->name }}</option>
                     @endforeach
                 @endisset
             </select>
         </div>
     </div>
+    <input type="hidden" name="form_type" id="form_type" value="{{ $from ?? '' }}">
+
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
             Institute Name
         </label>
         <div>
-            <input type="text" class="form-control" name="institute_name" id="institute_name" required>
+            <input type="text" class="form-control" name="institute_name" id="institute_name" value="{{ $info->name ?? '' }}" required>
         </div>
     </div>
     <div class="fv-row form-group mb-10">
@@ -28,7 +32,7 @@
             Institute Code
         </label>
         <div>
-            <input type="text" class="form-control" name="institute_code" id="institute_code" required>
+            <input type="text" class="form-control" name="institute_code" id="institute_code" value="{{ $info->code ?? '' }}" required>
         </div>
     </div>
     <div class="form-group mb-10">
@@ -36,9 +40,19 @@
             Institute Address
         </label>
         <div>
-            <textarea class="form-control" name="address" id="address"></textarea>
+            <textarea class="form-control" name="address" id="address">{{ $info->address ?? '' }}</textarea>
         </div>
     </div>
+    @if(isset($from) && !empty($from))
+    <div class="fv-row form-group mb-10">
+        <label class="form-label" for="">
+            Status
+        </label>
+        <div >
+            <input type="checkbox" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked  @endif >
+        </div>
+    </div>
+    @endif
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn">
@@ -53,6 +67,8 @@
 </form>
 
 <script>
+var from = '{{ $from ?? '' }}';
+
     var KTAppEcommerceSaveInstitute = function() {
 
         const handleSubmit = () => {
@@ -131,8 +147,12 @@
                                         }
                                     } else{
                                         toastr.success("Institution added successfully");
+                                        $('#kt_dynamic_app').modal('hide');
+
+                                        if (from) {
+                                            dtTable.draw();
+                                        } else {
                                         if( res.inserted_data ) {
-                                            $('#kt_dynamic_app').modal('hide');
                                             
                                             $('#institute_name').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
                                             $('#institute_name').val(res.inserted_data.id)
@@ -141,6 +161,7 @@
                                                 $('#institute_code').val(res.code);
                                             }
                                         }
+                                    }
                                     }
                                 }
                             })

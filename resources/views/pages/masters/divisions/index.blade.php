@@ -116,7 +116,7 @@
 
         processing: true,
         serverSide: true,
-        order :[0, 'asc'],
+        "order": [[ 0, "desc" ]],
         type: 'POST',
         ajax: {
             "url": "{{ route('division') }}",
@@ -177,11 +177,13 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            var formMethod = "addEdit" ;
             $.ajax({
                 url: "{{ route('division.add_edit') }}",
                 type: 'POST',
                 data: {
                     id: id,
+                    
                 },
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');

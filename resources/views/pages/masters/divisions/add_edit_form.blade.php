@@ -5,15 +5,23 @@
             Division Name
         </label>
         <input type="hidden" name="id" id="id" value="{{ $info->id ?? '' }}">
+        <input type="hidden" name="form_type" id="form_type" value="{{ $from ?? '' }}">
         <div>
             <input type="text" class="form-control" name="division_name" id="division_name"
                 value="{{ $info->name ?? '' }}" required>
         </div>
     </div>
-
-    <div class="form-group mb-10">
-
-    </div>
+    @if(isset($from) && !empty($from))
+        <div class="fv-row form-group mb-10">
+            <label class="form-label" for="">
+                Status
+            </label>
+            <div >
+                <input type="checkbox" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked  @endif >
+            </div>
+        </div>
+    @endif
+    
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn">

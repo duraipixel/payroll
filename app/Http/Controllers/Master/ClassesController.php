@@ -27,7 +27,7 @@ class ClassesController extends Controller
         );
         if($request->ajax())
         {
-            $data = Classes::orderBy('id','desc');
+            $data = Classes::select('*');
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
@@ -82,8 +82,8 @@ class ClassesController extends Controller
             $title = 'Update Class';
         }
 
-         $content = view('pages.masters.classes.add_edit_form',compact('info','title','from'));
-         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+        $content = view('pages.masters.classes.add_edit_form',compact('info','title','from'));
+        return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
     public function save(Request $request)
     {
@@ -96,7 +96,19 @@ class ClassesController extends Controller
         if ($validator->passes()) {
             $ins['academic_id'] = academicYearId();
             $ins['name'] = $request->class_name;
-            $ins['status'] = 'active';
+            if(isset($request->form_type))
+            {
+                if($request->status)
+                {
+                    $ins['status'] = 'active';
+                }
+                else{
+                    $ins['status'] = 'inactive';
+                }
+            }
+            else{
+                $ins['status'] = 'active';
+            }
             $data = Classes::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
