@@ -140,6 +140,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'caste' => App\Http\Controllers\Master\CasteController::class,
         'community' => App\Http\Controllers\Master\CommunityController::class,
         'bank' => App\Http\Controllers\Master\BankController::class,
+        'bank-branch' => App\Http\Controllers\Master\BankBranchController::class,
         
     );
     foreach($routeArray as $key=>$value)
