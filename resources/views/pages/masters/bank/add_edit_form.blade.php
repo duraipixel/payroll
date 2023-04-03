@@ -1,11 +1,12 @@
 <form action="" class="" id="dynamic_form">
-   
+    <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
+    <input type="hidden" name="form_type" id="form_type" value="{{ $from ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
             Bank Name
         </label>
-        <div >
-            <input type="text" class="form-control" name="bank_name" id="bank_name" required >
+        <div > 
+            <input type="text" class="form-control" name="bank_name" value="{{ $info->name ?? '' }}" id="bank_name" required >
         </div>
     </div>
    
@@ -14,7 +15,7 @@
             Bank Code
         </label>
         <div >
-            <input type="text" class="form-control" name="code" id="code" >
+            <input type="text" class="form-control" name="code" value="{{ $info->bank_code ?? '' }}" id="code" >
         </div>
     </div>
     <div class="form-group mb-10">
@@ -22,9 +23,19 @@
             Bank Short Name
         </label>
         <div >
-            <input type="text" class="form-control" name="short_name" id="short_name" >
+            <input type="text" class="form-control" name="short_name" value="{{ $info->short_name ?? '' }}" id="short_name" >
         </div>
     </div>
+    @if(isset($from) && !empty($from))
+    <div class="fv-row form-group mb-10">
+        <label class="form-label" for="">
+            Status
+        </label>
+        <div >
+            <input type="checkbox" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked  @endif >
+        </div>
+    </div>
+    @endif
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn"> 
@@ -39,6 +50,7 @@
 </form>
 
 <script>
+    var from = '{{ $from ?? '' }}';
 
 var KTAppEcommerceSaveReligion = function () {
 
@@ -101,11 +113,16 @@ var KTAppEcommerceSaveReligion = function () {
                                     }
                                 } else{
                                     toastr.success("Bank added successfully");
+                                    $('#kt_dynamic_app').modal('hide');
+
+                                    if (from) {
+                                            dtTable.draw();
+                                        } else {
                                     if( res.inserted_data ) {
-                                        $('#kt_dynamic_app').modal('hide');
                                         $('#bank_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
                                         $('#bank_id').val(res.inserted_data.id).trigger('change');
                                     }
+                                }
                                 }
                             }
                         })
