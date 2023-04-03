@@ -272,7 +272,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="javascript:void(0)">
+                            <a class="menu-link" href="{{  route('designation')  }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
