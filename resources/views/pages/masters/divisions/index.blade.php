@@ -76,7 +76,11 @@
                     id="division_table">
                     <thead>
                         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-
+                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                            Date
+                            </th>
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
                                 colspan="1" style="width: 355.733px;"
                                 aria-label="User: activate to sort column ascending">
@@ -89,6 +93,7 @@
                                 aria-label="Joined Date: activate to sort column ascending">
                                 Status
                             </th>
+                           
                             <th class="text-end min-w-100px sorting_disabled" rowspan="1" colspan="1"
                                 style="width: 160.017px;" aria-label="Actions">
                                 Actions
@@ -116,7 +121,7 @@
 
         processing: true,
         serverSide: true,
-        "order": [[ 0, "desc" ]],
+        order: [[0, "DESC"]],
         type: 'POST',
         ajax: {
             "url": "{{ route('division') }}",
@@ -125,14 +130,21 @@
             }
         },
 
-        columns: [{
+        columns: [
+            {
+                data: 'created_at',
+                name: 'created_at',
+            },
+            {
                 data: 'name',
-                name: 'name'
+                name: 'name',
+                bSortable: true,
             },
             {
                 data: 'status',
                 name: 'status'
             },
+           
             {
                 data: 'action',
                 name: 'action',

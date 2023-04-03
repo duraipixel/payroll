@@ -137,6 +137,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'place' => App\Http\Controllers\Master\PlaceController::class,
         'nationality' => App\Http\Controllers\Master\NationalityController::class,
         'religion' => App\Http\Controllers\Master\ReligionController::class,
+        'caste' => App\Http\Controllers\Master\CasteController::class,
         
     );
     foreach($routeArray as $key=>$value)

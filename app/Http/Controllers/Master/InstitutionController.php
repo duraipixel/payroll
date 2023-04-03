@@ -29,7 +29,7 @@ class InstitutionController extends Controller
         );
         if($request->ajax())
         {
-            $data = Institution::with('society')->orderBy('id','desc');
+            $data = Institution::with('society');
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
