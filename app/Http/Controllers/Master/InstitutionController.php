@@ -29,7 +29,7 @@ class InstitutionController extends Controller
         );
         if($request->ajax())
         {
-            $data = Institution::with('society')->orderBy('id','desc');
+            $data = Institution::with('society');
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
@@ -93,7 +93,20 @@ class InstitutionController extends Controller
             $ins['name'] = $request->institute_name;
             $ins['code'] = $request->institute_code;
             $ins['address'] = $request->address;
-            $ins['status'] = 'active';
+            if(isset($request->form_type))
+            {
+                if($request->status)
+                {
+                    $ins['status'] = 'active';
+                }
+                else{
+                    $ins['status'] = 'inactive';
+                }
+            }
+            else{
+                $ins['status'] = 'active';
+            }
+
             $data = Institution::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
@@ -111,13 +124,14 @@ class InstitutionController extends Controller
         $id = $request->id;
         $info = [];
         $title = 'Add Institutions';
+        $from = 'master';
         if( isset( $id ) && !empty( $id ) ) {
             $info = Institution::find($id);
             $title = 'Update Institutions';
 
         }
         $society = Society::where('status', 'active')->get();
-        $content = view('pages.masters.institutes.add_edit_form', compact('society', 'info'));
+        $content = view('pages.masters.institutes.add_edit_form', compact('society', 'info','from'));
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
 

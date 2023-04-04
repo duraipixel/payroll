@@ -22,8 +22,8 @@
                     </svg>
                 </span>
                 <!--end::Svg Icon-->
-                <input type="text" data-kt-user-table-filter="search" id="language_datable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Language">
+                <input type="text" data-kt-user-table-filter="search" id="branch_dataTable_search"
+                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Branch">
             </div>
             <!--end::Search-->
         </div>
@@ -33,7 +33,7 @@
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
-                <a type="button" class="btn btn-light-primary me-3" href="{{ route('language.export') }}">
+                <a type="button" class="btn btn-light-primary me-3" href="{{ route('bank-branch.export') }}">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -51,8 +51,8 @@
                     <!--end::Svg Icon-->Export
                 </a>
 
-                <button type="button" class="btn btn-primary" id="add_modal" onclick="getLanguageModal()">
-                    {!! plusSvg() !!} Add Language
+                <button type="button" class="btn btn-primary" id="add_modal" onclick="getBranchModal()">
+                    {!! plusSvg() !!} Add Branch
                 </button>
 
             </div>
@@ -73,31 +73,43 @@
         <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="table-responsive">
                 <table class="table align-middle table-hover table-row-dashed fs-6 dataTable no-footer"
-                    id="language_table">
+                    id="branch_table">
                     <thead>
                         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
                             colspan="1" style="width: 258.4px;"
                             aria-label="Joined Date: activate to sort column ascending">
                             Date
-                            </th>
-                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
-                                colspan="1" style="width: 355.733px;"
-                                aria-label="User: activate to sort column ascending">
-                                Language Name
-                            </th>
-
-                        
-                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
-                                colspan="1" style="width: 258.4px;"
-                                aria-label="Joined Date: activate to sort column ascending">
-                                Status
-                            </th>
-                            
-                            <th class="text-end min-w-100px sorting_disabled" rowspan="1" colspan="1"
-                                style="width: 160.017px;" aria-label="Actions">
-                                Actions
-                            </th>
+                        </th>
+                        <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                            Bank Name
+                        </th>
+                        <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                            Branch
+                        </th>
+                        <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                            IFSC Code
+                        </th>
+                        <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                            Address
+                        </th>
+                        <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 258.4px;"
+                            aria-label="Joined Date: activate to sort column ascending">
+                            Status
+                        </th>
+                        <th class="text-end min-w-100px sorting_disabled" rowspan="1" colspan="1"
+                            style="width: 160.017px;" aria-label="Actions">
+                            Actions
+                        </th>
                         </tr>
                     </thead>
 
@@ -117,16 +129,16 @@
 @section('add_on_script')
 
 <script>
-    var dtTable = $('#language_table').DataTable({
+    var dtTable = $('#branch_table').DataTable({
 
         processing: true,
         serverSide: true,
-        order :[0, 'desc'],
+        order: [[0, "DESC"]],
         type: 'POST',
         ajax: {
-            "url": "{{ route('language') }}",
+            "url": "{{ route('bank-branch') }}",
             "data": function(d) {
-                d.datatable_search = $('#language_datable_search').val();
+                d.datatable_search = $('#branch_dataTable_search').val();
             }
         },
 
@@ -136,8 +148,21 @@
                 name: 'created_at',
             },
             {
+                data:'bank_name',
+                name:'bank_name',
+            },
+            {
                 data: 'name',
                 name: 'name'
+            },
+          
+            {
+                data: 'ifsc_code',
+                name: 'ifsc_code'
+            },
+            {
+                data: 'address',
+                name: 'address'
             },
             {
                 data: 'status',
@@ -167,7 +192,7 @@
         $('.dataTables_filter').addClass('position-absolute end-0 top-0');
         $('.dataTables_length label select').addClass('form-control form-control-solid');
 
-        document.querySelector('#language_datable_search').addEventListener("keyup", function(e) {
+        document.querySelector('#branch_dataTable_search').addEventListener("keyup", function(e) {
             dtTable.draw();
         }),
 
@@ -181,18 +206,20 @@
         dtTable.draw();
         e.preventDefault();
         });
-        function getLanguageModal( id = '') {
+        function getBranchModal( id = '') {
 
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            var formMethod = "addEdit" ;
             $.ajax({
-                url: "{{ route('language.add_edit') }}",
+                url: "{{ route('bank-branch.add_edit') }}",
                 type: 'POST',
                 data: {
                     id: id,
+                    
                 },
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');
@@ -201,7 +228,7 @@
             })
 
         }
-        function languageChangeStatus(id, status) {
+        function branchChangeStatus(id, status) {
 
     Swal.fire({
         text: "Are you sure you would like to change status?",
@@ -223,7 +250,7 @@
         });
 
         $.ajax({
-            url: "{{ route('language.change.status') }}",
+            url: "{{ route('bank-branch.change.status') }}",
             type: 'POST',
             data: {
                 id: id,
@@ -252,7 +279,7 @@
     }
 });
 }
-        function deleteLanguage(id) {
+        function deleteBranch(id) {
             Swal.fire({
                 text: "Are you sure you would like to delete record?",
                 icon: "warning",
@@ -273,7 +300,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('language.delete') }}",
+                        url: "{{ route('bank-branch.delete') }}",
                         type: 'POST',
                         data: {
                             id: id,

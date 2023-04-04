@@ -22,8 +22,8 @@
                     </svg>
                 </span>
                 <!--end::Svg Icon-->
-                <input type="text" data-kt-user-table-filter="search" id="language_datable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Language">
+                <input type="text" data-kt-user-table-filter="search" id="religion_datable_search"
+                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Religion">
             </div>
             <!--end::Search-->
         </div>
@@ -33,7 +33,7 @@
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
-                <a type="button" class="btn btn-light-primary me-3" href="{{ route('language.export') }}">
+                <a type="button" class="btn btn-light-primary me-3" href="{{ route('religion.export') }}">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -51,8 +51,8 @@
                     <!--end::Svg Icon-->Export
                 </a>
 
-                <button type="button" class="btn btn-primary" id="add_modal" onclick="getLanguageModal()">
-                    {!! plusSvg() !!} Add Language
+                <button type="button" class="btn btn-primary" id="add_modal" onclick="getReligionModal()">
+                    {!! plusSvg() !!} Add Religion
                 </button>
 
             </div>
@@ -73,7 +73,7 @@
         <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="table-responsive">
                 <table class="table align-middle table-hover table-row-dashed fs-6 dataTable no-footer"
-                    id="language_table">
+                    id="religion_table">
                     <thead>
                         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
@@ -84,7 +84,7 @@
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
                                 colspan="1" style="width: 355.733px;"
                                 aria-label="User: activate to sort column ascending">
-                                Language Name
+                                Religion Name
                             </th>
 
                         
@@ -117,16 +117,16 @@
 @section('add_on_script')
 
 <script>
-    var dtTable = $('#language_table').DataTable({
+    var dtTable = $('#religion_table').DataTable({
 
         processing: true,
-        serverSide: true,
+        serverSide: true,  
         order :[0, 'desc'],
         type: 'POST',
         ajax: {
-            "url": "{{ route('language') }}",
+            "url": "{{ route('religion') }}",
             "data": function(d) {
-                d.datatable_search = $('#language_datable_search').val();
+                d.datatable_search = $('#religion_datable_search').val();
             }
         },
 
@@ -137,13 +137,13 @@
             },
             {
                 data: 'name',
-                name: 'name'
+                name: 'name',
             },
             {
                 data: 'status',
                 name: 'status'
             },
-           
+            
             {
                 data: 'action',
                 name: 'action',
@@ -167,7 +167,7 @@
         $('.dataTables_filter').addClass('position-absolute end-0 top-0');
         $('.dataTables_length label select').addClass('form-control form-control-solid');
 
-        document.querySelector('#language_datable_search').addEventListener("keyup", function(e) {
+        document.querySelector('#religion_datable_search').addEventListener("keyup", function(e) {
             dtTable.draw();
         }),
 
@@ -181,18 +181,20 @@
         dtTable.draw();
         e.preventDefault();
         });
-        function getLanguageModal( id = '') {
+        function getReligionModal( id = '') {
 
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            var formMethod = "addEdit" ;
             $.ajax({
-                url: "{{ route('language.add_edit') }}",
+                url: "{{ route('religion.add_edit') }}",
                 type: 'POST',
                 data: {
                     id: id,
+                    
                 },
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');
@@ -201,7 +203,7 @@
             })
 
         }
-        function languageChangeStatus(id, status) {
+        function religionChangeStatus(id, status) {
 
     Swal.fire({
         text: "Are you sure you would like to change status?",
@@ -223,7 +225,7 @@
         });
 
         $.ajax({
-            url: "{{ route('language.change.status') }}",
+            url: "{{ route('religion.change.status') }}",
             type: 'POST',
             data: {
                 id: id,
@@ -252,7 +254,7 @@
     }
 });
 }
-        function deleteLanguage(id) {
+        function deleteReligion(id) {
             Swal.fire({
                 text: "Are you sure you would like to delete record?",
                 icon: "warning",
@@ -273,7 +275,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('language.delete') }}",
+                        url: "{{ route('religion.delete') }}",
                         type: 'POST',
                         data: {
                             id: id,

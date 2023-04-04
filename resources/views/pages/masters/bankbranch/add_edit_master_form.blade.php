@@ -1,15 +1,44 @@
 <form action="" class="" id="dynamic_form">
-    <input type="hidden" name="id" id="id" value="{{ $info->id ?? '' }}">
+    <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
     <input type="hidden" name="form_type" id="form_type" value="{{ $from ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
-            Religion
+            Bank
         </label>
         <div >
-            <input type="text" class="form-control" name="religion" value="{{ $info->name ?? '' }}" id="religion" required >
+            <select name="bank_id" class="form-control" id="bank_id">
+                <option value="">--Select Bank--</option>
+                @foreach ($bank as $key=>$val)
+                <option value="{{ $val->id }}" @if(isset($info->bank_id) && $info->bank_id == $val->id) selected @endif>{{ $val['name']  }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
    
+    <div class="fv-row form-group mb-10">
+        <label class="form-label required" for="">
+            Branch 
+        </label>
+        <div >
+            <input type="text" class="form-control" name="branch_name" value="{{ $info->name ?? '' }}" id="branch_name" >
+        </div>
+    </div>
+    <div class="fv-row form-group mb-10">
+        <label class="form-label" for="">
+            IFSC Code
+        </label>
+        <div >
+            <input type="text" class="form-control" name="ifsc_code" value="{{ $info->ifsc_code ?? '' }}" id="ifsc_code" >
+        </div>
+    </div>
+    <div class="form-group mb-10">
+        <label class="form-label" for="">
+            Address
+        </label>
+        <div >
+            <textarea class="form-control" name="address" id="address">{{ $info->address ?? '' }}</textarea>
+        </div>
+    </div>
     @if(isset($from) && !empty($from))
     <div class="fv-row form-group mb-10">
         <label class="form-label" for="">
@@ -19,7 +48,7 @@
             <input type="checkbox" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked  @endif >
         </div>
     </div>
-@endif
+    @endif
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn"> 
@@ -34,9 +63,9 @@
 </form>
 
 <script>
-var from = '{{ $from ?? '' }}';
+    var from = '{{ $from ?? '' }}';
 
-var KTAppEcommerceSaveReligion = function () {
+var KTAppEcommerceSaveBranch = function () {
 
     const handleSubmit = () => {
         // Define variables
@@ -49,10 +78,17 @@ var KTAppEcommerceSaveReligion = function () {
             form,
             {
                 fields: {
-                    'religion': {
+                    'bank_id': {
 						validators: {
 							notEmpty: {
-								message: 'Religion is required'
+								message: 'Bank is required'
+							},
+						}
+					},
+                    'branch_name': {
+						validators: {
+							notEmpty: {
+								message: 'Branch Name is required'
 							},
 						}
 					},
@@ -71,7 +107,6 @@ var KTAppEcommerceSaveReligion = function () {
         // Handle submit button
         submitButton.addEventListener('click', e => {
             e.preventDefault();
-
             // Validate form before submit
             if (validator) {
                 validator.validate().then(function (status) {
@@ -81,7 +116,7 @@ var KTAppEcommerceSaveReligion = function () {
                         var forms = $('#dynamic_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url:"{{ route('save.religion') }}",
+                            url:"{{ route('save.branch') }}",
                             type:"POST",
                             data: formData,
                             processData: false,
@@ -97,17 +132,25 @@ var KTAppEcommerceSaveReligion = function () {
                                         });
                                     }
                                 } else{
-                                    toastr.success("Religion added successfully");
+                                    toastr.success("Bank Branch added successfully");
                                     $('#kt_dynamic_app').modal('hide');
-
                                     if (from) {
                                             dtTable.draw();
                                         } else {
-                                        if( res.inserted_data ) {
-                                            $('#religion_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                            $('#religion_id').val(res.inserted_data.id).trigger('change');
-                                        }
+                                    if( res.inserted_data ) {
+                                       
+                                        var option = '';
+                                        res.branch_data.forEach(element => {
+                                            let selected = '';
+                                            if( res.inserted_data.id == element.id ) {
+                                                selected = 'selected';
+                                            }
+                                            option += `<option value="${element.id}" ${selected}>${element.name}</option>`;
+                                        });
+                                        $('#branch_id').html(option);
+                                        
                                     }
+                                }
                                 }
                             }
                         })
@@ -126,7 +169,7 @@ var KTAppEcommerceSaveReligion = function () {
 }();
 
 KTUtil.onDOMContentLoaded(function () {
-    KTAppEcommerceSaveReligion.init();
+    KTAppEcommerceSaveBranch.init();
 });
     
     

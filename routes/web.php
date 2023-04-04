@@ -140,6 +140,15 @@ Route::group(['middleware' => 'auth'],  function () {
         'class' => App\Http\Controllers\Master\ClassesController::class,
         'division' => App\Http\Controllers\Master\DivisionController::class,
         'language' => App\Http\Controllers\Master\LanguageController::class,
+        'place' => App\Http\Controllers\Master\PlaceController::class,
+        'nationality' => App\Http\Controllers\Master\NationalityController::class,
+        'religion' => App\Http\Controllers\Master\ReligionController::class,
+        'caste' => App\Http\Controllers\Master\CasteController::class,
+        'community' => App\Http\Controllers\Master\CommunityController::class,
+        'bank' => App\Http\Controllers\Master\BankController::class,
+        'bank-branch' => App\Http\Controllers\Master\BankBranchController::class,
+        'designation' => App\Http\Controllers\Master\DesignationController::class,
+        'department' => App\Http\Controllers\Master\DepartmentController::class,
     );
     foreach($routeArray as $key=>$value)
     {

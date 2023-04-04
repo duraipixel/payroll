@@ -96,7 +96,19 @@ class DivisionController extends Controller
         if ($validator->passes()) {
             $ins['academic_id'] = academicYearId();
             $ins['name'] = $request->division_name;
-            $ins['status'] = 'active';
+            if(isset($request->form_type))
+            {
+                if($request->status)
+                {
+                    $ins['status'] = 'active';
+                }
+                else{
+                    $ins['status'] = 'inactive';
+                }
+            }
+            else{
+                $ins['status'] = 'active';
+            }
             $data = Division::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
