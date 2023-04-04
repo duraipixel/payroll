@@ -1,0 +1,34 @@
+.count_deatils{
+    background: #ededed;
+    width: 100%;
+    height: 225px;
+    border-radius: 25px;
+}
+.staff_count_dl{
+    background: white;
+    margin-top: 50px;
+    margin-left: 33px;
+    width: 29%;
+    height: 120px;
+    border-radius:10px;
+    box-shadow: 3px 3px 3px 3px #738085;
+}
+
+.ss_count_text{
+    margin: 15px 15px;
+    font-size: 15px;
+    font-weight: 600;
+    width: 175px;
+}
+.ss_count{
+    margin: 32px 15px;
+    font-size: 25px;
+    font-weight: 600;
+    color: #083c90;
+}
+.ss_count1{
+    margin: 10px 15px;
+    font-size: 25px;
+    font-weight: 600;
+    color: #083c90;
+}

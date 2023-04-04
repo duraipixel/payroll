@@ -5,7 +5,7 @@
     <div class="card">
 <?php
    $master_menu = config('services.master_menu');
-   
+   $staff_management = config('services.staff_management');
 ?>
         <div class="card-body py-4">
             <!--begin::Table-->
@@ -18,41 +18,36 @@
                <h4> <strong>Master Menu</strong>
                 <input type="checkbox"  name="master_select_all" id="master_select_all" onclick="master_select_all_func();"></h4>
               </div>
-              <div class="row justify-content-start">        
-             
-                   
+              <div class="row justify-content-start">                     
                 <div class="row mb-6">
                     <div class="col-1">
                         <b>Sl.No</b>
                     </div>
-                    <div class="col-1">
-                       
+                    <div class="col-1"></div>
+                    <div class="col-5">
+                        <strong>Menu</strong>
                     </div>
-                <div class="col-5">
-                    <strong>Menu</strong>
-                </div>
-                <div class="col-1">
-                    <strong>Add</strong>
-                </div>
-                <div class="col-1">
-                    <strong> Edit</strong>
-                </div>
-                <div class="col-1">
-                    <strong>View</strong>
-                </div>
-                <div class="col-1">
-                    <strong>Delete</strong>
-                </div>
-                <div class="col-1">
-                    <strong>Export</strong>
-                </div> 
+                    <div class="col-1">
+                        <strong>Add</strong>
+                    </div>
+                    <div class="col-1">
+                        <strong> Edit</strong>
+                    </div>
+                    <div class="col-1">
+                        <strong>View</strong>
+                    </div>
+                    <div class="col-1">
+                        <strong>Delete</strong>
+                    </div>
+                    <div class="col-1">
+                        <strong>Export</strong>
+                    </div> 
                 </div>
                 @php
                     $i=1;
                     $master_row=0;
                 @endphp
-                @foreach($master_menu as $key => $master_menus)
-               
+                @foreach($master_menu as $key => $master_menus)               
                 <div class="row mb-6"> 
                     <div class="col-1">
                         {{ $i}}
@@ -60,37 +55,102 @@
                     <div class="col-1">
                         <input type="checkbox" class="master_checkox" name="select_all_row_wise_{{$i}}" id="select_all_row_wise_{{$i}}" onclick="master_row({{$i}});">
                     </div>
-                <div class="col-5">
-                  
-                   <span class="pl-3"> {{$master_menus}}</span>
-                   <input type="hidden" name="menu_name[]" id="menu_name" value="{{$key}}">
-                   
+                    <div class="col-5">                  
+                    <span class="pl-3"> {{$master_menus}}</span>
+                    <input type="hidden" name="menu_name[]" id="menu_name" value="{{$key}}">                   
+                    </div>
+                    <div class="col-1">
+                        <input type="checkbox" class="master_checkox" name="master_add[]" id="master_add_{{$i}}">
+                    </div>
+                    <div class="col-1">
+                        <input type="checkbox" class="master_checkox" name="master_edit[]" id="master_edit_{{$i}}" >
+                    </div>
+                    <div class="col-1">
+                        <input type="checkbox" class="master_checkox" name="master_view[]" id="master_view_{{$i}}">
+                    </div>
+                    <div class="col-1">
+                        <input type="checkbox" class="master_checkox" name="master_delete[]" id="master_delete_{{$i}}">
+                    </div>
+                    <div class="col-1">
+                        <input type="checkbox" class="master_checkox" name="master_export[]" id="master_export_{{$i}}">
+                    </div>    
                 </div>
-                <div class="col-1">
-                    <input type="checkbox" class="master_checkox" name="master_add[]" id="master_add_{{$i}}">
-                </div>
-                <div class="col-1">
-                    <input type="checkbox" class="master_checkox" name="master_edit[]" id="master_edit_{{$i}}" >
-                </div>
-                <div class="col-1">
-                    <input type="checkbox" class="master_checkox" name="master_view[]" id="master_view_{{$i}}">
-                </div>
-                <div class="col-1">
-                    <input type="checkbox" class="master_checkox" name="master_delete[]" id="master_delete_{{$i}}">
-                </div>
-                <div class="col-1">
-                    <input type="checkbox" class="master_checkox" name="master_export[]" id="master_export_{{$i}}">
-                </div>    
-            </div>
             @php
             $i++;
             $master_row++;
-            @endphp
-           
+            @endphp           
             @endforeach
             <input type="hidden" name="master_row_count" id="master_row_count" value="{{$master_row}}">
-                    </div>
+                    </div> 
                     
+                    <div class="col-12 pb-3">
+                        <h4> <strong>Staff Management</strong>
+                         <input type="checkbox"  name="staff_select_all" id="staff_select_all" onclick="staff_select_all_func();"></h4>
+                       </div>
+                       <div class="row justify-content-start">                     
+                         <div class="row mb-6">
+                             <div class="col-1">
+                                 <b>Sl.No</b>
+                             </div>
+                             <div class="col-1"></div>
+                             <div class="col-5">
+                                 <strong>Menu</strong>
+                             </div>
+                             <div class="col-1">
+                                 <strong>Add</strong>
+                             </div>
+                             <div class="col-1">
+                                 <strong> Edit</strong>
+                             </div>
+                             <div class="col-1">
+                                 <strong>View</strong>
+                             </div>
+                             <div class="col-1">
+                                 <strong>Delete</strong>
+                             </div>
+                             <div class="col-1">
+                                 <strong>Export</strong>
+                             </div> 
+                         </div>
+                         @php
+                             $i=1;
+                             $staff_row=0;
+                         @endphp
+                         @foreach($staff_management as $key => $staff_managements)               
+                         <div class="row mb-6"> 
+                             <div class="col-1">
+                                 {{ $i}}
+                             </div>
+                             <div class="col-1">
+                                 <input type="checkbox" class="master_checkox" name="select_all_row_wise_{{$i}}" id="select_all_row_wise_{{$i}}" onclick="master_row({{$i}});">
+                             </div>
+                             <div class="col-5">                  
+                             <span class="pl-3"> {{$staff_managements}}</span>
+                             <input type="hidden" name="menu_name[]" id="menu_name" value="{{$key}}">                   
+                             </div>
+                             <div class="col-1">
+                                 <input type="checkbox" class="master_checkox" name="master_add[]" id="master_add_{{$i}}">
+                             </div>
+                             <div class="col-1">
+                                 <input type="checkbox" class="master_checkox" name="master_edit[]" id="master_edit_{{$i}}" >
+                             </div>
+                             <div class="col-1">
+                                 <input type="checkbox" class="master_checkox" name="master_view[]" id="master_view_{{$i}}">
+                             </div>
+                             <div class="col-1">
+                                 <input type="checkbox" class="master_checkox" name="master_delete[]" id="master_delete_{{$i}}">
+                             </div>
+                             <div class="col-1">
+                                 <input type="checkbox" class="master_checkox" name="master_export[]" id="master_export_{{$i}}">
+                             </div>    
+                         </div>
+                     @php
+                     $i++;
+                     $master_row++;
+                     @endphp           
+                     @endforeach
+                     <input type="hidden" name="master_row_count" id="master_row_count" value="{{$master_row}}">
+                </div> 
                 </div>
             </div>
             <!--end::Table-->
@@ -106,7 +166,6 @@
     function master_row(i)
     {
         var select_all_row_wise = document.getElementById("select_all_row_wise_"+i);
-        //alert(i);
         if (select_all_row_wise.checked == true)
         {
             document.getElementById("master_add_"+i).checked = true;
@@ -132,7 +191,6 @@
     {
         var master_selectall = document.getElementById("master_select_all");
         var row_count = $("#master_row_count").val();
-        //alert(master_selectall.checked);
         if (master_selectall.checked == true)
         {
             for (let i = 1; i <= row_count; i++) 
@@ -159,7 +217,6 @@
         }
     }
     
-// A $( document ).ready() block.
 $( document ).ready(function() {
     $('.master_checkox').click(function() {
         var row_count = $("#master_row_count").val();
@@ -169,7 +226,6 @@ $( document ).ready(function() {
             || (document.getElementById("master_view_"+k).checked == false) || (document.getElementById("master_delete_"+k).checked == false)
             || (document.getElementById("master_export_"+k).checked == false))
             {
-                //alert('dd');
                 document.getElementById("select_all_row_wise_"+k).checked = false;
                 document.getElementById("master_select_all").checked = false; 
             }
@@ -179,10 +235,8 @@ $( document ).ready(function() {
             {
                 document.getElementById("select_all_row_wise_"+k).checked = true;
                 document.getElementById("master_select_all").checked = true;
-            }
-         
+            }         
         }
     });
 });
-
 </script>

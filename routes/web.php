@@ -129,6 +129,12 @@ Route::group(['middleware' => 'auth'],  function () {
     //Page Permission Start 
     Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission'); 
     //Page Permission End
+    //Document Locker Start
+    
+    Route::get('/user/document_locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker'); 
+    Route::get('autocomplete-search', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'autocompleteSearch'])->name('autocomplete-search'); 
+    
+    //Document Locker End
     $routeArray = array(
         'institutions' => App\Http\Controllers\Master\InstitutionController::class,
         'class' => App\Http\Controllers\Master\ClassesController::class,
