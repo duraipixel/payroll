@@ -142,6 +142,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'bank' => App\Http\Controllers\Master\BankController::class,
         'bank-branch' => App\Http\Controllers\Master\BankBranchController::class,
         'designation' => App\Http\Controllers\Master\DesignationController::class,
+        'department' => App\Http\Controllers\Master\DepartmentController::class,
     );
     foreach($routeArray as $key=>$value)
     {
