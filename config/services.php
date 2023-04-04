@@ -60,7 +60,11 @@ return [
         'Subject' => 'Subject',
         'TeachingType' => 'Teaching Type',
         'TopicTraining' => 'Training Topic',
-        'Board' => 'University/Boards',
-        
-    ]
+        'Board' => 'University/Boards',        
+    ],
+    'staff_management' => [
+        'Register' => 'Register',
+        'StaffList' => 'Staff List',
+        'BulkUpload' => 'Bulk Upload'
+    ],
 ];
