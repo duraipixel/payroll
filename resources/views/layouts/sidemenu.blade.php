@@ -231,10 +231,10 @@
                         </span>
                         <span class="menu-title"> Master Data </span>
                         <span class="menu-arrow"></span>
-                    </span>
+                    </span>               
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="javascript:void(0)">
+                            <a class="menu-link" href="{{ route('appointment-order') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
