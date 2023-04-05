@@ -157,6 +157,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'training-topic' => App\Http\Controllers\Master\TrainingTopicController::class,
         'board' => App\Http\Controllers\Master\BoardController::class,
         'appointment-order' => App\Http\Controllers\Master\AppointmentOrderModelController::class,
+        'blood_group' => App\Http\Controllers\Master\BloodGroupController::class,
         
     );
     foreach($routeArray as $key=>$value)

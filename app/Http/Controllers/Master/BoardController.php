@@ -123,7 +123,7 @@ class BoardController extends Controller
         $info           = Board::find($id);
         $info->status   = $status;
         $info->update();
-        return response()->json(['message' => "You changed the School status!", 'status' => 1]);
+        return response()->json(['message' => "You changed the Board status!", 'status' => 1]);
     }
 
     public function delete(Request $request)
