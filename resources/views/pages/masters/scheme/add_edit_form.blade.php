@@ -1,14 +1,24 @@
 <form action="" class="" id="dynamic_form">
-   
+    <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
+    <input type="hidden" name="form_type" id="form_type" value="{{ $from ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
             Scheme Name
         </label>
         <div >
-            <input type="text" class="form-control" name="scheme_name" id="scheme_name" required >
+            <input type="text" class="form-control" name="scheme_name" value="{{  $info->name ?? '' }}" id="scheme_name" required >
         </div>
     </div>
-   
+    @if(isset($from) && !empty($from))
+    <div class="fv-row form-group mb-10">
+        <label class="form-label" for="">
+            Status
+        </label>
+        <div >
+            <input type="checkbox" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked  @endif >
+        </div>
+    </div>
+    @endif
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn"> 
@@ -23,6 +33,7 @@
 </form>
 
 <script>
+    var from = '{{ $from ?? '' }}';
 
 var KTAppEcommerceSaveReligion = function () {
 
@@ -85,11 +96,15 @@ var KTAppEcommerceSaveReligion = function () {
                                     }
                                 } else{
                                     toastr.success("Scheme added successfully");
+                                    $('#kt_dynamic_app').modal('hide');
+                                    if (from) {
+                                            dtTable.draw();
+                                        } else {
                                     if( res.inserted_data ) {
-                                        $('#kt_dynamic_app').modal('hide');
                                         $('#scheme_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
                                         $('#scheme_id').val(res.inserted_data.id).trigger('change');
                                     }
+                                }
                                 }
                             }
                         })
