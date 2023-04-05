@@ -152,6 +152,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'subject' => App\Http\Controllers\Master\SubjectController::class,
         'scheme' => App\Http\Controllers\Master\AttendanceSchemeController::class,
         'duty-class' => App\Http\Controllers\Master\DutyClassController::class,
+        'duty-type' => App\Http\Controllers\Master\DutyTypeController::class,
     );
     foreach($routeArray as $key=>$value)
     {
