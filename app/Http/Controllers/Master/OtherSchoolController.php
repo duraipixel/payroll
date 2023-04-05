@@ -72,7 +72,7 @@ class OtherSchoolController extends Controller
         $id = $request->id ?? '';
         $data = '';
         $validator = Validator::make($request->all(), [
-            'school_name' => 'required|string|unique:other_schools,name,' . $id,
+            'school_name' => 'required|string|unique:other_schools,name,' . $id .',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {
