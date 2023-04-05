@@ -89,7 +89,7 @@ class LanguageController extends Controller
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'language' => 'required|string|unique:languages,name,' . $id,
+            'language' => 'required|string|unique:languages,name,' . $id .',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {

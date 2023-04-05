@@ -78,7 +78,7 @@ class BankBranchController extends Controller
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'branch_name' => 'required|string|unique:bank_branches,name,' . $id,
+            'branch_name' => 'required|string|unique:bank_branches,name,' . $id .',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {

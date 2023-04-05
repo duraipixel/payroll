@@ -72,7 +72,7 @@ class CommunityController extends Controller
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-                                'community' => 'required|string|unique:communities,name,' . $id,
+                                'community' => 'required|string|unique:communities,name,' . $id .',id,deleted_at,NULL',
                             ]);
         
         if ($validator->passes()) {

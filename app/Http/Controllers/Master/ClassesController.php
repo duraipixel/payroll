@@ -90,7 +90,7 @@ class ClassesController extends Controller
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'class_name' => 'required|string|unique:classes,name,' . $id,
+            'class_name' => 'required|string|unique:classes,name,' . $id . ',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {

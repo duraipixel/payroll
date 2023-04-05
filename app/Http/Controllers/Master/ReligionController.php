@@ -76,7 +76,7 @@ class ReligionController extends Controller
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'religion' => 'required|string|unique:religions,name,' . $id,
+            'religion' => 'required|string|unique:religions,name,' . $id .',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {

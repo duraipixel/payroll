@@ -75,7 +75,7 @@ class NationalityController extends Controller
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'nationality' => 'required|string|unique:nationalities,name,' . $id,
+            'nationality' => 'required|string|unique:nationalities,name,' . $id .',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {

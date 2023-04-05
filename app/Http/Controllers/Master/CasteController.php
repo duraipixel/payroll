@@ -76,7 +76,7 @@ class CasteController extends Controller
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'caste' => 'required|string|unique:castes,name,' . $id,
+            'caste' => 'required|string|unique:castes,name,' . $id .',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {

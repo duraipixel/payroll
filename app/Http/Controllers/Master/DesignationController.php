@@ -72,7 +72,7 @@ class DesignationController extends Controller
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'designation' => 'required|string|unique:departments,name,' . $id,
+            'designation' => 'required|string|unique:departments,name,' . $id .',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {
