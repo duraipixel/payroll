@@ -1,17 +1,25 @@
 <form action="" class="" id="dynamic_form">
-   
+    <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
+    <input type="hidden" name="form_type" id="form_type" value="{{ $from ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
             Nature Of Employeement
         </label>
         <div>
-            <input type="text" class="form-control" name="nature_of_employeement" id="nature_of_employeement" required >
+            <input type="text" class="form-control" name="nature_of_employeement" id="nature_of_employeement" value="{{  $info->name ?? '' }}" required >
         </div>
     </div>
    
-    <div class="form-group mb-10">
-       
+    @if(isset($from) && !empty($from))
+    <div class="fv-row form-group mb-10">
+        <label class="form-label" for="">
+            Status
+        </label>
+        <div >
+            <input type="checkbox" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked  @endif >
+        </div>
     </div>
+    @endif
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn"> 
@@ -26,6 +34,7 @@
 </form>
 
 <script>
+    var from = '{{ $from ?? '' }}';
 
 var KTAppEcommerceSavePlace = function () {
 
@@ -87,11 +96,15 @@ var KTAppEcommerceSavePlace = function () {
                                     }
                                 } else{
                                     toastr.success("Nature of employment added successfully");
+                                    $('#kt_dynamic_app').modal('hide');
+                                    if (from) {
+                                            dtTable.draw();
+                                        } else {
                                     if( res.inserted_data ) {
-                                        $('#kt_dynamic_app').modal('hide');
                                         $('#nature_of_employment_id').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
                                         $('#nature_of_employment_id').val(res.inserted_data.id).trigger('change');
                                     }
+                                }
                                 }
                             }
                         })
