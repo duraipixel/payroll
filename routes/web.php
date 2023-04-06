@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/save/community', [App\Http\Controllers\Master\CommunityController::class, 'save'])->name('save.community');
     Route::post('/save/bank', [App\Http\Controllers\Master\BankController::class, 'save'])->name('save.bank');
     Route::post('/save/branch', [App\Http\Controllers\Master\BankBranchController::class, 'save'])->name('save.branch');
+    Route::post('/save/document/type', [App\Http\Controllers\Master\DocumentTypeController::class, 'save'])->name('save.document.type');
     Route::post('/get/branch', [App\Http\Controllers\Master\BankBranchController::class, 'getBankBranches'])->name('branch.all');
 
     Route::get('staff/register/{id?}', [App\Http\Controllers\StaffController::class, 'register'])->name('staff.register');
@@ -158,6 +159,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'board' => App\Http\Controllers\Master\BoardController::class,
         'appointment-order' => App\Http\Controllers\Master\AppointmentOrderModelController::class,
         'blood_group' => App\Http\Controllers\Master\BloodGroupController::class,
+        'document_type' => App\Http\Controllers\Master\DocumentTypeController::class,
         
     );
     foreach($routeArray as $key=>$value)

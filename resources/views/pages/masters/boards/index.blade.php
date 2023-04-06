@@ -23,7 +23,7 @@
                 </span>
                 <!--end::Svg Icon-->
                 <input type="text" data-kt-user-table-filter="search" id="board_dataTable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search School">
+                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Board">
             </div>
             <!--end::Search-->
         </div>

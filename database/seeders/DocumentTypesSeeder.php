@@ -19,32 +19,38 @@ class DocumentTypesSeeder extends Seeder
             array(
                 'academic_id' => academicYearId(),
                 'name' => 'Adhaar',
-                'status' => 'active'
+                'status' => 'active',
+                'created_at' => date("Y-m-d H:i:s"),
             ),
             array(
                 'academic_id' => academicYearId(),
                 'name' => 'Pan Card',
-                'status' => 'active'
+                'status' => 'active',
+                'created_at' => date("Y-m-d H:i:s"),
             ),
             array(
                 'academic_id' => academicYearId(),
                 'name' => 'Ration Card',
-                'status' => 'active'
+                'status' => 'active',
+                'created_at' => date("Y-m-d H:i:s"),
             ),
             array(
                 'academic_id' => academicYearId(),
                 'name' => 'Driving License',
-                'status' => 'active'
+                'status' => 'active',
+                'created_at' => date("Y-m-d H:i:s"),
             ),
             array(
                 'academic_id' => academicYearId(),
                 'name' => 'Voter ID',
-                'status' => 'active'
+                'status' => 'active',
+                'created_at' => date("Y-m-d H:i:s"),
             ),
             array(
                 'academic_id' => academicYearId(),
                 'name' => 'Passport',
-                'status' => 'active'
+                'status' => 'active',
+                'created_at' => date("Y-m-d H:i:s"),
             )
         );
         DB::table('document_types')->insert($ins);

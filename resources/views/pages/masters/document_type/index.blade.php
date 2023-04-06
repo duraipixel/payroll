@@ -22,8 +22,8 @@
                     </svg>
                 </span>
                 <!--end::Svg Icon-->
-                <input type="text" data-kt-user-table-filter="search" id="training_topic_dataTable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Topic">
+                <input type="text" data-kt-user-table-filter="search" id="document_type_dataTable_search"
+                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Document Type">
             </div>
             <!--end::Search-->
         </div>
@@ -33,7 +33,7 @@
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
-                <a type="button" class="btn btn-light-primary me-3" href="{{ route('training-topic.export') }}">
+                <a type="button" class="btn btn-light-primary me-3" href="{{ route('document_type.export') }}">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -51,8 +51,8 @@
                     <!--end::Svg Icon-->Export
                 </a>
 
-                <button type="button" class="btn btn-primary" id="add_modal" onclick="getTrainingTopicModal()">
-                    {!! plusSvg() !!} Add Training
+                <button type="button" class="btn btn-primary" id="add_modal" onclick="getDocumentTypeModal()">
+                    {!! plusSvg() !!} Add Document Type
                 </button>
 
             </div>
@@ -73,7 +73,7 @@
         <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="table-responsive">
                 <table class="table align-middle table-hover table-row-dashed fs-6 dataTable no-footer"
-                    id="training_topic_table">
+                    id="document_type_table">
                     <thead>
                         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
@@ -84,7 +84,7 @@
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
                                 colspan="1" style="width: 355.733px;"
                                 aria-label="User: activate to sort column ascending">
-                                Training Name
+                                Document Type Name
                             </th>
 
                         
@@ -117,16 +117,16 @@
 @section('add_on_script')
 
 <script>
-    var dtTable = $('#training_topic_table').DataTable({
+    var dtTable = $('#document_type_table').DataTable({
 
         processing: true,
         serverSide: true,
         order: [[0, "DESC"]],
         type: 'POST',
         ajax: {
-            "url": "{{ route('training-topic') }}",
+            "url": "{{ route('document_type') }}",
             "data": function(d) {
-                d.datatable_search = $('#training_topic_dataTable_search').val();
+                d.datatable_search = $('#document_type_dataTable_search').val();
             }
         },
 
@@ -167,7 +167,7 @@
         $('.dataTables_filter').addClass('position-absolute end-0 top-0');
         $('.dataTables_length label select').addClass('form-control form-control-solid');
 
-        document.querySelector('#training_topic_dataTable_search').addEventListener("keyup", function(e) {
+        document.querySelector('#document_type_dataTable_search').addEventListener("keyup", function(e) {
             dtTable.draw();
         }),
 
@@ -181,7 +181,7 @@
         dtTable.draw();
         e.preventDefault();
         });
-        function getTrainingTopicModal( id = '') {
+        function getDocumentTypeModal( id = '') {
 
             $.ajaxSetup({
                 headers: {
@@ -190,7 +190,7 @@
             });
             var formMethod = "addEdit" ;
             $.ajax({
-                url: "{{ route('training-topic.add_edit') }}",
+                url: "{{ route('document_type.add_edit') }}",
                 type: 'POST',
                 data: {
                     id: id,
@@ -203,7 +203,7 @@
             })
 
         }
-        function trainingTopicChangeStatus(id, status) {
+        function documentTypeChangeStatus(id, status) {
 
     Swal.fire({
         text: "Are you sure you would like to change status?",
@@ -225,7 +225,7 @@
         });
 
         $.ajax({
-            url: "{{ route('training-topic.change.status') }}",
+            url: "{{ route('document_type.change.status') }}",
             type: 'POST',
             data: {
                 id: id,
@@ -254,7 +254,7 @@
     }
 });
 }
-        function deleteTrainingTopic (id) {
+        function deleteDocumentType (id) {
             Swal.fire({
                 text: "Are you sure you would like to delete record?",
                 icon: "warning",
@@ -275,7 +275,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('training-topic.delete') }}",
+                        url: "{{ route('document_type.delete') }}",
                         type: 'POST',
                         data: {
                             id: id,
