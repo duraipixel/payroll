@@ -23,7 +23,7 @@
                 </span>
                 <!--end::Svg Icon-->
                 <input type="text" data-kt-user-table-filter="search" id="teaching_type_dataTable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Staff Category">
+                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Teaching Type">
             </div>
             <!--end::Search-->
         </div>

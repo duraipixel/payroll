@@ -126,7 +126,7 @@ class QualificationController extends Controller
         $info           = Qualification::find($id);
         $info->status   = $status;
         $info->update();
-        return response()->json(['message' => "You changed the Nature Of Qualification status!", 'status' => 1]);
+        return response()->json(['message' => "You changed the Qualification status!", 'status' => 1]);
     }
 
     public function delete(Request $request)

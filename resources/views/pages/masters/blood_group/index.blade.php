@@ -23,7 +23,7 @@
                 </span>
                 <!--end::Svg Icon-->
                 <input type="text" data-kt-user-table-filter="search" id="blood_group_dataTable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search School">
+                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Blood Group">
             </div>
             <!--end::Search-->
         </div>

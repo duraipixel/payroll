@@ -203,7 +203,7 @@
             })
 
         }
-        function BoardChangeStatus(id, status) {
+        function boardChangeStatus(id, status) {
 
     Swal.fire({
         text: "Are you sure you would like to change status?",

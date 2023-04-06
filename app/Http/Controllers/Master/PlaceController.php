@@ -127,7 +127,7 @@ class PlaceController extends Controller
         $info           = OtherSchoolPlace::find($id);
         $info->status   = $status;
         $info->update();
-        return response()->json(['message' => "You changed the division status!", 'status' => 1]);
+        return response()->json(['message' => "You changed the Place status!", 'status' => 1]);
     }
 
     public function delete(Request $request)
