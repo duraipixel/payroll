@@ -163,6 +163,8 @@ Route::group(['middleware' => 'auth'],  function () {
         'professional_type' => App\Http\Controllers\Master\ProfessionTypeController::class,
         'nature-of-employeement' => App\Http\Controllers\Master\NatureOfEmploymentController::class,
         'workplace' => App\Http\Controllers\Master\PlaceOfWorkController::class,
+        'qualification' => App\Http\Controllers\Master\QualificationController::class,
+        
     );
     foreach($routeArray as $key=>$value)
     {
