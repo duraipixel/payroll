@@ -39,8 +39,8 @@ class PlaceOfWorkController extends Controller
                     $date = date('Y-m-d',strtotime($keywords));
                     return $query->where(function($q) use($keywords,$date){
 
-                        $q->where('nature_of_employments.name','like',"%{$keywords}%")
-                        ->orWhereDate('nature_of_employments.created_at',$date);
+                        $q->where('place_of_works.name','like',"%{$keywords}%")
+                        ->orWhereDate('place_of_works.created_at',$date);
                     });
                 }
             })
