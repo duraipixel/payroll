@@ -166,6 +166,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'qualification' => App\Http\Controllers\Master\QualificationController::class,
         'relationship' => App\Http\Controllers\Master\RelationshipTypeController::class,
         'staff-category' => App\Http\Controllers\Master\StaffCategoryController::class,
+        'teaching-type' => App\Http\Controllers\Master\TeachingTypeController::class,
         
         
     );
