@@ -167,6 +167,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'relationship' => App\Http\Controllers\Master\RelationshipTypeController::class,
         'staff-category' => App\Http\Controllers\Master\StaffCategoryController::class,
         'teaching-type' => App\Http\Controllers\Master\TeachingTypeController::class,
+        'overview' => App\Http\Controllers\OverViewController::class,
         
         
     );
@@ -181,5 +182,6 @@ Route::group(['middleware' => 'auth'],  function () {
         });
 
     }
+    Route::post('overview',[App\Http\Controllers\OverViewController::class,'saveForm'])->name('overview.save');
 
 });
