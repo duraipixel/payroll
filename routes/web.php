@@ -169,7 +169,6 @@ Route::group(['middleware' => 'auth'],  function () {
         'teaching-type' => App\Http\Controllers\Master\TeachingTypeController::class,
         'overview' => App\Http\Controllers\OverViewController::class,
         
-        
     );
     foreach($routeArray as $key=>$value)
     {
@@ -183,5 +182,9 @@ Route::group(['middleware' => 'auth'],  function () {
 
     }
     Route::post('overview',[App\Http\Controllers\OverViewController::class,'saveForm'])->name('overview.save');
-
+    Route::prefix('logs')->group(function() {
+        Route::get('/',[App\Http\Controllers\LogController::class,'index'])->name('logs');
+        Route::post('/view',[App\Http\Controllers\LogController::class,'view'])->name('logs.view');
+    });
+    
 });

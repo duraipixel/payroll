@@ -52,6 +52,6 @@ class OverViewController extends Controller
                 return response()->json(['error'=> $error, 'message' => $message]);
             }
       
-        return response()->json(['error'=> $error, 'message' => $message, 'tabType' => $tabType]);
+        return response()->json(['error'=> $error, 'message' => $message]);
     }
 }
