@@ -66,44 +66,9 @@
                     <input name="email" id="email" value="{{ $staff_details->email ?? '' }}"
                         class="form-control form-control-lg " />
                 </div>
-                <div class="col-lg-4 mb-5">
-                    <label class="form-label required">Class Handling</label>
-                    <div class="position-relative">
-                        <select id="classes" name="class_id[]" class="form-control big_box select2-option"
-                            placeholder="" multiple>
-                            @isset($classes)
-                                @foreach ($classes as $item)
-                                    <option value="{{ $item->id }}" @if (isset($used_classes) && in_array($item->id, $used_classes)) selected @endif>
-                                        {{ $item->name }}</option>
-                                @endforeach
-                            @endisset
-                        </select>
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0 p-4"
-                            onclick="return openAddModel('class')">
-                            <i class="fa fa-plus"></i>
-                        </span>
-                    </div>
-                </div>
+                
                 <input type="hidden" name="id" id="staff_id" value="{{ $staff_details->id ?? '' }}">
-                <div class="col-lg-4 mb-5">
-                    <label class="form-label required">Division</label>
-                    <div class="position-relative">
-                        <select name="division_id" id="division_id" class="form-select form-select-lg ">
-                            <option value="">--Select Division--</option>
-                            @isset($divisions)
-                                @foreach ($divisions as $item)
-                                    <option value="{{ $item->id }}" @if (isset($staff_details->division_id) && $staff_details->division_id == $item->id) selected @endif>
-                                        {{ $item->name }}
-                                    </option>
-                                @endforeach
-                            @endisset
-                        </select>
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0 p-4"
-                            onclick="return openAddModel('division')">
-                            <i class="fa fa-plus"></i>
-                        </span>
-                    </div>
-                </div>
+                
                 <div class="col-lg-4 mb-5">
                     <label class="form-label">Reporting Manager</label>
                     <select name="reporting_manager_id" id="reporting_manager_id" class="form-select form-select-lg ">
@@ -464,9 +429,7 @@
             'institute_name',
             'name',
             'previous_code',
-            'email',
-            'classes',
-            'division_id',
+            'email',           
         ];
         $('.personal-form-errors').remove();
         $('.form-control,.form-select').removeClass('border-danger');

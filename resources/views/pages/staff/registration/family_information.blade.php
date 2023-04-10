@@ -101,6 +101,7 @@
     var insertRelationWorkingDetailUrl = "{{ route('staff.save.working_relationship') }}";
     var StaffRelationWorkingListUrl = "{{ route('staff.working.relation.list') }}";
     var deleteStaffRelationWorkingUrl = "{{ route('staff.relation.working.delete') }}";
+    // var getNomineeAjaxurl = "{{ route('staff.relation.working.delete') }}";
 </script>
 <script src="{{ asset('assets/js/form/registration/validateFamilyFrom.js') }}"></script>
 <script src="{{ asset('assets/js/form/registration/nomineeForm.js') }}"></script>

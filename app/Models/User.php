@@ -45,7 +45,8 @@ class User extends Authenticatable implements Auditable
         'profile_status',
         'verification_status',
         'status',
-        'is_super_admin'
+        'is_super_admin',
+        'addedBy'
     ];
 
     /**

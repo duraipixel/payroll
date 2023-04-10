@@ -184,13 +184,13 @@
         <input name="relation_register_no" id="relation_register_no" value="{{ $family_details->registration_no ?? '' }}" class="form-control form-control-lg form-control-solid" />
         <!--end::Input-->
     </div>
-   
+{{--    
     <div class="col-lg-6 mb-5 own_premises"  @if( isset($family_details->premises) && $family_details->premises == 'others' ) style="display:none" @endif>
         <!--begin::Label-->
         <label class="form-label">If Son/Daughter Std</label>
         <input name="relation_standard" id="relation_standard" value="{{ $family_details->standard ?? '' }}"  class="form-control form-control-lg form-control-solid" />
         <!--end::Input-->
-    </div>
+    </div> --}}
     <!--end::Input group-->
     <div class="col-lg-12 mb-5">
         <!--end::Label-->

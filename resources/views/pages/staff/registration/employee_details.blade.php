@@ -28,11 +28,12 @@
                         </span>
                     </div>
                 </div>
-    
+                
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Department</label>
                     <div class="position-relative">
                         <select name="department_id" autofocus id="department_id"
+                            onchange="return checkTeachingType(this.value)"
                             class="form-select form-select-lg select2-option">
                             <option value="">--Select Department--</option>
                             @isset($department)
@@ -49,10 +50,47 @@
                         </span>
                     </div>
                 </div>
-                <!--end::Input group-->
-                <!--begin::Input group-->
                 <div class="col-lg-4 mb-5">
-                    <label class="form-label required">Subject</label>
+                    <label class="form-label required">Division</label>
+                    <div class="position-relative">
+                        <select name="division_id" id="division_id" class="form-select form-select-lg ">
+                            <option value="">--Select Division--</option>
+                            @isset($divisions)
+                                @foreach ($divisions as $item)
+                                    <option value="{{ $item->id }}" @if (isset($staff_details->position) && $staff_details->position->division_id == $item->id) selected @endif>
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            @endisset
+                        </select>
+                        <span class="position-absolute btn btn-success btn-md top-0 end-0 p-4"
+                            onclick="return openAddModel('division')">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                    </div>
+                </div>
+                <!--end::Input group-->
+                <div class="col-lg-4 mb-5 teaching" style="display: @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'yes' ) block @else none @endif">
+                    <label class="form-label required">Class Handling</label>
+                    <div class="position-relative">
+                        <select id="classes" name="class_id[]" class="form-control big_box select2-option"
+                            placeholder="" multiple>
+                            @isset($classes)
+                                @foreach ($classes as $item)
+                                    <option value="{{ $item->id }}" @if (isset($used_classes) && in_array($item->id, $used_classes)) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            @endisset
+                        </select>
+                        <span class="position-absolute btn btn-success btn-md top-0 end-0 p-4"
+                            onclick="return openAddModel('class')">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                    </div>
+                </div>
+                <!--begin::Input group-->
+                <div class="col-lg-4 mb-5 teaching" style="display: @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'yes' ) block @else none @endif">
+                    <label class="form-label required">Handling Subject</label>
                     <div class="position-relative">
                         <select name="subject[]" autofocus id="subject" multiple
                             class="form-select form-select-lg select2-option">
@@ -77,7 +115,8 @@
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Attendance Scheme</label>
                     <div class="position-relative">
-                        <select name="scheme_id" autofocus id="scheme_id" class="form-select form-select-lg select2-option">
+                        <select name="scheme_id" autofocus id="scheme_id"
+                            class="form-select form-select-lg select2-option">
                             <option value="">--Select Scheme--</option>
                             @isset($scheme)
                                 @foreach ($scheme as $item)
@@ -93,18 +132,18 @@
                         </span>
                     </div>
                 </div>
-    
+
                 <hr class="bg-lt-clr mt-3">
                 </hr>
                 <!--begin::Tables Widget 13-->
-                <div class="card mb-0 mb-xl-0 wdth-40percent">
+                <div class="card mb-0 mb-xl-0 wdth-40percent teaching" style="display: @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'yes' ) block @else none @endif">
                     <!--begin::Header-->
                     <div class="card-header border-0 pt-0">
                         <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder fs-3 mb-1">Subject studied upto </span>
+                            <span class="card-label fw-bolder fs-3 mb-1">Subject Handling upto </span>
                         </h3>
                     </div>
-    
+
                     <div class="card-body py-0">
                         <!--begin::Table container-->
                         <div class="table-responsive" id="studied_pane">
@@ -116,10 +155,10 @@
                     </div>
                     <!--begin::Body-->
                 </div>
-    
+
                 <!--begin::Tables Widget 13-->
                 <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
-    
+
                     <div class="card-header bg-primary border-0 pt-0">
                         <h3 class="card-title align-items-start flex-column">
                             <span class="card-label fw-bolder fs-3 mb-1">Invigilation Duty Details</span>
@@ -132,11 +171,12 @@
                                 <span class="svg-icon svg-icon-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24" fill="none">
-                                        <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2"
-                                            rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor">
+                                        <rect opacity="0.5" x="11.364" y="20.364" width="16"
+                                            height="2" rx="1" transform="rotate(-90 11.364 20.364)"
+                                            fill="currentColor">
                                         </rect>
-                                        <rect x="4.36396" y="11.364" width="16" height="2" rx="1"
-                                            fill="currentColor"></rect>
+                                        <rect x="4.36396" y="11.364" width="16" height="2"
+                                            rx="1" fill="currentColor"></rect>
                                     </svg>
                                 </span> Add New</span>
                         </button>
@@ -144,11 +184,11 @@
                             class="engage-demos-toggle btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5"
                             title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-dismiss="click" data-bs-trigger="hover">
-    
+
                         </button>
-    
+
                     </div>
-    
+
                     <div class="card-body py-3" id="invigilation-pane">
                         <!--begin::Table container-->
                         @include('pages.staff.registration.emp_position.invigilation_list')
@@ -156,7 +196,7 @@
                     </div>
                     <!--begin::Body-->
                 </div>
-    
+
                 <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
                     <!--begin::Header-->
                     <div class="card-header bg-primary border-0 pt-0">
@@ -207,7 +247,6 @@
                     <!--begin::Body-->
                 </div>
                 <!--end::Tables Widget 13-->
-    
             </div>
         </form>
         <!--end::Input group-->
@@ -232,6 +271,30 @@
     <!--end::Card-->
 </div>
 <script>
+    var global_is_teaching = false;
+    @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'no' )
+        global_is_teaching = true;
+    @endif
+    function checkTeachingType(id) {
+
+        $.ajax({
+            url: "{{ route('get.department') }}",
+            type: 'POST',
+            data: {
+                id: id
+            },
+            success: function(res) {
+                console.log(res);
+                if (res.is_teaching == 'no') {
+                    $('.teaching').hide();
+                    global_is_teaching = true;
+                } else {
+                    $('.teaching').show();
+                    global_is_teaching = false;
+                }
+            }
+        })
+    }
     /**
      * Training functions starts here
      * **/
@@ -245,13 +308,15 @@
         $.ajax({
             url: "{{ route('get.studied.subject') }}",
             type: "POST",
-            data: {staff_id:staff_id},
+            data: {
+                staff_id: staff_id
+            },
             success: function(res) {
                 $('#studied_pane').html(res);
             }
         })
     }
-    
+
     function openTrainingForm() {
         $('#kt_new_data_toggle_train').click();
 
@@ -446,6 +511,7 @@
 
     function submitInvigilationForm() {
         var invigilationErrors = false;
+
         let key_name = [
             'duty_classes',
             'duty_type',
@@ -568,17 +634,26 @@
 
     async function validateEmployeePosition() {
         event.preventDefault();
+        console.log(global_is_teaching, 'global_is_teaching');
         var emp_position_errors = false;
+        if (global_is_teaching) {
+            var key_name = [
+                'designation_id',
+                'department_id',
+                'division_id',
+                'scheme_id'              
+            ];
+        } else {
 
-        var key_name = [
-            'designation_id',
-            'department_id',
-            'subject',
-            'scheme_id',
-            'nationality_id',
-            'religion_id',
-            'caste_id',
-        ];
+            var key_name = [
+                'designation_id',
+                'department_id',
+                'division_id',
+                'subject',
+                'scheme_id',
+                'class_id'              
+            ];
+        }
 
         $('.kyc-form-errors').remove();
         $('.form-control,.form-select').removeClass('border-danger');
@@ -606,6 +681,7 @@
             loading();
             var forms = $('#position_form')[0];
             var formData = new FormData(forms);
+            formData.append('global_is_teaching', global_is_teaching);
 
             const employeeResponse = await fetch("{{ route('staff.save.employee_position') }}", {
                     method: 'POST',
@@ -614,13 +690,13 @@
                 .then((response) => response.json())
                 .then((data) => {
                     unloading();
-                    
+
                     if (data.error == 1) {
                         if (data.message) {
                             data.message.forEach(element => {
                                 toastr.error("Error", element);
                             });
-                        }                        
+                        }
                         return true;
                     } else {
                         return false;
@@ -628,7 +704,7 @@
 
                 });
             return employeeResponse;
-            
+
         } else {
 
             return true;

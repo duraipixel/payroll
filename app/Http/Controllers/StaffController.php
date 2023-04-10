@@ -212,9 +212,7 @@ class StaffController extends Controller
         $validator      = Validator::make($request->all(), [
             'institute_name' => 'required',
             'name' => 'required',
-            'email' => 'required|string|unique:users,email,' . $id,
-            'class_id' => 'required',
-            'division_id' => 'required',
+            'email' => 'required|string|unique:users,email,' . $id,           
             'previous_code' => 'required'
             // 'previous_code' => 'required|string|unique:users,emp_code,'.$id,
         ]);
@@ -230,24 +228,13 @@ class StaffController extends Controller
             $ins['emp_code'] = $request->previous_code;
             $ins['first_name_tamil'] = $request->first_name_tamil;
             $ins['short_name'] = $request->short_name;
-            $ins['division_id'] = $request->division_id;
+            // $ins['division_id'] = $request->division_id;
             $ins['reporting_manager_id'] = $request->reporting_manager_id;
             $ins['status'] = 'active';
+            $ins['addedBy'] = auth()->id();
 
             $data = User::updateOrCreate(['emp_code' => $request->previous_code], $ins);
-            if ($data) {
-                if ($request->class_id) {
-                    StaffClass::where('staff_id', $data->id)->delete();
-                    foreach ($request->class_id as $item) {
-                        $cls = [];
-                        $cls['staff_id'] = $data->id;
-                        $cls['academic_id'] = $academic_id;
-                        $cls['class_id'] = $item;
-                        StaffClass::create($cls);
-                    }
-                }
-            }
-
+           
             if ($request->aadhar_name && !empty($request->aadhar_name)) {
                 $aadhar_id = DocumentType::where('name', 'Adhaar')->first();
                 $ins_aa = [];
@@ -307,7 +294,6 @@ class StaffController extends Controller
                     foreach ($files as $file1) {
 
                         $imageName = uniqid() . Str::replace(' ', "-", $file1->getClientOriginalName());
-
 
                         $directory              = 'staff/' . $request->previous_code . '/pancard';
                         $filename               = $directory . '/' . $imageName;
@@ -376,7 +362,7 @@ class StaffController extends Controller
                 $ins_aa['verification_status'] = 'pending';
 
                 $file_name = null;
-                /** 
+                /* 
                  *  check file is exists
                  */
                 if ($request->hasFile('driving_license')) {
@@ -406,6 +392,7 @@ class StaffController extends Controller
             }
 
             if ($request->voter_name && !empty($request->voter_name)) {
+
                 $voter_id = DocumentType::where('name', 'Voter ID')->first();
                 $ins_aa = [];
                 $ins_aa['academic_id'] = $academic_id;
@@ -445,6 +432,7 @@ class StaffController extends Controller
             }
 
             if ($request->passport_name && !empty($request->passport_name)) {
+
                 $passport_id = DocumentType::where('name', 'Passport')->first();
                 $ins_aa = [];
                 $ins_aa['academic_id'] = $academic_id;
@@ -560,7 +548,8 @@ class StaffController extends Controller
             $ins['status'] = 'active';
 
             StaffPersonalInfo::updateOrCreate(['staff_id' => $id], $ins);
-            if (!empty($request->uan_no)) {
+            
+            if (!empty($request->uan_no) && $request->is_uan == 'yes' ) {
 
                 $insEsi['academic_id'] = $academic_id;
                 $insEsi['staff_id'] = $id;
@@ -570,8 +559,11 @@ class StaffController extends Controller
                 $insEsi['location'] = $request->uan_area;
                 $insEsi['status'] = 'active';
                 StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'pf'], $insEsi);
+            } else {
+                StaffPfEsiDetail::where(['staff_id' => $id, 'type' => 'pf'])->delete();
             }
-            if (!empty($request->esi_no)) {
+
+            if (!empty($request->esi_no) && $request->is_esi == 'yes') {
 
                 $insEsi['academic_id'] = $academic_id;
                 $insEsi['staff_id'] = $id;
@@ -582,6 +574,8 @@ class StaffController extends Controller
                 $insEsi['location'] = $request->esi_address;
                 $insEsi['status'] = 'active';
                 StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'esi'], $insEsi);
+            } else {
+                StaffPfEsiDetail::where(['staff_id' => $id, 'type' => 'esi'])->delete();
             }
 
             if ($request->bank_id) {
@@ -634,17 +628,29 @@ class StaffController extends Controller
 
     public function insertEmployeePosition(Request $request)
     {
-        // dd( $request->all() );
+        
         #subjectid_classid
         $id = $request->id ?? '';
+        $global_is_teaching = $request->global_is_teaching;
         $data = '';
-        $validator      = Validator::make($request->all(), [
-            'designation_id' => 'required',
-            'department_id' => 'required',
-            'subject' => 'required',
-            'scheme_id' => 'required',
+        $validateArray = [
+                            'designation_id' => 'required',
+                            'department_id' => 'required',
+                            'subject' => 'required',
+                            'scheme_id' => 'required',
+                            'class_id' => 'required',
+                            'division_id' => 'required',
+                        ];
+        if( $global_is_teaching ) {
+            $validateArray = [
+                'designation_id' => 'required',
+                'department_id' => 'required',
+                'scheme_id' => 'required',
+                'division_id' => 'required',
+            ];
+        }
 
-        ]);
+        $validator      = Validator::make($request->all(), $validateArray );
 
         if ($validator->passes()) {
 
@@ -658,10 +664,23 @@ class StaffController extends Controller
             $ins['staff_id'] = $id;
             $ins['designation_id'] = $request->designation_id;
             $ins['department_id'] = $request->department_id;
-
+            $ins['division_id'] = $request->division_id;
             $ins['attendance_scheme_id'] = $request->scheme_id;
             $ins['status'] = 'active';
+            $ins['is_teaching_staff'] = $global_is_teaching ? 'no' : 'yes';
             StaffProfessionalData::updateOrCreate(['staff_id' => $id], $ins);
+
+            $data = User::find($id);
+            if ($request->class_id) {
+                StaffClass::where('staff_id', $data->id)->delete();
+                foreach ($request->class_id as $item) {
+                    $cls = [];
+                    $cls['staff_id'] = $data->id;
+                    $cls['academic_id'] = $academic_id;
+                    $cls['class_id'] = $item;
+                    StaffClass::create($cls);
+                }
+            }
 
             if ($request->subject && !empty($request->subject)) {
                 StaffExperiencedSubject::where('staff_id', $id)->delete();

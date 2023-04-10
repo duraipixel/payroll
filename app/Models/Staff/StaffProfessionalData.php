@@ -18,8 +18,10 @@ class StaffProfessionalData extends Model implements Auditable
         'staff_id',
         'designation_id',
         'department_id',
+        'division_id',
         'subject_id',
         'attendance_scheme_id',
-        'status'
+        'status',
+        'is_teaching_staff'
     ];
 }

@@ -34,7 +34,7 @@
                 <!--end::Header-->
                 <!--begin::Content-->
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-                    @include('layouts.parts.toolbar')
+                    {{-- @include('layouts.parts.toolbar') --}}
                     <!--begin::Post-->
                     <div class="post d-flex flex-column-fluid" id="kt_post">
                         <!--begin::Container-->

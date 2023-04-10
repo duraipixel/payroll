@@ -90,7 +90,7 @@
 <script>
     
     function getNominee() {
-
+        
         var staff_id = $('#outer_staff_id').val();
         $.ajaxSetup({
             headers: {
@@ -119,7 +119,7 @@
         })
     }
 
-    getNominee();
+    
 
     function getNomineeDetails(nominee_id) {
         $.ajaxSetup({

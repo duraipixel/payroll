@@ -8,6 +8,13 @@ function openNomineeForm() {
     $('#minor_contact').val('');
     $('#minor_address').val('');
     $('#staff_nominee_id').val('');
+
+    getNominee();
+    
+}
+
+function getFamilyNomiee() {
+
 }
 
 function editNomineeForm(staff_id, nominee_id) {

@@ -367,10 +367,23 @@
                 <hr>
                 <div class="row mb-10">
                     <div class="col-md-12 mb-7 fv-row">
-                        <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
+                        <label class="d-flex align-items-center fs-6 fw-bold form-label my-4">
                             <span class="">UAN Details</span>
+                            <div class="mx-5 cstm-zeed">
+
+                                <label class="form-check form-check-custom form-check-solid me-10">
+                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_uan" onclick="handleClick(this)" 
+                                        value="yes" @if ($staff_details->pf->ac_number ?? '' ) checked @endif />
+                                    <span class="form-check-label fw-bold">Yes</span>
+                                </label>
+                                <label class="form-check form-check-custom form-check-solid me-10">
+                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_uan" onclick="handleClick(this)"  value="no" @if (! ($staff_details->pf->ac_number ?? '') ) checked @endif />
+                                    <span class="form-check-label fw-bold"> No </span>
+                                </label>
+
+                            </div>
                         </label>
-                        <div class="row fv-row">
+                        <div class="row fv-row" id="uan_display_pane">
                             <div class="col-4">
                                 <input name="uan_no" id="uan_no" class="form-control form-control-lg "
                                     placeholder="Number" value="{{ $staff_details->pf->ac_number ?? '' }}" />
@@ -394,8 +407,23 @@
                     </div>
                     <div class="col-md-12 fv-row">
 
-                        <label class="fs-6 fw-bold form-label mb-2">ESI</label>
-                        <div class="row fv-row">
+                        <label  class="d-flex align-items-center fs-6 fw-bold form-label my-4">
+                            <span class="me-15 pe-3">ESI</span>
+                            <div class="mx-5 cstm-zeed">
+
+                                <label class="form-check form-check-custom form-check-solid me-10">
+                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_esi" onclick="handleEsiClick(this)" 
+                                        value="yes" @if ($staff_details->esi->ac_number ?? '' ) checked @endif />
+                                    <span class="form-check-label fw-bold">Yes</span>
+                                </label>
+                                <label class="form-check form-check-custom form-check-solid me-10">
+                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_esi" onclick="handleEsiClick(this)"  value="no" @if (! ($staff_details->esi->ac_number ?? '') ) checked @endif />
+                                    <span class="form-check-label fw-bold"> No </span>
+                                </label>
+
+                            </div>
+                        </label>
+                        <div class="row fv-row" id="esi_display_pane">
                             <div class="col-3">
                                 <input name="esi_no" id="esi_no" class="form-control form-control-lg "
                                     placeholder="Number" value="{{ $staff_details->esi->ac_number ?? '' }}" />
@@ -429,6 +457,33 @@
 </div>
 
 <script>
+    @if ($staff_details->pf->ac_number ?? '' )
+    $('#uan_display_pane').show();
+    @else
+    $('#uan_display_pane').hide();
+    @endif
+    function handleClick(myRadio) {
+
+        if( myRadio.value == 'no') {
+            $('#uan_display_pane').hide();
+        } else {
+            $('#uan_display_pane').show();
+        }
+    }
+
+    @if ($staff_details->esi->ac_number ?? '' )
+    $('#esi_display_pane').show();
+    @else
+    $('#esi_display_pane').hide();
+    @endif
+    function handleEsiClick(myRadio) {
+        if( myRadio.value == 'no') {
+            $('#esi_display_pane').hide();
+        } else {
+            $('#esi_display_pane').show();
+        }
+    }
+
     const datepicker = document.getElementById('dob');
     const marital_status = document.getElementById('marital_status');
     marital_status.addEventListener('change', function() {

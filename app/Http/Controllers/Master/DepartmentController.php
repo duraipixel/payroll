@@ -78,6 +78,7 @@ class DepartmentController extends Controller
         if ($validator->passes()) {
             $ins['academic_id'] = academicYearId();
             $ins['name'] = $request->department_name;
+            $ins['is_teaching'] = $request->is_teaching;
             if(isset($request->form_type))
             {
                 if($request->status)
@@ -137,5 +138,12 @@ class DepartmentController extends Controller
     public function export()
     {
         return Excel::download(new DepartmentExport,'department.xlsx');
+    }
+
+    public function getDepartment(Request $request)
+    {
+        $id = $request->id;
+        $info = Department::find($id);
+        return $info;
     }
 }

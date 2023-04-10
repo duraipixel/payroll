@@ -16,6 +16,7 @@ class Department extends Model implements Auditable
         'academic_id',	
         'name',
         'sort_order',	
-        'status'
+        'status',
+        'is_teaching' //enum(['yes', 'no'])
     ];
 }

@@ -9,6 +9,25 @@
             <input type="text" class="form-control" name="department_name" id="department_name" value="{{ $info->name ?? '' }}" required >
         </div>
     </div>
+    <div class="fv-row form-group mb-10">
+        <label class="form-label" for="">
+            Is Teaching
+        </label>
+        <div >
+            <div class="mx-5 cstm-zeed">
+
+                <label class="form-check form-check-custom form-check-solid me-10">
+                    <input class="form-check-input h-20px w-20px" type="radio" name="is_teaching" value="yes" @if ( isset($info->is_teaching) && $info->is_teaching == 'yes' ) checked @elseif(isset($info->is_teaching) && !empty($info->is_teaching)) @else checked @endif />
+                    <span class="form-check-label fw-bold">Yes</span>
+                </label>
+                <label class="form-check form-check-custom form-check-solid me-10">
+                    <input class="form-check-input h-20px w-20px" type="radio" name="is_teaching" value="no" @if ( isset($info->is_teaching) && $info->is_teaching == 'no' ) checked @endif />
+                    <span class="form-check-label fw-bold"> No </span>
+                </label>
+
+            </div>
+        </div>
+    </div>
     @if(isset($from) && !empty($from))
     <div class="fv-row form-group mb-10">
         <label class="form-label" for="">
