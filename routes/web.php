@@ -122,6 +122,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/staff/ordermodel/save', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'save'])->name('save.order_model');
 
     Route::post('/staff/appointment/save', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'save'])->name('staff.save.appointment');
+    Route::post('/blocks/save', [App\Http\Controllers\BlockController::class, 'save'])->name('save.blocks');
+
 
     // staff list
     Route::get('/staff/list', [App\Http\Controllers\StaffController::class, 'list'])->name('staff.list');
@@ -169,6 +171,8 @@ Route::group(['middleware' => 'auth'],  function () {
         'staff-category' => App\Http\Controllers\Master\StaffCategoryController::class,
         'teaching-type' => App\Http\Controllers\Master\TeachingTypeController::class,
         'overview' => App\Http\Controllers\OverViewController::class,
+        'blocks' => App\Http\Controllers\BlockController::class,
+        'block-classes' => App\Http\Controllers\BlockClassesController::class,
         
     );
     foreach($routeArray as $key=>$value)
