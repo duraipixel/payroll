@@ -276,6 +276,16 @@
                             </a>
                         </div>
                     </div>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link" href="{{ route('holiday') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Holidays</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
                  {{-- Block Mappting End --}}

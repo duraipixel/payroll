@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/get/branch', [App\Http\Controllers\Master\BankBranchController::class, 'getBankBranches'])->name('branch.all');
     Route::post('/save/leave-status', [App\Http\Controllers\AttendanceManagement\LeaveStatusController::class, 'save'])->name('save.leave-status');
     Route::post('/save/leave-head', [App\Http\Controllers\AttendanceManagement\LeaveHeadController::class, 'save'])->name('save.leave-head');
+    Route::post('/save/holiday', [App\Http\Controllers\AttendanceManagement\HolidayController::class, 'save'])->name('save.holiday');
 
 
     Route::get('staff/register/{id?}', [App\Http\Controllers\StaffController::class, 'register'])->name('staff.register');
@@ -188,6 +189,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'block-classes' => App\Http\Controllers\BlockClassesController::class,
         'leave-status' => App\Http\Controllers\AttendanceManagement\LeaveStatusController::class,
         'leave-head' => App\Http\Controllers\AttendanceManagement\LeaveHeadController::class,
+        'holiday' => App\Http\Controllers\AttendanceManagement\HolidayController::class,
         
     );
     foreach($routeArray as $key=>$value)
