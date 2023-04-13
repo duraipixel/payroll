@@ -268,7 +268,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('blocks') }}">
+                            <a class="menu-link" href="{{ route('leave-head') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>

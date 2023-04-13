@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/save/document/type', [App\Http\Controllers\Master\DocumentTypeController::class, 'save'])->name('save.document.type');
     Route::post('/get/branch', [App\Http\Controllers\Master\BankBranchController::class, 'getBankBranches'])->name('branch.all');
     Route::post('/save/leave-status', [App\Http\Controllers\AttendanceManagement\LeaveStatusController::class, 'save'])->name('save.leave-status');
+    Route::post('/save/leave-head', [App\Http\Controllers\AttendanceManagement\LeaveHeadController::class, 'save'])->name('save.leave-head');
 
 
     Route::get('staff/register/{id?}', [App\Http\Controllers\StaffController::class, 'register'])->name('staff.register');
@@ -186,6 +187,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'overview' => App\Http\Controllers\OverViewController::class,
         'block-classes' => App\Http\Controllers\BlockClassesController::class,
         'leave-status' => App\Http\Controllers\AttendanceManagement\LeaveStatusController::class,
+        'leave-head' => App\Http\Controllers\AttendanceManagement\LeaveHeadController::class,
         
     );
     foreach($routeArray as $key=>$value)
