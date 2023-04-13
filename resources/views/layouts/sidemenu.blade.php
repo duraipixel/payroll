@@ -241,14 +241,6 @@
                                 <span class="menu-title">Blocks</span>
                             </a>
                         </div>
-                        <div class="menu-item">
-                            <a class="menu-link" href="{{ route('block-classes') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Block Classes</span>
-                            </a>
-                        </div>
                     </div>
                 </div>
 
