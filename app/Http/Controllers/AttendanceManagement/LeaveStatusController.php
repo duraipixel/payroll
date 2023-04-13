@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Master;
+namespace App\Http\Controllers\AttendanceManagement;
 
-use App\Exports\BloodGroupExport;
+use App\Exports\LeaveStatusExport;
 use App\Http\Controllers\Controller;
-use App\Models\Master\BloodGroup;
+use App\Models\AttendanceManagement\LeaveStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -13,21 +13,21 @@ use DataTables;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
-class BloodGroupController extends Controller
+class LeaveStatusController extends Controller
 {
     public function index(Request $request)
     {
         $breadcrums = array(
-            'title' => 'Blood Group',
+            'title' => 'Leave Status',
             'breadcrums' => array(
                 array(
-                    'link' => '', 'title' => 'Blood Group'
+                    'link' => '', 'title' => 'Leave Status'
                 ),
             )
         );
         if($request->ajax())
         {
-            $data = BloodGroup::select('*');
+            $data = LeaveStatus::select('*');
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
@@ -39,14 +39,14 @@ class BloodGroupController extends Controller
                     $date = date('Y-m-d',strtotime($keywords));
                     return $query->where(function($q) use($keywords,$date){
 
-                        $q->where('blood_groups.name','like',"%{$keywords}%")
-                        ->orWhereDate('blood_groups.created_at',$date);
+                        $q->where('leave_statuses.name','like',"%{$keywords}%")
+                        ->orWhereDate('leave_statuses.created_at',$date);
                     });
                 }
             })
             ->addIndexColumn()
             ->editColumn('status', function ($row) {
-                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return bloodGroupChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return leaveStatusChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
                 return $status;
             })
             ->editColumn('created_at', function ($row) {
@@ -54,10 +54,10 @@ class BloodGroupController extends Controller
                 return $created_at;
             })
               ->addColumn('action', function ($row) {
-                $edit_btn = '<a href="javascript:void(0);" onclick="getBloodGroupModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                $edit_btn = '<a href="javascript:void(0);" onclick="getLeaveStatusModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                 <i class="fa fa-edit"></i>
             </a>';
-                    $del_btn = '<a href="javascript:void(0);" onclick="deleteBloodGroup(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                    $del_btn = '<a href="javascript:void(0);" onclick="deleteLeaveStatus(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                 <i class="fa fa-trash"></i></a>';
 
                     return $edit_btn . $del_btn;
@@ -65,22 +65,20 @@ class BloodGroupController extends Controller
                 ->rawColumns(['action', 'status']);
             return $datatables->make(true);
         }
-        return view('pages.masters.blood_group.index',compact('breadcrums'));
+        return view('pages.attendance_management.leave_status.index',compact('breadcrums'));
     }
     public function save(Request $request)
     {
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'blood_group' => 'required|string|unique:blood_groups,name,' . $id .',id,deleted_at,NULL',
+            'status_name' => 'required|string|unique:leave_statuses,name,' . $id .',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {
 
             $ins['academic_id'] = academicYearId();
-            $ins['name'] = $request->blood_group;
-            if(isset($request->form_type))
-            {
+            $ins['name'] = $request->status_name;
                 if($request->status)
                 {
                     $ins['status'] = 'active';
@@ -88,11 +86,8 @@ class BloodGroupController extends Controller
                 else{
                     $ins['status'] = 'inactive';
                 }
-            }
-            else{
-                $ins['status'] = 'active';
-            }
-            $data = BloodGroup::updateOrCreate(['id' => $id], $ins);
+            
+            $data = LeaveStatus::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
 
@@ -108,37 +103,36 @@ class BloodGroupController extends Controller
     {
         $id = $request->id;
         $info = [];
-        $title = 'Add Blood Group';
-        $from = 'master';
+        $title = 'Add Leave Status';
         if(isset($id) && !empty($id))
         {
-            $info = BloodGroup::find($id);
-            $title = 'Update Blood Group';
+            $info = LeaveStatus::find($id);
+            $title = 'Update Leave Status';
         }
 
-         $content = view('pages.masters.blood_group.add_edit_form',compact('info','title', 'from'));
+         $content = view('pages.attendance_management.leave_status.add_edit_form',compact('info','title'));
          return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
     public function changeStatus(Request $request)
     {
         $id             = $request->id;
         $status         = $request->status;
-        $info           = BloodGroup::find($id);
+        $info           = LeaveStatus::find($id);
         $info->status   = $status;
         $info->update();
-        return response()->json(['message' => "You changed the Blood Group status!", 'status' => 1]);
+        return response()->json(['message' => "You changed the Leave Status status!", 'status' => 1]);
     }
 
     public function delete(Request $request)
     {
         $id         = $request->id;
-        $info       = BloodGroup::find($id);
+        $info       = LeaveStatus::find($id);
         $info->delete();
         
         return response()->json(['message'=>"Successfully deleted state!",'status'=>1]);
     }
     public function export()
     {
-        return Excel::download(new BloodGroupExport,'blood_group.xlsx');
+        return Excel::download(new LeaveStatusExport,'leave_status.xlsx');
     }
 }
