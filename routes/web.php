@@ -182,7 +182,6 @@ Route::group(['middleware' => 'auth'],  function () {
         'staff-category' => App\Http\Controllers\Master\StaffCategoryController::class,
         'teaching-type' => App\Http\Controllers\Master\TeachingTypeController::class,
         'overview' => App\Http\Controllers\OverViewController::class,
-        'blocks' => App\Http\Controllers\BlockController::class,
         'block-classes' => App\Http\Controllers\BlockClassesController::class,
         
     );
@@ -197,6 +196,13 @@ Route::group(['middleware' => 'auth'],  function () {
         });
 
     }
+    Route::prefix('blocks')->group(function() {
+        Route::get('/',[App\Http\Controllers\BlockController::class,'index'])->name('blocks');
+        Route::get('/addOrEdit/{id?}',[App\Http\Controllers\BlockController::class,'add_edit'])->name('blocks.add_edit');
+        Route::post('/change/status', [App\Http\Controllers\BlockController::class, 'changeStatus'])->name('blocks.change.status');
+        Route::post('/change/delete', [App\Http\Controllers\BlockController::class, 'delete'])->name('blocks.delete');
+        Route::get('/export', [App\Http\Controllers\BlockController::class, 'export'])->name('blocks.export');
+    });
     Route::post('overview',[App\Http\Controllers\OverViewController::class,'saveForm'])->name('overview.save');
     Route::prefix('logs')->group(function() {
         Route::get('/',[App\Http\Controllers\LogController::class,'index'])->name('logs');

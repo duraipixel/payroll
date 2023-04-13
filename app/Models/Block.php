@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Block extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory;
     protected $fillable = [
+        'academic_id',
         'institute_id',
         'place_of_work_id',
         'name',
@@ -17,4 +18,8 @@ class Block extends Model
         'status',
         'added_by',
     ];
+    public function class()
+    {
+        return $this->hasMany(BlockClasses::class,'block_id','id')->where('status','active')->select('class_id');
+    }
 }

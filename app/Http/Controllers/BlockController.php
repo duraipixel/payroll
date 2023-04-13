@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exports\BlockExport;
 use App\Models\Block;
+use App\Models\BlockClasses;
+use App\Models\Master\Classes;
 use App\Models\Master\Institution;
 use App\Models\Master\PlaceOfWork;
 use Illuminate\Http\Request;
@@ -64,7 +66,8 @@ class BlockController extends Controller
                 return $created_at;
             })
               ->addColumn('action', function ($row) {
-                $edit_btn = '<a href="javascript:void(0);" onclick="getBlocksModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                $addHref = route('blocks.add_edit',$row->id);
+                $edit_btn = '<a href="'.$addHref.'" onclick="getBlocksModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                 <i class="fa fa-edit"></i>
             </a>';
                     $del_btn = '<a href="javascript:void(0);" onclick="deleteBlocks(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
@@ -84,6 +87,7 @@ class BlockController extends Controller
         $validator      = Validator::make($request->all(), [
             'block_name' => 'required|string|unique:blocks,name,' . $id .',id,deleted_at,NULL',
             'institute_id' => 'required',
+            'class_id' => 'required',
         ]);
         
         if ($validator->passes()) {
@@ -101,6 +105,31 @@ class BlockController extends Controller
                 $ins['status'] = 'inactive';
             }
             $data = Block::updateOrCreate(['id' => $id], $ins);
+            
+            if(isset($request->class_id) && !empty($request->class_id))
+            {
+                $dataCls = BlockClasses::where('block_id',$id)->get();
+                foreach($dataCls as $key=>$val)
+                {
+                    $val['status'] = 'inactive';
+                    $val->save();
+                }
+                foreach($request->class_id as $key=>$val)
+                {
+                    $insClass['academic_id']         = academicYearId();
+                    $insClass['block_id']            = $data->id;
+                    $insClass['class_id']            = $val;
+                    $insClass['added_by']            = Auth::user()->id;
+                    if($request->status)
+                    {
+                        $insClass['status'] = 'active';
+                    }
+                    else{
+                        $insClass['status'] = 'inactive';
+                    }
+                    $classData = BlockClasses::updateOrCreate(['block_id' => $data->id,'class_id' => $val], $insClass);
+                }
+            }
             $error = 0;
             $message = 'Added successfully';
 
@@ -112,19 +141,46 @@ class BlockController extends Controller
     }
     public function add_edit(Request $request)
     {
+        $breadcrums = array(
+            'title' => 'Block',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => 'Block Add'
+                ),
+            )
+        );
         $id = $request->id;
         $info = [];
+        $content = '';
         $title = 'Add Block';
         $institution = Institution::where('status','active')->get();
         $placeOfWork = PlaceOfWork::where('status','active')->get();
+        $class = Classes::where('status','active')->orderBy('id','desc')->get();
         if(isset($id) && !empty($id))
         {
             $info = Block::find($id);
-            $title = 'Update Block';
+            if(isset($info->class) && !empty($info->class))
+            {
+                $temp = [];
+                foreach($info->class as $key=>$val)
+                {
+                    $temp[] = $val->class_id;
+                }
+            }
+            $info['class'] = $temp;
+            $breadcrums = array(
+                'title' => 'Block',
+                'breadcrums' => array(
+                    array(
+                        'link' => '', 'title' => 'Block Update'
+                    ),
+                )
+            );
         }
 
-         $content = view('pages.blocks.add_edit_form',compact('info','title','institution','placeOfWork'));
-         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+        //  $content = view('pages.blocks.add_edit_form',compact('info','title','institution','placeOfWork','class'));
+        //  return view('layouts.modal.add_edit_form', compact('content', 'title'));
+        return view('pages.blocks.add_edit_form',compact('info','content', 'title','breadcrums','institution','placeOfWork','class'));
     }
     public function changeStatus(Request $request)
     {
@@ -140,6 +196,7 @@ class BlockController extends Controller
     {
         $id         = $request->id;
         $info       = Block::find($id);
+        $infoClass      = BlockClasses::where('block_id',$id)->delete();
         $info->delete();
         
         return response()->json(['message'=>"Successfully deleted state!",'status'=>1]);
