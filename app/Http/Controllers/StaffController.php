@@ -887,7 +887,7 @@ class StaffController extends Controller
                     return $status;
                 })
                 ->editColumn('institute_name', function ($row) {
-                    return $row->institute->name;
+                    return $row->institute->name ?? '';
                 })
 
                 ->editColumn('created_at', function ($row) {

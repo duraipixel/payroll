@@ -120,7 +120,7 @@
                                                         @endphp
 
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset('public'.$url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->aadhaar->id }}'', '{{ $item }}')">
@@ -175,7 +175,7 @@
                                                         @endphp
 
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset('public'.$url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->pan->id }}'', '{{ $item }}')">
@@ -229,7 +229,7 @@
                                                         @endphp
 
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset('public'.$url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->ration->id }}'', '{{ $item }}')">
@@ -285,7 +285,7 @@
                                                         @endphp
 
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset('public'.$url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->driving_license->id }}'', '{{ $item }}')">
@@ -338,7 +338,7 @@
                                                             $url = Storage::url($item);
                                                         @endphp
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset('public'.$url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->voter->id }}'', '{{ $item }}')">
@@ -398,7 +398,7 @@
                                                             $url = Storage::url($item);
                                                         @endphp
                                                         <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-success" href="{{ asset($url) }}"
+                                                            <a class="btn-sm btn-success" href="{{ asset('public'.$url) }}"
                                                                 target="_blank">View File </a>
                                                             {{-- <a class="btn-sm btn-outline-danger"
                                                                 onclick="removeDocument('{{ $staff_details->passport->id }}'', '{{ $item }}')">

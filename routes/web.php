@@ -59,16 +59,20 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/save/duty/type', [App\Http\Controllers\Master\DutyTypeController::class, 'save'])->name('save.duty.type');
     Route::post('/save/other/school', [App\Http\Controllers\Master\OtherSchoolController::class, 'save'])->name('save.other.school');
 
-    Route::post('/save/invigilation', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'save'])->name('save.invigilation');
-    Route::post('/form/invigilation/content', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'formContent'])->name('form.invigilation.content');
-    Route::post('/invigilation/list', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'getStaffInvigilationList'])->name('staff.invigilation.list');
-    Route::post('/invigilation/delete', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'deleteStaffInvigilation'])->name('staff.invigilation.delete');
+    Route::prefix('invigilation')->group(function() {
+        Route::post('/save', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'save'])->name('save.invigilation');
+        Route::post('/form/content', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'formContent'])->name('form.invigilation.content');
+        Route::post('/list', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'getStaffInvigilationList'])->name('staff.invigilation.list');
+        Route::post('/delete', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'deleteStaffInvigilation'])->name('staff.invigilation.delete');
+    });
 
-    Route::post('/save/training/topic', [App\Http\Controllers\Master\TrainingTopicController::class, 'save'])->name('save.training.topic');
-    Route::post('/save/staff/training', [App\Http\Controllers\Staff\StaffTrainingController::class, 'save'])->name('save.staff.training');
-    Route::post('/form/training/content', [App\Http\Controllers\Staff\StaffTrainingController::class, 'formContent'])->name('form.training.content');
-    Route::post('/training/list', [App\Http\Controllers\Staff\StaffTrainingController::class, 'getStaffTrainingList'])->name('staff.training.list');
-    Route::post('/training/delete', [App\Http\Controllers\Staff\StaffTrainingController::class, 'deleteStaffTraining'])->name('staff.training.delete');
+    Route::prefix('training')->group(function() {
+        Route::post('/save/topic', [App\Http\Controllers\Master\TrainingTopicController::class, 'save'])->name('save.training.topic');
+        Route::post('/save/staff', [App\Http\Controllers\Staff\StaffTrainingController::class, 'save'])->name('save.staff.training');
+        Route::post('/form/content', [App\Http\Controllers\Staff\StaffTrainingController::class, 'formContent'])->name('form.training.content');
+        Route::post('/list', [App\Http\Controllers\Staff\StaffTrainingController::class, 'getStaffTrainingList'])->name('staff.training.list');
+        Route::post('/delete', [App\Http\Controllers\Staff\StaffTrainingController::class, 'deleteStaffTraining'])->name('staff.training.delete');
+    });
 
     Route::post('/save/board', [App\Http\Controllers\Master\BoardController::class, 'save'])->name('save.board');
     Route::post('/save/type', [App\Http\Controllers\Master\ProfessionTypeController::class, 'save'])->name('save.type');
@@ -86,34 +90,41 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/form/content/experience', [App\Http\Controllers\Staff\StaffWorkExperienceController::class, 'formContent'])->name('form.experience.content');
     Route::post('/experience/delete', [App\Http\Controllers\Staff\StaffWorkExperienceController::class, 'deleteStaffExperience'])->name('staff.experience.delete');
 
-    Route::post('/member/list', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'list'])->name('staff.member.list');
-    Route::post('/member/save', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'save'])->name('staff.member.save');
-    Route::post('/member/form/content', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'formContent'])->name('form.family.content');
-    Route::post('/member/delete', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'deleteStaffFamilyMember'])->name('staff.family.delete');
+    Route::prefix('member')->group(function() {
+        Route::post('/list', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'list'])->name('staff.member.list');
+        Route::post('/save', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'save'])->name('staff.member.save');
+        Route::post('/form/content', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'formContent'])->name('form.family.content');
+        Route::post('/delete', [App\Http\Controllers\Staff\StaffFamilyMemberController::class, 'deleteStaffFamilyMember'])->name('staff.family.delete');
+    });
 
     //Bulk upload for staff information staff
     Route::get('/staff/bulk', [App\Http\Controllers\Staff\BulkUploadController::class, 'index'])->name('staff.bulk'); 
     Route::post('/bulk/save', [App\Http\Controllers\Staff\BulkUploadController::class, 'store'])->name('staff.save'); 
      //Bulk upload for staff information End
+    Route::prefix('staff')->group(function() {
 
-    Route::post('/staff/nominee/get', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNominee'])->name('staff.nominee.get');
-    Route::post('/staff/nominee/info', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNomineeInfo'])->name('staff.nominee.info');
-    Route::post('/staff/nominee/save', [App\Http\Controllers\Staff\StaffNomineeController::class, 'save'])->name('staff.nominee.save');
-    Route::post('/staff/content/nominee/form', [App\Http\Controllers\Staff\StaffNomineeController::class, 'formContent'])->name('staff.nominee.form.content');
-    Route::post('/staff/nominee/list', [App\Http\Controllers\Staff\StaffNomineeController::class, 'list'])->name('staff.nominee.list');
-    Route::post('/staff/nominee/delete', [App\Http\Controllers\Staff\StaffNomineeController::class, 'deleteStaffNominee'])->name('staff.nominee.delete');
+        Route::prefix('nominee')->group(function() {
+            Route::post('/get', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNominee'])->name('staff.nominee.get');
+            Route::post('/info', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNomineeInfo'])->name('staff.nominee.info');
+            Route::post('/save', [App\Http\Controllers\Staff\StaffNomineeController::class, 'save'])->name('staff.nominee.save');
+            Route::post('/content/form', [App\Http\Controllers\Staff\StaffNomineeController::class, 'formContent'])->name('staff.nominee.form.content');
+            Route::post('/list', [App\Http\Controllers\Staff\StaffNomineeController::class, 'list'])->name('staff.nominee.list');
+            Route::post('/delete', [App\Http\Controllers\Staff\StaffNomineeController::class, 'deleteStaffNominee'])->name('staff.nominee.delete');
+        });
 
-    Route::post('/staff/workingrelation/save', [App\Http\Controllers\Staff\StaffWorkingRelationController::class, 'save'])->name('staff.save.working_relationship');
-    Route::post('/staff/workingrelation/list', [App\Http\Controllers\Staff\StaffWorkingRelationController::class, 'staffWorkingList'])->name('staff.working.relation.list');
-    Route::post('/staff/workingrelation/formcontent', [App\Http\Controllers\Staff\StaffWorkingRelationController::class, 'formContent'])->name('staff.working.relation.content');
-    Route::post('/staff/workingrelation/delete', [App\Http\Controllers\Staff\StaffWorkingRelationController::class, 'deleteStaffWorkingRelation'])->name('staff.relation.working.delete');
+        Route::prefix('workingrelation')->group(function() {
+            Route::post('/save', [App\Http\Controllers\Staff\StaffWorkingRelationController::class, 'save'])->name('staff.save.working_relationship');
+            Route::post('/list', [App\Http\Controllers\Staff\StaffWorkingRelationController::class, 'staffWorkingList'])->name('staff.working.relation.list');
+            Route::post('/formcontent', [App\Http\Controllers\Staff\StaffWorkingRelationController::class, 'formContent'])->name('staff.working.relation.content');
+            Route::post('/delete', [App\Http\Controllers\Staff\StaffWorkingRelationController::class, 'deleteStaffWorkingRelation'])->name('staff.relation.working.delete');
+        });
 
-    Route::post('/staff/medical/save', [App\Http\Controllers\Staff\StaffHealthDetailController::class, 'save'])->name('staff.save.medical_information');
-
-    Route::post('/staff/medical/remark/save', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'save'])->name('save.medical.remarks');
-    Route::post('/staff/medical/remark/list', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'list'])->name('staff.medic.remarks.list');
-    Route::post('/staff/medical/remark/content', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'formContent'])->name('form.medic.remark.content');
-    Route::post('/staff/medical/remark/delete', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'deleteStaffMedcialRemarks'])->name('delete.medic.remark');
+        Route::post('/staff/medical/save', [App\Http\Controllers\Staff\StaffHealthDetailController::class, 'save'])->name('staff.save.medical_information');
+        Route::post('/staff/medical/remark/save', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'save'])->name('save.medical.remarks');
+        Route::post('/staff/medical/remark/list', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'list'])->name('staff.medic.remarks.list');
+        Route::post('/staff/medical/remark/content', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'formContent'])->name('form.medic.remark.content');
+        Route::post('/staff/medical/remark/delete', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'deleteStaffMedcialRemarks'])->name('delete.medic.remark');
+    });
 
     Route::post('/staff/category/save', [App\Http\Controllers\Master\StaffCategoryController::class, 'save'])->name('save.staff_category');
     Route::post('/staff/nature/save', [App\Http\Controllers\Master\NatureOfEmploymentController::class, 'save'])->name('save.nature_of_employeement');
