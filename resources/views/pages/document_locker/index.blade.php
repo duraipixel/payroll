@@ -59,15 +59,20 @@
                     <div class="col-md-4 staff_count_dl">
                         <p class="ss_count_text">Total Number of Staff</p>
                         <p class="ss_count">650 </p>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
+                        <img alt="Logo" src="{{ asset('assets/media/document/no_of_staff.png') }}"
+                        class="logo" />
                     </div>
                     <div class="col-md-4 staff_count_dl">
                         <p class="ss_count_text">Total Number of Documents Uploaded</p>
                         <p class="ss_count1">650 </p>
+                        <img alt="Logo" src="{{ asset('assets/media/document/document_upload.png') }}"
+                        class="logo" />
                     </div>
                     <div class="col-md-4 staff_count_dl ">
                         <p class="ss_count_text">Documents Review Pending </p>
                         <p class="ss_count1">650 </p>
+                        <img alt="Logo" src="{{ asset('assets/media/document/document_pending.png') }}"
+                        class="logo" />
                     </div>
                 </div>
             </div>
@@ -84,30 +89,30 @@
                             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
 
                                 <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
-                                    colspan="1" style="width: 355.733px;"
+                                    colspan="1" 
                                     aria-label="User: activate to sort column ascending">
-                                    Name
+                                    Staff ID
                                 </th>
 
                                 <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
-                                    colspan="1" style="width: 198.7px;"
+                                    colspan="1" 
                                     aria-label="Last login: activate to sort column ascending">
-                                    Code
+                                    Staff Name
                                 </th>
                                 <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
-                                    colspan="1" style="width: 198.7px;"
+                                    colspan="1" 
                                     aria-label="Last login: activate to sort column ascending">
-                                    Society
+                                    Staff Type
                                 </th>
 
                                 <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
-                                    colspan="1" style="width: 258.4px;"
+                                    colspan="1" 
                                     aria-label="Joined Date: activate to sort column ascending">
-                                    Status
+                                    Documents Uploaded
                                 </th>
-                                <th class="text-end min-w-100px sorting_disabled" rowspan="1" colspan="1"
+                                <th class="text-end min-w-100px sorting_disabled" rowspan="2" colspan="1"
                                     style="width: 160.017px;" aria-label="Actions">
-                                    Actions
+                                    SSLC Certificate
                                 </th>
                             </tr>
                         </thead>
