@@ -2,10 +2,18 @@
     <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
-            Name
+            Salary Field Name
         </label>
         <div > 
-            <input type="text" class="form-control" name="leave_head" value="{{ $info->name ?? '' }}" id="leave_head" required >
+            <input type="text" class="form-control" name="field_name" value="{{ $info->name ?? '' }}" id="field_name" required >
+        </div>
+    </div>
+    <div class="fv-row form-group mb-10">
+        <label class="form-label" for="">
+            Description
+        </label>
+        <div > 
+            <textarea name="description" class="form-control" id="" cols="130" rows="5">{{ $info->description ?? '' }}</textarea>
         </div>
     </div>
   
@@ -32,7 +40,7 @@
 
 <script>
 
-var KTAppEcommerceSaveLeaveHead = function () {
+var KTAppEcommerceSaveSalaryField = function () {
 
     const handleSubmit = () => {
         // Define variables
@@ -45,10 +53,10 @@ var KTAppEcommerceSaveLeaveHead = function () {
             form,
             {
                 fields: {
-                    'leave_head': {
+                    'field_name': {
 						validators: {
 							notEmpty: {
-								message: 'Leave Head Name is required'
+								message: 'Salary Field Name is required'
 							},
 						}
 					},
@@ -76,7 +84,7 @@ var KTAppEcommerceSaveLeaveHead = function () {
                         var forms = $('#dynamic_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url:"{{ route('save.leave-head') }}",
+                            url:"{{ route('save.salary-field') }}",
                             type:"POST",
                             data: formData,
                             processData: false,
@@ -92,7 +100,7 @@ var KTAppEcommerceSaveLeaveHead = function () {
                                         });
                                     }
                                 } else{
-                                    toastr.success("Leave Head added successfully");
+                                    toastr.success("Salary field Status added successfully");
                                     $('#kt_dynamic_app').modal('hide');
                                     dtTable.draw();
 
@@ -115,7 +123,7 @@ var KTAppEcommerceSaveLeaveHead = function () {
 }();
 
 KTUtil.onDOMContentLoaded(function () {
-    KTAppEcommerceSaveLeaveHead.init();
+    KTAppEcommerceSaveSalaryField.init();
 });
     
     

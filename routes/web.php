@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/staff/appointment/save', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'save'])->name('staff.save.appointment');
     Route::post('/blocks/save', [App\Http\Controllers\BlockController::class, 'save'])->name('save.blocks');
     Route::post('/salary-head/save', [App\Http\Controllers\PayrollManagement\SalaryHeadController::class, 'save'])->name('save.salary-head');
+    Route::post('/salary-field/save', [App\Http\Controllers\PayrollManagement\SalaryFieldController::class, 'save'])->name('save.salary-field');
     
 
     // staff list
@@ -192,6 +193,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'leave-head' => App\Http\Controllers\AttendanceManagement\LeaveHeadController::class,
         'holiday' => App\Http\Controllers\AttendanceManagement\HolidayController::class,
         'salary-head' => App\Http\Controllers\PayrollManagement\SalaryHeadController::class,
+        'salary-field' => App\Http\Controllers\PayrollManagement\SalaryFieldController::class,
         
     );
     foreach($routeArray as $key=>$value)

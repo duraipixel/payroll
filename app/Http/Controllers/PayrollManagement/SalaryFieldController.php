@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\PayrollManagement;
 
-use App\Exports\SalaryHeadExport;
+use App\Exports\SalaryFieldExport;
 use App\Http\Controllers\Controller;
-use App\Models\PayrollManagement\SalaryHead;
+use App\Models\PayrollManagement\SalaryField;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -12,21 +12,21 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
-class SalaryHeadController extends Controller
+class SalaryFieldController extends Controller
 {
     public function index(Request $request)
     {
         $breadcrums = array(
-            'title' => 'Salary Head',
+            'title' => 'Salary Field',
             'breadcrums' => array(
                 array(
-                    'link' => '', 'title' => 'Salary Head'
+                    'link' => '', 'title' => 'Salary Field'
                 ),
             )
         );
         if($request->ajax())
         {
-            $data = SalaryHead::select('*');
+            $data = SalaryField::select('*');
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
@@ -41,14 +41,14 @@ class SalaryHeadController extends Controller
                     $date = date('Y-m-d',strtotime($keywords));
                     return $query->where(function($q) use($keywords,$date){
 
-                        $q->where('salary_heads.name','like',"%{$keywords}%")
-                        ->orWhereDate('salary_heads.created_at',$date);
+                        $q->where('salary_fields.name','like',"%{$keywords}%")
+                        ->orWhereDate('salary_fields.created_at',$date);
                     });
                 }
             })
             ->addIndexColumn()
             ->editColumn('status', function ($row) {
-                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return salaryHeadChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return salaryFieldChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
                 return $status;
             })
             ->editColumn('created_at', function ($row) {
@@ -56,10 +56,10 @@ class SalaryHeadController extends Controller
                 return $created_at;
             })
               ->addColumn('action', function ($row) {
-                $edit_btn = '<a href="javascript:void(0);" onclick="getSalaryHeadModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                $edit_btn = '<a href="javascript:void(0);" onclick="getSalaryFieldModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                 <i class="fa fa-edit"></i>
             </a>';
-                    $del_btn = '<a href="javascript:void(0);" onclick="deleteSalaryHead(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                    $del_btn = '<a href="javascript:void(0);" onclick="deleteSalaryField(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                 <i class="fa fa-trash"></i></a>';
 
                     return $edit_btn . $del_btn;
@@ -67,21 +67,21 @@ class SalaryHeadController extends Controller
                 ->rawColumns(['action', 'status']);
             return $datatables->make(true);
         }
-        return view('pages.payroll_management.salary_head.index',compact('breadcrums'));
+        return view('pages.payroll_management.salary_field.index',compact('breadcrums'));
     }
     public function add_edit(Request $request)
     {
         $id = $request->id;
         $info = [];
-        $title = 'Add Salary Head';
+        $title = 'Add Salary Field';
         $from = 'master';
         if(isset($id) && !empty($id))
         {
-            $info = SalaryHead::find($id);
-            $title = 'Update Salary Head';
+            $info = SalaryField::find($id);
+            $title = 'Update Salary Field';
         }
 
-         $content = view('pages.payroll_management.salary_head.add_edit_form',compact('info','title', 'from'));
+         $content = view('pages.payroll_management.salary_field.add_edit_form',compact('info','title', 'from'));
          return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
     public function save(Request $request)
@@ -89,14 +89,15 @@ class SalaryHeadController extends Controller
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'name' => 'required|string|unique:salary_heads,name,' . $id .',id,deleted_at,NULL',
+            'field_name' => 'required|string|unique:salary_fields,name,' . $id .',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {
             $ins['academic_id'] = academicYearId();
-            $ins['name']        = $request->name;
+            $ins['name']        = $request->field_name;
             $ins['description'] = $request->description;
             $ins['added_by']            = Auth::user()->id;
+          
                 if($request->status)
                 {
                     $ins['status'] = 'active';
@@ -105,7 +106,7 @@ class SalaryHeadController extends Controller
                     $ins['status'] = 'inactive';
                 }
            
-            $data = SalaryHead::updateOrCreate(['id' => $id], $ins);
+            $data = SalaryField::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
 
@@ -119,21 +120,21 @@ class SalaryHeadController extends Controller
     {
         $id             = $request->id;
         $status         = $request->status;
-        $info           = SalaryHead::find($id);
+        $info           = SalaryField::find($id);
         $info->status   = $status;
         $info->update();
-        return response()->json(['message' => "You changed the Salary Head status!", 'status' => 1]);
+        return response()->json(['message' => "You changed the Salary field status!", 'status' => 1]);
     }
     public function delete(Request $request)
     {
         $id         = $request->id;
-        $info       = SalaryHead::find($id);
+        $info       = SalaryField::find($id);
         $info->delete();
         
         return response()->json(['message'=>"Successfully deleted state!",'status'=>1]);
     }
     public function export()
     {
-        return Excel::download(new SalaryHeadExport,'SalaryHead.xlsx');
+        return Excel::download(new SalaryFieldExport,'SalaryField.xlsx');
     }
 }
