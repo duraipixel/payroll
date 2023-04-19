@@ -651,7 +651,7 @@
                 'division_id',
                 'subject',
                 'scheme_id',
-                'class_id'              
+                'classes'              
             ];
         }
 
@@ -662,7 +662,9 @@
         const replacement = " ";
 
         key_name.forEach(element => {
+            console.log(element);
             var name_input = document.getElementById(element).value;
+            console.log(name_input)
 
             if (name_input == '' || name_input == undefined) {
 

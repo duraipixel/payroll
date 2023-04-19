@@ -278,6 +278,26 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
+                            <a class="menu-link" href="{{ route('leave-mapping') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Leave Mapping</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link" href="{{ route('att-manual-entry') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Attendance Manual Entry</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
                             <a class="menu-link" href="{{ route('holiday') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
@@ -312,7 +332,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('salary-field') }}">
+                            <a class="menu-link" href="{{ route('salary-head') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>

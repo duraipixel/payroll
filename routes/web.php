@@ -42,6 +42,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/get/branch', [App\Http\Controllers\Master\BankBranchController::class, 'getBankBranches'])->name('branch.all');
     Route::post('/save/leave-status', [App\Http\Controllers\AttendanceManagement\LeaveStatusController::class, 'save'])->name('save.leave-status');
     Route::post('/save/leave-head', [App\Http\Controllers\AttendanceManagement\LeaveHeadController::class, 'save'])->name('save.leave-head');
+    Route::post('/save/leave-mapping', [App\Http\Controllers\AttendanceManagement\LeaveMappingController::class, 'save'])->name('save.leave-mapping');
+    Route::post('/save/att-manual-entry', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'save'])->name('save.att-manual-entry');
     Route::post('/save/holiday', [App\Http\Controllers\AttendanceManagement\HolidayController::class, 'save'])->name('save.holiday');
 
 
@@ -139,7 +141,6 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/staff/appointment/save', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'save'])->name('staff.save.appointment');
     Route::post('/blocks/save', [App\Http\Controllers\BlockController::class, 'save'])->name('save.blocks');
     Route::post('/salary-head/save', [App\Http\Controllers\PayrollManagement\SalaryHeadController::class, 'save'])->name('save.salary-head');
-    Route::post('/salary-field/save', [App\Http\Controllers\PayrollManagement\SalaryFieldController::class, 'save'])->name('save.salary-field');
     
 
     // staff list
@@ -193,8 +194,8 @@ Route::group(['middleware' => 'auth'],  function () {
         'leave-head' => App\Http\Controllers\AttendanceManagement\LeaveHeadController::class,
         'holiday' => App\Http\Controllers\AttendanceManagement\HolidayController::class,
         'salary-head' => App\Http\Controllers\PayrollManagement\SalaryHeadController::class,
-        'salary-field' => App\Http\Controllers\PayrollManagement\SalaryFieldController::class,
-        
+        'leave-mapping' => App\Http\Controllers\AttendanceManagement\LeaveMappingController::class,
+        'att-manual-entry' => App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class,        
     );
     foreach($routeArray as $key=>$value)
     {

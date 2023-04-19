@@ -4,6 +4,7 @@
     height: 225px;
     border-radius: 25px;
 }
+
 .staff_count_dl{
     background: white;
     margin-top: 50px;
@@ -31,4 +32,18 @@
     font-size: 25px;
     font-weight: 600;
     color: #083c90;
+}
+.document_images{
+    float: right;
+    margin-top:-40%;
+}
+.document_images1{
+    float: right;
+    margin-top:-35%;
+}
+.table_head_color{
+color:#0061fd !important;
+}
+body {
+    overflow-x: hidden !important;
 }

@@ -108,9 +108,41 @@
                                     aria-label="Two-step: activate to sort column ascending">
                                     Documents Uploaded
                                 </th>
-                               
+                                <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" row m-0span="1"
+                                    colspan="1" 
+                                    aria-label="Joined Date: activate to sort column ascending">
+                                    Prerequisite Documents
+                                </th>                              
+                                <th class="text-end min-w-100px sorting_disabled" row m-0span="1" colspan="1"
+                                    aria-label="Actions">
+                                    Actions
+                                </th>
                             </tr>
-                       
+                            <tr>
+                                <th class="text-end min-w-100px sorting_disabled"  colspan="4"
+                                aria-label="Actions">                               
+                                </th>
+                                <th class="min-w-125px sorting table_head_color" tabindex="0" aria-controls="kt_table_users"                                
+                                aria-label="Joined Date: activate to sort column ascending" >
+                                    <strong>SSLC Certificate </strong>
+                                </th>
+                                <th class="min-w-125px sorting table_head_color" tabindex="0" aria-controls="kt_table_users"                                
+                                aria-label="Joined Date: activate to sort column ascending" >
+                                   <strong> HSC Certificate </strong>
+                                </th>
+                                <th class="min-w-125px sorting table_head_color" tabindex="0" aria-controls="kt_table_users"                               
+                                aria-label="Joined Date: activate to sort column ascending" >
+                                    <strong> UG Certificate </strong>
+                                </th>
+                                <th class="min-w-125px sorting table_head_color" tabindex="0" aria-controls="kt_table_users" 
+                                aria-label="Joined Date: activate to sort column ascending" >
+                                    <strong> PG Certificate </strong>
+                                </th>
+                                <th class="min-w-125px sorting table_head_color" tabindex="0" aria-controls="kt_table_users" 
+                                aria-label="Joined Date: activate to sort column ascending" >
+                                    <strong> PhD/M.Phil. Certificates </strong>
+                                </th>  
+                            </tr>
                         </thead>
     
                         <tbody class="text-gray-600 fw-bold">
@@ -156,14 +188,42 @@ columns: [{
     {
         data: 'status',
         name: 'status'
-    }
+    },
+    {
+        data: 'emp_code',
+        name: 'emp_code'
+    },
+    {
+        data: 'addedBy',
+        name: 'addedBy'
+    },
+    {
+        data: 'profile_status',
+        name: 'profile_status'
+    },
+    {
+        data: 'academic_id',
+        name: 'academic_id'
+    },
+    {
+        data: 'institute_id',
+        name: 'institute_id'
+    },
+    {
+        data: 'first_name',
+        name: 'first_name'
+    },
+    {
+        data: 'last_name',
+        name: 'last_name'
+    },
   
-    // {
-    //     data: 'action',
-    //     name: 'action',
-    //     orderable: false,
-    //     searchable: false
-    // },
+    {
+        data: 'action',
+        name: 'action',
+        orderable: false,
+        searchable: false
+    },
 ],
 language: {
     paginate: {

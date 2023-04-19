@@ -22,8 +22,8 @@
                     </svg>
                 </span>
                 <!--end::Svg Icon-->
-                <input type="text" data-kt-user-table-filter="search" id="salary_field_dataTable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Salary Field">
+                <input type="text" data-kt-user-table-filter="search" id="leave_mapping_dataTable_search"
+                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Attendance Manual Entry">
             </div>
             <!--end::Search-->
         </div>
@@ -33,7 +33,7 @@
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
-                <a type="button" class="btn btn-light-primary me-3" href="{{ route('salary-head.export') }}">
+                <a type="button" class="btn btn-light-primary me-3" href="{{ route('att-manual-entry.export') }}">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
                     <span class="svg-icon svg-icon-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -51,8 +51,8 @@
                     <!--end::Svg Icon-->Export
                 </a>
 
-                <button type="button" class="btn btn-primary" id="add_modal" onclick="getSalaryFieldModal()">
-                    {!! plusSvg() !!} Add Salary Field
+                <button type="button" class="btn btn-primary" id="add_modal" onclick="getLeaveMappingModal()">
+                    {!! plusSvg() !!} Add Attendance Manual Entry
                 </button>
 
             </div>
@@ -73,7 +73,7 @@
         <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="table-responsive">
                 <table class="table align-middle table-hover table-row-dashed fs-6 dataTable no-footer"
-                    id="salary_field_table">
+                    id="attendance_manual_entry_table">
                     <thead>
                         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
@@ -84,7 +84,37 @@
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
                                 colspan="1" style="width: 355.733px;"
                                 aria-label="User: activate to sort column ascending">
-                                Salary Name
+                               Staff  Name
+                            </th>
+                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                            Attendance Date
+                            </th>
+                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                          From Time
+                            </th>
+                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                           To Time
+                            </th>
+                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                           Reporting Manager
+                            </th>
+                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                          Attendance Status
+                            </th>
+                            <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
+                            colspan="1" style="width: 355.733px;"
+                            aria-label="User: activate to sort column ascending">
+                          Reason
                             </th>
                             <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" rowspan="1"
                                 colspan="1" style="width: 258.4px;"
@@ -115,27 +145,51 @@
 @section('add_on_script')
 
 <script>
-    var dtTable = $('#salary_field_table').DataTable({
+    var dtTable = $('#attendance_manual_entry_table').DataTable({
 
         processing: true,
         serverSide: true,
         order: [[0, "DESC"]],
         type: 'POST',
         ajax: {
-            "url": "{{ route('salary-head') }}",
+            "url": "{{ route('att-manual-entry') }}",
             "data": function(d) {
-                d.datatable_search = $('#salary_field_dataTable_search').val();
+                d.datatable_search = $('#leave_mapping_dataTable_search').val();
             }
         },
-
+      
         columns: [
             {
                 data: 'created_at',
                 name: 'created_at',
             },
             {
-                data: 'name',
-                name: 'name'
+                data: 'staff_name',
+                name: 'staff_name'
+            },
+            {
+                data: 'attendance_date',
+                name: 'attendance_date'
+            },
+            {
+                data: 'from_time',
+                name: 'from_time'
+            },
+            {
+                data: 'to_time',
+                name: 'to_time'
+            },
+            {
+                data: 'reporting_manager',
+                name: 'reporting_manager'
+            },
+            {
+                data: 'leave_status_name',
+                name: 'leave_status_name'
+            },
+            {
+                data: 'reason',
+                name: 'reason'
             },
             {
                 data: 'status',
@@ -165,7 +219,7 @@
         $('.dataTables_filter').addClass('position-absolute end-0 top-0');
         $('.dataTables_length label select').addClass('form-control form-control-solid');
 
-        document.querySelector('#salary_field_dataTable_search').addEventListener("keyup", function(e) {
+        document.querySelector('#leave_mapping_dataTable_search').addEventListener("keyup", function(e) {
             dtTable.draw();
         }),
 
@@ -179,7 +233,7 @@
         dtTable.draw();
         e.preventDefault();
         });
-        function getSalaryFieldModal( id = '') {
+        function getLeaveMappingModal( id = '') {
 
             $.ajaxSetup({
                 headers: {
@@ -188,7 +242,7 @@
             });
             var formMethod = "addEdit" ;
             $.ajax({
-                url: "{{ route('salary-head.add_edit') }}",
+                url: "{{ route('att-manual-entry.add_edit') }}",
                 type: 'POST',
                 data: {
                     id: id,
@@ -201,7 +255,7 @@
             })
 
         }
-        function salaryFieldChangeStatus(id, status) {
+        function leaveMappingStatusChangeStatus(id, status) {
 
     Swal.fire({
         text: "Are you sure you would like to change status?",
@@ -223,7 +277,7 @@
         });
 
         $.ajax({
-            url: "{{ route('salary-head.change.status') }}",
+            url: "{{ route('att-manual-entry.change.status') }}",
             type: 'POST',
             data: {
                 id: id,
@@ -252,7 +306,7 @@
     }
 });
 }
-        function deleteSalaryField(id) {
+        function deleteLeaveMappingStatus(id) {
             Swal.fire({
                 text: "Are you sure you would like to delete record?",
                 icon: "warning",
@@ -273,7 +327,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('salary-head.delete') }}",
+                        url: "{{ route('att-manual-entry.delete') }}",
                         type: 'POST',
                         data: {
                             id: id,
