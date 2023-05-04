@@ -6,9 +6,11 @@ use App\Exports\AttendanceManualEntryExport;
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
+use App\Models\Staff\StaffAppointmentDetail;
 use Illuminate\Http\Request;
 use App\Models\Master\NatureOfEmployment; 
 use App\Models\AttendanceManagement\LeaveStatus;
+use App\Models\AttendanceManagement\LeaveHead;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
@@ -127,14 +129,15 @@ class AttendanceManualEntryController extends Controller
         $title = 'Add Attendance Manual Entry';
         $employee_details = User::where('is_super_admin', '=', null)->get();
         $leave_status = LeaveStatus::where('status','active')->get();
+        $leave_heads = LeaveHead::where('status','active')->get();
         if(isset($id) && !empty($id))
         {
             $info = AttendanceManualEntry::find($id);
             $title = 'Update Attendance Manual Entry';
         }
 
-         $content = view('pages.attendance_management.attendance_manual_entry.add_edit_form',compact('info','title','employee_details','leave_status'));
-         return view('layouts.modal.dynamic_modal', compact('content', 'title','employee_details','leave_status'));
+         $content = view('pages.attendance_management.attendance_manual_entry.add_edit_form',compact('info','title','employee_details','leave_status','leave_heads'));
+         return view('layouts.modal.dynamic_modal', compact('content', 'title','employee_details','leave_status','leave_heads'));
     }
     public function changeStatus(Request $request)
     {
@@ -157,5 +160,23 @@ class AttendanceManualEntryController extends Controller
     public function export()
     {
         return Excel::download(new AttendanceManualEntryExport,'AttendanceManualEntryExport.xlsx');
+    }
+    public function getStaffLeaveDetails(Request $request)
+    {
+        $staff_id=$request->staff_id;
+        $staff_nature=StaffAppointmentDetail::with('employment_nature')->where('staff_id',$staff_id)->first();
+        if($staff_nature)
+        {
+            $staff_employment_nature=$staff_nature->employment_nature->name;
+            $nemp_id=$staff_nature->nature_of_employment_id;
+            $academic_id=academicYearId();
+            $get_leave_details=LeaveMapping::with('leave_head')->where('nature_of_employment_id',$nemp_id)->where('leave_mappings.academic_id',$academic_id)->get();
+            $staff_taken_leave=AttendanceManualEntry::where('employment_id',$staff_id)->where('academic_id',$academic_id)->get();
+            return response()->json([ 'status' => 1]);
+        }
+        else
+        {
+
+        }
     }
 }

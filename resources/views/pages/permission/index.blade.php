@@ -113,43 +113,43 @@
                              </div> 
                          </div>
                          @php
-                             $i=1;
+                             $si=1;
                              $staff_row=0;
                          @endphp
                          @foreach($staff_management as $key => $staff_managements)               
                          <div class="row mb-6"> 
                              <div class="col-1">
-                                 {{ $i}}
+                                 {{ $si}}
                              </div>
                              <div class="col-1">
                                  <input type="checkbox" class="master_checkox" name="select_all_row_wise_{{$i}}" id="select_all_row_wise_{{$i}}" onclick="master_row({{$i}});">
                              </div>
                              <div class="col-5">                  
                              <span class="pl-3"> {{$staff_managements}}</span>
-                             <input type="hidden" name="menu_name[]" id="menu_name" value="{{$key}}">                   
+                             <input type="hidden" name="staff_menu_name[]" id="staff_menu_name" value="{{$key}}">                   
                              </div>
                              <div class="col-1">
-                                 <input type="checkbox" class="master_checkox" name="master_add[]" id="master_add_{{$i}}">
+                                 <input type="checkbox" class="staff_checkox" name="staff_add[]" id="staff_add_{{$si}}">
                              </div>
                              <div class="col-1">
-                                 <input type="checkbox" class="master_checkox" name="master_edit[]" id="master_edit_{{$i}}" >
+                                 <input type="checkbox" class="staff_checkox" name="staff_edit[]" id="staff_edit_{{$si}}" >
                              </div>
                              <div class="col-1">
-                                 <input type="checkbox" class="master_checkox" name="master_view[]" id="master_view_{{$i}}">
+                                 <input type="checkbox" class="staff_checkox" name="staff_view[]" id="staff_view_{{$si}}">
                              </div>
                              <div class="col-1">
-                                 <input type="checkbox" class="master_checkox" name="master_delete[]" id="master_delete_{{$i}}">
+                                 <input type="checkbox" class="staff_checkox" name="staff_delete[]" id="staff_delete_{{$si}}">
                              </div>
                              <div class="col-1">
-                                 <input type="checkbox" class="master_checkox" name="master_export[]" id="master_export_{{$i}}">
+                                 <input type="checkbox" class="staff_checkox" name="staff_export[]" id="staff_export_{{$si}}">
                              </div>    
                          </div>
                      @php
-                     $i++;
+                     $si++;
                      $master_row++;
                      @endphp           
                      @endforeach
-                     <input type="hidden" name="master_row_count" id="master_row_count" value="{{$master_row}}">
+                     <input type="hidden" name="staff_row_count" id="staff_row_count" value="{{$master_row}}">
                 </div> 
                 </div>
             </div>

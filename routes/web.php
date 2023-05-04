@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/save/leave-head', [App\Http\Controllers\AttendanceManagement\LeaveHeadController::class, 'save'])->name('save.leave-head');
     Route::post('/save/leave-mapping', [App\Http\Controllers\AttendanceManagement\LeaveMappingController::class, 'save'])->name('save.leave-mapping');
     Route::post('/save/att-manual-entry', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'save'])->name('save.att-manual-entry');
+    Route::post('staff-leave-details', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'getStaffLeaveDetails'])->name('staff-leave-details');
     Route::post('/save/holiday', [App\Http\Controllers\AttendanceManagement\HolidayController::class, 'save'])->name('save.holiday');
 
 

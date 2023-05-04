@@ -3,6 +3,7 @@
 namespace App\Models\AttendanceManagement;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\AttendanceManagement\LeaveHead;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,4 +19,9 @@ class LeaveMapping extends Model
         'sort_order',
         'status'
     ];
+
+    public function leave_head()
+    {
+        return $this->hasOne(LeaveHead::class, 'id','leave_head_id');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Models\Staff;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\Master\NatureOfEmployment;
 
 class StaffAppointmentDetail extends Model implements Auditable
 {
@@ -28,4 +29,8 @@ class StaffAppointmentDetail extends Model implements Auditable
         'appointment_doc',
         'status'
     ];
+    public function employment_nature()
+    {
+        return $this->hasOne(NatureOfEmployment::class, 'id','nature_of_employment_id');
+    }
 }
