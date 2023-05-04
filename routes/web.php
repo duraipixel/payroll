@@ -3,20 +3,6 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-// Route::get('/', function () {
-//     return view('layouts.template');
-// });
 Route::get('/leave-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'leaveApplication']);
 Route::get('/el-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'earnedLeaveApplication']);
 Route::get('/eol-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'eolApplication']);
@@ -30,46 +16,12 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::post('/open/modal', [App\Http\Controllers\CommonController::class, 'openAddModal'])->name('modal.open');
 
-    Route::post('/save/institution', [App\Http\Controllers\Master\InstitutionController::class, 'save'])->name('save.institute');
     Route::post('/get/institution/staff/code', [App\Http\Controllers\Master\InstitutionController::class, 'getInstituteStaffCode'])->name('institute.staff.code');
-
-    Route::post('/save/division', [App\Http\Controllers\Master\DivisionController::class, 'save'])->name('save.division');
-    Route::post('/save/class', [App\Http\Controllers\Master\ClassesController::class, 'save'])->name('save.class');
-    Route::post('/save/language', [App\Http\Controllers\Master\LanguageController::class, 'save'])->name('save.language');
-    Route::post('/save/place', [App\Http\Controllers\Master\PlaceController::class, 'save'])->name('save.place');
-    Route::post('/save/nationality', [App\Http\Controllers\Master\NationalityController::class, 'save'])->name('save.nationality');
-    Route::post('/save/religion', [App\Http\Controllers\Master\ReligionController::class, 'save'])->name('save.religion');
-    Route::post('/save/caste', [App\Http\Controllers\Master\CasteController::class, 'save'])->name('save.caste');
-    Route::post('/save/community', [App\Http\Controllers\Master\CommunityController::class, 'save'])->name('save.community');
-    Route::post('/save/bank', [App\Http\Controllers\Master\BankController::class, 'save'])->name('save.bank');
-    Route::post('/save/branch', [App\Http\Controllers\Master\BankBranchController::class, 'save'])->name('save.branch');
-    Route::post('/save/document/type', [App\Http\Controllers\Master\DocumentTypeController::class, 'save'])->name('save.document.type');
+    
     Route::post('/get/branch', [App\Http\Controllers\Master\BankBranchController::class, 'getBankBranches'])->name('branch.all');
-    Route::post('/save/leave-status', [App\Http\Controllers\AttendanceManagement\LeaveStatusController::class, 'save'])->name('save.leave-status');
-    Route::post('/save/leave-head', [App\Http\Controllers\AttendanceManagement\LeaveHeadController::class, 'save'])->name('save.leave-head');
-    Route::post('/save/leave-mapping', [App\Http\Controllers\AttendanceManagement\LeaveMappingController::class, 'save'])->name('save.leave-mapping');
-    Route::post('/save/att-manual-entry', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'save'])->name('save.att-manual-entry');
     Route::post('staff-leave-details', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'getStaffLeaveDetails'])->name('staff-leave-details');
-    Route::post('/save/holiday', [App\Http\Controllers\AttendanceManagement\HolidayController::class, 'save'])->name('save.holiday');
-
-
-    Route::get('staff/register/{id?}', [App\Http\Controllers\StaffController::class, 'register'])->name('staff.register');
-    Route::post('staff/add/personal', [App\Http\Controllers\StaffController::class, 'insertPersonalData'])->name('staff.save.personal');
-    Route::post('staff/add/kyc', [App\Http\Controllers\StaffController::class, 'insertKycData'])->name('staff.save.kyc');
-    Route::post('staff/add/position', [App\Http\Controllers\StaffController::class, 'insertEmployeePosition'])->name('staff.save.employee_position');
-    Route::post('staff/add/education', [App\Http\Controllers\StaffController::class, 'insertEducationDetails'])->name('staff.save.education_details');
-    Route::post('staff/get/draftData', [App\Http\Controllers\StaffController::class, 'getStaffDraftData'])->name('staff.get.draft.data');
-    Route::post('staff/add/familyData', [App\Http\Controllers\StaffController::class, 'checkFamilyData'])->name('staff.save.familyPhase');
-
-    Route::post('/save/designation', [App\Http\Controllers\Master\DesignationController::class, 'save'])->name('save.designation');
-    Route::post('/save/department', [App\Http\Controllers\Master\DepartmentController::class, 'save'])->name('save.department');
     Route::post('/get/department', [App\Http\Controllers\Master\DepartmentController::class, 'getDepartment'])->name('get.department');
-    Route::post('/save/subject', [App\Http\Controllers\Master\SubjectController::class, 'save'])->name('save.subject');
     Route::post('/list/subject/studied', [App\Http\Controllers\Master\SubjectController::class, 'getSubjectStudied'])->name('get.studied.subject');
-    Route::post('/save/scheme', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'save'])->name('save.scheme');
-    Route::post('/save/duty/class', [App\Http\Controllers\Master\DutyClassController::class, 'save'])->name('save.duty.class');
-    Route::post('/save/duty/type', [App\Http\Controllers\Master\DutyTypeController::class, 'save'])->name('save.duty.type');
-    Route::post('/save/other/school', [App\Http\Controllers\Master\OtherSchoolController::class, 'save'])->name('save.other.school');
 
     Route::prefix('invigilation')->group(function() {
         Route::post('/save', [App\Http\Controllers\Staff\InvigilationDutyController::class, 'save'])->name('save.invigilation');
@@ -115,6 +67,14 @@ Route::group(['middleware' => 'auth'],  function () {
      //Bulk upload for staff information End
     Route::prefix('staff')->group(function() {
 
+        Route::get('/register/{id?}', [App\Http\Controllers\StaffController::class, 'register'])->name('staff.register');
+        Route::post('/add/personal', [App\Http\Controllers\StaffController::class, 'insertPersonalData'])->name('staff.save.personal');
+        Route::post('/add/kyc', [App\Http\Controllers\StaffController::class, 'insertKycData'])->name('staff.save.kyc');
+        Route::post('/add/position', [App\Http\Controllers\StaffController::class, 'insertEmployeePosition'])->name('staff.save.employee_position');
+        Route::post('/add/education', [App\Http\Controllers\StaffController::class, 'insertEducationDetails'])->name('staff.save.education_details');
+        Route::post('/get/draftData', [App\Http\Controllers\StaffController::class, 'getStaffDraftData'])->name('staff.get.draft.data');
+        Route::post('/add/familyData', [App\Http\Controllers\StaffController::class, 'checkFamilyData'])->name('staff.save.familyPhase');
+
         Route::prefix('nominee')->group(function() {
             Route::post('/get', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNominee'])->name('staff.nominee.get');
             Route::post('/info', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNomineeInfo'])->name('staff.nominee.info');
@@ -131,23 +91,22 @@ Route::group(['middleware' => 'auth'],  function () {
             Route::post('/delete', [App\Http\Controllers\Staff\StaffWorkingRelationController::class, 'deleteStaffWorkingRelation'])->name('staff.relation.working.delete');
         });
 
-        Route::post('/staff/medical/save', [App\Http\Controllers\Staff\StaffHealthDetailController::class, 'save'])->name('staff.save.medical_information');
-        Route::post('/staff/medical/remark/save', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'save'])->name('save.medical.remarks');
-        Route::post('/staff/medical/remark/list', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'list'])->name('staff.medic.remarks.list');
-        Route::post('/staff/medical/remark/content', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'formContent'])->name('form.medic.remark.content');
-        Route::post('/staff/medical/remark/delete', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'deleteStaffMedcialRemarks'])->name('delete.medic.remark');
+        Route::post('/medical/save', [App\Http\Controllers\Staff\StaffHealthDetailController::class, 'save'])->name('staff.save.medical_information');
+        Route::post('/medical/remark/save', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'save'])->name('save.medical.remarks');
+        Route::post('/medical/remark/list', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'list'])->name('staff.medic.remarks.list');
+        Route::post('/medical/remark/content', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'formContent'])->name('form.medic.remark.content');
+        Route::post('/medical/remark/delete', [App\Http\Controllers\Staff\StaffMedicalRemarkController::class, 'deleteStaffMedcialRemarks'])->name('delete.medic.remark');
+        
+        Route::post('/category/save', [App\Http\Controllers\Master\StaffCategoryController::class, 'save'])->name('save.staff_category');
+        Route::post('/nature/save', [App\Http\Controllers\Master\NatureOfEmploymentController::class, 'save'])->name('save.nature_of_employeement');
+        Route::post('/teaching_type/save', [App\Http\Controllers\Master\TeachingTypeController::class, 'save'])->name('save.teaching_type');
+        Route::post('/workplace/save', [App\Http\Controllers\Master\PlaceOfWorkController::class, 'save'])->name('save.work_place');
+        Route::post('/ordermodel/save', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'save'])->name('save.order_model');
+        Route::post('/appointment/save', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'save'])->name('staff.save.appointment');
     });
 
-    Route::post('/staff/category/save', [App\Http\Controllers\Master\StaffCategoryController::class, 'save'])->name('save.staff_category');
-    Route::post('/staff/nature/save', [App\Http\Controllers\Master\NatureOfEmploymentController::class, 'save'])->name('save.nature_of_employeement');
-    Route::post('/staff/teaching_type/save', [App\Http\Controllers\Master\TeachingTypeController::class, 'save'])->name('save.teaching_type');
-    Route::post('/staff/workplace/save', [App\Http\Controllers\Master\PlaceOfWorkController::class, 'save'])->name('save.work_place');
-    Route::post('/staff/ordermodel/save', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'save'])->name('save.order_model');
-
-    Route::post('/staff/appointment/save', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'save'])->name('staff.save.appointment');
     Route::post('/blocks/save', [App\Http\Controllers\BlockController::class, 'save'])->name('save.blocks');
     Route::post('/salary-head/save', [App\Http\Controllers\PayrollManagement\SalaryHeadController::class, 'save'])->name('save.salary-head');
-    
 
     // staff list
     Route::get('/staff/list', [App\Http\Controllers\StaffController::class, 'list'])->name('staff.list');
@@ -166,7 +125,7 @@ Route::group(['middleware' => 'auth'],  function () {
     $routeArray = array(
         'institutions' => App\Http\Controllers\Master\InstitutionController::class,
         'class' => App\Http\Controllers\Master\ClassesController::class,
-        'division' => App\Http\Controllers\Master\DivisionController::class,
+        'division' => App\Http\Controllers\Master\DivisionController::class, 
         'language' => App\Http\Controllers\Master\LanguageController::class,
         'place' => App\Http\Controllers\Master\PlaceController::class,
         'nationality' => App\Http\Controllers\Master\NationalityController::class,
@@ -196,6 +155,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'teaching-type' => App\Http\Controllers\Master\TeachingTypeController::class,
         'overview' => App\Http\Controllers\OverViewController::class,
         'block-classes' => App\Http\Controllers\BlockClassesController::class,
+        'blocks' => App\Http\Controllers\BlockController::class,
         'leave-status' => App\Http\Controllers\AttendanceManagement\LeaveStatusController::class,
         'leave-head' => App\Http\Controllers\AttendanceManagement\LeaveHeadController::class,
         'holiday' => App\Http\Controllers\AttendanceManagement\HolidayController::class,
@@ -211,16 +171,11 @@ Route::group(['middleware' => 'auth'],  function () {
             Route::post('/change/status', [$value, 'changeStatus'])->name($key.'.change.status');
             Route::post('/change/delete', [$value, 'delete'])->name($key.'.delete');
             Route::get('/export', [$value, 'export'])->name($key.'.export');
+            Route::post('/save', [$value, 'save'])->name('save.'.$key);
         });
 
     }
-    Route::prefix('blocks')->group(function() {
-        Route::get('/',[App\Http\Controllers\BlockController::class,'index'])->name('blocks');
-        Route::get('/addOrEdit/{id?}',[App\Http\Controllers\BlockController::class,'add_edit'])->name('blocks.add_edit');
-        Route::post('/change/status', [App\Http\Controllers\BlockController::class, 'changeStatus'])->name('blocks.change.status');
-        Route::post('/change/delete', [App\Http\Controllers\BlockController::class, 'delete'])->name('blocks.delete');
-        Route::get('/export', [App\Http\Controllers\BlockController::class, 'export'])->name('blocks.export');
-    });
+   
     Route::post('overview',[App\Http\Controllers\OverViewController::class,'saveForm'])->name('overview.save');
     Route::prefix('logs')->group(function() {
         Route::get('/',[App\Http\Controllers\LogController::class,'index'])->name('logs');

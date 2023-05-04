@@ -285,7 +285,12 @@
                         </div>
                     </div>
                 </div>
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion  @if (request()->routeIs([
+                    'leave-mapping',
+                    'leave-status',
+                    'leave-head',
+                    'holiday'
+                ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
@@ -320,7 +325,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('leave-status') }}">
+                            <a class="menu-link @if (request()->routeIs(['leave-status'])) active @endif" href="{{ route('leave-status') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -330,7 +335,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('leave-head') }}">
+                            <a class="menu-link @if (request()->routeIs(['leave-head'])) active @endif" href="{{ route('leave-head') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -340,7 +345,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('leave-mapping') }}">
+                            <a class="menu-link @if (request()->routeIs(['leave-mapping'])) active @endif" href="{{ route('leave-mapping') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -351,7 +356,7 @@
                    
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('holiday') }}">
+                            <a class="menu-link @if (request()->routeIs(['holiday'])) active @endif" href="{{ route('holiday') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>

@@ -81,7 +81,7 @@ var KTAppEcommerceSaveInstitute = function () {
                         var forms = $('#dynamic_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url:"{{ route('save.duty.type') }}",
+                            url:"{{ route('save.duty-type') }}",
                             type:"POST",
                             data: formData,
                             processData: false,

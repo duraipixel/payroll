@@ -72,7 +72,7 @@ var KTAppEcommerceSaveExperincedInstitute = function () {
                         var forms = $('#dynamic_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url:"{{ route('save.other.school') }}",
+                            url:"{{ route('save.other-school') }}",
                             type:"POST",
                             data: formData,
                             processData: false,
