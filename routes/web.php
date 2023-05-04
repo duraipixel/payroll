@@ -17,6 +17,11 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('layouts.template');
 // });
+Route::get('/leave-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'leaveApplication']);
+Route::get('/el-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'earnedLeaveApplication']);
+Route::get('/eol-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'eolApplication']);
+Route::get('/ml-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'maternityLeaveApplication']);
+Route::get('/permission-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'permissionApplication']);
 
 Auth::routes();
 

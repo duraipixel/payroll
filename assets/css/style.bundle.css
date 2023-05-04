@@ -54870,3 +54870,8 @@ body {
   background-color: #1049a5;
   border: 1px solid #1049a5;
 }
+
+.master-menu-items {
+  font-size: 11px;
+  color: #ddd !important;
+}
