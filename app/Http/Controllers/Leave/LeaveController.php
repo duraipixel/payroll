@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class LeaveController extends Controller
 {
-    public function FunctionName(Request $request)
+    public function index(Request $request)
     {
         $breadcrums = array(
             'title' => 'Leave Management',
@@ -57,6 +57,6 @@ class LeaveController extends Controller
         //         ->rawColumns(['action', 'status']);
         //     return $datatables->make(true);
         // }
-        return view('pages.masters.appointment_order_model.index',compact('breadcrums'));
+        return view('pages.leave.request_leave.index',compact('breadcrums'));
     }
 }

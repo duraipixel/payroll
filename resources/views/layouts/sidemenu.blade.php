@@ -289,6 +289,7 @@
                     'leave-mapping',
                     'leave-status',
                     'leave-head',
+                    'leaves.list',
                     'holiday'
                 ])) hover show @endif">
                     <span class="menu-link">
@@ -303,13 +304,14 @@
                         <span class="menu-title">Leave Management</span>
                         <span class="menu-arrow"></span>
                     </span>
+                   
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('leave-mapping') }}">
+                            <a class="menu-link @if (request()->routeIs(['leaves.list'])) active @endif" href="{{ route('leaves.list') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Approval</span>
+                                <span class="menu-title">Request Leave</span>
                             </a>
                         </div>
                     </div>
@@ -319,7 +321,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Request Leave</span>
+                                <span class="menu-title">Approval</span>
                             </a>
                         </div>
                     </div>

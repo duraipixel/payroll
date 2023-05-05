@@ -2347,7 +2347,7 @@ progress {
 }
 
 .table> :not(caption)>*>* {
-  padding: 0.75rem 0.75rem;
+  padding: 0.55rem 0.75rem;
   background-color: var(--bs-table-bg);
   border-bottom-width: 1px;
   box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
@@ -53713,7 +53713,7 @@ body {
   }
 
   .header-fixed.toolbar-fixed .wrapper {
-    padding-top: calc(130px + var(--kt-toolbar-height));
+    padding-top: calc(50px + var(--kt-toolbar-height));
   }
 }
 
