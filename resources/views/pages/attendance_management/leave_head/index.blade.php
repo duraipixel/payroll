@@ -63,7 +63,6 @@
 
         </div>
     </div>
-    <!--end::Card body-->
 </div>
 
 
