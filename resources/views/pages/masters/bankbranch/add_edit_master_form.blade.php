@@ -116,7 +116,7 @@ var KTAppEcommerceSaveBranch = function () {
                         var forms = $('#dynamic_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url:"{{ route('save.branch') }}",
+                            url:"{{ route('save.bank-branch') }}",
                             type:"POST",
                             data: formData,
                             processData: false,
