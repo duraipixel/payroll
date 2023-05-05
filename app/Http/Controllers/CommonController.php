@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AttendanceManagement\LeaveHead;
 use App\Models\Master\Bank;
 use App\Models\Master\BankBranch;
 use App\Models\Master\Society;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CommonController extends Controller
@@ -166,4 +168,57 @@ class CommonController extends Controller
         
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
+
+    public function getStaffInfo(Request $request)
+    {
+        $query = $request['query'];
+        $data = [];
+        if( $query ) {
+
+            $data = User::with('position.designation')->where('name', 'like', "%{$query}%")
+                        ->orWhere('emp_code', 'like', "%{$query}%")
+                        ->orWhere('institute_emp_code', 'like', "%{$query}%")
+                        ->orWhere('society_emp_code', 'like', "%{$query}%")
+                        ->get();
+
+        }
+
+        return $data;
+
+    }
+
+    function getStaffLeaveInfo(Request $request) {
+        
+        $staff_id = $request['staff_id'];
+
+        $data = User::with('position.designation')->find($staff_id);
+        
+        return array('data' => $data);
+    }
+
+    public function getLeaveForm(Request $request)
+    {
+        
+        if( $request->leave_category_id ) {
+            $heads = LeaveHead::find($request->leave_category_id);
+            
+            if( $heads ) {
+                switch (strtolower($heads->name)) {
+                    case 'el':
+                        return view('pages.leave.request_leave.el_form');
+                        break;
+                    case 'eol':
+                        return view('pages.leave.request_leave.el_form');
+                        break;
+                    
+                    default:
+                        return '';
+                        break;
+                }
+            }
+        }
+        dd( $request->all() );
+    }
+
 }
+

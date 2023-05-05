@@ -9,6 +9,17 @@
             <input type="text" class="form-control" name="designation" value="{{ $info->name ?? ''}}" id="designation" required >
         </div>
     </div>
+    <div class="fv-row form-group mb-10">
+        <label class="form-label" for="">
+            Can Assignable to Reporting Manager
+        </label>
+        <div >
+            <input type="radio" id="yes" class="form-check-input" value="1" name="can_assign_report_manager" @if(isset($info->can_assign_report_manager) && $info->can_assign_report_manager == 'yes') checked  @endif >
+            <label class="pe-3" for="yes">Yes</label>
+            <input type="radio" id="no" class="form-check-input" value="0" name="can_assign_report_manager" @if(isset($info->can_assign_report_manager) && $info->can_assign_report_manager == 'no') checked @elseif(!isset($info->can_assign_report_manager) || (isset($info->can_assign_report_manager) && empty( $info->can_assign_report_manager ) ) ) checked @endif >
+            <label for="no">No</label>
+        </div>
+    </div>
     @if(isset($from) && !empty($from))
     <div class="fv-row form-group mb-10">
         <label class="form-label" for="">

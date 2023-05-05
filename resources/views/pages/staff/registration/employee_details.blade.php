@@ -276,7 +276,11 @@
         global_is_teaching = true;
     @endif
     function checkTeachingType(id) {
-
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
         $.ajax({
             url: "{{ route('get.department') }}",
             type: 'POST',
@@ -683,6 +687,9 @@
             loading();
             var forms = $('#position_form')[0];
             var formData = new FormData(forms);
+            var staff_id = $('#outer_staff_id').val();
+            formData.append('outer_staff_id', staff_id);
+            formData.append('id', staff_id);
             formData.append('global_is_teaching', global_is_teaching);
 
             const employeeResponse = await fetch("{{ route('staff.save.employee_position') }}", {

@@ -48,18 +48,26 @@
                             <th class="text-center text-white" >
                             Date
                         </th>
-                            <th class="text-center text-white" >
-                                Name
-                            </th>
-                            <th class="text-center text-white" >
-                                Status
-                            </th>
-                            <th class="text-center text-white">
-                                Actions
-                            </th>
+                        <th class="text-center text-white" >
+                            Name
+                        </th>
+                        <th class="text-center text-white" >
+                            Designation
+                        </th>
+                        <th class="text-center text-white" >
+                            Leave Category
+                        </th>
+                        <th class="text-center text-white" >
+                            Days Requested
+                        </th>
+                        <th class="text-center text-white" >
+                            Status
+                        </th>
+                        <th class="text-center text-white">
+                            Actions
+                        </th>
                         </tr>
                     </thead>
-
                     <tbody class="text-gray-600 fw-bold">
                     </tbody>
                 </table>
@@ -74,6 +82,8 @@
 @endsection
 
 @section('add_on_script')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
 <script>
     var dtTable = $('#leave_table').DataTable({
@@ -83,9 +93,9 @@
         order: [[0, "DESC"]],
         type: 'POST',
         ajax: {
-            "url": "{{ route('appointment-order') }}",
+            "url": "{{ route('leaves.list') }}",
             "data": function(d) {
-                d.datatable_search = $('#appointment_order_dataTable_search').val();
+                d.datatable_search = $('#leave_table_dataTable_search').val();
             }
         },
 
@@ -126,7 +136,7 @@
         $('.dataTables_filter').addClass('position-absolute end-0 top-0');
         $('.dataTables_length label select').addClass('form-control form-control-solid');
 
-        document.querySelector('#appointment_order_dataTable_search').addEventListener("keyup", function(e) {
+        document.querySelector('#leave_table_dataTable_search').addEventListener("keyup", function(e) {
             dtTable.draw();
         }),
 
@@ -140,20 +150,20 @@
         dtTable.draw();
         e.preventDefault();
         });
-        function getAppointmentOrderModal( id = '') {
+
+
+        function getRequestLeaveModal( id = '') {
 
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var formMethod = "addEdit" ;
             $.ajax({
-                url: "{{ route('appointment-order.add_edit') }}",
+                url: "{{ route('leaves.add_edit') }}",
                 type: 'POST',
                 data: {
                     id: id,
-                    
                 },
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');

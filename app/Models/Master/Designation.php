@@ -16,6 +16,7 @@ class Designation extends Model implements Auditable
         'academic_id',	
         'name',
         'sort_order',	
-        'status'
+        'status',
+        'can_assign_report_manager'
     ];
 }

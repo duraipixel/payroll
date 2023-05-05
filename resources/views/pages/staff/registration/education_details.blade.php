@@ -564,7 +564,10 @@
             loading();
 
             var forms = $('#educateStaffform')[0];
+            var staff_id = $('#outer_staff_id').val();
             var formData = new FormData(forms);
+            
+            formData.append('id', staff_id);
 
             const eduResponse = await fetch("{{ route('staff.save.education_details') }}", {
                     method: 'POST',

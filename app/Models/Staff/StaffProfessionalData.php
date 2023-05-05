@@ -2,6 +2,7 @@
 
 namespace App\Models\Staff;
 
+use App\Models\Master\Designation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -24,4 +25,9 @@ class StaffProfessionalData extends Model implements Auditable
         'status',
         'is_teaching_staff'
     ];
+
+    public function designation()
+    {
+        return $this->hasOne(Designation::class, 'id', 'designation_id');
+    }
 }

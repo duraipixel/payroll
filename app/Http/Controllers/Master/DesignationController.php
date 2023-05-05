@@ -78,6 +78,7 @@ class DesignationController extends Controller
         if ($validator->passes()) {
             $ins['academic_id'] = academicYearId();
             $ins['name'] = $request->designation;
+            $ins['can_assign_report_manager'] = $request->can_assign_report_manager ? 'yes' : 'no';
             if(isset($request->form_type))
             {
                 if($request->status)
