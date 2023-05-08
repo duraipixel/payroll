@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AcademicYear;
+use App\Models\Leave\StaffLeave;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffDocument;
@@ -15,6 +16,8 @@ use App\Models\Staff\StaffStudiedSubject;
 use App\Models\Staff\StaffTalent;
 use App\Models\Staff\StaffWorkExperience;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -164,6 +167,80 @@ if (!function_exists('getTalents')) {
                                     ->where('staff_id', $staff_id)
                                     ->where('talent_fields', $talent_fields)
                                     ->first();
+    }
+}
+
+if (!function_exists('generateLeaveForm')) {
+    function generateLeaveForm($leave_id)
+    {
+        $leave_info = StaffLeave::find($leave_id);
+        $data['institute_name'] = $leave_info->staff_info->institute->name;
+        $data['application_no'] = $leave_info->application_no;
+        $data['application_date'] = date('d/M/Y', strtotime($leave_info->created_at));
+        $data['designation'] = $leave_info->designation;
+        $data['place_of_work'] = $leave_info->place_of_work;
+        $data['salary'] = $leave_info->salary;
+        $data['date_requested'] = date('d/M/Y', strtotime($leave_info->from_date)) .' - '.date('d/M/Y', strtotime($leave_info->to_date));
+        $data['no_of_days'] = $leave_info->no_of_days;
+        $data['reason'] = $leave_info->reason ?? '';
+        $data['address'] = $leave_info->address ?? '';
+        $data['staff_name'] = $leave_info->staff_info->name;
+        $data['staff_code'] = $leave_info->staff_info->institute_emp_code ?? $leave_info->staff_info->emp_code;
+        $data['taken_leave'] = '';
+        $data['holiday_date'] = $leave_info->holiday_date ? date('d/M/Y', strtotime($leave_info->holiday_date)) : '';
+        $data['is_leave_granted'] = $leave_info->is_granted ? ucfirst($leave_info->is_granted) : '';
+        $data['granted_days'] = $leave_info->granted_days ?? '';
+        $data['remarks'] = $leave_info->remarks ?? null;
+        $data['leave_granted_by'] = $leave_info->granted_info->name ?? '';
+        $data['granted_designation'] = $leave_info->granted_designation ?? '';
+
+        switch (strtolower($leave_info->leave_category)) {
+            case 'cl':
+                $data['form_title'] = 'LEAVE';
+                $file_name = time().$leave_info->application_no.'.pdf';
+                
+                $directory              = 'public/leave/' . $leave_info->application_no;
+                $filename               = $directory . '/' . $file_name;
+
+                $pdf = Pdf::loadView('leave_form.leave_application', $data)->setPaper('a4', 'portrait');
+                Storage::put($filename, $pdf->output());
+                $leave_info->document = $filename;
+                $leave_info->save();
+                
+                break;
+            case 'el':
+                $data['form_title'] = 'EARNED LEAVE';
+                $file_name = time().$leave_info->application_no.'.pdf';
+                
+                $directory              = 'public/leave/' . $leave_info->application_no;
+                $filename               = $directory . '/' . $file_name;
+
+                $pdf = Pdf::loadView('leave_form.el', $data)->setPaper('a4', 'portrait');
+                Storage::put($filename, $pdf->output());
+                $leave_info->document = $filename;
+                $leave_info->save();
+                break;
+            case 'eol':
+                $data['form_title'] = 'EARNED OUT LEAVE';
+                $file_name = time().$leave_info->application_no.'.pdf';
+                
+                $directory              = 'public/leave/' . $leave_info->application_no;
+                $filename               = $directory . '/' . $file_name;
+
+                $pdf = Pdf::loadView('leave_form.el', $data)->setPaper('a4', 'portrait');
+                Storage::put($filename, $pdf->output());
+                $leave_info->document = $filename;
+                $leave_info->save();
+                break;
+            case 'ml':
+    
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+        return true;
     }
 }
 

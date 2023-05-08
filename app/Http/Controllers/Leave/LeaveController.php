@@ -8,6 +8,9 @@ use App\Models\Leave\StaffLeave;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use DataTables;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class LeaveController extends Controller
 {
@@ -21,46 +24,50 @@ class LeaveController extends Controller
                 ),
             )
         );
-        // if($request->ajax())
-        // {
-        //     $data = AppointmentOrderModel::select('*');
-        //     $status = $request->get('status');
-        //     $datatable_search = $request->datatable_search ?? '';
-        //     $keywords = $datatable_search;
+        if($request->ajax())
+        {
+            $data = StaffLeave::select('*');
+            $status = $request->get('status');
+            $datatable_search = $request->datatable_search ?? '';
+            $keywords = $datatable_search;
             
-        //     $datatables =  Datatables::of($data)
-        //     ->filter(function($query) use($status,$keywords) {
-        //         if($keywords)
-        //         {
-        //             $date = date('Y-m-d',strtotime($keywords));
-        //             return $query->where(function($q) use($keywords,$date){
+            $datatables =  Datatables::of($data)
+            ->filter(function($query) use($status,$keywords) {
+                if($keywords)
+                {
+                    $date = date('Y-m-d',strtotime($keywords));
+                    return $query->where(function($q) use($keywords,$date){
 
-        //                 $q->where('appointment_order_models.name','like',"%{$keywords}%")
-        //                 ->orWhereDate('appointment_order_models.created_at',$date);
-        //             });
-        //         }
-        //     })
-        //     ->addIndexColumn()
-        //     ->editColumn('status', function ($row) {
-        //         $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return appointmentOrderChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
-        //         return $status;
-        //     })
-        //     ->editColumn('created_at', function ($row) {
-        //         $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
-        //         return $created_at;
-        //     })
-        //       ->addColumn('action', function ($row) {
-        //         $edit_btn = '<a href="javascript:void(0);" onclick="getAppointmentOrderModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
-        //         <i class="fa fa-edit"></i>
-        //     </a>';
-        //             $del_btn = '<a href="javascript:void(0);" onclick="deleteAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
-        //         <i class="fa fa-trash"></i></a>';
+                        $q->where('staff_leaves.application_no','like',"%{$keywords}%")
+                        ->orWhereDate('staff_leaves.leave_category',$date);
+                    });
+                }
+            })
+            ->addIndexColumn()
+            ->editColumn('status', function ($row) {
+                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return appointmentOrderChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                return $status;
+            })
+            ->editColumn('name', function ($row) {
+                return $row->staff_info->name;
+            })
+            ->editColumn('created_at', function ($row) {
+                $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
+                return $created_at;
+            })
+            ->addColumn('action', function ($row) {
+                $url = Storage::url($row->document);
+                $edit_btn = '<a href="'.asset('public'.$url).'" target="_blank"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                                <i class="fa fa-download"></i>
+                            </a>';
+                $del_btn = '<a href="javascript:void(0);" onclick="deleteAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                                <i class="fa fa-trash"></i></a>';
 
-        //             return $edit_btn . $del_btn;
-        //         })
-        //         ->rawColumns(['action', 'status']);
-        //     return $datatables->make(true);
-        // }
+                    return $edit_btn . $del_btn;
+                })
+                ->rawColumns(['action', 'status', 'created_at', 'name']);
+            return $datatables->make(true);
+        }
         return view('pages.leave.request_leave.index',compact('breadcrums'));
     }
 
@@ -91,26 +98,44 @@ class LeaveController extends Controller
 
             $from_date = date('Y-m-d', strtotime(str_replace('/', '-', current($req_dates) )));
             $end_date = date('Y-m-d', strtotime(str_replace('/', '-', end($req_dates) )));
-            dump( $from_date );
-            $staff_info = User::with('appointment.work_place')->find($request->staff_id);
-            dd( $staff_info->appointment->work_place->name );
-            $ins['academic_id'] = academicYearId();
-            $ins['staff_id'] = $request->staff_id;
-            $ins['designation'] = $request->designation;
-            $ins['place_of_work'] = $staff_info->appointment->work_place->name ?? null;
-            $ins['salary'] = $request->salary ?? null;
-            $ins['leave_category'] = '';
-            $ins['leave_category_id'] = '';
-            $ins['from_date'] = $from_date;
-            $ins['to_date'] = $end_date;
-            $ins['no_of_days'] = $no_of_days ?? 0;
-            $ins['reason'] = $request->reason;
-            $ins['address'] = $request->address ?? null;
-            /** generate leave form and send */
-            
-            //document
 
-            StaffLeave::updateOrCreate(['id' => $id], $ins);
+            /**
+             * Check already request to that date
+             */
+            $check = StaffLeave::where('staff_id', $request->staff_id)->where('from_date', $from_date)->first();
+            if( $check ) {
+                $error = 1;
+                $message = 'Leave Request already submit for this date';
+            } else {
+
+                $staff_info = User::with('appointment.work_place')->find($request->staff_id);
+                $leave_category_info = LeaveHead::find($request->leave_category_id);
+    
+                $ins['academic_id'] = academicYearId();
+                $ins['application_no'] = leaveApplicationNo($request->staff_id, $leave_category_info->name);
+                $ins['staff_id'] = $request->staff_id;
+                $ins['designation'] = $request->designation;
+                $ins['place_of_work'] = $staff_info->appointment->work_place->name ?? null;
+                $ins['salary'] = $request->salary ?? null;
+                $ins['leave_category'] = $leave_category_info->name;
+                $ins['leave_category_id'] = $leave_category_info->id;
+                $ins['from_date'] = $from_date;
+                $ins['to_date'] = $end_date;
+                $ins['no_of_days'] = $request->no_of_days ?? 0;
+                $ins['reason'] = $request->reason;
+                $ins['address'] = $request->address ?? null;
+                $ins['addedBy'] = auth()->user()->id;
+                $ins['reporting_id'] = $staff_info->reporting_manager_id ?? null;
+                /** generate leave form and send */
+                
+                //document
+                $leave_info = StaffLeave::updateOrCreate(['id' => $id], $ins);
+    
+                generateLeaveForm($leave_info->id);
+                
+                $error = 0;
+                $message = 'Leave Request submit successfully';
+            }
 
         }  else {
             $error = 1;

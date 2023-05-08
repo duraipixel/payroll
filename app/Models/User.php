@@ -150,5 +150,10 @@ class User extends Authenticatable implements Auditable
         return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'id');
     }
 
+    public function reporting()
+    {
+        return $this->hasOne(User::class, 'id', 'reporting_manager_id');
+    }
+
     
 }

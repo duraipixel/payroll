@@ -46,7 +46,7 @@
                     <thead class="bg-primary">
                         <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
                             <th class="text-center text-white" >
-                            Date
+                            Application Date
                         </th>
                         <th class="text-center text-white" >
                             Name
@@ -107,6 +107,18 @@
             {
                 data: 'name',
                 name: 'name'
+            },
+            {
+                data: 'designation',
+                name: 'designation'
+            },
+            {
+                data: 'leave_category',
+                name: 'leave_category'
+            },
+            {
+                data: 'no_of_days',
+                name: 'no_of_days'
             },
             {
                 data: 'status',

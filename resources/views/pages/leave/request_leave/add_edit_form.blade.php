@@ -163,11 +163,6 @@
                         </div>
                     </div>
                 </div>
-                
-                
-                
-
-                
 
                 <div class="form-group mt-7 text-end">
                     <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
@@ -282,6 +277,7 @@
                     $('#typeadd-panel').addClass('d-none');
                     $('#staff_name').attr('disabled', true);
                     $('#input-close').removeClass('d-none');
+                    $('#reporting_id').val(res.data?.reporting?.name);
                 }
             }
         })
@@ -295,6 +291,7 @@
         $('#typeadd-panel').removeClass('d-none');
         $('#staff_name').attr('disabled', false);
         $('#input-close').addClass('d-none');
+        $('#reporting_id').val('');
     })
 
     function datediff(first, second) {
@@ -425,7 +422,7 @@
                     validator.validate().then(function(status) {
 
                         if (status == 'Valid') {
-
+                            submitButton.disabled = true;
                             var forms = $('#leave_form')[0];
                             var formData = new FormData(forms);
                             $.ajax({
@@ -447,12 +444,8 @@
                                             });
                                         }
                                     } else {
-                                        toastr.success(
-                                            "Leave Request added successfully");
-                                        if (res.inserted_data) {
-                                            $('#kt_dynamic_app').modal('hide');
-
-                                        }
+                                        toastr.success("Leave Request added successfully");
+                                        $('#kt_dynamic_app').modal('hide');
                                     }
                                 }
                             })

@@ -2,6 +2,7 @@
 
 namespace App\Models\Leave;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,6 +13,7 @@ class StaffLeave extends Model
     protected $fillable = [
         'academic_id',
         'staff_id',
+        'application_no',
         'designation',
         'place_of_work',
         'salary',
@@ -38,4 +40,14 @@ class StaffLeave extends Model
         'status',
         'addedBy'
     ];
+
+    public function staff_info()
+    {
+        return $this->hasOne(User::class, 'id', 'staff_id');
+    }
+
+    public function granted_info()
+    {
+        return $this->hasOne(User::class, 'id', 'granted_by');
+    }
 }

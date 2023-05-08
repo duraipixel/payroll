@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Leave\StaffLeave;
 use App\Models\Master\Society;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 if (!function_exists('getStaffEmployeeCode')) {
@@ -50,5 +52,31 @@ if (!function_exists('getStaffInstitutionCode')) {
             }
         }   
         return $new_emp_code;
+    }
+}
+
+if (!function_exists('leaveApplicationNo')) {
+    function leaveApplicationNo($staff_id, $leave_category)
+    {
+        $staff_info = User::find($staff_id);
+        $institute_code = $staff_info->institute->code;
+        $leave = StaffLeave::orderBy('id', 'desc')->first();
+        $year = date('Y');
+        $countNo = '00001';
+        $leave_application_no = $institute_code.$year.$leave_category.$countNo;
+        if( $leave ) {
+            $emp_code = substr($leave->application_no, -5);
+            $emp_code = (int)$emp_code + 1;
+
+            if( (5 - strlen($emp_code)) > 0 ) {
+                $new_no = '';
+                for($i = 0; $i < (5-strlen($emp_code)); $i++) {
+                    $new_no .= '0';
+                }
+                $order_no = $new_no . $emp_code;
+                $leave_application_no = $institute_code.$year.$leave_category.$order_no;
+            }
+        }   
+        return $leave_application_no;
     }
 }

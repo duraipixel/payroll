@@ -191,7 +191,7 @@ class CommonController extends Controller
         
         $staff_id = $request['staff_id'];
 
-        $data = User::with('position.designation')->find($staff_id);
+        $data = User::with(['position.designation', 'reporting'])->find($staff_id);
         
         return array('data' => $data);
     }

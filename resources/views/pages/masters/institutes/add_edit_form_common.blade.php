@@ -116,7 +116,7 @@
                             var forms = $('#dynamic_form')[0];
                             var formData = new FormData(forms);
                             $.ajax({
-                                url:"{{ route('save.institutes') }}",
+                                url:"{{ route('save.institutions') }}",
                                 type:"POST",
                                 data: formData,
                                 processData: false,
