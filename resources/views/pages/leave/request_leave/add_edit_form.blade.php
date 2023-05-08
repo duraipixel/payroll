@@ -49,8 +49,8 @@
         </div>
 
         <div class="modal-body " id="dynamic_content">
-
-            <form action="" class="p-3" id="leave_form" autocomplete="off">
+            {{-- {{ dump($info->staff_info) }} --}}
+            <form action="" class="p-3" id="leave_form" autocomplete="off" enctype="multipart/form-data">
                 <div class="fv-row form-group mb-3 row">
                     <div class="col-sm-6">
                         <div class="row">
@@ -59,12 +59,15 @@
                                     Leave Category
                                 </label>
                             </div>
+                            <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
                             <div class="col-sm-7">
                                 <select name="leave_category_id" id="leave_category_id" class="form-control">
                                     <option value="">-select-</option>
                                     @isset($leave_category)
                                         @foreach ($leave_category as $citem)
-                                            <option value="{{ $citem->id }}">{{ $citem->name }}</option>
+                                            <option value="{{ $citem->id }}"
+                                                @if (isset($info->leave_category_id) && $info->leave_category_id == $citem->id) selected @endif>{{ $citem->name }}
+                                            </option>
                                         @endforeach
                                     @endisset
                                 </select>
@@ -77,7 +80,9 @@
                                 </label>
                             </div>
                             <div class="col-sm-7">
-                                <input type="text" name="requested_date" id="requested_date" class="form-control">
+                                <input type="text" name="requested_date" id="requested_date"
+                                    value="{{ isset($info->from_date) ? date('d/m/Y', strtotime($info->from_date)) . ' - ' . date('d/m/Y', strtotime($info->to_date)) : '' }}"
+                                    class="form-control">
                             </div>
                         </div>
                         <div class="fv-row form-group mb-3 row">
@@ -85,7 +90,8 @@
                                 <label class="form-label required mt-3" for="">No.of.Days requested </label>
                             </div>
                             <div class="col-sm-7">
-                                <input type="text" readonly name="no_of_days" id="no_of_days" class="form-control">
+                                <input type="text" readonly name="no_of_days" id="no_of_days"
+                                    value="{{ $info->no_of_days ?? '' }}" class="form-control">
                             </div>
                         </div>
                         <div class="fv-row form-group mb-3 row d-none" id="el_eol_form">
@@ -95,7 +101,9 @@
                                 </label>
                             </div>
                             <div class="col-sm-7">
-                                <input type="text" name="holiday_date" id="holiday_date" class="form-control">
+                                <input type="text" name="holiday_date" id="holiday_date"
+                                    value="{{ isset($info->holiday_date) ? date('Y-m-d', strtotime($info->holiday_date)) : '' }}"
+                                    class="form-control">
                             </div>
                         </div>
                         <div class="fv-row form-group mb-3 row">
@@ -105,10 +113,13 @@
                                 </label>
                             </div>
                             <div class="col-sm-7">
-                                <textarea name="reason" id="reason" cols="30" rows="2" class="form-control"></textarea>
+                                <textarea name="reason" id="reason" cols="30" rows="2" class="form-control">{{ $info->reason ?? '' }}</textarea>
                             </div>
                         </div>
                         <div id="leave-form-content">
+                            @if (isset($info->address) && !empty($info->address))
+                                @include('pages.leave.request_leave.el_form')
+                            @endif
                         </div>
                     </div>
                     <div class="col-sm-6">
@@ -119,11 +130,13 @@
                                 </label>
                             </div>
                             <div class="col-sm-7 position-relative" id="typeahed-click">
-                                <input type="text" name="staff_name" id="staff_name" class="form-control">
+                                <input type="text" name="staff_name" value="{{ $info->staff_info->name ?? '' }}"
+                                    id="staff_name" class="form-control">
                                 <span id="input-close" class="d-none">
                                     {!! cancelSvg() !!}
                                 </span>
-                                <input type="hidden" name="staff_id" id="staff_id" value="">
+                                <input type="hidden" name="staff_id" id="staff_id"
+                                    value="{{ $info->staff_id ?? '' }}">
                                 <div class="typeahead-pane d-none" id="typeadd-panel">
                                     <ul type="none" class="typeahead-pane-ul" id="typeahead-list">
 
@@ -138,7 +151,8 @@
                                 </label>
                             </div>
                             <div class="col-sm-7">
-                                <input type="text" name="staff_code" readonly id="staff_code" class="form-control">
+                                <input type="text" name="staff_code" value="{{ $info->staff_info->emp_code ?? '' }}"
+                                    readonly id="staff_code" class="form-control">
                             </div>
                         </div>
                         <div class="fv-row form-group mb-3 row">
@@ -148,7 +162,8 @@
                                 </label>
                             </div>
                             <div class="col-sm-7">
-                                <input type="text" name="designation" readonly id="designation" class="form-control">
+                                <input type="text" name="designation" value="{{ $info->designation ?? '' }}"
+                                    readonly id="designation" class="form-control">
                             </div>
                         </div>
                         <div class="fv-row form-group mb-3 row">
@@ -158,9 +173,60 @@
                                 </label>
                             </div>
                             <div class="col-sm-7">
-                                <input type="text" name="reporting_id" id="reporting_id" class="form-control" readonly>
+                                <input type="text" name="reporting_id" id="reporting_id" class="form-control"
+                                    readonly value="{{ $info->reporting_info->name ?? '' }}">
                             </div>
                         </div>
+                        @if (isset($info) && !empty($info))
+                            <div class="fv-row form-group mb-3 row">
+                                <div class="col-sm-5">
+                                    <label class="form-label required" for="">
+                                        Leave Granted
+                                    </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="radio" name="leave_granted" id="leave_granted_yes"
+                                        value="yes">
+                                    <label for="leave_granted_yes" role="button"> Yes </label> &emsp;
+                                    <input type="radio" name="leave_granted" id="leave_granted_no" value="no">
+                                    <label for="leave_granted_no" role="button"> No </label>
+                                </div>
+                            </div>
+                            <div class="fv-row form-group mb-3 row">
+                                <div class="col-sm-5">
+                                    <label class="form-label required mt-3" for="">
+                                        No of Days Granted
+                                    </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="number" min="1" max="15" name="no_of_days_granted"
+                                        id="no_of_days_granted" class="form-control"
+                                        value="{{ $info->no_of_days ?? '' }}" required>
+                                </div>
+                            </div>
+                            <div class="fv-row form-group mb-3 row">
+                                <div class="col-sm-5">
+                                    <label class="form-label required mt-3" for="">
+                                        Upload Application
+                                    </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <input type="file" name="application_file" id="application_file"
+                                        class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="fv-row form-group mb-3 row">
+                                <div class="col-sm-5">
+                                    <label class="form-label " for="">
+                                        Remarks
+                                    </label>
+                                </div>
+                                <div class="col-sm-7">
+                                    <textarea name="remarks" id="remarks" cols="30" rows="2" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
                 </div>
 
@@ -444,8 +510,10 @@
                                             });
                                         }
                                     } else {
-                                        toastr.success("Leave Request added successfully");
+                                        toastr.success(
+                                            "Leave Request added successfully");
                                         $('#kt_dynamic_app').modal('hide');
+                                        dtTable.draw();
                                     }
                                 }
                             })

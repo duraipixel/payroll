@@ -54875,3 +54875,15 @@ body {
   font-size: 11px;
   color: #ddd !important;
 }
+.select2-container {   
+ 
+  width:100% !important;
+}
+
+#ui-datepicker-div {
+  z-index: 2075 !important;
+}
+
+.z-index-85 {
+  /* z-index: 2085 !important; */
+}

@@ -46,7 +46,8 @@ class User extends Authenticatable implements Auditable
         'verification_status',
         'status',
         'is_super_admin',
-        'addedBy'
+        'addedBy',
+        'is_top_level'
     ];
 
     /**
@@ -153,6 +154,10 @@ class User extends Authenticatable implements Auditable
     public function reporting()
     {
         return $this->hasOne(User::class, 'id', 'reporting_manager_id');
+    }
+
+    public function reporting_managers() {
+        return $this->hasMany(ReportingManager::class, 'manager_id', 'id');
     }
 
     

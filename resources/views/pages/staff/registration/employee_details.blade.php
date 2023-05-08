@@ -22,7 +22,7 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
+                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('designation')">
                             <i class="fa fa-plus"></i>
                         </span>
@@ -44,7 +44,7 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
+                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('department')">
                             <i class="fa fa-plus"></i>
                         </span>
@@ -63,7 +63,7 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0 p-4"
+                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0 p-4"
                             onclick="return openAddModel('division')">
                             <i class="fa fa-plus"></i>
                         </span>
@@ -82,7 +82,7 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0 p-4"
+                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0 p-4"
                             onclick="return openAddModel('class')">
                             <i class="fa fa-plus"></i>
                         </span>
@@ -103,7 +103,7 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
+                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('subject')">
                             <i class="fa fa-plus"></i>
                         </span>
@@ -126,7 +126,7 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
+                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('scheme')">
                             <i class="fa fa-plus"></i>
                         </span>

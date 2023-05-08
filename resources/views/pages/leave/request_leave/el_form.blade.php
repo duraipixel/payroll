@@ -6,7 +6,7 @@
         </label>
     </div>
     <div class="col-sm-7">
-        <textarea name="address" id="address" cols="30" rows="e" class="form-control"></textarea>
+        <textarea name="address" id="address" cols="30" rows="e" class="form-control">{{ $info->address ?? '' }}</textarea>
     </div>
 </div>
 <script>

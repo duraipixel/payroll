@@ -14,5 +14,8 @@
         "postcss": "^8.1.14",
         "sass": "^1.56.1",
         "vite": "^4.2.1"
+    },
+    "dependencies": {
+        "orgchart": "^3.6.0"
     }
 }

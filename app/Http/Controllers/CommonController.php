@@ -210,7 +210,8 @@ class CommonController extends Controller
                     case 'eol':
                         return view('pages.leave.request_leave.el_form');
                         break;
-                    
+                    case 'ml':
+                        return view('pages.leave.request_leave.el_form');
                     default:
                         return '';
                         break;

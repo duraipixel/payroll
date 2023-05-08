@@ -38,7 +38,8 @@ class StaffLeave extends Model
         'reporting_id',
         'document',
         'status',
-        'addedBy'
+        'addedBy',
+        'approved_document'
     ];
 
     public function staff_info()
@@ -49,5 +50,10 @@ class StaffLeave extends Model
     public function granted_info()
     {
         return $this->hasOne(User::class, 'id', 'granted_by');
+    }
+
+    public function reporting_info ()
+    {
+        return $this->hasOne(User::class, 'id', 'reporting_id');
     }
 }

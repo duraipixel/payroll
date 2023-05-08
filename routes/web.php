@@ -120,6 +120,12 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/get/staff/leaveinfo', [App\Http\Controllers\CommonController::class, 'getStaffLeaveInfo'])->name('get.staff.leave.info'); 
     Route::post('/get/leave/form', [App\Http\Controllers\CommonController::class, 'getLeaveForm'])->name('get.leave.form'); 
 
+    Route::get('/reporting', [App\Http\Controllers\ReportingController::class, 'index'])->name('reporting.list'); 
+    Route::post('/reporting/assign/toplevel', [App\Http\Controllers\ReportingController::class, 'openTopLevelManagerModal'])->name('reporting.assign.form'); 
+    Route::post('/reporting/assign', [App\Http\Controllers\ReportingController::class, 'assignTopLevelManager'])->name('reporting.toplevel.assign'); 
+    Route::post('/reporting/manager/modal', [App\Http\Controllers\ReportingController::class, 'openManagerModal'])->name('reporting.manager.modal'); 
+    Route::post('/reporting/manager/assign', [App\Http\Controllers\ReportingController::class, 'assignManager'])->name('reporting.manager.assign'); 
+
     //Page Permission Start 
     Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission'); 
     //Page Permission End
