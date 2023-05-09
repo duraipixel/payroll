@@ -30,6 +30,46 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'account' => [
+        'overview' => 'Overview',
+        'logs' => 'Logs'
+    ],
+    'authentication' => [
+         'role' => 'Roles',
+         'user/permission' => 'Permissions',
+     ],
+    'staff_management' => [
+        'staff/register' => 'Register',
+        'staff/list' => 'Staff List',
+        'staff/bulk' => 'Bulk Upload',
+    ],
+    'document_locker' => [
+        'user/document_locker' => 'List',
+        //'Details' => 'Details',
+    ],
+    'block_mapping' => [
+        'blocks' => 'Blocks',
+    ],
+    'attendance_management' => [
+        'latt-manual-entry' => 'Attendance Manual Entry',
+    ],
+    'leave_management' => [
+        'leaves' => 'Request Leave',
+        'leave-status' => 'Leave Status',
+        'leave-head' => 'Leave Head',
+        'leave-mapping' => 'Leave Mapping', 
+        'holiday' => 'Holidays', 
+    ],
+    'payroll_management' => [
+        'salary-head' => 'Salary Heads',
+       // 'SalaryFields' => 'Salary Fields',
+    ],
+    
+    'gratuity_calculations' =>
+    [
+
+    ],
+
     'master_menu' => [
         'appointment-order' => 'Appointment Orders',
         'scheme' => 'Attence Schemes',
@@ -61,31 +101,5 @@ return [
         'teaching-type' => 'Teaching Type',
         'training-topic' => 'Training Topic',
         'board' => 'University/Boards',        
-     ],
-     'staff_management' => [
-        'staff/register' => 'Register',
-        'staff/list' => 'Staff List',
-    ],
-    'authentication' => [
-        'Roles' => 'Roles',
-        'user/permission' => 'Permissions',
-    ],
-    'document_locker' => [
-        'List' => 'user/document_locker',
-        'Details' => 'Details',
-    ],
-    'block_mapping' => [
-        'blocks' => 'Blocks',
-    ],
-    'attendance_management' => [
-        'leave-status' => 'Leave Status',
-        'leave-head' => 'Leave Head',
-        'leave-mapping' => 'Leave Mapping', 
-        'att-manual-entry' => 'Attendance Manual Entry', 
-        'holiday' => 'Holidays', 
-    ],
-    'payroll_management' => [
-        'salary-head' => 'Salary Heads',
-        'SalaryFields' => 'Salary Fields',
-    ],
+     ],    
 ];

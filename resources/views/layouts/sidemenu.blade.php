@@ -104,7 +104,8 @@
                 </div>
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion
                 @if (request()->routeIs([
-                    'user.permission'
+                    'user.permission',
+                    'role'
                 ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -122,7 +123,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="javascript:void(0)">
+                            <a class="menu-link  @if (request()->routeIs(['role'])) active @endif" href="{{ route('role') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -263,7 +264,7 @@
                     </div>
                 </div>
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion @if (request()->routeIs([
-                    'leave-status',
+                   
                     'att-manual-entry'
                 ])) hover show @endif">
                     <span class="menu-link">
@@ -280,7 +281,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link @if (request()->routeIs(['leave-status'])) active @endif" href="{{ route('leave-status') }}">
+                            <a class="menu-link"   href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
