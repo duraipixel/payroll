@@ -60,7 +60,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('overview') }}">
+                            <a class="menu-link @if (request()->routeIs(['overview'])) active @endif"  href="{{ route('overview') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -93,7 +93,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('logs') }}">
+                            <a class="menu-link @if (request()->routeIs(['logs'])) active @endif" href="{{ route('logs') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -102,7 +102,10 @@
                         </div>
                     </div>
                 </div>
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion
+                @if (request()->routeIs([
+                    'user.permission'
+                ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
@@ -127,7 +130,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('user.permission') }}">
+                            <a class="menu-link @if (request()->routeIs(['user.permission'])) active @endif" href="{{ route('user.permission') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -137,7 +140,11 @@
                     </div>
                 </div>
                
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion @if (request()->routeIs([
+                    'staff.register',
+                    'staff.list',
+                    'staff.bulk'
+                ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen022.svg-->
@@ -156,7 +163,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('staff.register') }}">
+                            <a class="menu-link  @if (request()->routeIs(['staff.register'])) active @endif" href="{{ route('staff.register') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -164,7 +171,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('staff.list') }}">
+                            <a class="menu-link  @if (request()->routeIs(['staff.list'])) active @endif" href="{{ route('staff.list') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -172,7 +179,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('staff.register') }}">
+                            <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -180,7 +187,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('staff.bulk') }}">
+                            <a class="menu-link @if (request()->routeIs(['staff.bulk'])) active @endif" href="{{ route('staff.bulk') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -191,7 +198,9 @@
                     </div>
                 </div>
                 <!-- Document locker Start-->
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion @if (request()->routeIs([
+                    'user.document_locker'
+                ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
@@ -206,7 +215,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('user.document_locker') }}">
+                            <a class="menu-link @if (request()->routeIs(['user.document_locker'])) active @endif " href="{{ route('user.document_locker') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -214,7 +223,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('user.permission') }}">
+                            <a class="menu-link"  href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -227,7 +236,9 @@
 
                  {{-- Block Mapping Start --}}
 
-                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion @if (request()->routeIs([
+                    'blocks'
+                ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
@@ -242,7 +253,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('blocks') }}">
+                            <a class="menu-link @if (request()->routeIs(['blocks'])) active @endif" href="{{ route('blocks') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -251,7 +262,10 @@
                         </div>
                     </div>
                 </div>
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion @if (request()->routeIs([
+                    'leave-status',
+                    'att-manual-entry'
+                ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
@@ -266,7 +280,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('leave-status') }}">
+                            <a class="menu-link @if (request()->routeIs(['leave-status'])) active @endif" href="{{ route('leave-status') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -276,7 +290,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('att-manual-entry') }}">
+                            <a class="menu-link @if (request()->routeIs(['att-manual-entry'])) active @endif" href="{{ route('att-manual-entry') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -317,7 +331,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('leave-mapping') }}">
+                            <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -331,7 +345,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title master-menu-items">Leave Status</span>
+                                <span class="menu-title">Leave Status</span>
                             </a>
                         </div>
                     </div>
@@ -341,7 +355,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title master-menu-items">Leave Head</span>
+                                <span class="menu-title">Leave Head</span>
                             </a>
                         </div>
                     </div>
@@ -351,7 +365,7 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title master-menu-items">Leave Mapping</span>
+                                <span class="menu-title">Leave Mapping</span>
                             </a>
                         </div>
                     </div>
@@ -362,12 +376,15 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title master-menu-items">Holidays</span>
+                                <span class="menu-title">Holidays</span>
                             </a>
                         </div>
                     </div>
                 </div>
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion
+                @if (request()->routeIs([
+                    'salary-head'
+                ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
@@ -382,7 +399,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('salary-head') }}">
+                            <a class="menu-link  @if (request()->routeIs(['salary-head'])) active @endif" href="{{ route('salary-head') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -392,7 +409,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('salary-head') }}">
+                            <a class="menu-link"  href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -417,7 +434,7 @@
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('salary-head') }}">
+                            <a class="menu-link"  href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -427,7 +444,7 @@
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('salary-head') }}">
+                            <a class="menu-link"  href="javascript:void(0)">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -440,7 +457,39 @@
 
                  {{-- Block Mappting End --}}
 
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion
+                @if (request()->routeIs([
+                    'appointment-order',
+                    'scheme',
+                    'bank',
+                    'bank-branch',
+                    'blood_group',
+                    'caste',
+                    'class',
+                    'community',
+                    'department',
+                    'designation',
+                    'division',
+                    'document_type',
+                    'duty-class',
+                    'duty-type',
+                    'professional_type',
+                    'nature-of-employeement',
+                    'institutions',
+                    'language', 
+                    'nationality', 
+                    'place',
+                    'other-school',
+                    'workplace',
+                    'qualification',
+                    'relationship',
+                    'religion',
+                    'staff-category',
+                    'subject',
+                    'teaching-type',
+                    'training-topic',
+                    'board',
+                ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen022.svg-->
@@ -457,7 +506,7 @@
                     </span>               
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('appointment-order') }}">
+                            <a class="menu-link @if (request()->routeIs(['appointment-order'])) active @endif" href="{{ route('appointment-order') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -465,7 +514,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('scheme') }}">
+                            <a class="menu-link @if (request()->routeIs(['scheme'])) active @endif" href="{{ route('scheme') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -473,7 +522,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('bank') }}">
+                            <a class="menu-link @if (request()->routeIs(['bank'])) active @endif" href="{{ route('bank') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -481,7 +530,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('bank-branch') }}">
+                            <a class="menu-link @if (request()->routeIs(['bank-branch'])) active @endif" href="{{ route('bank-branch') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -489,7 +538,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('blood_group') }}">
+                            <a class="menu-link @if (request()->routeIs(['blood_group'])) active @endif" href="{{ route('blood_group') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -497,7 +546,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('caste') }}">
+                            <a class="menu-link @if (request()->routeIs(['caste'])) active @endif" href="{{ route('caste') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -505,7 +554,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('class') }}">
+                            <a class="menu-link @if (request()->routeIs(['class'])) active @endif" href="{{ route('class') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -513,7 +562,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('community') }}">
+                            <a class="menu-link @if (request()->routeIs(['community'])) active @endif" href="{{ route('community') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -521,7 +570,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{  route('department')  }}">
+                            <a class="menu-link @if (request()->routeIs(['department'])) active @endif" href="{{  route('department')  }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -529,7 +578,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{  route('designation')  }}">
+                            <a class="menu-link @if (request()->routeIs(['designation'])) active @endif" href="{{  route('designation')  }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -537,7 +586,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('division') }}">
+                            <a class="menu-link @if (request()->routeIs(['division'])) active @endif" href="{{ route('division') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -545,7 +594,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('document_type') }}">
+                            <a class="menu-link @if (request()->routeIs(['document_type'])) active @endif" href="{{ route('document_type') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -553,7 +602,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('duty-class') }}">
+                            <a class="menu-link @if (request()->routeIs(['duty-class'])) active @endif" href="{{ route('duty-class') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -561,7 +610,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('duty-type') }}">
+                            <a class="menu-link @if (request()->routeIs(['duty-type'])) active @endif" href="{{ route('duty-type') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -569,7 +618,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('professional_type') }}">
+                            <a class="menu-link @if (request()->routeIs(['professional_type'])) active @endif" href="{{ route('professional_type') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -577,7 +626,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('nature-of-employeement') }}">
+                            <a class="menu-link @if (request()->routeIs(['nature-of-employeement'])) active @endif" href="{{ route('nature-of-employeement') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -585,7 +634,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('institutions') }}">
+                            <a class="menu-link @if (request()->routeIs(['institutions'])) active @endif" href="{{ route('institutions') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -593,7 +642,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('language') }}">
+                            <a class="menu-link @if (request()->routeIs(['language'])) active @endif" href="{{ route('language') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -601,7 +650,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('nationality') }}">
+                            <a class="menu-link @if (request()->routeIs(['nationality'])) active @endif" href="{{ route('nationality') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -610,7 +659,7 @@
                         </div>
                        
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('place') }}">
+                            <a class="menu-link @if (request()->routeIs(['place'])) active @endif" href="{{ route('place') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -618,7 +667,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('other-school') }}">
+                            <a class="menu-link @if (request()->routeIs(['other-school'])) active @endif" href="{{ route('other-school') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -626,7 +675,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('workplace') }}">
+                            <a class="menu-link @if (request()->routeIs(['workplace'])) active @endif" href="{{ route('workplace') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -634,7 +683,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('qualification') }}">
+                            <a class="menu-link @if (request()->routeIs(['qualification'])) active @endif" href="{{ route('qualification') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -642,7 +691,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('relationship') }}">
+                            <a class="menu-link @if (request()->routeIs(['relationship'])) active @endif" href="{{ route('relationship') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -650,7 +699,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('religion') }}">
+                            <a class="menu-link @if (request()->routeIs(['religion'])) active @endif" href="{{ route('religion') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -658,7 +707,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('staff-category') }}">
+                            <a class="menu-link @if (request()->routeIs(['staff-category'])) active @endif" href="{{ route('staff-category') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -666,7 +715,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('subject') }}">
+                            <a class="menu-link @if (request()->routeIs(['subject'])) active @endif" href="{{ route('subject') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -674,7 +723,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('teaching-type') }}">
+                            <a class="menu-link @if (request()->routeIs(['teaching-type'])) active @endif" href="{{ route('teaching-type') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -682,7 +731,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('training-topic') }}">
+                            <a class="menu-link @if (request()->routeIs(['training-topic'])) active @endif" href="{{ route('training-topic') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -690,7 +739,7 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a class="menu-link" href="{{ route('board') }}">
+                            <a class="menu-link @if (request()->routeIs(['board'])) active @endif" href="{{ route('board') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
