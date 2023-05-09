@@ -33,8 +33,11 @@
         <label class="form-label" for="">
             Status
         </label>
-        <div >
-            <input type="checkbox" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked  @endif >
+       <div >
+            <input type="radio" id="active" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif >
+            <label class="pe-3" for="active">Active</label>
+            <input type="radio" id="inactive" class="form-check-input" value="0" name="status" @if(isset($info->status) && $info->status != 'active') checked  @endif >
+            <label for="inactive">Inactive</label>
         </div>
     </div>
     @endif

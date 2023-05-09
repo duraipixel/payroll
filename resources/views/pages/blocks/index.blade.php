@@ -21,7 +21,7 @@
                     Export
                 </a>
 
-                <a type="button" class="btn btn-primary btn-sm" id="add_modal" href="{{ route('blocks.add_edit') }}">
+                <a type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getBlocksModal()">
                     {!! plusSvg() !!} Add Blocks
                 </a>
 
@@ -163,7 +163,7 @@
             var formMethod = "addEdit" ;
             $.ajax({
                 url: "{{ route('blocks.add_edit') }}",
-                type: 'GET',
+                type: 'POST',
                 data: {
                     id: id,
                     

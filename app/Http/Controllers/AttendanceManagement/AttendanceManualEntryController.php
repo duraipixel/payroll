@@ -81,7 +81,6 @@ class AttendanceManualEntryController extends Controller
     }
     public function save(Request $request)
     {
-       // dd($request->all());
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
