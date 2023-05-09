@@ -101,6 +101,16 @@ class AttendanceManualEntryController extends Controller
             $ins['to_time'] = $request->to_time;
             $ins['reporting_manager'] = $request->reporting_id;
             $ins['attendance_status'] = $request->leave_status_id;
+            $leave_status=LeaveStatus::find($request->leave_status_id);   
+                
+            if( $leave_status->name==='Absent')
+            {              
+                $ins['absent_status'] ='Pending';
+            }
+            else
+            {
+                $ins['absent_status'] ='';  
+            }
             $ins['reason'] = $request->reason;
                 if($request->status)
                 {
@@ -109,7 +119,7 @@ class AttendanceManualEntryController extends Controller
                 else{
                     $ins['status'] = 'inactive';
                 }
-            
+            //dd($ins);
             $data = AttendanceManualEntry::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
@@ -173,10 +183,6 @@ class AttendanceManualEntryController extends Controller
             $get_leave_details=LeaveMapping::with('leave_head')->where('nature_of_employment_id',$nemp_id)->where('leave_mappings.academic_id',$academic_id)->get();
             $staff_taken_leave=AttendanceManualEntry::where('employment_id',$staff_id)->where('academic_id',$academic_id)->get();
             return response()->json([ 'status' => 1]);
-        }
-        else
-        {
-
-        }
+        }        
     }
 }

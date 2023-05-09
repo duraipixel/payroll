@@ -15,6 +15,7 @@ class AttendanceManualEntry extends Model
         'attendance_date',
         'reporting_manager',
         'attendance_status',
+        'absent_status',
         'reason',
         'sort_order',
         'reason',
