@@ -3,7 +3,7 @@
     <input type="hidden" name="form_type" id="form_type" value="{{ $from ?? '' }}">
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
-            Bank
+            Select Staff
         </label>
         <div >
             <select name="staff_id" class="form-control" id="staff_id">
@@ -17,33 +17,19 @@
    
     <div class="fv-row form-group mb-10">
         <label class="form-label required" for="">
-            Branch 
+            Select Role 
         </label>
         <div >
             <select name="role_id" class="form-control" id="role_id">
-                <option value="">--Select Staff--</option>
-                @foreach ($staff_details as $key=>$val)
-                <option value="{{ $val->id }}" @if(isset($info->staff_id) && $info->staff_id == $val->id) selected @endif>{{ $val['name']  }}</option>
+                <option value="">--Select Role--</option>
+                @foreach ($role as $key=>$role_val)
+                <option value="{{ $role_val->id }}" @if(isset($info->role_id) && $info->role_id == $role_val->id) selected @endif>{{ $role_val['name']  }}</option>
                 @endforeach
             </select>
         </div>
     </div>
-    <div class="fv-row form-group mb-10">
-        <label class="form-label" for="">
-            IFSC Code
-        </label>
-        <div >
-            <input type="text" class="form-control" name="ifsc_code" value="{{ $info->ifsc_code ?? '' }}" id="ifsc_code" >
-        </div>
-    </div>
-    <div class="form-group mb-10">
-        <label class="form-label" for="">
-            Address
-        </label>
-        <div >
-            <textarea class="form-control" name="address" id="address">{{ $info->address ?? '' }}</textarea>
-        </div>
-    </div>
+
+    
     @if(isset($from) && !empty($from))
     <div class="fv-row form-group mb-10">
         <label class="form-label" for="">
@@ -86,17 +72,17 @@ var KTAppEcommerceSaveBranch = function () {
             form,
             {
                 fields: {
-                    'bank_id': {
+                    'staff_id': {
 						validators: {
 							notEmpty: {
-								message: 'Bank is required'
+								message: 'Select Staff is Required'
 							},
 						}
 					},
-                    'branch_name': {
+                    'role_id': {
 						validators: {
 							notEmpty: {
-								message: 'Branch Name is required'
+								message: 'Select Role is Required'
 							},
 						}
 					},
@@ -124,7 +110,7 @@ var KTAppEcommerceSaveBranch = function () {
                         var forms = $('#dynamic_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url:"{{ route('save.bank-branch') }}",
+                            url:"{{ route('save.role-mapping') }}",
                             type:"POST",
                             data: formData,
                             processData: false,

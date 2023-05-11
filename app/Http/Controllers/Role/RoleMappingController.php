@@ -15,7 +15,11 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Role\Role;
 use App\Models\Role\RoleMapping;
+use App\Exports\RoleMappingExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
+use DB;
+use Yajra\DataTables\Contracts\DataTable;
 
 class RoleMappingController extends Controller
 {
@@ -31,24 +35,25 @@ class RoleMappingController extends Controller
         );
         if($request->ajax())
         {
-            $data = RoleMapping::select('*');
-            // ->select('banks.name as bank_name','bank_branches.name','bank_branches.address','bank_branches.ifsc_code','bank_branches.created_at');
+            $data=RoleMapping::leftJoin('users as staff','staff.id','=','role_mappings.staff_id')
+                ->leftJoin('users as created','created.id','=','role_mappings.role_created_id')  
+                ->leftJoin('roles','roles.id','=','role_mappings.role_id')
+                ->select('staff.name as staff_name','created.name as created_by_name','roles.name as role_name','role_mappings.*'); 
             $status = $request->get('role_mappings.status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
             
-            $datatables =  Datatables::of($data)
+            $datatables =  DataTables::of($data)
             ->filter(function($query) use($status,$keywords) {
                 if($keywords)
                 {
                     $date = date('Y-m-d',strtotime($keywords));
                     return $query->where(function($q) use($keywords,$date){
 
-                      //  $q->where('bank_branches.name','like',"%{$keywords}%")
-                       // ->orWhere('banks.name','like',"%{$keywords}%")
-                        //->orWhere('bank_branches.address','like',"%{$keywords}%")
-                        //->orWhere('bank_branches.ifsc_code','like',"%{$keywords}%")
-                       // ->orWhereDate('bank_branches.created_at',$date);
+                        $q->where('staff.name','like',"%{$keywords}%")
+                        ->orWhere('created.name','like',"%{$keywords}%")
+                        ->orWhere('roles.name','like',"%{$keywords}%")
+                        ->orWhereDate('role_mappings.created_at',$date);
                     });
                 }
             })
@@ -87,9 +92,9 @@ class RoleMappingController extends Controller
         if ($validator->passes()) {
 
             $ins['academic_id'] = academicYearId();
-            $ins['staff_id'] = $request->bank_id;
-            $ins['role_id'] = $request->branch_name;
-            $ins['role_created_id'] = $request->branch_name;          
+            $ins['staff_id'] = $request->staff_id;
+            $ins['role_id'] = $request->role_id;
+            $ins['role_created_id'] = Auth::user()->id;          
             if($request->status)
             {
                 $ins['status'] = 'active';
@@ -108,14 +113,6 @@ class RoleMappingController extends Controller
         return response()->json(['error' => $error, 'message' => $message, 'inserted_data' => $data]);
     }
 
-    public function getBankBranches(Request $request)
-    {
-        $bank_id = $request->bank_id;
-        $branch_data = BankBranch::where('bank_id', $request->bank_id)->where('status', 'active')->get();
-
-        return response()->json(['branch_data' => $branch_data ?? []]);
-        
-    }
     public function add_edit(Request $request)
     {
         $id = $request->id;
@@ -123,19 +120,20 @@ class RoleMappingController extends Controller
         $title = 'Add Role Mapping';
         $from = 'role_mapping';
         $staff_details = User::where('is_super_admin', '=', null)->get(); 
+        $role=Role::where('status','active')->get();
        if(isset($id) && !empty($id))
         {
             $info = RoleMapping::find($id);
             $title = 'Update Bank Branch';
         }
-         $content = view('pages.role.role_mapping.add_edit_form',compact('info','title', 'from','staff_details'));
+         $content = view('pages.role.role_mapping.add_edit_form',compact('info','title','role', 'from','staff_details'));
          return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
     public function changeStatus(Request $request)
     {
         $id             = $request->id;
         $status         = $request->status;
-        $info           = BankBranch::find($id);
+        $info           = RoleMapping::find($id);
         $info->status   = $status;
         $info->update();
         return response()->json(['message' => "You changed the Bank Branch status!", 'status' => 1]);
@@ -144,14 +142,14 @@ class RoleMappingController extends Controller
     public function delete(Request $request)
     {
         $id         = $request->id;
-        $info       = BankBranch::find($id);
+        $info       = RoleMapping::find($id);
         $info->delete();
         
         return response()->json(['message'=>"Successfully deleted state!",'status'=>1]);
     }
     public function export()
     {
-        return Excel::download(new BankBranchExport,'branch.xlsx');
+        return Excel::download(new RoleMappingExport,'Role_Mapping.xlsx');
     }
 
 }

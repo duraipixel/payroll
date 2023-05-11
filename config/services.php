@@ -36,6 +36,7 @@ return [
     ],
     'authentication' => [
          'role' => 'Roles',
+         'role-mappings' => 'Role Mappings',
          'user/permission' => 'Permissions',
      ],
     'staff_management' => [

@@ -105,7 +105,8 @@
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion
                 @if (request()->routeIs([
                     'user.permission',
-                    'role'
+                    'role',
+                    'role-mapping'
                 ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -128,6 +129,14 @@
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title">Roles</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link  @if (request()->routeIs(['role-mapping'])) active @endif" href="{{ route('role-mapping') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Role Mappings</span>
                             </a>
                         </div>
                         <div class="menu-item">

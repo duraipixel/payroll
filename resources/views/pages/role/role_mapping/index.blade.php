@@ -16,13 +16,13 @@
         <div class="card-toolbar">
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
-                <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('bank-branch.export') }}">
+                <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('role-mapping.export') }}">
                     {!! exportSvg() !!} 
                     Export
                 </a>
 
-                <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getBranchModal()">
-                    {!! plusSvg() !!} Add Branch
+                <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getRoleMappingModal()">
+                    {!! plusSvg() !!} Add Role Mapping
                 </button>
 
             </div>
@@ -98,17 +98,17 @@
                 name: 'created_at',
             },
             {
-                data:'staff_id',
-                name:'staff_id',
+                data:'staff_name',
+                name:'staff_name',
             },
             {
-                data: 'role_id',
-                name: 'role_id'
+                data: 'role_name',
+                name: 'role_name'
             },
           
             {
-                data: 'role_created_id',
-                name: 'role_created_id'
+                data: 'created_by_name',
+                name: 'created_by_name'
             },
            
            
@@ -149,7 +149,7 @@
         dtTable.draw();
         e.preventDefault();
         });
-        function getBranchModal( id = '') {
+        function getRoleMappingModal( id = '') {
 
             $.ajaxSetup({
                 headers: {
@@ -158,7 +158,7 @@
             });
             var formMethod = "addEdit" ;
             $.ajax({
-                url: "{{ route('bank-branch.add_edit') }}",
+                url: "{{ route('role-mapping.add_edit') }}",
                 type: 'POST',
                 data: {
                     id: id,
@@ -193,7 +193,7 @@
         });
 
         $.ajax({
-            url: "{{ route('bank-branch.change.status') }}",
+            url: "{{ route('role-mapping.change.status') }}",
             type: 'POST',
             data: {
                 id: id,
@@ -222,7 +222,7 @@
     }
 });
 }
-        function deleteBranch(id) {
+        function deleteRoleMapping(id) {
             Swal.fire({
                 text: "Are you sure you would like to delete record?",
                 icon: "warning",
@@ -243,7 +243,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('bank-branch.delete') }}",
+                        url: "{{ route('role-mapping.delete') }}",
                         type: 'POST',
                         data: {
                             id: id,
