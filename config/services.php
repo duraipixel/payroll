@@ -52,7 +52,7 @@ return [
         'blocks' => 'Blocks',
     ],
     'attendance_management' => [
-        'latt-manual-entry' => 'Attendance Manual Entry',
+        'att-manual-entry' => 'Attendance Manual Entry',
     ],
     'leave_management' => [
         'leaves' => 'Request Leave',

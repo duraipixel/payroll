@@ -3,20 +3,31 @@
 @section('content')
     <!--begin::Card-->
     <div class="card">
-@php
-    $account = config('services.account');
-    $authentication= config('services.authentication');
-    $staff_management = config('services.staff_management');
-    $document_locker = config('services.document_locker');
-    $block_mapping = config('services.block_mapping');
-    $attendance_management = config('services.attendance_management');
-    $leave_management = config('services.leave_management');
-    $payroll_management = config('services.payroll_management');
-    $master_menu = config('services.master_menu');
-@endphp
         <div class="card-body py-4">
+            <form action="{{route('permission.save')}}" method="post" class="was-validated" id="dynamic_form">
+                @csrf
+                <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
+                <input type="hidden" name="form_type" id="form_type" value="{{ $from ?? '' }}">
+                <div class="row">
+                    <div class="col-sm-4  ">
+                        <div class="fv-row form-group mb-10 ">
+                            <label class="form-label required" for="">
+                             Select Role
+                            </label>
+                            <div > 
+                                <select name="role_id"  required  class="form-control" onchange="return permission_table_show();" id="role_id">
+                                    <option value="">--Select Role--</option>
+                                    @foreach ($role as $key=>$val)
+                                    <option value="{{ $val->id }}" @if(isset($info->staff_id) && $info->staff_id == $val->id) selected @endif>{{ $val['name']  }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Must Select Role</div>
+                        </div>
+                    </div>
+                    </div>               
+          
             <!--begin::Table-->
-            <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+            <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer" style="display:none;">
                
                 <div class="row">
                       
@@ -68,19 +79,19 @@
                     <input type="hidden" name="account_menu_name[]" id="account_menu_name" value="{{$key}}">                   
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="account_checkox" name="account_add[]" id="account_add_{{$acc_i}}">
+                        <input type="checkbox" class="account_checkox" name="account_add[]" value="{{$key}}_account_add" id="account_add_{{$acc_i}}">
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="account_checkox" name="account_edit[]" id="account_edit_{{$acc_i}}" >
+                        <input type="checkbox" class="account_checkox" name="account_edit[]"  value="{{$key}}_account_edit" id="account_edit_{{$acc_i}}" >
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="account_checkox" name="account_view[]" id="account_view_{{$acc_i}}">
+                        <input type="checkbox" class="account_checkox" name="account_view[]"  value="{{$key}}_account_view" id="account_view_{{$acc_i}}">
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="account_checkox" name="account_delete[]" id="account_delete_{{$acc_i}}">
+                        <input type="checkbox" class="account_checkox" name="account_delete[]" value="{{$key}}_account_delete" id="account_delete_{{$acc_i}}">
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="account_checkox" name="account_export[]" id="account_export_{{$acc_i}}">
+                        <input type="checkbox" class="account_checkox" name="account_export[]"  value="{{$key}}_account_export" id="account_export_{{$acc_i}}">
                     </div>    
                 </div>
             @php
@@ -140,19 +151,19 @@
         <input type="hidden" name="auth_menu_name[]" id="auth_menu_name" value="{{$key}}">                   
         </div>
         <div class="col-1">
-            <input type="checkbox" class="auth_checkox" name="auth_add[]" id="auth_add_{{$auth_i}}">
+            <input type="checkbox" class="auth_checkox" name="auth_add[]"  value="0" id="auth_add_{{$auth_i}}">
         </div>
         <div class="col-1">
-            <input type="checkbox" class="auth_checkox" name="auth_edit[]" id="auth_edit_{{$auth_i}}" >
+            <input type="checkbox" class="auth_checkox" name="auth_edit[]"  value="0" id="auth_edit_{{$auth_i}}" >
         </div>
         <div class="col-1">
-            <input type="checkbox" class="auth_checkox" name="auth_view[]" id="auth_view_{{$auth_i}}">
+            <input type="checkbox" class="auth_checkox" name="auth_view[]"  value="0" id="auth_view_{{$auth_i}}">
         </div>
         <div class="col-1">
-            <input type="checkbox" class="auth_checkox" name="auth_delete[]" id="auth_delete_{{$auth_i}}">
+            <input type="checkbox" class="auth_checkox" name="auth_delete[]"  value="0" id="auth_delete_{{$auth_i}}">
         </div>
         <div class="col-1">
-            <input type="checkbox" class="auth_checkox" name="auth_export[]" id="auth_export_{{$auth_i}}">
+            <input type="checkbox" class="auth_checkox" name="auth_export[]"  value="0" id="auth_export_{{$auth_i}}">
         </div>    
     </div>
 @php
@@ -213,19 +224,19 @@ $auth_row++;
              <input type="hidden" name="staff_menu_name[]" id="staff_menu_name" value="{{$key}}">                   
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="staff_checkox" name="staff_add[]" id="staff_add_{{$si}}">
+                 <input type="checkbox" class="staff_checkox" name="staff_add[]"  value="0" id="staff_add_{{$si}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="staff_checkox" name="staff_edit[]" id="staff_edit_{{$si}}" >
+                 <input type="checkbox" class="staff_checkox" name="staff_edit[]"  value="0" id="staff_edit_{{$si}}" >
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="staff_checkox" name="staff_view[]" id="staff_view_{{$si}}">
+                 <input type="checkbox" class="staff_checkox" name="staff_view[]"  value="0" id="staff_view_{{$si}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="staff_checkox" name="staff_delete[]" id="staff_delete_{{$si}}">
+                 <input type="checkbox" class="staff_checkox" name="staff_delete[]"  value="0" id="staff_delete_{{$si}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="staff_checkox" name="staff_export[]" id="staff_export_{{$si}}">
+                 <input type="checkbox" class="staff_checkox" name="staff_export[]"  value="0" id="staff_export_{{$si}}">
              </div>    
          </div>
      @php
@@ -285,19 +296,19 @@ $auth_row++;
              <input type="hidden" name="dl_menu_name[]" id="dl_menu_name" value="{{$key}}">                   
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="dl_checkox" name="dl_add[]" id="dl_add_{{$dli}}">
+                 <input type="checkbox" class="dl_checkox" name="dl_add[]"  value="0" id="dl_add_{{$dli}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="dl_checkox" name="dl_edit[]" id="dl_edit_{{$dli}}" >
+                 <input type="checkbox" class="dl_checkox" name="dl_edit[]"  value="0" id="dl_edit_{{$dli}}" >
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="dl_checkox" name="dl_view[]" id="dl_view_{{$dli}}">
+                 <input type="checkbox" class="dl_checkox" name="dl_view[]"  value="0" id="dl_view_{{$dli}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="dl_checkox" name="dl_delete[]" id="dl_delete_{{$dli}}">
+                 <input type="checkbox" class="dl_checkox" name="dl_delete[]"  value="0" id="dl_delete_{{$dli}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="dl_checkox" name="dl_export[]" id="dl_export_{{$dli}}">
+                 <input type="checkbox" class="dl_checkox" name="dl_export[]"   value="0" id="dl_export_{{$dli}}">
              </div>    
          </div>
      @php
@@ -357,19 +368,19 @@ $auth_row++;
          <input type="hidden" name="bm_menu_name[]" id="bm_menu_name" value="{{$key}}">                   
          </div>
          <div class="col-1">
-             <input type="checkbox" class="bm_checkox" name="bm_add[]" id="bm_add_{{$bmi}}">
+             <input type="checkbox" class="bm_checkox" name="bm_add[]"  value="0" id="bm_add_{{$bmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="bm_checkox" name="bm_edit[]" id="bm_edit_{{$bmi}}" >
+             <input type="checkbox" class="bm_checkox" name="bm_edit[]"  value="0" id="bm_edit_{{$bmi}}" >
          </div>
          <div class="col-1">
-             <input type="checkbox" class="bm_checkox" name="bm_view[]" id="bm_view_{{$bmi}}">
+             <input type="checkbox" class="bm_checkox" name="bm_view[]"  value="0" id="bm_view_{{$bmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="bm_checkox" name="bm_delete[]" id="bm_delete_{{$bmi}}">
+             <input type="checkbox" class="bm_checkox" name="bm_delete[]"  value="0" id="bm_delete_{{$bmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="bm_checkox" name="bm_export[]" id="bm_export_{{$bmi}}">
+             <input type="checkbox" class="bm_checkox" name="bm_export[]"  value="0" id="bm_export_{{$bmi}}">
          </div>    
      </div>
  @php
@@ -430,19 +441,19 @@ $auth_row++;
          <input type="hidden" name="att_man_menu_name[]" id="att_man_menu_name" value="{{$key}}">                   
          </div>
          <div class="col-1">
-             <input type="checkbox" class="att_man_checkox" name="att_man_add[]" id="att_man_add_{{$att_mani}}">
+             <input type="checkbox" class="att_man_checkox" name="att_man_add[]"  value="0" id="att_man_add_{{$att_mani}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="att_man_checkox" name="att_man_edit[]" id="att_man_edit_{{$att_mani}}" >
+             <input type="checkbox" class="att_man_checkox" name="att_man_edit[]"  value="0"  id="att_man_edit_{{$att_mani}}" >
          </div>
          <div class="col-1">
-             <input type="checkbox" class="att_man_checkox" name="att_man_view[]" id="att_man_view_{{$att_mani}}">
+             <input type="checkbox" class="att_man_checkox" name="att_man_view[]"   value="0" id="att_man_view_{{$att_mani}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="att_man_checkox" name="att_man_delete[]" id="att_man_delete_{{$att_mani}}">
+             <input type="checkbox" class="att_man_checkox" name="att_man_delete[]"   value="0" id="att_man_delete_{{$att_mani}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="att_man_checkox" name="att_man_export[]" id="att_man_export_{{$att_mani}}">
+             <input type="checkbox" class="att_man_checkox" name="att_man_export[]"  value="0"  id="att_man_export_{{$att_mani}}">
          </div>    
      </div>
  @php
@@ -502,19 +513,19 @@ $auth_row++;
          <input type="hidden" name="lm_menu_name[]" id="lm_menu_name" value="{{$key}}">                   
          </div>
          <div class="col-1">
-             <input type="checkbox" class="lm_checkox" name="lm_add[]" id="lm_add_{{$lmi}}">
+             <input type="checkbox" class="lm_checkox" name="lm_add[]"  value="0" id="lm_add_{{$lmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="lm_checkox" name="lm_edit[]" id="lm_edit_{{$lmi}}" >
+             <input type="checkbox" class="lm_checkox" name="lm_edit[]"  value="0"  id="lm_edit_{{$lmi}}" >
          </div>
          <div class="col-1">
-             <input type="checkbox" class="lm_checkox" name="lm_view[]" id="lm_view_{{$lmi}}">
+             <input type="checkbox" class="lm_checkox" name="lm_view[]"  value="0"  id="lm_view_{{$lmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="lm_checkox" name="lm_delete[]" id="lm_delete_{{$lmi}}">
+             <input type="checkbox" class="lm_checkox" name="lm_delete[]" value="0"  id="lm_delete_{{$lmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="lm_checkox" name="lm_export[]" id="lm_export_{{$lmi}}">
+             <input type="checkbox" class="lm_checkox" name="lm_export[]"  value="0" id="lm_export_{{$lmi}}">
          </div>    
      </div>
  @php
@@ -575,19 +586,19 @@ $auth_row++;
          <input type="hidden" name="prm_menu_name[]" id="prm_menu_name" value="{{$key}}">                   
          </div>
          <div class="col-1">
-             <input type="checkbox" class="prm_checkox" name="prm_add[]" id="prm_add_{{$prmi}}">
+             <input type="checkbox" class="prm_checkox" name="prm_add[]"  value="0"  id="prm_add_{{$prmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="prm_checkox" name="prm_edit[]" id="prm_edit_{{$prmi}}" >
+             <input type="checkbox" class="prm_checkox" name="prm_edit[]"  value="0"  id="prm_edit_{{$prmi}}" >
          </div>
          <div class="col-1">
-             <input type="checkbox" class="prm_checkox" name="prm_view[]" id="prm_view_{{$prmi}}">
+             <input type="checkbox" class="prm_checkox" name="prm_view[]"  value="0" id="prm_view_{{$prmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="prm_checkox" name="prm_delete[]" id="prm_delete_{{$prmi}}">
+             <input type="checkbox" class="prm_checkox" name="prm_delete[]"   value="0" id="prm_delete_{{$prmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="prm_checkox" name="prm_export[]" id="prm_export_{{$prmi}}">
+             <input type="checkbox" class="prm_checkox" name="prm_export[]"  value="0" id="prm_export_{{$prmi}}">
          </div>    
      </div>
  @php
@@ -647,19 +658,19 @@ $auth_row++;
                     <input type="hidden" name="menu_name[]" id="menu_name" value="{{$key}}">                   
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="master_checkox" name="master_add[]" id="master_add_{{$i}}">
+                        <input type="checkbox" class="master_checkox" name="master_add[]"  value="0" id="master_add_{{$i}}">
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="master_checkox" name="master_edit[]" id="master_edit_{{$i}}" >
+                        <input type="checkbox" class="master_checkox" name="master_edit[]"  value="0" id="master_edit_{{$i}}" >
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="master_checkox" name="master_view[]" id="master_view_{{$i}}">
+                        <input type="checkbox" class="master_checkox" name="master_view[]"  value="0"  id="master_view_{{$i}}">
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="master_checkox" name="master_delete[]" id="master_delete_{{$i}}">
+                        <input type="checkbox" class="master_checkox" name="master_delete[]"  value="0"  id="master_delete_{{$i}}">
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="master_checkox" name="master_export[]" id="master_export_{{$i}}">
+                        <input type="checkbox" class="master_checkox" name="master_export[]"  value="0" id="master_export_{{$i}}">
                     </div>    
                 </div>
             @php
@@ -669,11 +680,23 @@ $auth_row++;
             @endforeach
             <input type="hidden" name="master_row_count" id="master_row_count" value="{{$master_row}}">
                     </div> 
+                    <div class="form-group mb-10 text-end">
+                        <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
+                        <button type="submit" class="btn btn-primary" id=""> 
+                            <span class="indicator-label">
+                                Submit
+                            </span>
+                            <span class="indicator-progress">
+                                Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                            </span>
+                        </button>
+                    </div>
         <!-- Master Menu Checkbox End -->
 
                 </div>
             </div>
             <!--end::Table-->
+            </div></form>
         </div>
         <!--end::Card body-->
     </div>
@@ -683,6 +706,36 @@ $auth_row++;
 @endsection
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>
+    function permission_table_show()
+    {
+        var role_id=$("#role_id").val();
+        if(role_id=='')
+        {   
+            $("#kt_table_users_wrapper").hide();
+        }
+        else
+        {
+            $("#kt_table_users_wrapper").show();
+        }              
+    }
+   /* $( document ).ready(function() {
+    $(":checkbox").click(function(){
+     //alert(" you checked");
+     if($(this).is(':checked'))
+     {
+         var checked1=$(this).val();
+         //alert("The value for selected checkbox = "+checked1);
+         $(this).val('1');
+        //alert("checkedval="+$(this).val());
+     }
+     else
+     {
+        $(this).val('0');
+     }
+});
+});*/
+
+
 //Account Meu Checkbox Start
 function account_row(acc_i)
     {
@@ -694,6 +747,11 @@ function account_row(acc_i)
             document.getElementById("account_view_"+acc_i).checked = true;
             document.getElementById("account_delete_"+acc_i).checked = true;
             document.getElementById("account_export_"+acc_i).checked = true;
+            $("#account_add_"+acc_i).val('1');
+            $("#account_edit_"+acc_i).val('1');
+            $("#account_view_"+acc_i).val('1');
+            $("#account_delete_"+acc_i).val('1');
+            $("#account_export_"+acc_i).val('1');
         }
         else
         {
@@ -703,6 +761,11 @@ function account_row(acc_i)
             document.getElementById("account_delete_"+acc_i).checked = false;
             document.getElementById("account_export_"+acc_i).checked = false;
             $("#account_select_all").prop("checked", false);
+            $("#account_add_"+acc_i).val('0');
+            $("#account_edit_"+acc_i).val('0');
+            $("#account_view_"+acc_i).val('0');
+            $("#account_delete_"+acc_i).val('0');
+            $("#account_export_"+acc_i).val('0');
            
         }
     }
@@ -721,6 +784,11 @@ function account_row(acc_i)
                 document.getElementById("account_view_"+acc_i).checked = true;
                 document.getElementById("account_delete_"+acc_i).checked = true;
                 document.getElementById("account_export_"+acc_i).checked = true;
+                $("#account_add_"+acc_i).val('1');
+                $("#account_edit_"+acc_i).val('1');
+                $("#account_view_"+acc_i).val('1');
+                $("#account_delete_"+acc_i).val('1');
+                $("#account_export_"+acc_i).val('1');
             }
         }
         else
@@ -733,6 +801,11 @@ function account_row(acc_i)
                 document.getElementById("account_view_"+acc_j).checked = false;
                 document.getElementById("account_delete_"+acc_j).checked = false;
                 document.getElementById("account_export_"+acc_j).checked = false;
+                $("#account_add_"+acc_i).val('0');
+                $("#account_edit_"+acc_i).val('0');
+                $("#account_view_"+acc_i).val('0');
+                $("#account_delete_"+acc_i).val('0');
+                $("#account_export_"+acc_i).val('0');
             }
         }
     }
@@ -749,6 +822,11 @@ function auth_row(auth_i)
             document.getElementById("auth_view_"+auth_i).checked = true;
             document.getElementById("auth_delete_"+auth_i).checked = true;
             document.getElementById("auth_export_"+auth_i).checked = true;
+            $("#auth_add_"+auth_i).val('1');
+            $("#auth_edit_"+auth_i).val('1');
+            $("#auth_view_"+auth_i).val('1');
+            $("#auth_delete_"+auth_i).val('1');
+            $("#auth_export_"+auth_i).val('1');
         }
         else
         {
@@ -758,6 +836,11 @@ function auth_row(auth_i)
             document.getElementById("auth_delete_"+auth_i).checked = false;
             document.getElementById("auth_export_"+auth_i).checked = false;
             $("#auth_select_all").prop("checked", false);
+            $("#auth_add_"+auth_i).val('0');
+            $("#auth_edit_"+auth_i).val('0');
+            $("#auth_view_"+auth_i).val('0');
+            $("#auth_delete_"+auth_i).val('0');
+            $("#auth_export_"+auth_i).val('0');
            
         }
     }
@@ -776,6 +859,11 @@ function auth_row(auth_i)
                 document.getElementById("auth_view_"+auth_i).checked = true;
                 document.getElementById("auth_delete_"+auth_i).checked = true;
                 document.getElementById("auth_export_"+auth_i).checked = true;
+                $("#auth_add_"+auth_i).val('1');
+                $("#auth_edit_"+auth_i).val('1');
+                $("#auth_view_"+auth_i).val('1');
+                $("#auth_delete_"+auth_i).val('1');
+                $("#auth_export_"+auth_i).val('1');
             }
         }
         else
@@ -788,6 +876,11 @@ function auth_row(auth_i)
                 document.getElementById("auth_view_"+auth_j).checked = false;
                 document.getElementById("auth_delete_"+auth_j).checked = false;
                 document.getElementById("auth_export_"+auth_j).checked = false;
+                $("#auth_add_"+auth_i).val('0');
+                $("#auth_edit_"+auth_i).val('0');
+                $("#auth_view_"+auth_i).val('0');
+                $("#auth_delete_"+auth_i).val('0');
+                $("#auth_export_"+auth_i).val('0');
             }
         }
     }
@@ -804,6 +897,11 @@ function staff_row(staff_i)
             document.getElementById("staff_view_"+staff_i).checked = true;
             document.getElementById("staff_delete_"+staff_i).checked = true;
             document.getElementById("staff_export_"+staff_i).checked = true;
+            $("#staff_add_"+staff_i).val('1');
+            $("#staff_edit_"+staff_i).val('1');
+            $("#staff_view_"+staff_i).val('1');
+            $("#staff_delete_"+staff_i).val('1');
+            $("#staff_export_"+staff_i).val('1');
         }
         else
         {
@@ -813,7 +911,11 @@ function staff_row(staff_i)
             document.getElementById("staff_delete_"+staff_i).checked = false;
             document.getElementById("staff_export_"+staff_i).checked = false;
             $("#staff_select_all").prop("checked", false);
-           
+            $("#staff_add_"+staff_i).val('0');
+            $("#staff_edit_"+staff_i).val('0');
+            $("#staff_view_"+staff_i).val('0');
+            $("#staff_delete_"+staff_i).val('0');
+            $("#staff_export_"+staff_i).val('0');           
         }
     }
 
@@ -831,6 +933,11 @@ function staff_row(staff_i)
                 document.getElementById("staff_view_"+staff_i).checked = true;
                 document.getElementById("staff_delete_"+staff_i).checked = true;
                 document.getElementById("staff_export_"+staff_i).checked = true;
+                $("#staff_add_"+staff_i).val('1');
+                $("#staff_edit_"+staff_i).val('1');
+                $("#staff_view_"+staff_i).val('1');
+                $("#staff_delete_"+staff_i).val('1');
+                $("#staff_export_"+staff_i).val('1');
             }
         }
         else
@@ -843,6 +950,11 @@ function staff_row(staff_i)
                 document.getElementById("staff_view_"+staff_j).checked = false;
                 document.getElementById("staff_delete_"+staff_j).checked = false;
                 document.getElementById("staff_export_"+staff_j).checked = false;
+                $("#staff_add_"+staff_i).val('0');
+                $("#staff_edit_"+staff_i).val('0');
+                $("#staff_view_"+staff_i).val('0');
+                $("#staff_delete_"+staff_i).val('0');
+                $("#staff_export_"+staff_i).val('0');    
             }
         }
     }
@@ -860,6 +972,11 @@ function dl_row(dl_i)
             document.getElementById("dl_view_"+dl_i).checked = true;
             document.getElementById("dl_delete_"+dl_i).checked = true;
             document.getElementById("dl_export_"+dl_i).checked = true;
+            $("#dl_add_"+dl_i).val('1');
+            $("#dl_edit_"+dl_i).val('1');
+            $("#dl_view_"+dl_i).val('1');
+            $("#dl_delete_"+dl_i).val('1');
+            $("#dl_export_"+dl_i).val('1');
         }
         else
         {
@@ -869,6 +986,11 @@ function dl_row(dl_i)
             document.getElementById("dl_delete_"+dl_i).checked = false;
             document.getElementById("dl_export_"+dl_i).checked = false;
             $("#dl_select_all").prop("checked", false);
+            $("#dl_add_"+dl_i).val('0');
+            $("#dl_edit_"+dl_i).val('0');
+            $("#dl_view_"+dl_i).val('0');
+            $("#dl_delete_"+dl_i).val('0');
+            $("#dl_export_"+dl_i).val('0');
            
         }
     }
@@ -887,6 +1009,11 @@ function dl_row(dl_i)
                 document.getElementById("dl_view_"+dl_i).checked = true;
                 document.getElementById("dl_delete_"+dl_i).checked = true;
                 document.getElementById("dl_export_"+dl_i).checked = true;
+                $("#dl_add_"+dl_i).val('1');
+                $("#dl_edit_"+dl_i).val('1');
+                $("#dl_view_"+dl_i).val('1');
+                $("#dl_delete_"+dl_i).val('1');
+                $("#dl_export_"+dl_i).val('1');
             }
         }
         else
@@ -899,6 +1026,11 @@ function dl_row(dl_i)
                 document.getElementById("dl_view_"+dl_j).checked = false;
                 document.getElementById("dl_delete_"+dl_j).checked = false;
                 document.getElementById("dl_export_"+dl_j).checked = false;
+                $("#dl_add_"+dl_i).val('0');
+                $("#dl_edit_"+dl_i).val('0');
+                $("#dl_view_"+dl_i).val('0');
+                $("#dl_delete_"+dl_i).val('0');
+                $("#dl_export_"+dl_i).val('0');
             }
         }
     }
@@ -915,6 +1047,11 @@ function bm_row(bm_i)
             document.getElementById("bm_view_"+bm_i).checked = true;
             document.getElementById("bm_delete_"+bm_i).checked = true;
             document.getElementById("bm_export_"+bm_i).checked = true;
+            $("#bm_add_"+bm_i).val('1');
+            $("#bm_edit_"+bm_i).val('1');
+            $("#bm_view_"+bm_i).val('1');
+            $("#bm_delete_"+bm_i).val('1');
+            $("#bm_export_"+bm_i).val('1');
         }
         else
         {
@@ -924,6 +1061,11 @@ function bm_row(bm_i)
             document.getElementById("bm_delete_"+bm_i).checked = false;
             document.getElementById("bm_export_"+bm_i).checked = false;
             $("#bm_select_all").prop("checked", false);
+            $("#bm_add_"+bm_i).val('0');
+            $("#bm_edit_"+bm_i).val('0');
+            $("#bm_view_"+bm_i).val('0');
+            $("#bm_delete_"+bm_i).val('0');
+            $("#bm_export_"+bm_i).val('0');
            
         }
     }
@@ -942,6 +1084,11 @@ function bm_row(bm_i)
                 document.getElementById("bm_view_"+bm_i).checked = true;
                 document.getElementById("bm_delete_"+bm_i).checked = true;
                 document.getElementById("bm_export_"+bm_i).checked = true;
+                $("#bm_add_"+bm_i).val('1');
+                $("#bm_edit_"+bm_i).val('1');
+                $("#bm_view_"+bm_i).val('1');
+                $("#bm_delete_"+bm_i).val('1');
+                $("#bm_export_"+bm_i).val('1');
             }
         }
         else
@@ -954,6 +1101,11 @@ function bm_row(bm_i)
                 document.getElementById("bm_view_"+bm_j).checked = false;
                 document.getElementById("bm_delete_"+bm_j).checked = false;
                 document.getElementById("bm_export_"+bm_j).checked = false;
+                $("#bm_add_"+bm_i).val('0');
+                $("#bm_edit_"+bm_i).val('0');
+                $("#bm_view_"+bm_i).val('0');
+                $("#bm_delete_"+bm_i).val('0');
+                $("#bm_export_"+bm_i).val('0');
             }
         }
     }
@@ -971,6 +1123,11 @@ function att_man_row(att_man_i)
             document.getElementById("att_man_view_"+att_man_i).checked = true;
             document.getElementById("att_man_delete_"+att_man_i).checked = true;
             document.getElementById("att_man_export_"+att_man_i).checked = true;
+            $("#att_man_add_"+att_man_i).val('1');
+            $("#att_man_edit_"+att_man_i).val('1');
+            $("#att_man_view_"+att_man_i).val('1');
+            $("#att_man_delete_"+att_man_i).val('1');
+            $("#att_man_export_"+att_man_i).val('1');
         }
         else
         {
@@ -980,6 +1137,11 @@ function att_man_row(att_man_i)
             document.getElementById("att_man_delete_"+att_man_i).checked = false;
             document.getElementById("att_man_export_"+att_man_i).checked = false;
             $("#att_man_select_all").prop("checked", false);
+            $("#att_man_add_"+att_man_i).val('0');
+            $("#att_man_edit_"+att_man_i).val('0');
+            $("#att_man_view_"+att_man_i).val('0');
+            $("#att_man_delete_"+att_man_i).val('0');
+            $("#att_man_export_"+att_man_i).val('0');
            
         }
     }
@@ -998,6 +1160,11 @@ function att_man_row(att_man_i)
                 document.getElementById("att_man_view_"+att_man_i).checked = true;
                 document.getElementById("att_man_delete_"+att_man_i).checked = true;
                 document.getElementById("att_man_export_"+att_man_i).checked = true;
+                $("#att_man_add_"+att_man_i).val('1');
+                $("#att_man_edit_"+att_man_i).val('1');
+                $("#att_man_view_"+att_man_i).val('1');
+                $("#att_man_delete_"+att_man_i).val('1');
+                $("#att_man_export_"+att_man_i).val('1');
             }
         }
         else
@@ -1010,6 +1177,11 @@ function att_man_row(att_man_i)
                 document.getElementById("att_man_view_"+att_man_j).checked = false;
                 document.getElementById("att_man_delete_"+att_man_j).checked = false;
                 document.getElementById("att_man_export_"+att_man_j).checked = false;
+                $("#att_man_add_"+att_man_i).val('0');
+                $("#att_man_edit_"+att_man_i).val('0');
+                $("#att_man_view_"+att_man_i).val('0');
+                $("#att_man_delete_"+att_man_i).val('0');
+                $("#att_man_export_"+att_man_i).val('0');
             }
         }
     }
@@ -1027,6 +1199,11 @@ function lm_row(lm_i)
             document.getElementById("lm_view_"+lm_i).checked = true;
             document.getElementById("lm_delete_"+lm_i).checked = true;
             document.getElementById("lm_export_"+lm_i).checked = true;
+            $("#lm_add_"+lm_i).val('1');
+            $("#lm_edit_"+lm_i).val('1');
+            $("#lm_view_"+lm_i).val('1');
+            $("#lm_delete_"+lm_i).val('1');
+            $("#lm_export_"+lm_i).val('1');
         }
         else
         {
@@ -1036,6 +1213,11 @@ function lm_row(lm_i)
             document.getElementById("lm_delete_"+lm_i).checked = false;
             document.getElementById("lm_export_"+lm_i).checked = false;
             $("#lm_select_all").prop("checked", false);
+            $("#lm_add_"+lm_i).val('0');
+            $("#lm_edit_"+lm_i).val('0');
+            $("#lm_view_"+lm_i).val('0');
+            $("#lm_delete_"+lm_i).val('0');
+            $("#lm_export_"+lm_i).val('0');
            
         }
     }
@@ -1054,6 +1236,11 @@ function lm_row(lm_i)
                 document.getElementById("lm_view_"+lm_i).checked = true;
                 document.getElementById("lm_delete_"+lm_i).checked = true;
                 document.getElementById("lm_export_"+lm_i).checked = true;
+                $("#lm_add_"+lm_i).val('1');
+                $("#lm_edit_"+lm_i).val('1');
+                $("#lm_view_"+lm_i).val('1');
+                $("#lm_delete_"+lm_i).val('1');
+                $("#lm_export_"+lm_i).val('1');
             }
         }
         else
@@ -1066,6 +1253,11 @@ function lm_row(lm_i)
                 document.getElementById("lm_view_"+lm_j).checked = false;
                 document.getElementById("lm_delete_"+lm_j).checked = false;
                 document.getElementById("lm_export_"+lm_j).checked = false;
+                $("#lm_add_"+lm_i).val('0');
+                $("#lm_edit_"+lm_i).val('0');
+                $("#lm_view_"+lm_i).val('0');
+                $("#lm_delete_"+lm_i).val('0');
+                $("#lm_export_"+lm_i).val('0');
             }
         }
     }
@@ -1083,6 +1275,11 @@ function prm_row(prm_i)
             document.getElementById("prm_view_"+prm_i).checked = true;
             document.getElementById("prm_delete_"+prm_i).checked = true;
             document.getElementById("prm_export_"+prm_i).checked = true;
+            $("#prm_add_"+prm_i).val('1');
+            $("#prm_edit_"+prm_i).val('1');
+            $("#prm_view_"+prm_i).val('1');
+            $("#prm_delete_"+prm_i).val('1');
+            $("#prm_export_"+prm_i).val('1');
         }
         else
         {
@@ -1092,6 +1289,11 @@ function prm_row(prm_i)
             document.getElementById("prm_delete_"+prm_i).checked = false;
             document.getElementById("prm_export_"+prm_i).checked = false;
             $("#prm_select_all").prop("checked", false);
+            $("#prm_add_"+prm_i).val('0');
+            $("#prm_edit_"+prm_i).val('0');
+            $("#prm_view_"+prm_i).val('0');
+            $("#prm_delete_"+prm_i).val('0');
+            $("#prm_export_"+prm_i).val('0');
            
         }
     }
@@ -1110,6 +1312,11 @@ function prm_row(prm_i)
                 document.getElementById("prm_view_"+prm_i).checked = true;
                 document.getElementById("prm_delete_"+prm_i).checked = true;
                 document.getElementById("prm_export_"+prm_i).checked = true;
+                $("#prm_add_"+prm_i).val('1');
+                $("#prm_edit_"+prm_i).val('1');
+                $("#prm_view_"+prm_i).val('1');
+                $("#prm_delete_"+prm_i).val('1');
+                $("#prm_export_"+prm_i).val('1');
             }
         }
         else
@@ -1122,6 +1329,11 @@ function prm_row(prm_i)
                 document.getElementById("prm_view_"+prm_j).checked = false;
                 document.getElementById("prm_delete_"+prm_j).checked = false;
                 document.getElementById("prm_export_"+prm_j).checked = false;
+                $("#prm_add_"+prm_i).val('0');
+                $("#prm_edit_"+prm_i).val('0');
+                $("#prm_view_"+prm_i).val('0');
+                $("#prm_delete_"+prm_i).val('0');
+                $("#prm_export_"+prm_i).val('0');
             }
         }
     }
@@ -1137,6 +1349,11 @@ function prm_row(prm_i)
             document.getElementById("master_view_"+i).checked = true;
             document.getElementById("master_delete_"+i).checked = true;
             document.getElementById("master_export_"+i).checked = true;
+            $("#master_add_"+i).val('1');
+            $("#master_edit_"+i).val('1');
+            $("#master_view_"+i).val('1');
+            $("#master_delete_"+i).val('1');
+            $("#master_export_"+i).val('1');
         }
         else
         {
@@ -1147,6 +1364,11 @@ function prm_row(prm_i)
             document.getElementById("master_delete_"+i).checked = false;
             document.getElementById("master_export_"+i).checked = false;
             $("#master_select_all").prop("checked", false);
+            $("#master_add_"+i).val('0');
+            $("#master_edit_"+i).val('0');
+            $("#master_view_"+i).val('0');
+            $("#master_delete_"+i).val('0');
+            $("#master_export_"+i).val('0');
            
         }
     }
@@ -1165,6 +1387,11 @@ function prm_row(prm_i)
                 document.getElementById("master_view_"+i).checked = true;
                 document.getElementById("master_delete_"+i).checked = true;
                 document.getElementById("master_export_"+i).checked = true;
+                $("#master_add_"+i).val('1');
+                $("#master_edit_"+i).val('1');
+                $("#master_view_"+i).val('1');
+                $("#master_delete_"+i).val('1');
+                $("#master_export_"+i).val('1');
             }
         }
         else
@@ -1177,6 +1404,11 @@ function prm_row(prm_i)
                 document.getElementById("master_view_"+j).checked = false;
                 document.getElementById("master_delete_"+j).checked = false;
                 document.getElementById("master_export_"+j).checked = false;
+                $("#master_add_"+i).val('0');
+                $("#master_edit_"+i).val('0');
+                $("#master_view_"+i).val('0');
+                $("#master_delete_"+i).val('0');
+                $("#master_export_"+i).val('0');
             }
         }
     }

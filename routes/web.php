@@ -190,6 +190,11 @@ Route::group(['middleware' => 'auth'],  function () {
         });
 
     }
+
+    //permission routes start
+    Route::post('permission/save', [App\Http\Controllers\Permission\PermissionController::class, 'store'])->name('permission.save');  
+    //permission routes end 
+
    
     Route::post('overview',[App\Http\Controllers\OverViewController::class,'saveForm'])->name('overview.save');
     Route::prefix('logs')->group(function() {
