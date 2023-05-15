@@ -126,9 +126,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/reporting/manager/modal', [App\Http\Controllers\ReportingController::class, 'openManagerModal'])->name('reporting.manager.modal'); 
     Route::post('/reporting/manager/assign', [App\Http\Controllers\ReportingController::class, 'assignManager'])->name('reporting.manager.assign'); 
 
-    //Page Permission Start 
-    Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission'); 
-    //Page Permission End
+    
     //Document Locker Start
     
     Route::get('/user/document_locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker'); 
@@ -192,7 +190,11 @@ Route::group(['middleware' => 'auth'],  function () {
     }
 
     //permission routes start
-    Route::post('permission/save', [App\Http\Controllers\Permission\PermissionController::class, 'store'])->name('permission.save');  
+    Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission'); 
+    Route::post('permission/save', [App\Http\Controllers\Permission\PermissionController::class, 'store'])->name('permission.save'); 
+    Route::post('permission/menu-list', [App\Http\Controllers\Permission\PermissionController::class, 'menuList'])->name('permission.menu-list'); 
+    Route::post('permission/check', [App\Http\Controllers\Permission\PermissionController::class, 'checkPermission'])->name('permission.check'); 
+
     //permission routes end 
 
    

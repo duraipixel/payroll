@@ -19,12 +19,44 @@ use App\Models\Staff\StaffWorkExperience;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Role\Permission;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
     {
         $data = AcademicYear::where('is_current', 1)->first();
         return $data->id;
+    }
+}
+
+if (!function_exists('permissionCheck')) {
+    function permissionCheck($role_id,$key,$type)
+    {
+        if($type=='add_edit')
+        {
+            $menu_check = Permission::where('role_id', $role_id)->where('add_edit_menu','1')->where('route_name',$key)->first();            
+        }
+        else if($type=='view')
+        {
+            $menu_check = Permission::where('role_id', $role_id)->where('view_menu','1')->where('route_name',$key)->first(); 
+        }
+        else if($type=='delete')
+        {
+            $menu_check = Permission::where('role_id', $role_id)->where('delete_menu','1')->where('route_name',$key)->first(); 
+        }
+        else if($type=='export')
+        {
+            $menu_check = Permission::where('role_id', $role_id)->where('delete_menu','1')->where('route_name',$key)->first();
+        }
+        else
+        {
+            return false; 
+        }
+        if($menu_check)            
+            return true;           
+        else            
+            return false; 
+        
     }
 }
 
