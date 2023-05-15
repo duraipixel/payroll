@@ -9,7 +9,7 @@
         </div>
 
         <div class="modal-body " id="">
-            <form action="" class="p-3" id="toplevel_form" autocomplete="off" enctype="multipart/form-data">
+            <form action="" class="p-3 toplevel_form" id="toplevel_form" autocomplete="off" enctype="multipart/form-data">
                 <div class="fv-row form-group mb-3 row">
                     <div class="col-sm-5">
                         <label class="form-label required mt-1" for=""> Select Manager </label>
@@ -110,6 +110,7 @@
                                         toastr.success(
                                             "Top Level Assigned successfully");
                                         $('#kt_dynamic_app').modal('hide');
+                                        location.reload();
                                         
                                     }
                                 }

@@ -125,6 +125,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/reporting/assign', [App\Http\Controllers\ReportingController::class, 'assignTopLevelManager'])->name('reporting.toplevel.assign'); 
     Route::post('/reporting/manager/modal', [App\Http\Controllers\ReportingController::class, 'openManagerModal'])->name('reporting.manager.modal'); 
     Route::post('/reporting/manager/assign', [App\Http\Controllers\ReportingController::class, 'assignManager'])->name('reporting.manager.assign'); 
+    Route::post('/reporting/manager/change/modal', [App\Http\Controllers\ReportingController::class, 'openChangeManagerModal'])->name('reporting.manager.change.modal'); 
 
     
     //Document Locker Start

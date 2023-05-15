@@ -75,8 +75,8 @@
                         <option value=""> --Select Reporting Manager-- </option>
                         @isset($reporting_managers)
                             @foreach ($reporting_managers as $item)
-                                <option value="{{ $item->id }}" @if (isset($staff_details->reporting_manager_id) && $staff_details->reporting_manager_id == $item->id) selected @endif>
-                                    {{ $item->name }}</option>
+                                <option value="{{ $item->manager_id }}" @if (isset($staff_details->reporting_manager_id) && $staff_details->reporting_manager_id == $item->manager_id) selected @endif>
+                                    {{ $item->manager->name }}</option>
                             @endforeach
                         @endisset
                     </select>

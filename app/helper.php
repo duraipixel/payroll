@@ -293,10 +293,13 @@ if (!function_exists('generateLeaveForm')) {
     }
 
     function buildTree( $reportee_id ) {
-        $tree_view = '<ul class="active">';
-        $info = ReportingManager::where('reportee_id', $reportee_id)->get();
+        
+        $info = ReportingManager::where('reportee_id', $reportee_id)->where('is_top_level', 'no')->get();
+        $tree_view = '';
         if( isset( $info ) && !empty( $info )) {
+            $tree_view = '<ul class="active">';
             foreach ($info as $item_value) {
+                
                 $tree_view .= ' <li>
                                     <a href="javascript:void(0);">
                                         <div class="member-view-box">
@@ -309,18 +312,21 @@ if (!function_exists('generateLeaveForm')) {
                                             </div>
                                         </div>
                                     </a>';
+                
                 $tree_view .= buildChild($item_value->manager_id);
                 $tree_view .= '</li>';
             }
+            $tree_view .= '</ul>';
         }
-        $tree_view .= '</ul>';
 
         echo $tree_view;
     }
 
     function buildChild( $reportee_id ) {
+        
         $list  = '';
-        $info = ReportingManager::where('reportee_id', $reportee_id)->get();
+        $info = ReportingManager::where('reportee_id', $reportee_id)->where('is_top_level', 'no')->get();
+        
         if( isset( $info ) && !empty( $info )) {
             $list = '<ul class="active">';
             foreach ($info as $item_value) {
@@ -345,4 +351,5 @@ if (!function_exists('generateLeaveForm')) {
 
         return $list;
     }
+
 }

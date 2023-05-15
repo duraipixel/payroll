@@ -13,9 +13,13 @@
                         Assign Top Level Manager
                     </a>
                     &emsp;
-                    <a type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="return openAssignForm()">
+                    <a type="button" class="btn btn-dark btn-sm" id="add_modal" onclick="return openAssignForm()">
                         Assign Manager
                     </a>
+                    &emsp;
+                    {{-- <a type="button" class="btn btn-info btn-sm" id="add_modal" onclick="return openChangeForm()">
+                        Change / Transfer Manager
+                    </a> --}}
                 </div>
 
             </div>
@@ -25,6 +29,8 @@
             <div class="body genealogy-body genealogy-scroll">
                 <div class="genealogy-tree">
                     <ul>
+                        
+                        @isset($reporting_data)
                         <li>
                             <a href="javascript:void(0);">
                                 <div class="member-view-box">
@@ -36,10 +42,10 @@
                                     </div>
                                 </div>
                             </a>
-                        @isset($reporting_data)
+                        
                             {{ buildTree($reporting_data->reportee_id); }}
-                        @endisset
                         </li>
+                        @endisset
                     </ul>
                 </div>
             </div>
@@ -86,6 +92,22 @@
             });
             $.ajax({
                 url: "{{ route('reporting.manager.modal') }}",
+                type: 'POST',
+                success: function(res) {
+                    $('#kt_dynamic_app').modal('show');
+                    $('#kt_dynamic_app').html(res);
+                }
+            })
+        }
+
+        function openChangeForm() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('reporting.manager.change.modal') }}",
                 type: 'POST',
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');

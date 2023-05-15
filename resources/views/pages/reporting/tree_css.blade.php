@@ -145,4 +145,8 @@
         background-color: #000;
         z-index: 1;
     }
+
+    #toplevel_form > .select2-container {
+        z-index: 2222;
+    }
 </style>

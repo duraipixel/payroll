@@ -33,6 +33,7 @@ use App\Models\Master\Subject;
 use App\Models\Master\TeachingType;
 use App\Models\Master\TopicTraining;
 use App\Models\Master\TypeOfDuty;
+use App\Models\ReportingManager;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
@@ -113,7 +114,7 @@ class StaffController extends Controller
             ->get();
 
         $institutions = Institution::where('status', 'active')->get();
-        $reporting_managers = User::where('status', 'active')->where('is_super_admin', '!=', 1)->get();
+        $reporting_managers = ReportingManager::where('is_top_level', 'no')->where('status', 'active')->get();
         $divisions = Division::where('status', 'active')->get();
         $classes = Classes::where('status', 'active')->get();
         $duty_classes = DutyClass::where('status', 'active')->get();
@@ -201,6 +202,7 @@ class StaffController extends Controller
             'place_of_works' => $place_of_works ?? [],
             'order_models' => $order_models ?? [],
         );
+        
         return view('pages.staff.registration.index', $params);
     }
 
