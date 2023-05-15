@@ -98,7 +98,7 @@
         <!--end::Modal dialog-->
     </div>
 
-    <div class="modal fade" id="kt_dynamic_app" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="kt_dynamic_app" tabindex="-1" aria-hidden="true" style="z-index: 1051">
         <!--begin::Modal dialog-->
         @include('layouts.modal.dynamic_modal')
         <!--end::Modal dialog-->

@@ -137,7 +137,6 @@
                                         toastr.success(
                                             "Top Level Assigned successfully");
                                         $('#kt_dynamic_app').modal('hide');
-                                        location.reload();
                                         
                                     }
                                 }
