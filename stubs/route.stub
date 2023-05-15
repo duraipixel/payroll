@@ -1,0 +1,1 @@
+Route::get('/leaves', [App\Http\Controllers\_route_controller ::class, 'index'])->name('leaves.list'); 

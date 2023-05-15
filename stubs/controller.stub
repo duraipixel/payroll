@@ -1,0 +1,118 @@
+<?php
+
+namespace {{ DummyNamespace }};
+
+use Illuminate\Http\Request;
+use {{ rootRelatedModalNameSpace }};
+use Illuminate\Support\Facades\Validator;
+use DataTables;
+use Carbon\Carbon;
+
+class {{ DummyClass }} extends Controller
+{
+    public function index(Request $request)
+    {
+        $breadcrums = array(
+            'title' => '{{ title }}',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => '{{ title }}'
+                ),
+            )
+        );
+        if($request->ajax())
+        {
+            $data = {{ model }}::select('*');
+            $status = $request->get('status');
+            $datatable_search = $request->datatable_search ?? '';
+            $keywords = $datatable_search;
+            
+            $datatables =  Datatables::of($data)
+            ->filter(function($query) use($status,$keywords) {
+                if($keywords)
+                {
+                    $date = date('Y-m-d',strtotime($keywords));
+                    return $query->where(function($q) use($keywords,$date){
+                        {{ search_datatable_where }}
+                    });
+                }
+            })
+            ->addIndexColumn()
+            ->editColumn('status', function ($row) {
+                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return {{ model }}ChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                return $status;
+            })
+            ->editColumn('created_at', function ($row) {
+                $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
+                return $created_at;
+            })
+              ->addColumn('action', function ($row) {
+                $edit_btn = '<a href="javascript:void(0);" onclick="add{{ model }}Modal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                <i class="fa fa-edit"></i>
+            </a>';
+                    $del_btn = '<a href="javascript:void(0);" onclick="delete{{ model }}(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                <i class="fa fa-trash"></i></a>';
+
+                    return $edit_btn . $del_btn;
+                })
+                ->rawColumns(['action', 'status']);
+            return $datatables->make(true);
+        }
+        return view('pages.{{ view_folder }}.{{ view_index }}',compact('breadcrums'));
+    }
+
+    public function save(Request $request)
+    {
+        $id = $request->id ?? '';
+        $data = '';
+        $validator      = Validator::make($request->all(), [{{ $validation_fields }}]);
+        
+        if ($validator->passes()) {
+
+            //$ins['academic_id'] = academicYearId();
+            {{ $insert_fields }}
+            
+            $data = {{ model }}::updateOrCreate(['id' => $id], $ins);
+            $error = 0;
+            $message = 'Added successfully';
+
+        } else {
+            $error = 1;
+            $message = $validator->errors()->all();
+        }
+        return response()->json(['error' => $error, 'message' => $message, 'inserted_data' => $data]);
+    }
+
+    public function add_edit(Request $request)
+    {
+        $id = $request->id;
+        $info = [];
+        $title = 'Add {{ model }}';
+        if(isset($id) && !empty($id))
+        {
+            $info = {{ model }}::find($id);
+            $title = 'Update {{ model }}';
+        }
+        return view('{{ view_add_form }}', compact('info', 'title'));
+    }
+
+    public function changeStatus(Request $request)
+    {
+        $id             = $request->id;
+        $status         = $request->status;
+        $info           = {{ model }}::find($id);
+        $info->status   = $status;
+        $info->update();
+        return response()->json(['message' => "You changed the status!", 'status' => 1]);
+    }
+
+    public function delete(Request $request)
+    {
+        $id         = $request->id;
+        $info       = {{ model }}::find($id);
+        $info->delete();
+        
+        return response()->json(['message'=>"Successfully deleted!",'status'=>1]);
+    }
+    
+}

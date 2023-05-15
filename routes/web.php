@@ -201,5 +201,7 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::get('/',[App\Http\Controllers\LogController::class,'index'])->name('logs');
         Route::post('/view',[App\Http\Controllers\LogController::class,'view'])->name('logs.view');
     });
+
+    include 'crud.php';
     
 });
