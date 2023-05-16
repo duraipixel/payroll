@@ -17,6 +17,7 @@ class AppointmentOrderModel extends Model implements Auditable
         'institute_id',
         'name',
         'sort_order',	
-        'status'
+        'status',
+        'document'
     ];
 }

@@ -14,6 +14,7 @@ Auth::routes();
 Route::group(['middleware' => 'auth'],  function () {
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::post('/set/academic/year', [App\Http\Controllers\HomeController::class, 'setAcademicYear'])->name('set.academic.year');
     Route::post('/open/modal', [App\Http\Controllers\CommonController::class, 'openAddModal'])->name('modal.open');
 
     Route::post('/get/institution/staff/code', [App\Http\Controllers\Master\InstitutionController::class, 'getInstituteStaffCode'])->name('institute.staff.code');
@@ -156,8 +157,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'duty-type' => App\Http\Controllers\Master\DutyTypeController::class,
         'other-school' => App\Http\Controllers\Master\OtherSchoolController::class,
         'training-topic' => App\Http\Controllers\Master\TrainingTopicController::class,
-        'board' => App\Http\Controllers\Master\BoardController::class,
-        'appointment-order' => App\Http\Controllers\Master\AppointmentOrderModelController::class,
+        'board' => App\Http\Controllers\Master\BoardController::class,        
         'blood_group' => App\Http\Controllers\Master\BloodGroupController::class,
         'document_type' => App\Http\Controllers\Master\DocumentTypeController::class,
         'professional_type' => App\Http\Controllers\Master\ProfessionTypeController::class,
@@ -189,6 +189,10 @@ Route::group(['middleware' => 'auth'],  function () {
         });
 
     }
+
+    Route::get('appointment-order', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'index'])->name('appointment.orders');
+    Route::get('appointment-order/add/{id?}', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'add_edit'])->name('appointment.orders.add');
+    Route::post('appointment-order/save', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'save'])->name('appointment.orders.save');
 
     //permission routes start
     Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission'); 

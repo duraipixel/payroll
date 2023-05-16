@@ -54,9 +54,9 @@ class AppointmentOrderModelController extends Controller
                 return $created_at;
             })
               ->addColumn('action', function ($row) {
-                $edit_btn = '<a href="javascript:void(0);" onclick="getAppointmentOrderModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
-                <i class="fa fa-edit"></i>
-            </a>';
+                $edit_btn = '<a href="'.route('appointment.orders.add', ['id' => $row->id]).'"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                                <i class="fa fa-edit"></i>
+                            </a>';
                     $del_btn = '<a href="javascript:void(0);" onclick="deleteAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                 <i class="fa fa-trash"></i></a>';
 
@@ -66,9 +66,12 @@ class AppointmentOrderModelController extends Controller
             return $datatables->make(true);
         }
         return view('pages.masters.appointment_order_model.index',compact('breadcrums'));
+
     }
+
     public function save(Request $request)
     {
+
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
@@ -76,22 +79,12 @@ class AppointmentOrderModelController extends Controller
         ]);
         
         if ($validator->passes()) {
-
+            
             $ins['academic_id'] = academicYearId();
             $ins['name'] = $request->order_model;
-            if(isset($request->form_type))
-            {
-                if($request->status)
-                {
-                    $ins['status'] = 'active';
-                }
-                else{
-                    $ins['status'] = 'inactive';
-                }
-            }
-            else{
-                $ins['status'] = 'active';
-            }
+            $ins['document'] = $request->document_data;
+            $ins['status'] = $request->status == 1 ? 'active' : 'inactive';
+            
             $data = AppointmentOrderModel::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
@@ -103,22 +96,33 @@ class AppointmentOrderModelController extends Controller
 
         }
         return response()->json(['error' => $error, 'message' => $message, 'inserted_data' => $data]);
+
     }
-    public function add_edit(Request $request)
+
+    public function add_edit(Request $request, AppointmentOrderModel $id)
     {
-        $id = $request->id;
+        
         $info = [];
         $title = 'Add Appointment Order';
         $from = 'master';
-        if(isset($id) && !empty($id))
+        $breadcrums = array(
+            'title' => 'Appointment Order',
+            'breadcrums' => array(
+                array(
+                    'link' => route('appointment.orders'), 'title' => 'Appointment Order'
+                ),
+            )
+        );
+        if(isset($id->id) && !empty($id->id))
         {
-            $info = AppointmentOrderModel::find($id);
+            $info = $id;
             $title = 'Update Appointment Order';
         }
-
-         $content = view('pages.masters.appointment_order_model.add_edit_form',compact('info','title', 'from'));
-         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+        
+        return view('pages.masters.appointment_order_model.add_page',compact('info','title', 'from', 'breadcrums'));
+        
     }
+
     public function changeStatus(Request $request)
     {
         $id             = $request->id;

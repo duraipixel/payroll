@@ -72,7 +72,7 @@ return [
     ],
 
     'master_menu' => [
-        'appointment-order' => 'Appointment Orders',
+        'appointment.orders' => 'Appointment Orders',
         'scheme' => 'Attence Schemes',
         'bank' => 'Bank',
         'bank-branch' => 'Bank Branch',

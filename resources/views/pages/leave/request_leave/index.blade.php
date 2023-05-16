@@ -14,11 +14,7 @@
             </div>
             <div class="card-toolbar">
                 <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-{{-- 
-                    <a type="button" class="btn btn-light-primary btn-sm me-3"
-                        href="{{ route('appointment-order.export') }}">
-                        {!! exportSvg() !!} Export
-                    </a> --}}
+
 
                     <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getRequestLeaveModal()">
                         {!! plusSvg() !!} Request Leave
@@ -203,106 +199,6 @@
 
         }
 
-        function appointmentOrderChangeStatus(id, status) {
-
-            Swal.fire({
-                text: "Are you sure you would like to change status?",
-                icon: "warning",
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: "Yes, Change it!",
-                cancelButtonText: "No, return",
-                customClass: {
-                    confirmButton: "btn btn-danger",
-                    cancelButton: "btn btn-active-light"
-                }
-            }).then(function(result) {
-                if (result.value) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
-                    $.ajax({
-                        url: "{{ route('appointment-order.change.status') }}",
-                        type: 'POST',
-                        data: {
-                            id: id,
-                            status: status
-                        },
-                        success: function(res) {
-                            dtTable.ajax.reload();
-                            Swal.fire({
-                                title: "Updated!",
-                                text: res.message,
-                                icon: "success",
-                                confirmButtonText: "Ok, got it!",
-                                customClass: {
-                                    confirmButton: "btn btn-success"
-                                },
-                                timer: 3000
-                            });
-
-                        },
-                        error: function(xhr, err) {
-                            if (xhr.status == 403) {
-                                toastr.error(xhr.statusText, 'UnAuthorized Access');
-                            }
-                        }
-                    });
-                }
-            });
-        }
-
-        function deleteAppointmentOrder(id) {
-            Swal.fire({
-                text: "Are you sure you would like to delete record?",
-                icon: "warning",
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: "Yes, Delete it!",
-                cancelButtonText: "No, return",
-                customClass: {
-                    confirmButton: "btn btn-danger",
-                    cancelButton: "btn btn-active-light"
-                }
-            }).then(function(result) {
-                if (result.value) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
-                    $.ajax({
-                        url: "{{ route('appointment-order.delete') }}",
-                        type: 'POST',
-                        data: {
-                            id: id,
-                        },
-                        success: function(res) {
-                            dtTable.ajax.reload();
-                            Swal.fire({
-                                title: "Updated!",
-                                text: res.message,
-                                icon: "success",
-                                confirmButtonText: "Ok, got it!",
-                                customClass: {
-                                    confirmButton: "btn btn-success"
-                                },
-                                timer: 3000
-                            });
-
-                        },
-                        error: function(xhr, err) {
-                            if (xhr.status == 403) {
-                                toastr.error(xhr.statusText, 'UnAuthorized Access');
-                            }
-                        }
-                    });
-                }
-            });
-        }
+        
     </script>
 @endsection
