@@ -180,18 +180,18 @@ Route::group(['middleware' => 'auth'],  function () {
     foreach($routeArray as $key=>$value)
     {
         Route::prefix($key)->group(function() use($key,$value) {
-            Route::get('/',[$value,'index'])->name($key);
-            Route::post('/edit',[$value,'add_edit'])->name($key.'.add_edit');
+            Route::get('/',[$value,'index'])->name($key)->middleware(['checkAccess:view']);
+            Route::post('/edit',[$value,'add_edit'])->name($key.'.add_edit')->middleware(['checkAccess:add_edit']);
             Route::post('/change/status', [$value, 'changeStatus'])->name($key.'.change.status');
-            Route::post('/change/delete', [$value, 'delete'])->name($key.'.delete');
-            Route::get('/export', [$value, 'export'])->name($key.'.export');
+            Route::post('/change/delete', [$value, 'delete'])->name($key.'.delete')->middleware(['checkAccess:delete']);
+            Route::get('/export', [$value, 'export'])->name($key.'.export')->middleware(['checkAccess:export']);
             Route::post('/save', [$value, 'save'])->name('save.'.$key);
         });
 
     }
 
     //permission routes start
-    Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission'); 
+    Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission')->middleware(['checkAccess:view']); 
     Route::post('permission/save', [App\Http\Controllers\Permission\PermissionController::class, 'store'])->name('permission.save'); 
     Route::post('permission/menu-list', [App\Http\Controllers\Permission\PermissionController::class, 'menuList'])->name('permission.menu-list'); 
     Route::post('permission/check', [App\Http\Controllers\Permission\PermissionController::class, 'checkPermission'])->name('permission.check'); 

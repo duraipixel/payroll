@@ -43,6 +43,8 @@
                         <span class="menu-section text-muted text-uppercase fs-8 ls-1">Crafted</span>
                     </div>
                 </div>
+              
+                @if( access()->hasAccess(['overview', 'logs']) )
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -59,6 +61,7 @@
                         <span class="menu-arrow"></span>
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
+                          @if( access()->hasAccess('overview','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['overview'])) active @endif"  href="{{ route('overview') }}">
                                 <span class="menu-bullet">
@@ -67,6 +70,7 @@
                                 <span class="menu-title">Overview</span>
                             </a>
                         </div>
+                        @endif
                         <div class="menu-item">
                             <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">
@@ -92,6 +96,7 @@
                                 <span class="menu-title">API Keys</span>
                             </a>
                         </div>
+                        @if( access()->hasAccess('logs','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['logs'])) active @endif" href="{{ route('logs') }}">
                                 <span class="menu-bullet">
@@ -100,8 +105,11 @@
                                 <span class="menu-title">Logs</span>
                             </a>
                         </div>
+                        @endif
                     </div>
                 </div>
+              @endif
+              @if( access()->hasAccess(['role', 'role-mapping','user.permission']) )
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion
                 @if (request()->routeIs([
                     'user.permission',
@@ -122,7 +130,9 @@
                         <span class="menu-title">Authentication</span>
                         <span class="menu-arrow"></span>
                     </span>
+                   
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        @if( access()->hasAccess('role','view') )
                         <div class="menu-item">
                             <a class="menu-link  @if (request()->routeIs(['role'])) active @endif" href="{{ route('role') }}">
                                 <span class="menu-bullet">
@@ -131,6 +141,8 @@
                                 <span class="menu-title">Roles</span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('role-mapping','view') )
                         <div class="menu-item">
                             <a class="menu-link  @if (request()->routeIs(['role-mapping'])) active @endif" href="{{ route('role-mapping') }}">
                                 <span class="menu-bullet">
@@ -139,6 +151,8 @@
                                 <span class="menu-title">Role Mappings</span>
                             </a>
                         </div>
+                        @endif
+                       
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['user.permission'])) active @endif" href="{{ route('user.permission') }}">
                                 <span class="menu-bullet">
@@ -147,8 +161,11 @@
                                 <span class="menu-title">Permissions</span>
                             </a>
                         </div>
+                       
                     </div>
                 </div>
+                @endif
+              
                
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion @if (request()->routeIs([
                     'staff.register',

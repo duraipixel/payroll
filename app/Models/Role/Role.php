@@ -17,4 +17,9 @@ class Role extends Model
         'sort_order',
         'status'
     ];
+
+    public function permissions()
+    {
+        return $this->hasMany(Permission::class, 'role_id', 'id');
+    }
 }

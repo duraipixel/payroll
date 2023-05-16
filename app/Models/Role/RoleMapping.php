@@ -34,4 +34,6 @@ class RoleMapping extends Model
     {
         return $this->hasOne(User::class, 'id', 'role_created_id');
     }
+   
+    
 }

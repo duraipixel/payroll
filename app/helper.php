@@ -20,12 +20,40 @@ use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Role\Permission;
+use App\Helpers\AccessGuard;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
     {
         $data = AcademicYear::where('is_current', 1)->first();
         return $data->id;
+    }
+}
+
+if (!function_exists('access')) {
+    function access()
+    {
+        return new AccessGuard();
+    }
+} 
+
+if (!function_exists('permissionCheckAll')) {
+    function permissionCheckAll($role_id,$menu_type)
+    {
+        $check_array=[];
+        foreach ($menu_type as $key => $value) {
+            $menu_check = Permission::where('role_id', $role_id)->where('add_edit_menu','1')
+            ->where('view_menu','1')->where('delete_menu','1')->where('export_menu','1')->where('route_name',$key)->first();   
+            if($menu_check)
+            {
+                $check_array=1;
+            }
+            else
+            {
+                $check_array=0;
+            }
+        }
+        return $check_array;
     }
 }
 
@@ -46,7 +74,7 @@ if (!function_exists('permissionCheck')) {
         }
         else if($type=='export')
         {
-            $menu_check = Permission::where('role_id', $role_id)->where('delete_menu','1')->where('route_name',$key)->first();
+            $menu_check = Permission::where('role_id', $role_id)->where('export_menu','1')->where('route_name',$key)->first();
         }
         else
         {
@@ -55,8 +83,7 @@ if (!function_exists('permissionCheck')) {
         if($menu_check)            
             return true;           
         else            
-            return false; 
-        
+            return false;         
     }
 }
 

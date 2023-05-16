@@ -12,7 +12,8 @@
             <!-- Account Menu Checkbox Start -->
             <div class="col-12 pb-3">
                 <h4> <strong>Account Menu</strong>
-                 <input type="checkbox"  name="account_select_all" id="account_select_all" onclick="account_select_all_func();"></h4>
+                 <input type="checkbox"  name="account_select_all" id="account_select_all"
+                 @if($account_select_all==1) checked @endif onclick="account_select_all_func();"></h4>
                </div>
                <div class="row justify-content-start">                     
                 <div class="row mb-6">
@@ -95,7 +96,8 @@
     <!-- Authentication Menu Checkbox Start -->
     <div class="col-12 pb-3">
     <h4> <strong>Authentication Menu</strong>
-     <input type="checkbox"  name="auth_select_all" id="auth_select_all" onclick="auth_select_all_func();"></h4>
+     <input type="checkbox"  name="auth_select_all" id="auth_select_all" 
+     @if($auth_select_all==1) checked @endif onclick="auth_select_all_func();"></h4>
    </div>
    <div class="row justify-content-start">                     
     <div class="row mb-6">
@@ -176,7 +178,8 @@ $auth_row++;
 
     <div class="col-12 pb-3">
         <h4> <strong>Staff Management</strong>
-         <input type="checkbox"  name="staff_select_all" id="staff_select_all" onclick="staff_select_all_func();"></h4>
+         <input type="checkbox"  name="staff_select_all" id="staff_select_all" 
+         @if($sm_select_all==1) checked @endif onclick="staff_select_all_func();"></h4>
        </div>
        <div class="row justify-content-start">                     
          <div class="row mb-6">
@@ -256,7 +259,8 @@ $auth_row++;
 
     <div class="col-12 pb-3">
         <h4> <strong>Document Locker</strong>
-         <input type="checkbox"  name="dl_select_all" id="dl_select_all" onclick="dl_select_all_func();"></h4>
+         <input type="checkbox"  name="dl_select_all" 
+         @if($dl_select_all==1) checked @endif id="dl_select_all" onclick="dl_select_all_func();"></h4>
        </div>
        <div class="row justify-content-start">                     
          <div class="row mb-6">
@@ -336,7 +340,8 @@ $auth_row++;
 
   <div class="col-12 pb-3">
     <h4> <strong>Block Mapping</strong>
-     <input type="checkbox"  name="bm_select_all" id="bm_select_all" onclick="bm_select_all_func();"></h4>
+     <input type="checkbox"  name="bm_select_all" id="bm_select_all"
+     @if($bm_select_all==1) checked @endif onclick="bm_select_all_func();"></h4>
    </div>
    <div class="row justify-content-start">                     
      <div class="row mb-6">
@@ -417,7 +422,8 @@ $auth_row++;
 
 <div class="col-12 pb-3">
     <h4> <strong> Attendance Management</strong>
-     <input type="checkbox"  name="att_man_select_all" id="att_man_select_all" onclick="att_man_select_all_func();"></h4>
+     <input type="checkbox"  name="att_man_select_all" 
+     @if($am_select_all==1) checked @endif id="att_man_select_all" onclick="att_man_select_all_func();"></h4>
    </div>
    <div class="row justify-content-start">                     
      <div class="row mb-6">
@@ -497,7 +503,8 @@ $auth_row++;
 
 <div class="col-12 pb-3">
     <h4> <strong> Leave Management</strong>
-     <input type="checkbox"  name="lm_select_all" id="lm_select_all" onclick="lm_select_all_func();"></h4>
+     <input type="checkbox"  name="lm_select_all"
+     @if($lm_select_all==1) checked @endif id="lm_select_all" onclick="lm_select_all_func();"></h4>
    </div>
    <div class="row justify-content-start">                     
      <div class="row mb-6">
@@ -578,7 +585,8 @@ $auth_row++;
 
 <div class="col-12 pb-3">
     <h4> <strong> Payroll Management</strong>
-     <input type="checkbox"  name="prm_select_all" id="prm_select_all" onclick="prm_select_all_func();"></h4>
+     <input type="checkbox"  name="prm_select_all" id="prm_select_all"
+     @if($pm_select_all==1) checked @endif onclick="prm_select_all_func();"></h4>
    </div>
    <div class="row justify-content-start">                     
      <div class="row mb-6">
@@ -658,7 +666,8 @@ $auth_row++;
     <!-- Master Menu Checkbox Start -->
             <div class="col-12 pb-3">
                <h4> <strong>Master Menu</strong>
-                <input type="checkbox"  name="master_select_all" id="master_select_all" onclick="master_select_all_func();"></h4>
+                <input type="checkbox"  name="master_select_all" 
+                @if($master_select_all==1) checked @endif  id="master_select_all" onclick="master_select_all_func();"></h4>
               </div>
               <div class="row justify-content-start">                     
                 <div class="row mb-6">

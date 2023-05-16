@@ -31,21 +31,21 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'account' => [
-        'overview' => 'Overview',
+        'overview.save' => 'Overview',
         'logs' => 'Logs'
     ],
     'authentication' => [
          'role' => 'Roles',
-         'role-mappings' => 'Role Mappings',
-         'user/permission' => 'Permissions',
+         'role-mapping' => 'Role Mappings',
+         'user.permission' => 'Permissions',
      ],
     'staff_management' => [
-        'staff/register' => 'Register',
-        'staff/list' => 'Staff List',
-        'staff/bulk' => 'Bulk Upload',
+        'staff.register' => 'Register',
+        'staff.list' => 'Staff List',
+        'staff.bulk' => 'Bulk Upload',
     ],
     'document_locker' => [
-        'user/document_locker' => 'List',
+        'user.document_locker' => 'List',
         //'Details' => 'Details',
     ],
     'block_mapping' => [
@@ -55,7 +55,7 @@ return [
         'att-manual-entry' => 'Attendance Manual Entry',
     ],
     'leave_management' => [
-        'leaves' => 'Request Leave',
+        'leaves.list' => 'Request Leave',
         'leave-status' => 'Leave Status',
         'leave-head' => 'Leave Head',
         'leave-mapping' => 'Leave Mapping', 

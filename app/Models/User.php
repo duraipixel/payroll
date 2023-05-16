@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\Master\Institution;
+use App\Models\Role\RoleMapping;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
@@ -158,6 +159,11 @@ class User extends Authenticatable implements Auditable
 
     public function reporting_managers() {
         return $this->hasMany(ReportingManager::class, 'manager_id', 'id');
+    }
+
+    public function roleMapped()
+    {
+        return $this->hasOne(RoleMapping::class, 'staff_id', 'id');
     }
 
     
