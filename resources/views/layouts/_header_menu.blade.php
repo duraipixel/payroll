@@ -75,15 +75,13 @@
 
                 <div class="menu-item d-flex my-0">
                     <!--begin::Select-->
-                    <select name="status" data-control="select2" data-hide-search="true"
-                        data-placeholder="Filter"
-                        class="form-select form-select-sm border-body bg-body w-150px me-5">
-                        <option value="1">Academic year</option>
-                        <option value="2">2016 - 2017</option>
-                        <option value="3">2017 - 2018</option>
-                        <option value="4">2019 - 2020</option>
-                        <option value="5">2021 - 2022</option>
-                        <option value="6">2022 - 2023</option>
+                    <select name="status" onchange="return setGlobalAcademicYear(this.value)" class="form-control form-select form-select-sm border-body bg-body w-150px me-5">
+                        @isset($global_academic_year)
+                            @foreach ($global_academic_year as $item)
+                            <option value="{{ $item->id }}" @if( session()->get('academic_id') == $item->id ) selected @endif> {{ $item->from_year.' - '.$item->to_year }} </option>        
+                            @endforeach
+                            
+                        @endisset
                     </select>
                     <!--end::Select-->
                 </div>

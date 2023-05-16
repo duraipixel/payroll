@@ -847,15 +847,16 @@ class StaffController extends Controller
         );
         if ($request->ajax()) {
 
-            $data = User::with(['institute'])->where('is_super_admin', '=', null);
+            $data = User::select('users.*', 'institutions.name as institute_name')->join('institutions', 'institutions.id', 'users.institute_id')
+                        ->when( !empty(session()->get('academic_id')), function($query) {
+                            $query->where('users.academic_id', session()->get('academic_id') );
+                        } )->where('is_super_admin', '=', null);
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
             $datatables =  Datatables::of($data)
                 ->filter(function ($query) use ($keywords, $status) {
-                    if ($status) {
-                        return $query->where('banners.status', '=', "$status");
-                    }
+                    
                     if ($keywords) {
                         $date = date('Y-m-d', strtotime($keywords));
                         return $query->where(function ($q) use ($keywords, $date) {

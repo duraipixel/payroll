@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcademicYear;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -24,5 +26,13 @@ class HomeController extends Controller
     public function index()
     {
         return view('pages.dashboard.home');
+    }
+
+    public function setAcademicYear(Request $request)
+    {
+        $id = $request->id;
+        Session::put('academic_id', $id);
+
+        return true;
     }
 }
