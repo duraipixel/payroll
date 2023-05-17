@@ -27,6 +27,6 @@ class StaffDocument extends Model implements Auditable
 
     public function documentType()
     {
-        return $this->hasOne(DocumentType::class, 'document_type_id', 'id');
+        return $this->hasOne(DocumentType::class, 'id', 'document_type_id');
     }
 }

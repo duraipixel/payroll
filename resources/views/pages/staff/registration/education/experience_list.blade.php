@@ -38,7 +38,7 @@
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             @if( isset( $item->doc_file ) && !empty( $item->doc_file ) )
-                                <a href="{{ asset(Storage::url($item->doc_file)) }}" target="_blank" >
+                                <a href="{{ asset('public'.Storage::url($item->doc_file)) }}" target="_blank" >
                                     Download File
                                 </a>
                             @else 

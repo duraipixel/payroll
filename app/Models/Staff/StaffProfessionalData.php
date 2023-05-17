@@ -2,6 +2,7 @@
 
 namespace App\Models\Staff;
 
+use App\Models\Master\Department;
 use App\Models\Master\Designation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,5 +30,10 @@ class StaffProfessionalData extends Model implements Auditable
     public function designation()
     {
         return $this->hasOne(Designation::class, 'id', 'designation_id');
+    }
+
+    public function department()
+    {
+        return $this->hasOne(Department::class, 'id', 'department_id');
     }
 }

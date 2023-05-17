@@ -20,6 +20,7 @@ class OverViewController extends Controller
                 ),
             )
         );
+        $staff_id = auth()->user()->id;
         return view('pages.overview.index',compact('breadcrums'));
     }
     public function saveForm(Request $request)

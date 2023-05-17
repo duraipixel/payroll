@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\AcademicYear;
 use App\Models\Leave\StaffLeave;
 use App\Models\Master\Society;
+use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -78,5 +80,37 @@ if (!function_exists('leaveApplicationNo')) {
             }
         }   
         return $leave_application_no;
+    }
+}
+
+if (!function_exists('appointmentOrderNo')) {
+    function appointmentOrderNo($staff_id)
+    {
+        $academy_year = AcademicYear::find(session()->get('academic_id'));
+        // dd( $academy_year );
+        $year = $academy_year->from_year .'-'.$academy_year->to_year;
+        
+        $staff_info = User::find($staff_id);
+        $institute_code = $staff_info->institute->code;
+        $appoint = StaffAppointmentDetail::orderBy('id', 'desc')->first();
+        // $year = date('Y');
+        $countNo = '00001';
+        $appointment_order_no = $countNo.'/'.$institute_code.'/'.$year;
+        if( $appoint ) {
+            $code = explode('/', $appoint->appointment_order_no);
+            $emp_code = current( $code );
+            $emp_code = (int)$emp_code + 1;
+
+            if( (5 - strlen($emp_code)) > 0 ) {
+                $new_no = '';
+                for($i = 0; $i < (5-strlen($emp_code)); $i++) {
+                    $new_no .= '0';
+                }
+                $order_no = $new_no . $emp_code;
+                
+                $appointment_order_no = $order_no.'/'.$institute_code.'/'.$year;
+            }
+        }   
+        return $appointment_order_no;
     }
 }

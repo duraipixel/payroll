@@ -586,8 +586,8 @@ class StaffController extends Controller
                 $insBank['staff_id'] = $id;
                 $insBank['bank_id'] = $request->bank_id;
                 $insBank['bank_branch_id'] = $request->branch_id;
-                $insBank['account_number'] = $request->account_name;
-                $insBank['account_name'] = $request->account_no;
+                $insBank['account_name'] = $request->account_name;
+                $insBank['account_number'] = $request->account_no;
                 /** 
                  *  check file is exists
                  */
@@ -918,8 +918,13 @@ class StaffController extends Controller
                     else
                     {
                         $del_btn = '';
-                    }  
-                    return $edit_btn . $del_btn;
+                    } 
+                    
+                    $view_btn = '<a href="' . route('staff.view', ['user' => $row->id]) . '"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px" > 
+                                    <i class="fa fa-eye"></i>
+                                </a>';
+
+                    return $edit_btn . $view_btn . $del_btn;
                 })
                 ->rawColumns(['action', 'status', 'verification_status']);
             return $datatables->make(true);
@@ -944,5 +949,12 @@ class StaffController extends Controller
         $pdf = PDF::loadView('pages.staff.pdf.staff_overview',array('data' => $data))->setPaper('a4', 'landscape');
         // download PDF file with download method
         return $pdf->download('pdf_file.pdf');
+    }
+
+    public function view(Request $request, User $user)
+    {
+        
+        $params = array('info' => $user);
+        return view('pages.overview.index', $params);
     }
 }

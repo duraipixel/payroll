@@ -27,7 +27,8 @@ class StaffEducationDetail extends Model implements Auditable
         'education_type',	
         'doc_file',	
         'multi_file',	
-        'status'
+        'status',
+        'returned_date'
     ];
 
     public function boards()

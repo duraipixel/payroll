@@ -44,7 +44,7 @@
                             $path = Storage::url($item->doc_file);
                         @endphp
                         @isset($item->doc_file)
-                            <a href="{{ asset($path) }}" target="_blank"> Download File </a></td>
+                            <a href="{{ asset('public'.$path) }}" target="_blank"> Download File </a></td>
                         @endisset
                     <td class="text-end">
                         <a href="javascript:void(0)" onclick="return editCourse('{{ $item->staff_id }}', '{{ $item->id }}')" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1">

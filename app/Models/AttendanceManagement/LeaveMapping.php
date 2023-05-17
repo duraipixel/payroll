@@ -2,6 +2,7 @@
 
 namespace App\Models\AttendanceManagement;
 
+use App\Models\AcademicYear;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\AttendanceManagement\LeaveHead;
 use Illuminate\Database\Eloquent\Model;
@@ -23,5 +24,10 @@ class LeaveMapping extends Model
     public function leave_head()
     {
         return $this->hasOne(LeaveHead::class, 'id','leave_head_id');
+    }
+
+    public function academy()
+    {
+        return $this->hasOne(AcademicYear::class, 'id', 'academic_id');
     }
 }

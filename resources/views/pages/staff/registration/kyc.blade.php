@@ -319,7 +319,7 @@
                                                 @endphp
 
                                                 <div class="d-inline-block p-2 bg-light m-1">
-                                                    <a class="btn-sm btn-outline-info" href="{{ asset($url) }}"
+                                                    <a class="btn-sm btn-outline-info" href="{{ asset('public'.$url) }}"
                                                         target="_blank">View File </a>
                                                     {{-- <a class="btn-sm btn-outline-danger"
                                                     onclick="removeDocument('{{ $staff_details->aadhaar->id }}'', '{{ $item }}')">
@@ -360,7 +360,7 @@
                                                 @endphp
 
                                                 <div class="d-inline-block p-2 bg-light m-1">
-                                                    <a class="btn-sm btn-outline-info" href="{{ asset($url) }}"
+                                                    <a class="btn-sm btn-outline-info" href="{{ asset('public'.$url) }}"
                                                         target="_blank">View File </a>
                                                     {{-- <a class="btn-sm btn-outline-danger"
                                                     onclick="removeDocument('{{ $staff_details->aadhaar->id }}'', '{{ $item }}')">

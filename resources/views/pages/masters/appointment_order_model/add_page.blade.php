@@ -100,8 +100,8 @@
                                 </div>
                             </div>
                             <div class="form-group mb-10 text-center">
-                                <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel
-                                </button>
+                                <a href="{{ route('appointment.orders') }}" class="btn btn-light-primary"> Cancel
+                                </a>
                                 &emsp;
                                 <button type="button" class="btn btn-primary" id="form-submit-btn">
                                     <span class="indicator-label">
@@ -125,7 +125,7 @@
 
 @section('add_on_script')
     <script src="{{ asset('assets/ckeditor/ckeditor.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+    <script src="{{ asset('assets/js/clipboard.min.js') }}"></script>
     <script>
         new Clipboard(".fw-code-copy-button", {
             text: function(trigger) {

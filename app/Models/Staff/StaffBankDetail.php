@@ -2,6 +2,8 @@
 
 namespace App\Models\Staff;
 
+use App\Models\Master\Bank;
+use App\Models\Master\BankBranch;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -22,4 +24,16 @@ class StaffBankDetail extends Model implements Auditable
         'status',
         'account_name'
     ];
+
+    public function bankDetails()
+    {
+        return $this->hasOne(Bank::class, 'id', 'bank_id');
+    }
+
+    public function bankBranch()
+    {
+        return $this->hasOne(BankBranch::class, 'id', 'bank_branch_id');
+    }
+
+    
 }

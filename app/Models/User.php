@@ -10,12 +10,18 @@ use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Staff\StaffBankDetail;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
+use App\Models\Staff\StaffEducationDetail;
 use App\Models\Staff\StaffExperiencedSubject;
+use App\Models\Staff\StaffFamilyMember;
 use App\Models\Staff\StaffHealthDetail;
+use App\Models\Staff\StaffKnownLanguage;
+use App\Models\Staff\StaffMedicalRemark;
+use App\Models\Staff\StaffNominee;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffPfEsiDetail;
 use App\Models\Staff\StaffProfessionalData;
 use App\Models\Staff\StaffStudiedSubject;
+use App\Models\Staff\StaffWorkExperience;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -76,7 +82,7 @@ class User extends Authenticatable implements Auditable
     }
 
     public function staffDocuments() {
-        return $this->hasMany(StaffDocument::class, 'staff_id', 'id');
+        return $this->hasMany(StaffDocument::class, 'staff_id', 'id')->where('status', 'active');
     }
 
     public function aadhaar() {
@@ -110,7 +116,7 @@ class User extends Authenticatable implements Auditable
 
     public function bank()
     {
-        return $this->hasOne(StaffBankDetail::class, 'staff_id', 'id');
+        return $this->hasOne(StaffBankDetail::class, 'staff_id', 'id')->where('status', 'active');
     }
 
     public function pf()
@@ -152,6 +158,14 @@ class User extends Authenticatable implements Auditable
         return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'id');
     }
 
+    public function allAppointment() {
+        return $this->hasMany(StaffAppointmentDetail::class, 'staff_id', 'id');
+    }
+
+    public function firstAppointment() {
+        return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'id')->orderby('from_appointment', 'asc');
+    }
+
     public function reporting()
     {
         return $this->hasOne(User::class, 'id', 'reporting_manager_id');
@@ -164,6 +178,36 @@ class User extends Authenticatable implements Auditable
     public function roleMapped()
     {
         return $this->hasOne(RoleMapping::class, 'staff_id', 'id');
+    }
+    
+    public function knownLanguages()
+    {
+        return $this->hasMany(StaffKnownLanguage::class, 'staff_id', 'id');
+    }
+
+    public function medicalRemarks()
+    {
+        return $this->hasMany(StaffMedicalRemark::class, 'staff_id', 'id');
+    }
+
+    public function familyMembers()
+    {
+        return $this->hasMany(StaffFamilyMember::class, 'staff_id', 'id');
+    }
+
+    public function nominees()
+    {
+        return $this->hasMany(StaffNominee::class, 'staff_id', 'id');
+    }
+
+    public function education()
+    {
+        return $this->hasMany(StaffEducationDetail::class, 'staff_id', 'id');
+    }
+
+    public function careers()
+    {
+        return $this->hasMany(StaffWorkExperience::class, 'staff_id', 'id');
     }
 
     

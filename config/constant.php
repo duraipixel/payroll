@@ -2,6 +2,7 @@
 
 return [
     'appointment_variables' => array(
+        'date',        
         'appointment_order_no',
         'appointment_date',
         'designation',
@@ -10,7 +11,8 @@ return [
         'place',
         'salary',
         'date_of_completion',
-        'appointment_from_date',
+        'probation_completed_date',
+        'probation_order_date',
         'society_name'
     )
 ];

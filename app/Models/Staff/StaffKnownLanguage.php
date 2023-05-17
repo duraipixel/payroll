@@ -2,6 +2,7 @@
 
 namespace App\Models\Staff;
 
+use App\Models\Master\Language;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -20,4 +21,9 @@ class StaffKnownLanguage extends Model implements Auditable
         'speak',	
         'status'
     ];
+
+    public function language()
+    {
+        return $this->hasOne(Language::class, 'id', 'language_id');
+    }
 }

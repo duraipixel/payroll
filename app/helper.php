@@ -387,4 +387,12 @@ if (!function_exists('generateLeaveForm')) {
         return $list;
     }
 
+    function getTotalExperience($staff_id) {
+        return '1 year';//need to do calculation
+    }
+
+    function commonDateFormat( $date ){
+        return date('d/m/Y', strtotime($date));
+    }
+
 }

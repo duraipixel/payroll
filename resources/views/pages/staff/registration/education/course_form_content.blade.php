@@ -187,7 +187,7 @@
                         @php
                             $path = Storage::url($course_info->doc_file);
                         @endphp
-                        <a href="{{ asset($path) }}" target="_blank" class="btn btn-sm btn-primary">
+                        <a href="{{ asset('public'.$path) }}" target="_blank" class="btn btn-sm btn-primary">
                             View File
                         </a>
                         @endisset

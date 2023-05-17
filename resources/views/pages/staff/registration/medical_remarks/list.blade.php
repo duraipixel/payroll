@@ -27,7 +27,8 @@
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             @if( isset( $item->medic_documents ) && !empty($item->medic_documents) )
-                                <a href="{{ asset(Storage::url($item->medic_documents)) }}" class="" target="_blank"> Download File </a>
+                                {{-- <a href="{{ asset(Storage::url($item->medic_documents)) }}" class="" target="_blank"> Download File </a> --}}
+                                <a href="{{ asset('public'.Storage::url($item->medic_documents)) }}" class="" target="_blank"> Download File </a>
                             @else 
                                 <a href="javascript:void(0)" > No File Uploaded </a>
                             @endif

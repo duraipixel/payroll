@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
+use App\Models\Master\AppointmentOrderModel;
+use App\Models\Master\PlaceOfWork;
+use App\Models\Master\Society;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
+use PDF;
 
 
 class StaffAppointmentDetailController extends Controller
@@ -80,4 +85,66 @@ class StaffAppointmentDetailController extends Controller
         }
         return response()->json(['error' => $error, 'message' => $message, 'id' => $id ?? '']);
     }
+
+    public function generateModelPreview(Request $request)
+    {
+
+        $appointment_order_model_id = $request->appointment_order_model_id;
+
+        /**
+         * Get Appointment order details
+         */       
+        
+        $model_info = AppointmentOrderModel::find($appointment_order_model_id);
+        if( isset($model_info->document ) && !empty( $model_info->document ) ) {
+            $document = $model_info->document;
+            $user_info = User::find($request->staff_id);
+            $society_info = Society::find(1);
+            
+            $place_of_work = PlaceOfWork::find($request->place_of_work_id);
+            $staff_name = $user_info->personal->gender == 'male' ? 'Mr.' : 'Ms'; 
+            $appointment_variables = array(
+                'date' => date('d-m-Y'),        
+                'appointment_order_no' => appointmentOrderNo($user_info->id),
+                'appointment_date' => $request->from_appointment,
+                'designation' => $user_info->position->designation->name ?? null,
+                'staff_name' => $staff_name.$user_info->name,
+                'institution_name' => $user_info->institute->name ?? null,
+                'place' => $place_of_work->name ?? null,
+                'salary' => $request->salary_scale,
+                'date_of_completion' => '',
+                'probation_completed_date' => '',
+                'probation_order_date' => '',
+                'society_name' => $society_info->name ?? null
+            );
+
+            foreach ($appointment_variables as $key => $value) {
+                $document = str_replace('$'.$key, $value, $document);
+            }
+
+            $pdf = PDF::loadView('pages.masters.appointment_order_model.dynamic_pdf', [ 'data' => $document])->setPaper('a4', 'portrait');
+            $path = 'public/order_preview';
+
+            if (! File::exists($path)) {
+                File::makeDirectory($path, $mode = 0777, true, true);
+            }
+            $fileName =  time().'.'. 'pdf' ;
+            $pdf_path = 'public/order_preview/'.$fileName;
+            $pdf->save($pdf_path);
+
+            return asset($pdf_path);
+            
+            $error = 0;
+            $message = 'Genereated success';
+        } else {
+            $error = 1;
+            $message = 'Appointment Order Model does not upload document';
+        }
+
+        return array('error' => $error, 'message' => $message);
+        
+        
+
+    }
+   
 }

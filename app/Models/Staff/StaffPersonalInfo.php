@@ -2,6 +2,12 @@
 
 namespace App\Models\Staff;
 
+use App\Models\Master\Caste;
+use App\Models\Master\Community;
+use App\Models\Master\Language;
+use App\Models\Master\Nationality;
+use App\Models\Master\OtherSchoolPlace;
+use App\Models\Master\Religion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -37,4 +43,35 @@ class StaffPersonalInfo extends Model implements Auditable
         'permanent_address',	
         'status'       
     ];
+
+    public function motherTongue()
+    {
+        return $this->hasOne(Language::class, 'id', 'mother_tongue');
+    }
+
+    public function birthPlace()
+    {
+        return $this->hasOne(OtherSchoolPlace::class, 'id', 'birth_place');
+    }
+
+    public function nationality()
+    {
+        return $this->hasOne(Nationality::class, 'id', 'nationality_id');
+    }
+
+    public function religion()
+    {
+        return $this->hasOne(Religion::class, 'id', 'religion_id');
+    }
+
+    public function caste()
+    {
+        return $this->hasOne(Caste::class, 'id', 'caste_id');
+    }
+
+    public function community()
+    {
+        return $this->hasOne(Community::class, 'id', 'community_id');
+    }
+
 }
