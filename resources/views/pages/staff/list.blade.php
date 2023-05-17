@@ -18,7 +18,11 @@
                 </div>
 
             </div>
-
+            @php
+            $route_name = request()->route()->getName();               
+        @endphp
+       
+         @if( access()->buttonAccess($route_name,'add_edit') )
             <div class="card-toolbar">
                 <div class="d-flex justify-content-end" >
                     <a href="{{ route('staff.register') }}" class="btn btn-primary btn-sm" >
@@ -27,6 +31,8 @@
                     </a>
                 </div>
             </div>
+            @endif
+
         </div>
 
         <div class="card-body py-4">

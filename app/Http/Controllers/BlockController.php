@@ -66,13 +66,27 @@ class BlockController extends Controller
                 return $created_at;
             })
               ->addColumn('action', function ($row) {
-                $addHref = route('blocks.add_edit',$row->id);
-                $edit_btn = '<a href="'.$addHref.'" onclick="getBlocksModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
-                <i class="fa fa-edit"></i>
-            </a>';
+                $route_name = request()->route()->getName(); 
+                if( access()->buttonAccess($route_name,'add_edit') )
+                {
+                    $addHref = route('blocks.add_edit',$row->id);
+                    $edit_btn = '<a href="'.$addHref.'" onclick="getBlocksModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                    <i class="fa fa-edit"></i>
+                    </a>';
+                }
+                else
+                {
+                    $edit_btn = '';
+                }
+                if( access()->buttonAccess($route_name,'delete') )
+                {
                     $del_btn = '<a href="javascript:void(0);" onclick="deleteBlocks(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
-                <i class="fa fa-trash"></i></a>';
-
+                    <i class="fa fa-trash"></i></a>';
+                }
+                else
+                {
+                    $del_btn = '';
+                }  
                     return $edit_btn . $del_btn;
                 })
                 ->rawColumns(['action', 'status']);

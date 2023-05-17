@@ -16,12 +16,14 @@
         <div class="card-toolbar">
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
-              
-
-                <a class="btn btn-primary btn-sm" id="add_modal" href="{{ route('appointment.orders.add') }}" >
+                @php
+                $route_name = request()->route()->getName();               
+                @endphp
+                @if( access()->buttonAccess($route_name,'add_edit') )
+                    <a class="btn btn-primary btn-sm" id="add_modal" href="{{ route('appointment.orders.add') }}" >
                     {!! plusSvg() !!} Add Appointment Order
                 </a>
-
+                @endif
                 {{-- <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getAppointmentOrderModal()">
                     {!! plusSvg() !!} Add Appointment Order
                 </button> --}}

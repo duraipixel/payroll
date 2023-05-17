@@ -23,9 +23,11 @@
                                             @endforeach
                                         @endisset
                                     </select>
+                                    @if( access()->buttonAccess('blood_group','add_edit') )
                                     <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('medic_blood_group')">
                                         <i class="fa fa-plus"></i>
                                     </span>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-lg-4 mb-5">

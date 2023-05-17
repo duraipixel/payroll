@@ -56,10 +56,18 @@ class LogController extends Controller
                 return $created_at;
             })
               ->addColumn('action', function ($row) {
-                $view_btn = '<a href="javascript:void(0);" onclick="getLogsView(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
-                <i class="fa fa-eye"></i>
-            </a>';
-
+                $route_name = request()->route()->getName(); 
+                if( access()->buttonAccess($route_name,'add_edit') )
+                {
+                    $view_btn = '<a href="javascript:void(0);" onclick="getLogsView(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                    <i class="fa fa-eye"></i>
+                    </a>';
+                }
+                else
+                {
+                    $view_btn = '';
+                }
+    
                     return $view_btn;
                 })
                 ->rawColumns(['action']);

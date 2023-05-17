@@ -24,10 +24,13 @@
                                 @endforeach
                             @endisset
                         </select>
+                        
+                        @if( access()->buttonAccess('institutions','add_edit') )
                         <span class="position-absolute btn btn-success btn-md top-0 end-0 p-4"
                             onclick="return openAddModel('intitution')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-2 mb-5 rd-only">

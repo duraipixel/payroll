@@ -37,6 +37,14 @@ if (!function_exists('access')) {
     }
 } 
 
+if (!function_exists('dotReplaceUnderscore')) {
+    function dotReplaceUnderscore($value)
+    {
+        $str = str_replace('.', '__', $value);
+        return $str;
+    }
+} 
+
 if (!function_exists('permissionCheckAll')) {
     function permissionCheckAll($role_id,$menu_type)
     {

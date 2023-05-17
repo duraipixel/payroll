@@ -17,9 +17,11 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('relationship','add_edit') )
             <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('relationship')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
     </div>
 
@@ -70,9 +72,11 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('qualification','add_edit') )
             <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('qualification')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
         <!--end::Input-->
     </div>
@@ -140,9 +144,11 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('blood_group','add_edit') )
             <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('blood_group')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
         <!--end::Input-->
     </div>
@@ -162,9 +168,11 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('nationality','add_edit') )
             <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('family_nationality')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
         <!--end::Input-->
     </div>

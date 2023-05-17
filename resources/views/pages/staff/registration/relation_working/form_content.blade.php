@@ -35,9 +35,12 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('relationship','add_edit') )
+
             <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('relationship_working_type')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
       
     </div>

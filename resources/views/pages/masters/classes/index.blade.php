@@ -15,16 +15,20 @@
         </div>
         <div class="card-toolbar">
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-
+            @php
+                $route_name = request()->route()->getName();               
+            @endphp
+            @if( access()->buttonAccess($route_name,'export') )
                 <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('class.export') }}">
                     {!! exportSvg() !!}
                     Export
                 </a>
-
+            @endif
+            @if( access()->buttonAccess($route_name,'add_edit') )
                 <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getClassModal()">
                     {!! plusSvg() !!} Add Class
                 </button>
-
+            @endif
             </div>
 
             <div class="d-flex justify-content-end align-items-center d-none" data-kt-user-table-toolbar="selected">

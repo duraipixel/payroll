@@ -72,10 +72,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('language','add_edit') )
                         <span class="position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('language')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
 
@@ -93,10 +95,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('place','add_edit') )
                         <span class="position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('places')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
 
@@ -114,10 +118,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('nationality','add_edit') )
                         <span class="position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('nationality')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-4 mb-5">
@@ -134,10 +140,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('religion','add_edit') )
                         <span class="position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('religion')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-4 mb-5">
@@ -155,10 +163,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('caste','add_edit') )
                         <span class="position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('caste')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
 
@@ -177,10 +187,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('community','add_edit') )
                         <span class="position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('community')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
 
@@ -235,10 +247,12 @@
                                             @endforeach
                                         @endisset
                                     </select>
+                                    @if( access()->buttonAccess('bank','add_edit') )
                                     <span class="position-absolute btn btn-success btn-md top-0 end-0"
                                         onclick="return openAddModel('bank')">
                                         <i class="fa fa-plus"></i>
                                     </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -256,10 +270,12 @@
                                             @endforeach
                                         @endisset
                                     </select>
+                                    @if( access()->buttonAccess('bank-branch','add_edit') )
                                     <span class="position-absolute btn btn-success btn-md top-0 end-0"
                                         onclick="return openAddModel('bankbranch')">
                                         <i class="fa fa-plus"></i>
                                     </span>
+                                    @endif
                                 </div>
                             </div>
 

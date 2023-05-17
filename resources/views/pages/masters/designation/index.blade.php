@@ -23,15 +23,20 @@
         </div>
         <div class="card-toolbar">
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-
+            @php
+                $route_name = request()->route()->getName();               
+            @endphp
+            @if( access()->buttonAccess($route_name,'export') )
                 <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('designation.export') }}">
                     {!! exportSvg() !!}
                     Export
                 </a>
-
+            @endif
+            @if( access()->buttonAccess($route_name,'add_edit') )
                 <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getDesignationModal()">
                     {!! plusSvg() !!} Add Designation
                 </button>
+            @endif
 
             </div>
 

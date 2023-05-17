@@ -70,12 +70,26 @@ class LeaveController extends Controller
                         $approve_btn = '<a href="javascript:void(0);" onclick="approveLeave(' . $row->id . ')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" > 
                                             <i class="fa fa-check"></i></a>';
                     }
-                    $edit_btn = '<a href="' . asset('public' . $url) . '" target="_blank" tooltip="Leave form"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                    $route_name = request()->route()->getName(); 
+                    if( access()->buttonAccess($route_name,'add_edit') )
+                    {
+                        $edit_btn = '<a href="' . asset('public' . $url) . '" target="_blank" tooltip="Leave form"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                                 <i class="fa fa-download"></i>
                             </a>';
-                    $del_btn = '<a href="javascript:void(0);" onclick="deleteAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                    }
+                    else
+                    {
+                        $edit_btn = '';
+                    }
+                    if( access()->buttonAccess($route_name,'delete') )
+                    {
+                        $del_btn = '<a href="javascript:void(0);" onclick="deleteAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                                 <i class="fa fa-trash"></i></a>';
-
+                    }
+                    else
+                    {
+                        $del_btn = '';
+                    }
                     return $edit_btn . $approve_btn . $del_btn;
                 })
                 ->rawColumns(['action', 'status', 'created_at', 'name']);

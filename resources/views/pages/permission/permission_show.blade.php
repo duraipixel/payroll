@@ -53,10 +53,13 @@
                         $view_val=permissionCheck($role_id,$key,'view');
                     @endphp
                     @php 
-                        $delete_val=permissionCheck($role_id,$key,'view');
+                        $delete_val=permissionCheck($role_id,$key,'delete');
                     @endphp
                     @php 
-                        $export_val=permissionCheck($role_id,$key,'view');
+                        $export_val=permissionCheck($role_id,$key,'export');
+                    @endphp
+                    @php
+                    $key_value=dotReplaceUnderscore($key);
                     @endphp
                     <div class="col-1">
                         <input type="checkbox" class="account_checkox" name="account_select_all_row_wise_{{$acc_i}}"
@@ -68,19 +71,19 @@
                     </div>
                     <div class="col-1">
                       
-                        <input type="checkbox" class="account_checkox"  name="{{$key}}_add" @if($add_val==1) checked @endif value="1" id="account_add_{{$acc_i}}">
+                        <input type="checkbox" class="account_checkox"  name="{{$key_value}}_add" @if($add_val==1) checked @endif value="1" id="account_add_{{$acc_i}}">
                     </div>
                     <div class="col-1">
                        
-                        <input type="checkbox" class="account_checkox" name="{{$key}}_view" @if($view_val==1) checked @endif  value="1" id="account_view_{{$acc_i}}">
+                        <input type="checkbox" class="account_checkox" name="{{$key_value}}_view" @if($view_val==1) checked @endif  value="1" id="account_view_{{$acc_i}}">
                     </div>
                     <div class="col-1">
                        
-                        <input type="checkbox" class="account_checkox" name="{{$key}}_delete" @if($delete_val==1) checked @endif value="1" id="account_delete_{{$acc_i}}">
+                        <input type="checkbox" class="account_checkox" name="{{$key_value}}_delete" @if($delete_val==1) checked @endif value="1" id="account_delete_{{$acc_i}}">
                     </div>
                     <div class="col-1">
                        
-                        <input type="checkbox" class="account_checkox" name="{{$key}}_export"   @if($export_val==1) checked @endif  value="1" id="account_export_{{$acc_i}}">
+                        <input type="checkbox" class="account_checkox" name="{{$key_value}}_export"   @if($export_val==1) checked @endif  value="1" id="account_export_{{$acc_i}}">
                     </div>    
                 </div>
             @php
@@ -137,10 +140,13 @@
             $view_val=permissionCheck($role_id,$key,'view');
         @endphp
         @php 
-            $delete_val=permissionCheck($role_id,$key,'view');
+            $delete_val=permissionCheck($role_id,$key,'delete');
         @endphp
         @php 
-            $export_val=permissionCheck($role_id,$key,'view');
+            $export_val=permissionCheck($role_id,$key,'export');
+        @endphp
+        @php
+         $key_value=dotReplaceUnderscore($key);
         @endphp
         <div class="col-1">
             <input type="checkbox" class="auth_checkox" name="auth_select_all_row_wise_{{$auth_i}}"
@@ -152,16 +158,16 @@
         <input type="hidden" name="auth_menu_name[]" id="auth_menu_name" value="{{$key}}">                   
         </div>
         <div class="col-1">
-            <input type="checkbox" class="auth_checkox"  @if($add_val==1) checked @endif name="{{$key}}_add"  value="1" id="auth_add_{{$auth_i}}">
+            <input type="checkbox" class="auth_checkox"  @if($add_val==1) checked @endif name="{{$key_value}}_add"  value="1" id="auth_add_{{$auth_i}}">
         </div>
         <div class="col-1">
-            <input type="checkbox" class="auth_checkox" name="{{$key}}_view" @if($view_val==1) checked @endif  value="1" id="auth_view_{{$auth_i}}">
+            <input type="checkbox" class="auth_checkox" name="{{$key_value}}_view" @if($view_val==1) checked @endif  value="1" id="auth_view_{{$auth_i}}">
         </div>
         <div class="col-1">
-            <input type="checkbox" class="auth_checkox" name="{{$key}}_delete" @if($delete_val==1) checked @endif  value="1" id="auth_delete_{{$auth_i}}">
+            <input type="checkbox" class="auth_checkox" name="{{$key_value}}_delete" @if($delete_val==1) checked @endif  value="1" id="auth_delete_{{$auth_i}}">
         </div>
         <div class="col-1">
-            <input type="checkbox" class="auth_checkox" name="{{$key}}_export" @if($export_val==1) checked @endif  value="1" id="auth_export_{{$auth_i}}">
+            <input type="checkbox" class="auth_checkox" name="{{$key_value}}_export" @if($export_val==1) checked @endif  value="1" id="auth_export_{{$auth_i}}">
         </div>    
     </div>
 @php
@@ -219,10 +225,13 @@ $auth_row++;
                 $view_val=permissionCheck($role_id,$key,'view');
             @endphp
             @php 
-                $delete_val=permissionCheck($role_id,$key,'view');
+                $delete_val=permissionCheck($role_id,$key,'delete');
             @endphp
             @php 
-                $export_val=permissionCheck($role_id,$key,'view');
+                $export_val=permissionCheck($role_id,$key,'export');
+            @endphp
+            @php
+                $key_value=dotReplaceUnderscore($key);
             @endphp
              <div class="col-1">
                  <input type="checkbox" class="staff_checkox" name="staff_select_all_row_wise_{{$si}}"
@@ -234,16 +243,16 @@ $auth_row++;
              <input type="hidden" name="staff_menu_name[]" id="staff_menu_name" value="{{$key}}">                   
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="staff_checkox" name="{{$key}}_add"  @if($add_val==1) checked @endif value="1" id="staff_add_{{$si}}">
+                 <input type="checkbox" class="staff_checkox" name="{{$key_value}}_add"  @if($add_val==1) checked @endif value="1" id="staff_add_{{$si}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="staff_checkox" name="{{$key}}_view"   @if($view_val==1) checked @endif value="1" id="staff_view_{{$si}}">
+                 <input type="checkbox" class="staff_checkox" name="{{$key_value}}_view"   @if($view_val==1) checked @endif value="1" id="staff_view_{{$si}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="staff_checkox" name="{{$key}}_delete" @if($delete_val==1) checked @endif  value="1" id="staff_delete_{{$si}}">
+                 <input type="checkbox" class="staff_checkox" name="{{$key_value}}_delete" @if($delete_val==1) checked @endif  value="1" id="staff_delete_{{$si}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="staff_checkox" name="{{$key}}_export"  @if($export_val==1) checked @endif  value="1" id="staff_export_{{$si}}">
+                 <input type="checkbox" class="staff_checkox" name="{{$key_value}}_export"  @if($export_val==1) checked @endif  value="1" id="staff_export_{{$si}}">
              </div>    
          </div>
      @php
@@ -300,10 +309,13 @@ $auth_row++;
                 $view_val=permissionCheck($role_id,$key,'view');
             @endphp
             @php 
-                $delete_val=permissionCheck($role_id,$key,'view');
+                $delete_val=permissionCheck($role_id,$key,'delete');
             @endphp
             @php 
-                $export_val=permissionCheck($role_id,$key,'view');
+                $export_val=permissionCheck($role_id,$key,'export');
+            @endphp
+            @php
+                $key_value=dotReplaceUnderscore($key);
             @endphp
              <div class="col-1">
                  <input type="checkbox" class="dl_checkox" name="dl_select_all_row_wise_{{$dli}}" 
@@ -315,16 +327,16 @@ $auth_row++;
              <input type="hidden" name="dl_menu_name[]" id="dl_menu_name" value="{{$key}}">                   
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="dl_checkox" name="{{$key}}_add" @if($add_val==1) checked @endif  value="1" id="dl_add_{{$dli}}">
+                 <input type="checkbox" class="dl_checkox" name="{{$key_value}}_add" @if($add_val==1) checked @endif  value="1" id="dl_add_{{$dli}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="dl_checkox" name="{{$key}}_view" @if($view_val==1) checked @endif value="1" id="dl_view_{{$dli}}">
+                 <input type="checkbox" class="dl_checkox" name="{{$key_value}}_view" @if($view_val==1) checked @endif value="1" id="dl_view_{{$dli}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="dl_checkox" name="{{$key}}_delete" @if($delete_val==1) checked @endif  value="1" id="dl_delete_{{$dli}}">
+                 <input type="checkbox" class="dl_checkox" name="{{$key_value}}_delete" @if($delete_val==1) checked @endif  value="1" id="dl_delete_{{$dli}}">
              </div>
              <div class="col-1">
-                 <input type="checkbox" class="dl_checkox" name="{{$key}}_export"  @if($export_val==1) checked @endif   value="1" id="dl_export_{{$dli}}">
+                 <input type="checkbox" class="dl_checkox" name="{{$key_value}}_export"  @if($export_val==1) checked @endif   value="1" id="dl_export_{{$dli}}">
              </div>    
          </div>
      @php
@@ -381,10 +393,13 @@ $auth_row++;
                 $view_val=permissionCheck($role_id,$key,'view');
             @endphp
             @php 
-                $delete_val=permissionCheck($role_id,$key,'view');
+                $delete_val=permissionCheck($role_id,$key,'delete');
             @endphp
             @php 
-                $export_val=permissionCheck($role_id,$key,'view');
+                $export_val=permissionCheck($role_id,$key,'export');
+            @endphp
+            @php
+                $key_value=dotReplaceUnderscore($key);
             @endphp
          <div class="col-1">
              <input type="checkbox" class="bm_checkox" name="bm_select_all_row_wise_{{$bmi}}" 
@@ -396,16 +411,16 @@ $auth_row++;
          <input type="hidden" name="bm_menu_name[]" id="bm_menu_name" value="{{$key}}">                   
          </div>
          <div class="col-1">
-             <input type="checkbox" class="bm_checkox" name="{{$key}}_add" @if($add_val==1) checked @endif  value="1" id="bm_add_{{$bmi}}">
+             <input type="checkbox" class="bm_checkox" name="{{$key_value}}_add" @if($add_val==1) checked @endif  value="1" id="bm_add_{{$bmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="bm_checkox" name="{{$key}}_view"  @if($view_val==1) checked @endif  value="1" id="bm_view_{{$bmi}}">
+             <input type="checkbox" class="bm_checkox" name="{{$key_value}}_view"  @if($view_val==1) checked @endif  value="1" id="bm_view_{{$bmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="bm_checkox" name="{{$key}}_delete" @if($delete_val==1) checked @endif  value="1" id="bm_delete_{{$bmi}}">
+             <input type="checkbox" class="bm_checkox" name="{{$key_value}}_delete" @if($delete_val==1) checked @endif  value="1" id="bm_delete_{{$bmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="bm_checkox" name="{{$key}}_export" @if($export_val==1) checked @endif  value="1" id="bm_export_{{$bmi}}">
+             <input type="checkbox" class="bm_checkox" name="{{$key_value}}_export" @if($export_val==1) checked @endif  value="1" id="bm_export_{{$bmi}}">
          </div>    
      </div>
  @php
@@ -463,10 +478,13 @@ $auth_row++;
                 $view_val=permissionCheck($role_id,$key,'view');
             @endphp
             @php 
-                $delete_val=permissionCheck($role_id,$key,'view');
+                $delete_val=permissionCheck($role_id,$key,'delete');
             @endphp
             @php 
-                $export_val=permissionCheck($role_id,$key,'view');
+                $export_val=permissionCheck($role_id,$key,'export');
+            @endphp
+            @php
+                $key_value=dotReplaceUnderscore($key);
             @endphp
          <div class="col-1">
              <input type="checkbox" class="att_man_checkox" name="att_man_select_all_row_wise_{{$att_mani}}"
@@ -478,16 +496,16 @@ $auth_row++;
          <input type="hidden" name="att_man_menu_name[]" id="att_man_menu_name" value="{{$key}}">                   
          </div>
          <div class="col-1">
-             <input type="checkbox" class="att_man_checkox" name="{{$key}}_add" @if($add_val==1) checked @endif  value="1" id="att_man_add_{{$att_mani}}">
+             <input type="checkbox" class="att_man_checkox" name="{{$key_value}}_add" @if($add_val==1) checked @endif  value="1" id="att_man_add_{{$att_mani}}">
          </div> 
          <div class="col-1">
-             <input type="checkbox" class="att_man_checkox" name="{{$key}}_view" @if($view_val==1) checked @endif  value="1" id="att_man_view_{{$att_mani}}">
+             <input type="checkbox" class="att_man_checkox" name="{{$key_value}}_view" @if($view_val==1) checked @endif  value="1" id="att_man_view_{{$att_mani}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="att_man_checkox" name="{{$key}}_delete" @if($delete_val==1) checked @endif   value="1" id="att_man_delete_{{$att_mani}}">
+             <input type="checkbox" class="att_man_checkox" name="{{$key_value}}_delete" @if($delete_val==1) checked @endif   value="1" id="att_man_delete_{{$att_mani}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="att_man_checkox" name="{{$key}}_export"  @if($export_val==1) checked @endif value="1"  id="att_man_export_{{$att_mani}}">
+             <input type="checkbox" class="att_man_checkox" name="{{$key_value}}_export"  @if($export_val==1) checked @endif value="1"  id="att_man_export_{{$att_mani}}">
          </div>    
      </div>
  @php
@@ -544,10 +562,13 @@ $auth_row++;
             $view_val=permissionCheck($role_id,$key,'view');
         @endphp
         @php 
-            $delete_val=permissionCheck($role_id,$key,'view');
+            $delete_val=permissionCheck($role_id,$key,'delete');
         @endphp
         @php 
-            $export_val=permissionCheck($role_id,$key,'view');
+            $export_val=permissionCheck($role_id,$key,'export');
+        @endphp
+        @php
+            $key_value=dotReplaceUnderscore($key);
         @endphp
          <div class="col-1">
              <input type="checkbox" class="lm_checkox" name="lm_select_all_row_wise_{{$lmi}}" 
@@ -559,16 +580,16 @@ $auth_row++;
          <input type="hidden" name="lm_menu_name[]" id="lm_menu_name" value="{{$key}}">                   
          </div>
          <div class="col-1">
-             <input type="checkbox" class="lm_checkox" name="{{$key}}_add"  @if($add_val==1) checked @endif  value="1" id="lm_add_{{$lmi}}">
+             <input type="checkbox" class="lm_checkox" name="{{$key_value}}_add"  @if($add_val==1) checked @endif  value="1" id="lm_add_{{$lmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="lm_checkox" name="{{$key}}_view" @if($view_val==1) checked @endif  value="1"  id="lm_view_{{$lmi}}">
+             <input type="checkbox" class="lm_checkox" name="{{$key_value}}_view" @if($view_val==1) checked @endif  value="1"  id="lm_view_{{$lmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="lm_checkox" name="{{$key}}_delete" @if($delete_val==1) checked @endif value="1"  id="lm_delete_{{$lmi}}">
+             <input type="checkbox" class="lm_checkox" name="{{$key_value}}_delete" @if($delete_val==1) checked @endif value="1"  id="lm_delete_{{$lmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="lm_checkox" name="{{$key}}_export" @if($export_val==1) checked @endif  value="1" id="lm_export_{{$lmi}}">
+             <input type="checkbox" class="lm_checkox" name="{{$key_value}}_export" @if($export_val==1) checked @endif  value="1" id="lm_export_{{$lmi}}">
          </div>    
      </div>
  @php
@@ -626,10 +647,13 @@ $auth_row++;
             $view_val=permissionCheck($role_id,$key,'view');
         @endphp
         @php 
-            $delete_val=permissionCheck($role_id,$key,'view');
+            $delete_val=permissionCheck($role_id,$key,'delete');
         @endphp
         @php 
-            $export_val=permissionCheck($role_id,$key,'view');
+            $export_val=permissionCheck($role_id,$key,'export');
+        @endphp
+        @php
+            $key_value=dotReplaceUnderscore($key);
         @endphp
          <div class="col-1">
              <input type="checkbox" class="prm_checkox" name="prm_select_all_row_wise_{{$prmi}}" 
@@ -641,16 +665,16 @@ $auth_row++;
          <input type="hidden" name="prm_menu_name[]" id="prm_menu_name" value="{{$key}}">                   
          </div>
          <div class="col-1">
-             <input type="checkbox" class="prm_checkox" name="{{$key}}_add" @if($add_val==1) checked @endif  value="1"  id="prm_add_{{$prmi}}">
+             <input type="checkbox" class="prm_checkox" name="{{$key_value}}_add" @if($add_val==1) checked @endif  value="1"  id="prm_add_{{$prmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="prm_checkox" name="{{$key}}_view" @if($view_val==1) checked @endif value="1" id="prm_view_{{$prmi}}">
+             <input type="checkbox" class="prm_checkox" name="{{$key_value}}_view" @if($view_val==1) checked @endif value="1" id="prm_view_{{$prmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="prm_checkox" name="{{$key}}_delete" @if($delete_val==1) checked @endif   value="1" id="prm_delete_{{$prmi}}">
+             <input type="checkbox" class="prm_checkox" name="{{$key_value}}_delete" @if($delete_val==1) checked @endif   value="1" id="prm_delete_{{$prmi}}">
          </div>
          <div class="col-1">
-             <input type="checkbox" class="prm_checkox" name="{{$key}}_export" @if($export_val==1) checked @endif  value="1" id="prm_export_{{$prmi}}">
+             <input type="checkbox" class="prm_checkox" name="{{$key_value}}_export" @if($export_val==1) checked @endif  value="1" id="prm_export_{{$prmi}}">
          </div>    
      </div>
  @php
@@ -707,10 +731,13 @@ $auth_row++;
                         $view_val=permissionCheck($role_id,$key,'view');
                     @endphp
                     @php 
-                        $delete_val=permissionCheck($role_id,$key,'view');
+                        $delete_val=permissionCheck($role_id,$key,'delete');
                     @endphp
                     @php 
-                        $export_val=permissionCheck($role_id,$key,'view');
+                        $export_val=permissionCheck($role_id,$key,'export');
+                    @endphp
+                    @php
+                        $key_value=dotReplaceUnderscore($key);
                     @endphp
                     <div class="col-1">
                         <input type="checkbox" class="master_checkox" name="select_all_row_wise_{{$i}}" 
@@ -722,16 +749,16 @@ $auth_row++;
                     <input type="hidden" name="menu_name[]" id="menu_name" value="{{$key}}">                   
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="master_checkox" @if($add_val==1) checked @endif name="{{$key}}_add"  value="1" id="master_add_{{$i}}">
+                        <input type="checkbox" class="master_checkox" @if($add_val==1) checked @endif name="{{$key_value}}_add"  value="1" id="master_add_{{$i}}">
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="master_checkox" name="{{$key}}_view"  @if($view_val==1) checked @endif value="1"  id="master_view_{{$i}}">
+                        <input type="checkbox" class="master_checkox" name="{{$key_value}}_view"  @if($view_val==1) checked @endif value="1"  id="master_view_{{$i}}">
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="master_checkox" name="{{$key}}_delete" value="1" @if($delete_val==1) checked @endif  id="master_delete_{{$i}}">
+                        <input type="checkbox" class="master_checkox" name="{{$key_value}}_delete" value="1" @if($delete_val==1) checked @endif  id="master_delete_{{$i}}">
                     </div>
                     <div class="col-1">
-                        <input type="checkbox" class="master_checkox" name="{{$key}}_export"  value="1"  @if($export_val==1) checked @endif id="master_export_{{$i}}">
+                        <input type="checkbox" class="master_checkox" name="{{$key_value}}_export"  value="1"  @if($export_val==1) checked @endif id="master_export_{{$i}}">
                     </div>    
                 </div>
             @php

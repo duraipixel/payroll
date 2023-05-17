@@ -32,7 +32,10 @@
         <div class="card-toolbar">
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-
+                @php
+                $route_name = request()->route()->getName();               
+            @endphp
+            @if( access()->buttonAccess($route_name,'export') )
                 <a type="button" class="btn btn-light-primary me-3" href="{{ route('salary-head.export') }}">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
                     <span class="svg-icon svg-icon-2">
@@ -50,10 +53,12 @@
                     </span>
                     <!--end::Svg Icon-->Export
                 </a>
-
+            @endif
+            @if( access()->buttonAccess($route_name,'add_edit') )
                 <button type="button" class="btn btn-primary" id="add_modal" onclick="getSalaryFieldModal()">
                     {!! plusSvg() !!} Add Salary Field
                 </button>
+            @endif
 
             </div>
 

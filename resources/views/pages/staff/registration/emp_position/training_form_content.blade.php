@@ -75,10 +75,13 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('training-topic','add_edit') )
+
             <span class="position-absolute btn btn-success btn-md top-0 end-0"
                 onclick="return openAddModel('training_topic')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
     </div>
 

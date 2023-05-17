@@ -19,10 +19,12 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('duty-class','add_edit') )
             <span class="position-absolute btn btn-success btn-md top-0 end-0"
                 onclick="return openAddModel('duty_class')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
     </div>
     <div class="col-lg-6 mb-5">
@@ -39,10 +41,13 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('duty-type','add_edit') )
+
             <span class="position-absolute btn btn-success btn-md top-0 end-0"
                 onclick="return openAddModel('duty_type')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
     </div>
     
@@ -60,10 +65,12 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('other-school','add_edit') )
             <span class="position-absolute btn btn-success btn-md top-0 end-0"
                 onclick="return openAddModel('other_school')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
     </div>
     
@@ -80,11 +87,13 @@
                         </option>
                     @endforeach
                 @endisset
-            </select>
+            </select>            
+            @if( access()->buttonAccess('place','add_edit') )
             <span class="position-absolute btn btn-success btn-md top-0 end-0"
                 onclick="return openAddModel('other_places')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
     </div>
     <!--end::Input group-->

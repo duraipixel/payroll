@@ -27,10 +27,13 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('board','add_edit') )
+
             <span class="position-absolute btn btn-success btn-md top-0 end-0"
                 onclick="return openAddModel('boards')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
 
     </div>
@@ -60,10 +63,13 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('subject','add_edit') )
+
             <span class="position-absolute btn btn-success btn-md top-0 end-0"
                 onclick="return openAddModel('main_subject')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
     </div>
     <!--end::Input group-->
@@ -83,10 +89,12 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('subject','add_edit') )
             <span class="position-absolute btn btn-success btn-md top-0 end-0"
                 onclick="return openAddModel('ancillary_subject')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
     </div>
     <!--end::Input group-->
@@ -127,9 +135,11 @@
                     @endforeach
                 @endisset
             </select>
+            @if( access()->buttonAccess('professional_type','add_edit') )
             <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('professional_type')">
                 <i class="fa fa-plus"></i>
             </span>
+            @endif
         </div>
         
     </div>

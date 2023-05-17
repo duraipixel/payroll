@@ -184,7 +184,7 @@
                             </a>
                         </div>
                         @endif
-                       
+                        @if( access()->hasAccess('user.permission','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['user.permission'])) active @endif"
                                 href="{{ route('user.permission') }}">
@@ -194,12 +194,13 @@
                                 <span class="menu-title">Permissions</span>
                             </a>
                         </div>
+                        @endif
                        
                     </div>
                 </div>
                 @endif
               
-               
+                @if( access()->hasAccess(['staff.register', 'staff.list','staff.bulk']) )
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion @if (request()->routeIs([
                     'staff.register',
                     'staff.list',
@@ -230,7 +231,9 @@
                         <span class="menu-title">Staff Management</span>
                         <span class="menu-arrow"></span>
                     </span>
+                  
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        @if( access()->hasAccess('staff.register','view') )
                         <div class="menu-item">
                             <a class="menu-link  @if (request()->routeIs(['staff.register'])) active @endif"
                                 href="{{ route('staff.register') }}">
@@ -240,6 +243,8 @@
                                 <span class="menu-title">Register</span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('staff.list','view') )
                         <div class="menu-item">
                             <a class="menu-link  @if (request()->routeIs(['staff.list'])) active @endif"
                                 href="{{ route('staff.list') }}">
@@ -248,7 +253,8 @@
                                 </span>
                                 <span class="menu-title">Staff List</span>
                             </a>
-                        </div>
+                        </div> @endif
+                       
                         <div class="menu-item">
                             <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">
@@ -257,6 +263,8 @@
                                 <span class="menu-title">Staff Transfer</span>
                             </a>
                         </div>
+                     
+                        @if( access()->hasAccess('staff.bulk','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['staff.bulk'])) active @endif"
                                 href="{{ route('staff.bulk') }}">
@@ -266,9 +274,10 @@
                                 <span class="menu-title">Bulk Upload</span>
                             </a>
                         </div>
-
+                        @endif
                     </div>
                 </div>
+                @endif
                 <div class="menu-item ">
                     <span class="menu-link @if (request()->routeIs(['appointment.orders'])) active @endif">
                         <span class="menu-icon">
@@ -336,6 +345,7 @@
                         </div>
                     </div>
                 </div>
+                @if( access()->hasAccess(['user.document_locker']) )
                 <!-- Document locker Start-->
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion @if (request()->routeIs(['user.document_locker'])) hover show @endif">
@@ -355,6 +365,7 @@
                         <span class="menu-arrow"></span>
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        @if( access()->hasAccess('user.document_locker','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['user.document_locker'])) active @endif "
                                 href="{{ route('user.document_locker') }}">
@@ -364,6 +375,7 @@
                                 <span class="menu-title">List</span>
                             </a>
                         </div>
+                        @endif
                         <div class="menu-item">
                             <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">
@@ -375,9 +387,10 @@
                     </div>
                 </div>
                 <!-- Document locker End-->
+                @endif
 
                 {{-- Block Mapping Start --}}
-
+                @if( access()->hasAccess(['blocks']) )
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion @if (request()->routeIs(['blocks'])) hover show @endif">
                     <span class="menu-link">
@@ -396,6 +409,7 @@
                         <span class="menu-arrow"></span>
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        @if( access()->hasAccess('blocks','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['blocks'])) active @endif"
                                 href="{{ route('blocks') }}">
@@ -405,8 +419,11 @@
                                 <span class="menu-title">Blocks</span>
                             </a>
                         </div>
+                        @endif
                     </div>
                 </div>
+                @endif
+                @if( access()->hasAccess(['att-manual-entry']) )
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion @if (request()->routeIs(['att-manual-entry'])) hover show @endif">
                     <span class="menu-link">
@@ -435,6 +452,7 @@
                         </div>
                     </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        @if( access()->hasAccess('att-manual-entry','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['att-manual-entry'])) active @endif"
                                 href="{{ route('att-manual-entry') }}">
@@ -444,8 +462,11 @@
                                 <span class="menu-title">Manual Entry</span>
                             </a>
                         </div>
+                        @endif
                     </div>
                 </div>
+                @endif
+                @if( access()->hasAccess(['leave-mapping', 'leave-status', 'leave-head', 'leaves.list', 'holiday']) )
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion  @if (request()->routeIs(['leave-mapping', 'leave-status', 'leave-head', 'leaves.list', 'holiday'])) hover show @endif">
                     <span class="menu-link">
@@ -463,8 +484,9 @@
                         <span class="menu-title">Leave Management</span>
                         <span class="menu-arrow"></span>
                     </span>
-
+                    @if( access()->hasAccess('leaves.list','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
+                      
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['leaves.list'])) active @endif"
                                 href="{{ route('leaves.list') }}">
@@ -475,7 +497,8 @@
                             </a>
                         </div>
                     </div>
-
+                    @endif
+                    @if( access()->hasAccess('leave-status','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['leave-status'])) active @endif"
@@ -487,6 +510,8 @@
                             </a>
                         </div>
                     </div>
+                    @endif
+                    @if( access()->hasAccess('leave-head','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['leave-head'])) active @endif"
@@ -498,6 +523,8 @@
                             </a>
                         </div>
                     </div>
+                    @endif
+                    @if( access()->hasAccess('leave-mapping','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['leave-mapping'])) active @endif"
@@ -509,7 +536,8 @@
                             </a>
                         </div>
                     </div>
-
+                    @endif
+                    @if( access()->hasAccess('holiday','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['holiday'])) active @endif"
@@ -521,7 +549,10 @@
                             </a>
                         </div>
                     </div>
+                    @endif
                 </div>
+                @endif
+                @if( access()->hasAccess(['salary-head']) )
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion
                 @if (request()->routeIs(['salary-head'])) hover show @endif">
@@ -540,6 +571,7 @@
                         <span class="menu-title">Payroll Management</span>
                         <span class="menu-arrow"></span>
                     </span>
+                    @if( access()->hasAccess('salary-head','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
                             <a class="menu-link  @if (request()->routeIs(['salary-head'])) active @endif"
@@ -551,6 +583,7 @@
                             </a>
                         </div>
                     </div>
+                    @endif
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
                             <a class="menu-link" href="javascript:void(0)">
@@ -563,6 +596,7 @@
                     </div>
 
                 </div>
+                @endif
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -603,7 +637,37 @@
                 </div>
 
                 {{-- Block Mappting End --}}
-
+                @if( access()->hasAccess([
+                    'scheme',
+                    'bank',
+                    'bank-branch',
+                    'blood_group',
+                    'caste',
+                    'class',
+                    'community',
+                    'department',
+                    'designation',
+                    'division',
+                    'document_type',
+                    'duty-class',
+                    'duty-type',
+                    'professional_type',
+                    'nature-of-employeement',
+                    'institutions',
+                    'language',
+                    'nationality',
+                    'place',
+                    'other-school',
+                    'workplace',
+                    'qualification',
+                    'relationship',
+                    'religion',
+                    'staff-category',
+                    'subject',
+                    'teaching-type',
+                    'training-topic',
+                    'board',
+                ]))
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion
                 @if (request()->routeIs([
@@ -657,7 +721,7 @@
                         <span class="menu-arrow"></span>
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
-
+                        @if( access()->hasAccess('scheme','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['scheme'])) active @endif"
                                 href="{{ route('scheme') }}">
@@ -667,6 +731,8 @@
                                 <span class="menu-title">Attence Schemes</span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('bank','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['bank'])) active @endif"
                                 href="{{ route('bank') }}">
@@ -676,6 +742,8 @@
                                 <span class="menu-title">Bank</span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('bank-branch','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['bank-branch'])) active @endif"
                                 href="{{ route('bank-branch') }}">
@@ -685,6 +753,8 @@
                                 <span class="menu-title"> Bank Branches</span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('blood_group','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['blood_group'])) active @endif"
                                 href="{{ route('blood_group') }}">
@@ -694,6 +764,8 @@
                                 <span class="menu-title"> Blood Groups </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('caste','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['caste'])) active @endif"
                                 href="{{ route('caste') }}">
@@ -703,6 +775,8 @@
                                 <span class="menu-title"> Caste </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('class','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['class'])) active @endif"
                                 href="{{ route('class') }}">
@@ -712,6 +786,8 @@
                                 <span class="menu-title"> Classes </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('community','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['community'])) active @endif"
                                 href="{{ route('community') }}">
@@ -721,6 +797,8 @@
                                 <span class="menu-title"> Community </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('department','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['department'])) active @endif"
                                 href="{{ route('department') }}">
@@ -730,6 +808,8 @@
                                 <span class="menu-title"> Departments </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('designation','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['designation'])) active @endif"
                                 href="{{ route('designation') }}">
@@ -739,6 +819,8 @@
                                 <span class="menu-title"> Designations </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('division','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['division'])) active @endif"
                                 href="{{ route('division') }}">
@@ -748,6 +830,8 @@
                                 <span class="menu-title"> Divisions </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('document_type','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['document_type'])) active @endif"
                                 href="{{ route('document_type') }}">
@@ -757,6 +841,8 @@
                                 <span class="menu-title"> Document Types </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('duty-class','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['duty-class'])) active @endif"
                                 href="{{ route('duty-class') }}">
@@ -766,6 +852,8 @@
                                 <span class="menu-title"> Duty Class </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('duty-type','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['duty-type'])) active @endif"
                                 href="{{ route('duty-type') }}">
@@ -775,6 +863,8 @@
                                 <span class="menu-title"> Duty Types </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('professional_type','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['professional_type'])) active @endif"
                                 href="{{ route('professional_type') }}">
@@ -784,6 +874,8 @@
                                 <span class="menu-title"> Education Types </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('nature-of-employeement','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['nature-of-employeement'])) active @endif"
                                 href="{{ route('nature-of-employeement') }}">
@@ -793,6 +885,8 @@
                                 <span class="menu-title"> Employment Nature </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('institutions','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['institutions'])) active @endif"
                                 href="{{ route('institutions') }}">
@@ -802,6 +896,8 @@
                                 <span class="menu-title"> Institutions </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('language','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['language'])) active @endif"
                                 href="{{ route('language') }}">
@@ -811,6 +907,8 @@
                                 <span class="menu-title"> Languages </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('nationality','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['nationality'])) active @endif"
                                 href="{{ route('nationality') }}">
@@ -820,7 +918,8 @@
                                 <span class="menu-title"> Nationality </span>
                             </a>
                         </div>
-
+                        @endif
+                        @if( access()->hasAccess('place','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['place'])) active @endif"
                                 href="{{ route('place') }}">
@@ -830,6 +929,8 @@
                                 <span class="menu-title"> Other School Place </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('other-school','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['other-school'])) active @endif"
                                 href="{{ route('other-school') }}">
@@ -839,6 +940,8 @@
                                 <span class="menu-title"> Other Schools </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('workplace','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['workplace'])) active @endif"
                                 href="{{ route('workplace') }}">
@@ -848,6 +951,8 @@
                                 <span class="menu-title"> Place Of Works </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('qualification','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['qualification'])) active @endif"
                                 href="{{ route('qualification') }}">
@@ -857,6 +962,8 @@
                                 <span class="menu-title"> Qualifications </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('relationship','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['relationship'])) active @endif"
                                 href="{{ route('relationship') }}">
@@ -866,6 +973,8 @@
                                 <span class="menu-title"> Relationship Types </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('religion','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['religion'])) active @endif"
                                 href="{{ route('religion') }}">
@@ -875,6 +984,8 @@
                                 <span class="menu-title"> Religions </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('staff-category','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['staff-category'])) active @endif"
                                 href="{{ route('staff-category') }}">
@@ -884,6 +995,8 @@
                                 <span class="menu-title"> Staff Category </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('subject','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['subject'])) active @endif"
                                 href="{{ route('subject') }}">
@@ -893,6 +1006,8 @@
                                 <span class="menu-title"> Subjects </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('teaching-type','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['teaching-type'])) active @endif"
                                 href="{{ route('teaching-type') }}">
@@ -902,6 +1017,8 @@
                                 <span class="menu-title"> Teaching Types </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('training-topic','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['training-topic'])) active @endif"
                                 href="{{ route('training-topic') }}">
@@ -911,6 +1028,8 @@
                                 <span class="menu-title"> Training Topics </span>
                             </a>
                         </div>
+                        @endif
+                        @if( access()->hasAccess('board','view') )
                         <div class="menu-item">
                             <a class="menu-link @if (request()->routeIs(['board'])) active @endif"
                                 href="{{ route('board') }}">
@@ -920,9 +1039,11 @@
                                 <span class="menu-title"> University/Boards </span>
                             </a>
                         </div>
+                        @endif                        
 
                     </div>
                 </div>
+                @endif
 
             </div>
             <!--end::Menu-->

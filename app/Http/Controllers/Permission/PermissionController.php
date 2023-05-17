@@ -67,6 +67,7 @@ class PermissionController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->all());
         $role_check  = Permission::where('role_id',$request->role_id)->get();
         if(count($role_check))
         {
@@ -80,15 +81,16 @@ class PermissionController extends Controller
         {
             $message='Menu Permission Assigned Sucessfully'; 
         }
+      // dd('hi');
         $permission_menu = array('add', 'delete', 'view', 'export');
         //Account Menu Permission Insert Start 
         if( isset( $request->account_menu_name ) && !empty( $request->account_menu_name ) ) {
             $account_menu_roles = [];
             foreach ($request->account_menu_name as $account_menu_item) {
-                
+                $account_menu_item_value=dotReplaceUnderscore($account_menu_item);                
                 $account_tmp = [];
                 foreach ($permission_menu as $account_per_value) {
-                    $account_tmp[$account_per_value] = $_POST[$account_menu_item.'_'.$account_per_value] ?? 0;
+                    $account_tmp[$account_per_value] = $_POST[$account_menu_item_value.'_'.$account_per_value] ?? 0;
                 }
                 $account_menu_roles[$account_menu_item] = $account_tmp;
             }
@@ -110,13 +112,15 @@ class PermissionController extends Controller
         if( isset( $request->auth_menu_name ) && !empty( $request->auth_menu_name ) ) {
             $auth_menu_roles = [];
             foreach ($request->auth_menu_name as $auth_menu_item) {
-                
+                $auth_menu_item_value=dotReplaceUnderscore($auth_menu_item);
                 $auth_tmp = [];
                 foreach ($permission_menu as $auth_per_value) {
-                    $auth_tmp[$auth_per_value] = $_POST[$auth_menu_item.'_'.$auth_per_value] ?? 0;
+                    $auth_tmp[$auth_per_value] = $_POST[$auth_menu_item_value.'_'.$auth_per_value] ?? 0;
                 }
+               
                 $auth_menu_roles[$auth_menu_item] = $auth_tmp;
             }
+         
         }  
         foreach ($auth_menu_roles as $key => $auth_insert_value) {
             $authInsertData=[];
@@ -135,10 +139,10 @@ class PermissionController extends Controller
         if( isset( $request->staff_menu_name ) && !empty( $request->staff_menu_name ) ) {
             $staff_menu_roles = [];
             foreach ($request->staff_menu_name as $staff_menu_item) {
-                
+                $staff_menu_item_value=dotReplaceUnderscore($staff_menu_item);
                 $staff_tmp = [];
                 foreach ($permission_menu as $staff_per_value) {
-                    $staff_tmp[$staff_per_value] = $_POST[$staff_menu_item.'_'.$staff_per_value] ?? 0;
+                    $staff_tmp[$staff_per_value] = $_POST[$staff_menu_item_value.'_'.$staff_per_value] ?? 0;
                 }
                 $staff_menu_roles[$staff_menu_item] = $staff_tmp;
             }
@@ -160,10 +164,10 @@ class PermissionController extends Controller
         if( isset( $request->dl_menu_name ) && !empty( $request->dl_menu_name ) ) {
             $dl_menu_roles = [];
             foreach ($request->dl_menu_name as $dl_menu_item) {
-                
+                $dl_menu_item_value=dotReplaceUnderscore($dl_menu_item);                
                 $dl_tmp = [];
                 foreach ($permission_menu as $dl_per_value) {
-                    $dl_tmp[$dl_per_value] = $_POST[$dl_menu_item.'_'.$dl_per_value] ?? 0;
+                    $dl_tmp[$dl_per_value] = $_POST[$dl_menu_item_value.'_'.$dl_per_value] ?? 0;
                 }
                 $dl_menu_roles[$dl_menu_item] = $dl_tmp;
             }
@@ -185,10 +189,10 @@ class PermissionController extends Controller
         if( isset( $request->bm_menu_name ) && !empty( $request->bm_menu_name ) ) {
             $bm_menu_roles = [];
             foreach ($request->bm_menu_name as $bm_menu_item) {
-                
+                $bm_menu_item_value=dotReplaceUnderscore($bm_menu_item);                             
                 $bm_tmp = [];
                 foreach ($permission_menu as $bm_per_value) {
-                    $bm_tmp[$bm_per_value] = $_POST[$bm_menu_item.'_'.$bm_per_value] ?? 0;
+                    $bm_tmp[$bm_per_value] = $_POST[$bm_menu_item_value.'_'.$bm_per_value] ?? 0;
                 }
                 $bm_menu_roles[$bm_menu_item] = $bm_tmp;
             }
@@ -210,10 +214,10 @@ class PermissionController extends Controller
         if( isset( $request->att_man_menu_name ) && !empty( $request->att_man_menu_name ) ) {
             $att_menu_roles = [];
             foreach ($request->att_man_menu_name as $att_menu_item) {
-                
+                $att_menu_item_value=dotReplaceUnderscore($att_menu_item);
                 $att_tmp = [];
                 foreach ($permission_menu as $att_per_value) {
-                    $att_tmp[$att_per_value] = $_POST[$att_menu_item.'_'.$att_per_value] ?? 0;
+                    $att_tmp[$att_per_value] = $_POST[$att_menu_item_value.'_'.$att_per_value] ?? 0;
                 }
                 $att_menu_roles[$att_menu_item] = $att_tmp;
             }
@@ -235,10 +239,10 @@ class PermissionController extends Controller
         if( isset( $request->lm_menu_name ) && !empty( $request->lm_menu_name ) ) {
             $lm_menu_roles = [];
             foreach ($request->lm_menu_name as $lm_menu_item) {
-                
+                $lm_menu_item_value=dotReplaceUnderscore($lm_menu_item);                
                 $lm_tmp = [];
                 foreach ($permission_menu as $lm_per_value) {
-                    $lm_tmp[$lm_per_value] = $_POST[$lm_menu_item.'_'.$lm_per_value] ?? 0;
+                    $lm_tmp[$lm_per_value] = $_POST[$lm_menu_item_value.'_'.$lm_per_value] ?? 0;
                 }
                 $lm_menu_roles[$lm_menu_item] = $lm_tmp;
             }
@@ -260,10 +264,10 @@ class PermissionController extends Controller
          if( isset( $request->prm_menu_name ) && !empty( $request->prm_menu_name ) ) {
             $prm_menu_roles = [];
             foreach ($request->prm_menu_name as $prm_menu_item) {
-                
+                $prm_menu_item_value=dotReplaceUnderscore($prm_menu_item);  
                 $prm_tmp = [];
                 foreach ($permission_menu as $prm_per_value) {
-                    $prm_tmp[$prm_per_value] = $_POST[$prm_menu_item.'_'.$prm_per_value] ?? 0;
+                    $prm_tmp[$prm_per_value] = $_POST[$prm_menu_item_value.'_'.$prm_per_value] ?? 0;
                 }
                 $prm_menu_roles[$prm_menu_item] = $prm_tmp;
             }
@@ -285,10 +289,10 @@ class PermissionController extends Controller
          if( isset( $request->menu_name ) && !empty( $request->menu_name ) ) {
             $master_menu_roles = [];
             foreach ($request->menu_name as $master_menu_item) {
-                
+                $master_menu_item_value=dotReplaceUnderscore($master_menu_item); 
                 $master_tmp = [];
                 foreach ($permission_menu as $master_per_value) {
-                    $master_tmp[$master_per_value] = $_POST[$master_menu_item.'_'.$master_per_value] ?? 0;
+                    $master_tmp[$master_per_value] = $_POST[$master_menu_item_value.'_'.$master_per_value] ?? 0;
                 }
                 $master_menu_roles[$master_menu_item] = $master_tmp;
             }

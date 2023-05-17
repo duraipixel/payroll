@@ -22,10 +22,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('designation','add_edit') )
                         <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('designation')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
                 
@@ -44,10 +46,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('department','add_edit') )
                         <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('department')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-4 mb-5">
@@ -63,10 +67,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('division','add_edit') )
                         <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0 p-4"
                             onclick="return openAddModel('division')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
                 <!--end::Input group-->
@@ -82,10 +88,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('class','add_edit') )
                         <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0 p-4"
                             onclick="return openAddModel('class')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
                 <!--begin::Input group-->
@@ -126,10 +134,12 @@
                                 @endforeach
                             @endisset
                         </select>
+                        @if( access()->buttonAccess('scheme','add_edit') )
                         <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('scheme')">
                             <i class="fa fa-plus"></i>
                         </span>
+                        @endif
                     </div>
                 </div>
 

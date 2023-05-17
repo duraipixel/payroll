@@ -29,10 +29,13 @@
                                             @endforeach
                                         @endisset
                                     </select>
+                                    @if( access()->buttonAccess('staff-category','add_edit') )
+
                                     <span class="position-absolute btn btn-success btn-md top-0 end-0"
                                         onclick="return openAddModel('staff_category')">
                                         <i class="fa fa-plus"></i>
                                     </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -53,10 +56,13 @@
                                             @endforeach
                                         @endisset
                                     </select>
+                                    @if( access()->buttonAccess('nature-of-employeement','add_edit') )
+
                                     <span class="position-absolute btn btn-success btn-md top-0 end-0"
                                         onclick="return openAddModel('nature_of_employeement')">
                                         <i class="fa fa-plus"></i>
                                     </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -76,10 +82,13 @@
                                             @endforeach
                                         @endisset
                                     </select>
+                                    @if( access()->buttonAccess('teaching-type','add_edit') )
+
                                     <span class="position-absolute btn btn-success btn-md top-0 end-0"
                                         onclick="return openAddModel('teaching_type')">
                                         <i class="fa fa-plus"></i>
                                     </span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -98,11 +107,14 @@
                                                 </option>
                                             @endforeach
                                         @endisset
-                                    </select>
+                                    </select>            
+                                    @if( access()->buttonAccess('workplace','add_edit') )
+
                                     <span class="position-absolute btn btn-success btn-md top-0 end-0"
                                         onclick="return openAddModel('place_of_work')">
                                         <i class="fa fa-plus"></i>
                                     </span>
+                                    @endif
                                 </div>
                             </div>
 

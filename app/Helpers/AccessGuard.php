@@ -7,6 +7,53 @@ use DB;
 
 
 class AccessGuard {
+    public function buttonAccess($route_name,$type)
+    {
+        if( auth()->user()->is_super_admin ) {
+            return true;
+        } else {
+            if( !empty( $route_name ) ) {
+                $info = User::find(auth()->id());
+       
+                $data = $info->roleMapped;      
+                $role_id=$data->role_id;
+                if($type=='add_edit')
+                {
+                    $menu_check = Permission::where('role_id', $role_id)->where('add_edit_menu','1')->where('route_name',$route_name)->first();            
+                }
+                else if($type=='view')
+                {
+                   //dd($module);
+                    //DB::connection()->enableQueryLog();
+                    $menu_check = Permission::where('role_id', $role_id)->where('view_menu','1')->where('route_name',$route_name)->first();           
+                    //$queries = DB::getQueryLog();
+                    //dd($queries);
+                }
+                else if($type=='delete')
+                {
+                    $menu_check = Permission::where('role_id', $role_id)->where('delete_menu','1')->where('route_name',$route_name)->first(); 
+                }
+                else if($type=='export')
+                {
+                    $menu_check = Permission::where('role_id', $role_id)->where('export_menu','1')->where('route_name',$route_name)->first();
+                }
+                else
+                {
+                    return false; 
+                }
+               
+                if($menu_check)            
+                    return true;           
+                else            
+                return false; 
+                }
+                else
+                {
+                    return false; 
+                }
+        
+        }
+    }
     public function hasAccess($module, $permission_module = '') {
         if( auth()->user()->is_super_admin ) {
             return true;
