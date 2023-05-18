@@ -466,7 +466,7 @@
                     </div>
                 </div>
                 @endif
-                @if( access()->hasAccess(['leave-mapping', 'leave-status', 'leave-head', 'leaves.list', 'holiday']) )
+                @if( access()->hasAccess(['leave.overview','leave-mapping', 'leave-status', 'leave-head', 'leaves.list', 'holiday']) )
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion  @if (request()->routeIs(['leave-mapping', 'leave-status', 'leave-head', 'leaves.list', 'holiday'])) hover show @endif">
                     <span class="menu-link">
@@ -484,6 +484,18 @@
                         <span class="menu-title">Leave Management</span>
                         <span class="menu-arrow"></span>
                     </span>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                      
+                        <div class="menu-item">
+                            <a class="menu-link @if (request()->routeIs(['leaves.overview'])) active @endif"
+                                href="{{ route('leaves.overview') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Overview</span>
+                            </a>
+                        </div>
+                    </div>
                     @if( access()->hasAccess('leaves.list','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                       

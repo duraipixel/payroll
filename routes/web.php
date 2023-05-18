@@ -120,6 +120,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('/staff/generate/overview', [App\Http\Controllers\StaffController::class, 'generateOverviewPdf'])->name('staff.generate.overview');
 
     Route::get('/leaves', [App\Http\Controllers\Leave\LeaveController::class, 'index'])->name('leaves.list'); 
+    Route::get('/leaves/overview', [App\Http\Controllers\Leave\LeaveController::class, 'overview'])->name('leaves.overview'); 
     Route::post('/leaves/add', [App\Http\Controllers\Leave\LeaveController::class, 'addEditModal'])->name('leaves.add_edit'); 
     Route::post('/leaves/save', [App\Http\Controllers\Leave\LeaveController::class, 'saveLeaveRequest'])->name('save.leaves'); 
     Route::post('/get/staff/info', [App\Http\Controllers\CommonController::class, 'getStaffInfo'])->name('get.staff'); 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Leave;
 
 use App\Http\Controllers\Controller;
+use App\Models\AttendanceManagement\Holiday;
 use App\Models\AttendanceManagement\LeaveHead;
 use App\Models\Leave\StaffLeave;
 use App\Models\User;
@@ -232,6 +233,30 @@ class LeaveController extends Controller
             $message = $validator->errors()->all();
         }
         return response()->json(['error' => $error, 'message' => $message]);
+    }
+
+    public function overview(Request $request)
+    {
+        $breadcrums = array(
+            'title' => 'Leave Management Overview',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => 'Overview'
+                ),
+            )
+        );
+
+        if($request->ajax()) {
+
+            $data = Holiday::whereDate('date', '>=', $request->start)
+                      ->orWhereDate('date', '<=', $request->end)
+                      ->get(['id', 'title', 'date']);
+
+            return response()->json($data);
+
+        }
+
+        return view('pages.leave.overview', compact('breadcrums'));
     }
 
     
