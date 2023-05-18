@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SalaryHead extends Model
 {
+
     use HasFactory,SoftDeletes;
     protected $fillable = [
         'academic_id',
@@ -15,6 +16,8 @@ class SalaryHead extends Model
         'description',
         'sort_order',
         'added_by',
-        'status'
+        'status',
+        'is_static'
     ];
+    
 }

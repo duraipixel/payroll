@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             AcademicYearSeeder::class,    
             UserSeeder::class,
             SiteSettingsSeeder::class,
-            DocumentTypesSeeder::class
+            DocumentTypesSeeder::class,
+            SalaryHeadsSeeder::class
         ]);
     }
 }

@@ -109,6 +109,7 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::post('/appointment/save', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'save'])->name('staff.save.appointment');
 
         Route::post('/appointment/generate/preview', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'generateModelPreview'])->name('staff.appointment.preview');
+
     });
 
     Route::post('/blocks/save', [App\Http\Controllers\BlockController::class, 'save'])->name('save.blocks');
@@ -133,10 +134,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/reporting/manager/modal', [App\Http\Controllers\ReportingController::class, 'openManagerModal'])->name('reporting.manager.modal'); 
     Route::post('/reporting/manager/assign', [App\Http\Controllers\ReportingController::class, 'assignManager'])->name('reporting.manager.assign'); 
     Route::post('/reporting/manager/change/modal', [App\Http\Controllers\ReportingController::class, 'openChangeManagerModal'])->name('reporting.manager.change.modal'); 
-
     
-    //Document Locker Start
-    
+    //Document Locker Start    
     Route::get('/user/document_locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker'); 
     Route::get('autocomplete-search', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'autocompleteSearch'])->name('autocomplete-search'); 
     
@@ -180,6 +179,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'leave-head' => App\Http\Controllers\AttendanceManagement\LeaveHeadController::class,
         'holiday' => App\Http\Controllers\AttendanceManagement\HolidayController::class,
         'salary-head' => App\Http\Controllers\PayrollManagement\SalaryHeadController::class,
+        'salary-field' => App\Http\Controllers\PayrollManagement\SalaryFieldController::class,
         'leave-mapping' => App\Http\Controllers\AttendanceManagement\LeaveMappingController::class,
         'att-manual-entry' => App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class,        
     );
@@ -195,6 +195,8 @@ Route::group(['middleware' => 'auth'],  function () {
         });
 
     }
+
+    Route::post('get/head/fields', [App\Http\Controllers\PayrollManagement\SalaryFieldController::class, 'getHeadBasedFields'])->name('salary-field.head.fields');
 
     Route::get('appointment-order', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'index'])->name('appointment.orders');
     Route::get('appointment-order/add/{id?}', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'add_edit'])->name('appointment.orders.add');

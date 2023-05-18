@@ -12,8 +12,18 @@ class SalaryField extends Model
     protected $fillable = [
         'academic_id',
         'name',
+        'short_name',
         'description',
         'added_by',
-        'status'
+        'status',
+        'salary_head_id',
+        'entry_type', //'manual', 'calculation'
+        'no_of_numerals',
+        'order_in_salary_slip'
     ];
+
+    public function field_items()
+    {
+        return $this->hasMany(SalaryFieldCalculationItem::class, 'parent_field_id', 'id');
+    }
 }
