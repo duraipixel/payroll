@@ -583,6 +583,17 @@
                         <span class="menu-title">Payroll Management</span>
                         <span class="menu-arrow"></span>
                     </span>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link  @if (request()->routeIs(['salary.revision'])) active @endif"
+                                href="{{ route('salary.revision') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Salary Revision</span>
+                            </a>
+                        </div>
+                    </div>
                     @if( access()->hasAccess('salary-head','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
@@ -598,7 +609,7 @@
                     @endif
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="javascript:void(0)">
+                            <a class="menu-link  @if (request()->routeIs(['salary-head'])) active @endif" href="{{ route('salary-field') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>

@@ -217,6 +217,9 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::post('/view',[App\Http\Controllers\LogController::class,'view'])->name('logs.view');
     });
 
+    Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
+
+
     include 'crud.php';
     
 });

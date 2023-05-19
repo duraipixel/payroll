@@ -154,6 +154,7 @@
             },
             success: function(res) {
                 if (res) {
+                    $('#calcuation-pane').addClass('d-none');
                     var html_content = '';
                     res.map((item) => {
                         html_content += `<li class="border border-2 p-2 field-item-pane">

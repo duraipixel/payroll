@@ -190,4 +190,6 @@ class SalaryFieldController extends Controller
         return $fields;
     }
 
+    
+
 }
