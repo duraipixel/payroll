@@ -24,7 +24,7 @@
                     <h4> Select Staff to Add Insurance </h4>
                     &emsp;
                     <select name="staff_id" id="staff_id" class="form-control w-450px px-5"
-                        onchange="getSalaryBankLoans(this.value)">
+                        onchange="getSalaryInsurance(this.value)">
                         <option value="">--Select Employee--</option>
                         @isset($employees)
                             @foreach ($employees as $item)
@@ -35,37 +35,17 @@
                 </div>
             </div>
             <div class="card-toolbar">
-                {{-- <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-            @php
-                $route_name = request()->route()->getName();               
-            @endphp
-            @if (access()->buttonAccess($route_name, 'export'))
-                <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('salary-head.export') }}">
-                    {!! exportSvg() !!} Export
-                </a>
-            @endif
-            @if (access()->buttonAccess($route_name, 'add_edit'))
-                <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getSalaryHeadModal()">
-                    {!! plusSvg() !!} Add Salary Head
-                </button>
-            @endif
-
-            </div> --}}
-
             </div>
         </div>
 
-        <div class="card-body py-4" id="lic_form">
-           
+        <div class="card-body py-4" id="lic_form_details">
         </div>
     </div>
-
-
 @endsection
 
 @section('add_on_script')
     <script>
-        function getSalaryBankLoans(staff_id) {
+        function getSalaryInsurance(staff_id) {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -79,7 +59,7 @@
                     id: staff_id,
                 },
                 success: function(res) {
-                    $('#lic_form').html(res);
+                    $('#lic_form_details').html(res);
                 }
             })
 

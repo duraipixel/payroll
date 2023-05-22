@@ -9,7 +9,7 @@
         </h2>
         <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
             aria-labelledby="panelsStayOpen-headingOne">
-            <div class="accordion-body">
+            <div class="accordion-body" id="insurance_form_content">
                 @include('pages.payroll_management.lic.form')
             </div>
         </div>
@@ -35,6 +35,9 @@
                         Amount
                     </th>
                     <th class="text-center text-white">
+                        File
+                    </th>
+                    <th class="text-center text-white">
                         Status
                     </th>
                     <th class="text-center text-white">
@@ -44,6 +47,33 @@
             </thead>
 
             <tbody class="text-gray-600 fw-bold">
+                @isset($details)
+                    @foreach ($details as $item)
+                        <tr>
+                            <td> {{ $item->insurance_name }} </td>
+                            <td> {{ $item->policy_no }} </td>
+                            <td>{{ $item->amount }}</td>
+                            <td>
+                                @if (isset($item->file) && !empty($item->file))
+                                    {{-- <a href="{{ asset(Storage::url($item->file)) }}" class="" target="_blank"> Download File </a> --}}
+                                    <a href="{{ asset('public' . Storage::url($item->file)) }}" class=""
+                                        target="_blank"> View File </a>
+                                @else
+                                    <a href="javascript:void(0)"> No File Uploaded </a>
+                                @endif
+                            </td>
+                            <td>{{ ucfirst($item->status) }}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="return editLic('{{ $item->id }}')">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="return deleteLic('{{ $item->id }}')">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endisset
             </tbody>
         </table>
     </div>
@@ -58,85 +88,75 @@
         if (String.fromCharCode(e.keyCode).match(/[^.0-9]/g)) return false;
     });
 
-    function licFormSubmit() {
+    $('#staff_id').select2();
 
-        var form = document.getElementById('lic_form');
-        const submitButton = document.getElementById('submit_button');
-
-        event.preventDefault();
-        var bank_form_error = false;
-
-        var key_name = [
-            'insurance_name',
-            'policy_no',
-            'policy_date',
-            'amount',
-        ];
-
-        $('.kyc-form-errors').remove();
-        $('.form-control,.form-select').removeClass('border-danger');
-
-        const pattern = /_/gi;
-        const replacement = " ";
-
-        key_name.forEach(element => {
-            var name_input = document.getElementById(element).value;
-
-            if (name_input == '' || name_input == undefined) {
-
-                bank_form_error = true;
-                var elementValues = element.replace(pattern, replacement);
-                var name_input_error =
-                    '<div class="fv-plugins-message-container kyc-form-errors invalid-feedback"><div data-validator="notEmpty">' +
-                    elementValues.toUpperCase() + ' is required</div></div>';
-                // $('#' + element).after(name_input_error);
-                $('#' + element).addClass('border-danger')
-                $('#' + element).focus();
+    function editLic(id) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
-        // Validate form before submit
-        console.log(bank_form_error, 'bank_form_error')
-        if (!bank_form_error) {
-            submitButton.disabled = true;
-
-            var forms = $('#lic_form')[0];
-            // var formData = new FormData($('#lic_form')[0]);
-            const formdata = new FormData(document.querySelector("form"));
-            $.ajax({
-                url: "{{ route('save.loan') }}",
-                type: "POST",
-                data: formdata,
-                processData: false,
-                contentType: false,
-                success: function(res) {
-                    // Disable submit button whilst loading
-                    submitButton.disabled = false;
-
-                    if (res.error == 1) {
-                        if (res.message) {
-                            res.message.forEach(element => {
-                                toastr.error("Error",
-                                    element);
-                            });
-                        }
-                    } else {
-                        toastr.success(
-                            "Bank Loan added added successfully"
-                        );
-                        dtTable.draw();
-
-                    }
-                }
-            })
-
-        }
-
+        $.ajax({
+            url: "{{ route('edit.lic') }}",
+            type: 'POST',
+            data: {
+                id: id,
+            },
+            success: function(res) {
+                $('#insurance_form_content').html(res);
+            }
+        })
     }
 
+    function deleteLic(id) {
 
+        Swal.fire({
+            text: "Are you sure you would like to Delete Insurance?",
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, Delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: "{{ route('delete.lic') }}",
+                    type: 'POST',
+                    data: {
+                        id: id,
+                    },
+                    success: function(res) {
+                        if( res.staff_id ){
+                            getSalaryInsurance(res.staff_id);
+                        }
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: res.message,
+                            icon: "success",
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-success"
+                            },
+                            timer: 3000
+                        });
 
-
-
-    $('#staff_id').select2();
+                    },
+                    error: function(xhr, err) {
+                        if (xhr.status == 403) {
+                            toastr.error(xhr.statusText, 'UnAuthorized Access');
+                        }
+                    }
+                });
+            }
+        });
+    }
 </script>
