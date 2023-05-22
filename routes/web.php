@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test-appointment-pdf', [App\Http\Controllers\TestOneController::class, 'testAppointmentPdf']);
+
 Route::get('/delete_preview_pdf', [App\Http\Controllers\TestOneController::class, 'deletePreviewPdf']);
 Route::get('/leave-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'leaveApplication']);
 Route::get('/el-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'earnedLeaveApplication']);
@@ -67,6 +68,7 @@ Route::group(['middleware' => 'auth'],  function () {
     //Bulk upload for staff information staff
     Route::get('/staff/bulk', [App\Http\Controllers\Staff\BulkUploadController::class, 'index'])->name('staff.bulk'); 
     Route::post('/bulk/save', [App\Http\Controllers\Staff\BulkUploadController::class, 'store'])->name('staff.save'); 
+    Route::post('/bulk/save/old', [App\Http\Controllers\Staff\BulkUploadController::class, 'oldEntry'])->name('staff.old.save'); 
      //Bulk upload for staff information End
     Route::prefix('staff')->group(function() {
 

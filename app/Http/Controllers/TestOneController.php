@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\OldStaffEntryImport;
 use App\Models\Master\AppointmentOrderModel;
 use Illuminate\Http\Request;
 use App\Models\Test;
@@ -10,6 +11,7 @@ use DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 use PDF;
 
 class TestOneController extends Controller
@@ -46,5 +48,11 @@ class TestOneController extends Controller
         if (File::exists($path)) {            
             File::deleteDirectory($path);
         }
+    }
+
+    public function importOldEntry()
+    {
+        Excel::import( new OldStaffEntryImport, request()->file('file') );
+        return response()->json(['error'=> 0, 'message' => 'Imported successfully']);
     }
 }
