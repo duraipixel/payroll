@@ -20,7 +20,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             SiteSettingsSeeder::class,
             DocumentTypesSeeder::class,
-            SalaryHeadsSeeder::class
+            SalaryHeadsSeeder::class,
+            SalaryFieldSeeder::class,
+            ProfessionalTaxSeeder::class
         ]);
     }
 }

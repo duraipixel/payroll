@@ -53,6 +53,12 @@ class DocumentTypesSeeder extends Seeder
                 'created_at' => date("Y-m-d H:i:s"),
             )
         );
-        DB::table('document_types')->insert($ins);
+        $data = DB::table('document_types')->where('name', 'Passport')->first();
+        if( $data ){
+
+        } else {
+            
+            DB::table('document_types')->insert($ins);
+        }
     }
 }

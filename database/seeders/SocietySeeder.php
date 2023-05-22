@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Master\Society;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,6 @@ class SocietySeeder extends Seeder
             'name' => 'Amalorpavam Educational Welfare Society',
             'code' => 'AEWS',
         );
-
-        DB::table('societies')->insert($ins);
+        Society::updateOrcreate(['code' => 'AEWS'], $ins);
     }
 }
