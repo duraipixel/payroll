@@ -32,7 +32,7 @@
             </div>
             <div class="col-sm-6 mt-3">
                 <div class="form-group">
-                    <label class="form-label" for="">
+                    <label class="form-label required" for="">
                         Salary Field Short Name
                     </label>
                     <div>
@@ -52,7 +52,10 @@
                     <label class="pe-3" for="manual">Manual</label>
                     <input type="radio" id="calculation" onchange="return getEntryType(this)" class="form-check-input"
                         value="calculation" name="entry_type" @if (isset($info->entry_type) && $info->entry_type == 'calculation') checked @endif>
-                    <label for="calculation">Calculation</label>
+                    <label for="calculation" class="pe-3">Calculation</label>
+                    <input type="radio" id="inbuilt_calculation" onchange="return getEntryType(this)" class="form-check-input"
+                        value="inbuilt_calculation" name="entry_type" @if (isset($info->entry_type) && $info->entry_type == 'inbuilt_calculation') checked @endif>
+                    <label for="inbuilt_calculation">InBuilt Calculation</label>
                 </div>
             </div>
             <div class="col-sm-6 @if (isset($info->entry_type) && $info->entry_type == 'calculation') d-none @endif" id="entry_type_pane">
@@ -202,6 +205,12 @@
         if (value.value == 'manual') {
             $('#entry_type_pane').removeClass('d-none');
             $('#calcuation-pane').addClass('d-none');
+
+        } else if(value.value == 'inbuilt_calculation') {
+
+            $('#calcuation-pane').addClass('d-none');
+            $('#entry_type_pane').addClass('d-none');
+
         } else {
             $('#entry_type_pane').addClass('d-none');
             $('#calcuation-pane').removeClass('d-none');
@@ -230,6 +239,13 @@
                             validators: {
                                 notEmpty: {
                                     message: 'Salary Field Name is required'
+                                },
+                            }
+                        },
+                        'short_name':{
+                            validators: {
+                                notEmpty: {
+                                    message: 'Salary Field Short Name is required'
                                 },
                             }
                         }

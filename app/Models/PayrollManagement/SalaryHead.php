@@ -19,5 +19,10 @@ class SalaryHead extends Model
         'status',
         'is_static'
     ];
+
+    public function fields()
+    {
+        return $this->hasMany(SalaryField::class, 'salary_head_id', 'id')->orderBy('order_in_salary_slip', 'asc');
+    }
     
 }

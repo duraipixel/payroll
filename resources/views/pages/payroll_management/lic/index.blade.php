@@ -1,0 +1,88 @@
+@extends('layouts.template')
+@section('breadcrum')
+    @include('layouts.parts.breadcrum')
+@endsection
+@section('content')
+    <style>
+        .salary-selection .select2-selection {
+            /* height: 45px; */
+            display: grid;
+            align-items: center;
+            justify-items: center;
+
+        }
+
+        .salary-selection .select2-container {
+            width: 300px !important;
+            text-align: center;
+        }
+    </style>
+    <div class="card">
+        <div class="card-header border-0 pt-6">
+            <div class="card-title">
+                <div class="d-flex align-items-center position-relative my-1 salary-selection">
+                    <h4> Select Staff to Add Insurance </h4>
+                    &emsp;
+                    <select name="staff_id" id="staff_id" class="form-control w-450px px-5"
+                        onchange="getSalaryBankLoans(this.value)">
+                        <option value="">--Select Employee--</option>
+                        @isset($employees)
+                            @foreach ($employees as $item)
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            @endforeach
+                        @endisset
+                    </select>
+                </div>
+            </div>
+            <div class="card-toolbar">
+                {{-- <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+            @php
+                $route_name = request()->route()->getName();               
+            @endphp
+            @if (access()->buttonAccess($route_name, 'export'))
+                <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('salary-head.export') }}">
+                    {!! exportSvg() !!} Export
+                </a>
+            @endif
+            @if (access()->buttonAccess($route_name, 'add_edit'))
+                <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getSalaryHeadModal()">
+                    {!! plusSvg() !!} Add Salary Head
+                </button>
+            @endif
+
+            </div> --}}
+
+            </div>
+        </div>
+
+        <div class="card-body py-4" id="lic_form">
+           
+        </div>
+    </div>
+
+
+@endsection
+
+@section('add_on_script')
+    <script>
+        function getSalaryBankLoans(staff_id) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var formMethod = "addEdit";
+            $.ajax({
+                url: "{{ route('ajax-view.lic') }}",
+                type: 'POST',
+                data: {
+                    id: staff_id,
+                },
+                success: function(res) {
+                    $('#lic_form').html(res);
+                }
+            })
+
+        }
+    </script>
+@endsection

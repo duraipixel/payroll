@@ -218,7 +218,15 @@ Route::group(['middleware' => 'auth'],  function () {
     });
 
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
+    Route::get('salary/creation',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
 
+    Route::get('salary/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'index'])->name('salary.loan');
+    Route::post('salary/save/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'save'])->name('save.loan');
+    Route::post('salary/get/form/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'getFormAndList'])->name('ajax-view.loan');
+
+    Route::get('salary/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'insurance'])->name('salary.lic');
+    Route::post('salary/save/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'saveInsurance'])->name('save.lic');
+    Route::post('salary/get/form/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'getFormAndListInsurance'])->name('ajax-view.lic');
 
     include 'crud.php';
     

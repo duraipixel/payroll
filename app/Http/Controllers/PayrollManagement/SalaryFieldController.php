@@ -49,7 +49,13 @@ class SalaryFieldController extends Controller
                 ->addIndexColumn()
                 ->editColumn('status', function ($row) {
                     $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return salaryFieldChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                    if( $row->is_static == 'yes') {
+                        $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" >' . ucfirst($row->status) . '</a>';
+                    }
                     return $status;
+                })
+                ->editColumn('entry_type', function($row){
+                    return ucfirst(str_replace('_', " ", $row->entry_type));
                 })
                 ->editColumn('created_at', function ($row) {
                     $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
@@ -67,6 +73,11 @@ class SalaryFieldController extends Controller
                     if (access()->buttonAccess($route_name, 'delete')) {
                         $del_btn = '<a href="javascript:void(0);" onclick="deleteSalaryField(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                     <i class="fa fa-trash"></i></a>';
+                    }
+
+                    if( $row->is_static == 'yes') {
+                        $edit_btn = $del_btn = '';
+                        $edit_btn = 'Non Editable';
                     }
 
                     return $edit_btn . $del_btn;

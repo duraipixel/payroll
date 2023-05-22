@@ -51,8 +51,8 @@ class Crud extends Command
         die;
 
         $fillable = $this->generateMigration($fields, $table_name, $modelClassName);
-        // $this->call('migrate');
-        // $fillable_string = 'protected $fillable = '.print_r($fillable_array).';';
+        $this->call('migrate');
+
         $DummyNamespace = $this->DummyNamespace;
         $DummyRootNamespaceModels = $this->DummyRootNamespaceModels;
         // Replace placeholders with dynamic content for the model file
@@ -62,7 +62,7 @@ class Crud extends Command
         $modal_stub = str_replace('{{fillable}}', '\''.implode('\',\'', $fillable).'\'', $modal_stub);
         $this->generateFile(app_path("Models/{$modelClassName}.php"), $modal_stub);
 
-        $rootRelatedModalNameSpace = 'App/Models/'.$modelClassName;
+        $rootRelatedModalNameSpace = 'App\Models\''.$modelClassName;
         $this->generateController($modelClassName, $fields, $table_name,$rootRelatedModalNameSpace);
         die;
        
@@ -171,7 +171,10 @@ class Crud extends Command
 
     }
     private function generateViews() {
-
+        /**
+         * 1. index page with ajax datatable
+         * 2. Add form with Modal
+         */
     }
 
 

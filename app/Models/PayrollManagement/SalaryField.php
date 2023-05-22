@@ -19,7 +19,8 @@ class SalaryField extends Model
         'salary_head_id',
         'entry_type', //'manual', 'calculation'
         'no_of_numerals',
-        'order_in_salary_slip'
+        'order_in_salary_slip',
+        'is_static'
     ];
 
     public function field_items()
