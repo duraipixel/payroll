@@ -21,6 +21,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Role\Permission;
 use App\Helpers\AccessGuard;
+use App\Models\AttendanceManagement\LeaveMapping;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -393,6 +394,41 @@ if (!function_exists('generateLeaveForm')) {
 
     function commonDateFormat( $date ){
         return date('d/m/Y', strtotime($date));
+    }
+
+    function getTotalLeaveCount($staff_id) {
+        $staff_info = User::find($staff_id);
+        $allocated_total_leave = 0;
+        $taken_leave = 0;
+        $balance_leave = 0;
+        if( $staff_info->appointment->nature_of_employment_id ?? '' ){
+            $total_leaves = LeaveMapping::selectRaw('SUM(leave_mappings.leave_days) as total')->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)->where('status', 'active')->first();
+            
+            if( $total_leaves ) {
+                $allocated_total_leave = $total_leaves->total;
+            }
+        }
+        $leaves = StaffLeave::selectRaw('SUM(no_of_days) as taken_leave')->where('staff_id', $staff_id)
+                    // ->where('status', 'approved')
+                    ->first();
+        if( $leaves ) {
+            $taken_leave = $leaves->taken_leave ?? 0;
+        }
+        if( $allocated_total_leave >= $taken_leave ) {
+            $balance_leave = $allocated_total_leave - $taken_leave;
+        }
+        return array( 
+                    'allocated_total_leave' => $allocated_total_leave,
+                    'taken_leave' => $taken_leave,
+                    'balance_leave' => $balance_leave
+                );
+        
+    }
+
+    function attendanceYear()
+    {
+        $date = '1/Jan/'.date('Y').' - 31/Dec/'.date('Y');
+        return $date;
     }
 
 }

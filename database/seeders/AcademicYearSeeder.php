@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AcademicYear;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -81,6 +82,10 @@ class AcademicYearSeeder extends Seeder
             ),
         );
 
-        DB::table('academic_years')->insert($ins);
+        $info = AcademicYear::where('status', 'active')->first();
+        if( !$info ){
+
+            DB::table('academic_years')->insert($ins);
+        }
     }
 }

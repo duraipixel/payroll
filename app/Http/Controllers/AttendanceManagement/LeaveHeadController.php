@@ -82,6 +82,7 @@ class LeaveHeadController extends Controller
         }
         return view('pages.attendance_management.leave_head.index',compact('breadcrums'));
     }
+
     public function save(Request $request)
     {
         $id = $request->id ?? '';
@@ -94,14 +95,8 @@ class LeaveHeadController extends Controller
 
             $ins['academic_id'] = academicYearId();
             $ins['name'] = $request->leave_head;
-                if($request->status)
-                {
-                    $ins['status'] = 'active';
-                }
-                else{
-                    $ins['status'] = 'inactive';
-                }
-            
+            $ins['code'] = $request->leave_code;
+            $ins['status'] = $request->status;
             $data = LeaveHead::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
@@ -114,6 +109,7 @@ class LeaveHeadController extends Controller
         }
         return response()->json(['error' => $error, 'message' => $message, 'inserted_data' => $data]);
     }
+
     public function add_edit(Request $request)
     {
         $id = $request->id;
@@ -128,6 +124,7 @@ class LeaveHeadController extends Controller
          $content = view('pages.attendance_management.leave_head.add_edit_form',compact('info','title'));
          return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
+
     public function changeStatus(Request $request)
     {
         $id             = $request->id;

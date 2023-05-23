@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test-appointment-pdf', [App\Http\Controllers\TestOneController::class, 'testAppointmentPdf']);
+
 Route::get('/delete_preview_pdf', [App\Http\Controllers\TestOneController::class, 'deletePreviewPdf']);
 Route::get('/leave-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'leaveApplication']);
 Route::get('/el-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'earnedLeaveApplication']);
@@ -67,6 +68,7 @@ Route::group(['middleware' => 'auth'],  function () {
     //Bulk upload for staff information staff
     Route::get('/staff/bulk', [App\Http\Controllers\Staff\BulkUploadController::class, 'index'])->name('staff.bulk'); 
     Route::post('/bulk/save', [App\Http\Controllers\Staff\BulkUploadController::class, 'store'])->name('staff.save'); 
+    Route::post('/bulk/save/old', [App\Http\Controllers\Staff\BulkUploadController::class, 'oldEntry'])->name('staff.old.save'); 
      //Bulk upload for staff information End
     Route::prefix('staff')->group(function() {
 
@@ -109,6 +111,7 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::post('/appointment/save', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'save'])->name('staff.save.appointment');
 
         Route::post('/appointment/generate/preview', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'generateModelPreview'])->name('staff.appointment.preview');
+
     });
 
     Route::post('/blocks/save', [App\Http\Controllers\BlockController::class, 'save'])->name('save.blocks');
@@ -133,10 +136,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/reporting/manager/modal', [App\Http\Controllers\ReportingController::class, 'openManagerModal'])->name('reporting.manager.modal'); 
     Route::post('/reporting/manager/assign', [App\Http\Controllers\ReportingController::class, 'assignManager'])->name('reporting.manager.assign'); 
     Route::post('/reporting/manager/change/modal', [App\Http\Controllers\ReportingController::class, 'openChangeManagerModal'])->name('reporting.manager.change.modal'); 
-
     
-    //Document Locker Start
-    
+    //Document Locker Start    
     Route::get('/user/document_locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker'); 
     Route::get('autocomplete-search', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'autocompleteSearch'])->name('autocomplete-search'); 
     Route::get('/dl_view/{id?}', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'documentView'])->name('user.dl_view');
@@ -181,6 +182,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'leave-head' => App\Http\Controllers\AttendanceManagement\LeaveHeadController::class,
         'holiday' => App\Http\Controllers\AttendanceManagement\HolidayController::class,
         'salary-head' => App\Http\Controllers\PayrollManagement\SalaryHeadController::class,
+        'salary-field' => App\Http\Controllers\PayrollManagement\SalaryFieldController::class,
         'leave-mapping' => App\Http\Controllers\AttendanceManagement\LeaveMappingController::class,
         'att-manual-entry' => App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class,        
     );
@@ -196,6 +198,12 @@ Route::group(['middleware' => 'auth'],  function () {
         });
 
     }
+    /**
+     * ajax form data reload
+     */
+    Route::post('get/nationlity/list', [App\Http\Controllers\Master\NationalityController::class, 'getAjaxList'])->name('nationality.ajax.list');
+
+    Route::post('get/head/fields', [App\Http\Controllers\PayrollManagement\SalaryFieldController::class, 'getHeadBasedFields'])->name('salary-field.head.fields');
 
     Route::get('appointment-order', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'index'])->name('appointment.orders');
     Route::get('appointment-order/add/{id?}', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'add_edit'])->name('appointment.orders.add');
@@ -215,6 +223,25 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::get('/',[App\Http\Controllers\LogController::class,'index'])->name('logs');
         Route::post('/view',[App\Http\Controllers\LogController::class,'view'])->name('logs.view');
     });
+
+    Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
+    Route::get('salary/creation',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
+
+    Route::get('salary/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'index'])->name('salary.loan');
+    Route::post('salary/save/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'save'])->name('save.loan');
+    Route::post('salary/get/form/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'getFormAndList'])->name('ajax-view.loan');
+    Route::post('salary/edit/form/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'editLoanForm'])->name('edit.loan');
+    Route::post('salary/delete/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'deleteLoan'])->name('delete.loan');
+
+    Route::get('salary/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'insurance'])->name('salary.lic');
+    Route::post('salary/save/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'saveInsurance'])->name('save.lic');
+    Route::post('salary/get/form/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'getFormAndListInsurance'])->name('ajax-view.lic');
+    Route::post('salary/edit/form/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'editLicForm'])->name('edit.lic');
+    Route::post('salary/delete/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'deleteLic'])->name('delete.lic');
+
+    Route::get('professional/tax',[App\Http\Controllers\PayrollManagement\ProfessionTaxController::class,'index'])->name('professional-tax');
+    Route::post('professional/tax/save',[App\Http\Controllers\PayrollManagement\ProfessionTaxController::class,'save'])->name('save.professional-tax');
+
 
     include 'crud.php';
     

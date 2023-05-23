@@ -12,6 +12,8 @@ class LeaveHead extends Model
     protected $fillable = [
         'academic_id',
         'name',
+        'code',
+        'is_static',
         'sort_order',
         'status'
     ];

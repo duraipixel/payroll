@@ -57,12 +57,6 @@
                     </span>
 
                 </div>
-                <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Crafted</span>
-                    </div>
-                </div>
-              
                 @if( access()->hasAccess(['overview', 'logs']) )
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
@@ -208,25 +202,8 @@
                 ])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/general/gen022.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none">
-                                    <path
-                                        d="M11.2929 2.70711C11.6834 2.31658 12.3166 2.31658 12.7071 2.70711L15.2929 5.29289C15.6834 5.68342 15.6834 6.31658 15.2929 6.70711L12.7071 9.29289C12.3166 9.68342 11.6834 9.68342 11.2929 9.29289L8.70711 6.70711C8.31658 6.31658 8.31658 5.68342 8.70711 5.29289L11.2929 2.70711Z"
-                                        fill="currentColor" />
-                                    <path
-                                        d="M11.2929 14.7071C11.6834 14.3166 12.3166 14.3166 12.7071 14.7071L15.2929 17.2929C15.6834 17.6834 15.6834 18.3166 15.2929 18.7071L12.7071 21.2929C12.3166 21.6834 11.6834 21.6834 11.2929 21.2929L8.70711 18.7071C8.31658 18.3166 8.31658 17.6834 8.70711 17.2929L11.2929 14.7071Z"
-                                        fill="currentColor" />
-                                    <path opacity="0.3"
-                                        d="M5.29289 8.70711C5.68342 8.31658 6.31658 8.31658 6.70711 8.70711L9.29289 11.2929C9.68342 11.6834 9.68342 12.3166 9.29289 12.7071L6.70711 15.2929C6.31658 15.6834 5.68342 15.6834 5.29289 15.2929L2.70711 12.7071C2.31658 12.3166 2.31658 11.6834 2.70711 11.2929L5.29289 8.70711Z"
-                                        fill="currentColor" />
-                                    <path opacity="0.3"
-                                        d="M17.2929 8.70711C17.6834 8.31658 18.3166 8.31658 18.7071 8.70711L21.2929 11.2929C21.6834 11.6834 21.6834 12.3166 21.2929 12.7071L18.7071 15.2929C18.3166 15.6834 17.6834 15.6834 17.2929 15.2929L14.7071 12.7071C14.3166 12.3166 14.3166 11.6834 14.7071 11.2929L17.2929 8.70711Z"
-                                        fill="currentColor" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
+                           <i class="fa fa-users"></i>
+
                         </span>
                         <span class="menu-title">Staff Management</span>
                         <span class="menu-arrow"></span>
@@ -282,17 +259,7 @@
                     <span class="menu-link @if (request()->routeIs(['appointment.orders'])) active @endif">
                         <span class="menu-icon">
                             
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none">
-                                    <path
-                                        d="M18 21.6C16.6 20.4 9.1 20.3 6.3 21.2C5.7 21.4 5.1 21.2 4.7 20.8L2 18C4.2 15.8 10.8 15.1 15.8 15.8C16.2 18.3 17 20.5 18 21.6ZM18.8 2.8C18.4 2.4 17.8 2.20001 17.2 2.40001C14.4 3.30001 6.9 3.2 5.5 2C6.8 3.3 7.4 5.5 7.7 7.7C9 7.9 10.3 8 11.7 8C15.8 8 19.8 7.2 21.5 5.5L18.8 2.8Z"
-                                        fill="currentColor"></path>
-                                    <path opacity="0.3"
-                                        d="M21.2 17.3C21.4 17.9 21.2 18.5 20.8 18.9L18 21.6C15.8 19.4 15.1 12.8 15.8 7.8C18.3 7.4 20.4 6.70001 21.5 5.60001C20.4 7.00001 20.2 14.5 21.2 17.3ZM8 11.7C8 9 7.7 4.2 5.5 2L2.8 4.8C2.4 5.2 2.2 5.80001 2.4 6.40001C2.7 7.40001 3.00001 9.2 3.10001 11.7C3.10001 15.5 2.40001 17.6 2.10001 18C3.20001 16.9 5.3 16.2 7.8 15.8C8 14.2 8 12.7 8 11.7Z"
-                                        fill="currentColor"></path>
-                                </svg>
-                            </span>
+                           <i class="fa fa-file"></i>
                             
                         </span>
 
@@ -310,25 +277,7 @@
                     class="menu-item menu-accordion @if (request()->routeIs(['reporting.list'])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/general/gen022.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none">
-                                    <path
-                                        d="M11.2929 2.70711C11.6834 2.31658 12.3166 2.31658 12.7071 2.70711L15.2929 5.29289C15.6834 5.68342 15.6834 6.31658 15.2929 6.70711L12.7071 9.29289C12.3166 9.68342 11.6834 9.68342 11.2929 9.29289L8.70711 6.70711C8.31658 6.31658 8.31658 5.68342 8.70711 5.29289L11.2929 2.70711Z"
-                                        fill="currentColor" />
-                                    <path
-                                        d="M11.2929 14.7071C11.6834 14.3166 12.3166 14.3166 12.7071 14.7071L15.2929 17.2929C15.6834 17.6834 15.6834 18.3166 15.2929 18.7071L12.7071 21.2929C12.3166 21.6834 11.6834 21.6834 11.2929 21.2929L8.70711 18.7071C8.31658 18.3166 8.31658 17.6834 8.70711 17.2929L11.2929 14.7071Z"
-                                        fill="currentColor" />
-                                    <path opacity="0.3"
-                                        d="M5.29289 8.70711C5.68342 8.31658 6.31658 8.31658 6.70711 8.70711L9.29289 11.2929C9.68342 11.6834 9.68342 12.3166 9.29289 12.7071L6.70711 15.2929C6.31658 15.6834 5.68342 15.6834 5.29289 15.2929L2.70711 12.7071C2.31658 12.3166 2.31658 11.6834 2.70711 11.2929L5.29289 8.70711Z"
-                                        fill="currentColor" />
-                                    <path opacity="0.3"
-                                        d="M17.2929 8.70711C17.6834 8.31658 18.3166 8.31658 18.7071 8.70711L21.2929 11.2929C21.6834 11.6834 21.6834 12.3166 21.2929 12.7071L18.7071 15.2929C18.3166 15.6834 17.6834 15.6834 17.2929 15.2929L14.7071 12.7071C14.3166 12.3166 14.3166 11.6834 14.7071 11.2929L17.2929 8.70711Z"
-                                        fill="currentColor" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
+                            <i class="fa fa-folder-tree"></i>
                         </span>
                         <span class="menu-title">Reporting Management</span>
                         <span class="menu-arrow"></span>
@@ -351,15 +300,7 @@
                     class="menu-item menu-accordion @if (request()->routeIs(['user.document_locker'])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
+                            <i class="fa fa-box-open"></i>
                         </span>
                         <span class="menu-title">Document Locker</span>
                         <span class="menu-arrow"></span>
@@ -389,54 +330,13 @@
                 <!-- Document locker End-->
                 @endif
 
-                {{-- Block Mapping Start --}}
-                @if( access()->hasAccess(['blocks']) )
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion @if (request()->routeIs(['blocks'])) hover show @endif">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </span>
-                        <span class="menu-title">Block Mapping</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <div class="menu-sub menu-sub-accordion menu-active-bg">
-                        @if( access()->hasAccess('blocks','view') )
-                        <div class="menu-item">
-                            <a class="menu-link @if (request()->routeIs(['blocks'])) active @endif"
-                                href="{{ route('blocks') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Blocks</span>
-                            </a>
-                        </div>
-                        @endif
-                    </div>
-                </div>
-                @endif
+                
                 @if( access()->hasAccess(['att-manual-entry']) )
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion @if (request()->routeIs(['att-manual-entry'])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
+                            <i class="fa fa-chalkboard-teacher"></i>
                         </span>
                         <span class="menu-title">Attendance Management</span>
                         <span class="menu-arrow"></span>
@@ -471,15 +371,7 @@
                     class="menu-item menu-accordion  @if (request()->routeIs(['leave-mapping', 'leave-status', 'leave-head', 'leaves.list', 'holiday'])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
+                            <i class="fas fa-bed"></i>
                         </span>
                         <span class="menu-title">Leave Management</span>
                         <span class="menu-arrow"></span>
@@ -564,25 +456,83 @@
                     @endif
                 </div>
                 @endif
-                @if( access()->hasAccess(['salary-head']) )
+                @if( access()->hasAccess(['salary-head', 'salary-field']) )
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion
-                @if (request()->routeIs(['salary-head'])) hover show @endif">
+                @if (request()->routeIs(['salary-head', 'salary-field', 'salary.creation', 'salary.loan', 'salary.lic', 'professional-tax'])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
+                            <i class="fas fa-money-check"></i>
                         </span>
                         <span class="menu-title">Payroll Management</span>
                         <span class="menu-arrow"></span>
                     </span>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link  @if (request()->routeIs(['salary.creation'])) active @endif"
+                                href="{{ route('salary.creation') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Salary Creation</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link  @if (request()->routeIs(['salary.revision'])) active @endif"
+                                href="{{ route('salary.revision') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Salary Revision</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link  @if (request()->routeIs(['salary.loan'])) active @endif"
+                                href="{{ route('salary.loan') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Bank Loan</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link  @if (request()->routeIs(['salary.lic'])) active @endif"
+                                href="{{ route('salary.lic') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">LIC</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link  @if (request()->routeIs(['professional-tax'])) active @endif"
+                                href="{{ route('professional-tax') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Professional Tax</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link  @if (request()->routeIs(['salary.revision'])) active @endif"
+                                href="{{ route('salary.revision') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Income Tax</span>
+                            </a>
+                        </div>
+                    </div>
                     @if( access()->hasAccess('salary-head','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
@@ -598,7 +548,7 @@
                     @endif
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
-                            <a class="menu-link" href="javascript:void(0)">
+                            <a class="menu-link  @if (request()->routeIs(['salary-field'])) active @endif" href="{{ route('salary-field') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
@@ -612,15 +562,7 @@
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotune/technology/teh004.svg-->
-                            <span class="svg-icon svg-icon-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                    fill="currentColor" class="bi bi-briefcase" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
-                                </svg>
-                            </span>
-                            <!--end::Svg Icon-->
+                            <i class="fa fa-handshake"></i>
                         </span>
                         <span class="menu-title">Gratuity calculations</span>
                         <span class="menu-arrow"></span>
@@ -647,6 +589,32 @@
                     </div>
 
                 </div>
+                {{-- Block Mapping Start --}}
+                @if( access()->hasAccess(['blocks']) )
+                <div data-kt-menu-trigger="click"
+                    class="menu-item menu-accordion @if (request()->routeIs(['blocks'])) hover show @endif">
+                    <span class="menu-link">
+                        <span class="menu-icon">
+                            <i class="fab fa-playstation"></i>
+                        </span>
+                        <span class="menu-title">Block Mapping</span>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        @if( access()->hasAccess('blocks','view') )
+                        <div class="menu-item">
+                            <a class="menu-link @if (request()->routeIs(['blocks'])) active @endif"
+                                href="{{ route('blocks') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Blocks</span>
+                            </a>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                @endif
 
                 {{-- Block Mappting End --}}
                 @if( access()->hasAccess([

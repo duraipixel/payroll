@@ -51,9 +51,7 @@
                     id="leave_mapping_table">
                     <thead class="bg-primary">
                         <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                            <th class="text-center text-white" >
-                                Date
-                            </th>
+                           
                             <th class="text-center text-white" >
                                 Nature of employment
                             </th>
@@ -104,10 +102,7 @@
         },
       
         columns: [
-            {
-                data: 'created_at',
-                name: 'created_at',
-            },
+            
             {
                 data: 'nature_emp_name',
                 name: 'nature_emp_name'

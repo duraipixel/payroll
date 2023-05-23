@@ -48,7 +48,11 @@ class SalaryHeadController extends Controller
             })
             ->addIndexColumn()
             ->editColumn('status', function ($row) {
-                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return salaryHeadChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                if( $row->is_static == 'no'){
+                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return salaryHeadChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                } else {
+                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" >' . ucfirst($row->status) . '</a>';
+                }
                 return $status;
             })
             ->editColumn('created_at', function ($row) {
@@ -57,25 +61,23 @@ class SalaryHeadController extends Controller
             })
               ->addColumn('action', function ($row) {
                 $route_name = request()->route()->getName(); 
+                $del_btn = $edit_btn ='';
                 if( access()->buttonAccess($route_name,'add_edit') )
                 {
                     $edit_btn = '<a href="javascript:void(0);" onclick="getSalaryHeadModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                     <i class="fa fa-edit"></i>
                     </a>';
                 }
-                else
-                {
-                    $edit_btn = '';
-                }
+               
                 if( access()->buttonAccess($route_name,'delete') )
                 {
-                    $del_btn = '<a href="javascript:void(0);" onclick="deleteSalaryHead(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
-                    <i class="fa fa-trash"></i></a>';
+                    if( $row->is_static == 'no'){
+
+                        $del_btn = '<a href="javascript:void(0);" onclick="deleteSalaryHead(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                                    <i class="fa fa-trash"></i></a>';
+                    }
                 }
-                else
-                {
-                    $del_btn = '';
-                }  
+                
                     return $edit_btn . $del_btn;
                 })
                 ->rawColumns(['action', 'status']);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Staff;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Imports\BulkImport;
+use App\Imports\OldStaffEntryImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ToModel;
 use Illuminate\Support\Facades\DB;
@@ -46,4 +47,10 @@ class BulkUploadController extends Controller
                 return back()->with('error','Excel Not Uploaded. Please try again later !');
             }                   
     } 
+
+    public function oldEntry(Request $request)
+    {
+        Excel::import( new OldStaffEntryImport, request()->file('file') );
+        return response()->json(['error'=> 0, 'message' => 'Imported successfully']);
+    }
 }

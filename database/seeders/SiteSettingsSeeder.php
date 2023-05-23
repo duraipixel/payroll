@@ -18,7 +18,11 @@ class SiteSettingsSeeder extends Seeder
         $ins = array(
             'site_name' => 'AMALORPAVAM PAYROLL SYSTEM v1.0',
         );
-
-        DB::table('site_settings')->insert($ins);
+        $data = DB::table('site_settings')->where('id', 1)->first();
+        if($data){
+            DB::table('site_settings')->where('id', 1)->update($ins);
+        } else {
+            DB::table('site_settings')->insert($ins);
+        }
     }
 }

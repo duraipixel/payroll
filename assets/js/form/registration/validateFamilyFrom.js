@@ -20,9 +20,39 @@ function openFamilyForm() {
         $('#occupation_address').val('');
         $('#family_id').val('');
 
+        getFamilyNationality();
+
     }, 100);
 
     event.preventDefault();
+}
+
+function getFamilyNationality(){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: nationalityList,
+        type: "POST",
+        data: {
+            id: 'family_nationality'
+        },
+        success: function(res) {
+
+            if( res.list ) {
+                var dp_text = '';
+
+                res.list.map((item) => {
+                    dp_text += `<option value="${item.id}">${item.name}</option>`;
+                })
+                
+                $('#family_nationality').html(dp_text);
+
+            }
+        }
+    })
 }
 
 function editFamilyForm(staff_id, family_id) {

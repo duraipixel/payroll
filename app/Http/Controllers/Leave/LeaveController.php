@@ -194,7 +194,7 @@ class LeaveController extends Controller
                 } else {
 
                     $ins['academic_id'] = academicYearId();
-                    $ins['application_no'] = leaveApplicationNo($request->staff_id, $leave_category_info->name);
+                    $ins['application_no'] = leaveApplicationNo($request->staff_id, $leave_category_info->code);
                     $ins['staff_id'] = $request->staff_id;
                     $ins['designation'] = $request->designation;
                     $ins['place_of_work'] = $staff_info->appointment->work_place->name ?? null;
