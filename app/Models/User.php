@@ -86,6 +86,12 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(StaffClass::class, 'staff_id', 'id');
     }
 
+    public function handlingClassNames()
+    {
+        return $this->hasOne(StaffClass::class, 'staff_id', 'id')->join('classes', 'classes.id', '=', 'staff_classes.class_id')
+                    ->selectRaw('GROUP_CONCAT(classes.name) AS handling_classes');
+    }
+
     public function staffDocuments() {
         return $this->hasMany(StaffDocument::class, 'staff_id', 'id')->where('status', 'active');
     }
@@ -155,6 +161,13 @@ class User extends Authenticatable implements Auditable
     public function experiencedSubject()
     {
         return $this->hasMany(StaffExperiencedSubject::class, 'staff_id', 'id');
+    }
+
+    public function handlingSubjectNames()
+    {
+        return $this->hasOne(StaffExperiencedSubject::class, 'staff_id', 'id')->join('subjects', 'subjects.id', '=', 'staff_experienced_subjects.subject_id')
+        ->selectRaw('GROUP_CONCAT(subjects.name) AS handling_subjects');
+
     }
 
     public function institute()

@@ -924,7 +924,11 @@ class StaffController extends Controller
                                     <i class="fa fa-eye"></i>
                                 </a>';
 
-                    return $edit_btn . $view_btn . $del_btn;
+                    $print_btn = '<a target="_blank" href="' . route('staff.print', ['user' => $row->id]) . '"  class="btn btn-icon btn-active-info btn-light-dark mx-1 w-30px h-30px" > 
+                                    <i class="fa fa-print"></i>
+                                </a>';
+
+                    return $edit_btn . $view_btn. $print_btn . $del_btn;
                 })
                 ->rawColumns(['action', 'status', 'verification_status']);
             return $datatables->make(true);
@@ -964,5 +968,10 @@ class StaffController extends Controller
         
         $info = $user;
         return view('pages.overview.index', compact('info', 'breadcrums'));
+    }
+
+    public function print(Request $request, User $user)
+    {
+        return view('pages.overview.print_view.print', compact('user'));
     }
 }

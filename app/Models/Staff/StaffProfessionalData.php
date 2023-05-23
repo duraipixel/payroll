@@ -2,8 +2,10 @@
 
 namespace App\Models\Staff;
 
+use App\Models\Master\AttendanceScheme;
 use App\Models\Master\Department;
 use App\Models\Master\Designation;
+use App\Models\Master\Division;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -35,5 +37,15 @@ class StaffProfessionalData extends Model implements Auditable
     public function department()
     {
         return $this->hasOne(Department::class, 'id', 'department_id');
+    }
+
+    public function attendance_scheme()
+    {
+        return $this->hasOne(AttendanceScheme::class, 'id', 'attendance_scheme_id');
+    }
+
+    public function division()
+    {
+        return $this->hasOne(Division::class, 'id', 'division_id');
     }
 }

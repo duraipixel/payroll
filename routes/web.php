@@ -74,6 +74,7 @@ Route::group(['middleware' => 'auth'],  function () {
 
         Route::get('/register/{id?}', [App\Http\Controllers\StaffController::class, 'register'])->name('staff.register');
         Route::get('/view/{user}', [App\Http\Controllers\StaffController::class, 'view'])->name('staff.view');
+        Route::get('/print/{user}', [App\Http\Controllers\StaffController::class, 'print'])->name('staff.print');
         Route::post('/add/personal', [App\Http\Controllers\StaffController::class, 'insertPersonalData'])->name('staff.save.personal');
         Route::post('/add/kyc', [App\Http\Controllers\StaffController::class, 'insertKycData'])->name('staff.save.kyc');
         Route::post('/add/position', [App\Http\Controllers\StaffController::class, 'insertEmployeePosition'])->name('staff.save.employee_position');
