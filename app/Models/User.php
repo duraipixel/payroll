@@ -85,6 +85,14 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(StaffDocument::class, 'staff_id', 'id')->where('status', 'active');
     }
 
+    public function staffDocumentsPending() {
+        return $this->hasMany(StaffDocument::class, 'staff_id', 'id')->where('status', 'active')->where('verification_status','pending');
+    }
+    public function staffDocumentsApproved() {
+        return $this->hasMany(StaffDocument::class, 'staff_id', 'id')->where('status', 'active')->where('verification_status','approved');
+    }
+
+    
     public function aadhaar() {
         return $this->hasOne(StaffDocument::class, 'staff_id', 'id')->select('staff_documents.*')->join('document_types', 'document_types.id', '=', 'staff_documents.document_type_id')->where('name', 'Adhaar');
     }

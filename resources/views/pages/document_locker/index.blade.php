@@ -11,13 +11,10 @@
         </div>
 
         <div class="row  pt-6 px-10">
-            <div class="col-2">
-               
-
-                
+            <div class="col-3">
                 <!--end::Svg Icon-->
                 <input type="text" data-kt-user-table-filter="search" id="staff_name_id"
-                    class="typeahead  form-control form-control-solid w-180px  " placeholder="Search Name or ID">
+                    class="typeahead  form-control form-control-solid w-180px  " placeholder="Search Name or Staff ID">
             
             </div>
             <div class="col-2">
@@ -30,15 +27,15 @@
                 </select>
               
             </div>
+         
             <div class="col-2">
-                <select class="form-select ms-4" id="search_institutions"  >
-                    <option value="">Staff Type </option>
-                    @foreach ($staffCategory as $sc_value)
-                        <option value="{{$sc_value->id}}">{{$sc_value->name}}</option>                        
+                <select class="form-select ms-4" id="search_institutions " >
+                    <option value="">Department </option>
+                    @foreach ($department as $department_value)
+                        <option value="{{$department_value->id}}">{{$department_value->name}}</option>                        
                     @endforeach
                 </select>
-              
-            </div>
+          </div>
             <div class="col-2">
                 <select class="form-select ms-4" id="search_institutions "  >
                     <option value="">Designation</option>
@@ -47,14 +44,7 @@
                     @endforeach
                 </select>
           </div>
-          <div class="col-2">
-            <select class="form-select ms-4" id="search_institutions " >
-                <option value="">Caste </option>
-                @foreach ($caste as $caste_value)
-                    <option value="{{$caste_value->id}}">{{$caste_value->name}}</option>                        
-                @endforeach
-            </select>
-      </div>
+        
       <div class="col-2">
         <button type="button" class="btn btn-primary ms-7">Search</button>
   </div>
@@ -72,19 +62,19 @@
                 <div class="row m-0">
                     <div class="col-md-3 staff_count_dl">
                         <p class="ss_count_text">Total Number of Staff</p>
-                        <p class="ss_count">650 </p>
+                        <p class="ss_count">{{$user_count}} </p>
                         <img alt="Logo" src="{{ asset('assets/media/document/no_of_staff.png') }}"
                         class="logo document_images" />
                     </div>                    
                     <div class="col-md-3 staff_count_dl">
                         <p class="ss_count_text">Total Number of Documents Uploaded</p>
-                        <p class="ss_count1">650 </p>
+                        <p class="ss_count1">{{$total_documents}} </p>
                         <img alt="Logo" src="{{ asset('assets/media/document/document_upload.png') }}"
                         class="logo document_images1" />
                     </div>
                     <div class="col-md-3 staff_count_dl ">
                         <p class="ss_count_text">Documents Review Pending </p>
-                        <p class="ss_count1">650 </p>
+                        <p class="ss_count1">{{$review_pending_documents}} </p>
                         <img alt="Logo" src="{{ asset('assets/media/document/document_pending.png') }}"
                         class="logo document_images1" />
                     </div>
@@ -98,95 +88,67 @@
         <div class="card-body p-10">
             <div class="col-12">
                 <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                    <!--<table class="table align-middle table-hover table-row m-0-dashed fs-6 dataTable no-footer"
-                        id="staff_table">
-                        <thead>
-                            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-    
-                                <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" row m-0span="1"
-                                    colspan="1" 
-                                    aria-label="User: activate to sort column ascending">
-                                    Staff ID
-                                </th>
-                                <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" row m-0span="1"
-                                    colspan="1" 
-                                    aria-label="Role: activate to sort column ascending">
-                                    Staff Name
-                                </th>
-                                <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" row m-0span="1"
-                                    colspan="1" 
-                                    aria-label="Last login: activate to sort column ascending">
-                                    Staff Type
-                                </th>
-                                <th class="min-w-125px sorting" tabindex="0" aria-controls="kt_table_users" row m-0span="1"
-                                    colspan="1" 
-                                    aria-label="Two-step: activate to sort column ascending">
-                                    Documents Uploaded
-                                </th>
-                               
-                            </tr>
-                       
-                        </thead>
-    
-                        <tbody class="text-gray-600 fw-bold">
-                        </tbody>
-                    </table>-->
-                    
-                    <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
-                    id="bank_table">
-                    <thead class="bg-primary">
+                      <table id="document_locker" class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
+                      style="width:100%">
+                      <thead class="bg-primary">
                         <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="text-center text-white" style="width:85px;">Staff  ID</th>
+                                <th class="text-center text-white">Staff Name</th>
+                                <th class="text-center text-white">Department</th>
+                                <th class="text-center text-white">Designation</th>
+                                <th class="text-center text-white">Total Documents</th>                                
+                                <th class="text-center text-white">Aprroved Documents</th>
+                                <th  class="text-center text-white">Pending Documents</th>
+                                <th  class="text-center text-white">Action</th>
+                            </tr>
                            
-                            <th class="text-center text-white" >
-                                Bank Name
-                            </th>
-                            <th class="text-center text-white" >
-                                Bank Code
-                            </th>
-                            <th class="text-center text-white" >
-                                Short Name
-                            </th>
-                            <th class="text-center text-white" >
-                                Status
-                            </th>
-                            <th class="text-center text-white">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-gray-600 fw-bold">
-                        <tr>
-                            <td>
-                                aaa
-                            </td>
-                            <td>
-                                cccc
-                            </td>
-                            <td>
-                                ddd
-                            </td>
-                            <td>
-                                eeee
-                            </td>
-
-                            <td>
-                                fff
-                            </td>
-                        </tr>
-                         
+                        </thead>
+                        <tbody>
+                           
+                                @foreach ($user as $users )
+                                <tr>
+                                <td>{{$users->emp_code}}</td>
+                                <td>{{$users->name}}</td>
+                                <td>{{$users->position->department->name ??''}}</td>
+                                <td>{{$users->position->designation->name ??''}}</td>
+                                <td>{{$users->staffDocuments->count() ??''}}</td>
+                                <td>{{$users->staffDocumentsApproved->count() ??''}}</td>
+                                <td>{{$users->staffDocumentsPending->count() ??''}}</td>
+                               
+                                <td><a href=" {{route('user.dl_view', ['id' => $users->id])}}" class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px"> 
+                                    <i class="fa fa-eye"></i>
+                                </a></td>
+                                
+                            </tr>
+                                @endforeach
+                                
+                           
                         </tbody>
-                      </table>
+                    </table>
                 </div>
             </div>
         </div>
         <!--end::Card body-->
     </div>
     <!--end::Card-->
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
 @endsection
 
 @section('add_on_script')
+
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
     <script>   
+
+
+$(document).ready(function () {
+    $('#document_locker').DataTable({   
+        "scrollX": true
+    });
+});
   var route = "{{ url('autocomplete-search') }}";
         $('#staff_name_id').typeahead({
             source: function (query, process) {
@@ -194,7 +156,7 @@
                     query: query
                 }, function (data) {
                     console.log(data);
-                    var details=data[name]+'-'+data[emp_code]; console.log(details);
+                    //var details=data[name]+'-'+data[emp_code]; console.log(details);
                     return process(data);
                 });
             }
