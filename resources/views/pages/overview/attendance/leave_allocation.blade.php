@@ -11,36 +11,37 @@
         <!--begin::Thead-->
         <thead class="border-bottom border-gray-200 fs-7 text-uppercase fw-bolder">
             <tr class="text-start text-muted bg-light gs-0">
-                <th class="min-w-100px sorting" tabindex="0" aria-controls="kt_customer_details_invoices_table_3"
-                    rowspan="1" colspan="1" style="width: 0px;"
-                    aria-label="Order ID: activate to sort column ascending">
-                    Accumulated Leave</th>
-                <th class="min-w-100px sorting" tabindex="0" aria-controls="kt_customer_details_invoices_table_3"
-                    rowspan="1" colspan="1" style="width: 0px;"
-                    aria-label="Order ID: activate to sort column ascending">
-                    Available Leave</th>
-                <th class="min-w-100px sorting" tabindex="0" aria-controls="kt_customer_details_invoices_table_3"
-                    rowspan="1" colspan="1" style="width: 0px;"
-                    aria-label="Order ID: activate to sort column ascending">Leave
-                    Name</th>
-                <th class="min-w-100px sorting" tabindex="0" aria-controls="kt_customer_details_invoices_table_3"
-                    rowspan="1" colspan="1" style="width: 0px;"
-                    aria-label="Order ID: activate to sort column ascending">
-                    Academic Year</th>
+                <th > ACCUMULATED Leave Head</th>
+                <th > ACCUMULATED Leave Days</th>
+                <th >Is Carry Forword</th>
+              
             </tr>
         </thead>
         <!--end::Thead-->
         <!--begin::Tbody-->
+        
         <tbody class="fs-6 fw-bold text-gray-600">
-            @isset($info->appointment->leaveAllocatedYear)
-                @foreach ($info->appointment->leaveAllocatedYear as $item)
+            @isset($info->appointment->leaveAllocated)
+            @php
+                $total = 0;
+            @endphp
+                @foreach ($info->appointment->leaveAllocated as $item)
+                @php
+                    
+                    $total += $item->leave_days;
+                @endphp
                     <tr class="odd">
-                        <td>{{ $item->total_leave }}</td>
-                        <td>0</td>
-                        <td>{!! getLeaveHeadsSeperation($item->nature_of_employment_id) !!}</td>
-                        <td>{{ $item->academy->from_year . ' - ' . $item->academy->to_year }}</td>
+                        <td>{{ $item->leave_head->name }}</td>
+                        <td>{{ $item->leave_days }}</td>
+                        <td>{{ ucfirst($item->carry_forward) }}</td>
+                        {{-- <td>{!! getLeaveHeadsSeperation($item->nature_of_employment_id) !!}</td> --}}
+                        {{-- <td>{{ $item->academy->from_year . ' - ' . $item->academy->to_year }}</td> --}}
                     </tr>
                 @endforeach
+                <tr>
+                    <td> Total</td>
+                    <td> {{ $total }}</td>
+                </tr>
             @endisset
 
         </tbody>

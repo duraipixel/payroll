@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             DocumentTypesSeeder::class,
             SalaryHeadsSeeder::class,
             SalaryFieldSeeder::class,
-            ProfessionalTaxSeeder::class
+            ProfessionalTaxSeeder::class,
+            LeaveHeadSeeder::class
         ]);
     }
 }

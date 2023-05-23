@@ -954,7 +954,15 @@ class StaffController extends Controller
     public function view(Request $request, User $user)
     {
         
-        $params = array('info' => $user);
-        return view('pages.overview.index', $params);
+        $breadcrums = array(
+            'title' => 'Staff Details',
+            'breadcrums' => array(
+                array('link' => route('staff.list'), 'title' => 'Staff Management'),
+                array('link' => '', 'title' => 'Staff Details')
+            )
+        );
+        
+        $info = $user;
+        return view('pages.overview.index', compact('info', 'breadcrums'));
     }
 }

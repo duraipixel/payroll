@@ -139,6 +139,7 @@
     <!--begin::Page Custom Javascript(used by this page)-->
     {{-- <script src="{{ asset('assets/js/custom/utilities/modals/create-account.js') }}"></script> --}}
     {{-- <script src="{{ asset('assets/js/custom/apps/ecommerce/catalog/save-product.js') }}"></script> --}}
+    
     <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
     {{-- <script src="{{ asset('assets/js/custom/apps/chat/chat.js') }}"></script> --}}

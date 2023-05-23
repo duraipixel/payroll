@@ -4,16 +4,20 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\Leave\StaffLeave;
 use App\Models\Master\Institution;
 use App\Models\Role\RoleMapping;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Staff\StaffBankDetail;
+use App\Models\Staff\StaffBankLoan;
 use App\Models\Staff\StaffClass;
 use App\Models\Staff\StaffDocument;
 use App\Models\Staff\StaffEducationDetail;
 use App\Models\Staff\StaffExperiencedSubject;
 use App\Models\Staff\StaffFamilyMember;
 use App\Models\Staff\StaffHealthDetail;
+use App\Models\Staff\StaffInsurance;
+use App\Models\Staff\StaffInvigilationDuty;
 use App\Models\Staff\StaffKnownLanguage;
 use App\Models\Staff\StaffMedicalRemark;
 use App\Models\Staff\StaffNominee;
@@ -21,6 +25,7 @@ use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffPfEsiDetail;
 use App\Models\Staff\StaffProfessionalData;
 use App\Models\Staff\StaffStudiedSubject;
+use App\Models\Staff\StaffTrainingDetail;
 use App\Models\Staff\StaffWorkExperience;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -208,6 +213,31 @@ class User extends Authenticatable implements Auditable
     public function careers()
     {
         return $this->hasMany(StaffWorkExperience::class, 'staff_id', 'id');
+    }
+
+    public function training()
+    {
+        return $this->hasMany(StaffTrainingDetail::class, 'staff_id', 'id');
+    }
+
+    public function invigilation()
+    {
+        return $this->hasMany(StaffInvigilationDuty::class, 'staff_id', 'id');
+    }
+
+    public function loans()
+    {
+        return $this->hasMany(StaffBankLoan::class, 'staff_id', 'id');
+    }
+
+    public function insurance()
+    {
+        return $this->hasMany(StaffInsurance::class, 'staff_id', 'id');
+    }
+
+    public function leaves()
+    {
+        return $this->hasMany(StaffLeave::class, 'staff_id', 'id');
     }
 
     

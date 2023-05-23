@@ -8,15 +8,23 @@
             <input type="text" class="form-control" name="leave_head" value="{{ $info->name ?? '' }}" id="leave_head" required >
         </div>
     </div>
+    <div class="fv-row form-group mb-10">
+        <label class="form-label required" for="">
+            Code
+        </label>
+        <div > 
+            <input type="text" class="form-control" name="leave_code" value="{{ $info->code ?? '' }}" id="leave_code" required >
+        </div>
+    </div>
   
     <div class="fv-row form-group mb-10">
         <label class="form-label" for="">
             Status
         </label>
         <div >
-            <input type="radio" id="active" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif >
+            <input type="radio" id="active" class="form-check-input" value="active" name="status" @if(isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif >
             <label class="pe-3" for="active">Active</label>
-            <input type="radio" id="inactive" class="form-check-input" value="0" name="status" @if(isset($info->status) && $info->status != 'active') checked  @endif >
+            <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status" @if(isset($info->status) && $info->status != 'active') checked  @endif >
             <label for="inactive">Inactive</label>
         </div>
     </div>
@@ -52,6 +60,13 @@ var KTAppEcommerceSaveLeaveHead = function () {
 						validators: {
 							notEmpty: {
 								message: 'Leave Head Name is required'
+							},
+						}
+					},
+                    'leave_code': {
+						validators: {
+							notEmpty: {
+								message: 'Code is required'
 							},
 						}
 					},
