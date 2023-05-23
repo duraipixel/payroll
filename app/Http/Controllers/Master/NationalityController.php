@@ -85,6 +85,7 @@ class NationalityController extends Controller
         }
         return view('pages.masters.nationality.index',compact('breadcrums'));
     }
+
     public function save(Request $request)
     {
         $id = $request->id ?? '';
@@ -112,13 +113,15 @@ class NationalityController extends Controller
             $data = Nationality::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
-
+            $list = Nationality::where('status', 'active')->get();
         } else {
             $error = 1;
+            $list = [];
             $message = $validator->errors()->all();
         }
-        return response()->json(['error' => $error, 'message' => $message, 'inserted_data' => $data]);
+        return response()->json(['error' => $error, 'message' => $message, 'inserted_data' => $data, 'list' => $list]);
     }
+
     public function add_edit(Request $request)
     {
         $id = $request->id;
@@ -130,10 +133,11 @@ class NationalityController extends Controller
             $info = Nationality::find($id);
             $title = 'Update Nationality';
         }
-
-         $content = view('pages.masters.nationality.add_edit_form',compact('info','title', 'from'));
-         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+        
+        $content = view('pages.masters.nationality.add_edit_form',compact('info','title', 'from'));
+        return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
+
     public function changeStatus(Request $request)
     {
         $id             = $request->id;
@@ -152,8 +156,16 @@ class NationalityController extends Controller
         
         return response()->json(['message'=>"Successfully deleted state!",'status'=>1]);
     }
+
     public function export()
     {
         return Excel::download(new NationalityExport,'nationality.xlsx');
+    }
+
+    public function getAjaxList(Request $request)
+    {
+        $id = $request->id;
+        $list = Nationality::where('status', 'active')->get();
+        return array('id' => $id, 'list' => $list);
     }
 }

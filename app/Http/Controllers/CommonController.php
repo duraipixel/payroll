@@ -22,7 +22,7 @@ class CommonController extends Controller
         if( !empty( $bank_id )) {
             $banks = Bank::find($bank_id);
         }
-
+        
         switch ($form_type) {
             case 'intitution':
                 

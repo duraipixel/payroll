@@ -197,6 +197,10 @@ Route::group(['middleware' => 'auth'],  function () {
         });
 
     }
+    /**
+     * ajax form data reload
+     */
+    Route::post('get/nationlity/list', [App\Http\Controllers\Master\NationalityController::class, 'getAjaxList'])->name('nationality.ajax.list');
 
     Route::post('get/head/fields', [App\Http\Controllers\PayrollManagement\SalaryFieldController::class, 'getHeadBasedFields'])->name('salary-field.head.fields');
 

@@ -89,11 +89,22 @@ var KTAppEcommerceSaveNationality = function () {
                                     }
                                 } else{
                                     toastr.success("Nationality added successfully");
-                                    if( res.inserted_data ) {
-                                        $('#kt_dynamic_app').modal('hide');
-                                        $('#family_nationality').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                        $('#family_nationality').val(res.inserted_data.id).trigger('change');
-                                    }
+                                    $('#kt_dynamic_app').modal('hide');
+                                   
+                                    if( res.list ) {
+                                            var dp_text = '';
+
+                                            res.list.map((item) => {
+                                                dp_text += `<option value="${item.id}">${item.name}</option>`;
+                                            })
+                                            
+                                            $('#family_nationality').html(dp_text);
+
+                                        }
+                                        if( res.inserted_data ) {
+                                            // $('#family_nationality').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
+                                            $('#family_nationality').val(res.inserted_data.id).trigger('change');
+                                        }
                                 }
                             }
                         })

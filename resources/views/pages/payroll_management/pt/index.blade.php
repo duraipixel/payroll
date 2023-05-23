@@ -83,7 +83,7 @@
                     <div class="row mt-3">
                         <div class="col-sm-12 text-end">
                             <button class="btn btn-sm btn-primary" type="submit"> Submit </button>
-                            <button class="btn btn-sm btn-dark"> Cancel </button>
+                            <a class="btn btn-sm btn-dark" href="{{ route('professional-tax') }}"> Cancel </a>
                         </div>
                     </div>
                 </form>

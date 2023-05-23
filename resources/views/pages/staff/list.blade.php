@@ -46,13 +46,13 @@
                                     Staff Info
                                 </th>
                                 <th class="text-center text-white" >
-                                    Email
+                                    Society Code
+                                </th>
+                                <th class="text-center text-white" >
+                                    Institution Code
                                 </th>
                                 <th class="text-center text-white" >
                                     Emp Code
-                                </th>
-                                <th class="text-center text-white" >
-                                    Institute
                                 </th>
                                 <th class="text-center text-white" >
                                     Profile Compleation
@@ -95,16 +95,16 @@
                     name: 'name'
                 },
                 {
-                    data: 'email',
-                    name: 'email'
+                    data: 'society_emp_code',
+                    name: 'society_emp_code'
+                },
+                {
+                    data: 'institute_emp_code',
+                    name: 'institute_emp_code'
                 },
                 {
                     data: 'emp_code',
                     name: 'emp_code'
-                },
-                {
-                    data: 'institute_name',
-                    name: 'institute_name'
                 },
                 {
                     data: 'verification_status',
