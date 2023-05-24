@@ -14,6 +14,10 @@ use App\Models\Master\Caste;
 use App\Models\Master\Department;
 use App\Models\Master\NatureOfEmployment;
 use App\Models\Staff\StaffDocument;
+use App\Models\Staff\StaffEducationDetail;
+use App\Models\Staff\StaffWorkExperience;
+use App\Models\Leave\StaffLeave;
+use App\Models\Staff\StaffAppointmentDetail;
 
 class DocumentLockerController extends Controller
 {
@@ -48,17 +52,40 @@ class DocumentLockerController extends Controller
        
         $id             = $request->id;
         $status         = 'approved';
-        $info           = StaffDocument::find($id);
+        $info='';
+        if($request->type=='personal')
+        {
+            $info           = StaffDocument::find($id);           
+        }
+        else if($request->type=='education')
+        {
+            $info           = StaffEducationDetail::find($id);            
+        }
+        else if($request->type=='experience')
+        {
+            $info           = StaffWorkExperience::find($id);            
+        }
+        else
+        {
+            $info           ='';
+        }
         $info->verification_status   = $status;
         $info->update();
+        
+        
         return response()->json(['message' => "You are approved the document!", 'status' => 1]);
     }
     public  function documentView($id)
     {
         $user=User::find($id);  
         $personal_doc=StaffDocument::where('staff_id',$id)->get(); 
+        $education_doc=StaffEducationDetail::where('staff_id',$id)->get();
+        $experince_doc=StaffWorkExperience::where('staff_id',$id)->get();
+        $acadamic_id= academicYearId();
+        $leave_doc=StaffLeave::where('staff_id',$id)->where('academic_id',$acadamic_id)->get();
+        $appointment_doc=StaffAppointmentDetail::where('staff_id',$id)->get();
         
-        return view('pages.document_locker.document_view',compact('user','personal_doc')); 
+        return view('pages.document_locker.document_view',compact('user','personal_doc','education_doc','experince_doc','leave_doc','appointment_doc')); 
        
     }
     public function autocompleteSearch(Request $request)

@@ -47,6 +47,7 @@ class User extends Authenticatable implements Auditable
         'society_emp_code',
         'institute_emp_code',
         'emp_code',
+        'locker_no',
         'first_name',
         'first_name_tamil',
         'last_name',

@@ -5,7 +5,13 @@
 @endsection
 @section('content')
     <!--begin::Card title-->
-
+<style>
+    .btn-info-blue {
+    color: #00d6f7;
+    background-color: #f9ffff;
+    border-color: #17a2b8 !important;
+    }
+    </style>
 
     <div class="container">
         <div class="row">
@@ -75,7 +81,10 @@
                                     Employee Since
                                 </div>
                                 <div class="fw-bold">
-                                    {{date('Y', strtotime($user->appointment->joining_date )) ?? ''}}                                    
+                                    @if (@isset($user->appointment->joining_date))
+                                    {{date('Y', strtotime($user->appointment->joining_date )) ?? ''}}        
+                                    @endif
+                                                             
                                    
                                 </div>
                             </div>
@@ -94,10 +103,12 @@
             </div>
             <div class="col-sm-9 p-10">
               
-                <div class="d-flex ">
+                <div class="d-flex pb-5">
+                    
                     <h3> Document Locker </h3>
                    
-                    <span class="text-right"> #djdlf98909</span>
+                   
+                    <span class="text-right" style="margin-left:50%" ><button type="button" class="btn btn-info-blue" >Locker No: #{{$user->locker_no ??''}}</button></span>
                 </div>
                 <div class="card">
                     <div class=" d-flex align-items-start p-10">
@@ -109,9 +120,12 @@
                             <button class="nav-link  p-5" id="v-pills-education-tab" data-bs-toggle="pill"
                                 data-bs-target="#v-pills-education" type="button" role="tab"
                                 aria-controls="v-pills-education" aria-selected="false">Education Documents</button>
+                            <button class="nav-link  p-5" id="v-pills-experience-tab" data-bs-toggle="pill"
+                            data-bs-target="#v-pills-experience" type="button" role="tab"
+                            aria-controls="v-pills-experience" aria-selected="false">Experience Documents</button>
                             <button class="nav-link  p-5" id="v-pills-leave-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-leave" type="button" role="tab"
-                                aria-controls="v-pills-leave" aria-selected="false">Leave Documents</button>
+                            data-bs-target="#v-pills-leave" type="button" role="tab"
+                            aria-controls="v-pills-leave" aria-selected="false">Leave Documents</button>
                             <button class="nav-link  p-5" id="v-pills-salary-tab" data-bs-toggle="pill"
                                 data-bs-target="#v-pills-salary" type="button" role="tab"
                                 aria-controls="v-pills-salary" aria-selected="false">Salary Slip</button>
@@ -133,34 +147,190 @@
                                               
                                             </tr>
                                            
-                                        </thead>  
-                                    @foreach ($personal_doc as $personal_docs )
+                                        </thead>                                                                                 
+                                     
+                                    @forelse ($personal_doc as $personal_docs )
                                     <tr>
                                         <td> {{$personal_docs->documentType->name ??''}}</td>
-                                        <td> @if ($personal_docs->verification_status=='pending')
-                                            <a href="#" onclick="return changeDocumentStatus({{$personal_docs->id}})" class="btn btn-icon btn-active-info  btn-danger  mx-1 w-50px h-50px"> 
+                                        <td> @if ($personal_docs->verification_status=='pending')                                           
+                                            <a href="#" onclick="return changeDocumentStatus({{$personal_docs->id}},'personal')" class="btn btn-icon btn-active-info  btn-danger  mx-1 w-50px h-50px"> 
                                                 <i class="fa fa-times"></i></a>                        
                                         @else                                            
                                         <button class="btn  btn-success mx-1 w-50px h-50px"> 
                                             <i class="fa fa-check"></i></button>
                                         @endif</td>
                                         <td> {{$personal_docs->documentType->created_at ??''}}</td>
-                                         <td> <a href="#"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px"> 
-                                            <i class="fa fa-eye"></i>
+                                         <td>  
+                                            @if ($personal_docs->verification_status=='approved')
+                                                <a href="{{ url('storage/app/public'.'/'.$personal_docs->multi_file) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                                <i class="fa fa-download">
+                                            @else                                            
+                                                <button class="btn  btn-secondary mx-1 w-50px h-50px"> 
+                                                    <i class="fa  fa-times-circle"></i></button>
+                                            @endif
+
+                                            </i>
                                         </a></td>
                                     </tr>
-                                    @endforeach
+                                    @empty
+                                    <tr>
+                                        <td colspan="4"> <strong>Personal Documents not Uploaded</strong> </td>
+                                    </tr>
+                                    @endforelse
+
                                 </table>
                                     
                               </div>
                             <div class="tab-pane fade" id="v-pills-education" role="tabpanel"
-                                aria-labelledby="v-pills-education-tab">.cccccccccccccccccccc</div>
+                                aria-labelledby="v-pills-education-tab">
+                                <table  class="p-10 table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer">
+                                    <thead class="bg-primary p-10">
+                                        
+                                        <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="text-center text-white" >Document Name</th>
+                                                <th class="text-center text-white">Status</th>
+                                                <th class="text-center text-white">Uploaded Date</th>
+                                                <th class="text-center text-white">Action</th>
+                                              
+                                            </tr>
+                                           
+                                        </thead>                                                                                 
+                                    @forelse ($education_doc as $education_docs )
+                                    <tr>
+                                        <td> {{$education_docs->course_name ??''}}</td>
+                                        <td> @if ($education_docs->verification_status=='pending')
+                                            <a href="#" onclick="return changeDocumentStatus({{$education_docs->id}},'education')" class="btn btn-icon btn-active-info  btn-danger  mx-1 w-50px h-50px"> 
+                                                <i class="fa fa-times"></i></a>                        
+                                        @else                                            
+                                        <button class="btn  btn-success mx-1 w-50px h-50px"> 
+                                            <i class="fa fa-check"></i></button>
+                                        @endif</td>
+                                        <td> {{$education_docs->submitted_date ??''}}</td>
+                                         <td> <a href="{{ url('storage/app/public'.'/'.$education_docs->doc_file) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                            <i class="fa fa-download"></i>
+                                        </a></td>
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4"> <strong>Education Documents not Uploaded</strong> </td>
+                                    </tr>
+                                    @endforelse
+
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-experience" role="tabpanel"
+                            aria-labelledby="v-pills-experience-tab">
+                            <table  class="p-10 table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer">
+                                <thead class="bg-primary p-10">
+                                    
+                                    <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="text-center text-white">Designation</th>
+                                            <th class="text-center text-white">Status</th>
+                                            <th class="text-center text-white">Uploaded Date</th>
+                                            <th class="text-center text-white">Action</th>
+                                          
+                                        </tr>
+                                       
+                                    </thead>                                                                                 
+                                @forelse ($experince_doc as $experince_docs )
+                                <tr>
+                                    <td> {{$experince_docs->designation->name ??''}}</td>
+                                    <td> @if ($experince_docs->verification_status=='pending')
+                                        <a href="#" onclick="return changeDocumentStatus({{$experince_docs->id}},'experience')" class="btn btn-icon btn-active-info  btn-danger  mx-1 w-50px h-50px"> 
+                                            <i class="fa fa-times"></i></a>                        
+                                    @else                                            
+                                    <button class="btn  btn-success mx-1 w-50px h-50px"> 
+                                        <i class="fa fa-check"></i></button>
+                                    @endif</td>
+                                    <td> {{$experince_docs->created_at ??''}}</td>
+                                     <td> <a href=" {{ url('storage/app/public'.'/'.$experince_docs->doc_file) }}" class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                        <i class="fa fa-download"></i>
+                                    </a></td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4"> <strong>Experience Documents not Uploaded</strong> </td>
+                                </tr>
+                                @endforelse
+
+                            </table>
+                        </div>
                             <div class="tab-pane fade" id="v-pills-leave" role="tabpanel"
-                                aria-labelledby="v-pills-leave-tab">dddddddddddddd</div>
+                                aria-labelledby="v-pills-leave-tab">
+                                <table  class="p-10 table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer">
+                                    <thead class="bg-primary p-10">
+                                        
+                                        <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="text-center text-white">Staff Name</th>
+                                                <th class="text-center text-white">Leave Status</th>
+                                                <th class="text-center text-white">Uploaded Date</th>
+                                                <th class="text-center text-white">Action</th>
+                                              
+                                            </tr>
+                                           
+                                        </thead>                                                                                 
+                                    @forelse ($leave_doc as $leave_docs )
+                                    <tr>
+                                        <td> {{$leave_docs->staff_info->name ??''}}</td>
+                                        <td>{{ucfirst($leave_docs->status) ??''}}</td>
+                                        <td> {{$leave_docs->created_at ??''}}</td>
+
+                                         <td>
+                                           @if ($leave_docs->status=='pending')
+                                           <a href="{{ url('storage/app/public'.'/'.$leave_docs->document) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                            <i class="fa fa-download"></i>
+                                        </a>                       
+                                            @else                                            
+                                            <a href="{{ url('storage/app/public'.'/'.$leave_docs->approved_document) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                                <i class="fa fa-download"></i>
+                                            </a>
+                                            @endif
+                                        </td>
+                                          
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="4"> <strong>Leave Documents not Uploaded</strong> </td>
+                                    </tr>
+                                    @endforelse
+    
+                                </table>
+                            </div>
                             <div class="tab-pane fade" id="v-pills-salary" role="tabpanel"
                                 aria-labelledby="v-pills-salary-tab">eeeeeeeeeeeee</div>
                             <div class="tab-pane fade" id="v-pills-appointment" role="tabpanel"
-                            aria-labelledby="v-pills-appointment-tab">eeeeeeeeeeeee</div>
+                            aria-labelledby="v-pills-appointment-tab">
+                            <table  class="p-10 table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer">
+                                <thead class="bg-primary p-10">
+                                    
+                                    <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="text-center text-white">Staff Name</th>
+                                            <th class="text-center text-white">Employee Nature</th>
+                                            <th class="text-center text-white">Joining Date</th>
+                                            <th class="text-center text-white">Action</th>
+                                          
+                                        </tr>
+                                       
+                                    </thead>                                                                                 
+                                @forelse ($appointment_doc as $appointment_docs )
+                                <tr>
+                                    <td> {{$appointment_docs->staff_det->name ??''}}</td>
+                                    <td>{{ucfirst($appointment_docs->employment_nature->name ?? '')}}</td>
+                                    <td> {{$appointment_docs->joining_date ??''}}</td>
+
+                                    <td> <a href="{{ url('storage/app/public'.'/'.$appointment_docs->appointment_doc) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                        <i class="fa fa-download"></i>
+                                    </a></td>
+                                      
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="4"> <strong>Appointment Documents not Uploaded</strong> </td>
+                                </tr>
+                                @endforelse
+
+                            </table>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -177,7 +347,7 @@
 
 @section('add_on_script')
 <script>
-      function changeDocumentStatus(id) {
+      function changeDocumentStatus(id,type) {
 
 Swal.fire({
     text: "Are you sure you would like to change status?",
@@ -202,7 +372,8 @@ if (result.value) {
         url: "{{ route('document_status') }}",
         type: 'POST',
         data: {
-            id: id
+            id: id,
+            type: type
         },
         success: function(res) {
             window.location.reload();

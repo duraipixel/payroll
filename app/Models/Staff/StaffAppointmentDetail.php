@@ -11,6 +11,7 @@ use App\Models\Master\NatureOfEmployment;
 use App\Models\Master\PlaceOfWork;
 use App\Models\Master\StaffCategory;
 use App\Models\Master\TeachingType;
+use App\Models\User;
 
 class StaffAppointmentDetail extends Model implements Auditable
 {
@@ -39,6 +40,11 @@ class StaffAppointmentDetail extends Model implements Auditable
     {
         return $this->hasOne(NatureOfEmployment::class, 'id','nature_of_employment_id');
     }
+    public function staff_det()
+    {
+        return $this->hasOne(User::class, 'id', 'staff_id');
+    }
+
 
     public function work_place()
     {

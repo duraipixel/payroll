@@ -4,6 +4,47 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
+<style>
+    .typeahead-pane {
+        position: absolute;
+        width: 100%;
+        background: #ffffff;
+        margin: 0;
+        padding: 0;
+        border-radius: 6px;
+        box-shadow: 1px 2px 3px 2px #ddd;
+        z-index: 1;
+    }
+
+    .typeahead-pane-ul {
+        width: 100%;
+        padding: 0;
+    }
+
+    .typeahead-pane-li {
+        padding: 8px 15px;
+        width: 100%;
+        margin: 0;
+        border-bottom: 1px solid #2e3d4638;
+
+    }
+
+    .typeahead-pane-li:hover {
+        background: #3a81bf;
+        color: white;
+        cursor: pointer;
+    }
+
+    #input-close {
+        position: absolute;
+        top: 11px;
+        right: 15px;
+    }
+
+    .daterangepicker.show-calendar .ranges {
+        height: 0;
+    }
+</style>
     <!--begin::Card-->
     <div class="card" >
         <div class="card-title">
@@ -11,11 +52,21 @@
         </div>
 
         <div class="row  pt-6 px-10">
-            <div class="col-3">
+            <div class="col-3 position-relative"  id="typeahed-click">
                 <!--end::Svg Icon-->
-                <input type="text" data-kt-user-table-filter="search" id="staff_name_id"
-                    class="typeahead  form-control form-control-solid w-180px  " placeholder="Search Name or Staff ID">
-            
+
+                <input type="text" name="staff_name" value=""
+                id="staff_name" class="form-control" placeholder="Search Name or Staff ID">
+            <span id="input-close" class="d-none">
+                {!! cancelSvg() !!}
+            </span>
+           
+            <div class="typeahead-pane d-none" id="typeadd-panel">
+                <ul type="none" class="typeahead-pane-ul" id="typeahead-list">
+
+                </ul>
+            </div>
+                          
             </div>
             <div class="col-2">
                 <select class="form-select ms-4" id="search_institutions"  >
@@ -149,7 +200,7 @@ $(document).ready(function () {
         "scrollX": true
     });
 });
-  var route = "{{ url('autocomplete-search') }}";
+  /*var route = "{{ url('autocomplete-search') }}";
         $('#staff_name_id').typeahead({
             source: function (query, process) {
                 return $.get(route, {
@@ -161,7 +212,55 @@ $(document).ready(function () {
                 });
             }
         });
-        
+*/
+
+        window.addEventListener('click', function(e) {
+        if (document.getElementById('typeahed-click').contains(e.target)) {
+            // Clicked in box
+        } else {
+            // Clicked outside the box
+            $('#typeadd-panel').addClass('d-none');
+            // $('#staff_name').val('');
+            // $('#staff_id').val('');
+            // $('#staff_code').val('');
+            // $('#designation').val('');
+        }
+    });
+
+    var staff_name = document.getElementById('staff_name');
+
+    staff_name.addEventListener('keyup', function() {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('get.staff') }}",
+            type: 'POST',
+            data: {
+                query: this.value,
+            },
+            success: function(res) {
+                console.log(res);
+                if (res && res.length > 0) {
+                    $('#typeadd-panel').removeClass('d-none');
+                    let panel = '';
+                    res.map((item) => {
+                        panel +=
+                            `<li class="typeahead-pane-li">${item.name} - ${item.emp_code}</li>`;
+                    })
+                    $('#typeahead-list').html(panel);
+
+                } else {
+                    $('#typeadd-panel').addClass('d-none');
+
+                }
+            }
+        })
+    })
+
 
 
  

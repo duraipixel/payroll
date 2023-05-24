@@ -218,7 +218,7 @@ class StaffController extends Controller
             'previous_code' => 'required'
             // 'previous_code' => 'required|string|unique:users,emp_code,'.$id,
         ]);
-
+      
         if ($validator->passes()) {
 
             $academic_id = academicYearId();
@@ -228,12 +228,15 @@ class StaffController extends Controller
             $ins['institute_id'] = $request->institute_name;
             $ins['academic_id'] = $academic_id;
             $ins['emp_code'] = $request->previous_code;
+            $ins['locker_no'] = 'AMIDL'.$request->previous_code;
             $ins['first_name_tamil'] = $request->first_name_tamil;
             $ins['short_name'] = $request->short_name;
             // $ins['division_id'] = $request->division_id;
             $ins['reporting_manager_id'] = $request->reporting_manager_id;
             $ins['status'] = 'active';
             $ins['addedBy'] = auth()->id();
+          
+            
 
             $data = User::updateOrCreate(['emp_code' => $request->previous_code], $ins);
            
