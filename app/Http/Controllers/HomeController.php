@@ -32,7 +32,13 @@ class HomeController extends Controller
     {
         $id = $request->id;
         Session::put('academic_id', $id);
+        return true;
+    }
 
+    public function setInstitution(Request $request)
+    {
+        $id = $request->id;
+        Session::put('staff_institute_id', $id);
         return true;
     }
 }

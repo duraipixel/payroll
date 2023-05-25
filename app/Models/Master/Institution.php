@@ -18,6 +18,7 @@ class Institution extends Model implements Auditable
         'society_id',
         'academic_id',
         'code',
+        'logo',
         'flag',
         'short_name',
         'email',

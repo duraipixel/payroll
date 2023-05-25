@@ -3,6 +3,11 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
+<style>
+    #cke_document_model {
+        width: 100% !important;
+    }
+</style>
     <div class="card">
 
         <div class="card-header border-0 pt-6">

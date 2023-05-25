@@ -18,6 +18,7 @@ Route::group(['middleware' => 'auth'],  function () {
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::post('/set/academic/year', [App\Http\Controllers\HomeController::class, 'setAcademicYear'])->name('set.academic.year');
+    Route::post('/set/institution', [App\Http\Controllers\HomeController::class, 'setInstitution'])->name('set.institution');
     Route::post('/open/modal', [App\Http\Controllers\CommonController::class, 'openAddModal'])->name('modal.open');
 
     Route::post('/get/institution/staff/code', [App\Http\Controllers\Master\InstitutionController::class, 'getInstituteStaffCode'])->name('institute.staff.code');
@@ -244,6 +245,12 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('professional/tax',[App\Http\Controllers\PayrollManagement\ProfessionTaxController::class,'index'])->name('professional-tax');
     Route::post('professional/tax/save',[App\Http\Controllers\PayrollManagement\ProfessionTaxController::class,'save'])->name('save.professional-tax');
 
+    /**
+     *  Set working day calendar 
+     */
+    Route::post('/calendar/event/add', [App\Http\Controllers\AttendanceManagement\CalendarController::class, 'setEvent'])->name('calender.event.add'); 
+    Route::any('/calendar/event/get', [App\Http\Controllers\AttendanceManagement\CalendarController::class, 'getEvent'])->name('calender.event.get'); 
+    Route::post('/calendar/get/days', [App\Http\Controllers\AttendanceManagement\CalendarController::class, 'getDaysCount'])->name('calender.get.count'); 
 
     include 'crud.php';
     

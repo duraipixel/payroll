@@ -7,6 +7,7 @@ use App\Models\AcademicYear;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -37,11 +38,17 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        
+
         $academic = AcademicYear::where('status', 'active')->where('is_current', 1)->first();
-        if( $academic ){
+        if ($academic) {
             Session::put('academic_id', $academic->id);
         }
+        
         $this->middleware('guest')->except('logout');
+    }
+
+    protected function authenticated(Request $request, $user)
+    {
+        session(['staff_institute_id' => auth()->user()->institute_id ]);
     }
 }
