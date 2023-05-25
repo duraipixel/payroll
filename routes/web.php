@@ -185,7 +185,8 @@ Route::group(['middleware' => 'auth'],  function () {
         'salary-head' => App\Http\Controllers\PayrollManagement\SalaryHeadController::class,
         'salary-field' => App\Http\Controllers\PayrollManagement\SalaryFieldController::class,
         'leave-mapping' => App\Http\Controllers\AttendanceManagement\LeaveMappingController::class,
-        'att-manual-entry' => App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class,        
+        'att-manual-entry' => App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class,
+        'announcement' => App\Http\Controllers\Announcement\AnnouncementController::class,        
     );
     foreach($routeArray as $key=>$value)
     {

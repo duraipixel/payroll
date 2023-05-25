@@ -255,6 +255,25 @@
                     </div>
                 </div>
                 @endif
+              
+                <div class="menu-item ">
+                    <span class="menu-link @if (request()->routeIs(['announcement'])) active @endif">
+                        <span class="menu-icon">
+                            
+                           <i class="fa fa-bullhorn"></i>
+                            
+                        </span>
+
+
+                        <span class="menu-title">
+                            <a class="text-white"
+                                href="{{ route('announcement') }}">
+                                Announcement</span>
+                        </a>
+
+                    </span>
+                </div>
+
                 <div class="menu-item ">
                     <span class="menu-link @if (request()->routeIs(['appointment.orders'])) active @endif">
                         <span class="menu-icon">
