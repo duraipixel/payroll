@@ -5,46 +5,17 @@
 @endsection
 @section('content')
 <style>
-    .typeahead-pane {
-        position: absolute;
-        width: 100%;
-        background: #ffffff;
-        margin: 0;
-        padding: 0;
-        border-radius: 6px;
-        box-shadow: 1px 2px 3px 2px #ddd;
-        z-index: 1;
-    }
+    .select2-selection__rendered {
+    line-height: 38px !important;
+}
+.select2-container .select2-selection--single {
+    height: 40px !important;
+}
+.select2-selection__arrow {
+    height: 40px !important;
+}
+    </style>
 
-    .typeahead-pane-ul {
-        width: 100%;
-        padding: 0;
-    }
-
-    .typeahead-pane-li {
-        padding: 8px 15px;
-        width: 100%;
-        margin: 0;
-        border-bottom: 1px solid #2e3d4638;
-
-    }
-
-    .typeahead-pane-li:hover {
-        background: #3a81bf;
-        color: white;
-        cursor: pointer;
-    }
-
-    #input-close {
-        position: absolute;
-        top: 11px;
-        right: 15px;
-    }
-
-    .daterangepicker.show-calendar .ranges {
-        height: 0;
-    }
-</style>
     <!--begin::Card-->
     <div class="card" >
         <div class="card-title">
@@ -52,52 +23,38 @@
         </div>
 
         <div class="row  pt-6 px-10">
-            <div class="col-3 position-relative"  id="typeahed-click">
-                <!--end::Svg Icon-->
-
-                <input type="text" name="staff_name" value=""
-                id="staff_name" class="form-control" placeholder="Search Name or Staff ID">
-            <span id="input-close" class="d-none">
-                {!! cancelSvg() !!}
-            </span>
-           
-            <div class="typeahead-pane d-none" id="typeadd-panel">
-                <ul type="none" class="typeahead-pane-ul" id="typeahead-list">
-
-                </ul>
-            </div>
-                          
-            </div>
-            <div class="col-2">
-                <select class="form-select ms-4" id="search_institutions"  >
-                    <option value="">Institutions</option>
-                    @foreach ($institution as $ins_value)
-                        <option value="{{$ins_value->id}}">{{$ins_value->name}}</option>                        
+            <div class="col-3 position-relative" >
+                <select class="form-select ms-4" id="staff_id"  onchange="return showOptions();" >
+                    <option value="">Select Staff</option>
+                    @foreach ($user as $users)
+                        <option value="{{$users->id}}">{{$users->name}} - {{$users->emp_code}}</option>                        
                     @endforeach
                    
-                </select>
-              
+                </select>   
             </div>
          
-            <div class="col-2">
-                <select class="form-select ms-4" id="search_institutions " >
-                    <option value="">Department </option>
-                    @foreach ($department as $department_value)
-                        <option value="{{$department_value->id}}">{{$department_value->name}}</option>                        
+            <div class="col-3">
+                <select class="form-select ms-4" id="emp_nature_id" >
+                    <option value="">Nature Of Employment </option>
+                    @foreach ($employee_nature as $employment_value)
+                        <option value="{{$employment_value->id}}">{{$employment_value->name}}</option>                        
                     @endforeach
                 </select>
           </div>
-            <div class="col-2">
-                <select class="form-select ms-4" id="search_institutions "  >
-                    <option value="">Designation</option>
-                    @foreach ($designation as $desig_value)
-                        <option value="{{$desig_value->id}}">{{$desig_value->name}}</option>                        
+            <div class="col-3">
+                <select class="form-select ms-4" id="work_place_id"  >
+                    <option value="">Place of Work</option>
+                    @foreach ($place_of_work as $work_value)
+                        <option value="{{$work_value->id}}">{{$work_value->name}}</option>                        
                     @endforeach
                 </select>
           </div>
         
-      <div class="col-2">
-        <button type="button" class="btn btn-primary ms-7">Search</button>
+      <div class="col-3">
+        <button type="button" class="btn btn-primary ms-7" onclick="return search_dl();">Search</button>
+  </div>
+  <div class="invalid-feedback">
+    Please select above any one
   </div>
         </div>
 
@@ -139,7 +96,7 @@
         <div class="card-body p-10">
             <div class="col-12">
                 <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                      <table id="document_locker" class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
+                    <table id="document_locker" class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
                       style="width:100%">
                       <thead class="bg-primary">
                         <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
@@ -191,6 +148,7 @@
                            
                         </tbody>
                     </table>
+                    <div id="kt_dynamic_app"></div>
                 </div>
             </div>
         </div>
@@ -198,283 +156,123 @@
     </div>
     <!--end::Card-->
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
-    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+
 @endsection
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+<link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
 @section('add_on_script')
-
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
-    <script>   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
+<script>   
 
 $(document).ready(function () {
     $('#document_locker').DataTable({   
         "scrollX": true
     });
 });
-  /*var route = "{{ url('autocomplete-search') }}";
-        $('#staff_name_id').typeahead({
-            source: function (query, process) {
-                return $.get(route, {
-                    query: query
-                }, function (data) {
-                    console.log(data);
-                    //var details=data[name]+'-'+data[emp_code]; console.log(details);
-                    return process(data);
-                });
-            }
-        });
-*/
 
-        window.addEventListener('click', function(e) {
-        if (document.getElementById('typeahed-click').contains(e.target)) {
-            // Clicked in box
-        } else {
-            // Clicked outside the box
-            $('#typeadd-panel').addClass('d-none');
-            // $('#staff_name').val('');
-            // $('#staff_id').val('');
-            // $('#staff_code').val('');
-            // $('#designation').val('');
-        }
-    });
+$('#staff_id').select2({
+  selectOnClose: true
+});
 
-    var staff_name = document.getElementById('staff_name');
-
-    staff_name.addEventListener('keyup', function() {
-
+//Option value based on Staff name  start
+    function showOptions()
+    {
+        var staff_id=$("#staff_id").val();
         $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: "{{ route('get.staff') }}",
-            type: 'POST',
-            data: {
-                query: this.value,
-            },
-            success: function(res) {
-                console.log(res);
-                if (res && res.length > 0) {
-                    $('#typeadd-panel').removeClass('d-none');
-                    let panel = '';
-                    res.map((item) => {
-                        panel +=
-                            `<li class="typeahead-pane-li">${item.name} - ${item.emp_code}</li>`;
-                    })
-                    $('#typeahead-list').html(panel);
-
-                } else {
-                    $('#typeadd-panel').addClass('d-none');
-
-                }
-            }
-        })
-    })
-
-
-
- 
- var dtTable = $('#staff_table_data').DataTable({
-
-processing: true,
-serverSide: true,
-type: 'POST',
-ajax: {
-    "url": "{{ route('user.document_locker') }}",
-    "data": function(d) {
-      //  console.log(d);
-       // d.datatable_search = $('#staff_datable_search').val();
-    }
-},
-
-columns: [{
-        data: 'name',
-        name: 'name'
-    },
-    {
-        data: 'email',
-        name: 'email'
-    },
-    {
-        data: 'verification_status',
-        name: 'verification_status'
-    },
-    {
-        data: 'status',
-        name: 'status'
-    }
-  
-    // {
-    //     data: 'action',
-    //     name: 'action',
-    //     orderable: false,
-    //     searchable: false
-    // },
-],
-language: {
-    paginate: {
-        next: '<i class="fa fa-angle-right"></i>', // or '→'
-        previous: '<i class="fa fa-angle-left"></i>' // or '←' 
-    }
-},
-"aaSorting": [],
-"pageLength": 25
-});
-
-$('.dataTables_wrapper').addClass('position-relative');
-$('.dataTables_info').addClass('position-absolute');
-$('.dataTables_filter label input').addClass('form-control form-control-solid w-250px ps-14');
-$('.dataTables_filter').addClass('position-absolute end-0 top-0');
-$('.dataTables_length label select').addClass('form-control form-control-solid');
-
-/*document.querySelector('#staff_datable_search').addEventListener("keyup", function(e) {
-    dtTable.draw();
-}),*/
-
-$('#search-form').on('submit', function(e) {
-    dtTable.draw();
-    e.preventDefault();
-});
-$('#search-form').on('reset', function(e) {
-$('select[name=filter_status]').val(0).change();
-
-dtTable.draw();
-e.preventDefault();
-});
-
-        function institutionChangeStatus(id, status) {
-
-            Swal.fire({
-                text: "Are you sure you would like to change status?",
-                icon: "warning",
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: "Yes, Change it!",
-                cancelButtonText: "No, return",
-                customClass: {
-                    confirmButton: "btn btn-danger",
-                    cancelButton: "btn btn-active-light"
-                }
-            }).then(function(result) {
-                if (result.value) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
-                    $.ajax({
-                        url: "{{ route('institutions.change.status') }}",
-                        type: 'POST',
-                        data: {
-                            id: id,
-                            status: status
-                        },
-                        success: function(res) {
-                            dtTable.ajax.reload();
-                            Swal.fire({
-                                title: "Updated!",
-                                text: res.message,
-                                icon: "success",
-                                confirmButtonText: "Ok, got it!",
-                                customClass: {
-                                    confirmButton: "btn btn-success"
-                                },
-                                timer: 3000
-                            });
-
-                        },
-                        error: function(xhr, err) {
-                            if (xhr.status == 403) {
-                                toastr.error(xhr.statusText, 'UnAuthorized Access');
-                            }
-                        }
-                    });
-                }
-            });
-        }
-
-        $('#kt_common_add_form').on('hidden.bs.modal', function() {
-            $(this).find('form').trigger('reset');
-        })
-
-        function getInstituteModal( id = '') {
-
-            $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
             $.ajax({
-                url: "{{ route('institutions.add_edit') }}",
+                url: "{{ route('user.show_options') }}",
                 type: 'POST',
                 data: {
-                    id: id,
+                    staff_id: staff_id,                  
+
                 },
                 success: function(res) {
-                    $('#kt_dynamic_app').modal('show');
+                    if(res.place_of_work!='' && res.emp_nature )
+                    {
+                        $('#emp_nature_id').empty();
+                        $("#emp_nature_id").append('<option>Nature Of Employment</option>');                       
+                        var id = res.emp_nature['id'];
+                        var name = res.emp_nature['name'];
+                        var option = "<option value='"+id+"'>"+name+"</option>"; 
+                        $("#emp_nature_id").append(option);  
+                        
+                        $('#work_place_id').empty();
+                        $("#work_place_id").append('<option>Place of Work</option>');                       
+                        var id = res.place_of_work['id'];
+                        var name = res.place_of_work['name'];
+                        var option = "<option value='"+id+"'>"+name+"</option>"; 
+                        $("#work_place_id").append(option);                       
+                    }
+                    else
+                    {
+                        $('#emp_nature_id').empty();
+                        $("#emp_nature_id").append('<option>Nature Of Employment</option>');
+                        
+                        $('#work_place_id').empty();
+                        $("#work_place_id").append('<option>Place of Work</option>');     
+
+                    }                   
+                }
+            })
+    }
+
+//Option value based on Staff name  start
+
+// Search Staff details Start
+
+function search_dl()
+{
+    var staff_id=$("#staff_id").val();
+    var emp_nature_id=$("#emp_nature_id").val();
+    var work_place_id=$("#work_place_id").val();  
+    if(staff_id=='' && emp_nature_id=='' && work_place_id=='')
+    {       
+        $(".invalid-feedback").show();
+        return false;
+    }
+    else
+    {
+        $(".invalid-feedback").hide();
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('user.search_staff') }}",
+                type: 'POST',
+                data: {
+                    staff_id: staff_id,
+                    emp_nature_id: emp_nature_id,
+                    work_place_id: work_place_id,
+                },
+                success: function(res) {    
+                    var table = $('#document_locker').DataTable();
+                    table.column( 0 ).visible( false );
+                    table.column( 1 ).visible( false );   
+                    table.column( 2 ).visible( false );
+                    table.column( 3 ).visible( false );
+                    table.column( 4 ).visible( false );
+                    table.column( 5 ).visible( false );
+                    table.column( 6 ).visible( false );
+                    table.column( 7 ).visible( false );
                     $('#kt_dynamic_app').html(res);
                 }
             })
+    }
 
-        }
+}
+//Search Staff details End 
 
-        function deleteInstitution(id) {
-            Swal.fire({
-                text: "Are you sure you would like to delete record?",
-                icon: "warning",
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: "Yes, Delete it!",
-                cancelButtonText: "No, return",
-                customClass: {
-                    confirmButton: "btn btn-danger",
-                    cancelButton: "btn btn-active-light"
-                }
-            }).then(function(result) {
-                if (result.value) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
-                    $.ajax({
-                        url: "{{ route('institutions.delete') }}",
-                        type: 'POST',
-                        data: {
-                            id: id,
-                        },
-                        success: function(res) {
-                            dtTable.ajax.reload();
-                            Swal.fire({
-                                title: "Updated!",
-                                text: res.message,
-                                icon: "success",
-                                confirmButtonText: "Ok, got it!",
-                                customClass: {
-                                    confirmButton: "btn btn-success"
-                                },
-                                timer: 3000
-                            });
-
-                        },
-                        error: function(xhr, err) {
-                            if (xhr.status == 403) {
-                                toastr.error(xhr.statusText, 'UnAuthorized Access');
-                            }
-                        }
-                    });
-                }
-            });
-        }
-       
-       
 
 
     </script>
