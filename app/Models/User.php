@@ -103,6 +103,18 @@ class User extends Authenticatable implements Auditable
     public function staffDocumentsApproved() {
         return $this->hasMany(StaffDocument::class, 'staff_id', 'id')->where('status', 'active')->where('verification_status','approved');
     }
+    public function staffExperienceDocPending() {
+        return $this->hasMany(StaffWorkExperience::class, 'staff_id', 'id')->where('status', 'active')->where('verification_status','pending');
+    }
+    public function staffExperienceDocApproved() {
+        return $this->hasMany(StaffWorkExperience::class, 'staff_id', 'id')->where('status', 'active')->where('verification_status','approved');
+    }
+    public function staffEducationDocPending() {
+        return $this->hasMany(StaffEducationDetail::class, 'staff_id', 'id')->where('status', 'active')->where('verification_status','pending');
+    }
+    public function staffEducationDocApproved() {
+        return $this->hasMany(StaffEducationDetail::class, 'staff_id', 'id')->where('status', 'active')->where('verification_status','approved');
+    }
 
     
     public function aadhaar() {
@@ -184,6 +196,9 @@ class User extends Authenticatable implements Auditable
     public function appointment() {
         return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'id');
     }
+    public function appointmentCount() {
+        return $this->hasMany(StaffAppointmentDetail::class, 'staff_id', 'id');
+    }
 
     public function allAppointment() {
         return $this->hasMany(StaffAppointmentDetail::class, 'staff_id', 'id');
@@ -260,6 +275,16 @@ class User extends Authenticatable implements Auditable
     public function leaves()
     {
         return $this->hasMany(StaffLeave::class, 'staff_id', 'id');
+    }
+
+    public function leavesApproved()
+    {
+        return $this->hasMany(StaffLeave::class, 'staff_id', 'id')->where('status','approved');
+    }
+
+    public function leavesPending()
+    {
+        return $this->hasMany(StaffLeave::class, 'staff_id', 'id')->where('status','pending');
     }
 
     

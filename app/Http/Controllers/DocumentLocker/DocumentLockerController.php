@@ -33,9 +33,23 @@ class DocumentLockerController extends Controller
         }*/
         $user = User::where('is_super_admin', '=', null)->get();
         $user_count = User::where('is_super_admin', '=', null)->count();
-        $total_documents = StaffDocument::where('status','active')->count();
-        $review_pending_documents = StaffDocument::where('verification_status','pending')->where('status','active')->count();
-      // $user=User::find(6);
+       
+        $staff_document_pending = StaffDocument::where('verification_status','pending')->where('status','active')->count();
+        $education_doc_pending=StaffEducationDetail::where('verification_status','pending')->count();
+        $experince_doc_pending=StaffWorkExperience::where('verification_status','pending')->count();
+        $leave_doc_pending=StaffLeave::where('status','pending')->count();
+       
+        $review_pending_documents=$staff_document_pending+$education_doc_pending+$experince_doc_pending+
+                                 $leave_doc_pending;
+
+        $staff_document_total = StaffDocument::where('status','active')->count();
+        $education_doc_total=StaffEducationDetail::count();
+        $experince_doc_total=StaffWorkExperience::count();
+        $leave_doc_total=StaffLeave::count();
+        $appointment_doc_total=StaffAppointmentDetail::where('status','active')->count();
+        $total_documents = $staff_document_total+$education_doc_total+$experince_doc_total+
+                            $leave_doc_total+$appointment_doc_total;
+        // $user=User::find(6);
       //dd( $total_documents);
         $institution=Institution::where('status','active')->get();
         $division=NatureOfEmployment::where('status','active')->get();

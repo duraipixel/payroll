@@ -161,10 +161,25 @@
                                 <td>{{$users->emp_code}}</td>
                                 <td>{{$users->name}}</td>
                                 <td>{{$users->position->department->name ??''}}</td>
-                                <td>{{$users->position->designation->name ??''}}</td>
-                                <td>{{$users->staffDocuments->count() ??''}}</td>
-                                <td>{{$users->staffDocumentsApproved->count() ??''}}</td>
-                                <td>{{$users->staffDocumentsPending->count() ??''}}</td>
+                                <td>{{$users->position->designation->name ??''}}</td>                                             
+                                @php                                  
+                                    $total_doc='';
+                                    $total_doc=$users->staffDocuments->count()+$users->education->count()+
+                                    $users->careers->count()+$users->leaves->count()+$users->appointmentCount->count(); 
+                                    
+                                    $pending_doc='';
+                                    $pending_doc=$users->staffDocumentsPending->count()+$users->staffEducationDocPending->count()+
+                                    $users->staffExperienceDocPending->count()+$users->leavesPending->count();
+
+                                    $approved_doc='';
+                                    $approved_doc=$users->staffDocumentsApproved->count()+$users->staffEducationDocApproved->count()+
+                                    $users->staffExperienceDocApproved->count()+$users->leavesApproved->count()+$users->appointmentCount->count();
+                                    
+                                @endphp
+
+                                <td>{{ $total_doc ?? '0'}}</td>
+                                <td>{{$approved_doc ?? '0'}}</td>
+                                <td>{{$pending_doc?? '0'}}</td>
                                
                                 <td><a href=" {{route('user.dl_view', ['id' => $users->id])}}" class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px"> 
                                     <i class="fa fa-eye"></i>

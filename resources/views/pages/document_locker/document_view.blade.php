@@ -161,13 +161,10 @@
                                         @endif</td>
                                         <td> {{$personal_docs->documentType->created_at ??''}}</td>
                                          <td>  
-                                            @if ($personal_docs->verification_status=='approved')
+                                          
                                                 <a href="{{ url('storage/app/public'.'/'.$personal_docs->multi_file) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
                                                 <i class="fa fa-download">
-                                            @else                                            
-                                                <button class="btn  btn-secondary mx-1 w-50px h-50px"> 
-                                                    <i class="fa  fa-times-circle"></i></button>
-                                            @endif
+                                        
 
                                             </i>
                                         </a></td>
