@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Role\Permission;
 use App\Helpers\AccessGuard;
 use App\Models\AttendanceManagement\LeaveMapping;
+use App\Models\Master\Institution;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -429,6 +430,14 @@ if (!function_exists('generateLeaveForm')) {
     {
         $date = '1/Jan/'.date('Y').' - 31/Dec/'.date('Y');
         return $date;
+    }
+
+    function getAllInstitute() {
+        return Institution::where('status', 'active')->get();
+    }
+
+    function getInstituteInfo($id) {
+        return Institution::find($id);
     }
 
 }

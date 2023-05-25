@@ -213,6 +213,24 @@
             })
         }
 
+        function setGlobalInstitution(id) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url:"{{ route('set.institution') }}",
+                type: 'POST',
+                data:{id:id},
+                success: function(res) {
+                    if(res) {
+                        location.reload();
+                    }
+                }
+            })
+        }
+
         
     </script>
 </body>

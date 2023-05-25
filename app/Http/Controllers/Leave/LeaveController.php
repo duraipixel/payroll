@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Leave;
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceManagement\Holiday;
 use App\Models\AttendanceManagement\LeaveHead;
+use App\Models\CalendarDays;
 use App\Models\Leave\StaffLeave;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -245,17 +246,7 @@ class LeaveController extends Controller
                 ),
             )
         );
-
-        if($request->ajax()) {
-
-            $data = Holiday::whereDate('date', '>=', $request->start)
-                      ->orWhereDate('date', '<=', $request->end)
-                      ->get(['id', 'title', 'date']);
-
-            return response()->json($data);
-
-        }
-
+        // dd( session()->get('staff_institute_id') );
         return view('pages.leave.overview', compact('breadcrums'));
     }
 

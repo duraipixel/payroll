@@ -63,18 +63,22 @@
                 <div class="menu-item d-flex my-0">
                     <!--end::Select-->
                     <!--begin::Select-->
-                    <select name="status" data-control="select2" data-hide-search="true"
-                        data-placeholder="Export"
-                        class="form-select form-select-sm border-body bg-body w-200px">
-                        <option value="1">Instution Type</option>
-                        <option value="1">Amalarpavam</option>
-                        <option value="3">Amalarpavam CBSE</option>
+                    @php
+                        $institute = getAllInstitute();
+                    @endphp
+                    <select name="status" class="form-select form-select-sm border-body bg-body w-200px" onchange="setGlobalInstitution(this.value)">
+                        <option value=""> - Select Institution - </option>
+                        @isset($institute)
+                            @foreach ($institute as $item)
+                                <option value="{{ $item->id }}" @if( session()->get('staff_institute_id') == $item->id ) selected @endif>{{ $item->name }}</option>
+                            @endforeach
+                        @endisset
                     </select>
                     <!--end::Select-->
                 </div>
 
                 <div class="menu-item d-flex my-0">
-                    <!--begin::Select-->
+                    
                     <select name="status" onchange="return setGlobalAcademicYear(this.value)" class="form-control form-select form-select-sm border-body bg-body w-150px me-5">
                         @isset($global_academic_year)
                             @foreach ($global_academic_year as $item)
@@ -83,7 +87,7 @@
                             
                         @endisset
                     </select>
-                    <!--end::Select-->
+                    
                 </div>
 
             </div>
