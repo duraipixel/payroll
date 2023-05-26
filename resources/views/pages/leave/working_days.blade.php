@@ -34,26 +34,6 @@
 
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script> --}}
     {{-- <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.7/index.global.min.js'></script> --}}
-    <div class="card mb-2">
-        <div class="card-body py-4">
-            <h4> Start searching to see specific employee details here </h4>
-            <div class="row">
-                <div class="col-sm-6 custom_select">
-                    <select name="staff_id" id="staff_id" class="form-control" onchange="getStaffLeaves(this.value)">
-                        <option value="">-select-</option>
-                        @isset($user)
-                            @foreach ($user as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }} - {{ $item->emp_code }}</option>
-                            @endforeach
-                        @endisset
-                    </select>
-                </div>
-                <div class="col-sm-6 d-none" id="leave_overview_clear_btn">
-                    <button class="btn btn-danger btn-sm" type="button">Clear</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="card">
         <div class="card-body py-4">
             <div class="row">
@@ -83,14 +63,7 @@
 
             $('#calendar').fullCalendar({
 
-                events: {
-                    url: "{{ route('calender.event.get') }}",
-                    data: function() { // a function that returns an object
-                        return {
-                            staff_id: $('#staff_id').val(),
-                        };
-                    }
-                },
+                events: "{{ route('calender.event.get') }}",
                 eventAfterRender: function(event, element, view) {
                     element.append(event.title);
                 },
@@ -100,13 +73,7 @@
                 select: function(start, end, allDays) {
                     var start_date = moment(start).format('YYYY-MM-DD');
                     var end_date = moment(end).format('YYYY-MM-DD');
-                    var staff_id = $('#staff_id').val();
-                    console.log(staff_id, 'staff_id');
-                    if (staff_id) {
-                        getStaffLeaveDetails(staff_id, start_date, end_date);
-                    } else {
-                        // setDayDetails(start_date, end_date, calendar);
-                    }
+                    setDayDetails(start_date, end_date, calendar);
                 },
                 editable: true,
                 eventDrop: function(event) {
@@ -123,9 +90,8 @@
                 },
                 viewRender: function(view, element) {
                     var b = $('#calendar').fullCalendar('getDate');
-                    var staff_id = $('#staff_id').val();
                     // alert( moment(b).format('YYYY-MM-DD'));
-                    getStaffDaysCount(moment(b).format('YYYY-MM-DD'), staff_id);
+                    getDaysCount(moment(b).format('YYYY-MM-DD'));
                 },
 
             });
@@ -185,7 +151,7 @@
 
         }
 
-        function getStaffDaysCount(current_date, staff_id) {
+        function getDaysCount(current_date) {
 
             $.ajaxSetup({
                 headers: {
@@ -205,30 +171,8 @@
 
         }
 
-        function getStaffLeaveDetails(staff_id, from, to) {
-
-        }
-
         function displayMessage(message) {
             toastr.success(message, 'Event');
-        }
-
-        function getStaffLeaves(staff_id) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "{{ route('leaves.staff.info') }}",
-                type: "POST",
-                data: {
-                    staff_id: staff_id
-                },
-                success: function(res) {
-                    $('#days_count').html(res);
-                }
-            });
         }
     </script>
 @endsection

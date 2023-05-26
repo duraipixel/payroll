@@ -401,9 +401,9 @@
                     </div>
                 </div>
                 @endif
-                @if( access()->hasAccess(['leave.overview','leave-mapping', 'leave-status', 'leave-head', 'leaves.list', 'holiday']) )
+                @if( access()->hasAccess(['leaves.overview','leave-mapping', 'leave-status', 'leave-head', 'leaves.list', 'holiday', 'leaves.set.workingday']) )
                 <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion  @if (request()->routeIs(['leave-mapping', 'leave-status', 'leave-head', 'leaves.list', 'holiday', 'leave.overview'])) hover show @endif">
+                    class="menu-item menu-accordion  @if (request()->routeIs(['leave-mapping', 'leave-status', 'leave-head', 'leaves.list', 'holiday', 'leaves.overview', 'leaves.set.workingday'])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <i class="fas fa-bed"></i>
@@ -411,7 +411,17 @@
                         <span class="menu-title">Leave Management</span>
                         <span class="menu-arrow"></span>
                     </span>
-                    
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link @if (request()->routeIs(['leaves.overview'])) active @endif"
+                                href="{{ route('leaves.overview') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Overview</span>
+                            </a>
+                        </div>
+                    </div>
                     @if( access()->hasAccess('leaves.list','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                       
@@ -465,6 +475,17 @@
                         </div>
                     </div>
                     @endif
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link @if (request()->routeIs(['leaves.set.workingday'])) active @endif"
+                                href="{{ route('leaves.set.workingday') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Set Working Day</span>
+                            </a>
+                        </div>
+                    </div>
                     {{-- @if( access()->hasAccess('holiday','view') )
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
@@ -478,18 +499,7 @@
                         </div>
                     </div>
                     @endif --}}
-                    <div class="menu-sub menu-sub-accordion menu-active-bg">
-                      
-                        <div class="menu-item">
-                            <a class="menu-link @if (request()->routeIs(['leaves.overview'])) active @endif"
-                                href="{{ route('leaves.overview') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Set Working Days</span>
-                            </a>
-                        </div>
-                    </div>
+                    
                 </div>
                 @endif
                 @if( access()->hasAccess(['salary-head', 'salary-field']) )

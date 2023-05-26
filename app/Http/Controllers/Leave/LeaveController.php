@@ -31,7 +31,7 @@ class LeaveController extends Controller
         if ($request->ajax()) {
 
             $data = StaffLeave::select('staff_leaves.*', 'users.name as staff_name')->with(['staff_info'])
-                                ->join('users', 'users.id', '=', 'staff_leaves.staff_id');
+                ->join('users', 'users.id', '=', 'staff_leaves.staff_id');
             $status = $request->get('status');
             $keywords = $request->datatable_search ?? '';
 
@@ -42,7 +42,7 @@ class LeaveController extends Controller
                         return $query->where(function ($q) use ($keywords) {
                             $q->where('staff_leaves.application_no', 'like', "%{$keywords}%")
                                 ->orWhere('users.name', 'like', "%{$keywords}%");
-                                // ->orWhereDate('staff_leaves.created_at', $date);
+                            // ->orWhereDate('staff_leaves.created_at', $date);
                         });
                     }
                 })
@@ -51,7 +51,7 @@ class LeaveController extends Controller
                     $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" )">' . ucfirst($row->status) . '</a>';
                     return $status;
                 })
-               
+
                 ->editColumn('created_at', function ($row) {
                     $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
                     return $created_at;
@@ -59,44 +59,37 @@ class LeaveController extends Controller
                 ->addColumn('action', function ($row) {
                     $url = Storage::url($row->document);
                     $approve_btn = '';
-                    if( isset($row->approved_document ) && !empty( $row->approved_document ) ) {
+                    if (isset($row->approved_document) && !empty($row->approved_document)) {
 
                         $approved_doc = Storage::url($row->approved_document);
                         $approve_btn = '<a href="' . asset('public' . $approved_doc) . '" tooltip="Approved Document" target="_blank"  class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" > 
                                 <i class="fa fa-download"></i>
                             </a>';
                     }
-                    
-                    if( $row->status == 'pending') {
+
+                    if ($row->status == 'pending') {
 
                         $approve_btn = '<a href="javascript:void(0);" onclick="approveLeave(' . $row->id . ')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" > 
                                             <i class="fa fa-check"></i></a>';
                     }
-                    $route_name = request()->route()->getName(); 
-                    if( access()->buttonAccess($route_name,'add_edit') )
-                    {
+                    $route_name = request()->route()->getName();
+                    if (access()->buttonAccess($route_name, 'add_edit')) {
                         $edit_btn = '<a href="' . asset('public' . $url) . '" target="_blank" tooltip="Leave form"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                                 <i class="fa fa-download"></i>
                             </a>';
-                    }
-                    else
-                    {
+                    } else {
                         $edit_btn = '';
                     }
-                    if( access()->buttonAccess($route_name,'delete') )
-                    {
+                    if (access()->buttonAccess($route_name, 'delete')) {
                         $del_btn = '<a href="javascript:void(0);" onclick="deleteAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                                 <i class="fa fa-trash"></i></a>';
-                    }
-                    else
-                    {
+                    } else {
                         $del_btn = '';
                     }
                     return $edit_btn . $approve_btn . $del_btn;
                 })
                 ->rawColumns(['action', 'status', 'created_at', 'name']);
             return $datatables->make(true);
-            
         }
         return view('pages.leave.request_leave.index', compact('breadcrums'));
     }
@@ -173,12 +166,12 @@ class LeaveController extends Controller
 
                         $files = $request->file('application_file');
                         $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
-        
+
                         $directory = 'leave/' . $leave_info->application_no;
                         $filename  = $directory . '/' . $imageName;
-        
+
                         Storage::disk('public')->put($filename, File::get($files));
-                        $ins['approved_document'] = 'public/'.$filename;
+                        $ins['approved_document'] = 'public/' . $filename;
                     } else {
                         $error = 1;
                         $message = ['Application document upload is required'];
@@ -191,7 +184,6 @@ class LeaveController extends Controller
                     $ins['granted_by']  = auth()->user()->id;
                     $ins['granted_start_date']  = $leave_info->from_date;
                     $ins['granted_end_date']  = $leave_info->to_date;
-
                 } else {
 
                     $ins['academic_id'] = academicYearId();
@@ -204,7 +196,6 @@ class LeaveController extends Controller
                     $ins['to_date'] = $end_date;
                     $ins['no_of_days'] = $request->no_of_days ?? 0;
                     $ins['reason'] = $request->reason;
-
                 }
                 $ins['leave_category'] = $leave_category_info->name;
                 $ins['leave_category_id'] = $leave_category_info->id;
@@ -246,9 +237,55 @@ class LeaveController extends Controller
                 ),
             )
         );
-        // dd( session()->get('staff_institute_id') );
-        return view('pages.leave.overview', compact('breadcrums'));
+
+        $user = User::where('status', 'active')
+            // ->where('verification_status', 'approved')
+            ->when(!empty( session()->get('staff_institute_id') ), function($q) {
+                $q->where('institute_id', session()->get('staff_institute_id') );
+            } )
+            ->get();
+
+        return view('pages.leave.overview', compact('breadcrums', 'user'));
     }
 
-    
+    public function setWorkingDays(Request $request)
+    {
+        $breadcrums = array(
+            'title' => 'Set Working Days',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => 'Set working Days'
+                ),
+            )
+        );
+
+        return view('pages.leave.working_days', compact('breadcrums'));
+
+    }
+
+    public function getStaffLeaveInfo(Request $request)
+    {
+        
+        $staff_id = $request->staff_id;
+        $month_start = date('Y-m-1');
+        $month_end = date('Y-m-t');
+        $month = date('F');
+        /**
+         * 1.get leave days
+         * 2. get worked days
+         */
+        $working_days = CalendarDays::whereBetween('calendar_date', [$month_start, $month_end])->where('days_type', 'working_day')->count();
+        $holidays = CalendarDays::whereBetween('calendar_date', [$month_start, $month_end])->where('days_type', 'holiday')->count();
+
+        $user = User::find($staff_id);
+        $leaves = StaffLeave::selectRaw('sum(no_of_days) as leaves, staff_leaves.*')
+                    ->where('staff_id', $staff_id)->where('from_date', '>=', $month_start)
+                    ->where('to_date', '<=', $month_end)
+                    // ->where('status', 'approved')
+                    ->groupBy('staff_leaves.leave_category')
+                    ->get();
+        
+        return view('pages.leave._staff_leave_details', compact('user', 'leaves', 'month', 'working_days', 'holidays'));
+
+    }
 }

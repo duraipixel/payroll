@@ -15,8 +15,10 @@ class CalendarController extends Controller
     {
 
         $data = CalendarDays::all();
+        
         $event_data = [];
         $new_array = [];
+        $staff_id = $request->staff_id;
         if (isset($data) && !empty($data)) {
             foreach ($data as $items) {
                 $event_data[] = array(
@@ -36,10 +38,13 @@ class CalendarController extends Controller
                     'end' => $items->calendar_date,
                     // 'end' => date('Y-m-d', strtotime($items->end_date . ' +1 day')),
                     'color' => $items->days_type == 'working_day' ? '#16b31d' : '#f90d0d',
-                    'rendering' => 'background',
-                    
+                    'rendering' => 'background',                    
                     // 'height' => '200'
                 );
+
+                if( isset( $staff_id ) && !empty( $staff_id ) ){
+
+                }
             }
         }
         
