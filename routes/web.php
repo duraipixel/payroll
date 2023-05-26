@@ -126,6 +126,8 @@ Route::group(['middleware' => 'auth'],  function () {
 
     Route::get('/leaves', [App\Http\Controllers\Leave\LeaveController::class, 'index'])->name('leaves.list'); 
     Route::get('/leaves/overview', [App\Http\Controllers\Leave\LeaveController::class, 'overview'])->name('leaves.overview'); 
+    Route::post('/leaves/staff/info', [App\Http\Controllers\Leave\LeaveController::class, 'getStaffLeaveInfo'])->name('leaves.staff.info'); 
+    Route::get('/working/days', [App\Http\Controllers\Leave\LeaveController::class, 'setWorkingDays'])->name('leaves.set.workingday'); 
     Route::post('/leaves/add', [App\Http\Controllers\Leave\LeaveController::class, 'addEditModal'])->name('leaves.add_edit'); 
     Route::post('/leaves/save', [App\Http\Controllers\Leave\LeaveController::class, 'saveLeaveRequest'])->name('save.leaves'); 
     Route::post('/get/staff/info', [App\Http\Controllers\CommonController::class, 'getStaffInfo'])->name('get.staff'); 
@@ -214,6 +216,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('appointment-order/add/{id?}', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'add_edit'])->name('appointment.orders.add');
     Route::post('appointment-order/save', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'save'])->name('appointment.orders.save');
 
+    Route::get('scheme/add/{id?}', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'add_edit'])->name('appointment.orders.add');
+
     //permission routes start
     Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission')->middleware(['checkAccess:view']); 
     Route::post('permission/save', [App\Http\Controllers\Permission\PermissionController::class, 'store'])->name('permission.save'); 
@@ -221,8 +225,6 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('permission/check', [App\Http\Controllers\Permission\PermissionController::class, 'checkPermission'])->name('permission.check'); 
 
     //permission routes end 
-
-   
     Route::post('overview',[App\Http\Controllers\OverViewController::class,'saveForm'])->name('overview.save');
     Route::prefix('logs')->group(function() {
         Route::get('/',[App\Http\Controllers\LogController::class,'index'])->name('logs');

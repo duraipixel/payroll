@@ -54892,3 +54892,28 @@ body {
 .z-index-85 {
   /* z-index: 2085 !important; */
 }
+
+.custom_select .select2-selection {
+    height: 40px !important;
+    border-radius:15px !important;
+    border-color: #009ef752 !important;
+}
+
+.custom_select .select2-selection__rendered {
+    margin-top: 2px !important;
+    font-size: 15px !important;
+    padding: 3px !important;
+    color: #083c90 !important;
+    font-weight:bold !important;
+    margin-left: 10px !important;
+}
+
+.custom_select .select2-selection__arrow {
+    margin-top:5px !important;
+    margin-right: 3px !important;
+    
+}
+
+.custom_select .select2-selection__arrow b {
+   border-color: #03A9F4 transparent transparent transparent !important;    
+}

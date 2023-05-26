@@ -15,6 +15,13 @@ class AttendanceScheme extends Model implements Auditable
     protected $fillable = [
         'academic_id',	
         'name',
+        'institute_id',
+        'scheme_code',
+        'start_time',
+        'end_time',
+        'totol_hours',
+        'late_cutoff_time',
+        'permission_cutoff_time',
         'sort_order',	
         'status'
     ];

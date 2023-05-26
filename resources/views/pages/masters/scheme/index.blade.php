@@ -25,9 +25,9 @@
                 </a>
             @endif
             @if( access()->buttonAccess($route_name,'add_edit') )
-                <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getAttendanceSchemeModal()">
+                <a class="btn btn-primary btn-sm" id="add_modal" href="{{ route('appointment.orders.add') }}" >
                     {!! plusSvg() !!} Add Attendance Scheme
-                </button>
+                </a>
             @endif
 
             </div>
@@ -49,12 +49,18 @@
                 <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
                     id="scheme_table">
                     <thead class="bg-primary">
-                        <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                            <th class="text-center text-white" >
-                            Date
-                        </th>
+                        
                             <th class="text-center text-white" >
                                 Attendance Scheme Name
+                            </th>
+                            <th class="text-center text-white" >
+                                Scheme Code
+                            </th>
+                            <th class="text-center text-white" >
+                                Timings
+                            </th>
+                            <th class="text-center text-white" >
+                                Total Hours
                             </th>
                             <th class="text-center text-white" >
                                 Status
@@ -94,13 +100,22 @@
         },
 
         columns: [
-            {
-                data: 'created_at',
-                name: 'created_at',
-            },
+            
             {
                 data: 'name',
                 name: 'name'
+            },
+            {
+                data: 'scheme_code',
+                name: 'scheme_code'
+            },
+            {
+                data: 'timings',
+                name: 'timings'
+            },
+            {
+                data: 'totol_hours',
+                name: 'totol_hours'
             },
             {
                 data: 'status',
