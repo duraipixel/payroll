@@ -106,15 +106,45 @@ class DocumentLockerController extends Controller
     }
     public function searchData(Request $request)
     {
+        $user='';
+        $staff_id=array();
        if($request->staff_id!='')
        {
             $user = User::where('is_super_admin', '=', null)->where('id',$request->staff_id)->get();
-            return view('pages.document_locker.table_ajax', compact('user')); 
         }
        else
        {
+            if($request->emp_nature_id!='' &&  $request->work_place_id!='')
+            {              
+                $app_details=StaffAppointmentDetail::where('nature_of_employment_id',$request->emp_nature_id)->where('place_of_work_id', $request->work_place_id)->get();
+                foreach($app_details as $app_det)
+                {
+                    $staff_id[]=$app_det->staff_id;
+                }
+                $user = User::where('is_super_admin', '=', null)->whereIn('id',$staff_id)->get();               
+            }
+            else if($request->emp_nature_id!='' &&  $request->work_place_id=='')
+            {
+                $app_details=StaffAppointmentDetail::where('nature_of_employment_id',$request->emp_nature_id)->get();
+                foreach($app_details as $app_det)
+                {
+                    $staff_id[]=$app_det->staff_id;
+                }
+                $user = User::where('is_super_admin', '=', null)->whereIn('id',$staff_id)->get();      
 
-       }
+            }
+            else if($request->emp_nature_id=='' &&  $request->work_place_id!='')
+            {
+                $app_details=StaffAppointmentDetail::where('place_of_work_id', $request->work_place_id)->get();
+                foreach($app_details as $app_det)
+                {
+                    $staff_id[]=$app_det->staff_id;
+                }
+                $user = User::where('is_super_admin', '=', null)->whereIn('id',$staff_id)->get(); 
+            }
+           
+        }
+        return view('pages.document_locker.table_ajax', compact('user'));
     }
     public function showOptions(Request $request)
     {

@@ -93,7 +93,7 @@
             <!--begin::Card toolbar-->
             
 
-        <div class="card-body p-10">
+        <div class="card-body p-10" id="defalut_div">
             <div class="col-12">
                 <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <table id="document_locker" class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
@@ -148,10 +148,11 @@
                            
                         </tbody>
                     </table>
-                    <div id="kt_dynamic_app"></div>
+                    
                 </div>
             </div>
         </div>
+        <div id="kt_dynamic_app"></div>
         <!--end::Card body-->
     </div>
     <!--end::Card-->
@@ -182,7 +183,13 @@ $('#staff_id').select2({
 //Option value based on Staff name  start
     function showOptions()
     {
+
         var staff_id=$("#staff_id").val();
+       
+        if(staff_id=='')
+        {
+            window.location.reload();
+        }
         $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -255,16 +262,8 @@ function search_dl()
                     emp_nature_id: emp_nature_id,
                     work_place_id: work_place_id,
                 },
-                success: function(res) {    
-                    var table = $('#document_locker').DataTable();
-                    table.column( 0 ).visible( false );
-                    table.column( 1 ).visible( false );   
-                    table.column( 2 ).visible( false );
-                    table.column( 3 ).visible( false );
-                    table.column( 4 ).visible( false );
-                    table.column( 5 ).visible( false );
-                    table.column( 6 ).visible( false );
-                    table.column( 7 ).visible( false );
+                success: function(res) { 
+                    $("#defalut_div").hide();
                     $('#kt_dynamic_app').html(res);
                 }
             })
