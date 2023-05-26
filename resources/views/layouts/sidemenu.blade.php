@@ -57,7 +57,7 @@
                     </span>
 
                 </div>
-                @if( access()->hasAccess(['overview', 'logs']) )
+                @if( access()->hasAccess(['overview', 'logs','account.settings']) )
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -89,14 +89,17 @@
                             </a>
                         </div>
                         @endif
+                        @if( access()->hasAccess('settings','view') )
                         <div class="menu-item">
-                            <a class="menu-link" href="javascript:void(0)">
+                            <a class="menu-link @if (request()->routeIs(['account.settings'])) active @endif"
+                                href="{{ route('account.settings') }}">
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
                                 <span class="menu-title">Settings</span>
                             </a>
                         </div>
+                        @endif
                         <div class="menu-item">
                             <a class="menu-link" href="javascript:void(0)">
                                 <span class="menu-bullet">

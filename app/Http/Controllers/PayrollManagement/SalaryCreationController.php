@@ -23,4 +23,8 @@ class SalaryCreationController extends Controller
         $salary_heads = SalaryHead::where('status', 'active')->get();
         return view('pages.payroll_management.salary_creation.index', compact('breadcrums', 'employees', 'salary_heads'));
     }
+    public function salaryAdd(Request $request)
+    {
+        dd($request->all());
+    }
 }

@@ -229,8 +229,14 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::post('/view',[App\Http\Controllers\LogController::class,'view'])->name('logs.view');
     });
 
+    // Settings Start
+    Route::get('account/settings',[App\Http\Controllers\Account\SettingsController::class,'index'])->name('account.settings');
+    // Settings End
+
+
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
     Route::get('salary/creation',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
+    Route::post('salary/creation_add',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryAdd'])->name('salary.creation_add');
 
     Route::get('salary/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'index'])->name('salary.loan');
     Route::post('salary/save/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'save'])->name('save.loan');
