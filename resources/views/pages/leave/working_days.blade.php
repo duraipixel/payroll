@@ -105,7 +105,7 @@
             } = await Swal.fire({
                 title: 'Set ' + moment(from).format('MMM DD') + ' to ' + moment(to).subtract(1, "days").format(
                     'MMM DD') + ' as ',
-                html: '<select class="form-control" name="day_type" id="day_type"><option value="">--select--</option><option value="working_day">Working Day</option><option value="holiday">Holiday</option></select>' +
+                html: '<select class="form-control" name="day_type" id="day_type"><option value="">--select--</option><option value="working_day">Working Day</option><option value="week_off">Week Off</option><option value="holiday">Holiday</option></select>' +
                     '<input id="swal-input1" class="form-control mt-5" name="comments" value="" placeholder="Comments">',
                 showCancelButton: true,
                 focusConfirm: true,
@@ -142,6 +142,7 @@
 
                                     $('#calendar').fullCalendar('refetchEvents')
                                     // location.reload();
+                                    getDaysCount(moment(from).format('YYYY-MM-DD'));
                                 }, 300);
                             }
                         }

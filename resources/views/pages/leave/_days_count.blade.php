@@ -12,4 +12,10 @@
         </label>
         <span class="fw-bold fs-3 float-end px-3"> {{ $holidays ?? 0 }}</span>
     </li>
+    <li class="list-group-item p-4 d-flex align-items-center">
+        <label for="" class="fs-5 w-75">
+            WeekOff
+        </label>
+        <span class="fw-bold fs-3 float-end px-3"> {{ $week_off ?? 0 }}</span>
+    </li>
 </ul>

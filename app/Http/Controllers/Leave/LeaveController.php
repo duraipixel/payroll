@@ -276,6 +276,7 @@ class LeaveController extends Controller
          */
         $working_days = CalendarDays::whereBetween('calendar_date', [$month_start, $month_end])->where('days_type', 'working_day')->count();
         $holidays = CalendarDays::whereBetween('calendar_date', [$month_start, $month_end])->where('days_type', 'holiday')->count();
+        $week_off = CalendarDays::whereBetween('calendar_date', [$month_start, $month_end])->where('days_type', 'week_off')->count();
 
         $user = User::find($staff_id);
         $leaves = StaffLeave::selectRaw('sum(no_of_days) as leaves, staff_leaves.*')
@@ -285,7 +286,7 @@ class LeaveController extends Controller
                     ->groupBy('staff_leaves.leave_category')
                     ->get();
         
-        return view('pages.leave._staff_leave_details', compact('user', 'leaves', 'month', 'working_days', 'holidays'));
+        return view('pages.leave._staff_leave_details', compact('user', 'leaves', 'month', 'working_days', 'holidays', 'week_off'));
 
     }
 }

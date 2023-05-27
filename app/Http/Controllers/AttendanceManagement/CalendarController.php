@@ -27,7 +27,7 @@ class CalendarController extends Controller
                     'start' => $items->calendar_date,
                     'end' => $items->calendar_date,
                     'rendering' => 'background',
-                    'color' => $items->days_type == 'working_day' ? '#16b31d' : '#f90d0d',
+                    'color' => $items->days_type == 'working_day' ? '#16b31d' : ($items->days_type == 'week_off' ? 'orange':'#f90d0d'),
                     'display' => 'background'
                 );
 
@@ -37,7 +37,8 @@ class CalendarController extends Controller
                     'start' => $items->calendar_date,
                     'end' => $items->calendar_date,
                     // 'end' => date('Y-m-d', strtotime($items->end_date . ' +1 day')),
-                    'color' => $items->days_type == 'working_day' ? '#16b31d' : '#f90d0d',
+                    // 'color' => $items->days_type == 'working_day' ? '#16b31d' : '#f90d0d',
+                    'color' => $items->days_type == 'working_day' ? '#16b31d' : ($items->days_type == 'week_off' ? 'orange':'#f90d0d'),
                     'rendering' => 'background',                    
                     // 'height' => '200'
                 );
@@ -92,7 +93,8 @@ class CalendarController extends Controller
         
         $working_days = CalendarDays::whereBetween('calendar_date', [$month_start, $month_end])->where('days_type', 'working_day')->count();
         $holidays = CalendarDays::whereBetween('calendar_date', [$month_start, $month_end])->where('days_type', 'holiday')->count();
-        $params = array('working_days' => $working_days, 'holidays' => $holidays);
+        $week_off = CalendarDays::whereBetween('calendar_date', [$month_start, $month_end])->where('days_type', 'week_off')->count();
+        $params = array('working_days' => $working_days, 'holidays' => $holidays, 'week_off' => $week_off);
         return view('pages.leave._days_count', $params);
 
     }
