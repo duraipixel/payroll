@@ -4,19 +4,6 @@
 @endsection
 @section('content')
     <style>
-        .salary-selection .select2-selection {
-            /* height: 45px; */
-            display: grid;
-            align-items: center;
-            justify-items: center;
-
-        }
-
-        .salary-selection .select2-container {
-            width: 300px !important;
-            text-align: center;
-        }
-
         .netsalary {
             padding: 10px 20px;
             background: #b1e1fc;
@@ -30,7 +17,7 @@
 
             <div class="card-title w-100">
 
-                <div class="d-flex w-100 align-items-center justify-content-center position-relative my-1 salary-selection">
+                <div class="d-flex w-100 custom_select align-items-center justify-content-center position-relative my-1 salary-selection">
                     <div class="pe-8">
                         <h4> Select Staff to create Salary Database </h4>
                     </div>
@@ -57,6 +44,7 @@
                     <div class="accordion" id="accordionPanelsStayOpenExample">
                         @isset($salary_heads)
                             @foreach ($salary_heads as $item)
+                           
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="panelsStayOpen-headingOne">
                                         <button class="accordion-button" type="button"
@@ -71,6 +59,7 @@
                                             <div class="list-group">
                                                 @if (isset($item->fields) && !empty($item->fields))
                                                     @foreach ($item->fields as $item_fields)
+                                                  
                                                         <label class="list-group-item p-3">
                                                             <input class="form-check-input me-1" type="checkbox"
                                                                 data-id="{{ str_replace(' ', '_', $item_fields->short_name) }}"
@@ -79,7 +68,7 @@
                                                                 ({{ $item_fields->short_name }})
                                                             </span>
                                                             <input type="text" name="amount" onkeyup="getNetSalary(this.value)"
-                                                                id="{{ str_replace(' ', '_', $item_fields->short_name) }}_input"
+                                                                id="{{ str_replace(' ', '_', $item_fields->short_name) }}_input" @if( $item_fields->no_of_numerals ) maxlength="{{$item_fields->no_of_numerals}}" @endif
                                                                 class="border border-2 float-end text-end price @if($item->id == '1') add_input @else minus_input @endif" disabled>
                                                         </label>
                                                     @endforeach
@@ -157,7 +146,13 @@
         }
 
         function getSalaryHeadFields(staff_id) {
-            console.log(staff_id)
+
+            if( staff_id ) {
+                $('#salary-creation-panel').removeClass('d-none')
+            } else {
+                $('#salary-creation-panel').addClass('d-none')
+            }
+
         }
     </script>
 @endsection

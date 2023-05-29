@@ -505,7 +505,7 @@
                 @if( access()->hasAccess(['salary-head', 'salary-field']) )
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion
-                @if (request()->routeIs(['salary-head', 'salary-field', 'salary.creation', 'salary.loan', 'salary.lic', 'professional-tax'])) hover show @endif">
+                @if (request()->routeIs(['salary-head', 'salary-field', 'salary.creation', 'salary.loan', 'salary.lic', 'professional-tax', 'payroll.overview'])) hover show @endif">
                     <span class="menu-link">
                         <span class="menu-icon">
                             <i class="fas fa-money-check"></i>
@@ -513,6 +513,17 @@
                         <span class="menu-title">Payroll Management</span>
                         <span class="menu-arrow"></span>
                     </span>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link  @if (request()->routeIs(['payroll.overview'])) active @endif"
+                                href="{{ route('payroll.overview') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title"> Overview </span>
+                            </a>
+                        </div>
+                    </div>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
                         <div class="menu-item">
                             <a class="menu-link  @if (request()->routeIs(['salary.creation'])) active @endif"

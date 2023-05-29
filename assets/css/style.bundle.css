@@ -54917,3 +54917,37 @@ body {
 .custom_select .select2-selection__arrow b {
    border-color: #03A9F4 transparent transparent transparent !important;    
 }
+
+.payroll_month {
+  padding: 11px;
+  width: 7.5%;
+  text-align: center;
+}
+.payroll_month .month_name {
+  font-weight: bold;
+  color: gray;
+  padding: 3px;
+}
+.payroll_month .year {
+  color: #a3b3c8;
+  padding: 3px;    
+}
+
+
+.payroll_month.active {
+  background-color: #5473e3 !important;
+  color: #fff !important;
+  border: 1px solid #fff;
+  margin-top: -1px;
+  border-radius: 6px;
+}
+.payroll_month.active .month_name{
+  color: #fff;
+}
+.payroll_month.active .year{
+  color: #fff;
+}
+
+.payroll_month:hover {
+  cursor: pointer;
+}

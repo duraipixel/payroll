@@ -46,10 +46,7 @@
             </div>
         </div>
 
-        <!--begin::Card header-->
         <div class="card-header border-0 pt-6">
-
-            <!--begin::Card title-->
 
             <div class="card-title">
                 <h4 class="mt-5"><strong>Document Locker</strong></h4>
