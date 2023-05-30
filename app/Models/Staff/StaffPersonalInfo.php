@@ -8,6 +8,9 @@ use App\Models\Master\Language;
 use App\Models\Master\Nationality;
 use App\Models\Master\OtherSchoolPlace;
 use App\Models\Master\Religion;
+use App\Models\Scopes\AcademicScope;
+use App\Models\Scopes\InstitutionScope;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -44,6 +47,19 @@ class StaffPersonalInfo extends Model implements Auditable
         'status'       
     ];
 
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope(new AcademicScope);
+    // }
+    public function scopeAcademic($query)
+    {
+        if( session()->get('academic_id') && !empty( session()->get('academic_id') ) ){
+
+            return $query->where('staff_personal_info.academic_id', session()->get('academic_id'));
+        }
+    }
+  
+
     public function motherTongue()
     {
         return $this->hasOne(Language::class, 'id', 'mother_tongue');
@@ -72,6 +88,11 @@ class StaffPersonalInfo extends Model implements Auditable
     public function community()
     {
         return $this->hasOne(Community::class, 'id', 'community_id');
+    }
+
+    public function staffInfo()
+    {
+        return $this->hasOne(User::class, 'id', 'staff_id');
     }
 
 }

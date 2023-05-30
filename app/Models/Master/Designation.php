@@ -2,6 +2,7 @@
 
 namespace App\Models\Master;
 
+use App\Models\Staff\StaffProfessionalData;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,4 +20,10 @@ class Designation extends Model implements Auditable
         'status',
         'can_assign_report_manager'
     ];
+
+    public function staffEnrollments()
+    {
+        return $this->hasMany(StaffProfessionalData::class, 'designation_id', 'id');
+    }
+    
 }

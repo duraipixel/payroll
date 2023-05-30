@@ -32,9 +32,9 @@
             data-kt-scroll-offset="0">
             <!--begin::Menu-->
             <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500"
-                id="#kt_aside_menu" data-kt-menu="true" data-kt-menu-expand="false">
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                    <span class="menu-link">
+                id="#kt_aside_menu" data-kt-menu="true" >
+                <div class="menu-item menu-accordion">
+                    <a href="{{ route('home') }}" class="menu-link">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -53,8 +53,7 @@
                             <!--end::Svg Icon-->
                         </span>
                         <span class="menu-title">Dashboards</span>
-                        <span class="menu-arrow"></span>
-                    </span>
+                    </a>
 
                 </div>
                 @if( access()->hasAccess(['overview', 'logs','account.settings']) )

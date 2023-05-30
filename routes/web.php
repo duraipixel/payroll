@@ -242,6 +242,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
     Route::get('salary/creation',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
     Route::post('salary/creation_add',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryAdd'])->name('salary.creation_add');
+    Route::post('salary/get/staff',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryInfo'])->name('salary.get.staff');
 
     Route::get('salary/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'index'])->name('salary.loan');
     Route::post('salary/save/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'save'])->name('save.loan');

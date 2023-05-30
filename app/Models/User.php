@@ -60,27 +60,34 @@ class User extends Authenticatable implements Auditable
         'status',
         'is_super_admin',
         'addedBy',
-        'is_top_level'
+        'is_top_level',
+        'image'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function scopeAcademic($query)
+    {
+        if( session()->get('academic_id') && !empty( session()->get('academic_id') ) ){
+
+            return $query->where('users.academic_id', session()->get('academic_id'));
+        }
+    }
+
+    public function scopeInstituteBased($query)
+    {
+        if( session()->get('staff_institute_id') && !empty( session()->get('staff_institute_id') ) ){
+
+            return $query->where('users.institute_id', session()->get('staff_institute_id'));
+        }
+    }
 
     public function staffClasses()
     {

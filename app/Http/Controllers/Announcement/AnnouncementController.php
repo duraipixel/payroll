@@ -34,12 +34,12 @@ class AnnouncementController extends Controller
         );
         if($request->ajax())
         {
-            $data=Announcement::leftJoin('institutions','institutions.id','=','announcements.institute_id')
-            ; 
 
             $data=Announcement::leftJoin('institutions as ins','ins.id','=','announcements.institute_id')
-            ->leftJoin('users as created','created.id','=','announcements.announcement_created_id')         
-            ->select('created.name as created_by_name','ins.name as ins_name','announcements.*'); 
+                ->leftJoin('users as created','created.id','=','announcements.announcement_created_id')         
+                ->select('created.name as created_by_name','ins.name as ins_name','announcements.*')
+                ->Academic()
+                ->InstituteBased(); 
 
             $status = $request->get('announcements.status');
             $datatable_search = $request->datatable_search ?? '';

@@ -25,6 +25,14 @@ class StaffDocument extends Model implements Auditable
         'status'
     ];
 
+    public function scopeAcademic($query)
+    {
+        if( session()->get('academic_id') && !empty( session()->get('academic_id') ) ){
+
+            return $query->where('staff_documents.academic_id', session()->get('academic_id'));
+        }
+    }
+
     public function documentType()
     {
         return $this->hasOne(DocumentType::class, 'id', 'document_type_id');

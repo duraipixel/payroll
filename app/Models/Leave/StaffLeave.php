@@ -2,6 +2,8 @@
 
 namespace App\Models\Leave;
 
+use App\Models\Scopes\AcademicScope;
+use App\Models\Scopes\InstitutionScope;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +43,14 @@ class StaffLeave extends Model
         'addedBy',
         'approved_document'
     ];
+
+    public function scopeAcademic($query)
+    {
+        if( session()->get('academic_id') && !empty( session()->get('academic_id') ) ){
+
+            return $query->where('staff_leaves.academic_id', session()->get('academic_id'));
+        }
+    }
 
     public function staff_info()
     {

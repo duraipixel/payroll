@@ -217,6 +217,10 @@
                     <label class="form-label required">Emergency No.</label>
                     <input name="emergency_no" autofocus id="emergency_no" class="form-control form-control-lg number_only" maxlength="10" value="{{ $staff_details->personal->emergency_no ?? '' }}" />
                 </div>
+                <div class="col-lg-4 mb-5">
+                    <label class="form-label"> Profile Image </label>
+                    <input name="profile_image" type="file" autofocus id="profile_image" class="form-control form-control-lg" />
+                </div>
                 <div class="col-lg-6 mb-5">
                     <label class="form-label required">Contact Address</label>
                     <textarea name="contact_address" autofocus id="contact_address" class="form-control form-control-lg " rows="3"

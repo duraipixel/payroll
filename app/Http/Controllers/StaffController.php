@@ -551,7 +551,21 @@ class StaffController extends Controller
             $ins['contact_address'] = $request->contact_address;
             $ins['permanent_address'] = $request->permanent_address;
             $ins['status'] = 'active';
+            if ($request->hasFile('profile_image')) {
 
+                $files = $request->file('profile_image');
+                $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
+
+                $directory              = 'staff/' . $staff_info->emp_code . '/profile';
+                $filename               = $directory . '/' . $imageName;
+
+                Storage::disk('public')->put($filename, File::get($files));
+                // $ins['image'] = $filename;
+                $staff_info->image = $filename;
+                $staff_info->save();
+            }
+            
+            // profile_image
             StaffPersonalInfo::updateOrCreate(['staff_id' => $id], $ins);
             
             if (!empty($request->uan_no) && $request->is_uan == 'yes' ) {
@@ -853,7 +867,7 @@ class StaffController extends Controller
             $data = User::select('users.*', 'institutions.name as institute_name')->join('institutions', 'institutions.id', 'users.institute_id')
                         ->when( !empty(session()->get('academic_id')), function($query) {
                             $query->where('users.academic_id', session()->get('academic_id') );
-                        } )->where('is_super_admin', '=', null);
+                        } )->whereNull('is_super_admin');
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;

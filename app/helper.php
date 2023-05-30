@@ -23,6 +23,7 @@ use App\Models\Role\Permission;
 use App\Helpers\AccessGuard;
 use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\Master\Institution;
+use App\Models\PayrollManagement\StaffSalaryField;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -438,6 +439,12 @@ if (!function_exists('generateLeaveForm')) {
 
     function getInstituteInfo($id) {
         return Institution::find($id);
+    }
+
+    function getSalarySelectedFields($staff_id, $staff_salary_id, $field_id)
+    {
+        return StaffSalaryField::where('staff_id', $staff_id)->where('staff_salary_id', $staff_salary_id)
+                ->where('field_id', $field_id)->first();
     }
 
 }

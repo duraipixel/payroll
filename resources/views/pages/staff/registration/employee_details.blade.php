@@ -134,12 +134,12 @@
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('scheme','add_edit') )
+                        {{-- @if( access()->buttonAccess('scheme','add_edit') )
                         <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
                             onclick="return openAddModel('scheme')">
                             <i class="fa fa-plus"></i>
                         </span>
-                        @endif
+                        @endif --}}
                     </div>
                 </div>
 

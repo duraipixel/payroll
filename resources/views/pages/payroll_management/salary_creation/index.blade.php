@@ -8,93 +8,44 @@
             padding: 10px 20px;
             background: #b1e1fc;
         }
+        .blur-loading {
+            filter: blur(2px);
+        }
     </style>
     <div class="card">
-
-        <form id="salary-calculation" name="salary-calculation" method="post" action="{{ route('salary.creation_add')}}">
-          @csrf
+        @if (session('status'))
+            <div class="alert alert-success text-center">
+                {{ session('status') }}
+            </div>
+        @endif
+        <form id="salary-calculation" name="salary-calculation" method="post" action="{{ route('salary.creation_add') }}">
+            @csrf
             <div class="card-header border-0 pt-6">
 
-            <div class="card-title w-100">
+                <div class="card-title w-100">
 
-                <div class="d-flex w-100 custom_select align-items-center justify-content-center position-relative my-1 salary-selection">
-                    <div class="pe-8">
-                        <h4> Select Staff to create Salary Database </h4>
-                    </div>
-                    <select name="staff_id" id="staff_id" class="form-control w-450px"
-                        onchange="getSalaryHeadFields(this.value)">
-                        <option value="">--Select Employee--</option>
-                        @isset($employees)
-                            @foreach ($employees as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
-                            @endforeach
-                        @endisset
-                    </select>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="card-body py-4" id="salary-creation-panel">
-            {{-- {{dd( $salary_heads[0]->fields )}} --}}
-            <hr>
-            <div class="row mt-3">
-                <div class="col-sm-8 m-auto">
-
-                    <div class="accordion" id="accordionPanelsStayOpenExample">
-                        @isset($salary_heads)
-                            @foreach ($salary_heads as $item)
-                           
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                                        <button class="accordion-button" type="button"
-                                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
-                                            aria-controls="panelsStayOpen-collapseOne">
-                                            {{ $item->name }}
-                                        </button>
-                                    </h2>
-                                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
-                                        aria-labelledby="panelsStayOpen-headingOne">
-                                        <div class="accordion-body">
-                                            <div class="list-group">
-                                                @if (isset($item->fields) && !empty($item->fields))
-                                                    @foreach ($item->fields as $item_fields)
-                                                  
-                                                        <label class="list-group-item p-3">
-                                                            <input class="form-check-input me-1" type="checkbox"
-                                                                data-id="{{ str_replace(' ', '_', $item_fields->short_name) }}"
-                                                                onchange="getInputValue(this)" value="">
-                                                            <span class="px-3"> {{ $item_fields->name }}
-                                                                ({{ $item_fields->short_name }})
-                                                            </span>
-                                                            <input type="text" name="amount" onkeyup="getNetSalary(this.value)"
-                                                                id="{{ str_replace(' ', '_', $item_fields->short_name) }}_input" @if( $item_fields->no_of_numerals ) maxlength="{{$item_fields->no_of_numerals}}" @endif
-                                                                class="border border-2 float-end text-end price @if($item->id == '1') add_input @else minus_input @endif" disabled>
-                                                        </label>
-                                                    @endforeach
-                                                @endif
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                            <h2 class="accordion-header netsalary" id="panelsStayOpen-headingOne">
-                                Net Salary
-                                <span class="float-end" >₹ <span id="net_salary_text">0.00</span></span>
-                            </h2>
-                        @endisset
-
-
-                    </div>
-                    <div class="form-group mt-5 text-end">
-                        <button class="btn btn-primary btn-sm" type="submit"> Submit & Lock </button>
-                        <a class="btn btn-dark btn-sm" href="{{route('salary.creation')}}" > Cancel </a>
+                    <div
+                        class="d-flex w-100 custom_select align-items-center justify-content-center position-relative my-1 salary-selection">
+                        <div class="pe-8">
+                            <h4> Select Staff to create Salary Database </h4>
+                        </div>
+                        <select name="staff_id" id="staff_id" class="form-control w-450px"
+                            onchange="getSalaryHeadFields(this.value)" required>
+                            <option value="">--Select Employee--</option>
+                            @isset($employees)
+                                @foreach ($employees as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            @endisset
+                        </select>
                     </div>
 
                 </div>
             </div>
-        </div>
+
+            <div class="card-body py-4 d-none" id="salary-creation-panel">
+                {{-- {{dd( $salary_heads[0]->fields )}} --}}
+            </div>
         </form>
     </div>
 
@@ -103,30 +54,31 @@
 
 @section('add_on_script')
     <script>
-
         function getNetSalary(amount) {
             var earnings = 0;
             var deductions = 0;
             var netSalary = 0;
             var add_input = document.querySelectorAll('.add_input');
             var minus_input = document.querySelectorAll('.minus_input');
-    
+            var automatic_calculation_input = document.querySelector('.automatic_calculation');
+            console.log(automatic_calculation_input, 'automatic_calculation_input');
             add_input.forEach(element => {
-                console.log('first, ', $(element).val() );
-                if( $(element).val() != '' && $(element).val() != 'undefined' && $(element).val() != null ){
+                console.log('first, ', $(element).val());
+                if ($(element).val() != '' && $(element).val() != 'undefined' && $(element).val() != null) {
                     earnings += parseFloat($(element).val());
                 }
             });
 
             minus_input.forEach(element => {
-                console.log('first, ', $(element).val() );
-                if( $(element).val() != '' && $(element).val() != 'undefined' && $(element).val() != null ){
+                console.log('first, ', $(element).val());
+                if ($(element).val() != '' && $(element).val() != 'undefined' && $(element).val() != null) {
                     deductions += parseFloat($(element).val());
                 }
             });
 
             netSalary = earnings - deductions;
-            $('#net_salary_text').html( netSalary.toFixed(2) );
+            $('#net_salary').val(netSalary);
+            $('#net_salary_text').html(netSalary.toFixed(2));
         }
 
         $('#staff_id').select2();
@@ -147,8 +99,31 @@
 
         function getSalaryHeadFields(staff_id) {
 
-            if( staff_id ) {
-                $('#salary-creation-panel').removeClass('d-none')
+            if (staff_id) {
+
+                $('#salary-creation-panel').removeClass('d-none');
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                
+                $.ajax({
+                    url: "{{ route('salary.get.staff') }}",
+                    type: 'POST',
+                    data: {
+                        staff_id: staff_id,
+                    },
+                    beforeSend: function(){
+                        $('#salary-creation-panel').addClass('blur-loading');
+                    },
+                    success: function(res) {
+                        $('#salary-creation-panel').removeClass('blur-loading');
+                        $('#salary-creation-panel').html( res );
+                    }
+                });
+
             } else {
                 $('#salary-creation-panel').addClass('d-none')
             }

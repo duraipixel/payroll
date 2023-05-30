@@ -11,9 +11,10 @@
 </head>
 <!--end::Head-->
 <!--begin::Body-->
+
 <body id="kt_body"
     class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
-    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+    style="--kt-toolbar-height:95px;--kt-toolbar-height-tablet-and-mobile:95px">
 
     <!--begin::Main-->
     <!--begin::Root-->
@@ -63,7 +64,7 @@
         function loading() {
             loadingElement.style.display = 'flex';
         }
-        
+
         function unloading() {
             loadingElement.style.display = 'none';
         }
@@ -135,34 +136,19 @@
     <!--begin::Page Vendors Javascript(used by this page)-->
 
     <script src="{{ asset('assets/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
-    <!--end::Page Vendors Javascript-->
-    <!--begin::Page Custom Javascript(used by this page)-->
-    {{-- <script src="{{ asset('assets/js/custom/utilities/modals/create-account.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/custom/apps/ecommerce/catalog/save-product.js') }}"></script> --}}
     
     <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/custom/apps/chat/chat.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/custom/intro.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/custom/utilities/modals/upgrade-plan.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/custom/utilities/modals/create-app.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/custom/utilities/modals/new-target.js') }}"></script> --}}
-    {{-- <script src="{{ asset('assets/js/custom/utilities/modals/users-search.js') }}"></script> --}}
-    {{-- <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script> --}}
-    <!--end::Page Custom Javascript-->
-    <!--end::Javascript-->
+ 
     <script type="text/javascript">
-        // $(document).ready(function() {
-        //     var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-        //         removeItemButton: true,
-        //         maxItemCount: 12,
-        //         searchResultLimit: 12,
-        //         renderChoiceLimit: 12
-        //     });
-        // });
+      
     </script>
+     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+ 
     <script>
         $(document).ready(function() {
+            $('#employee_type').select2();
             $('#content').on('keydown', function(event) {
                 if (event.which == 121) {
                     $(this).toggleClass('tamil');
@@ -180,6 +166,52 @@
                 }
             });
         });
+
+        $(function() {
+
+            var start = moment().subtract(29, 'days');
+            var end = moment();
+
+            function cb(start, end) {
+                $('#search_home_date span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            }
+
+            $('#search_home_date').daterangepicker({
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                        'month').endOf('month')]
+                }
+            }, cb);
+
+            cb(start, end);
+
+
+            $('input[name="search_home_date"]').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format(
+                    'DD/MM/YYYY'));
+
+                let start_date = picker.startDate.format('DD/MM/YYYY');
+                let end_date = picker.endDate.format('DD/MM/YYYY');
+
+                let requested_days = datediff(parseDate(start_date), parseDate(end_date));
+                $('#no_of_days').val(requested_days + 1);
+
+            });
+
+            $('input[name="search_home_date"]').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+
+
+
+        });
     </script>
     <script>
         $(".DA_radio_holder .radio-btn").change(function() {
@@ -195,18 +227,20 @@
         });
 
         function setGlobalAcademicYear(id) {
-            
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
             $.ajax({
-                url:"{{ route('set.academic.year') }}",
+                url: "{{ route('set.academic.year') }}",
                 type: 'POST',
-                data:{id:id},
+                data: {
+                    id: id
+                },
                 success: function(res) {
-                    if(res) {
+                    if (res) {
                         location.reload();
                     }
                 }
@@ -220,18 +254,61 @@
                 }
             });
             $.ajax({
-                url:"{{ route('set.institution') }}",
+                url: "{{ route('set.institution') }}",
                 type: 'POST',
-                data:{id:id},
+                data: {
+                    id: id
+                },
                 success: function(res) {
-                    if(res) {
+                    if (res) {
                         location.reload();
                     }
                 }
             })
         }
 
-        
+        function gotoStaffOverview() {
+            var global_search = $('#global_search').val();
+            if( global_search == '' || global_search == 'undefined' ) {
+                toastr.error('Enter keywords to view Staff Overview details');
+                $('#global_search').focus();
+                return false;
+            }
+        }
+
+        var global_search = document.getElementById('global_search');
+
+    global_search.addEventListener('keyup', function() {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('get.staff') }}",
+            type: 'POST',
+            data: {
+                query: this.value,
+            },
+            success: function(res) {
+                console.log(res);
+                if (res && res.length > 0) {
+                    $('#typeadd-panel').removeClass('d-none');
+                    let panel = '';
+                    res.map((item) => {
+                        panel +=
+                            `<li class="typeahead-pane-li" onclick="return getStaffLeaveInfo(${item.id})">${item.name} - ${item.emp_code}</li>`;
+                    })
+                    $('#typeahead-list').html(panel);
+
+                } else {
+                    $('#typeadd-panel').addClass('d-none');
+
+                }
+            }
+        })
+    })
     </script>
 </body>
 
