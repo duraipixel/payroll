@@ -18,6 +18,7 @@ Route::group(['middleware' => 'auth'],  function () {
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::post('/set/academic/year', [App\Http\Controllers\HomeController::class, 'setAcademicYear'])->name('set.academic.year');
+    Route::post('/get/dashboard/view', [App\Http\Controllers\HomeController::class, 'getDashboardView'])->name('get.dashboard.view');
     Route::post('/set/institution', [App\Http\Controllers\HomeController::class, 'setInstitution'])->name('set.institution');
     Route::post('/open/modal', [App\Http\Controllers\CommonController::class, 'openAddModal'])->name('modal.open');
 

@@ -136,16 +136,14 @@
     <!--begin::Page Vendors Javascript(used by this page)-->
 
     <script src="{{ asset('assets/plugins/custom/formrepeater/formrepeater.bundle.js') }}"></script>
-    
+
     <script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
     <script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
- 
-    <script type="text/javascript">
-      
-    </script>
-     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
- 
+
+    <script type="text/javascript"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
     <script>
         $(document).ready(function() {
             $('#employee_type').select2();
@@ -200,8 +198,8 @@
                 let start_date = picker.startDate.format('DD/MM/YYYY');
                 let end_date = picker.endDate.format('DD/MM/YYYY');
 
-                let requested_days = datediff(parseDate(start_date), parseDate(end_date));
-                $('#no_of_days').val(requested_days + 1);
+                getDashboardView(start_date, end_date)
+
 
             });
 
@@ -270,56 +268,80 @@
         function gotoStaffOverview() {
             var global_search = $('#global_search').val();
             var search_staff_id = $('#search_staff_id').val();
-            if( global_search == '' || global_search == 'undefined' ) {
+            if (global_search == '' || global_search == 'undefined') {
                 toastr.error('Enter keywords to view Staff Overview details');
                 $('#global_search').focus();
                 return false;
             } else {
                 let url_staff = "{{ url('/staff/print') }}";
-                window.open(url_staff+'/'+search_staff_id, '_blank');
+                window.open(url_staff + '/' + search_staff_id, '_blank');
             }
         }
 
         var global_search = document.getElementById('global_search');
 
-    global_search.addEventListener('keyup', function() {
+        global_search.addEventListener('keyup', function() {
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: "{{ route('get.staff') }}",
-            type: 'POST',
-            data: {
-                query: this.value,
-            },
-            success: function(res) {
-                console.log(res);
-                if (res && res.length > 0) {
-                    $('#typeadd-search-panel1').removeClass('d-none');
-                    let panel = '';
-                    res.map((item) => {
-                        panel +=
-                            `<li class="typeahead-pane-li" onclick="return setGlobalSearchValue(${item.id}, '${item.name} - ${item.emp_code}')">${item.name} - ${item.emp_code}</li>`;
-                    })
-                    $('#typeahead-search-list').html(panel);
-
-                } else {
-                    $('#typeadd-search-panel1').addClass('d-none');
-                    $('#search_staff_id').val('');
-                    $('#global_search').val('');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-            }
-        })
-    })
+            });
+            $.ajax({
+                url: "{{ route('get.staff') }}",
+                type: 'POST',
+                data: {
+                    query: this.value,
+                },
+                success: function(res) {
+                    console.log(res);
+                    if (res && res.length > 0) {
+                        $('#typeadd-search-panel1').removeClass('d-none');
+                        let panel = '';
+                        res.map((item) => {
+                            panel +=
+                                `<li class="typeahead-pane-li" onclick="return setGlobalSearchValue(${item.id}, '${item.name} - ${item.emp_code}')">${item.name} - ${item.emp_code}</li>`;
+                        })
+                        $('#typeahead-search-list').html(panel);
 
-    function setGlobalSearchValue(id, name) {
-        $('#global_search').val(name);
-        $('#search_staff_id').val(id);
-        $('#typeadd-search-panel1').addClass('d-none');
-    }
+                    } else {
+                        $('#typeadd-search-panel1').addClass('d-none');
+                        $('#search_staff_id').val('');
+                        $('#global_search').val('');
+                    }
+                }
+            })
+        })
+
+        function setGlobalSearchValue(id, name) {
+            $('#global_search').val(name);
+            $('#search_staff_id').val(id);
+            $('#typeadd-search-panel1').addClass('d-none');
+        }
+
+        function getDashboardView(start_date, end_date) {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('get.dashboard.view') }}",
+                type: 'POST',
+                data: {
+                    start_date: start_date,
+                    end_date: end_date
+                },
+                beforeSend: function(){
+                    $('#dashboard_view').addClass('blur_loading_3px');
+                },
+                success: function(res) {
+                    $('#dashboard_view').removeClass('blur_loading_3px');
+                    $('#dashboard_view').html( res );
+                }
+            })
+        }
     </script>
 </body>
 
