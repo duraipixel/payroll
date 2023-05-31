@@ -175,10 +175,15 @@ class CommonController extends Controller
         $data = [];
         if( $query ) {
 
-            $data = User::with('position.designation')->where('name', 'like', "%{$query}%")
-                        ->orWhere('emp_code', 'like', "%{$query}%")
-                        ->orWhere('institute_emp_code', 'like', "%{$query}%")
-                        ->orWhere('society_emp_code', 'like', "%{$query}%")
+            $data = User::with('position.designation')
+                        ->where(function($q) use($query) {
+                            $q->where('name', 'like', "%{$query}%");
+                            $q->orWhere('emp_code', 'like', "%{$query}%");
+                            $q->orWhere('institute_emp_code', 'like', "%{$query}%");
+                            $q->orWhere('society_emp_code', 'like', "%{$query}%");
+                        })
+                        ->InstituteBased()
+                        ->Academic()                       
                         ->get();
 
         }

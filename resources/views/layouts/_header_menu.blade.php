@@ -14,23 +14,24 @@
     .typeahead-pane-search-ul {
         width: 100%;
         padding: 0;
+        height: 400px;
+        overflow-y: auto;
     }
 
-    .typeahead-pane-search-li {
+    .typeahead-pane-li {
         padding: 8px 15px;
         width: 100%;
         margin: 0;
         border-bottom: 1px solid #2e3d4638;
-
     }
 
-    .typeahead-pane-search-li:hover {
+    .typeahead-pane-li:hover {
         background: #3a81bf;
         color: white;
         cursor: pointer;
     }
 </style>
-<div id="kt_header" style="z-index:auto;display:block;height:auto" class="header align-items-stretch">
+<div id="kt_header" style="display:block;height:auto" class="header align-items-stretch">
     <div class="container-fluid d-flex align-items-stretch justify-content-between">
         <div class="menu menu-lg-rounded menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch"
             id="#kt_header_menu" data-kt-menu="true">
@@ -58,15 +59,8 @@
                 <input type="text" class="form-control ps-10 mx-3 w-400px" name="global_search" id="global_search"
                     value="" placeholder="Staff Name , Employee Code, Email, Mobile No" />
                 <input type="hidden" name="search_staff_id" id="search_staff_id" value="">
-                <div class="typeahead-pane-search" id="typeadd-panel">
+                <div class="typeahead-pane-search d-none" id="typeadd-search-panel1">
                     <ul type="none" class="typeahead-pane-search-ul" id="typeahead-search-list">
-                        <li class="typeahead-pane-search-li"> Duriar - 2035666 </li>
-                        <li class="typeahead-pane-search-li"> Duriar - 2035666 </li>
-                        <li class="typeahead-pane-search-li"> Duriar - 2035666 </li>
-                        <li class="typeahead-pane-search-li"> Duriar - 2035666 </li>
-                        <li class="typeahead-pane-search-li"> Duriar - 2035666 </li>
-                        <li class="typeahead-pane-search-li"> Duriar - 2035666 </li>
-                        <li class="typeahead-pane-search-li"> Duriar - 2035666 </li>
                     </ul>
                 </div>
                 <button class="btn btn-primary btn-light-primary" onclick="return gotoStaffOverview()"> View </button>

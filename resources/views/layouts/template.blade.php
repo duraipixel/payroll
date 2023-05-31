@@ -269,10 +269,14 @@
 
         function gotoStaffOverview() {
             var global_search = $('#global_search').val();
+            var search_staff_id = $('#search_staff_id').val();
             if( global_search == '' || global_search == 'undefined' ) {
                 toastr.error('Enter keywords to view Staff Overview details');
                 $('#global_search').focus();
                 return false;
+            } else {
+                let url_staff = "{{ url('/staff/print') }}";
+                window.open(url_staff+'/'+search_staff_id, '_blank');
             }
         }
 
@@ -294,21 +298,28 @@
             success: function(res) {
                 console.log(res);
                 if (res && res.length > 0) {
-                    $('#typeadd-panel').removeClass('d-none');
+                    $('#typeadd-search-panel1').removeClass('d-none');
                     let panel = '';
                     res.map((item) => {
                         panel +=
-                            `<li class="typeahead-pane-li" onclick="return getStaffLeaveInfo(${item.id})">${item.name} - ${item.emp_code}</li>`;
+                            `<li class="typeahead-pane-li" onclick="return setGlobalSearchValue(${item.id}, '${item.name} - ${item.emp_code}')">${item.name} - ${item.emp_code}</li>`;
                     })
-                    $('#typeahead-list').html(panel);
+                    $('#typeahead-search-list').html(panel);
 
                 } else {
-                    $('#typeadd-panel').addClass('d-none');
-
+                    $('#typeadd-search-panel1').addClass('d-none');
+                    $('#search_staff_id').val('');
+                    $('#global_search').val('');
                 }
             }
         })
     })
+
+    function setGlobalSearchValue(id, name) {
+        $('#global_search').val(name);
+        $('#search_staff_id').val(id);
+        $('#typeadd-search-panel1').addClass('d-none');
+    }
     </script>
 </body>
 

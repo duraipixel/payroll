@@ -25,8 +25,10 @@ use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffPfEsiDetail;
 use App\Models\Staff\StaffProfessionalData;
 use App\Models\Staff\StaffStudiedSubject;
+use App\Models\Staff\StaffTalent;
 use App\Models\Staff\StaffTrainingDetail;
 use App\Models\Staff\StaffWorkExperience;
+use App\Models\Staff\StaffWorkingRelation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -292,6 +294,16 @@ class User extends Authenticatable implements Auditable
     public function leavesPending()
     {
         return $this->hasMany(StaffLeave::class, 'staff_id', 'id')->where('status','pending');
+    }
+
+    public function talents()
+    {
+        return $this->hasMany(StaffTalent::class, 'staff_id', 'id')->where('status', 'active');
+    }
+
+    public function workingRelations()
+    {
+        return $this->hasMany(StaffWorkingRelation::class, 'staff_id', 'id')->where('status', 'active');
     }
 
     

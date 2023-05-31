@@ -19,7 +19,7 @@
         Date of Birth
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->dob ? commonDateFormat($user->personal->dob) : '' }}
+        {{ isset($user->personal->dob) && !empty($user->personal->dob) ? commonDateFormat($user->personal->dob) : '' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Gender
@@ -45,7 +45,7 @@
         Marriage Date
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->dob ? commonDateFormat($user->personal->dob) : 'n/a' }}
+        {{ isset($user->personal->marriage_date) && !empty($user->personal->marriage_date) ? commonDateFormat($user->personal->marriage_date) : '' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Mother Tongue

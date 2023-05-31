@@ -2,6 +2,7 @@
 
 namespace App\Models\Staff;
 
+use App\Models\Master\BloodGroup;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -29,4 +30,10 @@ class StaffHealthDetail extends Model implements Auditable
         'disease_allergy_name',
         'differently_abled_name'
     ];
+
+    public function bloog_group()
+    {
+        return $this->hasOne(BloodGroup::class, 'id', 'bloodgroup_id');
+    }
+
 }
