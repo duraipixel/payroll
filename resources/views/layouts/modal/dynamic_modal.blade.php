@@ -4,7 +4,7 @@
         <!--begin::Modal header-->
         <div class="modal-header">
             <!--begin::Modal title-->
-            <h2>{{ isset($title)  ? ucwords( str_replace(['-','_'], ' ',$title ) ) : 'Add Form' }}</h2>
+            <h2>{{ isset($title) ? ucwords(str_replace(['-', '_'], ' ', $title)) : 'Add Form' }}</h2>
             <!--end::Modal title-->
             <!--begin::Close-->
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -33,3 +33,13 @@
     </div>
     <!--end::Modal content-->
 </div>
+<script>
+    // $(document).ready(function() {
+    //     $(window).keydown(function(event) {
+    //         if (event.keyCode == 13) {
+    //             event.preventDefault();
+    //             return false;
+    //         }
+    //     });
+    // });
+</script>

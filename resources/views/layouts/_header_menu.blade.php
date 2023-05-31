@@ -31,7 +31,7 @@
         cursor: pointer;
     }
 </style>
-<div id="kt_header" style="display:block;height:auto" class="header align-items-stretch">
+<div id="kt_header" style="display:block;height:auto;z-index:990;" class="header align-items-stretch">
     <div class="container-fluid d-flex align-items-stretch justify-content-between">
         <div class="menu menu-lg-rounded menu-lg-row menu-state-bg menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-400 fw-bold my-5 my-lg-0 align-items-stretch"
             id="#kt_header_menu" data-kt-menu="true">

@@ -1,4 +1,4 @@
-<div id="kt_header" class="header align-items-stretch maa-header">
+<div id="kt_header" class="header align-items-stretch maa-header" style="z-index:999 !important;">
     <!--begin::Container-->
     <div class="container-fluid d-flex align-items-stretch justify-content-between">
         <div class="col-6">
