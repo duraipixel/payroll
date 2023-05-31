@@ -21,7 +21,8 @@ class OverViewController extends Controller
             )
         );
         $staff_id = auth()->user()->id;
-        return view('pages.overview.index',compact('breadcrums'));
+        $info = User::find($staff_id);
+        return view('pages.overview.index',compact('breadcrums', 'info'));
     }
     public function saveForm(Request $request)
     {
