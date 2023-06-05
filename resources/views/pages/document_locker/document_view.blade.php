@@ -11,6 +11,7 @@
     background-color: #f9ffff;
     border-color: #17a2b8 !important;
     }
+
     </style>
 
     <div class="container">
@@ -41,7 +42,7 @@
                             {!! calenderSvg() !!} {{$user->personal->dob ?? ''}}
                         </div>
                         <div class="p-3">
-                            {!! emailSvg() !!} {{$user->personal->email ?? ''}}
+                            {!! emailSvg() !!} {{$user->email ?? ''}}
                         </div>
                         <div>
                             <div class="d-flex p-3">
@@ -140,10 +141,11 @@
                                     <thead class="bg-primary p-10">
                                         
                                         <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="text-center text-white" >Document Name</th>
-                                                <th class="text-center text-white">Status</th>
+                                                <th class="text-center text-white ps-3" >Document Name</th>
+                                                <th class="text-center text-white"> Approval Status</th>                                              
                                                 <th class="text-center text-white">Uploaded Date</th>
                                                 <th class="text-center text-white">Action</th>
+                                                <th class="text-center text-white pe-3">Download</th>
                                               
                                             </tr>
                                            
@@ -152,26 +154,41 @@
                                     @forelse ($personal_doc as $personal_docs )
                                     <tr>
                                         <td> {{$personal_docs->documentType->name ??''}}</td>
-                                        <td> @if ($personal_docs->verification_status=='pending')                                           
-                                            <a href="#" onclick="return changeDocumentStatus({{$personal_docs->id}},'personal')" class="btn btn-icon btn-active-info  btn-danger  mx-1 w-50px h-50px"> 
-                                                <i class="fa fa-times"></i></a>                        
-                                        @else                                            
-                                        <button class="btn  btn-success mx-1 w-50px h-50px"> 
-                                            <i class="fa fa-check"></i></button>
-                                        @endif</td>
+                                        <td>
+                                            @if ($personal_docs->verification_status=='pending')      
+                                            <span class="badge badge-secondary"> Pending</span>
+                                            @elseif ($personal_docs->verification_status=='approved')
+                                            <span class="badge badge-success">
+                                                {{ucfirst($personal_docs->verification_status)}}</span><br>
+                                                {{$personal_docs->approved_date ??''}}
+                                            @elseif($personal_docs->verification_status=='rejected')
+                                            <span class="badge badge-danger"> 
+                                                {{ucfirst($personal_docs->verification_status)}}
+                                            </span><br>
+                                            {{$personal_docs->rejected_date ??''}}
+                                            @endif
+                                           
+                                        </td>
                                         <td> {{$personal_docs->documentType->created_at ??''}}</td>
-                                         <td>  
+                                      
+                                         <td>
+                                            @if ($personal_docs->verification_status=='pending' || $personal_docs->verification_status=='rejected' )                                           
+                                            <a href="#" onclick="return changeDocumentStatus({{$personal_docs->id}},'personal','approved')" class="btn btn-sm btn-success"> 
+                                              <strong> Click to Approve</strong></a>                        
+                                        @else  
+                                        <a href="#" onclick="return changeDocumentStatus({{$personal_docs->id}},'personal','rejected')" class="btn btn-sm btn-danger"> 
+                                            <strong>  Click to Reject</strong></a>                       
+                                        @endif                                         
                                           
-                                                <a href="{{ url('storage/app/public'.'/'.$personal_docs->multi_file) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
-                                                <i class="fa fa-download">
-                                        
-
-                                            </i>
-                                        </a></td>
+                                        </td>
+                                        <td>
+                                            <a href="{{ url('storage/app/public'.'/'.$personal_docs->multi_file) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                                <i class="fa fa-download"></i></a>
+                                        </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="4"> <strong>Personal Documents not Uploaded</strong> </td>
+                                        <td colspan="5"> <strong>Personal Documents not Uploaded</strong> </td>
                                     </tr>
                                     @endforelse
 
@@ -184,10 +201,13 @@
                                     <thead class="bg-primary p-10">
                                         
                                         <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="text-center text-white" >Document Name</th>
-                                                <th class="text-center text-white">Status</th>
-                                                <th class="text-center text-white">Uploaded Date</th>
-                                                <th class="text-center text-white">Action</th>
+
+                                            <th class="text-center text-white ps-3" >Document Name</th>
+                                            <th class="text-center text-white"> Approval Status</th>                                              
+                                            <th class="text-center text-white">Uploaded Date</th>
+                                            <th class="text-center text-white">Action</th>
+                                            <th class="text-center text-white pe-3">Download</th>
+                                              
                                               
                                             </tr>
                                            
@@ -195,21 +215,41 @@
                                     @forelse ($education_doc as $education_docs )
                                     <tr>
                                         <td> {{$education_docs->course_name ??''}}</td>
-                                        <td> @if ($education_docs->verification_status=='pending')
-                                            <a href="#" onclick="return changeDocumentStatus({{$education_docs->id}},'education')" class="btn btn-icon btn-active-info  btn-danger  mx-1 w-50px h-50px"> 
-                                                <i class="fa fa-times"></i></a>                        
-                                        @else                                            
-                                        <button class="btn  btn-success mx-1 w-50px h-50px"> 
-                                            <i class="fa fa-check"></i></button>
-                                        @endif</td>
+
+                                        <td>
+                                            @if ($education_docs->verification_status=='pending')      
+                                            <span class="badge badge-secondary"> Pending</span>
+                                            @elseif ($education_docs->verification_status=='approved')
+                                            <span class="badge badge-success">
+                                                {{ucfirst($education_docs->verification_status)}}</span><br>
+                                                {{$education_docs->approved_date ??''}}
+                                            @elseif($education_docs->verification_status=='rejected')
+                                            <span class="badge badge-danger"> 
+                                                {{ucfirst($education_docs->verification_status)}}
+                                            </span><br>
+                                            {{$education_docs->rejected_date ??''}}
+                                            @endif
+                                           
+                                        </td>
+                                       
                                         <td> {{$education_docs->submitted_date ??''}}</td>
+
+                                        <td> @if ($education_docs->verification_status=='pending' || $education_docs->verification_status=='rejected')
+                                            <a href="#" onclick="return changeDocumentStatus({{$education_docs->id}},'education','approved')" class="btn btn-sm btn-success"> 
+                                                <strong> Click to Approve</strong></a>                        
+                                        @else    
+                                        
+                                        <a href="#" onclick="return changeDocumentStatus({{$education_docs->id}},'education','rejected')" class="btn btn-sm btn-danger"> 
+                                           Click to Reject</a>   
+                                      
+                                        @endif</td>
                                          <td> <a href="{{ url('storage/app/public'.'/'.$education_docs->doc_file) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
                                             <i class="fa fa-download"></i>
                                         </a></td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="4"> <strong>Education Documents not Uploaded</strong> </td>
+                                        <td colspan="5"> <strong>Education Documents not Uploaded</strong> </td>
                                     </tr>
                                     @endforelse
 
@@ -220,26 +260,42 @@
                             <table  class="p-10 table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer">
                                 <thead class="bg-primary p-10">
                                     
-                                    <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="text-center text-white">Designation</th>
-                                            <th class="text-center text-white">Status</th>
-                                            <th class="text-center text-white">Uploaded Date</th>
-                                            <th class="text-center text-white">Action</th>
-                                          
-                                        </tr>
+                                    <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">                                           
+                                        <th class="text-center text-white ps-3">Designation</th>
+                                        <th class="text-center text-white"> Approval Status</th>                                              
+                                        <th class="text-center text-white">Uploaded Date</th>
+                                        <th class="text-center text-white">Action</th>
+                                        <th class="text-center text-white pe-3">Download</th>                                          
+                                    </tr>
                                        
-                                    </thead>                                                                                 
+                                </thead>                                                                                 
                                 @forelse ($experince_doc as $experince_docs )
                                 <tr>
                                     <td> {{$experince_docs->designation->name ??''}}</td>
-                                    <td> @if ($experince_docs->verification_status=='pending')
-                                        <a href="#" onclick="return changeDocumentStatus({{$experince_docs->id}},'experience')" class="btn btn-icon btn-active-info  btn-danger  mx-1 w-50px h-50px"> 
-                                            <i class="fa fa-times"></i></a>                        
-                                    @else                                            
-                                    <button class="btn  btn-success mx-1 w-50px h-50px"> 
-                                        <i class="fa fa-check"></i></button>
-                                    @endif</td>
+
+                                    <td>
+                                        @if ($experince_docs->verification_status=='pending')      
+                                        <span class="badge badge-secondary"> Pending</span>
+                                        @elseif ($experince_docs->verification_status=='approved')
+                                        <span class="badge badge-success">
+                                            {{ucfirst($experince_docs->verification_status)}}</span><br>
+                                            {{$experince_docs->approved_date ??''}}
+                                        @elseif($experince_docs->verification_status=='rejected')
+                                        <span class="badge badge-danger"> 
+                                            {{ucfirst($experince_docs->verification_status)}}
+                                        </span><br>
+                                        {{$experince_docs->rejected_date ??''}}
+                                        @endif
+                                       
+                                    </td>                                    
                                     <td> {{$experince_docs->created_at ??''}}</td>
+                                    <td> @if ($experince_docs->verification_status=='pending' || $experince_docs->verification_status=='rejected' )
+                                        <a href="#" onclick="return changeDocumentStatus({{$experince_docs->id}},'experience','approved')" class="btn btn-sm btn-success"> 
+                                            Click to Approve</a>                        
+                                    @else  
+                                    <a href="#" onclick="return changeDocumentStatus({{$experince_docs->id}},'experience','rejected')" class="btn btn-sm btn-danger"> 
+                                        Click to Reject</a> 
+                                    @endif</td>
                                      <td> <a href=" {{ url('storage/app/public'.'/'.$experince_docs->doc_file) }}" class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
                                         <i class="fa fa-download"></i>
                                     </a></td>
@@ -344,7 +400,7 @@
 
 @section('add_on_script')
 <script>
-      function changeDocumentStatus(id,type) {
+      function changeDocumentStatus(id,type,status) {
 
 Swal.fire({
     text: "Are you sure you would like to change status?",
@@ -370,7 +426,8 @@ if (result.value) {
         type: 'POST',
         data: {
             id: id,
-            type: type
+            type: type,
+            status: status
         },
         success: function(res) {
             window.location.reload();

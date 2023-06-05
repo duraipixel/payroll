@@ -19,6 +19,7 @@ use App\Models\Staff\StaffWorkExperience;
 use App\Models\Leave\StaffLeave;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Master\PlaceOfWork;
+use Carbon\Carbon;
 
 class DocumentLockerController extends Controller
 {
@@ -65,31 +66,34 @@ class DocumentLockerController extends Controller
     }
     public  function changeDocumentStaus(Request $request)
     {
-       
         $id             = $request->id;
-        $status         = 'approved';
+        $status         = $request->status;
         $info='';
         if($request->type=='personal')
         {
-            $info           = StaffDocument::find($id);           
+            $info        = StaffDocument::find($id);  
         }
         else if($request->type=='education')
         {
-            $info           = StaffEducationDetail::find($id);            
+            $info        = StaffEducationDetail::find($id);                    
         }
         else if($request->type=='experience')
         {
-            $info           = StaffWorkExperience::find($id);            
+            $info        = StaffWorkExperience::find($id);                      
         }
-        else
+        if($status=='approved')
+        {               
+            $approved_date = Carbon::now();
+            $info->approved_date=$approved_date->toDateTimeString();
+        }
+        else if($status=='rejected')
         {
-            $info           ='';
-        }
+            $rejected_date = Carbon::now();
+            $info->rejected_date=$rejected_date->toDateTimeString();
+        }    
         $info->verification_status   = $status;
         $info->update();
-        
-        
-        return response()->json(['message' => "You are approved the document!", 'status' => 1]);
+        return response()->json(['message' => "You are ".$status." the document!", 'status' => 1]);
     }
     public  function documentView($id)
     {
