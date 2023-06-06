@@ -16,7 +16,7 @@ class AccessGuard {
                 $info = User::find(auth()->id());
        
                 $data = $info->roleMapped;      
-                $role_id=$data->role_id;
+                $role_id = $data->role_id ?? '';
                 if($type=='add_edit')
                 {
                     $menu_check = Permission::where('role_id', $role_id)->where('add_edit_menu','1')->where('route_name',$route_name)->first();            
@@ -60,7 +60,7 @@ class AccessGuard {
         } else {
             $info = User::find(auth()->id());
             $data = $info->roleMapped;      
-            $role_id=$data->role_id;           
+            $role_id=$data->role_id ?? '';           
             //$data = $info->role->permissions;
             //$data = unserialize($data);
             if( is_string( $module ) ) {
