@@ -181,6 +181,32 @@
             })
 
         }
+
+
+        function viewAttendanceSchemeModal( id = '') {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var formMethod = "addEdit" ;
+            $.ajax({
+                url: "{{ route('scheme.view') }}",
+                type: 'POST',
+                data: {
+                    id: id,
+                    
+                },
+                success: function(res) {
+                    $('#kt_dynamic_app').modal('show');
+                    $('#kt_dynamic_app').html(res);
+                }
+            })
+
+        }
+
+
         function attendanceSchemeChangeStatus(id, status) {
 
     Swal.fire({

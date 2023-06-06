@@ -24,27 +24,42 @@
                             class="rounded" alt="...">
                     </div>
                     <div class="form-group mt-3 py-3 px-5">
+                        @if(isset($user->name))
                         <h3> {{$user->name}}</h3>
+                        @endif
+                        @if(isset($user->personal->gender))
                         <div class="p-3">
                             {!! genderMaleSvg() !!} 
                             {{ucfirst($user->personal->gender ?? '')}}
                         </div>
+                        @endif
+                        @if (isset($user->position->designation->name))
                         <div class="p-3">
                             {!! userSvg() !!}{{$user->position->designation->name ??''}}
                         </div>
+                        @endif
+                        @if(isset($user->personal->contact_address))
                         <div class="p-3">
                             {!! locationSvg() !!}   {{ucfirst($user->personal->contact_address ?? '')}}
-                        </div class="p-3">
+                        </div>
+                        @endif
+                        @if(isset($user->personal->phone_no))
                         <div class="p-3">
                             {!! mobileSvg() !!}{{$user->personal->phone_no ?? ''}}
                         </div>
+                        @endif
+                        @if (isset($user->personal->dob))
                         <div class="p-3">
                             {!! calenderSvg() !!} {{$user->personal->dob ?? ''}}
                         </div>
-                        <div class="p-3">
+                        @endif
+                        @if (isset($user->email))
+                        <div class="p-3">                          
                             {!! emailSvg() !!} {{$user->email ?? ''}}
                         </div>
+                        @endif
                         <div>
+                            @if (isset($user->emp_code))                            
                             <div class="d-flex p-3">
                                 <div class="w-50">
                                     Employee id
@@ -53,14 +68,17 @@
                                     {{$user->emp_code}}
                                 </div>
                             </div>
+                            @endif
+                           
                             <div class="d-flex p-3">
                                 <div class="w-50">
                                     Reporting Person
                                 </div>
                                 <div class="fw-bold">
-                                    
+                                    Admin
                                 </div>
                             </div>
+                            @if (isset($user->personal->marital_status)) 
                             <div class="d-flex p-3">
                                 <div class="w-50">
                                     Marital Status
@@ -69,6 +87,8 @@
                                     {{ucfirst($user->personal->marital_status ?? '')}}   
                                 </div>
                             </div>
+                            @endif
+                            @if (isset($user->position->department->name))
                             <div class="d-flex p-3">
                                 <div class="w-50">
                                     Employee Department
@@ -77,6 +97,8 @@
                                     {{$user->position->department->name ??''}}
                                 </div>
                             </div>
+                            @endif
+                            @if (isset($user->appointment->joining_date))
                             <div class="d-flex p-3">
                                 <div class="w-50">
                                     Employee Since
@@ -84,11 +106,10 @@
                                 <div class="fw-bold">
                                     @if (@isset($user->appointment->joining_date))
                                     {{date('Y', strtotime($user->appointment->joining_date )) ?? ''}}        
-                                    @endif
-                                                             
-                                   
+                                    @endif                         
                                 </div>
                             </div>
+                            @endif
                             <div class="d-flex p-3">
                                 <div class="w-50">
                                     Total Experience
@@ -142,7 +163,8 @@
                                         
                                         <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
                                                 <th class="text-center text-white ps-3" >Document Name</th>
-                                                <th class="text-center text-white"> Approval Status</th>                                              
+                                                <th class="text-center text-white"> Approval Status</th>
+                                                <th class="text-center text-white"> Approved By</th>                                              
                                                 <th class="text-center text-white">Uploaded Date</th>
                                                 <th class="text-center text-white">Action</th>
                                                 <th class="text-center text-white pe-3">Download</th>
@@ -169,7 +191,8 @@
                                             @endif
                                            
                                         </td>
-                                        <td> {{$personal_docs->documentType->created_at ??''}}</td>
+                                        <td> {{$personal_docs->doc_approved_by->name ??''}}</td>
+                                        <td> {{$personal_docs->documentType->created_at ??''}}</td>                                       
                                       
                                          <td>
                                             @if ($personal_docs->verification_status=='pending' || $personal_docs->verification_status=='rejected' )                                           
@@ -188,7 +211,7 @@
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="5"> <strong>Personal Documents not Uploaded</strong> </td>
+                                        <td colspan="6"> <strong>Personal Documents not Uploaded</strong> </td>
                                     </tr>
                                     @endforelse
 
@@ -203,7 +226,8 @@
                                         <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
 
                                             <th class="text-center text-white ps-3" >Document Name</th>
-                                            <th class="text-center text-white"> Approval Status</th>                                              
+                                            <th class="text-center text-white"> Approval Status</th>
+                                            <th class="text-center text-white"> Approved By</th>                                                 
                                             <th class="text-center text-white">Uploaded Date</th>
                                             <th class="text-center text-white">Action</th>
                                             <th class="text-center text-white pe-3">Download</th>
@@ -231,7 +255,7 @@
                                             @endif
                                            
                                         </td>
-                                       
+                                        <td> {{$education_docs->doc_approved_by->name ??''}}</td>                                       
                                         <td> {{$education_docs->submitted_date ??''}}</td>
 
                                         <td> @if ($education_docs->verification_status=='pending' || $education_docs->verification_status=='rejected')
@@ -249,7 +273,7 @@
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="5"> <strong>Education Documents not Uploaded</strong> </td>
+                                        <td colspan="6"> <strong>Education Documents not Uploaded</strong> </td>
                                     </tr>
                                     @endforelse
 
@@ -262,7 +286,8 @@
                                     
                                     <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">                                           
                                         <th class="text-center text-white ps-3">Designation</th>
-                                        <th class="text-center text-white"> Approval Status</th>                                              
+                                        <th class="text-center text-white"> Approval Status</th>  
+                                        <th class="text-center text-white"> Approved By</th>                                             
                                         <th class="text-center text-white">Uploaded Date</th>
                                         <th class="text-center text-white">Action</th>
                                         <th class="text-center text-white pe-3">Download</th>                                          
@@ -287,7 +312,8 @@
                                         {{$experince_docs->rejected_date ??''}}
                                         @endif
                                        
-                                    </td>                                    
+                                    </td>
+                                    <td> {{$experince_docs->doc_approved_by->name ??''}}</td>                        
                                     <td> {{$experince_docs->created_at ??''}}</td>
                                     <td> @if ($experince_docs->verification_status=='pending' || $experince_docs->verification_status=='rejected' )
                                         <a href="#" onclick="return changeDocumentStatus({{$experince_docs->id}},'experience','approved')" class="btn btn-sm btn-success"> 
@@ -302,7 +328,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4"> <strong>Experience Documents not Uploaded</strong> </td>
+                                    <td colspan="6"> <strong>Experience Documents not Uploaded</strong> </td>
                                 </tr>
                                 @endforelse
 
@@ -314,50 +340,135 @@
                                     <thead class="bg-primary p-10">
                                         
                                         <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="text-center text-white">Staff Name</th>
-                                                <th class="text-center text-white">Leave Status</th>
-                                                <th class="text-center text-white">Uploaded Date</th>
-                                                <th class="text-center text-white">Action</th>
-                                              
+                                                   
+                                                                                      
+                                                <th class="text-center text-white ps-3">Leave Dates</th>
+                                                <th class="text-center text-white">No of Days</th>
+                                                <th class="text-center text-white">Approval Status</th>
+                                                <th class="text-center text-white">Leave Approved By</th>
+                                                <th class="text-center text-white">Action</th>  
+                                                <th class="text-center text-white pe-3">Download</th>                                              
                                             </tr>
                                            
                                         </thead>                                                                                 
                                     @forelse ($leave_doc as $leave_docs )
                                     <tr>
-                                        <td> {{$leave_docs->staff_info->name ??''}}</td>
-                                        <td>{{ucfirst($leave_docs->status) ??''}}</td>
-                                        <td> {{$leave_docs->created_at ??''}}</td>
-
-                                         <td>
-                                           @if ($leave_docs->status=='pending')
-                                           <a href="{{ url('storage/app/public'.'/'.$leave_docs->document) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                      
+                                       
+                                        <td>{{$leave_docs->from_date ??''}} to {{$leave_docs->to_date ??''}}</td>
+                                        <td>{{$leave_docs->no_of_days ?? ''}}</td>                             
+                                    <td>
+                                        @if ($leave_docs->status=='pending')      
+                                        <span class="badge badge-secondary"> Pending</span>
+                                        @elseif ($leave_docs->status=='approved')
+                                        <span class="badge badge-success">
+                                            {{ucfirst($leave_docs->status)}}</span><br>
+                                            {{$leave_docs->approved_date ??''}}                                          
+                                        @elseif($leave_docs->status=='rejected')
+                                        <span class="badge badge-danger"> 
+                                            {{ucfirst($leave_docs->status)}} </span><br>
+                                            {{$leave_docs->rejected_date ??''}}   
+                                       
+                                        @endif                                       
+                                    </td>
+                                    <td> {{$leave_docs->granted_info->name ??''}}</td>
+                                    <td> @if ($leave_docs->status=='pending' || $leave_docs->status=='rejected' )
+                                            <a href="#" onclick="return changeDocumentStatus({{$leave_docs->id}},'leave','approved')" class="btn btn-sm btn-success"> 
+                                            Click to Approve</a>                        
+                                        @else  
+                                            <a href="#" onclick="return changeDocumentStatus({{$leave_docs->id}},'leave','rejected')" class="btn btn-sm btn-danger"> 
+                                            Click to Reject</a> 
+                                        @endif
+                                    </td>
+                                    <td>
+                                           @if ($leave_docs->status=='pending'  )
+                                           <a href="{{ url('storage/app'.'/'.$leave_docs->document) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
                                             <i class="fa fa-download"></i>
                                         </a>                       
                                             @else                                            
-                                            <a href="{{ url('storage/app/public'.'/'.$leave_docs->approved_document) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                            <a href="{{ url('storage/app'.'/'.$leave_docs->approved_document) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
                                                 <i class="fa fa-download"></i>
                                             </a>
                                             @endif
-                                        </td>
+                                    </td>
                                           
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="4"> <strong>Leave Documents not Uploaded</strong> </td>
+                                        <td colspan="6"> <strong>Leave Documents not Uploaded</strong> </td>
                                     </tr>
                                     @endforelse
     
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="v-pills-salary" role="tabpanel"
-                                aria-labelledby="v-pills-salary-tab">eeeeeeeeeeeee</div>
+                                aria-labelledby="v-pills-salary-tab">
+                            
+                                <table  class="p-10 table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer">
+                                    <thead class="bg-primary p-10">
+                                        
+                                        <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                                   
+                                                                                      
+                                                <th class="text-center text-white ps-3">Gross Salary</th>
+                                                <th class="text-center text-white">Deductions</th>     
+                                                <th class="text-center text-white">Approval Status</th>                                               
+                                                <th class="text-center text-white">Approved By</th>
+                                                <th class="text-center text-white">Action</th>  
+                                                <th class="text-center text-white pe-3">Download</th>                                              
+                                            </tr>
+                                           
+                                        </thead>                                                                                 
+                                    @forelse ($salary_doc as $salary_docs )
+                                    <tr>                         
+                                        <td>{{$salary_docs->total_earnings ??''}} </td>
+                                        <td>{{$salary_docs->total_deductions ?? ''}}</td>                               
+                                    <td>
+                                        @if ($salary_docs->is_salary_processed=='no' && $salary_docs->approved_date=='')      
+                                        <span class="badge badge-secondary"> Pending</span>
+                                        @elseif ($salary_docs->is_salary_processed=='yes' && $salary_docs->approved_date!='')
+                                        <span class="badge badge-success">
+                                          Approved</span><br>     
+                                          {{$salary_docs->approved_date ?? ''}}
+                                        @elseif ($salary_docs->is_salary_processed=='no' && $salary_docs->rejected_date!='')
+                                            <span class="badge badge-danger">
+                                            Rejected</span><br>     
+                                            {{$salary_docs->rejected_date ?? ''}}                   
+                                        @endif                                       
+                                    </td>
+                                    <td>{{$salary_docs->salaryApprovedBy->name ?? ''}}</td>                        
+                                    <td> @if ($salary_docs->is_salary_processed=='no')
+                                            <a href="#" onclick="return changeDocumentStatus({{$salary_docs->id}},'salary','approved')" class="btn btn-sm btn-success"> 
+                                            Click to Approve</a>                        
+                                        @else
+                                            <a href="#" onclick="return changeDocumentStatus({{$salary_docs->id}},'salary','rejected')" class="btn btn-sm btn-danger"> 
+                                            Click to Reject</a> 
+                                        @endif
+                                    </td>
+                                    <td>
+                                           @if ($salary_docs->is_salary_processed=='yes'  )
+                                           <!-- <a href="{{ url('storage/app'.'/'.$leave_docs->document) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                                   
+                                                </a>      -->                           
+                                            @endif
+                                    </td>
+                                          
+                                    </tr>
+                                    @empty
+                                    <tr>
+                                        <td colspan="6"> <strong>Leave Documents not Uploaded</strong> </td>
+                                    </tr>
+                                    @endforelse
+    
+                                </table>
+                            </div>
                             <div class="tab-pane fade" id="v-pills-appointment" role="tabpanel"
                             aria-labelledby="v-pills-appointment-tab">
                             <table  class="p-10 table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer">
                                 <thead class="bg-primary p-10">
                                     
                                     <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="text-center text-white">Staff Name</th>
+                                            <th class="text-center text-white">Appointment Model Name</th>
                                             <th class="text-center text-white">Employee Nature</th>
                                             <th class="text-center text-white">Joining Date</th>
                                             <th class="text-center text-white">Action</th>
@@ -367,13 +478,17 @@
                                     </thead>                                                                                 
                                 @forelse ($appointment_doc as $appointment_docs )
                                 <tr>
-                                    <td> {{$appointment_docs->staff_det->name ??''}}</td>
+                                    <td> {{$appointment_docs->appointmentOrderModel->name ??''}}</td>
                                     <td>{{ucfirst($appointment_docs->employment_nature->name ?? '')}}</td>
                                     <td> {{$appointment_docs->joining_date ??''}}</td>
 
-                                    <td> <a href="{{ url('storage/app/public'.'/'.$appointment_docs->appointment_doc) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
+                                    <td> 
+                                        @if($appointment_docs->appointment_doc)
+                                        <a href="{{ url('storage/app/public'.'/'.$appointment_docs->appointment_doc) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download> 
                                         <i class="fa fa-download"></i>
-                                    </a></td>
+                                    </a>
+                                    @endif
+                                </td>
                                       
                                 </tr>
                                 @empty

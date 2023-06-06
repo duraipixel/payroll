@@ -8,6 +8,7 @@ use App\Models\Master\Subject;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\User;
 
 class StaffEducationDetail extends Model implements Auditable
 {
@@ -49,5 +50,9 @@ class StaffEducationDetail extends Model implements Auditable
     public function eduType()
     {
         return $this->hasOne(ProfessionType::class, 'id', 'education_type');
+    }
+    public function doc_approved_by()
+    {
+        return $this->hasOne(User::class, 'id', 'approved_by');
     }
 }

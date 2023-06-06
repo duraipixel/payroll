@@ -178,6 +178,16 @@ class LeaveController extends Controller
                         return response()->json(['error' => $error, 'message' => $message]);
                     }
                     $ins['is_granted'] = $request->leave_granted;
+                    if( $request->leave_granted=='yes')
+                    {
+                        $approved_date = Carbon::now();
+                        $ins['approved_date']=$approved_date->toDateTimeString();                       
+                    }
+                    else
+                    {
+                        $rejected_date = Carbon::now();
+                        $ins['rejected_date']=$rejected_date->toDateTimeString();      
+                    }
                     $ins['granted_days'] = $request->no_of_days_granted;
                     $ins['remarks']  = $request->remarks;
                     $ins['granted_designation']  = '';
@@ -207,8 +217,12 @@ class LeaveController extends Controller
                 if ($request->leave_granted) {
                     if ($request->leave_granted == 'yes') {
                         $ins['status'] = 'approved';
+                        $approved_date = Carbon::now();
+                        $ins['approved_date']=$approved_date->toDateTimeString(); 
                     } else {
                         $ins['status'] = 'rejected';
+                        $rejected_date = Carbon::now();
+                        $ins['rejected_date']=$rejected_date->toDateTimeString();
                     }
                 } else {
                     $ins['status'] = 'pending';

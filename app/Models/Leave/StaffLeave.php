@@ -36,6 +36,8 @@ class StaffLeave extends Model
         'granted_days',
         'remarks',
         'granted_by',
+        'approved_date',
+        'rejected_date',
         'granted_designation',
         'reporting_id',
         'document',

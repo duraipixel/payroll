@@ -20,19 +20,13 @@ use App\Models\Leave\StaffLeave;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Master\PlaceOfWork;
 use Carbon\Carbon;
+use App\Models\PayrollManagement\StaffSalary;
+use App\Models\PayrollManagement\SalaryApprovalLog;
 
 class DocumentLockerController extends Controller
 {
     public function index(Request $request)
     {
-       
-       /* if ($request->ajax()) 
-        {
-            $data = User::where('is_super_admin', '=', null);
-            $datatables =  Datatables::of($data)
-                            ->addIndexColumn();
-            return $datatables->make(true);
-        }*/
         $user = User::where('is_super_admin', '=', null)->get();
         $user_count = User::where('is_super_admin', '=', null)->count();
        
@@ -40,17 +34,20 @@ class DocumentLockerController extends Controller
         $education_doc_pending=StaffEducationDetail::where('verification_status','pending')->count();
         $experince_doc_pending=StaffWorkExperience::where('verification_status','pending')->count();
         $leave_doc_pending=StaffLeave::where('status','pending')->count();
+        $salary_pending=StaffSalary::where('status','active')->where('is_salary_processed','no')->count();
        
         $review_pending_documents=$staff_document_pending+$education_doc_pending+$experince_doc_pending+
-                                 $leave_doc_pending;
+                                 $leave_doc_pending+$salary_pending;
 
         $staff_document_total = StaffDocument::where('status','active')->count();
         $education_doc_total=StaffEducationDetail::count();
         $experince_doc_total=StaffWorkExperience::count();
         $leave_doc_total=StaffLeave::count();
+        $salary_total=StaffSalary::count();
+        
         $appointment_doc_total=StaffAppointmentDetail::where('status','active')->count();
         $total_documents = $staff_document_total+$education_doc_total+$experince_doc_total+
-                            $leave_doc_total+$appointment_doc_total;
+                            $leave_doc_total+$appointment_doc_total+$salary_total;
         // $user=User::find(6);
       //dd( $total_documents);
         $institution=Institution::where('status','active')->get();
@@ -59,6 +56,7 @@ class DocumentLockerController extends Controller
         $designation=Designation::where('status','active')->get();
         $staffCategory=StaffCategory::where('status','active')->get();
         $department=Department::where('status','active')->get();
+       
 
         //dd($institution);
         
@@ -68,6 +66,7 @@ class DocumentLockerController extends Controller
     {
         $id             = $request->id;
         $status         = $request->status;
+        $user_id        = auth()->id();
         $info='';
         if($request->type=='personal')
         {
@@ -81,6 +80,35 @@ class DocumentLockerController extends Controller
         {
             $info        = StaffWorkExperience::find($id);                      
         }
+        else if($request->type=='leave')
+        {
+            $info        = StaffLeave::find($id); 
+            $info->granted_by   = $user_id;   
+            $info->status   = $status;             
+        }
+        else if($request->type=='salary')
+        {
+            $info        = StaffSalary::find($id); 
+            $info->salary_approved_by   = $user_id;  
+            if($status=='approved')
+            {  
+                $info->is_salary_processed='yes'; 
+            }
+            else if($status=='rejected')
+            {
+                $info->is_salary_processed='no'; 
+            }
+
+            $approved_log_date = Carbon::now();
+            $approved_date=$approved_log_date->toDateTimeString();
+            $salary_log=new  SalaryApprovalLog();           
+            $salary_log->staff_id=$info->staff_id;
+            $salary_log->salary_id=$id;
+            $salary_log->approved_by=$user_id;
+            $salary_log->approval_status=$status;
+            $salary_log->approval_date=$approved_date;
+            $salary_log->save();
+        }
         if($status=='approved')
         {               
             $approved_date = Carbon::now();
@@ -91,21 +119,28 @@ class DocumentLockerController extends Controller
             $rejected_date = Carbon::now();
             $info->rejected_date=$rejected_date->toDateTimeString();
         }    
-        $info->verification_status   = $status;
+       
+        if($request->type!='leave' && $request->type!='salary')
+        {
+            $info->approved_by   = $user_id;
+            $info->verification_status   = $status;
+        }
+      
         $info->update();
         return response()->json(['message' => "You are ".$status." the document!", 'status' => 1]);
     }
     public  function documentView($id)
     {
         $user=User::find($id);  
-        $personal_doc=StaffDocument::where('staff_id',$id)->get(); 
+        $personal_doc=StaffDocument::where('staff_id',$id)->get();
         $education_doc=StaffEducationDetail::where('staff_id',$id)->get();
         $experince_doc=StaffWorkExperience::where('staff_id',$id)->get();
         $acadamic_id= academicYearId();
         $leave_doc=StaffLeave::where('staff_id',$id)->where('academic_id',$acadamic_id)->get();
         $appointment_doc=StaffAppointmentDetail::where('staff_id',$id)->get();
+        $salary_doc=StaffSalary::where('staff_id',$id)->get();
         
-        return view('pages.document_locker.document_view',compact('user','personal_doc','education_doc','experince_doc','leave_doc','appointment_doc')); 
+        return view('pages.document_locker.document_view',compact('user','personal_doc','salary_doc','education_doc','experince_doc','leave_doc','appointment_doc')); 
        
     }
     public function searchData(Request $request)

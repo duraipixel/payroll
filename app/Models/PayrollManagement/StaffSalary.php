@@ -4,6 +4,7 @@ namespace App\Models\PayrollManagement;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class StaffSalary extends Model
 {
@@ -38,5 +39,8 @@ class StaffSalary extends Model
     {
         return $this->hasMany(StaffSalaryField::class, 'staff_salary_id', 'id')->where('reference_type', 'DEDUCTIONS');
     }
-
+    public function salaryApprovedBy()
+    {
+        return $this->hasOne(User::class, 'id', 'salary_approved_by');
+    }
 }

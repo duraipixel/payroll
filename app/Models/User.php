@@ -34,6 +34,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\PayrollManagement\StaffSalary;
 
 class User extends Authenticatable implements Auditable
 {
@@ -284,6 +285,19 @@ class User extends Authenticatable implements Auditable
     public function leaves()
     {
         return $this->hasMany(StaffLeave::class, 'staff_id', 'id');
+    }
+
+    public function salary()
+    {
+        return $this->hasMany(StaffSalary::class, 'staff_id', 'id');
+    }
+    public function salaryApproved()
+    {
+        return $this->hasMany(StaffSalary::class, 'staff_id', 'id')->where('is_salary_processed','yes');
+    }
+    public function salaryPending()
+    {
+        return $this->hasMany(StaffSalary::class, 'staff_id', 'id')->where('is_salary_processed','no');
     }
 
     public function leavesApproved()

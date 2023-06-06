@@ -27,15 +27,16 @@
                         @php                                  
                             $total_doc='';
                             $total_doc=$users->staffDocuments->count()+$users->education->count()+
-                            $users->careers->count()+$users->leaves->count()+$users->appointmentCount->count(); 
+                            $users->careers->count()+$users->leaves->count()+$users->appointmentCount->count()+
+                            $users->salary->count(); 
                             
                             $pending_doc='';
                             $pending_doc=$users->staffDocumentsPending->count()+$users->staffEducationDocPending->count()+
-                            $users->staffExperienceDocPending->count()+$users->leavesPending->count();
+                            $users->staffExperienceDocPending->count()+$users->leavesPending->count()+$users->salaryPending->count();
 
                             $approved_doc='';
                             $approved_doc=$users->staffDocumentsApproved->count()+$users->staffEducationDocApproved->count()+
-                            $users->staffExperienceDocApproved->count()+$users->leavesApproved->count()+$users->appointmentCount->count();
+                            $users->staffExperienceDocApproved->count()+$users->salaryApproved->count()+$users->leavesApproved->count()+$users->appointmentCount->count();
                             
                         @endphp
 

@@ -61,11 +61,16 @@ class AttendanceSchemeController extends Controller
                                     <i class="fa fa-edit"></i>
                                 </a>';
                     }
+                    if (access()->buttonAccess($route_name, 'view')) {
+                        $view_btn = '<a href="javascript:void(0);" onclick="viewAttendanceSchemeModal(' . $row->id . ')" class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px" >  
+                                    <i class="fa fa-eye"></i>
+                                </a>';
+                    }
                     if (access()->buttonAccess($route_name, 'delete')) {
                         $del_btn = '<a href="javascript:void(0);" onclick="deleteAttendanceScheme(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                     <i class="fa fa-trash"></i></a>';
                     }
-                    return $edit_btn . $del_btn;
+                    return $edit_btn . $del_btn . $view_btn;
                 })
                 ->rawColumns(['action', 'status', 'timings']);
             return $datatables->make(true);
@@ -151,5 +156,15 @@ class AttendanceSchemeController extends Controller
     public function export()
     {
         return Excel::download(new AttendanceSchemeExport, 'AttendanceScheme.xlsx');
+    }
+    
+    public function schemeView(Request $request)
+    {
+        $info=AttendanceScheme::find($request->id);
+        $title='Attendance Scheme';
+        $content = view('pages.masters.scheme.view',compact('info','title'));
+        return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+       // return view('pages.masters.scheme.view', compact('scheme_data'));
+
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Master\OtherSchool;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use App\Models\User;
 
 class StaffWorkExperience extends Model implements Auditable
 {
@@ -39,5 +40,9 @@ class StaffWorkExperience extends Model implements Auditable
     public function designation()
     {
         return $this->hasOne(Designation::class, 'id', 'designation_id');
+    }
+    public function doc_approved_by()
+    {
+        return $this->hasOne(User::class, 'id', 'approved_by');
     }
 }

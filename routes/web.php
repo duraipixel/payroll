@@ -150,6 +150,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('/dl_view/{id?}', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'documentView'])->name('user.dl_view');
     Route::post('/document_status', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'changeDocumentStaus'])->name('document_status'); 
     //Document Locker End
+   
+    Route::post('/scheme_view', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'schemeView'])->name('scheme.view');
     $routeArray = array(
         'institutions' => App\Http\Controllers\Master\InstitutionController::class,
         'class' => App\Http\Controllers\Master\ClassesController::class,
