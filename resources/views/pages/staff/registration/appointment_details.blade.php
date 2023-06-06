@@ -265,7 +265,7 @@
                                     </div>
 
                                     <div class="col-md-12 fv-row">
-                                        @if (getStaffVerificationStatus($staff_details->id, 'salary_entry'))
+                                        @if ( isset( $staff_details ) && !empty( $staff_details ) && getStaffVerificationStatus($staff_details->id, 'salary_entry'))
                                             <div class="row">
                                                 <div class="col-sm-12 mt-6">
                                                     <div class="alert alert-success">
@@ -293,7 +293,12 @@
                                             </div>
 
                                             <a class="btn btn-warning w-100"
-                                                href="{{ route('salary.creation', ['staff_id' => $staff_details->id]) }}">
+                                            @if ( isset( $staff_details ) && !empty( $staff_details ) )
+                                                href="{{ route('salary.creation', ['staff_id' => $staff_details->id]) }}"
+                                            @else 
+                                                href="{{ route('salary.creation') }}"
+                                            @endif
+                                                >
                                                 Create Salary Database </a>
                                         @endif
                                     </div>
@@ -318,7 +323,7 @@
                                                     <div class="fw-bold fs-6 text-gray-800"> Data Entry </div>
                                                 </td>
                                                 <td>
-                                                    @if (getStaffVerificationStatus($staff_details->id, 'data_entry'))
+                                                    @if (  isset( $staff_details ) && !empty( $staff_details ) &&  getStaffVerificationStatus($staff_details->id, 'data_entry'))
                                                         {!! yesTickSvg() !!}
                                                     @else
                                                         {!! noTickSvg() !!}
@@ -332,7 +337,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    @if (getStaffVerificationStatus($staff_details->id, 'doc_uploaded'))
+                                                    @if (isset( $staff_details ) && !empty( $staff_details ) &&  getStaffVerificationStatus($staff_details->id, 'doc_uploaded'))
                                                         {!! yesTickSvg() !!}
                                                     @else
                                                         {!! noTickSvg() !!}
@@ -346,7 +351,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    @if (getStaffVerificationStatus($staff_details->id, 'doc_verified'))
+                                                    @if ( isset( $staff_details ) && !empty( $staff_details ) &&  getStaffVerificationStatus($staff_details->id, 'doc_verified'))
                                                         {!! yesTickSvg() !!}
                                                     @else
                                                         {!! noTickSvg() !!}
@@ -360,7 +365,7 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    @if (getStaffVerificationStatus($staff_details->id, 'salary_entry'))
+                                                    @if ( isset( $staff_details ) && !empty( $staff_details ) &&  getStaffVerificationStatus($staff_details->id, 'salary_entry'))
                                                         {!! yesTickSvg() !!}
                                                     @else
                                                         {!! noTickSvg() !!}
