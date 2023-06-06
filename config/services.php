@@ -31,7 +31,7 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
     'account' => [
-        'overview.save' => 'Overview',
+        'overview' => 'Overview',
         'logs' => 'Logs'
     ],
     'authentication' => [

@@ -43,6 +43,11 @@
                                             aria-selected="false">Leave Info</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
+                                        <a id="kt_referrals_2020_tab" class="nav-link text-active-primary"
+                                            data-bs-toggle="tab" role="tab" href="#kt_customer_details_invoices_9"
+                                            aria-selected="false">Document Info</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
                                         <a id="kt_referrals_2015_tab" class="nav-link text-active-primary"
                                             data-bs-toggle="tab" role="tab" href="#kt_customer_details_invoices_6"
                                             aria-selected="false">Utilities</a>
@@ -80,6 +85,9 @@
                                 </div>
                                 <div id="kt_customer_details_invoices_5" class="py-0 tab-pane fade" role="tabpanel">
                                     @include('pages.overview.attendance.index')
+                                </div>
+                                <div id="kt_customer_details_invoices_9" class="py-0 tab-pane fade" role="tabpanel">
+                                    @include('pages.overview.document.index')
                                 </div>
                                 <div id="kt_customer_details_invoices_6" class="py-0 tab-pane fade" role="tabpanel">
                                     @include('pages.overview.utilitites.index')

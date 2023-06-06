@@ -22,11 +22,22 @@ use App\Models\Master\PlaceOfWork;
 use Carbon\Carbon;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\SalaryApprovalLog;
+use DB;
 
 class DocumentLockerController extends Controller
 {
     public function index(Request $request)
     {
+
+        /*$post = new SalaryApprovalLog;
+  
+        $columns = $post->getTableColumns();
+        $tables = DB::connection()->getDoctrineSchemaManager()->listTableNames();
+        dd($tables);*/
+        $user_id        = auth()->id();
+        $user_check=User::where('id',$user_id)->where('is_super_admin','1')->first();
+        if($user_check)
+        {
         $user = User::where('is_super_admin', '=', null)->get();
         $user_count = User::where('is_super_admin', '=', null)->count();
        
@@ -48,8 +59,42 @@ class DocumentLockerController extends Controller
         $appointment_doc_total=StaffAppointmentDetail::where('status','active')->count();
         $total_documents = $staff_document_total+$education_doc_total+$experince_doc_total+
                             $leave_doc_total+$appointment_doc_total+$salary_total;
-        // $user=User::find(6);
-      //dd( $total_documents);
+
+      
+        }
+        else
+        {
+            //dd($user_id);
+          
+            $user_check_reporting=User::where('is_super_admin','=', null)->where('reporting_manager_id',$user_id)->get();
+            $report_manager=[];
+            foreach ($user_check_reporting as $key => $user_check_reportings) {
+                $report_manager[]=$user_check_reportings->id;
+            }
+
+            $user = User::where('is_super_admin', '=', null)->whereIn('id',$report_manager)->get();
+            $user_count = User::where('is_super_admin', '=', null)->whereIn('id',$report_manager)->count();
+           
+            $staff_document_pending = StaffDocument::where('verification_status','pending')->whereIn('staff_id',$report_manager)->where('status','active')->count();
+            $education_doc_pending=StaffEducationDetail::where('verification_status','pending')->whereIn('staff_id',$report_manager)->count();
+            $experince_doc_pending=StaffWorkExperience::where('verification_status','pending')->whereIn('staff_id',$report_manager)->count();
+            $leave_doc_pending=StaffLeave::where('status','pending')->whereIn('staff_id',$report_manager)->count();
+            $salary_pending=StaffSalary::where('status','active')->whereIn('staff_id',$report_manager)->where('is_salary_processed','no')->count();
+           
+            $review_pending_documents=$staff_document_pending+$education_doc_pending+$experince_doc_pending+
+                                     $leave_doc_pending+$salary_pending;
+    
+            $staff_document_total = StaffDocument::where('status','active')->whereIn('staff_id',$report_manager)->count();
+            $education_doc_total=StaffEducationDetail::whereIn('staff_id',$report_manager)->count();
+            $experince_doc_total=StaffWorkExperience::whereIn('staff_id',$report_manager)->count();
+            $leave_doc_total=StaffLeave::whereIn('staff_id',$report_manager)->count();
+            $salary_total=StaffSalary::whereIn('staff_id',$report_manager)->count();
+            
+            $appointment_doc_total=StaffAppointmentDetail::where('status','active')->whereIn('staff_id',$report_manager)->count();
+            $total_documents = $staff_document_total+$education_doc_total+$experince_doc_total+
+                                $leave_doc_total+$appointment_doc_total+$salary_total;
+           //dd($report_manager);
+        }
         $institution=Institution::where('status','active')->get();
         $employee_nature=NatureOfEmployment::where('status','active')->get();
         $place_of_work=PlaceOfWork::where('status','active')->get();
@@ -101,8 +146,10 @@ class DocumentLockerController extends Controller
 
             $approved_log_date = Carbon::now();
             $approved_date=$approved_log_date->toDateTimeString();
+            $acadamic_id= academicYearId();
             $salary_log=new  SalaryApprovalLog();           
             $salary_log->staff_id=$info->staff_id;
+            $salary_log->academic_id=$acadamic_id;
             $salary_log->salary_id=$id;
             $salary_log->approved_by=$user_id;
             $salary_log->approval_status=$status;

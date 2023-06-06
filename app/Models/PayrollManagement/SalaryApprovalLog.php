@@ -18,5 +18,7 @@ class SalaryApprovalLog extends Model implements Auditable
         'approval_status',
         'approval_date'
     ];
-
+    /*public function getTableColumns() {
+        return $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+    }*/
 }
