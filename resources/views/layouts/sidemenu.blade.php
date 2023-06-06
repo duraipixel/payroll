@@ -300,18 +300,11 @@
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                                        <span class="menu-title">List</span>
+                                        <span class="menu-title">Overview</span>
                                     </a>
                                 </div>
                             @endif
-                            <div class="menu-item">
-                                <a class="menu-link" href="javascript:void(0)">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Details</span>
-                                </a>
-                            </div>
+                            
                         </div>
                     </div>
                     <!-- Document locker End-->
@@ -637,7 +630,7 @@
 
                 </div>
                 {{-- Block Mapping Start --}}
-                @if (access()->hasAccess(['blocks']))
+                {{-- @if (access()->hasAccess(['blocks']))
                     <div data-kt-menu-trigger="click"
                         class="menu-item menu-accordion @if (request()->routeIs(['blocks'])) hover show @endif">
                         <span class="menu-link">
@@ -661,7 +654,7 @@
                             @endif
                         </div>
                     </div>
-                @endif
+                @endif --}}
 
                 {{-- Block Mappting End --}}
                 @if (access()->hasAccess([

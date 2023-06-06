@@ -20,7 +20,7 @@
             </span>
 
             <input class="form-control form-control-solid ps-12" placeholder="Select a date" name="from_training_date"
-                id="from_training_date" value="{{ (isset($training_info->from) && !empty( $training_info->from )) ? date('d-m-Y', strtotime($training_info->from)) : '' }}" />
+                id="from_training_date" type="date" value="{{ $training_info->from ?? '' }}" />
         </div>
 
     </div>
@@ -48,7 +48,7 @@
             </span>
 
             <input class="form-control form-control-solid ps-12" placeholder="Select a date" name="to_training_date"
-                id="to_training_date" value="{{ (isset($training_info->to) && !empty( $training_info->to )) ? date('d-m-Y', strtotime($training_info->to)) : '' }}" />
+                id="to_training_date" type="date" value="{{ $training_info->to ?? '' }}" />
             <!--end::Datepicker-->
         </div>
         <!--end::Input-->
@@ -65,7 +65,7 @@
         <label class="form-label required">Topic of the Training</label>
         <div class="position-relative">
             <select name="training_topic" autofocus id="training_topic"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg" required>
                 <option value="">--Select Topic --</option>
                 @isset($training_topics)
                     @foreach ($training_topics as $item)
@@ -120,13 +120,13 @@
 <script>
     $(function() {
        
-       $("#from_training_date").datepicker({
-           dateFormat: 'd-mm-yy'
-       });
+    //    $("#from_training_date").datepicker({
+    //        dateFormat: 'd-mm-yy'
+    //    });
 
-       $("#to_training_date").datepicker({
-           dateFormat: 'd-mm-yy'
-       });
+    //    $("#to_training_date").datepicker({
+    //        dateFormat: 'd-mm-yy'
+    //    });
 
    });
 

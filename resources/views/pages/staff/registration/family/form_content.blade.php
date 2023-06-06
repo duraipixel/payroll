@@ -7,7 +7,7 @@
         <div class="position-relative">
 
             <select name="staff_relationship_id" autofocus id="staff_relationship_id"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg " required>
                 <option value="">--Select Type --</option>
                 @isset($relation_types)
                     @foreach ($relation_types as $item)
@@ -35,7 +35,7 @@
         
         <div class="position-relative d-flex align-items-center">
             {!! dobSVG() !!}
-            <input class="form-control form-control-solid ps-12" placeholder="Select a date" name="dob" id="dob" value="{{ isset($family_details->dob) ? date('d-m-Y',strtotime($family_details->dob)) : ''  }}" />
+            <input class="form-control form-control-solid ps-12" placeholder="Select a date" type="date" name="dob" id="dob" value="{{ $family_details->dob ?? '' }}" />
         </div>
     </div>
   
@@ -62,7 +62,7 @@
         <div class="position-relative">
 
             <select name="qualification_id" autofocus id="qualification_id"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg " required>
                 <option value="">--Select Qualification --</option>
                 @isset($qualificaiton)
                     @foreach ($qualificaiton as $item)
@@ -134,7 +134,7 @@
         <label class="form-label required">Blood Group</label>
         <div class="position-relative">
             <select name="blood_group_id" autofocus id="blood_group_id"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg " required>
                 <option value="">--Select Blood Group --</option>
                 @isset($blood_groups)
                     @foreach ($blood_groups as $item)
@@ -158,7 +158,7 @@
         <label class="form-label required">Nationality</label>
         <div class="position-relative">
             <select name="family_nationality" autofocus id="family_nationality"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg " required>
                 <option value="">--Select Nationality --</option>
                 @isset($nationalities)
                     @foreach ($nationalities as $item)

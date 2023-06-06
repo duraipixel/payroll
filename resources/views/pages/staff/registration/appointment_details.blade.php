@@ -29,12 +29,11 @@
                                             @endforeach
                                         @endisset
                                     </select>
-                                    @if( access()->buttonAccess('staff-category','add_edit') )
-
-                                    <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                                        onclick="return openAddModel('staff_category')">
-                                        <i class="fa fa-plus"></i>
-                                    </span>
+                                    @if (access()->buttonAccess('staff-category', 'add_edit'))
+                                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
+                                            onclick="return openAddModel('staff_category')">
+                                            <i class="fa fa-plus"></i>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -57,12 +56,11 @@
                                             @endforeach
                                         @endisset
                                     </select>
-                                    @if( access()->buttonAccess('nature-of-employeement','add_edit') )
-
-                                    <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                                        onclick="return openAddModel('nature_of_employeement')">
-                                        <i class="fa fa-plus"></i>
-                                    </span>
+                                    @if (access()->buttonAccess('nature-of-employeement', 'add_edit'))
+                                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
+                                            onclick="return openAddModel('nature_of_employeement')">
+                                            <i class="fa fa-plus"></i>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -83,12 +81,11 @@
                                             @endforeach
                                         @endisset
                                     </select>
-                                    @if( access()->buttonAccess('teaching-type','add_edit') )
-
-                                    <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                                        onclick="return openAddModel('teaching_type')">
-                                        <i class="fa fa-plus"></i>
-                                    </span>
+                                    @if (access()->buttonAccess('teaching-type', 'add_edit'))
+                                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
+                                            onclick="return openAddModel('teaching_type')">
+                                            <i class="fa fa-plus"></i>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -108,13 +105,12 @@
                                                 </option>
                                             @endforeach
                                         @endisset
-                                    </select>            
-                                    @if( access()->buttonAccess('workplace','add_edit') )
-
-                                    <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                                        onclick="return openAddModel('place_of_work')">
-                                        <i class="fa fa-plus"></i>
-                                    </span>
+                                    </select>
+                                    @if (access()->buttonAccess('workplace', 'add_edit'))
+                                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
+                                            onclick="return openAddModel('place_of_work')">
+                                            <i class="fa fa-plus"></i>
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -171,96 +167,219 @@
                             </div>
                             <hr>
                             <div class="row my-3">
-                                <div class="col-sm-12">
-                                    <div class="row">
-                                        <div class="col-lg-4 mb-5">
-                                            <label class="form-label required">Period of Appointment (From)</label>
-                                            <div class="position-relative d-flex align-items-center">
-                                                {!! dobSvg() !!}
-                                                <input class="form-control  ps-12" placeholder="Select a date"
-                                                    name="from_appointment" id="from_appointment"
-                                                    value="{{ isset($staff_details->appointment->from_appointment) ? date('d-m-Y', strtotime($staff_details->appointment->from_appointment)) : '' }}" />
+                                <div class="col-sm-8">
+
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-lg-6 mb-5">
+                                                <label class="form-label required">Period of Appointment (From)</label>
+                                                <div class="position-relative d-flex align-items-center">
+                                                    {!! dobSvg() !!}
+                                                    <input class="form-control  ps-12" placeholder="Select a date"
+                                                        name="from_appointment" id="from_appointment"
+                                                        value="{{ isset($staff_details->appointment->from_appointment) ? date('d-m-Y', strtotime($staff_details->appointment->from_appointment)) : '' }}" />
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-lg-4 mb-5">
-                                            <label class="form-label required">Period of Appointment (To)</label>
+                                            <div class="col-lg-6 mb-5">
+                                                <label class="form-label required">Period of Appointment (To)</label>
 
-                                            <div class="position-relative d-flex align-items-center">
-                                                {!! dobSvg() !!}
-                                                <input class="form-control ps-12" placeholder="Select a date"
-                                                    name="to_appointment" id="to_appointment"
-                                                    value="{{ isset($staff_details->appointment->to_appointment) ? date('d-m-Y', strtotime($staff_details->appointment->to_appointment)) : '' }}" />
+                                                <div class="position-relative d-flex align-items-center">
+                                                    {!! dobSvg() !!}
+                                                    <input class="form-control ps-12" placeholder="Select a date"
+                                                        name="to_appointment" id="to_appointment"
+                                                        value="{{ isset($staff_details->appointment->to_appointment) ? date('d-m-Y', strtotime($staff_details->appointment->to_appointment)) : '' }}" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-sm-12">
-                                    <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
 
-                                        <div class="col-lg-4 mb-5">
-                                            <label class="form-label required">
-                                                Appointment order model
-                                            </label>
-                                            {{-- <a href="javascript:void(0)" class="float-end" onclick="return selectAppointmentModel()"> Select Model </a> --}}
-                                            <div class="position-relative">
-                                                <select name="appointment_order_model_id" autofocus
-                                                    id="appointment_order_model_id"
-                                                    class="form-select form-select-lg select2-option" required>
-                                                    <option value=""> -- Select Order Model -- </option>
-                                                    @isset($order_models)
-                                                        @foreach ($order_models as $item)
-                                                            <option value="{{ $item->id }}"
-                                                                @if (isset($staff_details->appointment->appointment_order_model_id) &&
-                                                                        $staff_details->appointment->appointment_order_model_id == $item->id) selected @endif>
-                                                                {{ $item->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    @endisset
-                                                </select>
-                                                {{-- <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                                                    onclick="return openAddModel('order_model')">
-                                                    <i class="fa fa-plus"></i>
-                                                </span> --}}
+                                            <div class="col-lg-6 mb-5">
+                                                <label class="form-label required">
+                                                    Appointment order model
+                                                </label>
+                                                {{-- <a href="javascript:void(0)" class="float-end" onclick="return selectAppointmentModel()"> Select Model </a> --}}
+                                                <div class="position-relative">
+                                                    <select name="appointment_order_model_id" autofocus
+                                                        id="appointment_order_model_id"
+                                                        class="form-select form-select-lg select2-option" required>
+                                                        <option value=""> -- Select Order Model -- </option>
+                                                        @isset($order_models)
+                                                            @foreach ($order_models as $item)
+                                                                <option value="{{ $item->id }}"
+                                                                    @if (isset($staff_details->appointment->appointment_order_model_id) &&
+                                                                            $staff_details->appointment->appointment_order_model_id == $item->id) selected @endif>
+                                                                    {{ $item->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        @endisset
+                                                    </select>
+                                                    {{-- <span class="position-absolute btn btn-success btn-md top-0 end-0"
+                                                        onclick="return openAddModel('order_model')">
+                                                        <i class="fa fa-plus"></i>
+                                                    </span> --}}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <button type="button" class="btn btn-success mt-8"
+                                                    id="generate_order"
+                                                    @if (isset($staff_details->appointment->appointment_order_model_id) &&
+                                                            !empty($staff_details->appointment->appointment_order_model_id)) @else disabled @endif
+                                                    onclick="return generateAppointmentModel()"> Generate Appointment
+                                                    Order
+                                                </button>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div class="col-lg-4">
-                                            <button type="button" class="btn btn-success mt-8" id="generate_order"
-                                                @if (isset($staff_details->appointment->appointment_order_model_id) &&
-                                                        !empty($staff_details->appointment->appointment_order_model_id)) @else disabled @endif
-                                                onclick="return generateAppointmentModel()"> Generate Appointment Order
-                                            </button>
+                                    <div class="col-md-6 fv-row">
+                                        <label class="required fs-6 fw-bold form-label mb-2">Upload Appointment
+                                            Order</label>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <label class="col-form-label text-lg-right">Upload
+                                                    File:</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input class="form-control form-control-sm" style=""
+                                                    type="file" name="appointment_order_doc">
+                                            </div>
+                                            @isset($staff_details->appointment->appointment_doc)
+                                                <div class="col-12">
+                                                    <div class="d-flex justiy-content-around flex-wrap">
+                                                        @php
+                                                            $url = Storage::url($staff_details->appointment->appointment_doc);
+                                                        @endphp
+                                                        <div class="d-inline-block p-2 bg-light m-1">
+                                                            <a class="btn-sm btn-success"
+                                                                href="{{ asset('public' . $url) }}" target="_blank">View
+                                                                File </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endisset
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-4 fv-row">
-                                    <label class="required fs-6 fw-bold form-label mb-2">Upload Appointment
-                                        Order</label>
-                                    <div class="row">
-                                        <div class="col-4">
-                                            <label class="col-form-label text-lg-right">Upload
-                                                File:</label>
-                                        </div>
-                                        <div class="col-8">
-                                            <input class="form-control form-control-sm" style="" type="file"
-                                                name="appointment_order_doc">
-                                        </div>
-                                        @isset($staff_details->appointment->appointment_doc)
-                                            <div class="col-12">
-                                                <div class="d-flex justiy-content-around flex-wrap">
-                                                    @php
-                                                        $url = Storage::url($staff_details->appointment->appointment_doc);
-                                                    @endphp
-                                                    <div class="d-inline-block p-2 bg-light m-1">
-                                                        <a class="btn-sm btn-success" href="{{ asset('public'.$url) }}"
-                                                            target="_blank">View File </a>
+                                    <div class="col-md-12 fv-row">
+                                        @if (getStaffVerificationStatus($staff_details->id, 'salary_entry'))
+                                            <div class="row">
+                                                <div class="col-sm-12 mt-6">
+                                                    <div class="alert alert-success">
+                                                        Salary Database is created
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endisset
+                                            <div class="d-flex">
+
+                                                <a href="javascript:void(0)"
+                                                    onclick="return getSalarySlipView('{{ $staff_details->id }}')"
+                                                    class="btn btn-light-info w-50"> View Salary </a>
+                                                <a class="btn btn-warning w-50"
+                                                    href="{{ route('salary.creation', ['staff_id' => $staff_details->id]) }}">
+                                                    Edit Salary Database </a>
+                                            </div>
+                                        @else
+                                            <div class="row">
+                                                <div class="col-sm-12 mt-6">
+                                                    <div class="alert alert-warning">
+                                                        Salary is not processing to create salary database click below
+                                                        button
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <a class="btn btn-warning w-100"
+                                                href="{{ route('salary.creation', ['staff_id' => $staff_details->id]) }}">
+                                                Create Salary Database </a>
+                                        @endif
                                     </div>
+                                </div>
+                                <div class="col-sm-4">
+
+                                    <table style="box-shadow: 3px 2px 5px 1px #ddd;"
+                                        class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+
+                                        <thead>
+                                            <tr class="fw-bold fs-6 text-gray-800 text-center border-0 bg-light">
+                                                <th colspan="2"
+                                                    class="min-w-200px rounded-start rounded-end text-white"
+                                                    style="background: #ff8e8e;"> Completed Progress </th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody class="border-bottom border-dashed">
+
+                                            <tr class="text-center">
+                                                <td class="text-start ps-6">
+                                                    <div class="fw-bold fs-6 text-gray-800"> Data Entry </div>
+                                                </td>
+                                                <td>
+                                                    @if (getStaffVerificationStatus($staff_details->id, 'data_entry'))
+                                                        {!! yesTickSvg() !!}
+                                                    @else
+                                                        {!! noTickSvg() !!}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="text-start ps-6">
+                                                    <div class="fw-bold fs-6 text-gray-800">
+                                                        Document Uploaded
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if (getStaffVerificationStatus($staff_details->id, 'doc_uploaded'))
+                                                        {!! yesTickSvg() !!}
+                                                    @else
+                                                        {!! noTickSvg() !!}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="text-start ps-6">
+                                                    <div class="fw-bold fs-6 text-gray-800">
+                                                        Document Verified
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if (getStaffVerificationStatus($staff_details->id, 'doc_verified'))
+                                                        {!! yesTickSvg() !!}
+                                                    @else
+                                                        {!! noTickSvg() !!}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td class="text-start ps-6">
+                                                    <div class="fw-bold fs-6 text-gray-800">
+                                                        Salary Entry
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    @if (getStaffVerificationStatus($staff_details->id, 'salary_entry'))
+                                                        {!! yesTickSvg() !!}
+                                                    @else
+                                                        {!! noTickSvg() !!}
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            <tr class="text-center">
+                                                <td colspan="2">
+                                                    <div class="alert alert-warning small">
+                                                        Only when data entry, uploading, and document verification are
+                                                        complete can employee codes be created.
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+
+                                    </table>
+
                                 </div>
                             </div>
                         </div>
@@ -362,6 +481,9 @@
                         return false;
                     } else {
                         toastr.success("Success", 'Staff Appointment Order Details Saved Successfully');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                         return true;
                     }
 
@@ -395,14 +517,33 @@
             type: "POST",
             data: forms,
             success: function(res) {
-                if(res) {
+                if (res) {
                     $('#generate_order').attr('disabled', false);
                     var link = document.createElement('a');
                     link.href = res;
-                    link.target  = "_blank";
+                    link.target = "_blank";
                     link.click();
                 }
             }
         });
+    }
+
+    function getSalarySlipView(staff_id) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('salary.modal.view') }}",
+            type: 'POST',
+            data: {
+                staff_id: staff_id
+            },
+            success: function(res) {
+                $('#kt_dynamic_app').modal('show');
+                $('#kt_dynamic_app').html(res);
+            }
+        })
     }
 </script>

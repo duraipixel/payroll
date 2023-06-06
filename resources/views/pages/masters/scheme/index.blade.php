@@ -25,7 +25,7 @@
                 </a>
             @endif
             @if( access()->buttonAccess($route_name,'add_edit') )
-                <a class="btn btn-primary btn-sm" id="add_modal" href="{{ route('appointment.orders.add') }}" >
+                <a class="btn btn-primary btn-sm" id="add_modal" href="{{ route('attendance.scheme.add') }}" >
                     {!! plusSvg() !!} Add Attendance Scheme
                 </a>
             @endif

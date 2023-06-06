@@ -54940,6 +54940,7 @@ body {
   border: 1px solid #fff;
   margin-top: -1px;
   border-radius: 6px;
+  caret-color: transparent;
 }
 .payroll_month.active .month_name{
   color: #fff;

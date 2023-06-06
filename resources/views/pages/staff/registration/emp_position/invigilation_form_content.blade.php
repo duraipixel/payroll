@@ -9,7 +9,7 @@
         <input type="hidden" name="duty_id" id="duty_id" value="{{ $duty_info->id ?? '' }}">
         <div class="position-relative">
             <select name="duty_classes" autofocus id="duty_classes"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg" required>
                 <option value="">--Select Class--</option>
                 @isset($duty_classes)
                     @foreach ($duty_classes as $item)
@@ -31,7 +31,7 @@
         <label class="form-label required">Type of Duty</label>
         <div class="position-relative">
             <select name="duty_type" autofocus id="duty_type"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg" required>
                 <option value="">--Select Duty type --</option>
                 @isset($duty_types)
                     @foreach ($duty_types as $item)
@@ -55,7 +55,7 @@
         <label class="form-label required">Name Of School</label>
         <div class="position-relative">
             <select name="duty_other_school" autofocus id="other_school"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg" required>
                 <option value="">--Select School --</option>
                 @isset($other_schools)
                     @foreach ($other_schools as $item)
@@ -78,7 +78,7 @@
         <label class="form-label required">Place</label>
         <div class="position-relative">
             <select name="duty_other_place_id" autofocus id="duty_other_place_id"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg" required>
                 <option value="">--Select Place --</option>
                 @isset($places)
                     @foreach ($places as $item)
@@ -122,7 +122,7 @@
             <!--end::Icon-->
             <!--begin::Datepicker-->
             <input class="form-control form-control-solid ps-12" placeholder="Select a date"
-                name="inv_from_date" required id="inv_from_date" value="{{ isset($duty_info->from_date) && !empty( $duty_info->from_date ) ? date('d-m-Y', strtotime($duty_info->from_date)) : ''  }}" />
+                name="inv_from_date" required id="inv_from_date" type="date" value="{{ $duty_info->from_date ?? '' }}" />
             <!--end::Datepicker-->
         </div>
         <!--end::Input-->
@@ -151,8 +151,7 @@
             </span>
          
             <input class="form-control form-control-solid ps-12" placeholder="Select a date"
-                name="inv_to_date" required id="inv_to_date" value="{{ isset($duty_info->to_date) && !empty( $duty_info->to_date ) ? date('d-m-Y', strtotime($duty_info->to_date)) : '' }}" />
-            
+                name="inv_to_date" type="date" required id="inv_to_date" value="{{ $duty_info->to_date ?? '' }}" />
         </div>
         <!--end::Input-->
     </div>
@@ -195,13 +194,13 @@
 <script>
     $(function() {
         
-        $("#inv_from_date").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#inv_from_date").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
 
-        $("#inv_to_date").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#inv_to_date").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
 
     });
 

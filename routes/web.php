@@ -217,7 +217,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('appointment-order/add/{id?}', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'add_edit'])->name('appointment.orders.add');
     Route::post('appointment-order/save', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'save'])->name('appointment.orders.save');
 
-    Route::get('scheme/add/{id?}', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'add_edit'])->name('appointment.scheme.add');
+    Route::get('scheme/add/{id?}', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'add_edit'])->name('attendance.scheme.add');
 
     //permission routes start
     Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission')->middleware(['checkAccess:view']); 
@@ -241,10 +241,12 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('payroll/overview/month',[App\Http\Controllers\PayrollManagement\OverviewController::class,'getMonthData'])->name('payroll.get.month.chart');
 
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
-    Route::get('salary/creation',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
+    Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
     Route::post('salary/creation_add',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryAdd'])->name('salary.creation_add');
     Route::post('salary/get/staff',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryInfo'])->name('salary.get.staff');
-
+    Route::post('salary/get/view',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryModalView'])->name('salary.modal.view');
+    Route::get('salary/download/preview/{staff_id}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'downloadSalaryPreviewPdf'])->name('salary.preview.pdf');
+    
     Route::get('salary/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'index'])->name('salary.loan');
     Route::post('salary/save/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'save'])->name('save.loan');
     Route::post('salary/get/form/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'getFormAndList'])->name('ajax-view.loan');

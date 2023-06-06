@@ -5,8 +5,8 @@
         <label class="required fs-6 fw-bold mb-2"> Date </label>
         <div class="position-relative d-flex align-items-center">
             {!! dobSvg() !!}
-            <input class="form-control ps-12" placeholder="Select a date" name="medic_remark_date" id="medic_remark_date"
-                value="{{ isset($remark_info->medic_date) ? date('d-m-Y', strtotime($remark_info->medic_date)) : '' }}" />
+            <input class="form-control ps-12" placeholder="Select a date" type="date" name="medic_remark_date" id="medic_remark_date"
+                value="{{ $remark_info->medic_date ?? '' }}" />
         </div>
     </div>
 

@@ -8,6 +8,7 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
 use App\Models\User;
 use Illuminate\Http\Request;
+use PDF;
 
 class SalaryCreationController extends Controller
 {
@@ -22,9 +23,18 @@ class SalaryCreationController extends Controller
                 ),
             )
         );
+        $staff_id = $request->staff_id ?? '';
+        if( $staff_id ) {
+            $salary_info = StaffSalary::where('staff_id', $staff_id)->first();
+            $salary_heads = SalaryHead::where('status', 'active')->get();
+        } else {
+            $salary_info = '';
+            $salary_heads = '';
+        }
+
         $employees = User::where('status', 'active')->whereNull('is_super_admin')->get();
         $salary_heads = SalaryHead::where('status', 'active')->get();
-        return view('pages.payroll_management.salary_creation.index', compact('breadcrums', 'employees', 'salary_heads'));
+        return view('pages.payroll_management.salary_creation.index', compact('breadcrums', 'employees', 'salary_heads', 'staff_id', 'salary_info', 'salary_heads'));
 
     }
 
@@ -92,7 +102,12 @@ class SalaryCreationController extends Controller
         } else {
             $error = 'Error while setting Salary Fields';
         }
-        return redirect('/salary/creation')->with('status', $error);
+        if( $request->from ) {
+            return redirect('staff/register/'.$staff_id)->with('status', $error);
+        } else {
+
+            return redirect('/salary/creation')->with('status', $error);
+        }
 
     }
 
@@ -104,4 +119,35 @@ class SalaryCreationController extends Controller
         $salary_heads = SalaryHead::where('status', 'active')->get();
         return view('pages.payroll_management.salary_creation.fields', compact('salary_heads', 'salary_info' ) );
     }
+
+    public function salaryModalView(Request $request)
+    {
+        $staff_id = $request->staff_id;
+        $staff_info = User::find($staff_id);
+        $salary_info = StaffSalary::where('staff_id', $staff_id)->first();
+        $salary_heads = SalaryHead::where('status', 'active')->get();
+        $title = 'Salary Preview';
+
+        return view('pages.payroll_management.salary_creation._modal_view_salary', compact('salary_info', 'salary_heads', 'title', 'staff_info'));
+
+    }
+
+    public function downloadSalaryPreviewPdf(Request $request)
+    {
+        $staff_id = $request->staff_id;
+        $staff_info = User::find($staff_id);
+        $salary_info = StaffSalary::where('staff_id', $staff_id)->first();
+        $salary_heads = SalaryHead::where('status', 'active')->get();
+        $pdf = PDF::loadView('pages.payroll_management.salary_creation._salary_slip',array('staff_info' => $staff_info, 'salary_info' => $salary_info))->setPaper('a4', 'portrait');
+        // download PDF file with download method
+        if ($salary_info->salary_month && !empty($salary_info->salary_month)) {
+
+            $file_name = $salary_info->salary_month.'_'.$salary_info->salary_year.'_salary.pdf';
+        } else {
+            $file_name = date('d-M-Y', strtotime($salary_info->created_at)).'_salary.pdf';
+        }
+        
+        return $pdf->stream($file_name);
+    }
+
 }

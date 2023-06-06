@@ -25,7 +25,7 @@
         </label>
         <div class="position-relative">
             <select name="working_relationship_type_id" autofocus id="working_relationship_type_id"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg" required>
                 <option value="">--Select Reletionship Type --</option>
                 @isset($relation_types)
                     @foreach ($relation_types as $item)

@@ -2,6 +2,7 @@
 
 use App\Models\AcademicYear;
 use App\Models\Leave\StaffLeave;
+use App\Models\Master\Institution;
 use App\Models\Master\Society;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\User;
@@ -14,35 +15,44 @@ if (!function_exists('getStaffEmployeeCode')) {
         $society_code = $society->code;
         $year = date('Y');
         $countNo = '0000';
-        $new_emp_code = $society_code.$year.$countNo;
-        $codes = DB::table('users')->where('society_emp_code', $new_emp_code)->first();
+        $new_emp_code = $society_code.'/'.$year.$countNo;
+        // $codes = DB::table('users')->where('society_emp_code', $new_emp_code)->orderBY('society_emp_code','desc')->first();
+        $codes = DB::table('users')->orderBY('society_emp_code','desc')->first();
         if( $codes ) {
-            $emp_code = substr($codes->society_emp_code, -4);
-            $emp_code = (int)$emp_code + 1;
-
+            $emp_code = explode('/', $codes->society_emp_code);
+            $society_code = $emp_code[0];
+            $emp_code = $emp_code[1];
+            $emp_code = substr($emp_code, -4);
+            $emp_code = $emp_code + 1;
+            
             if( (4 - strlen($emp_code)) > 0 ) {
                 $new_no = '';
                 for($i = 0; $i < (4-strlen($emp_code)); $i++) {
                     $new_no .= '0';
                 }
                 $order_no = $new_no . $emp_code;
-                $new_emp_code = $society_code.$year.$order_no;
+                $new_emp_code = $society_code.'/'.$year.$order_no;
+            } else {
+                $new_emp_code = $society_code.'/'.$year.$emp_code;
             }
         }   
+        
         return $new_emp_code;
     }
 }
 
 if (!function_exists('getStaffInstitutionCode')) {
-    function getStaffInstitutionCode($institute_code)
+    function getStaffInstitutionCode($institute_id)
     {
+        $institute_code = Institution::find($institute_id);
         $year = date('Y');
         $countNo = '0000';
-        $new_emp_code = $institute_code.$year.$countNo;
-        $codes = DB::table('users')->where('institute_emp_code', $new_emp_code)->first();
+        $new_emp_code = $institute_code->code.$countNo;
+        $codes = DB::table('users')->orderBy('institute_emp_code', 'desc')->first();
         if( $codes ) {
             $emp_code = substr($codes->institute_emp_code, -4);
-            $emp_code = (int)$emp_code + 1;
+            
+            $emp_code = $emp_code + 1;
 
             if( (4 - strlen($emp_code)) > 0 ) {
                 $new_no = '';
@@ -50,7 +60,9 @@ if (!function_exists('getStaffInstitutionCode')) {
                     $new_no .= '0';
                 }
                 $order_no = $new_no . $emp_code;
-                $new_emp_code = $institute_code.$year.$order_no;
+                $new_emp_code = $institute_code->code.$order_no;
+            } else {
+                $new_emp_code = $institute_code->code.$emp_code;
             }
         }   
         return $new_emp_code;

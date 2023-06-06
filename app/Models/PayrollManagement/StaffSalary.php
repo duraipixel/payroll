@@ -29,4 +29,14 @@ class StaffSalary extends Model
         return $this->hasMany(StaffSalaryField::class, 'staff_salary_id', 'id');
     }
 
+    public function earnings()
+    {
+        return $this->hasMany(StaffSalaryField::class, 'staff_salary_id', 'id')->where('reference_type', 'EARNINGS');
+    }
+
+    public function deductions()
+    {
+        return $this->hasMany(StaffSalaryField::class, 'staff_salary_id', 'id')->where('reference_type', 'DEDUCTIONS');
+    }
+
 }

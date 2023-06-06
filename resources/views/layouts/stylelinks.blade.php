@@ -21,6 +21,10 @@
         filter: blur(3px);
     }
 
+    #kt_dynamic_app {
+        z-index: 3000 !important;
+    }
+
     div#staff-loading {
         position: fixed;
         top: 0;

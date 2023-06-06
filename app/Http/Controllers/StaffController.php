@@ -114,7 +114,9 @@ class StaffController extends Controller
             ->get();
 
         $institutions = Institution::where('status', 'active')->get();
-        $reporting_managers = ReportingManager::where('is_top_level', 'no')->where('status', 'active')->get();
+        $reporting_managers = ReportingManager::where('status', 'active')
+                            // ->where('is_top_level', 'no')
+                            ->get();
         $divisions = Division::where('status', 'active')->get();
         $classes = Classes::where('status', 'active')->get();
         $duty_classes = DutyClass::where('status', 'active')->get();
@@ -867,7 +869,7 @@ class StaffController extends Controller
             $data = User::select('users.*', 'institutions.name as institute_name')->join('institutions', 'institutions.id', 'users.institute_id')
                         ->when( !empty(session()->get('academic_id')), function($query) {
                             $query->where('users.academic_id', session()->get('academic_id') );
-                        } )->whereNull('is_super_admin');
+                        } )->whereNull('is_super_admin')->orderBy('created_at', 'desc');
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;

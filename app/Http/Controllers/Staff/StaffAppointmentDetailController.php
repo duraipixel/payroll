@@ -77,6 +77,22 @@ class StaffAppointmentDetailController extends Controller
             
             StaffAppointmentDetail::updateOrCreate(['staff_id' => $staff_id], $ins);
 
+            if( canGenerateEmpCode($staff_id) ) {
+                /**
+                 * generate emp code   // society_emp_code, institute_emp_code
+                 */
+                if( !$staff_info->society_emp_code ) {
+
+                    $staff_info->society_emp_code = getStaffEmployeeCode();
+                    $staff_info->save();
+                }
+                if( !$staff_info->institute_emp_code ) {
+
+                    $staff_info->institute_emp_code = getStaffInstitutionCode($staff_info->institute_id);
+                    $staff_info->save();
+                }
+            }
+
             $error      = 0;
             $message    = '';
         } else {

@@ -23,7 +23,7 @@
             <div class="card-header border-0 pt-6">
 
                 <div class="card-title w-100">
-
+                    <input type="hidden" name="from" value="@if( isset( $staff_id ) && !empty($staff_id) ) 'staff' @endif">
                     <div
                         class="d-flex w-100 custom_select align-items-center justify-content-center position-relative my-1 salary-selection">
                         <div class="pe-8">
@@ -34,7 +34,7 @@
                             <option value="">--Select Employee--</option>
                             @isset($employees)
                                 @foreach ($employees as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}" @if( isset( $staff_id ) && $staff_id == $item->id ) selected @endif >{{ $item->name }}</option>
                                 @endforeach
                             @endisset
                         </select>
@@ -43,8 +43,11 @@
                 </div>
             </div>
 
-            <div class="card-body py-4 d-none" id="salary-creation-panel">
+            <div class="card-body py-4 @if( isset( $staff_id ) && !empty( $staff_id ) ) @else d-none @endif" id="salary-creation-panel">
                 {{-- {{dd( $salary_heads[0]->fields )}} --}}
+                @if( isset( $staff_id ) && !empty( $staff_id ) )
+                @include('pages.payroll_management.salary_creation.fields')
+                @endif
             </div>
         </form>
     </div>

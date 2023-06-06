@@ -17,7 +17,7 @@
        
         <label class="form-label required"> Board/University </label>
         <div class="position-relative">
-            <select name="board_id" autofocus id="board_id" class="form-select form-select-lg select2-option" required>
+            <select name="board_id" autofocus id="board_id" class="form-select form-select-lg " required>
                 <option value="">-- Select Board --</option>
                 @isset($boards)
                     @foreach ($boards as $item)
@@ -44,7 +44,7 @@
         <div class="position-relative d-flex align-items-center">
             {!! dobSVG() !!}
             <input class="form-control form-control-solid ps-12" placeholder="Select a date"
-                name="course_completed_year" required id="course_completed_year" value="{{ isset($course_info->course_completed_year) && !empty( $course_info->course_completed_year ) ? date('d-m-Y', strtotime($course_info->course_completed_year)) : ''  }}" />
+                name="course_completed_year" type="date" required id="course_completed_year" value="{{ $course_info->course_completed_year ?? ''  }}" />
         </div>
     </div>
     <!--end::Input group-->
@@ -53,7 +53,7 @@
         <label class="form-label required"> Main Subject </label>
         <div class="position-relative">
             <select name="main_subject_id" autofocus id="main_subject_id"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg " required>
                 <option value="">--Select Main Subject --</option>
                 @isset($subjects)
                     @foreach ($subjects as $item)
@@ -79,7 +79,7 @@
         <label class="form-label required"> Ancillary Subject </label>
         <div class="position-relative">
             <select name="ancillary_subject_id" autofocus id="ancillary_subject_id"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg " required>
                 <option value="">--Select Ancillary Subject --</option>
                 @isset($subjects)
                     @foreach ($subjects as $item)
@@ -114,7 +114,7 @@
         <div class="position-relative d-flex align-items-center">
            {!! dobSVG() !!}
             <input class="form-control form-control-solid ps-12" placeholder="Select a date"
-                name="course_submitted_date" required id="course_submitted_date" value="{{ isset($course_info->submitted_date) && !empty( $course_info->submitted_date ) ? date('d-m-Y', strtotime($course_info->submitted_date)) : ''  }}" />
+                name="course_submitted_date" type="date" required id="course_submitted_date" value="{{ $course_info->submitted_date ?? ''  }}" />
         </div>
     </div>
     <!--end::Input group-->
@@ -125,7 +125,7 @@
         <label class="form-label required"> Type </label>
         <div class="position-relative">
             <select name="course_professional_type" autofocus id="course_professional_type"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg " required>
                 <option value="">--Select Type --</option>
                 @isset($types)
                     @foreach ($types as $item)
@@ -230,17 +230,17 @@
 <script>
     $(function() {
         
-        $("#course_started_year").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#course_started_year").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
 
-        $("#course_completed_year").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#course_completed_year").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
 
-        $("#course_submitted_date").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#course_submitted_date").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
 
     });
 </script>

@@ -5,7 +5,7 @@
         <label class="form-label required"> Institution Name </label>
         <div class="position-relative">
             <select name="experience_institute_name" autofocus id="experience_institute_name"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg" required>
                 <option value="">--Select Institute --</option>
                 @isset($other_schools)
                     @foreach ($other_schools as $item)
@@ -30,7 +30,7 @@
         <label class="form-label required"> Designation </label>
         <div class="position-relative">
             <select name="experience_designation" autofocus id="experience_designation"
-                class="form-select form-select-lg select2-option" required>
+                class="form-select form-select-lg" required>
                 <option value="">--Select Designation --</option>
                 @isset($designation)
                     @foreach ($designation as $item)
@@ -55,7 +55,7 @@
         <div class="position-relative d-flex align-items-center">
             {!! dobSVG() !!}
             <input class="form-control form-control-solid ps-12" placeholder="Select a date"
-                name="experience_from" required id="experience_from" value="{{ isset($experience_info->from) && !empty( $experience_info->from ) ? date('d-m-Y', strtotime($experience_info->from)) : ''  }}" />
+                name="experience_from" type="date" required id="experience_from" value="{{ $experience_info->from ?? '' }}" />
         </div>
     </div>
     <div class="col-lg-6 mb-5">
@@ -63,7 +63,7 @@
         <div class="position-relative d-flex align-items-center">
             {!! dobSVG() !!}
             <input class="form-control form-control-solid ps-12" placeholder="Select a date"
-                name="experience_to" required id="experience_to" value="{{ isset($experience_info->to) && !empty( $experience_info->to ) ? date('d-m-Y', strtotime($experience_info->to)) : ''  }}" />
+                name="experience_to" type="date" required id="experience_to" value="{{ $experience_info->to ?? '' }}" />
         </div>
     </div>
 
@@ -146,13 +146,13 @@
 <script>
     $(function() {
         
-        $("#experience_from").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#experience_from").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
 
-        $("#experience_to").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#experience_to").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
 
     });
 </script>

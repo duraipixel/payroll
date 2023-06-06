@@ -17,15 +17,20 @@ class OverviewController extends Controller
                 ),
             )
         );
-        return view('pages.payroll_management.overview.index', compact('breadcrums'));
+        $date = date('Y-m-d');
+        return view('pages.payroll_management.overview.index', compact('breadcrums', 'date'));
     }
 
     public function getMonthData(Request $request)
     {
         $academic_id = session()->get('academic_id');
         $academic_info = AcademicYear::find($academic_id);
-        dd( $academic_info );
+        
+        $dates = $request->dates;
         $month_no = $request->month_no;
-        return view('pages.payroll_management.overview._ajax_month_view');
+        $params = array(
+            'date' => $dates
+        );
+        return view('pages.payroll_management.overview._ajax_month_view', $params );
     }
 }

@@ -25,6 +25,11 @@
     <div class="card">
         <!--begin::Card body-->
         <div class="card-body">
+            @if (session('status'))
+                <div class="alert alert-success text-center">
+                    {{ session('status') }}
+                </div>
+            @endif
             <!--begin::Stepper-->
             <div id="wizard">
                 <h3>
@@ -204,7 +209,6 @@
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 
     <script>
-
         $('#classes, #reporting_manager_id').select2();
 
 

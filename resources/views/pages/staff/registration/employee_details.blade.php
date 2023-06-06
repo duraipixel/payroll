@@ -266,7 +266,7 @@
 <div id="kt_help" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help" data-kt-drawer-activate="true"
     data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}"
     data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_new_data_toggle_duty"
-    data-kt-drawer-close="#kt_help_close">
+    data-kt-drawer-close="#kt_help_close" style="z-index: 2222;">
     <!--begin::Card-->
     @include('pages.staff.registration.emp_position.add_invigilation')
     <!--end::Card-->
@@ -275,7 +275,7 @@
 <div id="kt_help" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help" data-kt-drawer-activate="true"
     data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}"
     data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_new_data_toggle_train"
-    data-kt-drawer-close="#kt_help_close">
+    data-kt-drawer-close="#kt_help_close"  style="z-index: 2222;">
     <!--begin::Card-->
     @include('pages.staff.registration.emp_position.add_training')
     <!--end::Card-->

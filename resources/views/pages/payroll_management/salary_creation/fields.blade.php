@@ -71,7 +71,7 @@
         </div>
         <div class="form-group mt-5 text-end">
             <button class="btn btn-primary btn-sm" type="submit"> Submit & Lock </button>
-            <a class="btn btn-dark btn-sm" href="{{ route('salary.creation') }}"> Cancel </a>
+            <a class="btn btn-dark btn-sm" href="@if( isset( $staff_id ) && !empty($staff_id) ) {{ route('staff.register', [ 'id' => $staff_id ]) }} @else {{ route('salary.creation') }} @endif"> Cancel </a>
         </div>
 
     </div>

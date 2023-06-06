@@ -28,7 +28,7 @@
             data-kt-drawer-width="{default:'350px', 'md': '725px'}"
             data-kt-drawer-direction="end"
             data-kt-drawer-toggle="#kt_new_family1_toggle"
-            data-kt-drawer-close="#kt_help_close">
+            data-kt-drawer-close="#kt_help_close"  style="z-index: 2222;">
             @include('pages.staff.registration.medical_remarks.medical_form')
         </div>
         <!--end::Help drawer-->

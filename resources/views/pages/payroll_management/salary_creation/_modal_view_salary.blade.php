@@ -24,22 +24,46 @@
         </div>
         <!--end::Modal header-->
         <!--begin::Modal body-->
-        <div class="modal-body py-lg-10 px-lg-10" id="dynamic_content">
-            <!--begin::Stepper-->
-            {!! $content ?? '' !!}
-            <!--end::Stepper-->
+        <div class="modal-body py-lg-10 px-lg-10 py-4">
+            <div class="row">
+                <div class="col-sm-12 py-2 text-end">
+                    {{-- <a href="{{ route('salary.preview.pdf', ['staff_id' => $staff_info->id]) }}" target="_blank" class="btn btn-sm btn-light-success" >
+                        <i class="fa fa-download"></i> PDF
+                    </a> --}}
+                    <a href="javascript:void(0)" onclick="return printDiv('salary_print_area')"
+                        class="btn btn-sm btn-light-success">
+                        <i class="fa fa-print"></i> Print
+                    </a>
+                </div>
+            </div>
+            <div id="salary_print_area">
+
+                @include('pages.payroll_management.salary_creation._salary_slip')
+            </div>
+            <div class="row">
+                <div class="col-sm-12 text-end">
+                    <button class="btn btn-dark" type="button"  onclick="closeModal()"> Close
+                    </button>
+                </div>
+            </div>
         </div>
         <!--end::Modal body-->
     </div>
     <!--end::Modal content-->
 </div>
 <script>
-    $(document).ready(function() {
-        $(window).keydown(function(event) {
-            if (event.keyCode == 13) {
-                event.preventDefault();
-                return false;
-            }
-        });
-    });
+    function printDiv(divName) {
+
+        var toPrint;
+        toPrint=window.open();
+        toPrint.document.write(document.getElementById(divName).innerHTML);
+        toPrint.print();
+        toPrint.close();
+        
+    }
+
+    function closeModal() {
+        console.log('clidkced');
+        $('#kt_dynamic_app').modal('hide');
+    }
 </script>

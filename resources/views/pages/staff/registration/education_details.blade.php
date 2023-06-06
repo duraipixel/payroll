@@ -190,7 +190,7 @@
 <div id="kt_help" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help" data-kt-drawer-activate="true"
     data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}"
     data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_new_data_toggle_educate"
-    data-kt-drawer-close="#kt_help_close">
+    data-kt-drawer-close="#kt_help_close"  style="z-index: 2222;">
     <!--begin::Card-->
     @include('pages.staff.registration.education.course_form')
     <!--end::Card-->
@@ -201,7 +201,7 @@
 <div id="kt_help" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help" data-kt-drawer-activate="true"
     data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}"
     data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_new_data1_toggle"
-    data-kt-drawer-close="#kt_help_close">
+    data-kt-drawer-close="#kt_help_close"  style="z-index: 2222;">
     <!--begin::Card-->
     @include('pages.staff.registration.education.experience_form')
     <!--end::Card-->
@@ -212,7 +212,7 @@
 <div id="kt_help" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help" data-kt-drawer-activate="true"
     data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}"
     data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_new_data1_toggle_1"
-    data-kt-drawer-close="#kt_help_close">
+    data-kt-drawer-close="#kt_help_close"  style="z-index: 2222;">
     <!--begin::Card-->
     @include('pages.staff.registration.education.certificate_form')
     <!--end::Card-->
