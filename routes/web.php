@@ -218,7 +218,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('appointment-order', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'index'])->name('appointment.orders');
     Route::get('appointment-order/add/{id?}', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'add_edit'])->name('appointment.orders.add');
     Route::post('appointment-order/save', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'save'])->name('appointment.orders.save');
-
+    Route::post('appointment-order/view', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'appointmentOrderView'])->name('appointment.orders.view');
+    
     Route::get('scheme/add/{id?}', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'add_edit'])->name('attendance.scheme.add');
 
     //permission routes start

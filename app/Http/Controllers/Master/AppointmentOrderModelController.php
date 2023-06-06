@@ -65,6 +65,16 @@ class AppointmentOrderModelController extends Controller
                 {
                     $edit_btn = '';
                 }
+                if( access()->buttonAccess($route_name,'view') )
+                {
+                    $view_btn = '<a href="javascript:void(0);" onclick="viewAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-info btn-light-primary mx-1 w-30px h-30px" > 
+                                    <i class="fa fa-eye"></i>
+                                </a>';
+                }
+                else
+                {
+                    $view_btn = '';
+                }
                 if( access()->buttonAccess($route_name,'delete') )
                 {
                     $del_btn = '<a href="javascript:void(0);" onclick="deleteAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
@@ -74,7 +84,7 @@ class AppointmentOrderModelController extends Controller
                 {
                     $del_btn = '';
                 }
-                    return $edit_btn . $del_btn;
+                    return $edit_btn . $del_btn . $view_btn;
                 })
                 ->rawColumns(['action', 'status']);
             return $datatables->make(true);
@@ -158,5 +168,12 @@ class AppointmentOrderModelController extends Controller
     public function export()
     {
         return Excel::download(new AppointmentOrderModelExport,'appointment_order.xlsx');
+    }
+    public function appointmentOrderView(Request $request)
+    {
+        $info=AppointmentOrderModel::find($request->id);
+        $title='Appointment Order';
+        $content = view('pages.masters.appointment_order_model.view',compact('info','title'));
+        return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
 }
