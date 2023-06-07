@@ -20,11 +20,11 @@
 </head>
 
 <body id="kt_body" class="app-blank app-blank">
-    <div class="d-flex flex-column flex-root" id="kt_app_root">
+    <div class="d-flex flex-column flex-root" style="min-height: 100%;" id="kt_app_root">
         <!--begin::Authentication - Sign-in -->
         <div class="d-flex flex-column flex-lg-row flex-column-fluid">
             <!--begin::Body-->
-                {{-- <a class="dropdown-item" href="{{ route('logout') }}"
+            {{-- <a class="dropdown-item" href="{{ route('logout') }}"
                    onclick="event.preventDefault();
                                  document.getElementById('logout-form').submit();">
                     {{ __('Logout') }}
@@ -33,37 +33,28 @@
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                     @csrf
                 </form> --}}
-            <div class="d-flex align-items-center w-lg-50 p-10 order-2 order-lg-1">
-                <!--begin::Form-->
-                @yield('content')
-                <!--end::Form-->
-            </div>
-            <!--end::Body-->
-            <!--begin::Aside-->
+
             <div class="d-flex flex-lg-row-fluid w-lg-50 bgi-size-cover bgi-position-center order-1 order-lg-2"
                 style="background-image: url({{ asset('assets/media/misc/auth-bg.png') }})">
-                <!--begin::Content-->
+                
                 <div class="d-flex flex-column flex-center py-7 py-lg-15 px-5 px-md-15 w-100">
-                    <!--begin::Logo-->
-                    <a href="#" class="mb-0 mb-lg-12">
-                        <img alt="Logo" src="{{ asset('assets/media/logos/user-logo.png') }}"
-                            class="h-60px h-lg-75px" />
+                    
+                    <a href="#" class="mb-0 mb-lg-12 text-center">
+                        <img alt="Logo" src="{{ asset('assets/media/logos/user-logo.png') }}" class="w-250px w-xl-400px " />
                     </a>
-                    <!--end::Logo-->
-                    <!--begin::Image-->
-                    <img class="d-none d-lg-block mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20"
-                        src="{{ asset('assets/media/logos/user-logo-1.png') }}" alt="" />
-                    <!--end::Image-->
-                    <!--begin::Title-->
-                    <h1 class="d-none d-lg-block text-white fs-2qx fw-bolder text-center mb-7">FROM STUDENTS TO LEADERS
-                        OF TOMORROW</h1>
-                    <!--end::Title-->
+              
+                    <img class="d-none d-lg-block mx-auto w-250px w-xl-400px mb-10 mb-lg-20" src="{{ asset('assets/media/logos/user-logo-1.png') }}" alt="" />
+                 
+                    <h1 class="d-none d-lg-block text-white fs-1qx fw-bolder text-center mb-7">
+                        FROM STUDENTS TO LEADERS OF TOMORROW
+                    </h1>
                 </div>
-                <!--end::Content-->
             </div>
-            <!--end::Aside-->
+            <div class="d-flex align-items-center w-lg-50 p-10 order-2 order-lg-2">
+                @yield('content')
+            </div>
+           
         </div>
-        <!--end::Authentication - Sign-in-->
     </div>
 </body>
 {{-- <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">

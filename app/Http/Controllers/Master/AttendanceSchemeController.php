@@ -57,7 +57,7 @@ class AttendanceSchemeController extends Controller
                     $edit_btn = '';
                     $del_btn = '';
                     if (access()->buttonAccess($route_name, 'add_edit')) {
-                        $edit_btn = '<a href="' . route('appointment.orders.add', ['id' => $row->id]) . '" class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                        $edit_btn = '<a href="' . route('attendance.scheme.add', ['id' => $row->id]) . '" class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                                     <i class="fa fa-edit"></i>
                                 </a>';
                     }

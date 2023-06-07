@@ -57,7 +57,8 @@
 
                 </div>
                 @if (access()->hasAccess(['overview', 'logs', 'account.settings']))
-                    <div data-kt-menu-trigger="click" class="menu-item menu-accordion @if (request()->routeIs(['overview', 'logs', 'account.settings'])) hover show @endif">
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion @if (request()->routeIs(['overview', 'logs', 'account.settings'])) hover show @endif">
                         <span class="menu-link">
                             <span class="menu-icon">
                                 <!--begin::Svg Icon | path: icons/duotune/communication/com013.svg-->
@@ -202,14 +203,14 @@
                                 </div>
                             @endif
 
-                            <div class="menu-item">
+                            {{-- <div class="menu-item">
                                 <a class="menu-link" href="javascript:void(0)">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
                                     <span class="menu-title">Staff Transfer</span>
                                 </a>
-                            </div>
+                            </div> --}}
 
                             @if (access()->hasAccess('staff.bulk', 'view'))
                                 <div class="menu-item">
@@ -225,41 +226,38 @@
                         </div>
                     </div>
                 @endif
+                @if (access()->hasAccess(['announcement']))
+                    <div class="menu-item ">
+                        <span class="menu-link @if (request()->routeIs(['announcement'])) active @endif">
+                            <span class="menu-icon">
 
-                <div class="menu-item ">
-                    <span class="menu-link @if (request()->routeIs(['announcement'])) active @endif">
-                        <span class="menu-icon">
+                                <i class="fa fa-bullhorn"></i>
 
-                            <i class="fa fa-bullhorn"></i>
+                            </span>
+                            <span class="menu-title">
+                                <a class="text-white" href="{{ route('announcement') }}">
+                                    Announcement</span>
+                            </a>
 
                         </span>
-
-
-                        <span class="menu-title">
-                            <a class="text-white" href="{{ route('announcement') }}">
-                                Announcement</span>
-                        </a>
-
-                    </span>
-                </div>
-
+                    </div>
+                @endif
+                @if (access()->hasAccess(['appointment.orders']))
                 <div class="menu-item ">
                     <span class="menu-link @if (request()->routeIs(['appointment.orders'])) active @endif">
                         <span class="menu-icon">
-
                             <i class="fa fa-file"></i>
-
                         </span>
-
 
                         <span class="menu-title">
                             <a class="text-white" href="{{ route('appointment.orders') }}">
                                 Appointment Orders</span>
                         </a>
-
                     </span>
                 </div>
+                @endif
                 {{-- Reporting Structure --}}
+                @if (access()->hasAccess(['reporting.list']))
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion @if (request()->routeIs(['reporting.list'])) hover show @endif">
                     <span class="menu-link">
@@ -281,6 +279,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 @if (access()->hasAccess(['user.document_locker']))
                     <!-- Document locker Start-->
                     <div data-kt-menu-trigger="click"
@@ -304,13 +303,13 @@
                                     </a>
                                 </div>
                             @endif
-                            
+
                         </div>
                     </div>
                     <!-- Document locker End-->
                 @endif
 
-
+                
                 @if (access()->hasAccess(['att-manual-entry', 'scheme', 'appointment.orders.add']))
                     <div data-kt-menu-trigger="click"
                         class="menu-item menu-accordion @if (request()->routeIs(['att-manual-entry', 'scheme', 'appointment.orders.add'])) hover show @endif">
@@ -599,6 +598,7 @@
 
                     </div>
                 @endif
+                @if (access()->hasAccess(['salary-head']))
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                     <span class="menu-link">
                         <span class="menu-icon">
@@ -627,8 +627,8 @@
                             </a>
                         </div>
                     </div>
-
                 </div>
+                @endif
                 {{-- Block Mapping Start --}}
                 {{-- @if (access()->hasAccess(['blocks']))
                     <div data-kt-menu-trigger="click"

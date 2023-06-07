@@ -125,8 +125,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/staff/change/status', [App\Http\Controllers\StaffController::class, 'changeStatus'])->name('staff.change.status');
     Route::get('/staff/generate/overview', [App\Http\Controllers\StaffController::class, 'generateOverviewPdf'])->name('staff.generate.overview');
 
-    Route::get('/leaves', [App\Http\Controllers\Leave\LeaveController::class, 'index'])->name('leaves.list'); 
-    Route::get('/leaves/overview', [App\Http\Controllers\Leave\LeaveController::class, 'overview'])->name('leaves.overview'); 
+    Route::get('/leaves', [App\Http\Controllers\Leave\LeaveController::class, 'index'])->name('leaves.list')->middleware(['checkAccess:view']); 
+    Route::get('/leaves/overview', [App\Http\Controllers\Leave\LeaveController::class, 'overview'])->name('leaves.overview')->middleware(['checkAccess:view']); 
     Route::post('/leaves/staff/info', [App\Http\Controllers\Leave\LeaveController::class, 'getStaffLeaveInfo'])->name('leaves.staff.info'); 
     Route::get('/working/days', [App\Http\Controllers\Leave\LeaveController::class, 'setWorkingDays'])->name('leaves.set.workingday'); 
     Route::post('/leaves/add', [App\Http\Controllers\Leave\LeaveController::class, 'addEditModal'])->name('leaves.add_edit'); 
@@ -143,7 +143,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/reporting/manager/change/modal', [App\Http\Controllers\ReportingController::class, 'openChangeManagerModal'])->name('reporting.manager.change.modal'); 
     
     //Document Locker Start    
-    Route::get('/user/document_locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker'); 
+    Route::get('/user/document_locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker')->middleware(['checkAccess:view']); 
     Route::post('/user/search_staff', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'searchData'])->name('user.search_staff'); 
     Route::post('/user/show_options', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'showOptions'])->name('user.show_options'); 
     Route::get('autocomplete-search', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'autocompleteSearch'])->name('autocomplete-search'); 
