@@ -146,7 +146,9 @@
 
     <script>
         $(document).ready(function() {
-            $('#employee_type').select2();
+            $('#employee_type').select2({
+                theme: 'bootstrap-5',
+            });
             $('#content').on('keydown', function(event) {
                 if (event.which == 121) {
                     $(this).toggleClass('tamil');
@@ -333,12 +335,12 @@
                     start_date: start_date,
                     end_date: end_date
                 },
-                beforeSend: function(){
+                beforeSend: function() {
                     $('#dashboard_view').addClass('blur_loading_3px');
                 },
                 success: function(res) {
                     $('#dashboard_view').removeClass('blur_loading_3px');
-                    $('#dashboard_view').html( res );
+                    $('#dashboard_view').html(res);
                 }
             })
         }

@@ -1,3 +1,4 @@
+
 <script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/scripts.bundle.js') }}"></script>
 <script src="{{ asset('assets/js/jquery.js') }}"></script>

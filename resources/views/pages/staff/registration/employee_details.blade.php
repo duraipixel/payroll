@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 mb-5">
-                    <label class="form-label required">Division</label>
+                    <label class="form-label">Division</label>
                     <div class="position-relative">
                         <select name="division_id" id="division_id" class="form-select form-select-lg ">
                             <option value="">--Select Division--</option>
@@ -654,15 +654,13 @@
             var key_name = [
                 'designation_id',
                 'department_id',
-                'division_id',
                 'scheme_id'              
             ];
         } else {
 
             var key_name = [
                 'designation_id',
-                'department_id',
-                'division_id',
+                'department_id',                
                 'subject',
                 'scheme_id',
                 'classes'              

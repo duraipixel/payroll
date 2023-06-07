@@ -2605,12 +2605,16 @@ progress {
 .form-control[type=file]:not(:disabled):not([readonly]) {
   cursor: pointer;
 }
-
+.form-control::placeholder {
+  color: #5E6278 !important;
+  font-weight: normal !important;
+  font-size: 12px;
+}
 .form-control:focus {
   color: #5E6278;
   background-color: #ffffff;
   border-color: #3C8BC4;
-  border-width: 2px;
+  border-width: 1px;
   outline: 0;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 0 0.25rem rgba(0, 158, 247, 0.25);
 }
@@ -2773,7 +2777,7 @@ textarea.form-control-lg {
 }
 
 .form-select {
-  display: block;
+  display: inline-block;
   width: 100%;
   padding: 0.75rem 3rem 0.75rem 1rem;
   -moz-padding-start: calc(1rem - 3px);
@@ -53758,7 +53762,7 @@ body {
   .header-fixed .header.maa-header {
     top: 0;
     height: 65px;
-    background-color: #083c90;
+    background-color: #1b49a3;
   }
 
   .header-fixed .header {
@@ -53926,7 +53930,7 @@ body {
 }
 
 .aside.aside-dark {
-  background-color: #083c90;
+  background-color: #252525;
 }
 
 .aside.aside-dark .aside-logo {
@@ -53991,7 +53995,7 @@ body {
     top: 0;
     bottom: 0;
     left: 0;
-    z-index: 101;
+    z-index: 999999;
     overflow: hidden;
   }
 
@@ -54301,7 +54305,7 @@ body {
 .aside-dark .menu .menu-item.hover:not(.here)>.menu-link:not(.disabled):not(.active):not(.here),
 .aside-dark .menu .menu-item:not(.here) .menu-link:hover:not(.disabled):not(.active):not(.here) {
   transition: color 0.2s ease, background-color 0.2s ease;
-  background-color: #1049a5;
+  background-color: #37383a;
   color: #ffffff;
 }
 
@@ -54406,7 +54410,7 @@ body {
 
 .aside-dark .menu .menu-item .menu-link.active {
   transition: color 0.2s ease, background-color 0.2s ease;
-  background-color: #1049a5;
+  background-color: #37383a;
   color: #ffffff;
 }
 
@@ -54880,9 +54884,31 @@ body {
   font-size: 11px;
   color: #ddd !important;
 }
-.select2-container {   
- 
-  width:100% !important;
+
+.w-200px {
+  width: 200px !important;
+}
+
+.w-200px .select2 {
+  width: 200px !important;
+}
+
+.select2-selection {
+  box-shadow: none !important;
+}
+
+.select2-container--bootstrap-5 .select2-selection {
+  border: 1px solid #E4E6EF !important;
+}
+
+.select2 {
+  min-width: 100px !important
+}
+
+.select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 #ui-datepicker-div {
@@ -54893,29 +54919,37 @@ body {
   /* z-index: 2085 !important; */
 }
 
+.select2 .selection {
+  display: flex !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.input-group .select2-container--bootstrap-5 {
+  flex-grow: unset !important
+}
+
 .custom_select .select2-selection {
-    height: 40px !important;
-    border-radius:15px !important;
-    border-color: #009ef752 !important;
+  height: 40px !important;
+  border-radius: 0.475rem !important;
+  border-color: #E4E6EF !important
 }
 
 .custom_select .select2-selection__rendered {
-    margin-top: 2px !important;
-    font-size: 15px !important;
-    padding: 3px !important;
-    color: #083c90 !important;
-    font-weight:bold !important;
-    margin-left: 10px !important;
+  margin-top: 2px !important;
+  font-size: 15px !important;
+  padding: 3px !important;
+  margin-left: 10px !important;
 }
 
 .custom_select .select2-selection__arrow {
-    margin-top:5px !important;
-    margin-right: 3px !important;
-    
+  margin-top: 5px !important;
+  margin-right: 3px !important;
+
 }
 
 .custom_select .select2-selection__arrow b {
-   border-color: #03A9F4 transparent transparent transparent !important;    
+  border-color: #03A9F4 transparent transparent transparent !important;
 }
 
 .payroll_month {
@@ -54923,14 +54957,16 @@ body {
   width: 7.5%;
   text-align: center;
 }
+
 .payroll_month .month_name {
   font-weight: bold;
   color: gray;
   padding: 3px;
 }
+
 .payroll_month .year {
   color: #a3b3c8;
-  padding: 3px;    
+  padding: 3px;
 }
 
 
@@ -54942,10 +54978,12 @@ body {
   border-radius: 6px;
   caret-color: transparent;
 }
-.payroll_month.active .month_name{
+
+.payroll_month.active .month_name {
   color: #fff;
 }
-.payroll_month.active .year{
+
+.payroll_month.active .year {
   color: #fff;
 }
 

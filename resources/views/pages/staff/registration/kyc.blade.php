@@ -12,8 +12,8 @@
                     <div class="position-relative d-flex align-items-center">
                         {!! dobSVG() !!}
                         <input class="form-control  ps-12" autocomplete="off" placeholder="Select a date"
-                            name="date_of_birth" id="date_of_birth" autofocus
-                            value="{{ isset($staff_details->personal) ? date('d-m-Y', strtotime($staff_details->personal->dob)) : null }}" />
+                            name="date_of_birth" id="date_of_birth" autofocus type="date"
+                            value="{{ $staff_details->personal->dob ?? '' }}" />
                     </div>
                 </div>
                 <div class="mb-5 col-lg-4 fv-row">
@@ -50,12 +50,12 @@
                     </select>
                 </div>
                 <div class="col-md-4 fv-row mb-5" id="marriage_data" @if (isset($staff_details->personal) && $staff_details->personal->marital_status == 'married') style="display:block" @else style="display:none;" @endif>
-                    <label class="fs-6 fw-bold mb-2">Marriage Date</label>
+                    <label class="fs-6 fw-bold mb-2 required">Marriage Date</label>
                     <div class="position-relative d-flex align-items-center">
                         {!! dobSVG() !!}
-                        <input class="form-control  ps-12" placeholder="Select a date" name="marriage_date"
+                        <input class="form-control  ps-12" type="date" placeholder="Select a date" name="marriage_date"
                             id="marriage_date"
-                            value="{{ isset($staff_details->personal->marriage_date) ? date('d-m-Y', strtotime($staff_details->personal->marriage_date)) : '' }}" />
+                            value="{{ $staff_details->personal->marriage_date ?? '' }}" />
                     </div>
                 </div>
                 <div class="col-lg-4 mb-5">

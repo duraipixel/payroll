@@ -43,11 +43,13 @@ return [
         'staff.register' => 'Register',
         'staff.list' => 'Staff List',
         'staff.bulk' => 'Bulk Upload',
+        'reporting' => 'Reporting Manager',
     ],
     'document_locker' => [
         'user.document_locker' => 'List',
         //'Details' => 'Details',
     ],
+    
     'block_mapping' => [
         'blocks' => 'Blocks',
     ],

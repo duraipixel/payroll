@@ -52,6 +52,10 @@ class AttendanceSchemeController extends Controller
                     $timings = Carbon::parse($row->start_time)->format('H:i A').' - '.Carbon::parse($row->end_time)->format('H:i A');
                     return $timings;
                 })
+                ->editColumn('totol_hours', function($row) {
+                    $totol_hours = Carbon::parse($row->totol_hours)->format('H:i');
+                    return $totol_hours;
+                })
                 ->addColumn('action', function ($row) {
                     $route_name = request()->route()->getName();
                     $edit_btn = '';
@@ -97,6 +101,7 @@ class AttendanceSchemeController extends Controller
             $ins['late_cutoff_time'] = $request->late_cutoff_time ? '00:' . $request->late_cutoff_time : null;
             $ins['permission_cutoff_time'] = $request->permission_cutoff_time ? '00:' . $request->permission_cutoff_time : null;
             $ins['status'] = $request->status;
+            
             $data = AttendanceScheme::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
@@ -164,7 +169,7 @@ class AttendanceSchemeController extends Controller
         $title='Attendance Scheme';
         $content = view('pages.masters.scheme.view',compact('info','title'));
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
-       // return view('pages.masters.scheme.view', compact('scheme_data'));
+       
 
     }
 }

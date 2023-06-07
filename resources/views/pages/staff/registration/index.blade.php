@@ -8,6 +8,7 @@
         <script>
             var formStep = '{{ $step }}';
             formStep = parseInt(formStep) - 1;
+            // formStep = 0;
         </script>
     @else
         <script>
@@ -152,7 +153,7 @@
         }
 
         async function checkGoFurther(form_no) {
-            console.log(form_no, 'form_no');
+            
             switch (form_no) {
                 case 0:
                     return await validatePersonalForm();
