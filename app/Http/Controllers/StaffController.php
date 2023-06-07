@@ -115,8 +115,8 @@ class StaffController extends Controller
 
         $institutions = Institution::where('status', 'active')->get();
         $reporting_managers = ReportingManager::where('status', 'active')
-                            // ->where('is_top_level', 'no')
-                            ->get();
+            // ->where('is_top_level', 'no')
+            ->get();
         $divisions = Division::where('status', 'active')->get();
         $classes = Classes::where('status', 'active')->get();
         $duty_classes = DutyClass::where('status', 'active')->get();
@@ -204,7 +204,7 @@ class StaffController extends Controller
             'place_of_works' => $place_of_works ?? [],
             'order_models' => $order_models ?? [],
         );
-        
+
         return view('pages.staff.registration.index', $params);
     }
 
@@ -216,11 +216,11 @@ class StaffController extends Controller
         $validator      = Validator::make($request->all(), [
             'institute_name' => 'required',
             'name' => 'required',
-            'email' => 'required|string|unique:users,email,' . $id,           
+            'email' => 'required|string|unique:users,email,' . $id,
             'previous_code' => 'required'
             // 'previous_code' => 'required|string|unique:users,emp_code,'.$id,
         ]);
-      
+
         if ($validator->passes()) {
 
             $academic_id = academicYearId();
@@ -230,18 +230,18 @@ class StaffController extends Controller
             $ins['institute_id'] = $request->institute_name;
             $ins['academic_id'] = $academic_id;
             $ins['emp_code'] = $request->previous_code;
-            $ins['locker_no'] = 'AMIDL'.$request->previous_code;
+            $ins['locker_no'] = 'AMIDL' . $request->previous_code;
             $ins['first_name_tamil'] = $request->first_name_tamil;
             $ins['short_name'] = $request->short_name;
             // $ins['division_id'] = $request->division_id;
             $ins['reporting_manager_id'] = $request->reporting_manager_id;
             $ins['status'] = 'active';
             $ins['addedBy'] = auth()->id();
-          
-            
+
+
 
             $data = User::updateOrCreate(['emp_code' => $request->previous_code], $ins);
-           
+
             if ($request->aadhar_name && !empty($request->aadhar_name)) {
                 $aadhar_id = DocumentType::where('name', 'Adhaar')->first();
                 $ins_aa = [];
@@ -566,11 +566,11 @@ class StaffController extends Controller
                 $staff_info->image = $filename;
                 $staff_info->save();
             }
-            
+
             // profile_image
             StaffPersonalInfo::updateOrCreate(['staff_id' => $id], $ins);
-            
-            if (!empty($request->uan_no) && $request->is_uan == 'yes' ) {
+
+            if (!empty($request->uan_no) && $request->is_uan == 'yes') {
 
                 $insEsi['academic_id'] = $academic_id;
                 $insEsi['staff_id'] = $id;
@@ -649,20 +649,20 @@ class StaffController extends Controller
 
     public function insertEmployeePosition(Request $request)
     {
-        
+
         #subjectid_classid
         $id = $request->id ?? '';
         $global_is_teaching = $request->global_is_teaching;
         $data = '';
         $validateArray = [
-                            'designation_id' => 'required',
-                            'department_id' => 'required',
-                            'subject' => 'required',
-                            'scheme_id' => 'required',
-                            'class_id' => 'required',
-                            'division_id' => 'required',
-                        ];
-        if( $global_is_teaching ) {
+            'designation_id' => 'required',
+            'department_id' => 'required',
+            'subject' => 'required',
+            'scheme_id' => 'required',
+            'class_id' => 'required',
+            'division_id' => 'required',
+        ];
+        if ($global_is_teaching) {
             $validateArray = [
                 'designation_id' => 'required',
                 'department_id' => 'required',
@@ -671,7 +671,7 @@ class StaffController extends Controller
             ];
         }
 
-        $validator      = Validator::make($request->all(), $validateArray );
+        $validator      = Validator::make($request->all(), $validateArray);
 
         if ($validator->passes()) {
 
@@ -866,16 +866,36 @@ class StaffController extends Controller
         );
         if ($request->ajax()) {
 
-            $data = User::select('users.*', 'institutions.name as institute_name')->join('institutions', 'institutions.id', 'users.institute_id')
-                        ->when( !empty(session()->get('academic_id')), function($query) {
-                            $query->where('users.academic_id', session()->get('academic_id') );
-                        } )->whereNull('is_super_admin')->orderBy('created_at', 'desc');
+
+            $data = User::select('users.*', 'institutions.name as institute_name')
+                ->join('institutions', 'institutions.id', 'users.institute_id')
+                ->when(!empty(session()->get('academic_id')), function ($query) {
+                    $query->where('users.academic_id', session()->get('academic_id'));
+                })->whereNull('is_super_admin');
+ /*
+            $subquery = User::select('users.*', 'institutions.name as institute_name')
+                ->join('institutions', 'institutions.id', 'users.institute_id')
+                ->where('users.academic_id', session()->get('academic_id'))
+                ->whereNull('is_super_admin')
+                ->getQuery();
+
+            $countQuery = DB::table(DB::raw("({$subquery->toSql()}) as count_row_table"))
+                ->select(DB::raw('count(*) as aggregate'))
+                ->mergeBindings($subquery)
+                ->first();
+
+            $data = DB::table(DB::raw("({$subquery->toSql()}) as count_row_table"))
+                ->select('count_row_table.*', 'count_row_table.institute_name')
+                ->mergeBindings($subquery)
+                ->orderBy('count_row_table.created_at', 'desc')
+                ->get(); */
+
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
             $datatables =  Datatables::of($data)
                 ->filter(function ($query) use ($keywords, $status) {
-                    
+
                     if ($keywords) {
                         $date = date('Y-m-d', strtotime($keywords));
                         return $query->where(function ($q) use ($keywords, $date) {
@@ -913,32 +933,26 @@ class StaffController extends Controller
                 })
 
                 ->editColumn('created_at', function ($row) {
-                    $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
+                    $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at)->format('d-m-Y');
                     return $created_at;
                 })
 
                 ->addColumn('action', function ($row) {
-                    $route_name = request()->route()->getName(); 
-                    if( access()->buttonAccess($route_name,'add_edit') )
-                    {
+                    $route_name = request()->route()->getName();
+                    if (access()->buttonAccess($route_name, 'add_edit')) {
                         $edit_btn = '<a href="' . route('staff.register', ['id' => $row->id]) . '"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                         <i class="fa fa-edit"></i>
                         </a>';
-                    }
-                    else
-                    {
+                    } else {
                         $edit_btn = '';
                     }
-                    if( access()->buttonAccess($route_name,'delete') )
-                    {
+                    if (access()->buttonAccess($route_name, 'delete')) {
                         $del_btn = '<a href="javascript:void(0);" onclick="deleteStaff(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                         <i class="fa fa-trash"></i></a>';
-                    }
-                    else
-                    {
+                    } else {
                         $del_btn = '';
-                    } 
-                    
+                    }
+
                     $view_btn = '<a href="' . route('staff.view', ['user' => $row->id]) . '"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px" > 
                                     <i class="fa fa-eye"></i>
                                 </a>';
@@ -947,10 +961,90 @@ class StaffController extends Controller
                                     <i class="fa fa-print"></i>
                                 </a>';
 
-                    return $edit_btn . $view_btn. $print_btn . $del_btn;
+                    return $edit_btn . $view_btn . $print_btn . $del_btn;
                 })
                 ->rawColumns(['action', 'status', 'verification_status']);
             return $datatables->make(true);
+
+
+            /* $datatables = Datatables::of($data)
+                ->with([
+                    "recordsTotal" => $countQuery->aggregate,
+                    "recordsFiltered" => $countQuery->aggregate
+                ]);
+
+            $status = $request->get('status');
+            $datatable_search = $request->datatable_search ?? '';
+            $keywords = $datatable_search;
+            $datatables->filter(function ($query) use ($keywords, $status) {
+                if ($keywords) {
+                    $date = date('Y-m-d', strtotime($keywords));
+                    return $query->where(function ($q) use ($keywords, $date) {
+
+                        $q->where('users.name', 'like', "%{$keywords}%")
+                            ->orWhere('users.status', 'like', "%{$keywords}%")
+                            ->orWhere('users.email', 'like', "%{$keywords}%")
+                            ->orWhere('users.emp_code', 'like', "%{$keywords}%")
+                            ->orWhere('users.first_name_tamil', 'like', "%{$keywords}%")
+                            ->orWhereDate("users.created_at", $date);
+                    });
+                }
+            });
+
+            $datatables->addIndexColumn()
+                ->editColumn('verification_status', function ($row) {
+                    $status = '
+                            <div class="d-flex align-items-center w-100px w-sm-200px flex-column mt-3">
+                                <div class="d-flex justify-content-between w-100 mt-auto">
+                                    <span class="fw-semibold fs-6 text-gray-400">' . ucwords($row->verification_status) . '</span>
+                                    <span class="fw-bold fs-6">' . getStaffProfileCompilation($row->id) . '%</span>
+                                </div>
+                                <div class="h-5px mx-3 w-100 bg-light">
+                                    <div class="bg-success rounded h-5px" role="progressbar" aria-valuenow="' . getStaffProfileCompilation($row->id) . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . getStaffProfileCompilation($row->id) . '%;"></div>
+                                </div>
+                            </div>';
+                    return $status;
+                })
+                ->editColumn('status', function ($row) {
+                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return staffChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                    return $status;
+                })
+                ->editColumn('institute_name', function ($row) {
+                    return $row->institute->name ?? '';
+                })
+                ->editColumn('created_at', function ($row) {
+                    $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at)->format('d-m-Y');
+                    return $created_at;
+                })
+                ->addColumn('action', function ($row) {
+                    $route_name = request()->route()->getName();
+                    if (access()->buttonAccess($route_name, 'add_edit')) {
+                        $edit_btn = '<a href="' . route('staff.register', ['id' => $row->id]) . '"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                                <i class="fa fa-edit"></i>
+                                </a>';
+                    } else {
+                        $edit_btn = '';
+                    }
+                    if (access()->buttonAccess($route_name, 'delete')) {
+                        $del_btn = '<a href="javascript:void(0);" onclick="deleteStaff(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                                <i class="fa fa-trash"></i></a>';
+                    } else {
+                        $del_btn = '';
+                    }
+
+                    $view_btn = '<a href="' . route('staff.view', ['user' => $row->id]) . '"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px" > 
+                                            <i class="fa fa-eye"></i>
+                                        </a>';
+
+                    $print_btn = '<a target="_blank" href="' . route('staff.print', ['user' => $row->id]) . '"  class="btn btn-icon btn-active-info btn-light-dark mx-1 w-30px h-30px" > 
+                                            <i class="fa fa-print"></i>
+                                        </a>';
+
+                    return $edit_btn . $view_btn . $print_btn . $del_btn;
+                })
+                ->rawColumns(['action', 'status', 'verification_status']);
+
+            return $datatables->make(true); */
         }
         return view('pages.staff.list', compact('breadcrums'));
     }
@@ -969,14 +1063,14 @@ class StaffController extends Controller
     {
         // retreive all records from db
         $data = User::all();
-        $pdf = PDF::loadView('pages.staff.pdf.staff_overview',array('data' => $data))->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('pages.staff.pdf.staff_overview', array('data' => $data))->setPaper('a4', 'landscape');
         // download PDF file with download method
         return $pdf->download('pdf_file.pdf');
     }
 
     public function view(Request $request, User $user)
     {
-        
+
         $breadcrums = array(
             'title' => 'Staff Details',
             'breadcrums' => array(
@@ -984,7 +1078,7 @@ class StaffController extends Controller
                 array('link' => '', 'title' => 'Staff Details')
             )
         );
-        
+
         $info = $user;
         return view('pages.overview.index', compact('info', 'breadcrums'));
     }

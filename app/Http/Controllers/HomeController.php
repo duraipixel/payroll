@@ -38,20 +38,27 @@ class HomeController extends Controller
         $month = date('m');
         $end = date('t');
 
-        $dob = StaffPersonalInfo::whereRaw("DATE_FORMAT(dob, '%m-%d') >= '".$month."-01' and DATE_FORMAT(dob, '%m-%d') <= '".$month."-".$end."'")
+        $dob = StaffPersonalInfo::whereRaw("CONVERT(VARCHAR(5), dob, 110) >= '".$month."-01' and CONVERT(VARCHAR(5), dob, 110) <= '".$month."-".$end."'")
                 ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
                 ->when(session()->get('staff_institute_id'), function($q) {
                     $q->where('users.institute_id', session()->get('staff_institute_id'));
                 })->Academic()
-                ->orderByRaw("DATE_FORMAT(dob, '%m-%d')  > '".date('m')."-".date('d')."' desc")
+                // ->orderByRaw("CONVERT(VARCHAR(5), dob, 110)  > '".date('m')."-".date('d')."' desc")
+                ->orderByRaw("CASE
+                WHEN CONVERT(VARCHAR(5), dob, 110) > '".date('m')."-".date('d')."' THEN 1
+                ELSE 0
+            END DESC;")
                 ->get();
 
-        $anniversary = StaffPersonalInfo::whereRaw("DATE_FORMAT(marriage_date, '%m-%d') >= '".$month."-01' and DATE_FORMAT(marriage_date, '%m-%d') <= '".$month."-".$end."'")
+        $anniversary = StaffPersonalInfo::whereRaw("CONVERT(VARCHAR(5), marriage_date, 110) >= '".$month."-01' and CONVERT(VARCHAR(5), marriage_date, 110) <= '".$month."-".$end."'")
                         ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
                         ->when(session()->get('staff_institute_id'), function($q) {
                             $q->where('users.institute_id', session()->get('staff_institute_id'));
                         })->Academic()
-                        ->orderByRaw("DATE_FORMAT(marriage_date, '%m-%d')  > '".date('m')."-".date('d')."' desc")
+                        ->orderByRaw("CASE
+                WHEN CONVERT(VARCHAR(5), marriage_date, 110) > '".date('m')."-".date('d')."' THEN 1
+                ELSE 0
+            END DESC;")
                         ->get();
 
         $result_month_for = date('1 M, Y').' - '.date('t M, Y');
@@ -64,7 +71,7 @@ class HomeController extends Controller
                             })->Academic()
                             ->get();
 
-        $announcement = Announcement::whereRaw("DATE(created_at) BETWEEN '".$from_date."' and '".$to_date."'")
+        $announcement = Announcement::whereRaw("CAST(created_at AS DATE) BETWEEN '".$from_date."' and '".$to_date."'")
                             ->Academic()
                             ->InstituteBased()
                             ->get();

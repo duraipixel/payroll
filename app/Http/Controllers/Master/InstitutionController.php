@@ -125,7 +125,7 @@ class InstitutionController extends Controller
             $data = Institution::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
-            $code = getStaffInstitutionCode($request->institute_code);
+            $code = getStaffInstitutionCode($id);
 
         } else {
             $error = 1;
