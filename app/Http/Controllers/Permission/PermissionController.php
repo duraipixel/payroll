@@ -9,12 +9,14 @@ use App\Models\Role\Permission;
 
 class PermissionController extends Controller
 {
+
     public function index()
     {
       
         $role=Role::where('status','active')->get();       
         return view('pages.permission.index',compact('role')); 
     }
+
     public function menuList(Request $request)
     {
         if ($request->ajax()) {

@@ -54,6 +54,7 @@ return [
     'attendance_management' => [
         'att-manual-entry' => 'Attendance Manual Entry',
     ],
+    
     'leave_management' => [
         'leaves.list' => 'Request Leave',
         'leave-status' => 'Leave Status',
@@ -72,6 +73,7 @@ return [
     ],
 
     'master_menu' => [
+        'appointment.orders' => 'Appointment Order',
         'scheme' => 'Attence Schemes',
         'bank' => 'Bank',
         'bank-branch' => 'Bank Branch',
