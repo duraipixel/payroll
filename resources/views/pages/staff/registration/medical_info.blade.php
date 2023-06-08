@@ -11,7 +11,7 @@
                         <div class="row">
                             <div class="col-lg-4 mb-5">
                                 <label class="form-label required">Blood Group</label>
-                                <div class="position-relative">
+                                <div class="input-group">
                                     <select name="medical_blood_group_id" autofocus id="medical_blood_group_id"
                                         class="form-select form-select-lg select2-option" required>
                                         <option value="">--Select Type --</option>
@@ -24,9 +24,9 @@
                                         @endisset
                                     </select>
                                     @if( access()->buttonAccess('blood_group','add_edit') )
-                                    <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('medic_blood_group')">
+                                    <button type="button"  class="border-0 btn-light-success btn-sm border" onclick="return openAddModel('medic_blood_group')">
                                         <i class="fa fa-plus"></i>
-                                    </span>
+                                    </button>
                                     @endif
                                 </div>
                             </div>

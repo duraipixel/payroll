@@ -49,20 +49,20 @@
                         <option value="divorced" @if (isset($staff_details->personal) && $staff_details->personal->marital_status == 'divorced') selected @endif>Divorced</option>
                     </select>
                 </div>
-                <div class="col-md-4 fv-row mb-5" id="marriage_data" @if (isset($staff_details->personal) && $staff_details->personal->marital_status == 'married') style="display:block" @else style="display:none;" @endif>
+                <div class="col-md-4 fv-row mb-5" id="marriage_data"
+                    @if (isset($staff_details->personal) && $staff_details->personal->marital_status == 'married') style="display:block" @else style="display:none;" @endif>
                     <label class="fs-6 fw-bold mb-2 required">Marriage Date</label>
                     <div class="position-relative d-flex align-items-center">
                         {!! dobSVG() !!}
-                        <input class="form-control  ps-12" type="date" placeholder="Select a date" name="marriage_date"
-                            id="marriage_date"
+                        <input class="form-control  ps-12" type="date" placeholder="Select a date"
+                            name="marriage_date" id="marriage_date"
                             value="{{ $staff_details->personal->marriage_date ?? '' }}" />
                     </div>
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Mother Tongue</label>
-                    <div class="position-relative">
-                        <select name="language_id" autofocus id="language_id"
-                            class="form-select form-select-lg select2-option">
+                    <div class="input-group">
+                        <select name="language_id" autofocus id="language_id" class="select2-option">
                             <option value="">--Select Language--</option>
                             @isset($mother_tongues)
                                 @foreach ($mother_tongues as $item)
@@ -72,20 +72,19 @@
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('language','add_edit') )
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                            onclick="return openAddModel('language')">
-                            <i class="fa fa-plus"></i>
-                        </span>
+                        @if (access()->buttonAccess('language', 'add_edit'))
+                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                                onclick="return openAddModel('language')">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         @endif
                     </div>
                 </div>
 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Place of Birth </label>
-                    <div class="position-relative">
-                        <select name="place_of_birth_id" autofocus id="place_of_birth_id"
-                            class="form-select form-select-lg select2-option">
+                    <div class="input-group">
+                        <select name="place_of_birth_id" autofocus id="place_of_birth_id" class="select2-option">
                             <option value="">--Select Place--</option>
                             @isset($places)
                                 @foreach ($places as $item)
@@ -95,20 +94,19 @@
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('place','add_edit') )
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                            onclick="return openAddModel('places')">
-                            <i class="fa fa-plus"></i>
-                        </span>
+                        @if (access()->buttonAccess('place', 'add_edit'))
+                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                                onclick="return openAddModel('places')">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         @endif
                     </div>
                 </div>
 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Nationality</label>
-                    <div class="position-relative">
-                        <select name="nationality_id" autofocus id="nationality_id"
-                            class="form-select form-select-lg select2-option">
+                    <div class="input-group">
+                        <select name="nationality_id" autofocus id="nationality_id" class="select2-option">
                             <option value="">--Select Nationality--</option>
                             @isset($nationalities)
                                 @foreach ($nationalities as $item)
@@ -118,41 +116,40 @@
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('nationality','add_edit') )
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                            onclick="return openAddModel('nationality')">
-                            <i class="fa fa-plus"></i>
-                        </span>
+                        @if (access()->buttonAccess('nationality', 'add_edit'))
+                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                                onclick="return openAddModel('nationality')">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         @endif
                     </div>
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Religion</label>
-                    <div class="position-relative">
-                        <select name="religion_id" autofocus id="religion_id"
-                            class="form-select form-select-lg select2-option">
+                    <div class="input-group">
+                        <select name="religion_id" autofocus id="religion_id" class="select2-option">
                             <option value="">--Select Religion--</option>
                             @isset($religions)
                                 @foreach ($religions as $item)
-                                    <option value="{{ $item->id }}" @if (isset($staff_details->personal) && $staff_details->personal->religion_id == $item->id) selected @endif>
+                                    <option value="{{ $item->id }}"
+                                        @if (isset($staff_details->personal) && $staff_details->personal->religion_id == $item->id) selected @endif>
                                         {{ $item->name }}
                                     </option>
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('religion','add_edit') )
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                            onclick="return openAddModel('religion')">
-                            <i class="fa fa-plus"></i>
-                        </span>
+                        @if (access()->buttonAccess('religion', 'add_edit'))
+                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                                onclick="return openAddModel('religion')">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         @endif
                     </div>
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Caste</label>
-                    <div class="position-relative">
-                        <select name="caste_id" autofocus id="caste_id"
-                            class="form-select form-select-lg select2-option">
+                    <div class="input-group">
+                        <select name="caste_id" autofocus id="caste_id" class="select2-option">
                             <option value="">--Select Caste--</option>
                             @isset($castes)
                                 @foreach ($castes as $item)
@@ -163,20 +160,19 @@
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('caste','add_edit') )
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                            onclick="return openAddModel('caste')">
-                            <i class="fa fa-plus"></i>
-                        </span>
+                        @if (access()->buttonAccess('caste', 'add_edit'))
+                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                                onclick="return openAddModel('caste')">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         @endif
                     </div>
                 </div>
 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Community</label>
-                    <div class="position-relative">
-                        <select name="community_id" autofocus id="community_id"
-                            class="form-select form-select-lg select2-option">
+                    <div class="input-group">
+                        <select name="community_id" autofocus id="community_id" class="select2-option">
                             <option value="">--Select Community--</option>
                             @isset($communities)
                                 @foreach ($communities as $item)
@@ -187,39 +183,59 @@
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('community','add_edit') )
-                        <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                            onclick="return openAddModel('community')">
-                            <i class="fa fa-plus"></i>
-                        </span>
+                        @if (access()->buttonAccess('community', 'add_edit'))
+                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                                onclick="return openAddModel('community')">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         @endif
                     </div>
                 </div>
 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Phone No.</label>
-                    <input name="phone_no" autofocus id="phone_no" maxlength="10" class="number_only form-control form-control-lg "
+                    <input name="phone_no" autofocus id="phone_no" maxlength="10"
+                        class="number_only form-control form-control-lg "
                         value="{{ $staff_details->personal->phone_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label">Mobile No - 1</label>
-                    <input name="mobile_no_1" class="form-control form-control-lg number_only" maxlength="10" value="{{ $staff_details->personal->mobile_no1 ?? '' }}" />
+                    <input name="mobile_no_1" class="form-control form-control-lg number_only" maxlength="10"
+                        value="{{ $staff_details->personal->mobile_no1 ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label ">Mobile No - 2</label>
-                    <input name="mobile_no_2" class="form-control form-control-lg number_only" maxlength="10" value="{{ $staff_details->personal->mobile_no2 ?? '' }}" />
+                    <input name="mobile_no_2" class="form-control form-control-lg number_only" maxlength="10"
+                        value="{{ $staff_details->personal->mobile_no2 ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label ">Whatsapp No.</label>
-                    <input name="whatsapp_no" class="form-control form-control-lg number_only" maxlength="10" value="{{ $staff_details->personal->whatsapp_no ?? '' }}" />
+                    <input name="whatsapp_no" class="form-control form-control-lg number_only" maxlength="10"
+                        value="{{ $staff_details->personal->whatsapp_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Emergency No.</label>
-                    <input name="emergency_no" autofocus id="emergency_no" class="form-control form-control-lg number_only" maxlength="10" value="{{ $staff_details->personal->emergency_no ?? '' }}" />
+                    <input name="emergency_no" autofocus id="emergency_no"
+                        class="form-control form-control-lg number_only" maxlength="10"
+                        value="{{ $staff_details->personal->emergency_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
-                    <label class="form-label"> Profile Image </label>
-                    <input name="profile_image" type="file" autofocus id="profile_image" class="form-control form-control-lg" />
+                    <div>
+
+                        <label class="form-label"> Profile Image </label>
+                        <input name="profile_image" type="file" autofocus id="profile_image"
+                            class="form-control form-control-lg" />
+                    </div>
+                    <div>
+                        @if (isset($staff_details->image) && !empty($staff_details->image))
+                            @php
+                                $profile_image = Storage::url($staff_details->image);
+                            @endphp
+                            <a class="" href="{{ asset('public' . $profile_image) }}" target="_blank">
+                                <img src="{{ asset('public' . $profile_image) }}" alt="" width="75">
+                            </a>
+                        @endif
+                    </div>
                 </div>
                 <div class="col-lg-6 mb-5">
                     <label class="form-label required">Contact Address</label>
@@ -237,9 +253,8 @@
                         <label class="fs-6 fw-bold form-label mb-2">Bank Details</label>
                         <div class="row fv-row">
                             <div class="col-lg-3 mb-5">
-                                <div class="position-relative">
-                                    <select name="bank_id" id="bank_id"
-                                        class="form-select form-select-lg select2-option"
+                                <div class="input-group">
+                                    <select name="bank_id" id="bank_id" class="select2-option"
                                         onchange="return getBranchDetails(this.value)">
                                         <option value="">--Select Bank--</option>
                                         @isset($banks)
@@ -251,19 +266,18 @@
                                             @endforeach
                                         @endisset
                                     </select>
-                                    @if( access()->buttonAccess('bank','add_edit') )
-                                    <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                                        onclick="return openAddModel('bank')">
-                                        <i class="fa fa-plus"></i>
-                                    </span>
+                                    @if (access()->buttonAccess('bank', 'add_edit'))
+                                        <button type="button" class="border-0 btn-light-success btn-sm border"
+                                            onclick="return openAddModel('bank')">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
                                     @endif
                                 </div>
                             </div>
 
                             <div class="col-lg-3 mb-5">
-                                <div class="position-relative">
-                                    <select name="branch_id" id="branch_id"
-                                        class="form-select form-select-lg select2-option">
+                                <div class="input-group">
+                                    <select name="branch_id" id="branch_id" class="select2-option">
                                         <option value="">--Select Bank Branch--</option>
                                         @isset($branch_details)
                                             @foreach ($branch_details as $item)
@@ -274,11 +288,11 @@
                                             @endforeach
                                         @endisset
                                     </select>
-                                    @if( access()->buttonAccess('bank-branch','add_edit') )
-                                    <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                                        onclick="return openAddModel('bankbranch')">
-                                        <i class="fa fa-plus"></i>
-                                    </span>
+                                    @if (access()->buttonAccess('bank-branch', 'add_edit'))
+                                        <button type="button" class="border-0 btn-light-success btn-sm border"
+                                            onclick="return openAddModel('bankbranch')">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
                                     @endif
                                 </div>
                             </div>
@@ -313,7 +327,7 @@
                                         <input class="form-control" style="" type="file"
                                             name="bank_passbook" multiple="">
                                     </div>
-                                    
+
                                     @isset($staff_details->bank->passbook_image)
                                         <div class="col-12">
                                             <div class="d-flex justiy-content-around flex-wrap">
@@ -323,8 +337,9 @@
                                                 @endphp
 
                                                 <div class="d-inline-block p-2 bg-light m-1">
-                                                    <a class="btn-sm btn-outline-info" href="{{ asset('public'.$url) }}"
-                                                        target="_blank">View File </a>
+                                                    <a class="btn-sm btn-outline-info"
+                                                        href="{{ asset('public' . $url) }}" target="_blank">View File
+                                                    </a>
                                                     {{-- <a class="btn-sm btn-outline-danger"
                                                     onclick="removeDocument('{{ $staff_details->aadhaar->id }}'', '{{ $item }}')">
                                                     Remove
@@ -334,7 +349,7 @@
                                         </div>
                                     @endisset
                                 </div>
-                               
+
                             </div>
                             <div class="col-4">
                             </div>
@@ -364,8 +379,9 @@
                                                 @endphp
 
                                                 <div class="d-inline-block p-2 bg-light m-1">
-                                                    <a class="btn-sm btn-outline-info" href="{{ asset('public'.$url) }}"
-                                                        target="_blank">View File </a>
+                                                    <a class="btn-sm btn-outline-info"
+                                                        href="{{ asset('public' . $url) }}" target="_blank">View File
+                                                    </a>
                                                     {{-- <a class="btn-sm btn-outline-danger"
                                                     onclick="removeDocument('{{ $staff_details->aadhaar->id }}'', '{{ $item }}')">
                                                     Remove
@@ -392,12 +408,15 @@
                             <div class="mx-5 cstm-zeed">
 
                                 <label class="form-check form-check-custom form-check-solid me-10">
-                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_uan" onclick="handleClick(this)" 
-                                        value="yes" @if ($staff_details->pf->ac_number ?? '' ) checked @endif />
+                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_uan"
+                                        onclick="handleClick(this)" value="yes"
+                                        @if ($staff_details->pf->ac_number ?? '') checked @endif />
                                     <span class="form-check-label fw-bold">Yes</span>
                                 </label>
                                 <label class="form-check form-check-custom form-check-solid me-10">
-                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_uan" onclick="handleClick(this)"  value="no" @if (! ($staff_details->pf->ac_number ?? '') ) checked @endif />
+                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_uan"
+                                        onclick="handleClick(this)" value="no"
+                                        @if (!($staff_details->pf->ac_number ?? '')) checked @endif />
                                     <span class="form-check-label fw-bold"> No </span>
                                 </label>
 
@@ -413,9 +432,8 @@
                                 <div class="position-relative d-flex align-items-center">
                                     {!! dobSVG() !!}
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="Start date"
-                                        name="uan_start_date" id="uan_start_date"
-                                        value="{{ isset($staff_details->pf->start_date) ? date('d-m-Y', strtotime($staff_details->pf->start_date)) : '' }}"
-                                        autofocus />
+                                        name="uan_start_date" id="uan_start_date" type="date"
+                                        value="{{ $staff_details->pf->start_date ?? '' }}" autofocus />
                                 </div>
 
                             </div>
@@ -427,17 +445,20 @@
                     </div>
                     <div class="col-md-12 fv-row">
 
-                        <label  class="d-flex align-items-center fs-6 fw-bold form-label my-4">
+                        <label class="d-flex align-items-center fs-6 fw-bold form-label my-4">
                             <span class="me-15 pe-3">ESI</span>
                             <div class="mx-5 cstm-zeed">
 
                                 <label class="form-check form-check-custom form-check-solid me-10">
-                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_esi" onclick="handleEsiClick(this)" 
-                                        value="yes" @if ($staff_details->esi->ac_number ?? '' ) checked @endif />
+                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_esi"
+                                        onclick="handleEsiClick(this)" value="yes"
+                                        @if ($staff_details->esi->ac_number ?? '') checked @endif />
                                     <span class="form-check-label fw-bold">Yes</span>
                                 </label>
                                 <label class="form-check form-check-custom form-check-solid me-10">
-                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_esi" onclick="handleEsiClick(this)"  value="no" @if (! ($staff_details->esi->ac_number ?? '') ) checked @endif />
+                                    <input class="form-check-input h-20px w-20px" type="radio" name="is_esi"
+                                        onclick="handleEsiClick(this)" value="no"
+                                        @if (!($staff_details->esi->ac_number ?? '')) checked @endif />
                                     <span class="form-check-label fw-bold"> No </span>
                                 </label>
 
@@ -452,16 +473,16 @@
                                 <div class="position-relative d-flex align-items-center">
                                     {!! dobSVG() !!}
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="Start date"
-                                        name="esi_start_date" id="esi_start_date" autofocus
-                                        value="{{ isset($staff_details->esi->start_date) ? date('d-m-Y', strtotime($staff_details->esi->start_date)) : '' }}" />
+                                        name="esi_start_date" id="esi_start_date" autofocus type="date"
+                                        value="{{ $staff_details->esi->start_date ?? '' }}" />
                                 </div>
                             </div>
                             <div class="col-3">
                                 <div class="position-relative d-flex align-items-center">
                                     {!! dobSVG() !!}
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="End date"
-                                        name="esi_end_date" id="esi_end_date" autofocus
-                                        value="{{ isset($staff_details->esi->start_date) ? date('d-m-Y', strtotime($staff_details->esi->start_date)) : '' }}" />
+                                        name="esi_end_date" id="esi_end_date" autofocus type="date"
+                                        value="{{ $staff_details->esi->end_date ?? '' }}" />
                                 </div>
                             </div>
                             <div class="col-3">
@@ -477,27 +498,27 @@
 </div>
 
 <script>
-    @if ($staff_details->pf->ac_number ?? '' )
-    $('#uan_display_pane').show();
+    @if ($staff_details->pf->ac_number ?? '')
+        $('#uan_display_pane').show();
     @else
-    $('#uan_display_pane').hide();
+        $('#uan_display_pane').hide();
     @endif
     function handleClick(myRadio) {
 
-        if( myRadio.value == 'no') {
+        if (myRadio.value == 'no') {
             $('#uan_display_pane').hide();
         } else {
             $('#uan_display_pane').show();
         }
     }
 
-    @if ($staff_details->esi->ac_number ?? '' )
-    $('#esi_display_pane').show();
+    @if ($staff_details->esi->ac_number ?? '')
+        $('#esi_display_pane').show();
     @else
-    $('#esi_display_pane').hide();
+        $('#esi_display_pane').hide();
     @endif
     function handleEsiClick(myRadio) {
-        if( myRadio.value == 'no') {
+        if (myRadio.value == 'no') {
             $('#esi_display_pane').hide();
         } else {
             $('#esi_display_pane').show();
@@ -507,7 +528,7 @@
     const datepicker = document.getElementById('dob');
     const marital_status = document.getElementById('marital_status');
     marital_status.addEventListener('change', function() {
-        if( this.value == 'married') {
+        if (this.value == 'married') {
             document.getElementById('marriage_data').style.display = 'block';
         } else {
             document.getElementById('marriage_data').style.display = 'none';
@@ -540,23 +561,26 @@
         })
     }
     $(function() {
-        $("#date_of_birth").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
-        $('#marriage_date').datepicker({
-            dateFormat: 'd-mm-yy'
-        });
-        $('#uan_start_date').datepicker({
-            dateFormat: 'd-mm-yy'
-        });
-        $('#esi_start_date').datepicker({
-            dateFormat: 'd-mm-yy'
-        });
-        $('#esi_end_date').datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#date_of_birth").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
+        // $('#marriage_date').datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
+        // $('#uan_start_date').datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
+        // $('#esi_start_date').datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
+        // $('#esi_end_date').datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
+        // $('.select2-option').select2({
+        //     dateFormat: 'd-mm-yy'
+        // });
         $('.select2-option').select2({
-            dateFormat: 'd-mm-yy'
+            theme: 'bootstrap-5'
         });
     });
 
@@ -564,7 +588,7 @@
     async function validateKycForm() {
         event.preventDefault();
         var kyc_error = false;
-        
+
         var key_name = [
             'date_of_birth',
             'marital_status',
@@ -621,7 +645,7 @@
                         var err_message = '';
                         if (data.message) {
                             data.message.forEach(element => {
-                                err_message += '<p>'+element+'</p>';
+                                err_message += '<p>' + element + '</p>';
                             });
                             toastr.error("Error", err_message);
                         }
@@ -629,7 +653,7 @@
                     } else {
                         return false;
                     }
-                    
+
                 });
             return kycResponse;
 
@@ -638,5 +662,4 @@
             return true;
         }
     }
-
 </script>

@@ -1,34 +1,34 @@
 <div class="row g-6 g-xl-9 mb-6 mb-xl-9">
 
     <div class="col-md-6 col-lg-2">
-        <div class="card h-100 cstmzed">
+        <div class="card h-100 cstmzed shadow">
             @include('pages.dashboard.noti_card._employee')
         </div>
     </div>
 
     <div class="col-md-6 col-lg-2">
-        <div class="card h-100 cstmzed">
+        <div class="card h-100 cstmzed shadow">
             @include('pages.dashboard.noti_card._leave_approval')
         </div>
     </div>
 
     <div class="col-md-6 col-lg-2">
-        <div class="card h-100 cstmzed">
+        <div class="card h-100 cstmzed shadow">
             @include('pages.dashboard.noti_card._birthday')
         </div>
     </div>
     <div class="col-md-6 col-lg-2">
-        <div class="card h-100 cstmzed">
+        <div class="card h-100 cstmzed shadow">
             @include('pages.dashboard.noti_card._anniversary')
         </div>
     </div>
     <div class="col-md-6 col-lg-2">
-        <div class="card h-100 cstmzed">
+        <div class="card h-100 cstmzed shadow">
             @include('pages.dashboard.noti_card._announcement')
         </div>
     </div>
     <div class="col-md-6 col-lg-2">
-        <div class="card h-100 cstmzed">
+        <div class="card h-100 cstmzed shadow">
             @include('pages.dashboard.noti_card._doc_approval')
         </div>
     </div>

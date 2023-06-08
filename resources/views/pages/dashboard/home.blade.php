@@ -12,7 +12,7 @@
 
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
             <div class="post d-flex flex-column-fluid" id="kt_post">
-                <div id="dashboard_view" class="container-xxl">
+                <div id="dashboard_view" class="px-3">
                     @include('pages.dashboard.dynamic_view')
                 </div>
             </div>

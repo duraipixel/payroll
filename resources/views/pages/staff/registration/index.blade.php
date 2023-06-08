@@ -4,6 +4,10 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
+    <link rel="stylesheet" href="{{ asset('assets/css/registration.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bd-wizard.css') }}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     @if (isset($staff_details) && !empty($staff_details))
         <script>
             var formStep = '{{ $step }}';
@@ -15,145 +19,131 @@
             var formStep = 0;
         </script>
     @endif
-    <link rel="stylesheet" href="{{ asset('assets/css/registration.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('assets/css/bd-wizard.css') }}">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-
-    <!--begin::Card-->
-    <div class="card">
-        <!--begin::Card body-->
-        <div class="card-body">
-            @if (session('status'))
-                <div class="alert alert-success text-center">
-                    {{ session('status') }}
-                </div>
-            @endif
-            <!--begin::Stepper-->
-            <div id="wizard">
-                <h3>
-                    <div class="media">
-                        <div class="bd-wizard-step-icon text-center">
-                            <i class="icon-xl la la-user-check"></i>
-                        </div>
-                        <div class="media-body text-center">
-                            <div class="bd-wizard-step-title">Personal Information</div>
-                        </div>
-                    </div>
-                </h3>
-                <section>
-                    <div class="">
-                        <input type="hidden" name="staff_id" id="outer_staff_id" value="{{ $staff_details->id ?? '' }}">
-                        @include('pages.staff.registration.personal_info')
-                    </div>
-                </section>
-                <h3>
-                    <div class="media">
-                        <div class="bd-wizard-step-icon text-center">
-                            <i class="icon-xl la la-edit"></i>
-                        </div>
-                        <div class="media-body text-center">
-                            <div class="bd-wizard-step-title">KYC Information</div>
-                        </div>
-                    </div>
-                </h3>
-                <section>
-                    <div class="">
-                        @include('pages.staff.registration.kyc')
-                    </div>
-                </section>
-                <h3>
-                    <div class="media">
-                        <div class="bd-wizard-step-icon text-center">
-                            <i class="icon-xl la la-user-tag"></i>
-                        </div>
-                        <div class="media-body text-center">
-                            <div class="bd-wizard-step-title">Employee Position </div>
-                        </div>
-                    </div>
-                </h3>
-                <section>
-                    <div class="">
-                        @include('pages.staff.registration.employee_details')
-                    </div>
-                </section>
-                <h3>
-                    <div class="media">
-                        <div class="bd-wizard-step-icon text-center">
-                            <i class="icon-xl la la-book-open"></i>
-                        </div>
-                        <div class="media-body text-center">
-                            <div class="bd-wizard-step-title">Education Qualification</div>
-                        </div>
-                    </div>
-                </h3>
-                <section>
-                    <div class="">
-                        @include('pages.staff.registration.education_details')
-                    </div>
-                </section>
-
-                <h3>
-                    <div class="media">
-                        <div class="bd-wizard-step-icon text-center">
-                            <i class="icon-xl la la-users"></i>
-                        </div>
-                        <div class="media-body text-center">
-                            <div class="bd-wizard-step-title">Family Information</div>
-                        </div>
-                    </div>
-                </h3>
-                <section>
-                    <div class="">
-                        @include('pages.staff.registration.family_information')
-                    </div>
-                </section>
-
-                <h3>
-                    <div class="media">
-                        <div class="bd-wizard-step-icon text-center">
-                            <i class="icon-xl la la-briefcase-medical"></i>
-                        </div>
-                        <div class="media-body text-center">
-                            <div class="bd-wizard-step-title"> Medical Information </div>
-                        </div>
-                    </div>
-                </h3>
-                <section>
-                    <div class="">
-                        @include('pages.staff.registration.medical_info')
-                    </div>
-                </section>
-
-                <h3>
-                    <div class="media">
-                        <div class="bd-wizard-step-icon text-center">
-                            <i class="icon-xl la la-briefcase-medical"></i>
-                        </div>
-                        <div class="media-body text-center">
-                            <div class="bd-wizard-step-title"> Appointment Information </div>
-                        </div>
-                    </div>
-                </h3>
-                <section>
-                    <div class="">
-                        @include('pages.staff.registration.appointment_details')
-                    </div>
-                </section>
-            </div>
-            <!--end::Stepper-->
+    @if (session('status'))
+        <div class="alert alert-success text-center">
+            {{ session('status') }}
         </div>
-        <!--end::Card body-->
+    @endif
+    <!--begin::Stepper-->
+    <div id="wizard" class="wizard-section shadow">
+        <h3>
+            <div class="media">
+                <div class="bd-wizard-step-icon text-center">
+                    <i class="icon-xl la la-user-check"></i>
+                </div>
+                <div class="media-body text-center">
+                    <div class="bd-wizard-step-title">Personal Information</div>
+                </div>
+            </div>
+        </h3>
+        <section>
+            <div class="">
+                <input type="hidden" name="staff_id" id="outer_staff_id" value="{{ $staff_details->id ?? '' }}">
+                @include('pages.staff.registration.personal_info')
+            </div>
+        </section>
+        <h3>
+            <div class="media">
+                <div class="bd-wizard-step-icon text-center">
+                    <i class="icon-xl la la-edit"></i>
+                </div>
+                <div class="media-body text-center">
+                    <div class="bd-wizard-step-title">KYC Information</div>
+                </div>
+            </div>
+        </h3>
+        <section>
+            <div class="">
+                @include('pages.staff.registration.kyc')
+            </div>
+        </section>
+        <h3>
+            <div class="media">
+                <div class="bd-wizard-step-icon text-center">
+                    <i class="icon-xl la la-user-tag"></i>
+                </div>
+                <div class="media-body text-center">
+                    <div class="bd-wizard-step-title">Employee Position </div>
+                </div>
+            </div>
+        </h3>
+        <section>
+            <div class="">
+                @include('pages.staff.registration.employee_details')
+            </div>
+        </section>
+        <h3>
+            <div class="media">
+                <div class="bd-wizard-step-icon text-center">
+                    <i class="icon-xl la la-book-open"></i>
+                </div>
+                <div class="media-body text-center">
+                    <div class="bd-wizard-step-title">Education Qualification</div>
+                </div>
+            </div>
+        </h3>
+        <section>
+            <div class="">
+                @include('pages.staff.registration.education_details')
+            </div>
+        </section>
+
+        <h3>
+            <div class="media">
+                <div class="bd-wizard-step-icon text-center">
+                    <i class="icon-xl la la-users"></i>
+                </div>
+                <div class="media-body text-center">
+                    <div class="bd-wizard-step-title">Family Information</div>
+                </div>
+            </div>
+        </h3>
+        <section>
+            <div class="">
+                @include('pages.staff.registration.family_information')
+            </div>
+        </section>
+
+        <h3>
+            <div class="media">
+                <div class="bd-wizard-step-icon text-center">
+                    <i class="icon-xl la la-briefcase-medical"></i>
+                </div>
+                <div class="media-body text-center">
+                    <div class="bd-wizard-step-title"> Medical Information </div>
+                </div>
+            </div>
+        </h3>
+        <section>
+            <div class="">
+                @include('pages.staff.registration.medical_info')
+            </div>
+        </section>
+
+        <h3>
+            <div class="media">
+                <div class="bd-wizard-step-icon text-center">
+                    <i class="icon-xl la la-briefcase-medical"></i>
+                </div>
+                <div class="media-body text-center">
+                    <div class="bd-wizard-step-title"> Appointment Information </div>
+                </div>
+            </div>
+        </h3>
+        <section>
+            <div class="">
+                @include('pages.staff.registration.appointment_details')
+            </div>
+        </section>
     </div>
+
     <script>
         function goToNext() {
             return false;
         }
 
         async function checkGoFurther(form_no) {
-            
+
             switch (form_no) {
                 case 0:
                     return await validatePersonalForm();
@@ -210,8 +200,8 @@
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 
     <script>
-        $('#classes, #reporting_manager_id').select2();
-
+        $('#classes, #reporting_manager_id').select2({ theme: 'bootstrap-5'});
+        
 
         function openAddModel(form_type) {
 

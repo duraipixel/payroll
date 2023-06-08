@@ -54,7 +54,7 @@
     <script>
         $(document).ready(function() {
 
-            $('#staff_id').select2();
+            $('#staff_id').select2({ theme: 'bootstrap-5'});
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

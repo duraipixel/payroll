@@ -200,7 +200,7 @@
      <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 
      <script>
-        $('#classes, #reporting_manager_id').select2();
+        $('#classes, #reporting_manager_id').select2({ theme: 'bootstrap-5'});
 
         function openAddModel(form_type) {
             

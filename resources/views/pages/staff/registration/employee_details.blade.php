@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Designation</label>
-                    <div class="position-relative">
+                    <div class="input-group">
                         <select name="designation_id" autofocus id="designation_id"
                             class="form-select form-select-lg select2-option">
                             <option value="">--Select Designation--</option>
@@ -23,17 +23,17 @@
                             @endisset
                         </select>
                         @if( access()->buttonAccess('designation','add_edit') )
-                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
+                        <button type="button"  class="border-0 btn-light-success btn-sm border"
                             onclick="return openAddModel('designation')">
                             <i class="fa fa-plus"></i>
-                        </span>
+                        </button>
                         @endif
                     </div>
                 </div>
                 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Department</label>
-                    <div class="position-relative">
+                    <div class="input-group">
                         <select name="department_id" autofocus id="department_id"
                             onchange="return checkTeachingType(this.value)"
                             class="form-select form-select-lg select2-option">
@@ -47,16 +47,16 @@
                             @endisset
                         </select>
                         @if( access()->buttonAccess('department','add_edit') )
-                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
+                        <button type="button"  class="border-0 btn-light-success btn-sm border"
                             onclick="return openAddModel('department')">
                             <i class="fa fa-plus"></i>
-                        </span>
+                        </button>
                         @endif
                     </div>
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label">Division</label>
-                    <div class="position-relative">
+                    <div class="input-group">
                         <select name="division_id" id="division_id" class="form-select form-select-lg ">
                             <option value="">--Select Division--</option>
                             @isset($divisions)
@@ -68,17 +68,17 @@
                             @endisset
                         </select>
                         @if( access()->buttonAccess('division','add_edit') )
-                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0 p-4"
+                        <button type="button"  class="border-0 btn-light-success btn-sm border"
                             onclick="return openAddModel('division')">
                             <i class="fa fa-plus"></i>
-                        </span>
+                        </button>
                         @endif
                     </div>
                 </div>
                 <!--end::Input group-->
                 <div class="col-lg-4 mb-5 teaching" style="display: @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'yes' ) block @else none @endif">
                     <label class="form-label required">Class Handling</label>
-                    <div class="position-relative">
+                    <div class="input-group">
                         <select id="classes" name="class_id[]" class="form-control big_box select2-option"
                             placeholder="" multiple>
                             @isset($classes)
@@ -99,7 +99,7 @@
                 <!--begin::Input group-->
                 <div class="col-lg-4 mb-5 teaching" style="display: @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'yes' ) block @else none @endif">
                     <label class="form-label required">Handling Subject</label>
-                    <div class="position-relative">
+                    <div class="input-group">
                         <select name="subject[]" autofocus id="subject" multiple
                             class="form-select form-select-lg select2-option">
                             <option value="">--Select Subject--</option>
@@ -111,10 +111,10 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
+                        <button type="button"  class="border-0 btn-light-success btn-sm border"
                             onclick="return openAddModel('subject')">
                             <i class="fa fa-plus"></i>
-                        </span>
+                        </button>
                     </div>
                 </div>
                 <!--end::Input group-->
@@ -122,7 +122,7 @@
                 <input type="hidden" name="id" id="staff_id" value="{{ $staff_details->id ?? '' }}">
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Attendance Scheme</label>
-                    <div class="position-relative">
+                    <div class="input-group">
                         <select name="scheme_id" autofocus id="scheme_id"
                             class="form-select form-select-lg select2-option">
                             <option value="">--Select Scheme--</option>
@@ -135,10 +135,10 @@
                             @endisset
                         </select>
                         {{-- @if( access()->buttonAccess('scheme','add_edit') )
-                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0"
+                        <button type="button"  class="border-0 btn-light-success btn-sm border"
                             onclick="return openAddModel('scheme')">
                             <i class="fa fa-plus"></i>
-                        </span>
+                        </button>
                         @endif --}}
                     </div>
                 </div>

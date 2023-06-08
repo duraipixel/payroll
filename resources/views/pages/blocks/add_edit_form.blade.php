@@ -123,9 +123,9 @@
 <script>
 
    $(document).ready(function(){
-$('#classes').select2();
-$('#institute_id').select2();
-$('#place_of_work_id').select2();
+$('#classes').select2({ theme: 'bootstrap-5'});
+$('#institute_id').select2({ theme: 'bootstrap-5'});
+$('#place_of_work_id').select2({ theme: 'bootstrap-5'});
    });
 var KTAppEcommerceSaveBlocks = function () {
 

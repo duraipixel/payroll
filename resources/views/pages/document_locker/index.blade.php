@@ -5,74 +5,66 @@
 @endsection
 @section('content')
     <!--begin::Card-->
-    <div class="card">
-        <div class="card-title">
-            <h4 class="ms-10 mt-10"><strong>Search Staff</strong></h4>
-        </div>
-
-        <div class="row  pt-6 px-10">
-            <div class="col-3 position-relative custom_select">
-                <select class="form-select ms-4" id="staff_id" onchange="return showOptions();">
-                    <option value="">Select Staff</option>
-                    @foreach ($user as $users)
-                        <option value="{{ $users->id }}">{{ $users->name }} - {{ $users->emp_code }}</option>
-                    @endforeach
-
-                </select>
-            </div>
-
-            <div class="col-3 custom_select">
-                <select class="form-select ms-4" id="emp_nature_id">
-                    <option value="">Nature Of Employment </option>
-                    @foreach ($employee_nature as $employment_value)
-                        <option value="{{ $employment_value->id }}">{{ $employment_value->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-3 custom_select">
-                <select class="form-select ms-4" id="work_place_id">
-                    <option value="">Place of Work</option>
-                    @foreach ($place_of_work as $work_value)
-                        <option value="{{ $work_value->id }}">{{ $work_value->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div class="col-3">
-                <button type="button" class="btn btn-primary ms-7" onclick="return search_dl();">Search</button>
-            </div>
-            <div class="invalid-feedback">
-                Please select above any one
-            </div>
-        </div>
-
-        <div class="card-header border-0 pt-6">
-
-            <div class="card-title">
-                <h4 class="mt-5"><strong>Document Locker</strong></h4>
-            </div>
-            <div class="p-3 w-100 bg-light rounded">
-                <div class="row gap-2 justify-content-around">
-                    <div class="col-md-3 staff_count_dl">
-                        <p class="ss_count_text">Total Number of Staff</p>
-                        <p class="ss_count">{{ $user_count }} </p>
-                        <img alt="Logo" src="{{ asset('assets/media/document/no_of_staff.png') }}"
-                            class="logo document_images" />
-                    </div>
-                    <div class="col-md-3 staff_count_dl">
-                        <p class="ss_count_text">Total Number of Documents Uploaded</p>
-                        <p class="ss_count1">{{ $total_documents }} </p>
-                        <img alt="Logo" src="{{ asset('assets/media/document/document_upload.png') }}"
-                            class="logo document_images1" />
-                    </div>
-                    <div class="col-md-3 staff_count_dl ">
-                        <p class="ss_count_text">Documents Review Pending </p>
-                        <p class="ss_count1">{{ $review_pending_documents }} </p>
-                        <img alt="Logo" src="{{ asset('assets/media/document/document_pending.png') }}"
-                            class="logo document_images1" />
+    <div class="my-5 container">
+        <div class="row gap-2">
+            <div class="col">
+                <div class="card shadow h-100">
+                    <div class="card-body p-4">
+                        <p>Total Number of Staff</p>
+                        <h2>{{ $user_count }} </h2>
+                        <img alt="Logo" src="{{ asset('assets/media/document/no_of_staff.png') }}" style="float:right"/>
                     </div>
                 </div>
             </div>
+            <div class="col">
+                <div class="card shadow h-100">
+                    <div class="card-body p-4">
+                        <p>Total Number of Documents Uploaded</p>
+                        <h2>{{ $total_documents }} </h2>
+                        <img alt="Logo" src="{{ asset('assets/media/document/document_upload.png') }}"  style="float:right"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col ">
+                <div class="card shadow h-100">
+                    <div class="card-body p-4">
+                        <p>Documents Review Pending </p>
+                        <h2>{{ $review_pending_documents }} </h2>
+                        <img alt="Logo" src="{{ asset('assets/media/document/document_pending.png') }}" style="float:right"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header border-0 pt-6">
+            <div class="d-flex align-items-center col-md-10 mx-auto mb-4">
+                <div class="fw-bold col-2">Search Staff</div>
+                <div class="input-group">
+                    <select id="staff_id" onchange="return showOptions();">
+                        <option value="">Select Staff</option>
+                        @foreach ($user as $users)
+                            <option value="{{ $users->id }}">{{ $users->name }} - {{ $users->emp_code }}</option>
+                        @endforeach
+                    </select>
+                    <select id="emp_nature_id">
+                        <option value="">Nature Of Employment </option>
+                        @foreach ($employee_nature as $employment_value)
+                            <option value="{{ $employment_value->id }}">{{ $employment_value->name }}</option>
+                        @endforeach
+                    </select>
+                    <select id="work_place_id">
+                        <option value="">Place of Work</option>
+                        @foreach ($place_of_work as $work_value)
+                            <option value="{{ $work_value->id }}">{{ $work_value->name }}</option>
+                        @endforeach
+                    </select>
+                    <button type="button" class="btn btn-primary" onclick="return search_dl();">Search</button>
+                </div>
+            </div>
+            <div class="invalid-feedback">
+                Please select above any one
+            </div> 
         </div>
         <!--begin::Card title-->
         <!--begin::Card toolbar-->
@@ -158,14 +150,16 @@
         });
 
         $('#staff_id').select2({
-            selectOnClose: true
+            selectOnClose: true,
+            theme: 'bootstrap-5'
         });
-
         $('#emp_nature_id').select2({
-            selectOnClose: true
+            selectOnClose: true,
+            theme: 'bootstrap-5'
         });
         $('#work_place_id').select2({
-            selectOnClose: true
+            selectOnClose: true,
+            theme: 'bootstrap-5'
         });
 
         //Option value based on Staff name  start

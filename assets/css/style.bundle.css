@@ -47714,10 +47714,6 @@ code:not([class*=language-]) {
   height: 60px;
 }
 
-.symbol.symbol-60px .symbol-label {
-  width: 60px;
-  height: 60px;
-}
 
 .symbol.symbol-60px.symbol-fixed .symbol-label {
   width: 60px;
@@ -54447,7 +54443,7 @@ body {
 
 @media (min-width: 992px) {
   .content {
-    padding: 30px 0;
+    /* padding: 30px 0; */
   }
 
   .toolbar-enabled:not(.toolbar-fixed) .content {
@@ -54775,6 +54771,7 @@ body {
   right: 0;
   padding: 4px 13px;
   border-top-right-radius: 0.625rem;
+  margin-top: -179px !important;
 }
 
 .maa-header h1 {
@@ -54990,3 +54987,4 @@ body {
 .payroll_month:hover {
   cursor: pointer;
 }
+

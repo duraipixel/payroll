@@ -34,7 +34,7 @@ class DocumentLockerController extends Controller
         $columns = $post->getTableColumns();
         $tables = DB::connection()->getDoctrineSchemaManager()->listTableNames();
         dd($tables);*/
-        $user_id        = auth()->id();
+        $user_id        = auth()->user()->id;
         $user_check=User::where('id',$user_id)->where('is_super_admin','1')->first();
         if($user_check)
         {

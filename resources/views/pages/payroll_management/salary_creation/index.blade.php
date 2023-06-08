@@ -84,7 +84,7 @@
             $('#net_salary_text').html(netSalary.toFixed(2));
         }
 
-        $('#staff_id').select2();
+        $('#staff_id').select2({ theme: 'bootstrap-5'});
 
         function getInputValue(en) {
 

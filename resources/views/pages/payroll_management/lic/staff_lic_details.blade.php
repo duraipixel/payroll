@@ -88,7 +88,7 @@
         if (String.fromCharCode(e.keyCode).match(/[^.0-9]/g)) return false;
     });
 
-    $('#staff_id').select2();
+    $('#staff_id').select2({ theme: 'bootstrap-5'});
 
     function editLic(id) {
         $.ajaxSetup({

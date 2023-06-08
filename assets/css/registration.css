@@ -1,11 +1,11 @@
-#classes + .select2-container > .selection > span.select2-selection.select2-selection--multiple {
-    height: 46px; 
+#classes+.select2-container>.selection>span.select2-selection.select2-selection--multiple {
+    height: 46px;
 }
 
-#reporting_manager_id + .select2-container > .selection > span.select2-selection.select2-selection--single {
-    border:none;
-    background:#f5f8fa;
-    height:42px;
+#reporting_manager_id+.select2-container>.selection>span.select2-selection.select2-selection--single {
+    border: none;
+    background: #f5f8fa;
+    height: 42px;
 }
 
 span#select2-reporting_manager_id-container {
@@ -18,44 +18,46 @@ span#select2-reporting_manager_id-container {
 .toastr-success {
     background-color: green;
 }
+
 #toast-container .toastr {
     background-color: green !important;
 }
 
-#classes + .fv-plugins-message-container.personal-form-errors.invalid-feedback {
+#classes+.fv-plugins-message-container.personal-form-errors.invalid-feedback {
     position: absolute;
     bottom: -28px;
 }
 
-.select2-container .select2-selection--multiple {
+/* .select2-container .select2-selection--multiple {
     min-height: 42px;
 }
 
-.select2-option + .select2 span.select2-selection.select2-selection--single {
+.select2-option+.select2 span.select2-selection.select2-selection--single {
     height: 43px;
     border-radius: 4px 5px 5px 4px;
-    border-color:#ddd
-}
+    border-color: #ddd
+} */
 
-.select2-option + .select2 span.select2-selection.select2-selection--single > .select2-selection__rendered  {
+/* .select2-option+.select2 span.select2-selection.select2-selection--single>.select2-selection__rendered {
     margin-top: 7px;
     font-weight: 600;
     color: #5e628d;
+} */
+ /* .wizard-section span.select2.select2-container {
+    width: 100% !important;
+} */
+.wizard-section  .input-group > .select2 {
+    width: calc(100% - 41px) !important;
 }
-
-span.select2.select2-container {
-    width:100% !important;
-}
+/*
+.input-group span.select2.select2-container {
+    width: 88% !important;
+} */
+/* .wizard-section .input-group span.select2.select2-container {
+    width: 90% !important;
+} */
 
 a.completed {
     background: #5bcb3fa6;
-}
-
-.select2-option.border-danger + .select2 span.select2-selection.select2-selection--single {
-    border-color: #F1416C
-}
-
-.select2-option.border-danger + .select2-container > .selection > span.select2-selection.select2-selection--multiple {
-    border-color: #F1416C !important;
 }
 
