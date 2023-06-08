@@ -263,6 +263,10 @@
                                             @endisset
                                         </div>
                                     </div>
+                                    <div class="col-sm-12">
+                                        {{-- service history view --}}
+                                        @include('pages.staff.registration._service_history')
+                                    </div>
 
                                     <div class="col-md-12 fv-row">
                                         @if ( isset( $staff_details ) && !empty( $staff_details ) && getStaffVerificationStatus($staff_details->id, 'salary_entry'))

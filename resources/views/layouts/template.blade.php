@@ -149,6 +149,9 @@
             $('#employee_type').select2({
                 theme: 'bootstrap-5',
             });
+            $('#academic_year').select2({
+                theme: 'bootstrap-5',
+            });
             $('#content').on('keydown', function(event) {
                 if (event.which == 121) {
                     $(this).toggleClass('tamil');

@@ -39,6 +39,8 @@ class StaffAppointmentDetailController extends Controller
         if ($validator->passes()) {
 
             $academic_id = academicYearId();
+            dump( $academic_id );
+            dd( $request->all() );
             $staff_id = $request->staff_id;
             $staff_info = User::find($staff_id);
 

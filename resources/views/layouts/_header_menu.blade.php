@@ -75,7 +75,7 @@
                         @endforeach
                     @endisset
                 </select>
-                <select name="status" onchange="return setGlobalAcademicYear(this.value)" class="form-select">
+                <select name="academic_year" id="academic_year" onchange="return setGlobalAcademicYear(this.value)" class="form-select">
                     @isset($global_academic_year)
                         @foreach ($global_academic_year as $item)
                             <option value="{{ $item->id }}" @if (session()->get('academic_id') == $item->id) selected @endif>
