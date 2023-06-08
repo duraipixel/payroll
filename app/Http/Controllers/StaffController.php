@@ -660,14 +660,14 @@ class StaffController extends Controller
             'subject' => 'required',
             'scheme_id' => 'required',
             'class_id' => 'required',
-            'division_id' => 'required',
+            // 'division_id' => 'required',
         ];
         if ($global_is_teaching) {
             $validateArray = [
                 'designation_id' => 'required',
                 'department_id' => 'required',
                 'scheme_id' => 'required',
-                'division_id' => 'required',
+                // 'division_id' => 'required',
             ];
         }
 
@@ -685,7 +685,7 @@ class StaffController extends Controller
             $ins['staff_id'] = $id;
             $ins['designation_id'] = $request->designation_id;
             $ins['department_id'] = $request->department_id;
-            $ins['division_id'] = $request->division_id;
+            $ins['division_id'] = $request->division_id ?? null;
             $ins['attendance_scheme_id'] = $request->scheme_id;
             $ins['status'] = 'active';
             $ins['is_teaching_staff'] = $global_is_teaching ? 'no' : 'yes';
@@ -1085,6 +1085,7 @@ class StaffController extends Controller
 
     public function print(Request $request, User $user)
     {
+        
         return view('pages.overview.print_view.print', compact('user'));
     }
 }

@@ -79,8 +79,7 @@
             <!-- -------------------------------------------------------------- !-->
         </tbody>
     </table>
-
-
+    
     <div style="page-break-before:always">&nbsp;</div>
 
     @include('pages.overview.print_view._education')

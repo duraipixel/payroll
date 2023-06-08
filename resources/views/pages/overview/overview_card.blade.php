@@ -4,8 +4,14 @@
             <div class="me-7 mb-4">
                 <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
                     {{-- <img src="../assets/media/avatars/300-1.jpg" alt="image" /> --}}
-                    @if (isset(auth()->user()->image) && !empty(auth()->user()->image))
-                        <img alt="user" src="{{ asset('/') . auth()->user()->image }}" />
+                  
+
+                    @if ( (isset(auth()->user()->image) && !empty(auth()->user()->image)) || (isset($info->image) && !empty($info->image)) )
+                    @php
+                        $image_path = $info->image ?? ((auth()->user()->id == $info->id && isset(auth()->user()->image) && !empty(auth()->user()->image) ) ? auth()->user()->image : '' );
+                        $profile_image = Storage::url($image_path);
+                    @endphp
+                        <img alt="user" src="{{ asset('public' . $profile_image) }}" />
                     @else
                         <img alt="user" src="{{ asset('assets/images/no_Image.jpg') }}" />
                     @endif

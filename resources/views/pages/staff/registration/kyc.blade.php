@@ -10,7 +10,7 @@
                 <div class="col-md-4 fv-row mb-5">
                     <label class="required fs-6 fw-bold mb-2">Date of Birth</label>
                     <div class="position-relative d-flex align-items-center">
-                        {!! dobSVG() !!}
+                        
                         <input class="form-control  ps-12" autocomplete="off" placeholder="Select a date"
                             name="date_of_birth" id="date_of_birth" autofocus type="date"
                             value="{{ $staff_details->personal->dob ?? '' }}" />
@@ -53,7 +53,7 @@
                     @if (isset($staff_details->personal) && $staff_details->personal->marital_status == 'married') style="display:block" @else style="display:none;" @endif>
                     <label class="fs-6 fw-bold mb-2 required">Marriage Date</label>
                     <div class="position-relative d-flex align-items-center">
-                        {!! dobSVG() !!}
+                        
                         <input class="form-control  ps-12" type="date" placeholder="Select a date"
                             name="marriage_date" id="marriage_date"
                             value="{{ $staff_details->personal->marriage_date ?? '' }}" />
@@ -430,7 +430,7 @@
                             <div class="col-4">
 
                                 <div class="position-relative d-flex align-items-center">
-                                    {!! dobSVG() !!}
+                                    
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="Start date"
                                         name="uan_start_date" id="uan_start_date" type="date"
                                         value="{{ $staff_details->pf->start_date ?? '' }}" autofocus />
@@ -471,7 +471,7 @@
                             </div>
                             <div class="col-3">
                                 <div class="position-relative d-flex align-items-center">
-                                    {!! dobSVG() !!}
+                                    
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="Start date"
                                         name="esi_start_date" id="esi_start_date" autofocus type="date"
                                         value="{{ $staff_details->esi->start_date ?? '' }}" />
@@ -479,7 +479,7 @@
                             </div>
                             <div class="col-3">
                                 <div class="position-relative d-flex align-items-center">
-                                    {!! dobSVG() !!}
+                                    
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="End date"
                                         name="esi_end_date" id="esi_end_date" autofocus type="date"
                                         value="{{ $staff_details->esi->end_date ?? '' }}" />

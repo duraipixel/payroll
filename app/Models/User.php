@@ -99,8 +99,19 @@ class User extends Authenticatable implements Auditable
 
     public function handlingClassNames()
     {
+        // return $this->hasOne(StaffClass::class, 'staff_id', 'id')->join('classes', 'classes.id', '=', 'staff_classes.class_id')
+        //             ->selectRaw('GROUP_CONCAT(classes.name) AS handling_classes');
+
+        /* this query for sql server above 2017
         return $this->hasOne(StaffClass::class, 'staff_id', 'id')->join('classes', 'classes.id', '=', 'staff_classes.class_id')
-                    ->selectRaw('GROUP_CONCAT(classes.name) AS handling_classes');
+                ->selectRaw('STRING_AGG(classes.name, \', \') AS handling_classes');*/
+
+        return $this->hasOne(StaffClass::class, 'staff_id', 'id')->join('classes', 'classes.id', '=', 'staff_classes.class_id')
+                ->selectRaw('SUBSTRING((SELECT \', \' + classes.name
+                                FROM staff_classes
+                                INNER JOIN classes ON classes.id = staff_classes.class_id
+                                WHERE staff_classes.staff_id = ? AND staff_classes.staff_id IS NOT NULL
+                                FOR XML PATH(\'\')), 3, 1000) AS handling_classes', [$this->id]);
     }
 
     public function staffDocuments() {
@@ -188,8 +199,15 @@ class User extends Authenticatable implements Auditable
 
     public function handlingSubjectNames()
     {
+        /*return $this->hasOne(StaffExperiencedSubject::class, 'staff_id', 'id')->join('subjects', 'subjects.id', '=', 'staff_experienced_subjects.subject_id')
+        ->selectRaw('GROUP_CONCAT(subjects.name) AS handling_subjects'); */
+
         return $this->hasOne(StaffExperiencedSubject::class, 'staff_id', 'id')->join('subjects', 'subjects.id', '=', 'staff_experienced_subjects.subject_id')
-        ->selectRaw('GROUP_CONCAT(subjects.name) AS handling_subjects');
+                ->selectRaw('SUBSTRING((SELECT \', \' + subjects.name
+                                FROM staff_experienced_subjects
+                                INNER JOIN subjects ON subjects.id = staff_experienced_subjects.subject_id
+                                WHERE staff_experienced_subjects.staff_id = ? AND staff_experienced_subjects.staff_id IS NOT NULL
+                                FOR XML PATH(\'\')), 3, 1000) AS handling_subjects', [$this->id]);
 
     }
 

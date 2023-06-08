@@ -55,6 +55,15 @@
                             class="fw-bold fs-6 text-gray-800">{{ ucfirst($info->personal->motherTongue->name ?? '') }}</span>
                     </div>
                 </div>
+                @if( isset( $info->personal->dob ) && !empty( $info->personal->dob ))
+                <div class="row mb-7">
+                    <label class="col-lg-5 fw-semibold text-muted">DOB</label>
+                    <div class="col-lg-7">
+                        <span
+                            class="fw-bold fs-6 text-gray-800">{{ commonDateFormat($info->personal->dob ?? '') }}</span>
+                    </div>
+                </div>
+                @endif
                 <div class="row mb-7">
                     <label class="col-lg-5 fw-semibold text-muted">Phone Number</label>
                     <div class="col-lg-7">
@@ -164,15 +173,21 @@
                         </div>
                     </div>
                     <div class="row mb-7">
+                        <label class="col-lg-5 fw-semibold text-muted"> IFSC CODE </label>
+                        <div class="col-lg-7 fv-row">
+                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->bank->bankBranch->ifsc_code ?? '-' }} </span>
+                        </div>
+                    </div>
+                    <div class="row mb-7">
                         <label class="col-lg-5 fw-semibold text-muted"> Account Name </label>
                         <div class="col-lg-7 fv-row">
-                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->bank->account_name ?? '-' }}</span>
+                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->bank->account_name ?? '-' }} </span>
                         </div>
                     </div>
                     <div class="row mb-7">
                         <label class="col-lg-5 fw-semibold text-muted"> Account Number </label>
                         <div class="col-lg-7 fv-row">
-                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->bank->account_number ?? '-' }}</span>
+                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->bank->account_number ?? '-' }} </span>
                         </div>
                     </div>
                 @endisset
@@ -181,13 +196,13 @@
                     <div class="row mb-7">
                         <label class="col-lg-5 fw-semibold text-muted"> PF Number </label>
                         <div class="col-lg-7 fv-row">
-                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->pf->ac_number ?? '-' }}</span>
+                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->pf->ac_number ?? '-' }} </span>
                         </div>
                     </div>
                     <div class="row mb-7">
                         <label class="col-lg-5 fw-semibold text-muted"> PF Account Location </label>
                         <div class="col-lg-7 fv-row">
-                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->pf->lcoation ?? '-' }}</span>
+                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->pf->lcoation ?? '-' }} </span>
                         </div>
                     </div>
                 @endisset
@@ -195,13 +210,13 @@
                     <div class="row mb-7">
                         <label class="col-lg-5 fw-semibold text-muted"> ESI Number </label>
                         <div class="col-lg-7 fv-row">
-                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->esi->ac_number ?? '-' }}</span>
+                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->esi->ac_number ?? '-' }} </span>
                         </div>
                     </div>
                     <div class="row mb-7">
                         <label class="col-lg-5 fw-semibold text-muted"> ESI Account Location </label>
                         <div class="col-lg-7 fv-row">
-                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->esi->lcoation ?? '-' }}</span>
+                            <span class="fw-bold text-gray-800 fs-6"> {{ $info->esi->lcoation ?? '-' }} </span>
                         </div>
                     </div>
                 @endisset
