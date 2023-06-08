@@ -507,8 +507,11 @@ if (!function_exists('getStaffVerificationStatus')) {
                 $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $count_personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'verification_status' => 'approved'])->get();
                 $return = false;
-                if( ( count($education) == count($doc_education) )  && ( count( $expeince ) == count($doc_expeince) ) && count($personal_doc) == count($count_personal_doc) ) {
-                    $return = true;
+                if( count( $education ) > 0 &&  count($expeince) > 0 && count($personal_doc) > 0 ) {
+
+                    if( ( count($education) == count($doc_education) )  && ( count( $expeince ) == count($doc_expeince) ) && count($personal_doc) == count($count_personal_doc) ) {
+                        $return = true;
+                    }
                 }
                 return $return;
                 break;
