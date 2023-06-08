@@ -118,10 +118,10 @@
                             <div class="col-md-4 fv-row mb-5">
                                 <label class="required fs-6 fw-bold mb-2"> Date of Joining </label>
                                 <div class="position-relative d-flex align-items-center">
-                                    {!! dobSvg() !!}
+                                    
                                     <input class="form-control  ps-12" placeholder="Select a date" name="joining_date"
-                                        id="joining_date"
-                                        value="{{ isset($staff_details->appointment->joining_date) ? date('d-m-Y', strtotime($staff_details->appointment->joining_date)) : '' }}" />
+                                        id="joining_date" type="date"
+                                        value="{{ $staff_details->appointment->joining_date ?? '' }}" />
                                 </div>
                             </div>
 
@@ -132,7 +132,7 @@
                                 </label>
                                 <input name="salary_scale" id="salary_scale"
                                     value="{{ $staff_details->appointment->salary_scale ?? '' }}"
-                                    class="form-control form-control-lg price" />
+                                    class="form-control form-control-lg" />
                             </div>
                             <div class="mb-5 col-lg-4 fv-row">
                                 <div class="d-inline-block flex-stack">
@@ -174,10 +174,10 @@
                                             <div class="col-lg-6 mb-5">
                                                 <label class="form-label required">Period of Appointment (From)</label>
                                                 <div class="position-relative d-flex align-items-center">
-                                                    {!! dobSvg() !!}
+                                                    
                                                     <input class="form-control  ps-12" placeholder="Select a date"
-                                                        name="from_appointment" id="from_appointment"
-                                                        value="{{ isset($staff_details->appointment->from_appointment) ? date('d-m-Y', strtotime($staff_details->appointment->from_appointment)) : '' }}" />
+                                                        name="from_appointment" id="from_appointment" type="date"
+                                                        value="{{ $staff_details->appointment->from_appointment ?? '' }}" />
                                                 </div>
                                             </div>
 
@@ -185,10 +185,10 @@
                                                 <label class="form-label required">Period of Appointment (To)</label>
 
                                                 <div class="position-relative d-flex align-items-center">
-                                                    {!! dobSvg() !!}
+                                                    
                                                     <input class="form-control ps-12" placeholder="Select a date"
-                                                        name="to_appointment" id="to_appointment"
-                                                        value="{{ isset($staff_details->appointment->to_appointment) ? date('d-m-Y', strtotime($staff_details->appointment->to_appointment)) : '' }}" />
+                                                        name="to_appointment" id="to_appointment" type="date"
+                                                        value="{{ $staff_details->appointment->to_appointment ?? '' }}" />
                                                 </div>
                                             </div>
                                         </div>
@@ -397,17 +397,17 @@
 <script>
     $(function() {
 
-        $("#joining_date").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#joining_date").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
 
-        $("#from_appointment").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#from_appointment").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
 
-        $("#to_appointment").datepicker({
-            dateFormat: 'd-mm-yy'
-        });
+        // $("#to_appointment").datepicker({
+        //     dateFormat: 'd-mm-yy'
+        // });
 
     });
 
