@@ -856,6 +856,7 @@ class StaffController extends Controller
 
     public function list(Request $request)
     {
+
         $breadcrums = array(
             'title' => 'Staff Management',
             'breadcrums' => array(
@@ -869,10 +870,11 @@ class StaffController extends Controller
 
             $data = User::select('users.*', 'institutions.name as institute_name')
                 ->join('institutions', 'institutions.id', 'users.institute_id')
-                ->when(!empty(session()->get('academic_id')), function ($query) {
-                    $query->where('users.academic_id', session()->get('academic_id'));
-                })->whereNull('is_super_admin');
- /*
+                // ->when(!empty(session()->get('academic_id')), function ($query) {
+                //     $query->where('users.academic_id', session()->get('academic_id'));
+                // })
+                ->whereNull('is_super_admin');
+            /*
             $subquery = User::select('users.*', 'institutions.name as institute_name')
                 ->join('institutions', 'institutions.id', 'users.institute_id')
                 ->where('users.academic_id', session()->get('academic_id'))

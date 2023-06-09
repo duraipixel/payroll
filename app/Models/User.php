@@ -222,8 +222,12 @@ class User extends Authenticatable implements Auditable
     }
 
     public function appointment() {
-        return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'id');
+        return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'id')
+            ->when( !empty(session()->get('academic_id')),function($query){
+                $query->where( 'academic_id', session()->get('academic_id') );
+            });
     }
+    
     public function appointmentCount() {
         return $this->hasMany(StaffAppointmentDetail::class, 'staff_id', 'id');
     }

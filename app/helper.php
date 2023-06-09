@@ -30,6 +30,9 @@ if (!function_exists('academicYearId')) {
     function academicYearId()
     {
         $data = AcademicYear::where('is_current', 1)->first();
+        if( session()->get('academic_id') && !empty( session()->get('academic_id') ) ) {
+            return session()->get('academic_id');
+        }
         return $data->id;
     }
 }

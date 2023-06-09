@@ -39,8 +39,7 @@ class StaffAppointmentDetailController extends Controller
         if ($validator->passes()) {
 
             $academic_id = academicYearId();
-            dump( $academic_id );
-            dd( $request->all() );
+            
             $staff_id = $request->staff_id;
             $staff_info = User::find($staff_id);
 
@@ -77,7 +76,7 @@ class StaffAppointmentDetailController extends Controller
 
             $ins['status'] = 'active';
             
-            StaffAppointmentDetail::updateOrCreate(['staff_id' => $staff_id], $ins);
+            StaffAppointmentDetail::updateOrCreate(['staff_id' => $staff_id, 'academic_id' => $academic_id], $ins);
 
             if( canGenerateEmpCode($staff_id) ) {
                 /**
