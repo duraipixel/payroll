@@ -55006,3 +55006,15 @@ body {
   height: 250px;
   overflow-y: auto;
 }
+.typeahead-pane-search-ul {
+  position: absolute;
+  height: 300px;
+  overflow-y: auto;
+  background: white;
+  z-index: 1; 
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+.typeahead-pane-search-ul li {
+  padding: 15px 20px;
+}
