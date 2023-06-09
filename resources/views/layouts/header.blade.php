@@ -15,7 +15,28 @@
                     </svg>
                 </span>
             </div>
-            <h1 class="h3 m-0 lead text-dark fw-bold form-control border-0">AMALORPAVAM PAYROLL SYSTEM v1.0</h1>
+            {{-- <h1 class="h3 m-0 lead text-dark fw-bold form-control border-0">AMALORPAVAM PAYROLL SYSTEM v1.0</h1> --}}
+            @php $institute = getAllInstitute();@endphp
+            <select name="status" class="form-select" onchange="setGlobalInstitution(this.value)">
+                {{-- <option value=""> - Select Institution - </option> --}}
+                @isset($institute)
+                    @foreach ($institute as $item)
+                        <option value="{{ $item->id }}" @if (session()->get('staff_institute_id') == $item->id) selected @endif>
+                            {{ $item->name }}</option>
+                    @endforeach
+                @endisset
+            </select>
+            <select name="academic_year" id="academic_year" onchange="return setGlobalAcademicYear(this.value)" class="form-select">
+                @isset($global_academic_year)
+                    @foreach ($global_academic_year as $item)
+                        <option value="{{ $item->id }}" @if (session()->get('academic_id') == $item->id) selected @endif>
+                            {{ $item->from_year . ' - ' . $item->to_year }} </option>
+                    @endforeach
+                @endisset
+            </select>
+            @if (request()->routeIs(['home']))
+                <input type="text" name="search_home_date" id="search_home_date" class="border outline-0 px-3">
+            @endif
             <div class="btn p-0 px-2 btn-light d-flex align-items-center justify-content-center">
                 <div>
                     <div class="cursor-pointer symbol symbol-30px symbol-md-30px" data-kt-menu-trigger="click"

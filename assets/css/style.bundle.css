@@ -2605,11 +2605,13 @@ progress {
 .form-control[type=file]:not(:disabled):not([readonly]) {
   cursor: pointer;
 }
+
 .form-control::placeholder {
   color: #5E6278 !important;
   font-weight: normal !important;
   font-size: 12px;
 }
+
 .form-control:focus {
   color: #5E6278;
   background-color: #ffffff;
@@ -53718,8 +53720,12 @@ body {
   }
 
   .header-fixed.toolbar-fixed .wrapper {
-    padding-top: calc(50px + var(--kt-toolbar-height));
+    padding-top: calc(-29px + var(--kt-toolbar-height));
   }
+}
+
+.outline-0 {
+  outline: none !important;
 }
 
 @media (max-width: 991.98px) {
@@ -54766,14 +54772,18 @@ body {
   border: 0;
 }
 
+.canvasjs-chart-credit {
+  display: none !important;
+}
+
 .cstemed {
   position: absolute;
   background: #1b488c;
   color: #fff;
   right: 0;
-  padding: 4px 13px;
   border-top-right-radius: 0.625rem;
-  margin-top: -179px !important;
+  top: 0;
+  width: 25px;
 }
 
 .maa-header h1 {
@@ -54989,4 +54999,3 @@ body {
 .payroll_month:hover {
   cursor: pointer;
 }
-

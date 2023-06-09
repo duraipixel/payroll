@@ -14,7 +14,7 @@
     <h3 class="p-3 text-center"> Service History</h3>
     <table class="table table-hover table-row-dashed align-middle gs-0 gy-3 my-0 ">
         <thead>
-            <tr class="fs-7 fw-bold text-gray-400 border-bottom-0">
+            <tr class="fs-8 fw-bold text-gray-400 border-bottom-0">
                 <th class="p-0 p-3 min-w-50px bg-dark">No</th>
                 <th class="p-0 p-3 bg-dark">From</th>
                 <th class="p-0 p-3 bg-dark">To</th>

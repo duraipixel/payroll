@@ -3,12 +3,10 @@
     data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start"
     data-kt-drawer-toggle="#kt_aside_mobile_toggle">
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
-        <a href="" class="d-block py-3">
-            <img alt="Logo" src="{{ asset('assets/media/logos/user-logo.png') }}"
-                class="h-45px logo" />
-       <img alt="Logo" src="{{ asset('assets/media/logos/user-logo-1.png') }}"
-                class="h-40px mt-1 logo" /> 
-        </a> 
+        <a href="" class="d-flex py-3 align-items-center">
+            <img alt="Logo" src="{{ asset('assets/media/logos/user-logo.png') }}"   width="100px" class="me-2"/>
+            <img alt="Logo" src="{{ asset('assets/media/logos/user-logo-1.png') }}" width="100px"  class="ms-2"  />
+        </a>
     </div>
 
     <div class="aside-menu flex-column-fluid">
@@ -230,42 +228,42 @@
                     </div>
                 @endif
                 @if (access()->hasAccess(['appointment.orders']))
-                <div class="menu-item ">
-                    <span class="menu-link @if (request()->routeIs(['appointment.orders'])) active @endif">
-                        <span class="menu-icon">
-                            <i class="fa fa-file"></i>
-                        </span>
+                    <div class="menu-item ">
+                        <span class="menu-link @if (request()->routeIs(['appointment.orders'])) active @endif">
+                            <span class="menu-icon">
+                                <i class="fa fa-file"></i>
+                            </span>
 
-                        <span class="menu-title">
-                            <a class="text-white" href="{{ route('appointment.orders') }}">
-                                Appointment Orders</span>
-                        </a>
-                    </span>
-                </div>
+                            <span class="menu-title">
+                                <a class="text-white" href="{{ route('appointment.orders') }}">
+                                    Appointment Orders</span>
+                            </a>
+                        </span>
+                    </div>
                 @endif
                 {{-- Reporting Structure --}}
                 @if (access()->hasAccess(['reporting.list']))
-                <div data-kt-menu-trigger="click"
-                    class="menu-item menu-accordion @if (request()->routeIs(['reporting.list'])) hover show @endif">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <i class="fa fa-folder-tree"></i>
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion @if (request()->routeIs(['reporting.list'])) hover show @endif">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <i class="fa fa-folder-tree"></i>
+                            </span>
+                            <span class="menu-title">Reporting Management</span>
+                            <span class="menu-arrow"></span>
                         </span>
-                        <span class="menu-title">Reporting Management</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <div class="menu-sub menu-sub-accordion menu-active-bg">
-                        <div class="menu-item">
-                            <a class="menu-link  @if (request()->routeIs(['reporting.list'])) active @endif"
-                                href="{{ route('reporting.list') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Overview</span>
-                            </a>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link  @if (request()->routeIs(['reporting.list'])) active @endif"
+                                    href="{{ route('reporting.list') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Overview</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endif
                 @if (access()->hasAccess(['user.document_locker']))
                     <!-- Document locker Start-->
@@ -296,7 +294,7 @@
                     <!-- Document locker End-->
                 @endif
 
-                
+
                 @if (access()->hasAccess(['att-manual-entry', 'scheme', 'appointment.orders.add']))
                     <div data-kt-menu-trigger="click"
                         class="menu-item menu-accordion @if (request()->routeIs(['att-manual-entry', 'scheme', 'appointment.orders.add'])) hover show @endif">
@@ -586,35 +584,35 @@
                     </div>
                 @endif
                 @if (access()->hasAccess(['salary-head']))
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <i class="fa fa-handshake"></i>
+                    <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                        <span class="menu-link">
+                            <span class="menu-icon">
+                                <i class="fa fa-handshake"></i>
+                            </span>
+                            <span class="menu-title">Gratuity calculations</span>
+                            <span class="menu-arrow"></span>
                         </span>
-                        <span class="menu-title">Gratuity calculations</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <div class="menu-sub menu-sub-accordion menu-active-bg">
-                        <div class="menu-item">
-                            <a class="menu-link" href="javascript:void(0)">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Resigned Staff</span>
-                            </a>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link" href="javascript:void(0)">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Resigned Staff</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link" href="javascript:void(0)">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Retired Staff</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                    <div class="menu-sub menu-sub-accordion menu-active-bg">
-                        <div class="menu-item">
-                            <a class="menu-link" href="javascript:void(0)">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Retired Staff</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
                 @endif
                 {{-- Block Mapping Start --}}
                 {{-- @if (access()->hasAccess(['blocks']))
