@@ -398,8 +398,12 @@ if (!function_exists('generateLeaveForm')) {
         return '1 year';//need to do calculation
     }
 
-    function commonDateFormat( $date ){
-        return date('d/m/Y', strtotime($date));
+    function commonDateFormat( $date ) {
+
+        if( $date ) {            
+            return date('d/m/Y', strtotime($date));
+        }
+        
     }
 
     function getTotalLeaveCount($staff_id) {

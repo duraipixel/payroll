@@ -32,7 +32,8 @@
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
         {{-- 15/05/2019 --}}
-        N/A
+        {{ commonDateFormat($joining->joining_date ?? '') }}
+        
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Marital Status
