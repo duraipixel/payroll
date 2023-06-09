@@ -3,13 +3,13 @@
     <div class="w-100">
 
         <div class="pb-5 pb-lg-5">
-            <h2 class="fw-bolder text-dark">Employee Details</h2>
+            <h2 class="fw-bolder text-dark"> Employee Details </h2>
         </div>
         <form id="position_form">
             @csrf
             <div class="row">
                 <div class="col-lg-4 mb-5">
-                    <label class="form-label required">Designation</label>
+                    <label class="form-label required"> Designation </label>
                     <div class="input-group">
                         <select name="designation_id" autofocus id="designation_id"
                             class="form-select form-select-lg select2-option">
@@ -32,7 +32,7 @@
                 </div>
                 
                 <div class="col-lg-4 mb-5">
-                    <label class="form-label required">Department</label>
+                    <label class="form-label required"> Department </label>
                     <div class="input-group">
                         <select name="department_id" autofocus id="department_id"
                             onchange="return checkTeachingType(this.value)"

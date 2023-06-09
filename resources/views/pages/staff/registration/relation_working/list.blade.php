@@ -18,9 +18,9 @@
                 @foreach ($working_details as $item)
                     <tr>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $item->belonger->name }} </td>
+                            {{ ucwords($item->belonger->name) }} </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $item->relationship->name }}</td>
+                            {{ ucwords($item->relationship->name) }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ $item->belonger->emp_code }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">

@@ -18,10 +18,10 @@
                 @foreach ($experience_details as $item)
                     <tr>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $item->institute->name }}
+                            {{ strtoupper($item->institute->name) }}
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $item->designation->name }}
+                            {{ strtoupper($item->designation->name) }}
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ date('d-m-Y', strtotime($item->from)) }} - {{ date('d-m-Y', strtotime($item->to)) }}

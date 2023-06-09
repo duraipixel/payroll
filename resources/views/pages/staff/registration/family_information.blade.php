@@ -2,18 +2,17 @@
     <!--begin::Wrapper-->
     <div class="w-100">
 
-        <!--begin::Tables Widget 13-->
-
         <div class="pb-0 pb-lg-0 mt-0">
-            <!--begin::Title-->
-            <h2 class="fw-bolder text-dark">Family Information</h2>
-            <!--end::Title-->
+            
+            <h2 class="fw-bolder text-dark"> Family Information </h2>
+            
         </div>
         <div class="tble-fnton card mt-0 mb-5 mb-xl-8">
             <!--begin::Header-->
             <div class="card-header bg-primary border-0 pt-0">
+                
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bolder fs-3 mb-1">Family Details</span>
+                    <span class="card-label fw-bolder fs-3 mb-1"> Family Details </span>
                 </h3>
 
                 <button onclick="return openFamilyForm()"

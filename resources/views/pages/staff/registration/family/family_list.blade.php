@@ -38,9 +38,9 @@
                         </span>
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->qualification->name }}</td>
-                    <td class="text-dark fw-bolder text-hover-primary fs-6"> {{ $item->profession }}
+                    <td class="text-dark fw-bolder text-hover-primary fs-6"> {{ ucfirst($item->profession) }}
                     </td>
-                    <td class="text-dark fw-bolder text-hover-primary fs-6"> {{ $item->premises }}
+                    <td class="text-dark fw-bolder text-hover-primary fs-6"> {{ ucfirst($item->premises) }}
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->residential_address }}</td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->occupational_address  }}</td>

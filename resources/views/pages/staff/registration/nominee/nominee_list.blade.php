@@ -22,14 +22,14 @@
                 @foreach ($nominee_details as $item)
                     <tr>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $item->nominee->first_name }}
+                            {{ ucwords($item->nominee->first_name) }}
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $item->relationship->name }}</td>
+                            {{ ucwords($item->relationship->name) }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ date('d-m-Y', strtotime($item->dob)) }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $item->gender }}</td>
+                            {{ strtoupper($item->gender) }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ $item->age }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
