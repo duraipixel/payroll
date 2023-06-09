@@ -11,11 +11,11 @@
         <div class="modal-body " id="">
             <form action="" class="p-3 toplevel_form" id="toplevel_form" autocomplete="off" enctype="multipart/form-data">
                 <div class="fv-row form-group mb-3 row">
-                    <div class="col-sm-5">
+                    <div class="col-sm-4">
                         <label class="form-label required mt-1" for=""> Select Manager </label>
                     </div>
-                    <div class="col-sm-7">
-                        <select name="manager_id" id="manager_id" class="form-control select2-option">
+                    <div class="col-sm-8">
+                        <select name="manager_id" id="manager_id" class="form-select w-100 form-select-option">
                             @isset($managers)
                                 @foreach ($managers as $item)
                                     <option value="{{ $item->id }}">{{ $item->name . ' - ' . $item->emp_code }}</option>
@@ -132,4 +132,9 @@
     KTUtil.onDOMContentLoaded(function() {
         KTAppEcommerceSaveBranch.init();
     });
+    $('.form-select-option').select2({
+        dropdownParent: $('#kt_dynamic_app'),
+        theme: 'bootstrap-5',
+        width:'100%'
+    }); 
 </script>

@@ -158,4 +158,9 @@
     KTUtil.onDOMContentLoaded(function() {
         KTAppEcommerceSaveBranch.init();
     });
+    $('.form-select-option').select2({
+        dropdownParent: $('#kt_dynamic_app'),
+        theme: 'bootstrap-5',
+        width:'100%'
+    }); 
 </script>

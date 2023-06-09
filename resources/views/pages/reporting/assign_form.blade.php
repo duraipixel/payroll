@@ -19,7 +19,7 @@
                         <label class="form-label required mt-1" for=""> Select Reportee </label>
                     </div>
                     <div class="col-sm-7">
-                        <select name="reportee_id" id="reportee_id" class="form-control reportee-pane select2-option">
+                        <select name="reportee_id" id="reportee_id" class="form-control reportee-pane form-select-option">
                             <option value=""> --select --</option>
                             @isset($reportee)
                                 @foreach ($reportee as $ritem)
@@ -34,7 +34,7 @@
                         <label class="form-label required mt-1" for=""> Select Manager </label>
                     </div>
                     <div class="col-sm-7">
-                        <select name="manager_id" id="manager_id" class="form-control select2-option">
+                        <select name="manager_id" id="manager_id" class="form-control form-select-option">
                             <option value=""> --select --</option>
                             @isset($managers)
                                 @foreach ($managers as $item)
@@ -46,6 +46,7 @@
                 </div>
 
                 <div class="form-group mt-7 text-end">
+                    
                     <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
                     <button type="button" class="btn btn-primary" id="form-submit-btn">
                         <span class="indicator-label">
@@ -159,4 +160,9 @@
     KTUtil.onDOMContentLoaded(function() {
         KTAppEcommerceSaveBranch.init();
     });
+    $('.form-select-option').select2({
+        dropdownParent: $('#kt_dynamic_app'),
+        theme: 'bootstrap-5',
+        width:'100%'
+    }); 
 </script>
