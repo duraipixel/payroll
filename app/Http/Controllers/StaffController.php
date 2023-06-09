@@ -1087,8 +1087,9 @@ class StaffController extends Controller
 
     public function print(Request $request, User $user)
     {
+
         $joining = StaffAppointmentDetail::selectRaw('min(joining_date) as joining_date')->where('staff_id', $user->id)->first();
-        
         return view('pages.overview.print_view.print', compact('user', 'joining'));
+
     }
 }
