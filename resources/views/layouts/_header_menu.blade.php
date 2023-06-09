@@ -27,7 +27,6 @@
                 </div>
             </div>
             <button class="btn btn-primary btn-primary" onclick="return gotoStaffOverview()"> View </button>
-           
         </div>
     </div>
 </div>

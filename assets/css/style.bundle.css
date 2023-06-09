@@ -55001,3 +55001,7 @@ body {
 .payroll_month:hover {
   cursor: pointer;
 }
+.card-table {
+  height: 250px;
+  overflow-y: auto;
+}
