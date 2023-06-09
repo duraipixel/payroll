@@ -54001,7 +54001,7 @@ body {
     top: 0;
     bottom: 0;
     left: 0;
-    z-index: 999999;
+    z-index: 1;
     overflow: hidden;
   }
 
@@ -54245,6 +54245,7 @@ body {
 
 .aside-menu .menu-item {
   padding: 0;
+  border-bottom:1px solid #ffffff0d 
 }
 
 .aside-menu .menu-item .menu-link {
