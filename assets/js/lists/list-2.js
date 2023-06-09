@@ -15,7 +15,7 @@ var KTProjectList1 = function () {
             data: {
                 datasets: [{
                     data: [8, 4, 4],
-                    backgroundColor: ['#00A3FF', '#50CD89', '#E4E6EF']
+                    backgroundColor: ['#00A3FF', '#43a43c', '#E4E6EF']
                 }],
                 labels: ['Working Days', 'Present', 'Absent']
             },

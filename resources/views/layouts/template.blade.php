@@ -15,14 +15,12 @@
 <body id="kt_body"
     class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
     style="--kt-toolbar-height:95px;--kt-toolbar-height-tablet-and-mobile:95px">
-
     <!--begin::Main-->
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
         <!--begin::Page-->
         <div class="page d-flex flex-row flex-column-fluid">
             <!--begin::Aside-->
-
             @include('layouts.sidemenu')
             <!--end::Aside-->
             <!--begin::Wrapper-->

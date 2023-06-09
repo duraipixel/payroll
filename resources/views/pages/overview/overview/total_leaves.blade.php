@@ -48,7 +48,7 @@
             data: {
                 datasets: [{
                     data: @json($leave_chart_data),
-                    backgroundColor: ['#00A3FF', '#cf6262', '#50CD89']
+                    backgroundColor: ['#00A3FF', '#cf6262', '#43a43c']
                 }],
                 labels: @json($leave_chart_label)
             },

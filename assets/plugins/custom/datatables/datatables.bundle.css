@@ -597,7 +597,7 @@ table.DTCR_clonedTable.dataTable {
 
 div.DTCR_pointer {
   width: 1px;
-  background-color: #0d6efd;
+  background-color: #1d3883;
   z-index: 201;
 }
 
@@ -695,7 +695,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before, table
   font-family: "Courier New", Courier, monospace;
   line-height: 1em;
   content: "+";
-  background-color: #0d6efd;
+  background-color: #1d3883;
 }
 
 table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control:before, table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control:before {
@@ -740,7 +740,7 @@ table.dataTable.dtr-column > tbody > tr > td.dtr-control:before, table.dataTable
   font-family: "Courier New", Courier, monospace;
   line-height: 1em;
   content: "+";
-  background-color: #0d6efd;
+  background-color: #1d3883;
 }
 
 table.dataTable.dtr-column > tbody > tr.parent td.dtr-control:before, table.dataTable.dtr-column > tbody > tr.parent th.dtr-control:before, table.dataTable.dtr-column > tbody > tr.parent td.control:before, table.dataTable.dtr-column > tbody > tr.parent th.control:before {
@@ -857,7 +857,7 @@ table.dt-rowReorder-float {
   position: absolute !important;
   opacity: 0.8;
   table-layout: fixed;
-  outline: 2px solid #0d6efd;
+  outline: 2px solid #1d3883;
   outline-offset: -2px;
   z-index: 2001;
 }
@@ -918,7 +918,7 @@ div.DTS div.dataTables_scrollBody table {
 }
 
 table.dataTable tbody > tr.selected, table.dataTable tbody > tr > .selected {
-  background-color: #0d6efd;
+  background-color: #1d3883;
 }
 
 table.dataTable.stripe tbody > tr.odd.selected, table.dataTable.stripe tbody > tr.odd > .selected, table.dataTable.display tbody > tr.odd.selected, table.dataTable.display tbody > tr.odd > .selected {

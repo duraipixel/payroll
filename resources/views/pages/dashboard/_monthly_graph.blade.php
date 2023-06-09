@@ -56,7 +56,7 @@
             data: {
                 datasets: [{
                     data: @json($month_graph_data),
-                    backgroundColor: ['#00A3FF', '#cf6262', '#50CD89']
+                    backgroundColor: ['#00A3FF', '#cf6262', '#43a43c']
                 }],
                 labels: @json($month_graph_label)
             },
