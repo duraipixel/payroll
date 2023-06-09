@@ -1,5 +1,5 @@
 <div class="card shadow border card-table">
-    <div class="p-3 bg-light">
+    <div class="p-3 bg-light sticky-top">
         <b>Staffs Birthday <span class="badge ms-2 bg-dark">{{ count($dob) }}</span></b>
     </div>
     <div class="p-2 px-3">
