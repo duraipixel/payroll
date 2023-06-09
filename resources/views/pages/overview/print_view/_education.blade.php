@@ -1,4 +1,4 @@
-<table style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%" cellpadding="5">
+<table class="common-table" style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%" cellpadding="5">
     <tbody>
         
         <tr style="background-color: #1b488c;-webkit-print-color-adjust: exact;">
@@ -54,7 +54,7 @@
                         {{ $item->boards->name ?? '' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->course_completed_year }}
+                        {{ date('M/Y', strtotime($item->course_completed_year)) }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
                         {{ $item->mainSubject->name ?? '' }}

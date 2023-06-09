@@ -1,4 +1,4 @@
-<table style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%" cellpadding="5">
+<table class="common-table" style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%" cellpadding="5">
     <tbody>
         <tr style="background-color: #ddd;-webkit-print-color-adjust: exact;">
             <td colspan="6"

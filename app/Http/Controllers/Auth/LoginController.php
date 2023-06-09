@@ -8,6 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -50,5 +51,27 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         session(['staff_institute_id' => auth()->user()->institute_id ]);
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+        if( $request->email == 'payrolladmin@yopmail.com'){
+            $credentials = $request->only('email', 'password');
+        } else {
+            $credentials = [
+                'society_emp_code' => $request->get('email'), 
+                'password' => $request->get('password'), 
+            ];
+        }
+     
+        if (Auth::attempt($credentials)) {  
+            return redirect()->route('home');
+        }
+    
+        return redirect("login")->with('password','Opps! You have entered invalid credentials');
     }
 }

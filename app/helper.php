@@ -408,7 +408,7 @@ if (!function_exists('generateLeaveForm')) {
         $taken_leave = 0;
         $balance_leave = 0;
         if( $staff_info->appointment->nature_of_employment_id ?? '' ){
-            $total_leaves = LeaveMapping::selectRaw('SUM(leave_mappings.leave_days) as total')->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)->where('status', 'active')->first();
+            $total_leaves = LeaveMapping::selectRaw('sum(CAST(leave_mappings.leave_days AS DECIMAL(10, 2))) as total')->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)->where('status', 'active')->first();
             
             if( $total_leaves ) {
                 $allocated_total_leave = $total_leaves->total;

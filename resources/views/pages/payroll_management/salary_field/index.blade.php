@@ -67,25 +67,25 @@
         <div class="card-body py-4">
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="table-responsive">
-                    <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
+                    <table class="table align-middle gs-2 table-hover table-bordered table-striped fs-7 no-footer"
                         id="salary_field_table">
                         <thead class="bg-primary">
                             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="text-center text-white">
+                                <th class=" text-white">
                                     Salary Head
                                 </th>
-                                <th class="text-center text-white" >
+                                <th class="text-start text-white" >
                                     Salary Field Name
                                 </th>
-                                <th class="text-center text-white" >
+                                <th class="text-start text-white" >
                                     Code
                                 </th>
-                                <th class="text-center text-white"> Entry Type </th>
-                                <th class="text-center text-white"> Sort Order </th>
-                                <th class="text-center text-white">
+                                <th class="text-start text-white"> Entry Type </th>
+                                <th class="text-start text-white"> Sort Order </th>
+                                <th class=" text-white">
                                     Status
                                 </th>
-                                <th class="text-center text-white">
+                                <th class=" text-white">
                                     Actions
                                 </th>
                             </tr>

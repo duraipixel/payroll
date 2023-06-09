@@ -75,6 +75,6 @@ class StaffAppointmentDetail extends Model implements Auditable
     {
         return $this->hasMany(LeaveMapping::class, 'nature_of_employment_id', 'nature_of_employment_id')
                 ->groupBy('nature_of_employment_id', 'academic_id')
-                ->selectRaw('sum(CAST(leave_mappings.leave_days as int)) as total_leave, nature_of_employment_id, academic_id');
+                ->selectRaw('sum(CAST(leave_mappings.leave_days AS DECIMAL(10, 2))) as total_leave, nature_of_employment_id, academic_id');
     }
 }

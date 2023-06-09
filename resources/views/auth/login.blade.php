@@ -4,6 +4,12 @@
     <div class="d-flex flex-center flex-column flex-lg-row-fluid">
         <!--begin::Wrapper-->
         <div class="col-md-8 p-10">
+        <div class="w-lg-500px p-10">
+            @if ($alert = Session::get('password'))
+                <div class="alert alert-warning">
+                    {{ $alert }}
+                </div>
+            @endif
             <!--begin::Form-->
             <form class="form w-100" method="POST" action="{{ route('login') }}" id="kt_sign_in_form">
                 @csrf
