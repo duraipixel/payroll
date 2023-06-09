@@ -104,7 +104,7 @@
     <div style="page-break-before:always">&nbsp;</div>
     @include('pages.overview.print_view._family')
     {{-- @include('pages.overview.print_view._family_others') --}}
-    @include('pages.overview.print_view._aews')
+    {{-- @include('pages.overview.print_view._aews') --}}
     @include('pages.overview.print_view._nominee')
     @include('pages.overview.print_view._relation_working')
 

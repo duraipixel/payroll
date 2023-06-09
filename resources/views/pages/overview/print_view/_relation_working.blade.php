@@ -24,16 +24,16 @@
             @foreach ($user->workingRelations as $item)
                 <tr>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->belonger->name ?? '' }}
+                        {{ $item->belonger->name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->relationship->name ?? '' }}
+                        {{ $item->relationship->name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                       {{ $item->belonger->emp_code ?? '' }}
+                       {{ $item->belonger->emp_code ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->belonger->work_place->name ?? '' }}
+                        {{ $item->belonger->work_place->name ?? 'N/A' }}
                     </td>
                 </tr>
             @endforeach

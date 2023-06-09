@@ -19,25 +19,26 @@
         Date of Birth
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ isset($user->personal->dob) && !empty($user->personal->dob) ? commonDateFormat($user->personal->dob) : '' }}
+        {{ isset($user->personal->dob) && !empty($user->personal->dob) ? commonDateFormat($user->personal->dob) : 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Gender
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ ucfirst( $user->personal->gender ?? '') }}
+        {{ ucfirst( $user->personal->gender ?? 'N/A') }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Date of Joining
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        15/05/2019
+        {{-- 15/05/2019 --}}
+        N/A
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Marital Status
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ ucfirst($user->personal->marital_status ?? '') }}
+        {{ ucfirst($user->personal->marital_status ?? 'N/A') }}
     </td>
 </tr>
 <tr>
@@ -45,25 +46,25 @@
         Marriage Date
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ isset($user->personal->marriage_date) && !empty($user->personal->marriage_date) ? commonDateFormat($user->personal->marriage_date) : '' }}
+        {{ isset($user->personal->marriage_date) && !empty($user->personal->marriage_date) ? commonDateFormat($user->personal->marriage_date) : 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Mother Tongue
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->motherTongue->name ?? '' }}
+        {{ $user->personal->motherTongue->name ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Place of Birth
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->birthPlace->name ?? '' }}
+        {{ $user->personal->birthPlace->name ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Nationality 
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->nationality->name ?? '' }}
+        {{ $user->personal->nationality->name ?? 'N/A' }}
     </td>
 </tr>
 <tr>
@@ -71,19 +72,19 @@
         Religion
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->religion->name ?? '' }}
+        {{ $user->personal->religion->name ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Caste
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->caste->name ?? '' }}
+        {{ $user->personal->caste->name ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Community
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->community->name ?? '' }}
+        {{ $user->personal->community->name ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Email Id 
@@ -99,26 +100,26 @@
         Phone No
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->phone_no ?? '-' }}
+        {{ $user->personal->phone_no ?? 'N/A' }}
     </td>
     <td
         style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Mobile No - 1 
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->mobile_no1 ?? '' }}
+        {{ $user->personal->mobile_no1 ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Mobile No - 2 
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->mobile_no2 ?? '' }}
+        {{ $user->personal->mobile_no2 ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Whatsapp No. 
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->whatsapp_no ?? '' }}
+        {{ $user->personal->whatsapp_no ?? 'N/A' }}
     </td>
 </tr>
 <tr>
@@ -126,7 +127,7 @@
         Emergency No
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->personal->emergency_no ?? '' }}
+        {{ $user->personal->emergency_no ?? 'N/A' }}
     </td>
 </tr>
 <tr>

@@ -469,10 +469,11 @@ if (!function_exists('getStaffVerificationStatus')) {
                 $health_details = StaffHealthDetail::where('staff_id', $staff_id)->first();
                 $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $knownLanguages = StaffKnownLanguage::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-                $studienSubject = StaffStudiedSubject::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+                // $studienSubject = StaffStudiedSubject::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $return = false;
-                if( $personalInfo && $professional_data && count( $education ) > 0 && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($expeince) > 0 &&  count($knownLanguages) > 0 && count($studienSubject) > 0 && count($staffbank) > 0  ){
+                
+                if( $personalInfo && $professional_data && count( $education ) > 0 && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($expeince) > 0 &&  count($knownLanguages) > 0 && count($staffbank) > 0  ){
                     $return = true;
                 }
                 return $return;

@@ -6,11 +6,6 @@
                         height:0px;">
                 Appointment Information</td>
         </tr>
-        <tr style="background-color: #ddd;-webkit-print-color-adjust: exact;">
-            <td colspan="16"
-                style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;font-size: 12px;">
-                Appointment Details</td>
-        </tr>
         
         @if (isset($user->allAppointment) && count($user->allAppointment) > 0)
             @foreach ($user->allAppointment as $item)
@@ -45,9 +40,9 @@
                     </td>
                     <td
                         style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                        {{ $item->has_probation ?? '' }}
+                        {{ $item->has_probation ?? 'N/A' }}
                         <br>
-                        {{ $item->probation_period ?? '' }}
+                        {{ $item->probation_period ?? 'N/A' }}
                     </td>
                     <td
                         style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
@@ -55,7 +50,7 @@
                     </td>
                     <td
                         style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                        {{ $item->appointmentOrderModel->name ?? '' }}
+                        {{ $item->appointmentOrderModel->name ?? 'N/A' }}
                     </td>
                 </tr>
             @endforeach

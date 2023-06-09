@@ -9,7 +9,7 @@
             <!--end::Stepper-->
             <div class="row">
                 <div class="col-sm-12 mt-3 text-end">
-                    <button type="button" data-bs-dismiss="modal" class="btn btn-dark">Close</button>
+                    <button type="button" data-bs-dismiss="modal" class="btn btn-sm btn-dark me-3 mb-3">Close</button>
                 </div>
             </div>
         </div>

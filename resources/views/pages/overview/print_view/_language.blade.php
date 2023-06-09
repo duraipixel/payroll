@@ -23,7 +23,7 @@
         
     <tr>
         <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-            {{ $item->language->name ?? '' }}
+            {{ $item->language->name ?? 'N/A' }}
         </td>
         <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
             {{ $item->read ? 'Yes' : 'No' }}

@@ -48,28 +48,28 @@
                         {{ $loop->iteration }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->course_name ?? '' }}
+                        {{ $item->course_name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->boards->name ?? '' }}
+                        {{ $item->boards->name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
                         {{ date('M/Y', strtotime($item->course_completed_year)) }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->mainSubject->name ?? '' }}
+                        {{ $item->mainSubject->name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->axSubject->name ?? '' }}
+                        {{ $item->axSubject->name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->submitted_date ?? '' }}
+                        {{ $item->submitted_date ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->returned_date ?? '' }}
+                        {{ $item->returned_date ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->eduType->name ?? '' }}
+                        {{ $item->eduType->name ?? 'N/A' }}
                     </td>
                 </tr>
             @endforeach

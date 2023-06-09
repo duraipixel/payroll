@@ -71,7 +71,7 @@
                                 <div class="mb-5 col-lg-4 fv-row">
                                     <div class="DA_holder question">
                                         <div class="fw-bold me-5">
-                                            <label class="fs-6">Disease Allergy</label>
+                                            <label class="fs-6">Disease Allergy </label>
                                         </div>
                                         <div
                                             class="DA_holder DA_radio_holder d-block mt-5 align-items-center cstm-zeed">
@@ -86,7 +86,7 @@
                                                 class="form-check form-check-custom form-check-solid me-10">
                                                 <input class="form-check-input h-20px w-20px radio-btn"
                                                     type="radio" name="allergy" id="allergy_no"
-                                                    value="no" @if( isset($staff_details->healthDetails->disease_allergy_name) && empty( $staff_details->healthDetails->disease_allergy_name ) ) checked @endif />
+                                                    value="no" {{ $staff_details->healthDetails->disease_allergy_name ?? 'checked' }} />
                                                 <span class="form-check-label fw-bold f1">No</span>
                                             </label>
                                         </div>
@@ -94,7 +94,7 @@
         
                                     <div class="DA_holder textField" @if( isset($staff_details->healthDetails->disease_allergy_name) && !empty( $staff_details->healthDetails->disease_allergy_name ) ) style="display:block" @endif>
                                         <div class="col-lg-12 mb-5">
-                                            <label class="form-label"> </label>
+                                            <label class="form-label"></label>
                                             <input name="allergy_name" id="allergry_name" value="{{ $staff_details->healthDetails->disease_allergy_name ?? '' }}" class="form-control form-control-lg " 
                                             placeholder="Disease Allergy Name"/>
                                         </div>
@@ -113,14 +113,12 @@
                                                 <input class="form-check-input h-20px w-20px radio-btn"
                                                     type="radio" name="diff_abled" id="diff_abled_yes" @if( isset($staff_details->healthDetails->differently_abled_name) && !empty( $staff_details->healthDetails->differently_abled_name ) ) checked @endif
                                                     value="yes" />
-                                                <span class="form-check-label fw-bold fl">Yes</span>
+                                                <span class="form-check-label fw-bold fl"> Yes </span>
                                             </label>
                                             <label
                                                 class="form-check form-check-custom form-check-solid me-10">
-                                                <input class="form-check-input h-20px w-20px radio-btn"
-                                                    type="radio" name="diff_abled" id="diff_abled_no" @if( isset($staff_details->healthDetails->differently_abled_name) && empty( $staff_details->healthDetails->differently_abled_name ) ) checked @endif
-                                                    value="no" />
-                                                <span class="form-check-label fw-bold f1">No</span>
+                                                <input class="form-check-input h-20px w-20px radio-btn" type="radio" name="diff_abled" id="diff_abled_no" {{ $staff_details->healthDetails->differently_abled_name ?? 'checked' }} value="no" />
+                                                <span class="form-check-label fw-bold f1"> No </span>
                                             </label>
                                         </div>
                                     </div>

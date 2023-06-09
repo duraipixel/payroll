@@ -39,19 +39,19 @@
         Name (In Tamil)
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->first_name_tamil ?? '-' }}
+        {{ $user->first_name_tamil ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Short Name
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->short_name ?? '-' }}
+        {{ $user->short_name ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Institution Type
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->institute->name ?? '-' }}
+        {{ $user->institute->name ?? 'N/A' }}
     </td>
 </tr>
 <tr>
@@ -59,26 +59,26 @@
         style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Category of Staff</td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->appointment->staffCategory->name ?? '-' }}
+        {{ $user->appointment->staffCategory->name ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Nature of Employment
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->appointment->employment_nature->name ?? '-' }}
+        {{ $user->appointment->employment_nature->name ?? 'N/A' }}
     </td>
 
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Teaching Type
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->appointment->teachingType->name ?? '-' }}
+        {{ $user->appointment->teachingType->name ?? 'N/A' }}
     </td>
     <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
         Place of Work
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->appointment->work_place->name ?? '-' }}
+        {{ $user->appointment->work_place->name ?? 'N/A' }}
     </td>
 </tr>
 <tr>
@@ -92,6 +92,6 @@
         Reporting Manager 
     </td>
     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-        {{ $user->reporting->name ?? '-' }}
+        {{ $user->reporting->name ?? 'N/A' }}
     </td>
 </tr>

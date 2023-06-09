@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PayrollManagement\SalaryHead;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
+use App\Models\Staff\StaffBankLoan;
 use App\Models\Staff\StaffInsurance;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -164,6 +165,7 @@ class SalaryCreationController extends Controller
             $content = view('pages.payroll_management.salary_creation._show_insurance_details', compact('datas', 'title') );
         } else {
             $title = 'Loans Acive Details';
+            $datas = StaffBankLoan::where('status', 'active')->where('staff_id', $staff_id )->get();
             $content = view('pages.payroll_management.salary_creation._loan_details', compact('datas', 'title') );
         }
 

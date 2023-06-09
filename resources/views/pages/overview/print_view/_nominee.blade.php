@@ -51,9 +51,9 @@
                         {{ $item->share }} %
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{  $item->minor_address ?? '' }}
+                        {{  $item->minor_address ?? 'N/A' }}
                         <br>
-                        {{ $item->minor_contact_no ?? '' }}
+                        {{ $item->minor_contact_no ?? 'N/A' }}
                     </td>
                 </tr>
             @endforeach

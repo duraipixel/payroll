@@ -51,40 +51,40 @@
             @foreach ($user->familyMembers as $item)
                 <tr>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->relationship->name ?? '' }}
+                        {{ $item->relationship->name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
                         {{ $item->first_name }}
                         <br>{{ ucfirst($item->gender) }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ isset($item->dob) && !empty($item->dob) ? commonDateFormat($item->dob) : '' }} <br> Age - {{ $item->age ?? 0 }}
+                        {{ isset($item->dob) && !empty($item->dob) ? commonDateFormat($item->dob) : 'N/A' }} <br> Age - {{ $item->age ?? 0 }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->qualification->name ?? '' }}
+                        {{ $item->qualification->name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->profession ?? '' }}
+                        {{ $item->profession ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->residential_address ?? '' }}
+                        {{ $item->residential_address ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->contact_no ?? '' }}
+                        {{ $item->contact_no ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->bloodGroup->name ?? '' }}
+                        {{ $item->bloodGroup->name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->nationality->name ?? '' }}
+                        {{ $item->nationality->name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->remarks ?? '' }}
+                        {{ $item->remarks ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;"> 
-                        {{ $item->premises ?? '' }}
+                        {{ $item->premises ?? 'N/A' }}
                         <br>
-                        {{ $item->registration_no ?? '' }}
+                        {{ $item->registration_no ?? 'N/A' }}
                         <br>
                     </td>
                 </tr>

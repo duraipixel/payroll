@@ -40,7 +40,7 @@
                                                                 @endforeach
                                                                 ]
                                                             @endif
-                                                            @if ($item_fields->short_name == 'LIC')
+                                                            @if ($item_fields->short_name == 'LIC' || strtolower($item_fields->short_name) == 'bank loan' )
                                                                 <i class="fa fa-exclamation-circle loans_info"
                                                                     role="button"
                                                                     data-id="{{ $item_fields->short_name }}"></i>

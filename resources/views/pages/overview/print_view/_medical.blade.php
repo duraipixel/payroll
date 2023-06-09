@@ -17,25 +17,25 @@
                 Blood Group
             </td>
             <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                {{ $user->healthDetails->bloog_group->name ?? '' }}
+                {{ $user->healthDetails->bloog_group->name ?? 'N/A' }}
             </td>
             <td
                 style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
                 Height in Cms </td>
             <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                {{ $user->healthDetails->height ?? '' }}
+                {{ $user->healthDetails->height ?? 'N/A' }}
             </td>
             <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
                 Weight in Kgs
             </td>
             <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                {{ $user->healthDetails->weight ?? '' }}
+                {{ $user->healthDetails->weight ?? 'N/A' }}
             </td>
             <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
                 Identification mark
             </td>
             <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                {{ $user->healthDetails->identification_mark ?? '' }}
+                {{ $user->healthDetails->identification_mark ?? 'N/A' }}
             </td>
         </tr>
         <tr>
@@ -43,25 +43,25 @@
                 Identification mark - 1
             </td>
             <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                {{ $user->healthDetails->identification_mark1 ?? '' }}
+                {{ $user->healthDetails->identification_mark1 ?? 'N/A' }}
             </td>
             <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
                 Identification mark - 2
             </td>
             <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                {{ $user->healthDetails->identification_mark2 ?? '' }}
+                {{ $user->healthDetails->identification_mark2 ?? 'N/A' }}
             </td>
             <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
                 Disease Allergy
             </td>
             <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                {{ $user->healthDetails->disease_allergy ?? '' }}
+                {{ $user->healthDetails->disease_allergy ?? 'N/A' }}
             </td>
             <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
                 Differently abled 
             </td>
             <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                {{ $user->healthDetails->differently_abled ?? '' }}
+                {{ $user->healthDetails->differently_abled ?? 'N/A' }}
             </td>
         </tr>
 
