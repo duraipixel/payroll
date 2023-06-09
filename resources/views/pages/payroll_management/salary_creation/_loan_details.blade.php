@@ -42,7 +42,7 @@
 
         <tbody>
             
-            @if (isset($datas) && !empty($datas))
+            @if (isset($datas) && count($datas) > 0)
                 @foreach ($datas as $item)
                     <tr>
                         <td class="p-3"> {{ $loop->iteration }} </td>
@@ -56,7 +56,7 @@
                 @endforeach
             @else
             <tr>
-                <td class="p-3" colspan="7"> No Records </td>
+                <td class="p-3 text-center" colspan="7"> No Records </td>
             </tr>
             @endif
 

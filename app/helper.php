@@ -25,6 +25,7 @@ use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\Master\Institution;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
+use App\Models\PayrollManagement\StaffSalaryPatternField;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -451,7 +452,7 @@ if (!function_exists('generateLeaveForm')) {
 
     function getSalarySelectedFields($staff_id, $staff_salary_id, $field_id)
     {
-        return StaffSalaryField::where('staff_id', $staff_id)->where('staff_salary_id', $staff_salary_id)
+        return StaffSalaryPatternField::where('staff_id', $staff_id)->where('staff_salary_pattern_id', $staff_salary_id)
                 ->where('field_id', $field_id)->first();
     }
 

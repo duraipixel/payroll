@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\PayrollManagement\SalaryHead;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
+use App\Models\PayrollManagement\StaffSalaryPattern;
+use App\Models\PayrollManagement\StaffSalaryPatternField;
 use App\Models\Staff\StaffBankLoan;
 use App\Models\Staff\StaffInsurance;
 use App\Models\User;
@@ -82,22 +84,22 @@ class SalaryCreationController extends Controller
             $insert_data['is_salary_processed'] = 'no';
             $insert_data['status'] = 'active';
             
-            $salary_info = StaffSalary::updateOrCreate(['staff_id' => $staff_id], $insert_data);
+            $salary_info = StaffSalaryPattern::updateOrCreate(['staff_id' => $staff_id], $insert_data);
 
-            StaffSalaryField::where('staff_salary_id', $salary_info->id )->forceDelete();
+            StaffSalaryPatternField::where('staff_salary_pattern_id', $salary_info->id )->forceDelete();
 
             foreach ( $ins as $items_pay ) {
 
                 $field_data = [];
                 $field_data['staff_id'] = $staff_id;
-                $field_data['staff_salary_id'] = $salary_info->id;
+                $field_data['staff_salary_pattern_id'] = $salary_info->id;
                 $field_data['field_id'] = $items_pay['field_id'];
                 $field_data['field_name'] = $items_pay['name'];
                 $field_data['amount'] = $items_pay['amount'];
                 $field_data['percentage'] = '';
                 $field_data['reference_type'] = $items_pay['reference_type'];
                 $field_data['reference_id'] = $items_pay['reference_id'];
-                StaffSalaryField::create($field_data);
+                StaffSalaryPatternField::create($field_data);
                 
             }
             $error = 'Salary is set successfully';
@@ -117,7 +119,7 @@ class SalaryCreationController extends Controller
     {
         $staff_id = $request->staff_id;
 
-        $salary_info = StaffSalary::where('staff_id', $staff_id)->first();
+        $salary_info = StaffSalaryPattern::where('staff_id', $staff_id)->first();
         $salary_heads = SalaryHead::where('status', 'active')->get();
         return view('pages.payroll_management.salary_creation.fields', compact('salary_heads', 'salary_info' ) );
     }
@@ -126,7 +128,7 @@ class SalaryCreationController extends Controller
     {
         $staff_id = $request->staff_id;
         $staff_info = User::find($staff_id);
-        $salary_info = StaffSalary::where('staff_id', $staff_id)->first();
+        $salary_info = StaffSalaryPattern::where('staff_id', $staff_id)->first();
         $salary_heads = SalaryHead::where('status', 'active')->get();
         $title = 'Salary Preview';
 
@@ -138,7 +140,7 @@ class SalaryCreationController extends Controller
     {
         $staff_id = $request->staff_id;
         $staff_info = User::find($staff_id);
-        $salary_info = StaffSalary::where('staff_id', $staff_id)->first();
+        $salary_info = StaffSalaryPattern::where('staff_id', $staff_id)->first();
         $salary_heads = SalaryHead::where('status', 'active')->get();
         $pdf = PDF::loadView('pages.payroll_management.salary_creation._salary_slip',array('staff_info' => $staff_info, 'salary_info' => $salary_info))->setPaper('a4', 'portrait');
         // download PDF file with download method
