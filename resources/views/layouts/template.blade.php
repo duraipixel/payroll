@@ -35,7 +35,7 @@
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     {{-- @include('layouts.parts.toolbar') --}}
                     <!--begin::Post-->
-                    <div class="post d-flex flex-column-fluid" id="kt_post">
+                    <div class="post p-3" id="kt_post">
                         <!--begin::Container-->
                         <div id="kt_content_container">
                             @yield('content')
