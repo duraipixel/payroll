@@ -15,6 +15,7 @@
 
 
 :root {
+  --side-bar-size:225px;
   --bs-blue: #009ef6;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
@@ -35217,6 +35218,8 @@ a:hover {
   display: flex;
   align-items: center;
   flex-grow: 1;
+  font-weight: lighter;
+  font-size: 12px;
 }
 
 .menu-item .menu-link .menu-badge {
@@ -53707,7 +53710,7 @@ body {
 
   .aside-enabled.aside-fixed .wrapper {
     transition: padding-left 0.3s ease;
-    padding-left: 265px;
+    padding-left: var(--side-bar-size);
   }
 
   .aside-enabled.aside-fixed[data-kt-aside-minimize=on] .wrapper {
@@ -53784,7 +53787,7 @@ body {
   }
 
   .aside-enabled.aside-fixed.header-fixed .header {
-    left: 265px;
+    left: var(--side-bar-size);
     transition: left 0.3s ease;
   }
 
@@ -53863,7 +53866,7 @@ body {
   }
 
   .aside-enabled.aside-fixed.toolbar-fixed .toolbar {
-    left: 265px;
+    left: var(--side-bar-size);
     transition: left 0.3s ease;
   }
 
@@ -53978,20 +53981,19 @@ body {
 
 @media (min-width: 992px) {
   .aside {
-    width: 265px;
+    width: var(--side-bar-size);
     transition: width 0.3s ease;
   }
 
   .aside .aside-logo {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     height: auto;
-    padding: 0 25px;
   }
 
   .aside .aside-menu {
-    width: 265px;
+    width: var(--side-bar-size);
   }
 
   .aside-fixed .aside {
@@ -54023,7 +54025,7 @@ body {
 
   [data-kt-aside-minimize=on] .aside.aside-hoverable:hover:not(.animating) {
     transition: width 0.3s ease;
-    width: 265px;
+    width: var(--side-bar-size);
     box-shadow: 5px 0px 10px rgba(70, 78, 95, 0.075);
   }
 
@@ -54089,8 +54091,8 @@ body {
 
 .aside-menu .menu .menu-item .menu-link,
 .aside-menu .menu .menu-item .menu-content {
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .aside-menu .menu .menu-sub:not([data-popper-placement])>.menu-item>.menu-content,
@@ -54309,7 +54311,7 @@ body {
 .aside-dark .menu .menu-item.hover:not(.here)>.menu-link:not(.disabled):not(.active):not(.here),
 .aside-dark .menu .menu-item:not(.here) .menu-link:hover:not(.disabled):not(.active):not(.here) {
   transition: color 0.2s ease, background-color 0.2s ease;
-  background-color: #37383a;
+  background-color: #0204093d;
   color: #ffffff;
 }
 
@@ -54414,7 +54416,7 @@ body {
 
 .aside-dark .menu .menu-item .menu-link.active {
   transition: color 0.2s ease, background-color 0.2s ease;
-  background-color: #37383a;
+  background-color: #2196f35c;
   color: #ffffff;
 }
 
@@ -54520,7 +54522,7 @@ body {
   }
 
   .docs-wrapper {
-    padding-left: 265px;
+    padding-left: var(--side-bar-size);
   }
 }
 
@@ -54574,7 +54576,7 @@ body {
     left: 0;
     z-index: 101;
     overflow: hidden;
-    width: 265px;
+    width: var(--side-bar-size);
   }
 
   .docs-aside .docs-aside-logo {
@@ -54585,7 +54587,7 @@ body {
   }
 
   .docs-aside .docs-aside-menu {
-    width: 265px;
+    width: var(--side-bar-size);
   }
 }
 
