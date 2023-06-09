@@ -55014,7 +55014,13 @@ body {
   z-index: 1; 
   border: 1px solid #eee;
   border-radius: 5px;
+  padding: 0 !important;
 }
 .typeahead-pane-search-ul li {
-  padding: 15px 20px;
+  padding: 10px 20px;
+}
+.typeahead-pane-search-ul li:hover {
+  background-color: #0b0e18;
+  color: white;
+  cursor: pointer;
 }
