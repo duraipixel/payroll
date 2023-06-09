@@ -48,7 +48,7 @@
                     <i class="icon-xl la la-edit"></i>
                 </div>
                 <div class="media-body text-center">
-                    <div class="bd-wizard-step-title">KYC  &nbsp; information</div>
+                    <div class="bd-wizard-step-title">KYC  &nbsp;information</div>
                 </div>
             </div>
         </h3>
@@ -200,7 +200,7 @@
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 
     <script>
-        $('#classes, #reporting_manager_id').select2({ theme: 'bootstrap-5'});
+        $('#classes').select2({ theme: 'bootstrap-5'});
         
 
         function openAddModel(form_type) {

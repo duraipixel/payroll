@@ -4,13 +4,13 @@
         <div class="fv-row  row">
             <div class="col-lg-4 mb-5 rd-only">
                 <label class="input-label">Employee Code</label>
-                <input name="society_employee_code" id="society_employee_code" class="form-control form-control-lg "
+                <input name="society_employee_code" id="society_employee_code" class="form-input"
                     value="{{ $staff_details->society_emp_code ?? 'Draft' }}" readonly />
             </div>
             <div class="col-lg-4 mb-5">
                 <label class="input-label required">Institution Name</label>
-                <div class="input-group">
-                    <select name="institute_name" id="institute_name" class="form-select">
+                <div class="d-flex">
+                    <select name="institute_name" id="institute_name" class="form-input">
                         <option value="">--Select Institution--</option>
                         @isset($institutions)
                             @foreach ($institutions as $item)
@@ -20,26 +20,25 @@
                         @endisset
                     </select>
                     @if (access()->buttonAccess('institutions', 'add_edit'))
-                        <button type="button" onclick="return openAddModel('intitution')"
-                            class="border-0 btn-light-success btn-sm border"><i class="fa fa-plus"></i></button>
+                        <button type="button" onclick="return openAddModel('intitution')" class="text-white btn-primary"><i class="fa fa-plus"></i></button>
                     @endif
                 </div>
             </div>
             <div class="col-lg-4 mb-5 rd-only">
                 <label class="input-label">Institution Code</label>
-                <input name="institute_code" id="institute_code" class="form-control form-control-lg "
+                <input name="institute_code" id="institute_code" class="form-input"
                     value="{{ $staff_details->institute_emp_code ?? 'Draft' }}" readonly />
             </div>
             <div class="col-lg-4 mb-5 rd-only position-relative">
                 <label class="input-label required">Previous Code</label>
-                <input name="previous_code" id="previous_code" class="form-control form-control-lg "
+                <input name="previous_code" id="previous_code" class="form-input"
                     value="{{ $staff_details->emp_code ?? '' }}" />
             </div>
 
             <div class="col-lg-4 mb-5">
                 <label class="input-label required">Name (In English)</label>
                 <input name="name" id="name" value="{{ $staff_details->name ?? '' }}"
-                    class="form-control form-control-lg " />
+                    class="form-input" />
             </div>
             <div class="col-lg-4 mb-5 use-latha">
                 <label class="d-flex align-items-center input-label required">
@@ -49,24 +48,24 @@
                         data-bs-content="&lt;div class='d-flex flex-stack text-dark fw-bolder'&gt; &lt;div&gt;Please Type in Tamil&lt;/div&gt; &lt;/div&gt; &lt;div class='d-flex flex-stack text-muted'&gt;"></i>
                 </label>
                 <input name="first_name_tamil" value="{{ $staff_details->first_name_tamil ?? '' }}" id="content"
-                    class="form-control form-control-lg  tamil" />
+                    class="form-input tamil" />
             </div>
             <div class="col-lg-4 mb-5">
                 <label class="input-label">Short Name</label>
                 <input name="short_name" id="short_name" value="{{ $staff_details->short_name ?? '' }}"
-                    class="form-control form-control-lg " />
+                    class="form-input" />
             </div>
             <div class="col-lg-4 mb-5">
                 <label class="input-label required">Email ID</label>
                 <input name="email" id="email" value="{{ $staff_details->email ?? '' }}"
-                    class="form-control form-control-lg " />
+                    class="form-input" />
             </div>
 
             <input type="hidden" name="id" id="staff_id" value="{{ $staff_details->id ?? '' }}">
 
             <div class="col-lg-4 mb-5">
                 <label class="input-label">Reporting Manager</label>
-                <select name="reporting_manager_id" id="reporting_manager_id" class="form-select form-select-lg ">
+                <select name="reporting_manager_id" id="reporting_manager_id" class="form-input">
                     <option value=""> --Select Reporting Manager-- </option>
                     @isset($reporting_managers)
                         @foreach ($reporting_managers as $item)
@@ -98,7 +97,8 @@
                                 value="{{ $staff_details->aadhaar->doc_number ?? '' }}" />
                         </td>
                         <td>
-                            <input class="form-input" style="" type="file" name="aadhar[]"multiple="">
+                            <input class="form-input" style="" type="file" name="aadhar[]"
+                                multiple="">
                             @isset($staff_details->aadhaar->multi_file)
                                 @php
                                     $paths = explode(',', $staff_details->aadhaar->multi_file);
