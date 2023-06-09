@@ -5,9 +5,9 @@
        
         <label class="required fs-6 fw-bold mb-2">Course Started</label>
         <!--begin::Input-->
-        <div class="position-relative">
+        <div class="d-flex">
            
-            <input class="form-control form-control-solid ps-12" placeholder="Course Name"
+            <input class="form-input ps-12" placeholder="Course Name"
                 name="course_name" required id="course_name" value="{{ $course_info->course_name ?? '' }}" />
         </div>
     </div>
@@ -16,8 +16,8 @@
     <div class="col-lg-6 mb-5">
        
         <label class="form-label required"> Board/University </label>
-        <div class="position-relative">
-            <select name="board_id" autofocus id="board_id" class="form-select form-select-lg " required>
+        <div class="d-flex">
+            <select name="board_id" autofocus id="board_id" class="form-input" required>
                 <option value="">-- Select Board --</option>
                 @isset($boards)
                     @foreach ($boards as $item)
@@ -29,10 +29,10 @@
             </select>
             @if( access()->buttonAccess('board','add_edit') )
 
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
+            <button type="button" class="btn-primary text-white"
                 onclick="return openAddModel('boards')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
 
@@ -41,9 +41,9 @@
     <!--begin::Input group-->
     <div class="col-lg-6 mb-5">
         <label class="required fs-6 fw-bold mb-2">Course Completed</label>
-        <div class="position-relative d-flex align-items-center">
+        <div class="d-flex d-flex align-items-center">
             {!! dobSVG() !!}
-            <input class="form-control form-control-solid ps-12" placeholder="Select a date"
+            <input class="form-input ps-12" placeholder="Select a date"
                 name="course_completed_year" type="date" required id="course_completed_year" value="{{ $course_info->course_completed_year ?? ''  }}" />
         </div>
     </div>
@@ -51,9 +51,9 @@
     <!--begin::Input group-->
     <div class="col-lg-6 mb-5">
         <label class="form-label required"> Main Subject </label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="main_subject_id" autofocus id="main_subject_id"
-                class="form-select form-select-lg " required>
+                class="form-input" required>
                 <option value="">--Select Main Subject --</option>
                 @isset($subjects)
                     @foreach ($subjects as $item)
@@ -65,10 +65,10 @@
             </select>
             @if( access()->buttonAccess('subject','add_edit') )
 
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
+            <button type="button" class="btn-primary text-white"
                 onclick="return openAddModel('main_subject')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
     </div>
@@ -77,9 +77,9 @@
     <div class="col-lg-6 mb-5">
         
         <label class="form-label required"> Ancillary Subject </label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="ancillary_subject_id" autofocus id="ancillary_subject_id"
-                class="form-select form-select-lg " required>
+                class="form-input" required>
                 <option value="">--Select Ancillary Subject --</option>
                 @isset($subjects)
                     @foreach ($subjects as $item)
@@ -90,10 +90,10 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('subject','add_edit') )
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
+            <button type="button" class="btn-primary text-white"
                 onclick="return openAddModel('ancillary_subject')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
     </div>
@@ -111,9 +111,9 @@
     <!--begin::Input group-->
     <div class="col-lg-6 mb-5">
         <label class="required fs-6 fw-bold mb-2">Submitted Date</label>
-        <div class="position-relative d-flex align-items-center">
+        <div class="d-flex d-flex align-items-center">
            {!! dobSVG() !!}
-            <input class="form-control form-control-solid ps-12" placeholder="Select a date"
+            <input class="form-input ps-12" placeholder="Select a date"
                 name="course_submitted_date" type="date" required id="course_submitted_date" value="{{ $course_info->submitted_date ?? ''  }}" />
         </div>
     </div>
@@ -123,9 +123,9 @@
     <div class="col-lg-6 mb-5">
         <input type="hidden" name="course_id" id="course_id" value="{{ $course_info->id ?? '' }}">
         <label class="form-label required"> Type </label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="course_professional_type" autofocus id="course_professional_type"
-                class="form-select form-select-lg " required>
+                class="form-input" required>
                 <option value="">--Select Type --</option>
                 @isset($types)
                     @foreach ($types as $item)
@@ -136,9 +136,9 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('professional_type','add_edit') )
-            <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('professional_type')">
+            <button type="button" class="btn-primary text-white" onclick="return openAddModel('professional_type')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
         
@@ -156,13 +156,13 @@
                         <div class="uppy" id="kt_uppy_5">
                             <div class="uppy-wrapper">
                                 <div class="uppy-Root uppy-FileInput-container">
-                                    <input class="uppy-FileInput-input uppy-input-control" style=""
+                                    <input class="uppy-FileInput-input uppy-input-control form-input" style=""
                                         type="file" name="course_file"
                                         id="course_file">
-                                        <label
+                                        {{-- <label
                                         class="uppy-input-label btn btn-light-primary btn-sm btn-bold"
                                         for="course_file">Attach
-                                        files</label>
+                                        files</label> --}}
                                 </div><span class="form-text text-dark">Maximum file size
                                     1MB</span>
                             </div>
@@ -202,7 +202,7 @@
     <div class="d-flex flex-stack pt-5">
         <!--begin::Wrapper-->
         <div>
-            <button onclick="return submitCourseForm()" type="button" class="btn btn-lg btn-primary me-3 d-inline-block"
+            <button onclick="return submitCourseForm()" type="button" class="btn btn-primary"
                 >
                 <span class="indicator-label">Add
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->

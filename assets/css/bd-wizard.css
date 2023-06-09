@@ -69,7 +69,9 @@
         display: none;
     }
 }
-
+.current {
+    background-color: white !important;
+}
 .wizard .steps>ul li.current .bd-wizard-step-icon,
 .wizard .steps>ul li.done .bd-wizard-step-icon {
     color: #fff;
@@ -184,12 +186,10 @@
 
 .wizard .actions li a {
     display: inline-block;
-    border-radius: 6px;
     background-color: #1d3883;
-    padding: 16px 30px;
     color: #fff;
-    font-style: 15px;
-    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 5px;
 }
 
 .wizard .actions li.disabled {
@@ -212,7 +212,6 @@
     padding: 20px;
     background: white;
     overflow: hidden;
-    margin-bottom: 25px;
 }
 
 .header-fixed.toolbar-fixed .wrapper,
@@ -223,12 +222,14 @@
 .wizard-section {
     overflow: hidden;
 }
-
+.wizard .select2 {
+    width: 100% !important;
+}
 .wizard .select2-selection--single,
 .wizard .content .form-control,
 .wizard .content .form-select {
     min-height: 15px !important;
-    height: 35px !important;
+    height: 25px !important;
     border-radius: 4px !important;
     padding: 5px 10px !important;
     font-size: 12px !important;
@@ -236,6 +237,7 @@
 .wizard .steps>ul li {
     position: relative;
     bottom: -1px;
+    background: #e6e8ea;
 }
 .input-label {
     font-size: 11px ;
@@ -249,4 +251,5 @@
     outline: none;
     width: 100%;
     font-size: 12px !important;
+    height:25px
 }

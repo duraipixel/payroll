@@ -20,7 +20,8 @@
                         @endisset
                     </select>
                     @if (access()->buttonAccess('institutions', 'add_edit'))
-                        <button type="button" onclick="return openAddModel('intitution')" class="text-white btn-primary"><i class="fa fa-plus"></i></button>
+                        <button type="button" onclick="return openAddModel('intitution')"
+                            class="text-white btn-primary"><i class="fa fa-plus"></i></button>
                     @endif
                 </div>
             </div>
@@ -37,8 +38,7 @@
 
             <div class="col-lg-4 mb-5">
                 <label class="input-label required">Name (In English)</label>
-                <input name="name" id="name" value="{{ $staff_details->name ?? '' }}"
-                    class="form-input" />
+                <input name="name" id="name" value="{{ $staff_details->name ?? '' }}" class="form-input" />
             </div>
             <div class="col-lg-4 mb-5 use-latha">
                 <label class="d-flex align-items-center input-label required">
@@ -57,8 +57,7 @@
             </div>
             <div class="col-lg-4 mb-5">
                 <label class="input-label required">Email ID</label>
-                <input name="email" id="email" value="{{ $staff_details->email ?? '' }}"
-                    class="form-input" />
+                <input name="email" id="email" value="{{ $staff_details->email ?? '' }}" class="form-input" />
             </div>
 
             <input type="hidden" name="id" id="staff_id" value="{{ $staff_details->id ?? '' }}">
@@ -75,257 +74,257 @@
                     @endisset
                 </select>
             </div>
-            <table class="table table-bordered">
-                <thead class="bg-light">
-                    <tr>
-                        <th class="fw-bold">#Card</th>
-                        <th class="fw-bold">Name</th>
-                        <th class="fw-bold">Card Number</th>
-                        <th class="fw-bold">File</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>Aadhaar</th>
-                        <td>
-                            <input name="aadhar_name" id="aadhar_name"
-                                value="{{ $staff_details->aadhaar->description ?? '' }}"
-                                class="form-input " placeholder="Name" />
-                        </td>
-                        <td>
-                            <input name="aadhar_no" class="form-input " placeholder="Number"
-                                value="{{ $staff_details->aadhaar->doc_number ?? '' }}" />
-                        </td>
-                        <td>
-                            <input class="form-input" style="" type="file" name="aadhar[]"
-                                multiple="">
-                            @isset($staff_details->aadhaar->multi_file)
-                                @php
-                                    $paths = explode(',', $staff_details->aadhaar->multi_file);
-                                @endphp
-                                @isset($paths)
+            <div class="p-3">
+                <table class="table table-bordered">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="fw-bold">#Card</th>
+                            <th class="fw-bold">Name</th>
+                            <th class="fw-bold">Card Number</th>
+                            <th class="fw-bold">File</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Aadhaar</th>
+                            <td>
+                                <input name="aadhar_name" id="aadhar_name"
+                                    value="{{ $staff_details->aadhaar->description ?? '' }}" class="form-input "
+                                    placeholder="Name" />
+                            </td>
+                            <td>
+                                <input name="aadhar_no" class="form-input " placeholder="Number"
+                                    value="{{ $staff_details->aadhaar->doc_number ?? '' }}" />
+                            </td>
+                            <td>
+                                <input class="form-input" style="" type="file" name="aadhar[]" multiple="">
+                                @isset($staff_details->aadhaar->multi_file)
+                                    @php
+                                        $paths = explode(',', $staff_details->aadhaar->multi_file);
+                                    @endphp
+                                    @isset($paths)
 
-                                    @foreach ($paths as $item)
-                                        @php
-                                            $url = Storage::url($item);
-                                        @endphp
+                                        @foreach ($paths as $item)
+                                            @php
+                                                $url = Storage::url($item);
+                                            @endphp
 
-                                        <div class="d-inline-block p-2 bg-light m-1">
-                                            <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
-                                                target="_blank">View File </a>
-                                        </div>
-                                    @endforeach
+                                            <div class="d-inline-block p-2 bg-light m-1">
+                                                <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
+                                                    target="_blank">View File </a>
+                                            </div>
+                                        @endforeach
+                                    @endisset
                                 @endisset
-                            @endisset
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Pan</th>
-                        <td>
-                            <input name="pancard_name" class="form-input " placeholder="Name"
-                                value="{{ $staff_details->pan->description ?? '' }}" />
-                        </td>
-                        <td>
-                            <input name="pancard_no" class="form-input " placeholder="Number"
-                                value="{{ $staff_details->pan->doc_number ?? '' }}" />
-                        </td>
-                        <td>
-                            <input class="form-input" style="" type="file"
-                                name="pancard[]" multiple="">
-                            @isset($staff_details->pan->multi_file)
-                                @php
-                                    $paths = explode(',', $staff_details->pan->multi_file);
-                                @endphp
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Pan</th>
+                            <td>
+                                <input name="pancard_name" class="form-input " placeholder="Name"
+                                    value="{{ $staff_details->pan->description ?? '' }}" />
+                            </td>
+                            <td>
+                                <input name="pancard_no" class="form-input " placeholder="Number"
+                                    value="{{ $staff_details->pan->doc_number ?? '' }}" />
+                            </td>
+                            <td>
+                                <input class="form-input" style="" type="file" name="pancard[]"
+                                    multiple="">
+                                @isset($staff_details->pan->multi_file)
+                                    @php
+                                        $paths = explode(',', $staff_details->pan->multi_file);
+                                    @endphp
 
-                                @isset($paths)
-                                    <div class="col-12">
-                                        <div class="d-flex justiy-content-around flex-wrap">
-                                            @foreach ($paths as $item)
-                                                @php
-                                                    $url = Storage::url($item);
-                                                @endphp
+                                    @isset($paths)
+                                        <div class="col-12">
+                                            <div class="d-flex justiy-content-around flex-wrap">
+                                                @foreach ($paths as $item)
+                                                    @php
+                                                        $url = Storage::url($item);
+                                                    @endphp
 
-                                                <div class="d-inline-block p-2 bg-light m-1">
-                                                    <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
-                                                        target="_blank">View File </a>
-                                                </div>
-                                            @endforeach
+                                                    <div class="d-inline-block p-2 bg-light m-1">
+                                                        <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
+                                                            target="_blank">View File </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    @endisset
                                 @endisset
-                            @endisset
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Ration Card</th>
-                        <td>
-                            <input name="ration_card_name" class="form-input " placeholder="Name"
-                                value="{{ $staff_details->ration->description ?? '' }}" />
-                        </td>
-                        <td>
-                            <input name="ration_card_number" class="form-input "
-                                placeholder="Number" value="{{ $staff_details->ration->doc_number ?? '' }}" />
-                        </td>
-                        <td>
-                            <input class="form-input" style="" type="file"
-                                name="ration_card[]" multiple="">
-                            @isset($staff_details->ration->multi_file)
-                                @php
-                                    $paths = explode(',', $staff_details->ration->multi_file);
-                                @endphp
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Ration Card</th>
+                            <td>
+                                <input name="ration_card_name" class="form-input " placeholder="Name"
+                                    value="{{ $staff_details->ration->description ?? '' }}" />
+                            </td>
+                            <td>
+                                <input name="ration_card_number" class="form-input " placeholder="Number"
+                                    value="{{ $staff_details->ration->doc_number ?? '' }}" />
+                            </td>
+                            <td>
+                                <input class="form-input" style="" type="file" name="ration_card[]"
+                                    multiple="">
+                                @isset($staff_details->ration->multi_file)
+                                    @php
+                                        $paths = explode(',', $staff_details->ration->multi_file);
+                                    @endphp
 
-                                @isset($paths)
-                                    <div class="col-12">
-                                        <div class="d-flex justiy-content-around flex-wrap">
-                                            @foreach ($paths as $item)
-                                                @php
-                                                    $url = Storage::url($item);
-                                                @endphp
+                                    @isset($paths)
+                                        <div class="col-12">
+                                            <div class="d-flex justiy-content-around flex-wrap">
+                                                @foreach ($paths as $item)
+                                                    @php
+                                                        $url = Storage::url($item);
+                                                    @endphp
 
-                                                <div class="d-inline-block p-2 bg-light m-1">
-                                                    <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
-                                                        target="_blank">View File </a>
-                                                    <a class="btn-sm btn-outline-danger"
-                                                        onclick="removeDocument('{{ $staff_details->ration->id }}'', '{{ $item }}')">
-                                                        Remove
-                                                    </a>
-                                                </div>
-                                            @endforeach
+                                                    <div class="d-inline-block p-2 bg-light m-1">
+                                                        <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
+                                                            target="_blank">View File </a>
+                                                        <a class="btn-sm btn-outline-danger"
+                                                            onclick="removeDocument('{{ $staff_details->ration->id }}'', '{{ $item }}')">
+                                                            Remove
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    @endisset
                                 @endisset
-                            @endisset
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Driving Licence</th>
-                        <td>
-                            <input name="license_name" class="form-input " placeholder="Name"
-                                value="{{ $staff_details->driving_license->description ?? '' }}" />
-                        </td>
-                        <td>
-                            <input name="license_number" class="form-input " placeholder="Number"
-                                value="{{ $staff_details->driving_license->doc_number ?? '' }}" />
-                        </td>
-                        <td>
-                            <input class="form-input" style="" type="file"
-                                name="driving_license[]" multiple="">
-                            @isset($staff_details->driving_license->multi_file)
-                                @php
-                                    $paths = explode(',', $staff_details->driving_license->multi_file);
-                                @endphp
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Driving Licence</th>
+                            <td>
+                                <input name="license_name" class="form-input " placeholder="Name"
+                                    value="{{ $staff_details->driving_license->description ?? '' }}" />
+                            </td>
+                            <td>
+                                <input name="license_number" class="form-input " placeholder="Number"
+                                    value="{{ $staff_details->driving_license->doc_number ?? '' }}" />
+                            </td>
+                            <td>
+                                <input class="form-input" style="" type="file" name="driving_license[]"
+                                    multiple="">
+                                @isset($staff_details->driving_license->multi_file)
+                                    @php
+                                        $paths = explode(',', $staff_details->driving_license->multi_file);
+                                    @endphp
 
-                                @isset($paths)
-                                    <div class="col-12">
-                                        <div class="d-flex justiy-content-around flex-wrap">
-                                            @foreach ($paths as $item)
-                                                @php
-                                                    $url = Storage::url($item);
-                                                @endphp
+                                    @isset($paths)
+                                        <div class="col-12">
+                                            <div class="d-flex justiy-content-around flex-wrap">
+                                                @foreach ($paths as $item)
+                                                    @php
+                                                        $url = Storage::url($item);
+                                                    @endphp
 
-                                                <div class="d-inline-block p-2 bg-light m-1">
-                                                    <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
-                                                        target="_blank">View File </a>
-                                                    <a class="btn-sm btn-outline-danger"
-                                                        onclick="removeDocument('{{ $staff_details->driving_license->id }}'', '{{ $item }}')">
-                                                        Remove
-                                                    </a>
-                                                </div>
-                                            @endforeach
+                                                    <div class="d-inline-block p-2 bg-light m-1">
+                                                        <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
+                                                            target="_blank">View File </a>
+                                                        <a class="btn-sm btn-outline-danger"
+                                                            onclick="removeDocument('{{ $staff_details->driving_license->id }}'', '{{ $item }}')">
+                                                            Remove
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    @endisset
                                 @endisset
-                            @endisset
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Voter ID</th>
-                        <td>
-                            <input name="voter_name" class="form-input " placeholder="Name"
-                                value="{{ $staff_details->voter->description ?? '' }}" />
-                        </td>
-                        <td>
-                            <input name="voter_number" class="form-input " placeholder="Number"
-                                value="{{ $staff_details->voter->doc_number ?? '' }}" />
-                        </td>
-                        <td>
-                            <input class="form-input" style="" type="file" name="voter[]"
-                                multiple="">
-                            @isset($staff_details->voter->multi_file)
-                                @php
-                                    $paths = explode(',', $staff_details->voter->multi_file);
-                                @endphp
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Voter ID</th>
+                            <td>
+                                <input name="voter_name" class="form-input " placeholder="Name"
+                                    value="{{ $staff_details->voter->description ?? '' }}" />
+                            </td>
+                            <td>
+                                <input name="voter_number" class="form-input " placeholder="Number"
+                                    value="{{ $staff_details->voter->doc_number ?? '' }}" />
+                            </td>
+                            <td>
+                                <input class="form-input" style="" type="file" name="voter[]"
+                                    multiple="">
+                                @isset($staff_details->voter->multi_file)
+                                    @php
+                                        $paths = explode(',', $staff_details->voter->multi_file);
+                                    @endphp
 
-                                @isset($paths)
-                                    <div class="col-12">
-                                        <div class="d-flex justiy-content-around flex-wrap">
-                                            @foreach ($paths as $item)
-                                                @php
-                                                    $url = Storage::url($item);
-                                                @endphp
-                                                <div class="d-inline-block p-2 bg-light m-1">
-                                                    <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
-                                                        target="_blank">View File </a>
-                                                    <a class="btn-sm btn-outline-danger"
-                                                        onclick="removeDocument('{{ $staff_details->voter->id }}'', '{{ $item }}')">
-                                                        Remove
-                                                    </a>
-                                                </div>
-                                            @endforeach
+                                    @isset($paths)
+                                        <div class="col-12">
+                                            <div class="d-flex justiy-content-around flex-wrap">
+                                                @foreach ($paths as $item)
+                                                    @php
+                                                        $url = Storage::url($item);
+                                                    @endphp
+                                                    <div class="d-inline-block p-2 bg-light m-1">
+                                                        <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
+                                                            target="_blank">View File </a>
+                                                        <a class="btn-sm btn-outline-danger"
+                                                            onclick="removeDocument('{{ $staff_details->voter->id }}'', '{{ $item }}')">
+                                                            Remove
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
-                                    </div>
 
+                                    @endisset
                                 @endisset
-                            @endisset
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Passport</th>
-                        <td>
-                            <input name="passport_name" id="passport_name" class="form-input "
-                                placeholder="Passport Name"
-                                value="{{ $staff_details->passport->description ?? '' }}" />
-                        </td>
-                        <td>
-                            <input name="passport_number" class="form-input "
-                                placeholder="Passport Number"
-                                value="{{ $staff_details->passport->doc_number ?? '' }}" />
-                        </td>
-                        <td>
-                            <input class="form-input" style="" type="file"
-                                name="passport[]" multiple="">
-                            @isset($staff_details->passport->multi_file)
-                                @php
-                                    $paths = explode(',', $staff_details->passport->multi_file);
-                                @endphp
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Passport</th>
+                            <td>
+                                <input name="passport_name" id="passport_name" class="form-input "
+                                    placeholder="Passport Name"
+                                    value="{{ $staff_details->passport->description ?? '' }}" />
+                            </td>
+                            <td>
+                                <input name="passport_number" class="form-input " placeholder="Passport Number"
+                                    value="{{ $staff_details->passport->doc_number ?? '' }}" />
+                            </td>
+                            <td>
+                                <input class="form-input" style="" type="file" name="passport[]"
+                                    multiple="">
+                                @isset($staff_details->passport->multi_file)
+                                    @php
+                                        $paths = explode(',', $staff_details->passport->multi_file);
+                                    @endphp
 
-                                @isset($paths)
-                                    <div class="col-12">
-                                        <div class="d-flex justiy-content-around flex-wrap">
-                                            @foreach ($paths as $item)
-                                                @php
-                                                    $url = Storage::url($item);
-                                                @endphp
-                                                <div class="d-inline-block p-2 bg-light m-1">
-                                                    <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
-                                                        target="_blank">View File </a>
-                                                    <a class="btn-sm btn-outline-danger"
-                                                        onclick="removeDocument('{{ $staff_details->passport->id }}'', '{{ $item }}')">
-                                                        Remove
-                                                    </a>
-                                                </div>
-                                            @endforeach
+                                    @isset($paths)
+                                        <div class="col-12">
+                                            <div class="d-flex justiy-content-around flex-wrap">
+                                                @foreach ($paths as $item)
+                                                    @php
+                                                        $url = Storage::url($item);
+                                                    @endphp
+                                                    <div class="d-inline-block p-2 bg-light m-1">
+                                                        <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
+                                                            target="_blank">View File </a>
+                                                        <a class="btn-sm btn-outline-danger"
+                                                            onclick="removeDocument('{{ $staff_details->passport->id }}'', '{{ $item }}')">
+                                                            Remove
+                                                        </a>
+                                                    </div>
+                                                @endforeach
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endisset
                                 @endisset
-                            @endisset
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
     </form>
 </div>
 

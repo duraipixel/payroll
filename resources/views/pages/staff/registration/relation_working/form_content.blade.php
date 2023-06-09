@@ -63,7 +63,7 @@
     <div class="d-flex flex-stack pt-5">
         <!--begin::Wrapper-->
         <div>
-            <button type="button" class="btn btn-lg btn-primary me-3 d-inline-block" onclick="return submitRelationWorkingDetails()" >
+            <button type="button" class="btn btn-primary" onclick="return submitRelationWorkingDetails()" >
                 <span class="indicator-label"> Submit
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
                     <span class="svg-icon svg-icon-3 ms-2 me-0">

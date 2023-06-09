@@ -22,12 +22,12 @@
                             <label class="fs-6 required">Gender</label>
                         </div>
                         <div class="d-block mt-5 align-items-center cstm-zeed">
-                            <label class="form-check form-check-custom form-check-solid me-10">
+                            <label class="form-check form-check-custom form-check-solid">
                                 <input class="form-check-input h-20px w-20px" type="radio" name="gender"
                                     value="male" @if (isset($staff_details->personal) && $staff_details->personal->gender == 'male') checked @endif />
                                 <span class="form-check-label fw-bold">Male</span>
                             </label>
-                            <label class="form-check form-check-custom form-check-solid me-10">
+                            <label class="form-check form-check-custom form-check-solid">
                                 <input class="form-check-input h-20px w-20px" type="radio" name="gender"
                                     value="female" @if (isset($staff_details->personal) && $staff_details->personal->gender == 'female') checked @endif />
                                 <span class="form-check-label fw-bold">Female</span>
@@ -42,7 +42,7 @@
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Marital Status</label>
-                    <select name="marital_status" id="marital_status" autofocus class="form-select form-select-lg">
+                    <select name="marital_status" id="marital_status" autofocus class="form-input">
                         <option value="">Select Status</option>
                         <option value="married" @if (isset($staff_details->personal) && $staff_details->personal->marital_status == 'married') selected @endif>Married</option>
                         <option value="single" @if (isset($staff_details->personal) && $staff_details->personal->marital_status == 'single') selected @endif>Single</option>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Mother Tongue</label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="language_id" autofocus id="language_id" class="select2-option">
                             <option value="">--Select Language--</option>
                             @isset($mother_tongues)
@@ -73,7 +73,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('language', 'add_edit'))
-                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                            <button type="button" class="text-white btn-primary"
                                 onclick="return openAddModel('language')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -83,7 +83,7 @@
 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Place of Birth </label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="place_of_birth_id" autofocus id="place_of_birth_id" class="select2-option">
                             <option value="">--Select Place--</option>
                             @isset($places)
@@ -95,7 +95,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('place', 'add_edit'))
-                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                            <button type="button" class="text-white btn-primary"
                                 onclick="return openAddModel('places')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -105,7 +105,7 @@
 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Nationality</label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="nationality_id" autofocus id="nationality_id" class="select2-option">
                             <option value="">--Select Nationality--</option>
                             @isset($nationalities)
@@ -117,7 +117,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('nationality', 'add_edit'))
-                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                            <button type="button" class="text-white btn-primary"
                                 onclick="return openAddModel('nationality')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -126,7 +126,7 @@
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Religion</label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="religion_id" autofocus id="religion_id" class="select2-option">
                             <option value="">--Select Religion--</option>
                             @isset($religions)
@@ -139,7 +139,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('religion', 'add_edit'))
-                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                            <button type="button" class="text-white btn-primary"
                                 onclick="return openAddModel('religion')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -148,7 +148,7 @@
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Caste</label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="caste_id" autofocus id="caste_id" class="select2-option">
                             <option value="">--Select Caste--</option>
                             @isset($castes)
@@ -161,7 +161,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('caste', 'add_edit'))
-                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                            <button type="button" class="text-white btn-primary"
                                 onclick="return openAddModel('caste')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -171,7 +171,7 @@
 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Community</label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="community_id" autofocus id="community_id" class="select2-option">
                             <option value="">--Select Community--</option>
                             @isset($communities)
@@ -184,7 +184,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('community', 'add_edit'))
-                            <button type="button" class="border-0 btn-light-success btn-sm border"
+                            <button type="button" class="text-white btn-primary"
                                 onclick="return openAddModel('community')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -195,28 +195,28 @@
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Phone No.</label>
                     <input name="phone_no" autofocus id="phone_no" maxlength="10"
-                        class="number_only form-control form-control-lg "
+                        class="number_only form-input "
                         value="{{ $staff_details->personal->phone_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label">Mobile No - 1</label>
-                    <input name="mobile_no_1" class="form-control form-control-lg number_only" maxlength="10"
+                    <input name="mobile_no_1" class="form-input number_only" maxlength="10"
                         value="{{ $staff_details->personal->mobile_no1 ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label ">Mobile No - 2</label>
-                    <input name="mobile_no_2" class="form-control form-control-lg number_only" maxlength="10"
+                    <input name="mobile_no_2" class="form-input number_only" maxlength="10"
                         value="{{ $staff_details->personal->mobile_no2 ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label ">Whatsapp No.</label>
-                    <input name="whatsapp_no" class="form-control form-control-lg number_only" maxlength="10"
+                    <input name="whatsapp_no" class="form-input number_only" maxlength="10"
                         value="{{ $staff_details->personal->whatsapp_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Emergency No.</label>
                     <input name="emergency_no" autofocus id="emergency_no"
-                        class="form-control form-control-lg number_only" maxlength="10"
+                        class="form-input number_only" maxlength="10"
                         value="{{ $staff_details->personal->emergency_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
@@ -224,7 +224,7 @@
 
                         <label class="form-label"> Profile Image </label>
                         <input name="profile_image" type="file" autofocus id="profile_image"
-                            class="form-control form-control-lg" />
+                            class="form-input" />
                     </div>
                     <div>
                         @if (isset($staff_details->image) && !empty($staff_details->image))
@@ -239,12 +239,12 @@
                 </div>
                 <div class="col-lg-6 mb-5">
                     <label class="form-label required">Contact Address</label>
-                    <textarea name="contact_address" autofocus id="contact_address" class="form-control form-control-lg " rows="3"
+                    <textarea name="contact_address" autofocus id="contact_address" class="form-input " rows="3"
                         required>{{ $staff_details->personal->contact_address ?? '' }}</textarea>
                 </div>
                 <div class="col-lg-6 mb-5">
                     <label class="form-label required">Permanent Address</label>
-                    <textarea name="permanent_address" autofocus id="permanent_address" class="form-control form-control-lg "
+                    <textarea name="permanent_address" autofocus id="permanent_address" class="form-input "
                         rows="3" required>{{ $staff_details->personal->permanent_address ?? '' }}</textarea>
                 </div>
                 <hr>
@@ -253,7 +253,7 @@
                         <label class="fs-6 fw-bold form-label mb-2">Bank Details</label>
                         <div class="row fv-row">
                             <div class="col-lg-3 mb-5">
-                                <div class="input-group">
+                                <div class="d-flex">
                                     <select name="bank_id" id="bank_id" class="select2-option"
                                         onchange="return getBranchDetails(this.value)">
                                         <option value="">--Select Bank--</option>
@@ -267,7 +267,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('bank', 'add_edit'))
-                                        <button type="button" class="border-0 btn-light-success btn-sm border"
+                                        <button type="button" class="text-white btn-primary"
                                             onclick="return openAddModel('bank')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -276,7 +276,7 @@
                             </div>
 
                             <div class="col-lg-3 mb-5">
-                                <div class="input-group">
+                                <div class="d-flex">
                                     <select name="branch_id" id="branch_id" class="select2-option">
                                         <option value="">--Select Bank Branch--</option>
                                         @isset($branch_details)
@@ -289,7 +289,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('bank-branch', 'add_edit'))
-                                        <button type="button" class="border-0 btn-light-success btn-sm border"
+                                        <button type="button" class="text-white btn-primary"
                                             onclick="return openAddModel('bankbranch')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -298,13 +298,13 @@
                             </div>
 
                             <div class="col-3">
-                                <input name="account_name" class="form-control form-control-lg "
+                                <input name="account_name" class="form-input "
                                     placeholder="Account Name"
                                     value="{{ $staff_details->bank->account_name ?? '' }}" />
                             </div>
 
                             <div class="col-3">
-                                <input name="account_no" class="number_only form-control form-control-lg "
+                                <input name="account_no" class="number_only form-input "
                                     placeholder="Account Number"
                                     value="{{ $staff_details->bank->account_number ?? '' }}" />
                             </div>
@@ -314,7 +314,7 @@
                 </div>
 
                 <div class="row mb-5">
-                    <div class="col-md-4 fv-row">
+                    <div class="col-md-6 fv-row">
                         <label class="fs-6 fw-bold form-label mb-2">Bank Passbook</label>
                         <div class="row fv-row">
                             <div class="col-12">
@@ -357,7 +357,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 fv-row">
+                    <div class="col-md-6 fv-row">
                         <label class="fs-6 fw-bold form-label mb-2">Canceled Cheque</label>
                         <div class="row fv-row">
                             <div class="col-12">
@@ -424,7 +424,7 @@
                         </label>
                         <div class="row fv-row" id="uan_display_pane">
                             <div class="col-4">
-                                <input name="uan_no" id="uan_no" class="form-control form-control-lg "
+                                <input name="uan_no" id="uan_no" class="form-input "
                                     placeholder="Number" value="{{ $staff_details->pf->ac_number ?? '' }}" />
                             </div>
                             <div class="col-4">
@@ -438,7 +438,7 @@
 
                             </div>
                             <div class="col-4">
-                                <input name="uan_area" id="uan_area" class="form-control form-control-lg "
+                                <input name="uan_area" id="uan_area" class="form-input "
                                     placeholder="Area" value="{{ $staff_details->pf->location ?? '' }}" />
                             </div>
                         </div>
@@ -466,7 +466,7 @@
                         </label>
                         <div class="row fv-row" id="esi_display_pane">
                             <div class="col-3">
-                                <input name="esi_no" id="esi_no" class="form-control form-control-lg "
+                                <input name="esi_no" id="esi_no" class="form-input "
                                     placeholder="Number" value="{{ $staff_details->esi->ac_number ?? '' }}" />
                             </div>
                             <div class="col-3">
@@ -486,7 +486,7 @@
                                 </div>
                             </div>
                             <div class="col-3">
-                                <input name="esi_address" class="form-control form-control-lg " placeholder="Area"
+                                <input name="esi_address" class="form-input " placeholder="Area"
                                     value="{{ $staff_details->pf->location ?? '' }}" />
                             </div>
                         </div>

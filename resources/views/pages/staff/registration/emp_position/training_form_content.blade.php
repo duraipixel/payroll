@@ -19,7 +19,7 @@
                 </svg>
             </span>
 
-            <input class="form-control form-control-solid ps-12" placeholder="Select a date" name="from_training_date"
+            <input class="form-input ps-12" placeholder="Select a date" name="from_training_date"
                 id="from_training_date" type="date" value="{{ $training_info->from ?? '' }}" />
         </div>
 
@@ -47,7 +47,7 @@
                 </svg>
             </span>
 
-            <input class="form-control form-control-solid ps-12" placeholder="Select a date" name="to_training_date"
+            <input class="form-input ps-12" placeholder="Select a date" name="to_training_date"
                 id="to_training_date" type="date" value="{{ $training_info->to ?? '' }}" />
             <!--end::Datepicker-->
         </div>
@@ -58,12 +58,12 @@
         <label class="form-label required">
             Name of the Trainer
         </label>
-        <input name="trainer_name" id="trainer_name" value="{{ $training_info->trainer_name ?? '' }}" class="form-control form-control-lg form-control-solid" />
+        <input name="trainer_name" id="trainer_name" value="{{ $training_info->trainer_name ?? '' }}" class="form-input" />
     </div>
 
     <div class="col-lg-6 mb-5">
         <label class="form-label required">Topic of the Training</label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="training_topic" autofocus id="training_topic"
                 class="form-select form-select-lg" required>
                 <option value="">--Select Topic --</option>
@@ -76,24 +76,22 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('training-topic','add_edit') )
-
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
-                onclick="return openAddModel('training_topic')">
-                <i class="fa fa-plus"></i>
-            </span>
+                <button type="button" class="btn-primary text-white" onclick="return openAddModel('training_topic')">
+                    <i class="fa fa-plus"></i>
+                </button>
             @endif
         </div>
     </div>
 
     <div class="col-lg-12 mb-5">
         <label class="form-label required"> Remarks </label>
-        <input name="training_remarks" id="training_remarks" value="{{ $training_info->remarks ?? '' }}" class="form-control form-control-lg form-control-solid" />
+        <input name="training_remarks" id="training_remarks" value="{{ $training_info->remarks ?? '' }}" class="form-input" />
     </div>
     <!--end::Input group-->
     <div class="d-flex flex-stack pt-5">
         <!--begin::Wrapper-->
         <div>
-            <button type="button" onClick="submitTrainingForm()" class="btn btn-lg btn-primary me-3 d-inline-block"
+            <button type="button" onClick="submitTrainingForm()" class="btn btn-primary"
                 data-kt-stepper-action="submit">
                 <span class="indicator-label"> Submit
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->

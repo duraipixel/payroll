@@ -219,7 +219,7 @@
     <div class="d-flex flex-stack pt-5">
         <!--begin::Wrapper-->
         <div>
-            <button type="button" class="btn btn-lg btn-primary me-3 d-inline-block"
+            <button type="button" class="btn btn-primary"
                 onclick="return submitFamilyMemberForm()">
                 <span class="indicator-label">Add
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->

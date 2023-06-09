@@ -7,9 +7,9 @@
     <div class="col-lg-6 mb-5">
         <label class="form-label required">Class</label>
         <input type="hidden" name="duty_id" id="duty_id" value="{{ $duty_info->id ?? '' }}">
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="duty_classes" autofocus id="duty_classes"
-                class="form-select form-select-lg" required>
+                class="form-input" required>
                 <option value="">--Select Class--</option>
                 @isset($duty_classes)
                     @foreach ($duty_classes as $item)
@@ -20,18 +20,18 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('duty-class','add_edit') )
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
+            <button type="button" class="text-white btn-primary"
                 onclick="return openAddModel('duty_class')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
     </div>
     <div class="col-lg-6 mb-5">
         <label class="form-label required">Type of Duty</label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="duty_type" autofocus id="duty_type"
-                class="form-select form-select-lg" required>
+                class="form-input" required>
                 <option value="">--Select Duty type --</option>
                 @isset($duty_types)
                     @foreach ($duty_types as $item)
@@ -43,19 +43,19 @@
             </select>
             @if( access()->buttonAccess('duty-type','add_edit') )
 
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
+            <button type="button" class="text-white btn-primary"
                 onclick="return openAddModel('duty_type')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
     </div>
     
     <div class="col-lg-6 mb-5">
         <label class="form-label required">Name Of School</label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="duty_other_school" autofocus id="other_school"
-                class="form-select form-select-lg" required>
+                class="form-input" required>
                 <option value="">--Select School --</option>
                 @isset($other_schools)
                     @foreach ($other_schools as $item)
@@ -66,19 +66,19 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('other-school','add_edit') )
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
+            <button type="button" class="text-white btn-primary"
                 onclick="return openAddModel('other_school')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
     </div>
     
     <div class="col-lg-6 mb-5">
         <label class="form-label required">Place</label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="duty_other_place_id" autofocus id="duty_other_place_id"
-                class="form-select form-select-lg" required>
+                class="form-input" required>
                 <option value="">--Select Place --</option>
                 @isset($places)
                     @foreach ($places as $item)
@@ -89,10 +89,10 @@
                 @endisset
             </select>            
             @if( access()->buttonAccess('place','add_edit') )
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
+            <button type="button" class="text-white btn-primary"
                 onclick="return openAddModel('other_places')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
     </div>
@@ -101,7 +101,7 @@
     <div class="col-lg-6 mb-5">
         <label class="required fs-6 fw-bold mb-2">From</label>
         <!--begin::Input-->
-        <div class="position-relative d-flex align-items-center">
+        <div class="d-flex d-flex align-items-center">
             <!--begin::Icon-->
             <!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
             <span class="svg-icon svg-icon-2 position-absolute mx-4">
@@ -121,7 +121,7 @@
             <!--end::Svg Icon-->
             <!--end::Icon-->
             <!--begin::Datepicker-->
-            <input class="form-control form-control-solid ps-12" placeholder="Select a date"
+            <input class="form-input ps-12" placeholder="Select a date"
                 name="inv_from_date" required id="inv_from_date" type="date" value="{{ $duty_info->from_date ?? '' }}" />
             <!--end::Datepicker-->
         </div>
@@ -132,7 +132,7 @@
     <div class="col-lg-6 mb-5">
         <label class="required fs-6 fw-bold mb-2">To</label>
         <!--begin::Input-->
-        <div class="position-relative d-flex align-items-center">
+        <div class="d-flex d-flex align-items-center">
             <!--begin::Icon-->
             <!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
             <span class="svg-icon svg-icon-2 position-absolute mx-4">
@@ -150,7 +150,7 @@
                 </svg>
             </span>
          
-            <input class="form-control form-control-solid ps-12" placeholder="Select a date"
+            <input class="form-input ps-12" placeholder="Select a date"
                 name="inv_to_date" type="date" required id="inv_to_date" value="{{ $duty_info->to_date ?? '' }}" />
         </div>
         <!--end::Input-->
@@ -167,7 +167,7 @@
     <div class="d-flex flex-stack pt-5">
         <!--begin::Wrapper-->
         <div>
-            <button type="button"  onClick="return submitInvigilationForm()"  class="btn btn-lg btn-primary me-3 d-inline-block">
+            <button type="button"  onClick="return submitInvigilationForm()"  class="btn btn-primary">
                 <span class="indicator-label" > 
                     Submit
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
@@ -190,21 +190,4 @@
         </div>
         <!--end::Wrapper-->
     </div>
-</div>
-<script>
-    $(function() {
-        
-        // $("#inv_from_date").datepicker({
-        //     dateFormat: 'd-mm-yy'
-        // });
-
-        // $("#inv_to_date").datepicker({
-        //     dateFormat: 'd-mm-yy'
-        // });
-
-    });
-
-   
-   
-    
-</script>
+</div> 

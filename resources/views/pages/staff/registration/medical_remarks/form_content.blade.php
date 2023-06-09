@@ -45,7 +45,7 @@
     <div class="d-flex flex-stack pt-5">
         <div>
             <button onclick="return submitMedicalRemarks()" type="button"
-                class="btn btn-lg btn-primary me-3 d-inline-block">
+                class="btn btn-primary">
                 <span class="indicator-label"> Submit
                     {!! arrowSvg() !!}
                 </span>

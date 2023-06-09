@@ -1,4 +1,4 @@
-<div class="card shadow-none rounded-0 w-100">
+`   <div class="card shadow-none rounded-0 w-100">
     <!--begin::Header-->
     <div class="card-header" id="kt_help_header">
         <h5 class="card-title fw-bold text-gray-600">Add your Certificate Request
@@ -132,7 +132,7 @@
             <div class="d-flex flex-stack pt-5">
                 <!--begin::Wrapper-->
                 <div>
-                    <button type="button" class="btn btn-lg btn-primary me-3 d-inline-block"
+                    <button type="button" class="btn btn-primary"
                         data-kt-stepper-action="submit">
                         <span class="indicator-label">Add
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->

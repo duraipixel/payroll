@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required"> Designation </label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="designation_id" autofocus id="designation_id"
                             class="form-select form-select-lg select2-option">
                             <option value="">--Select Designation--</option>
@@ -23,7 +23,7 @@
                             @endisset
                         </select>
                         @if( access()->buttonAccess('designation','add_edit') )
-                        <button type="button"  class="border-0 btn-light-success btn-sm border"
+                        <button type="button"  class="text-white btn-primary"
                             onclick="return openAddModel('designation')">
                             <i class="fa fa-plus"></i>
                         </button>
@@ -33,7 +33,7 @@
                 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required"> Department </label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="department_id" autofocus id="department_id"
                             onchange="return checkTeachingType(this.value)"
                             class="form-select form-select-lg select2-option">
@@ -47,7 +47,7 @@
                             @endisset
                         </select>
                         @if( access()->buttonAccess('department','add_edit') )
-                        <button type="button"  class="border-0 btn-light-success btn-sm border"
+                        <button type="button"  class="text-white btn-primary"
                             onclick="return openAddModel('department')">
                             <i class="fa fa-plus"></i>
                         </button>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label">Division</label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="division_id" id="division_id" class="form-select form-select-lg ">
                             <option value="">--Select Division--</option>
                             @isset($divisions)
@@ -68,7 +68,7 @@
                             @endisset
                         </select>
                         @if( access()->buttonAccess('division','add_edit') )
-                        <button type="button"  class="border-0 btn-light-success btn-sm border"
+                        <button type="button"  class="text-white btn-primary"
                             onclick="return openAddModel('division')">
                             <i class="fa fa-plus"></i>
                         </button>
@@ -78,7 +78,7 @@
                 <!--end::Input group-->
                 <div class="col-lg-4 mb-5 teaching" style="display: @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'yes' ) block @else none @endif">
                     <label class="form-label required">Class Handling</label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select id="classes" name="class_id[]" class="form-control big_box select2-option"
                             placeholder="" multiple>
                             @isset($classes)
@@ -99,7 +99,7 @@
                 <!--begin::Input group-->
                 <div class="col-lg-4 mb-5 teaching" style="display: @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'yes' ) block @else none @endif">
                     <label class="form-label required">Handling Subject</label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="subject[]" autofocus id="subject" multiple
                             class="form-select form-select-lg select2-option">
                             <option value="">--Select Subject--</option>
@@ -111,7 +111,7 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <button type="button"  class="border-0 btn-light-success btn-sm border"
+                        <button type="button"  class="text-white btn-primary"
                             onclick="return openAddModel('subject')">
                             <i class="fa fa-plus"></i>
                         </button>
@@ -122,7 +122,7 @@
                 <input type="hidden" name="id" id="staff_id" value="{{ $staff_details->id ?? '' }}">
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Attendance Scheme</label>
-                    <div class="input-group">
+                    <div class="d-flex">
                         <select name="scheme_id" autofocus id="scheme_id"
                             class="form-select form-select-lg select2-option">
                             <option value="">--Select Scheme--</option>
@@ -135,7 +135,7 @@
                             @endisset
                         </select>
                         {{-- @if( access()->buttonAccess('scheme','add_edit') )
-                        <button type="button"  class="border-0 btn-light-success btn-sm border"
+                        <button type="button"  class="text-white btn-primary"
                             onclick="return openAddModel('scheme')">
                             <i class="fa fa-plus"></i>
                         </button>
@@ -150,7 +150,7 @@
                     <!--begin::Header-->
                     <div class="card-header border-0 pt-0">
                         <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder fs-3 mb-1">Subject Handling upto </span>
+                            <span class="card-label fw-bolder fs-5 mb-1">Subject Handling upto </span>
                         </h3>
                     </div>
 
@@ -169,12 +169,12 @@
                 <!--begin::Tables Widget 13-->
                 <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
 
-                    <div class="card-header bg-primary border-0 pt-0">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder fs-3 mb-1">Invigilation Duty Details</span>
+                    <div class="bg-primary p-2 d-flex align-items-center justify-content-between">
+                        <h3 class="fs-7 text-white m-0">
+                            <span class="card-label fw-bolder fs-5 mb-1">Invigilation Duty Details</span>
                         </h3>
                         <button onclick="openInviligationForm()"
-                            class="btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5"
+                            class="btn btn-sm btn-success"
                             title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-dismiss="click" data-bs-trigger="hover">
                             <span id="kt_engage_demos_label">
@@ -191,7 +191,7 @@
                                 </span> Add New</span>
                         </button>
                         <button id="kt_new_data_toggle_duty" style="display:none"
-                            class="engage-demos-toggle btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5"
+                            class="engage-demos-toggle btn btn-sm btn-success"
                             title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-dismiss="click" data-bs-trigger="hover">
 
@@ -209,12 +209,12 @@
 
                 <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
                     <!--begin::Header-->
-                    <div class="card-header bg-primary border-0 pt-0">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder fs-3 mb-1">Training Details</span>
+                    <div class="bg-primary p-2 d-flex align-items-center justify-content-between">
+                        <h3 class="fs-7 text-white m-0">
+                            <span class="card-label fw-bolder fs-5 mb-1">Training Details</span>
                         </h3>
                         <button onclick="openTrainingForm()"
-                            class=" btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5"
+                            class=" btn btn-sm btn-success"
                             title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-dismiss="click" data-bs-trigger="hover">
                             <span id="kt_engage_demos_label"><span class="svg-icon svg-icon-3">
@@ -230,7 +230,7 @@
                                 </span> Add New </span>
                         </button>
                         <button id="kt_new_data_toggle_train" style="display:none;"
-                            class="engage-demos-toggle btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5"
+                            class="engage-demos-toggle btn btn-sm btn-success"
                             title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-dismiss="click" data-bs-trigger="hover">
                             <span id="kt_engage_demos_label"><span class="svg-icon svg-icon-3">

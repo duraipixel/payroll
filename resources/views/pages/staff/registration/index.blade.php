@@ -25,7 +25,7 @@
         </div>
     @endif
     <!--begin::Stepper-->
-    <div id="wizard" class="wizard-section">
+    <div id="wizard" class="wizard-section border shadow">
         <h3>
             <div class="media">
                 <div class="bd-wizard-step-icon text-center">
@@ -48,7 +48,7 @@
                     <i class="icon-xl la la-edit"></i>
                 </div>
                 <div class="media-body text-center">
-                    <div class="bd-wizard-step-title">KYC  &nbsp;information</div>
+                    <div class="bd-wizard-step-title">KYC  &nbsp; information</div>
                 </div>
             </div>
         </h3>

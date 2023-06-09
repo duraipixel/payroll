@@ -123,7 +123,7 @@
 
     <div class="d-flex flex-stack pt-5">
         <div>
-            <button type="button" onclick="return submitExperienceForm()" class="btn btn-lg btn-primary me-3 d-inline-block" >
+            <button type="button" onclick="return submitExperienceForm()" class="btn btn-primary" >
                 <span class="indicator-label">Add
                     <span class="svg-icon svg-icon-3 ms-2 me-0">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
