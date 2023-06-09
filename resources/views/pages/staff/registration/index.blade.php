@@ -25,14 +25,14 @@
         </div>
     @endif
     <!--begin::Stepper-->
-    <div id="wizard" class="wizard-section shadow">
+    <div id="wizard" class="wizard-section">
         <h3>
             <div class="media">
                 <div class="bd-wizard-step-icon text-center">
                     <i class="icon-xl la la-user-check"></i>
                 </div>
                 <div class="media-body text-center">
-                    <div class="bd-wizard-step-title">Personal Information</div>
+                    <div class="bd-wizard-step-title">Personal information</div>
                 </div>
             </div>
         </h3>
@@ -48,7 +48,7 @@
                     <i class="icon-xl la la-edit"></i>
                 </div>
                 <div class="media-body text-center">
-                    <div class="bd-wizard-step-title">KYC Information</div>
+                    <div class="bd-wizard-step-title">KYC  &nbsp; information</div>
                 </div>
             </div>
         </h3>
@@ -78,7 +78,7 @@
                     <i class="icon-xl la la-book-open"></i>
                 </div>
                 <div class="media-body text-center">
-                    <div class="bd-wizard-step-title">Education Qualification</div>
+                    <div class="bd-wizard-step-title">Education & Qualification</div>
                 </div>
             </div>
         </h3>
@@ -94,7 +94,7 @@
                     <i class="icon-xl la la-users"></i>
                 </div>
                 <div class="media-body text-center">
-                    <div class="bd-wizard-step-title">Family Information</div>
+                    <div class="bd-wizard-step-title">Family information</div>
                 </div>
             </div>
         </h3>
