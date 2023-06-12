@@ -23,9 +23,9 @@
         <label class="form-label required">
             Relationship Type
         </label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="working_relationship_type_id" autofocus id="working_relationship_type_id"
-                class="form-select form-select-lg" required>
+                class="form-input" required>
                 <option value="">--Select Reletionship Type --</option>
                 @isset($relation_types)
                     @foreach ($relation_types as $item)
@@ -37,9 +37,9 @@
             </select>
             @if( access()->buttonAccess('relationship','add_edit') )
 
-            <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('relationship_working_type')">
+            <button type="button" class="btn-primary text-white" onclick="return openAddModel('relationship_working_type')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
       

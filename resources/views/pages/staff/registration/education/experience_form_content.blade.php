@@ -3,9 +3,9 @@
     <div class="col-lg-6 mb-5">
 
         <label class="form-label required"> Institution Name </label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="experience_institute_name" autofocus id="experience_institute_name"
-                class="form-select form-select-lg" required>
+                class="form-input" required>
                 <option value="">--Select Institute --</option>
                 @isset($other_schools)
                     @foreach ($other_schools as $item)
@@ -17,10 +17,10 @@
             </select>
             @if( access()->buttonAccess('other-school   ','add_edit') )
 
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
+            <button type="button" class="btn-primary text-white"
                 onclick="return openAddModel('experience_institute_name')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
 
@@ -28,9 +28,9 @@
     <input type="hidden" name="experience_id" id="experience_id" value="{{ $experience_info->id ?? '' }}">
     <div class="col-lg-6 mb-5">
         <label class="form-label required"> Designation </label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="experience_designation" autofocus id="experience_designation"
-                class="form-select form-select-lg" required>
+                class="form-input" required>
                 <option value="">--Select Designation --</option>
                 @isset($designation)
                     @foreach ($designation as $item)
@@ -42,10 +42,10 @@
             </select>
             @if( access()->buttonAccess('designation','add_edit') )
 
-            <span class="position-absolute btn btn-success btn-md top-0 end-0"
+            <button type="button" class="btn-primary text-white"
                 onclick="return openAddModel('experience_designation')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
     </div>

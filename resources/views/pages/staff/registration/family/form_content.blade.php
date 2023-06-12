@@ -4,10 +4,10 @@
     <div class="col-lg-6 mb-5">
 
         <label class="form-label required">Relationship Type</label>
-        <div class="position-relative">
+        <div class="d-flex">
 
             <select name="staff_relationship_id" autofocus id="staff_relationship_id"
-                class="form-select form-select-lg " required>
+                class="form-input" required>
                 <option value="">--Select Type --</option>
                 @isset($relation_types)
                     @foreach ($relation_types as $item)
@@ -18,9 +18,9 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('relationship','add_edit') )
-            <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('relationship')">
+            <button type="button" class="btn-primary text-white" onclick="return openAddModel('relationship')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
     </div>
@@ -33,7 +33,7 @@
     <div class="col-lg-6 mb-5">
         <label class="required fs-6 fw-bold mb-2">Date of Birth</label>
         
-        <div class="position-relative d-flex align-items-center">
+        <div class="d-flex d-flex align-items-center">
             {!! dobSVG() !!}
             <input class="form-control form-control-solid ps-12" placeholder="Select a date" type="date" name="dob" id="dob" value="{{ $family_details->dob ?? '' }}" />
         </div>
@@ -59,10 +59,10 @@
     <div class="col-lg-6 mb-5">
         <!--begin::Label-->
         <label class="form-label required">Qualification</label>
-        <div class="position-relative">
+        <div class="d-flex">
 
             <select name="qualification_id" autofocus id="qualification_id"
-                class="form-select form-select-lg " required>
+                class="form-input" required>
                 <option value="">--Select Qualification --</option>
                 @isset($qualificaiton)
                     @foreach ($qualificaiton as $item)
@@ -73,9 +73,9 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('qualification','add_edit') )
-            <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('qualification')">
+            <button type="button" class="btn-primary text-white" onclick="return openAddModel('qualification')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
         <!--end::Input-->
@@ -132,9 +132,9 @@
     <div class="col-lg-6 mb-5">
         <!--begin::Label-->
         <label class="form-label required">Blood Group</label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="blood_group_id" autofocus id="blood_group_id"
-                class="form-select form-select-lg " required>
+                class="form-input" required>
                 <option value="">--Select Blood Group --</option>
                 @isset($blood_groups)
                     @foreach ($blood_groups as $item)
@@ -145,9 +145,9 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('blood_group','add_edit') )
-            <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('blood_group')">
+            <button type="button" class="btn-primary text-white" onclick="return openAddModel('blood_group')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
         <!--end::Input-->
@@ -156,9 +156,9 @@
     <div class="col-lg-6 mb-5">
         <!--begin::Label-->
         <label class="form-label required">Nationality</label>
-        <div class="position-relative">
+        <div class="d-flex">
             <select name="family_nationality" autofocus id="family_nationality"
-                class="form-select form-select-lg " required>
+                class="form-input" required>
                 <option value="">--Select Nationality --</option>
                 @isset($nationalities)
                     @foreach ($nationalities as $item)
@@ -169,9 +169,9 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('nationality','add_edit') )
-            <span class="position-absolute btn btn-success btn-md top-0 end-0" onclick="return openAddModel('family_nationality')">
+            <button type="button" class="btn-primary text-white" onclick="return openAddModel('family_nationality')">
                 <i class="fa fa-plus"></i>
-            </span>
+            </button>
             @endif
         </div>
         <!--end::Input-->

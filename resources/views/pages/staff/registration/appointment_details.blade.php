@@ -16,9 +16,9 @@
 
                             <div class="col-lg-4 mb-5">
                                 <label class="form-label required"> Category of Staff </label>
-                                <div class="input-group">
+                                <div class="d-flex">
                                     <select name="staff_category_id" autofocus id="staff_category_id"
-                                        class="form-select form-select-lg select2-option" required>
+                                        class="form-input select2-option" required>
                                         <option value="">-- Select Category --</option>
                                         @isset($staff_category)
                                             @foreach ($staff_category as $item)
@@ -30,7 +30,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('staff-category', 'add_edit'))
-                                        <button type="button"  class="border-0 btn-light-success btn-sm border"
+                                        <button type="button"  class="btn-primary text-white"
                                             onclick="return openAddModel('staff_category')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -42,9 +42,9 @@
 
                                 <label class="form-label required">Nature of Employment</label>
 
-                                <div class="input-group">
+                                <div class="d-flex">
                                     <select name="nature_of_employment_id" autofocus id="nature_of_employment_id"
-                                        class="form-select form-select-lg select2-option" required>
+                                        class="form-input select2-option" required>
                                         <option value="">-- Select Nature --</option>
                                         @isset($employments)
                                             @foreach ($employments as $item)
@@ -57,7 +57,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('nature-of-employeement', 'add_edit'))
-                                        <button type="button"  class="border-0 btn-light-success btn-sm border"
+                                        <button type="button"  class="btn-primary text-white"
                                             onclick="return openAddModel('nature_of_employeement')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -68,9 +68,9 @@
                             <div class="col-lg-4 mb-5">
                                 <label class="form-label required"> Teaching Type </label>
 
-                                <div class="input-group">
+                                <div class="d-flex">
                                     <select name="teaching_type_id" autofocus id="teaching_type_id"
-                                        class="form-select form-select-lg select2-option" required>
+                                        class="form-input select2-option" required>
                                         <option value="">-- Select Teaching Type --</option>
                                         @isset($teaching_types)
                                             @foreach ($teaching_types as $item)
@@ -82,7 +82,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('teaching-type', 'add_edit'))
-                                        <button type="button"  class="border-0 btn-light-success btn-sm border"
+                                        <button type="button"  class="btn-primary text-white"
                                             onclick="return openAddModel('teaching_type')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -93,9 +93,9 @@
                             <div class="col-lg-4 mb-5">
                                 <label class="form-label required"> Place of Work </label>
 
-                                <div class="input-group">
+                                <div class="d-flex">
                                     <select name="place_of_work_id" autofocus id="place_of_work_id"
-                                        class="form-select form-select-lg select2-option" required>
+                                        class="form-input select2-option" required>
                                         <option value=""> -- Select Place Of Work -- </option>
                                         @isset($place_of_works)
                                             @foreach ($place_of_works as $item)
@@ -107,7 +107,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('workplace', 'add_edit'))
-                                        <button type="button"  class="border-0 btn-light-success btn-sm border"
+                                        <button type="button"  class="btn-primary text-white"
                                             onclick="return openAddModel('place_of_work')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -204,7 +204,7 @@
                                                 <div class="position-relative">
                                                     <select name="appointment_order_model_id" autofocus
                                                         id="appointment_order_model_id"
-                                                        class="form-select form-select-lg " required>
+                                                        class="form-input " required>
                                                         <option value=""> -- Select Order Model -- </option>
                                                         @isset($order_models)
                                                             @foreach ($order_models as $item)
@@ -216,7 +216,7 @@
                                                             @endforeach
                                                         @endisset
                                                     </select>
-                                                    {{-- <button type="button"  class="border-0 btn-light-success btn-sm border"
+                                                    {{-- <button type="button"  class="btn-primary text-white"
                                                         onclick="return openAddModel('order_model')">
                                                         <i class="fa fa-plus"></i>
                                                     </button> --}}
