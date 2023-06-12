@@ -34559,8 +34559,7 @@ a:hover {
   border: 0;
   border-bottom: 1px solid transparent;
   transition: color 0.2s ease, background-color 0.2s ease;
-  padding: 0.5rem 0;
-  margin: 0 1rem;
+  padding: 0.5rem ;
 }
 
 .nav-line-tabs .nav-item:first-child .nav-link {
@@ -34586,6 +34585,7 @@ a:hover {
 
 .nav-line-tabs.nav-line-tabs-2x .nav-item {
   margin-bottom: -2px;
+  font-size: 12px;
 }
 
 .nav-line-tabs.nav-line-tabs-2x .nav-item .nav-link {
@@ -49683,8 +49683,8 @@ code:not([class*=language-]) {
   }
 
   .symbol.symbol-lg-160px.symbol-fixed>img {
-    width: 160px;
-    height: 160px;
+    width: 120px;
+    height: 120px;
     max-width: none;
   }
 
@@ -54001,7 +54001,7 @@ body {
     top: 0;
     bottom: 0;
     left: 0;
-    z-index: 1;
+    z-index: 11 !important;
     overflow: hidden;
   }
 

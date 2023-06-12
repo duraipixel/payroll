@@ -3,8 +3,6 @@
         <div class="d-flex flex-wrap flex-sm-nowrap mb-3">
             <div class="me-7 mb-4">
                 <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
-                    {{-- <img src="../assets/media/avatars/300-1.jpg" alt="image" /> --}}
-                  
 
                     @if ( (isset(auth()->user()->image) && !empty(auth()->user()->image)) || (isset($info->image) && !empty($info->image)) )
                     @php
@@ -15,63 +13,45 @@
                     @else
                         <img alt="user" src="{{ asset('assets/images/no_Image.jpg') }}" />
                     @endif
-                    <div
-                        class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px">
+                    <div  class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px">
                     </div>
                 </div>
             </div>
 
             <div class="flex-grow-1">
-
                 <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
-
                     <div class="d-flex flex-column">
-
                         <div class="d-flex align-items-center mb-2">
-                            <a href="#"
-                                class="text-gray-900 text-hover-primary fs-2 fw-bolder me-1">{{ $info->name }}</a>
-                            <a href="#"
-                                class="btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3">{{ ucfirst($info->status) }}</a>
+                            <a href="#" class="text-gray-900 text-hover-primary fs-4 fw-bolder me-1">{{ $info->name }}</a>
+                            <a href="#" class="btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3">{{ ucfirst($info->status) }}</a>
                         </div>
-
                         <div class="d-flex flex-wrap fw-bold fs-6 mb-4 pe-2">
                             @isset($info->personal->gender)
-                                <a href="#"
-                                    class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-
+                                <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                     {!! genderMaleSvg() !!}
                                     {{ ucfirst($info->personal->gender ?? '') }}
                                 </a>
                             @endisset
                             @isset($info->position->designation->name)
-                                <a href="#"
-                                    class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-
+                                <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                     {!! userSvg() !!}
                                     {{ ucwords($info->position->designation->name ?? '') }}
                                 </a>
                             @endisset
                             @isset($info->personal->contact_address)
-                                <a href="#"
-                                    class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-
+                                <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                     {!! locationSvg() !!}
                                     {{ $info->personal->contact_address ?? '' }}
                                 </a>
                             @endisset
                             @isset($info->personal->phone_no)
-                                <a href="#"
-                                    class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-
+                                <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                     {!! mobileSvg() !!}
                                     {{ $info->personal->phone_no ?? '' }}
-
                                 </a>
                             @endisset
                             @isset($info->personal->dob)
-                                <a href="#"
-                                    class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
-
+                                <a href="#"  class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                     {!! calenderSvg() !!}
                                     {{ isset($info->personal->dob) ? date('d/m/Y', strtotime($info->personal->dob)) : '' }}
                                 </a>
@@ -92,7 +72,7 @@
                             <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
                                 <div class="d-flex align-items-center">
                                     <div class="fs-2 fw-bolder" data-kt-countup="false" data-kt-countup-value="12589"
-                                        data-kt-countup-prefix="">{{ $info->emp_code ?? '' }}
+                                        data-kt-countup-prefix="">{{ $info->emp_code ?? '00000' }}
                                     </div>
                                 </div>
                                 <div class="fw-bold fs-6 text-gray-400">Employe ID</div>
