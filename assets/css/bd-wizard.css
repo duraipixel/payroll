@@ -39,7 +39,7 @@
     .wizard .steps>ul li a {
         padding: 15px 10px;
     }
-} 
+}
 
 @media (max-width: 767px) {
     .wizard .steps>ul li a .media {
@@ -55,7 +55,7 @@
     .wizard .steps>ul li .bd-wizard-step-icon {
         margin: 0 auto;
     }
-} 
+}
 
 .wizard .steps>ul li .bd-wizard-step-subtitle {
     line-height: 1;
@@ -69,21 +69,26 @@
         display: none;
     }
 }
+
 .current {
     background-color: white !important;
 }
+
 .wizard .steps>ul li.current .bd-wizard-step-icon,
 .wizard .steps>ul li.done .bd-wizard-step-icon {
     color: #fff;
 }
-.current .bd-wizard-step-title  {
+
+.current .bd-wizard-step-title {
     font-weight: 500;
     font-size: 12px;
 }
-.current .bd-wizard-step-title ,
-.current .bd-wizard-step-icon i{
+
+.current .bd-wizard-step-title,
+.current .bd-wizard-step-icon i {
     color: black !important;
 }
+
 /* li.current {
     border:1px solid lightgray;
     border-bottom: 0px !important;
@@ -140,9 +145,11 @@
 .wizard .content .form-control::-moz-placeholder {
     color: #919aa3;
 }
+
 .select2-container--default .select2-selection--single {
     border: 1px solid #e4e6ef !important;
 }
+
 .wizard .content .form-control:-ms-input-placeholder {
     color: #919aa3;
 }
@@ -154,11 +161,12 @@
 .wizard .content .form-control::placeholder {
     color: #919aa3;
 }
+
 .wizard .steps>ul,
-.wizard .steps>ul li
-{
+.wizard .steps>ul li {
     background: white;
 }
+
 .wizard .actions {
     padding: 0 35px 35px;
     background-color: #fff;
@@ -222,9 +230,11 @@
 .wizard-section {
     overflow: hidden;
 }
+
 .wizard .select2 {
     width: 100% !important;
 }
+
 .wizard .select2-selection--single,
 .wizard .content .form-control,
 .wizard .content .form-select {
@@ -234,22 +244,34 @@
     padding: 5px 10px !important;
     font-size: 12px !important;
 }
+
 .wizard .steps>ul li {
     position: relative;
     bottom: -1px;
     background: #e6e8ea;
 }
+
 .input-label {
-    font-size: 11px ;
+    font-size: 11px;
     display: block;
 }
+
 .form-input::placeholder {
     font-size: 12px !important;
 }
+
 .form-input {
-    border: solid 1px #ececec;
+    border: solid 1px #c0c0c094 !important;
     outline: none;
     width: 100%;
     font-size: 12px !important;
-    height:25px
+    height: 25px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.form-input:active {
+    border: solid 1px black !important;
+}
+.form-input:focus {
+    border: solid 1px royalblue !important;
 }
