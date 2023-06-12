@@ -28,25 +28,39 @@ class DocumentLockerController extends Controller
 {
     public function index(Request $request)
     {
-        $total_documents = 0;
+        $total_documents          = 0;
         $review_pending_documents = 0;
-        $user_count = 0;
-        $user = User::all();
+        $user_count               = 0;
+        $user                     = User::all();
+        $auth_user  = auth()->user();
+        $result = User::with([
+            "position.designation",
+            "position.department",
+            "StaffDocument",
+            "StaffEducationDetail",
+            "StaffWorkExperience",
+            "StaffLeave",
+            "StaffSalary",
+            "StaffAppointmentDetail"
+        ])->when(!is_null($auth_user->reporting_manager_id), function ($q) use ($auth_user) {
+            $q->where('reporting_manager_id', $auth_user->id);
+        })->get();
 
-        if ($request->ajax()) {
-            $auth_user  = auth()->user();
-            $result = User::with([
-                "position.designation",
-                "position.department",
-                "StaffDocument",
-                "StaffEducationDetail",
-                "StaffWorkExperience",
-                "StaffLeave",
-                "StaffSalary",
-                "StaffAppointmentDetail"
-            ])->when(!is_null($auth_user->reporting_manager_id), function ($q) use ($auth_user) {
-                $q->where('reporting_manager_id', $auth_user->id);
-            })->get();
+        foreach ($result as $key => $row) {
+            $total_documents += count($row->StaffDocument)
+            + count($row->StaffEducationDetail)
+            + count($row->StaffWorkExperience)
+            + count($row->StaffLeave)
+            + count($row->StaffSalary)
+            + count($row->StaffAppointmentDetail);
+
+            $review_pending_documents += count($row->staffDocumentsPending)
+            + count($row->staffEducationDocPending)
+            + count($row->staffExperienceDocPending)
+            + count($row->leavesPending);
+        }
+
+        if ($request->ajax()) { 
             return DataTables::of($result)
                 ->addColumn('department', function ($row) {
                     return !is_null($row->position) ? $row->position->department->name : null;
@@ -62,12 +76,12 @@ class DocumentLockerController extends Controller
                         + count($row->StaffSalary)
                         + count($row->StaffAppointmentDetail);
                 })
-                // ->addColumn('approved_documents', function ($row) {
-                //     return count($row->staffDocumentsApproved) + count($row->staffEducationDocApproved) + count($row->staffExperienceDocApproved) + count($row->leavesApproved) + count($row->appointmentCount);
-                // })
-                // ->addColumn('pending_documents', function ($row) {
-                //     return count($row->staffDocumentsPending) + count($row->staffEducationDocPending) + count($row->staffExperienceDocPending) + count($row->leavesPending);
-                // })
+                ->addColumn('approved_documents', function ($row) {
+                    return count($row->staffDocumentsApproved) + count($row->staffEducationDocApproved) + count($row->staffExperienceDocApproved) + count($row->leavesApproved) + count($row->appointmentCount);
+                })
+                ->addColumn('pending_documents', function ($row) {
+                    return count($row->staffDocumentsPending) + count($row->staffEducationDocPending) + count($row->staffExperienceDocPending) + count($row->leavesPending);
+                })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('user.dl_view', ['id' => $row->id]) . '"
                         class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px">
@@ -76,63 +90,7 @@ class DocumentLockerController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->make(true);
-        }
-        // $user_id        = auth()->user()->id;
-        // $user_check = User::where('id', $user_id)->where('is_super_admin', '1')->first();
-        // if ($user_check) {
-        //     $user = User::where('is_super_admin', '=', null)->get();
-        //     $user_count = User::where('is_super_admin', '=', null)->count();
-
-        //     $staff_document_pending = StaffDocument::where('verification_status', 'pending')->where('status', 'active')->count();
-        //     $education_doc_pending = StaffEducationDetail::where('verification_status', 'pending')->count();
-        //     $experince_doc_pending = StaffWorkExperience::where('verification_status', 'pending')->count();
-        //     $leave_doc_pending = StaffLeave::where('status', 'pending')->count();
-        //     $salary_pending = StaffSalary::where('status', 'active')->where('is_salary_processed', 'no')->count();
-
-        //     $review_pending_documents = $staff_document_pending + $education_doc_pending + $experince_doc_pending +
-        //         $leave_doc_pending + $salary_pending;
-
-        //     $staff_document_total = StaffDocument::where('status', 'active')->count();
-        //     $education_doc_total = StaffEducationDetail::count();
-        //     $experince_doc_total = StaffWorkExperience::count();
-        //     $leave_doc_total = StaffLeave::count();
-        //     $salary_total = StaffSalary::count();
-
-        //     $appointment_doc_total = StaffAppointmentDetail::where('status', 'active')->count();
-        //     $total_documents = $staff_document_total + $education_doc_total + $experince_doc_total +
-        //         $leave_doc_total + $appointment_doc_total + $salary_total;
-        // } else {
-        //     //dd($user_id);
-
-        //     $user_check_reporting = User::where('is_super_admin', '=', null)->where('reporting_manager_id', $user_id)->get();
-        //     $report_manager = [];
-        //     foreach ($user_check_reporting as $key => $user_check_reportings) {
-        //         $report_manager[] = $user_check_reportings->id;
-        //     }
-
-        //     $user = User::where('is_super_admin', '=', null)->whereIn('id', $report_manager)->get();
-        //     $user_count = User::where('is_super_admin', '=', null)->whereIn('id', $report_manager)->count();
-
-        //     $staff_document_pending = StaffDocument::where('verification_status', 'pending')->whereIn('staff_id', $report_manager)->where('status', 'active')->count();
-        //     $education_doc_pending = StaffEducationDetail::where('verification_status', 'pending')->whereIn('staff_id', $report_manager)->count();
-        //     $experince_doc_pending = StaffWorkExperience::where('verification_status', 'pending')->whereIn('staff_id', $report_manager)->count();
-        //     $leave_doc_pending = StaffLeave::where('status', 'pending')->whereIn('staff_id', $report_manager)->count();
-        //     $salary_pending = StaffSalary::where('status', 'active')->whereIn('staff_id', $report_manager)->where('is_salary_processed', 'no')->count();
-
-        //     $review_pending_documents = $staff_document_pending + $education_doc_pending + $experince_doc_pending +
-        //         $leave_doc_pending + $salary_pending;
-
-        //     $staff_document_total = StaffDocument::where('status', 'active')->whereIn('staff_id', $report_manager)->count();
-        //     $education_doc_total = StaffEducationDetail::whereIn('staff_id', $report_manager)->count();
-        //     $experince_doc_total = StaffWorkExperience::whereIn('staff_id', $report_manager)->count();
-        //     $leave_doc_total = StaffLeave::whereIn('staff_id', $report_manager)->count();
-        //     $salary_total = StaffSalary::whereIn('staff_id', $report_manager)->count();
-
-        //     $appointment_doc_total = StaffAppointmentDetail::where('status', 'active')->whereIn('staff_id', $report_manager)->count();
-        //     $total_documents = $staff_document_total + $education_doc_total + $experince_doc_total +
-        //         $leave_doc_total + $appointment_doc_total + $salary_total;
-        //     //dd($report_manager);
-        // }
+        } 
         $institution     = Institution::where('status', 'active')->get();
         $employee_nature = NatureOfEmployment::where('status', 'active')->get();
         $place_of_work   = PlaceOfWork::where('status', 'active')->get();

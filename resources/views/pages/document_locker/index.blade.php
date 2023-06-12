@@ -4,58 +4,58 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
-    <!--begin::Card-->
-    <div class="my-5 container">
-        <div class="row gap-2">
-            <div class="col">
-                <div class="card shadow h-100">
-                    <div class="card-body p-4">
-                        <p>Total Number of Staff</p>
-                        <h2>{{ $user_count }} </h2>
-                        <img alt="Logo" src="{{ asset('assets/media/document/no_of_staff.png') }}" style="float:right" />
+    <div class="row container">
+        <div class="col-md-4">
+            <div class="alert alert-primary fade show" role="alert">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <i class="fa fa-users fs-2x" aria-hidden="true"></i>
+                        <div class="my-3"> Total Staff </div>
                     </div>
+                    <h3 class="display-6">{{ count($user) }}</h3>
                 </div>
             </div>
-            <div class="col">
-                <div class="card shadow h-100">
-                    <div class="card-body p-4">
-                        <p>Total Number of Documents Uploaded</p>
-                        <h2>{{ $total_documents }} </h2>
-                        <img alt="Logo" src="{{ asset('assets/media/document/document_upload.png') }}"
-                            style="float:right" />
+        </div>
+        <div class="col-md-4">
+            <div class="alert alert-primary fade show" role="alert">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <i class="fa fa-file-text fs-2x" aria-hidden="true"></i>
+                        <div class="my-3"> Total Documents </div>
                     </div>
+                    <h3 class="display-6">{{ $total_documents }}</h3>
                 </div>
             </div>
-            <div class="col ">
-                <div class="card shadow h-100">
-                    <div class="card-body p-4">
-                        <p>Documents Review Pending </p>
-                        <h2>{{ $review_pending_documents }} </h2>
-                        <img alt="Logo" src="{{ asset('assets/media/document/document_pending.png') }}"
-                            style="float:right" />
+        </div>
+        <div class="col-md-4">
+            <div class="alert alert-primary fade show" role="alert">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <i class="fa fa-clock fs-2x" aria-hidden="true"></i>
+                        <div class="my-3"> Pending Documents </div>
                     </div>
+                    <h3 class="display-6">{{ $review_pending_documents }}</h3>
                 </div>
             </div>
         </div>
     </div>
-    <div class="card">
-        <div class="card-header border-0 pt-6">
-            <div class="d-flex align-items-center col-md-10 mx-auto mb-4">
-                <div class="fw-bold col-2">Search Staff</div>
+    <div class="card border shadow-sm">
+        <div class="card-header align-items-center justify-content-center bg-light">
+            <div>
                 <div class="input-group">
-                    <select id="staff_id" onchange="return showOptions();">
+                    <select id="staff_id" onchange="return showOptions();" class="form-input">
                         <option value="">Select Staff</option>
                         @foreach ($user as $users)
                             <option value="{{ $users->id }}">{{ $users->name }} - {{ $users->emp_code }}</option>
                         @endforeach
                     </select>
-                    <select id="emp_nature_id">
+                    <select id="emp_nature_id" class="form-input">
                         <option value="">Nature Of Employment </option>
                         @foreach ($employee_nature as $employment_value)
                             <option value="{{ $employment_value->id }}">{{ $employment_value->name }}</option>
                         @endforeach
                     </select>
-                    <select id="work_place_id">
+                    <select id="work_place_id" class="form-input">
                         <option value="">Place of Work</option>
                         @foreach ($place_of_work as $work_value)
                             <option value="{{ $work_value->id }}">{{ $work_value->name }}</option>
@@ -64,13 +64,7 @@
                     <button type="button" class="btn btn-primary" onclick="return search_dl();">Search</button>
                 </div>
             </div>
-            <div class="invalid-feedback">
-                Please select above any one
-            </div>
         </div>
-        <!--begin::Card title-->
-        <!--begin::Card toolbar-->
-
 
         <div class="card-body p-10" id="defalut_div">
             <div class="col-12">
@@ -85,20 +79,17 @@
                                 <th class="text-center text-white">Department</th>
                                 <th class="text-center text-white">Designation</th>
                                 <th class="text-center text-white">Total Documents</th>
-                                {{-- <th class="text-center text-white">Aprroved Documents</th>
-                                <th class="text-center text-white">Pending Documents</th> --}}
+                                <th class="text-center text-white">Aprroved Documents</th>
+                                <th class="text-center text-white">Pending Documents</th>
                                 <th class="text-center text-white">Action</th>
                             </tr>
-
                         </thead>
                         <tbody> </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
         <div id="kt_dynamic_app"></div>
-        <!--end::Card body-->
     </div>
     <!--end::Card-->
 @endsection
@@ -120,8 +111,7 @@
                 //     [0, "DESC"]
                 // ],
                 ajax: "{{ route('user.document_locker') }}",
-                columns: [
-                    {
+                columns: [{
                         data: 'id',
                         name: 'id'
                     },
@@ -141,19 +131,19 @@
                         data: 'total_documents',
                         name: 'total_documents'
                     },
-                    // {
-                    //     data: 'approved_documents',
-                    //     name: 'approved_documents'
-                    // },
-                    // {
-                    //     data: 'pending_documents',
-                    //     name: 'pending_documents'
-                    // },
+                    {
+                        data: 'approved_documents',
+                        name: 'approved_documents'
+                    },
+                    {
+                        data: 'pending_documents',
+                        name: 'pending_documents'
+                    },
                     {
                         data: 'action',
                         name: 'action',
-                        sortable:false,
-                        searchable:false,
+                        sortable: false,
+                        searchable: false,
                     },
                 ]
             });

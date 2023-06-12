@@ -53935,8 +53935,8 @@ body {
 }
 
 .aside.aside-dark {
-  /* background-color: #252525; */
-  background: url('./../media/misc/auth-bg.png');
+  /* background: #252525; */
+  background: linear-gradient(to right top, #051937, #062149, #0a295c, #12306f, #1d3883) , url('');
   background-size: cover;
 }
 
