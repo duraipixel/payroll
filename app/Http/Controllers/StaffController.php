@@ -41,6 +41,7 @@ use App\Models\Staff\StaffDocument;
 use App\Models\Staff\StaffEducationDetail;
 use App\Models\Staff\StaffExperiencedSubject;
 use App\Models\Staff\StaffFamilyMember;
+use App\Models\Staff\StaffHandlingSubject;
 use App\Models\Staff\StaffInvigilationDuty;
 use App\Models\Staff\StaffKnownLanguage;
 use App\Models\Staff\StaffMedicalRemark;
@@ -104,6 +105,44 @@ class StaffController extends Controller
             $nominee_details = StaffNominee::where('staff_id', $id)->get();
             $working_details = StaffWorkingRelation::where('status', 'active')->where('staff_id', $id)->get();
             $medical_remarks = StaffMedicalRemark::where('staff_id', $id)->get();
+
+            $subject_handling = DB::select("SELECT 
+                                    COUNT(*) AS subject_count,
+                                    STUFF((
+                                    SELECT ',' + CAST(subject_id AS VARCHAR(10))
+                                    FROM staff_handling_subjects
+                                    where staff_id = ".$id."
+                                    group by subject_id
+                                    FOR XML PATH(''), TYPE
+                                    ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS concatenated_subjects
+                                FROM staff_handling_subjects s ");
+
+            if( isset( $subject_handling[0] ) && $subject_handling[0]->subject_count > 0 ){
+                
+                $string_comes = $subject_handling[0]->concatenated_subjects;
+                $string_comes = explode(",", $string_comes);
+                $subject_details = Subject::whereIn('id', $string_comes)->get();
+                
+            }
+
+            $class_handling = DB::select("SELECT 
+                                    COUNT(*) AS class_count,
+                                    STUFF((
+                                    SELECT ',' + CAST(class_id AS VARCHAR(10))
+                                    FROM staff_handling_subjects
+                                    where staff_id = ".$id."
+                                    group by class_id
+                                    FOR XML PATH(''), TYPE
+                                    ).value('.', 'NVARCHAR(MAX)'), 1, 1, '') AS concatenated_subjects
+                                FROM staff_handling_subjects s ");
+            if( isset( $class_handling[0] ) && $class_handling[0]->class_count > 0 ){
+                
+                $class_string = $class_handling[0]->concatenated_subjects;
+                $class_string = explode(",", $class_string);
+                $class_details = Classes::whereIn('id', $class_string)->get();
+                
+            }
+            
         }
 
         $other_staff = User::with('institute')->where('status', 'active')
@@ -136,6 +175,7 @@ class StaffController extends Controller
         $subjects = Subject::where('status', 'active')->get();
         $scheme = AttendanceScheme::where('status', 'active')->get();
         $training_topics = TopicTraining::where('status', 'active')->get();
+        
 
         #phase4
         $boards = Board::where('status', 'active')->get();
@@ -203,6 +243,8 @@ class StaffController extends Controller
             'teaching_types' => $teaching_types ?? [],
             'place_of_works' => $place_of_works ?? [],
             'order_models' => $order_models ?? [],
+            'class_details' => $class_details ?? [],
+            'subject_details' => $subject_details ?? []
         );
 
         return view('pages.staff.registration.index', $params);
@@ -716,6 +758,23 @@ class StaffController extends Controller
                 }
             }
 
+            if ($request->handled && !empty($request->handled)) {
+                StaffHandlingSubject::where('staff_id', $id)->delete();
+                foreach ($request->handled as $item) {
+                    $ids = explode('_', $item);
+                    $class_id = $ids[1];
+                    $subject_id = $ids[0];
+                    $ins2 = [];
+                    $ins2['academic_id'] = $academic_id;
+                    $ins2['staff_id'] = $id;
+                    $ins2['subject_id'] = $subject_id;
+                    $ins2['class_id'] = $class_id;
+                    $ins2['status'] = 'active';
+                    StaffHandlingSubject::create($ins2);
+                }
+            }
+
+
             if ($request->studied && !empty($request->studied)) {
                 StaffStudiedSubject::where('staff_id', $id)->delete();
                 foreach ($request->studied as $item) {
@@ -1095,5 +1154,25 @@ class StaffController extends Controller
         // dd($studied_subjects);
         return view('pages.overview.print_view.print', compact('user', 'joining', 'subjects', 'classes'));
 
+    }
+
+    public function getStaffHandlingDetails(Request $request) {
+        
+
+        $class_handling = $request->class_handling;
+        $subject_handling = $request->subject_handling;
+        $subject_details = [];
+        $class_details = [];
+        $staff_id = $request->staff_id;
+        $staff_details = User::find($staff_id);
+        if( !empty( $subject_handling ) ) {
+            $subject_details = Subject::whereIn('id', $subject_handling)->get();
+        }
+        
+        if( !empty( $class_handling ) ) {
+            $class_details = Classes::whereIn('id', $class_handling)->get();
+        }
+        
+        return view('pages.staff.registration.emp_position._handling_subject', compact('subject_details', 'class_details', 'staff_details' ));
     }
 }

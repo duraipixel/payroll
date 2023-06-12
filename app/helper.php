@@ -26,6 +26,7 @@ use App\Models\Master\Institution;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
 use App\Models\PayrollManagement\StaffSalaryPatternField;
+use App\Models\Staff\StaffHandlingSubject;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -213,6 +214,17 @@ if (!function_exists('getStudiedSubjects')) {
     function getStudiedSubjects($staff_id, $subject_id, $class_id = '')
     {
         return StaffStudiedSubject::where('staff_id', $staff_id)
+            ->where('subject_id', $subject_id)
+            ->when($class_id != '', function ($q) use ($class_id) {
+                return $q->where('class_id', $class_id);
+            })->first();
+    }
+}
+
+if (!function_exists('getHandlingSubjects')) {
+    function getHandlingSubjects($staff_id, $subject_id, $class_id = '')
+    {
+        return StaffHandlingSubject::where('staff_id', $staff_id)
             ->where('subject_id', $subject_id)
             ->when($class_id != '', function ($q) use ($class_id) {
                 return $q->where('class_id', $class_id);

@@ -5,6 +5,7 @@
             top: -9px;
             background: white;
         }
+
         #studied_table tr:hover {
             background: #ededf4;
         }
@@ -43,8 +44,7 @@
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required"> Department </label>
                     <div class="d-flex">
-                        <select name="department_id" autofocus id="department_id"
-                            {{-- onchange="return checkTeachingType(this.value)" --}}
+                        <select name="department_id" autofocus id="department_id" {{-- onchange="return checkTeachingType(this.value)" --}}
                             class="form-select form-select-lg select2-option">
                             <option value="">--Select Department--</option>
                             @isset($department)
@@ -156,7 +156,7 @@
                 <hr class="bg-lt-clr mt-3">
                 </hr>
                 <!--begin::Tables Widget 13-->
-                <div class="card mb-0 mb-xl-0 wdth-40percent teaching"
+                {{-- <div class="card mb-0 mb-xl-0 wdth-40percent teaching"
                     style="display: @if (isset($staff_details->position->is_teaching_staff) && $staff_details->position->is_teaching_staff == 'yes') block @else none @endif">
                     <!--begin::Header-->
                     <div class="card-header border-0 pt-0">
@@ -170,79 +170,79 @@
                         <div class="table-responsive" id="studied_pane">
                             <!--begin::Table-->
                             {{-- @include('pages.staff.registration.emp_position.studied_subject_pane') --}}
-                            <!--end::Table-->
+                <!--end::Table-->
+                {{-- </div> --}}
+                <!--end::Table container-->
+                {{-- </div> --}}
+                <!--begin::Body-->
+                {{-- </div> --}}
+                <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
+
+                    <div class="bg-primary p-2 d-flex align-items-center justify-content-between py-2">
+                        <h3 class="fs-7 text-white m-0">
+                            <span class="card-label fw-bolder fs-5 mb-1">Staff Handling Subjects</span>
+                        </h3>
+                    </div>
+
+                    <div class="card-body py-3" id="studied_subject_table">
+                        <div class="row">
+                            <div class="col-lg-6 mb-5" >
+                                <label class="form-label">Handling Subject</label>
+                                <div class="d-flex">
+                                    <select name="subject[]" autofocus id="subject" multiple
+                                        class="form-control big_box select2-option" onchange="return getHandlingSubject()">
+                                        <option value="">--Select Subject--</option>
+                                        @isset($subjects)
+                                            @foreach ($subjects as $item)
+                                                <option value="{{ $item->id }}"
+                                                    @if (isset($used_exp_subjects) && in_array($item->id, $used_exp_subjects)) selected @endif>
+                                                    {{ $item->name }}
+                                                </option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                    {{-- <button type="button" class="text-white btn-primary"
+                                        onclick="return openAddModel('subject')">
+                                        <i class="fa fa-plus"></i>
+                                    </button> --}}
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-5">
+                                <label class="form-label">Class Handling</label>
+                                <div class="d-flex">
+                                    <select id="classes" name="class_id[]" class="form-control big_box select2-option"
+                                        placeholder="" multiple onchange="return getHandlingSubject()">
+                                        @isset($classes)
+                                            @foreach ($classes as $item)
+                                                <option value="{{ $item->id }}"
+                                                    @if (isset($used_classes) && in_array($item->id, $used_classes)) selected @endif>
+                                                    {{ $item->name }}</option>
+                                            @endforeach
+                                        @endisset
+                                    </select>
+                                    {{-- @if (access()->buttonAccess('class', 'add_edit'))
+                                        <span
+                                            class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0 p-4"
+                                            onclick="return openAddModel('class')">
+                                            <i class="fa fa-plus"></i>
+                                        </span>
+                                    @endif --}}
+                                </div>
+                            </div>
+                            
+                            
                         </div>
-                        <!--end::Table container-->
+                        <div class="row">
+                            <div class="col-sm-12" id="handling_table_content">
+                                @include('pages.staff.registration.emp_position._handling_subject')
+                            </div>
+                        </div>
                     </div>
                     <!--begin::Body-->
                 </div>
                 <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
 
-                    <div class="bg-primary p-2 d-flex align-items-center justify-content-between py-2">
-                        <h3 class="fs-7 text-white m-0">
-                            <span class="card-label fw-bolder fs-5 mb-1">Staff Studied Subjects</span>
-                        </h3>
-                    </div>
-
-                    <div class="card-body py-3" id="studied_subject_table" style="height: 400px;overflow:auto">
-
-                        <table id="studied_table"
-                            class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
-
-                            <thead>
-                                <tr class="fw-bolder text-muted">
-                                    <th class="min-w-50px">Subjects</th>
-                                    @isset($classes)
-                                        @foreach ($classes as $item)
-                                            <th class="min-w-30px text-center" id="{{ $item->id }}">
-                                                {{ $item->name }}</th>
-                                        @endforeach
-                                    @endisset
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                @isset($subjects)
-                                    @foreach ($subjects as $items)
-                                        <tr>
-                                            <td class="text-dark fw-bolder text-hover-primary fs-6">
-                                                {{ $items->name }}
-                                            </td>
-                                            @isset($classes)
-                                                @foreach ($classes as $item)
-                                                    <td class="text-center m-w-30px">
-                                                        <div
-                                                            class="form-check justify-content-center form-check-sm form-check-custom form-check-solid">
-                                                            <input class="form-check-input widget-13-check"
-                                                                style="border: 1px solid #797474;" name="studied[]"
-                                                                id="subject_class" type="checkbox"
-                                                                value="{{ $items->id }}_{{ $item->id }}"
-                                                                @if (isset($staff_details->id) && getStudiedSubjects($staff_details->id, $items->id, $item->id)) checked @endif />
-                                                        </div>
-                                                    </td>
-                                                @endforeach
-                                            @endisset
-                                            {{-- <td>
-                                                <div
-                                                    class="form-check justify-content-center form-check-sm form-check-custom form-check-solid">
-                                                    <input class="form-check-input widget-13-check"
-                                                        style="border: 1px solid #797474;" type="checkbox"
-                                                        @if (isset($staff_details->id) &&
-                                                                getStudiedSubjects($staff_details->id, $items->id) &&
-                                                                getStudiedSubjects($staff_details->id, $items->id)->class_id == null) checked @endif
-                                                        name="no_studied[]" value="{{ $items->id }}" />
-                                                </div>
-                                            </td> --}}
-                                        </tr>
-                                    @endforeach
-                                @endisset
-
-                            </tbody>
-
-                        </table>
-
-                        <!--end::Table container-->
-                    </div>
+                    @include('pages.staff.registration.emp_position._studied_subject')
                     <!--begin::Body-->
                 </div>
 
@@ -739,7 +739,7 @@
             var key_name = [
                 'designation_id',
                 'department_id',
-                'scheme_id',                
+                'scheme_id',
             ];
         }
 
@@ -802,6 +802,32 @@
 
             return true;
         }
+    }
+
+    function getHandlingSubject() {
+        
+        var class_handling = $('#classes').select2('val');
+        var subject_handling = $('#subject').select2('val');
+        var staff_id = $('#outer_staff_id').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('get.staff.handling.details') }}",
+            type: "POST",
+            data: {
+                class_handling: class_handling,
+                subject_handling:subject_handling,
+                staff_id:staff_id
+            },
+            success: function(res) {
+
+              $('#handling_table_content').html(res);
+            }
+        })
+
     }
 </script>
 @if (isset($staff_details->id))

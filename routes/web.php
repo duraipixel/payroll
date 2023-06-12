@@ -83,6 +83,7 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::post('/add/education', [App\Http\Controllers\StaffController::class, 'insertEducationDetails'])->name('staff.save.education_details');
         Route::post('/get/draftData', [App\Http\Controllers\StaffController::class, 'getStaffDraftData'])->name('staff.get.draft.data');
         Route::post('/add/familyData', [App\Http\Controllers\StaffController::class, 'checkFamilyData'])->name('staff.save.familyPhase');
+        Route::post('/get/staff/handling', [App\Http\Controllers\StaffController::class, 'getStaffHandlingDetails'])->name('get.staff.handling.details');
 
         Route::prefix('nominee')->group(function() {
             Route::post('/get', [App\Http\Controllers\Staff\StaffNomineeController::class, 'getStaffNominee'])->name('staff.nominee.get');
