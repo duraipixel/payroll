@@ -342,5 +342,28 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(StaffWorkingRelation::class, 'staff_id', 'id')->where('status', 'active');
     }
 
-    
+    // DOCUMENT LOCKER RELATIONS
+
+    public function StaffDocument() {
+        return $this->hasMany(StaffDocument::class, 'staff_id', 'id')->where('status', 'active');
+
+    }
+    public function StaffEducationDetail() {
+        return $this->hasMany(StaffEducationDetail::class, 'staff_id', 'id')->where('status', 'active');
+
+    }
+    public function StaffWorkExperience() {
+        return $this->hasMany(StaffWorkExperience::class, 'staff_id', 'id')->where('status', 'active');
+
+    }
+    public function StaffLeave() {
+        return $this->hasMany(StaffLeave::class, 'staff_id', 'id')->where('status', 'active');
+
+    }
+    public function StaffSalary() {
+        return $this->hasMany(StaffSalary::class, 'staff_id', 'id')->where('status', 'active');
+    } 
+    public function StaffAppointmentDetail() {
+        return $this->hasMany(StaffAppointmentDetail::class, 'staff_id', 'id')->where('status', 'active');
+    }
 }

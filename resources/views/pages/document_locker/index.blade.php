@@ -12,7 +12,7 @@
                     <div class="card-body p-4">
                         <p>Total Number of Staff</p>
                         <h2>{{ $user_count }} </h2>
-                        <img alt="Logo" src="{{ asset('assets/media/document/no_of_staff.png') }}" style="float:right"/>
+                        <img alt="Logo" src="{{ asset('assets/media/document/no_of_staff.png') }}" style="float:right" />
                     </div>
                 </div>
             </div>
@@ -21,7 +21,8 @@
                     <div class="card-body p-4">
                         <p>Total Number of Documents Uploaded</p>
                         <h2>{{ $total_documents }} </h2>
-                        <img alt="Logo" src="{{ asset('assets/media/document/document_upload.png') }}"  style="float:right"/>
+                        <img alt="Logo" src="{{ asset('assets/media/document/document_upload.png') }}"
+                            style="float:right" />
                     </div>
                 </div>
             </div>
@@ -30,7 +31,8 @@
                     <div class="card-body p-4">
                         <p>Documents Review Pending </p>
                         <h2>{{ $review_pending_documents }} </h2>
-                        <img alt="Logo" src="{{ asset('assets/media/document/document_pending.png') }}" style="float:right"/>
+                        <img alt="Logo" src="{{ asset('assets/media/document/document_pending.png') }}"
+                            style="float:right" />
                     </div>
                 </div>
             </div>
@@ -64,7 +66,7 @@
             </div>
             <div class="invalid-feedback">
                 Please select above any one
-            </div> 
+            </div>
         </div>
         <!--begin::Card title-->
         <!--begin::Card toolbar-->
@@ -83,46 +85,13 @@
                                 <th class="text-center text-white">Department</th>
                                 <th class="text-center text-white">Designation</th>
                                 <th class="text-center text-white">Total Documents</th>
-                                <th class="text-center text-white">Aprroved Documents</th>
-                                <th class="text-center text-white">Pending Documents</th>
+                                {{-- <th class="text-center text-white">Aprroved Documents</th>
+                                <th class="text-center text-white">Pending Documents</th> --}}
                                 <th class="text-center text-white">Action</th>
                             </tr>
 
                         </thead>
-                        <tbody>
-
-                            @foreach ($user as $users)
-                                <tr>
-                                    <td>{{ $users->emp_code }}</td>
-                                    <td>{{ $users->name }}</td>
-                                    <td>{{ $users->position->department->name ?? '' }}</td>
-                                    <td>{{ $users->position->designation->name ?? '' }}</td>
-                                    @php
-                                        $total_doc = '';
-                                        $total_doc = $users->staffDocuments->count() + $users->education->count() + $users->careers->count() + $users->leaves->count() + $users->appointmentCount->count();
-                                        
-                                        $pending_doc = '';
-                                        $pending_doc = $users->staffDocumentsPending->count() + $users->staffEducationDocPending->count() + $users->staffExperienceDocPending->count() + $users->leavesPending->count();
-                                        
-                                        $approved_doc = '';
-                                        $approved_doc = $users->staffDocumentsApproved->count() + $users->staffEducationDocApproved->count() + $users->staffExperienceDocApproved->count() + $users->leavesApproved->count() + $users->appointmentCount->count();
-                                        
-                                    @endphp
-
-                                    <td>{{ $total_doc ?? '0' }}</td>
-                                    <td>{{ $approved_doc ?? '0' }}</td>
-                                    <td>{{ $pending_doc ?? '0' }}</td>
-
-                                    <td><a href=" {{ route('user.dl_view', ['id' => $users->id]) }}"
-                                            class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px">
-                                            <i class="fa fa-eye"></i>
-                                        </a></td>
-
-                                </tr>
-                            @endforeach
-
-
-                        </tbody>
+                        <tbody> </tbody>
                     </table>
 
                 </div>
@@ -145,7 +114,48 @@
     <script>
         $(document).ready(function() {
             $('#document_locker').DataTable({
-                "scrollX": true
+                // processing: true,    
+                serverSide: true,
+                // order: [
+                //     [0, "DESC"]
+                // ],
+                ajax: "{{ route('user.document_locker') }}",
+                columns: [
+                    {
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'department',
+                        name: 'department'
+                    },
+                    {
+                        data: 'designation',
+                        name: 'designation'
+                    },
+                    {
+                        data: 'total_documents',
+                        name: 'total_documents'
+                    },
+                    // {
+                    //     data: 'approved_documents',
+                    //     name: 'approved_documents'
+                    // },
+                    // {
+                    //     data: 'pending_documents',
+                    //     name: 'pending_documents'
+                    // },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        sortable:false,
+                        searchable:false,
+                    },
+                ]
             });
         });
 

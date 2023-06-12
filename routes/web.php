@@ -143,12 +143,12 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/reporting/manager/change/modal', [App\Http\Controllers\ReportingController::class, 'openChangeManagerModal'])->name('reporting.manager.change.modal'); 
     
     //Document Locker Start    
-    Route::get('/user/document_locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker')->middleware(['checkAccess:view']); 
-    Route::post('/user/search_staff', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'searchData'])->name('user.search_staff'); 
-    Route::post('/user/show_options', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'showOptions'])->name('user.show_options'); 
+    Route::get('/user/document-locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker')->middleware(['checkAccess:view']); 
+    Route::get('/user/document-locker/show/{id?}', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'documentView'])->name('user.dl_view');
+    Route::post('/user/search-staff', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'searchData'])->name('user.search_staff'); 
+    Route::post('/user/show-options', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'showOptions'])->name('user.show_options'); 
     Route::get('autocomplete-search', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'autocompleteSearch'])->name('autocomplete-search'); 
-    Route::get('/dl_view/{id?}', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'documentView'])->name('user.dl_view');
-    Route::post('/document_status', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'changeDocumentStaus'])->name('document_status'); 
+    Route::post('/document-status', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'changeDocumentStaus'])->name('document_status'); 
     //Document Locker End
    
     Route::post('/scheme_view', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'schemeView'])->name('scheme.view');
