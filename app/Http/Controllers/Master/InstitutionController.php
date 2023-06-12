@@ -103,6 +103,7 @@ class InstitutionController extends Controller
         ]);
         
         if ($validator->passes()) {
+          
             $ins['academic_id'] = academicYearId();
             $ins['society_id'] = $request->society_id;
             $ins['name'] = $request->institute_name;
@@ -121,8 +122,12 @@ class InstitutionController extends Controller
             else{
                 $ins['status'] = 'active';
             }
-
+            
             $data = Institution::updateOrCreate(['id' => $id], $ins);
+
+            if( !$id ) {
+                $id = $data->id;
+            } 
             $error = 0;
             $message = 'Added successfully';
             $code = getStaffInstitutionCode($id);
