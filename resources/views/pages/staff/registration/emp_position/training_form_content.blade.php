@@ -76,7 +76,7 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('training-topic','add_edit') )
-                <button type="button" class="btn-primary text-white" onclick="return openAddModel('training_topic')">
+                <button type="button" class="btn-dark text-white" onclick="return openAddModel('training_topic')">
                     <i class="fa fa-plus"></i>
                 </button>
             @endif

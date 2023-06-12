@@ -37,7 +37,7 @@
             </select>
             @if( access()->buttonAccess('relationship','add_edit') )
 
-            <button type="button" class="btn-primary text-white" onclick="return openAddModel('relationship_working_type')">
+            <button type="button" class="btn-dark text-white" onclick="return openAddModel('relationship_working_type')">
                 <i class="fa fa-plus"></i>
             </button>
             @endif

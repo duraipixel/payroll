@@ -24,7 +24,7 @@
                                         @endisset
                                     </select>
                                     @if( access()->buttonAccess('blood_group','add_edit') )
-                                        <button type="button" class="btn-primary text-white" onclick="return openAddModel('medic_blood_group')">
+                                        <button type="button" class="btn-dark text-white" onclick="return openAddModel('medic_blood_group')">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     @endif

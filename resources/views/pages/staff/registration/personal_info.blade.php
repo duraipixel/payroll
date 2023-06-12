@@ -21,7 +21,7 @@
                     </select>
                     @if (access()->buttonAccess('institutions', 'add_edit'))
                         <button type="button" onclick="return openAddModel('intitution')"
-                            class="text-white btn-primary"><i class="fa fa-plus"></i></button>
+                            class="btn-dark text-white"><i class="fa fa-plus"></i></button>
                     @endif
                 </div>
             </div>

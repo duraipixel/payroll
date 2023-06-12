@@ -29,7 +29,7 @@
             </select>
             @if( access()->buttonAccess('board','add_edit') )
 
-            <button type="button" class="btn-primary text-white"
+            <button type="button" class="btn-dark text-white"
                 onclick="return openAddModel('boards')">
                 <i class="fa fa-plus"></i>
             </button>
@@ -65,7 +65,7 @@
             </select>
             @if( access()->buttonAccess('subject','add_edit') )
 
-            <button type="button" class="btn-primary text-white"
+            <button type="button" class="btn-dark text-white"
                 onclick="return openAddModel('main_subject')">
                 <i class="fa fa-plus"></i>
             </button>
@@ -90,7 +90,7 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('subject','add_edit') )
-            <button type="button" class="btn-primary text-white"
+            <button type="button" class="btn-dark text-white"
                 onclick="return openAddModel('ancillary_subject')">
                 <i class="fa fa-plus"></i>
             </button>
@@ -136,7 +136,7 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('professional_type','add_edit') )
-            <button type="button" class="btn-primary text-white" onclick="return openAddModel('professional_type')">
+            <button type="button" class="btn-dark text-white" onclick="return openAddModel('professional_type')">
                 <i class="fa fa-plus"></i>
             </button>
             @endif

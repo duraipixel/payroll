@@ -32,7 +32,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('designation', 'add_edit'))
-                            <button type="button" class="text-white btn-primary"
+                            <button type="button" class="btn-dark text-white"
                                 onclick="return openAddModel('designation')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -56,7 +56,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('department', 'add_edit'))
-                            <button type="button" class="text-white btn-primary"
+                            <button type="button" class="btn-dark text-white"
                                 onclick="return openAddModel('department')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -77,7 +77,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('division', 'add_edit'))
-                            <button type="button" class="text-white btn-primary"
+                            <button type="button" class="btn-dark text-white"
                                 onclick="return openAddModel('division')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -122,7 +122,7 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <button type="button" class="text-white btn-primary" onclick="return openAddModel('subject')">
+                        <button type="button" class="btn-dark text-white" onclick="return openAddModel('subject')">
                             <i class="fa fa-plus"></i>
                         </button>
                     </div>
@@ -145,7 +145,7 @@
                             @endisset
                         </select>
                         {{-- @if (access()->buttonAccess('scheme', 'add_edit'))
-                        <button type="button"  class="text-white btn-primary"
+                        <button type="button"  class="btn-dark text-white"
                             onclick="return openAddModel('scheme')">
                             <i class="fa fa-plus"></i>
                         </button>

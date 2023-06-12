@@ -73,7 +73,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('language', 'add_edit'))
-                            <button type="button" class="text-white btn-primary"
+                            <button type="button" class="btn-dark text-white"
                                 onclick="return openAddModel('language')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -95,7 +95,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('place', 'add_edit'))
-                            <button type="button" class="text-white btn-primary"
+                            <button type="button" class="btn-dark text-white"
                                 onclick="return openAddModel('places')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -117,7 +117,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('nationality', 'add_edit'))
-                            <button type="button" class="text-white btn-primary"
+                            <button type="button" class="btn-dark text-white"
                                 onclick="return openAddModel('nationality')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -139,7 +139,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('religion', 'add_edit'))
-                            <button type="button" class="text-white btn-primary"
+                            <button type="button" class="btn-dark text-white"
                                 onclick="return openAddModel('religion')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -161,7 +161,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('caste', 'add_edit'))
-                            <button type="button" class="text-white btn-primary"
+                            <button type="button" class="btn-dark text-white"
                                 onclick="return openAddModel('caste')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -184,7 +184,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('community', 'add_edit'))
-                            <button type="button" class="text-white btn-primary"
+                            <button type="button" class="btn-dark text-white"
                                 onclick="return openAddModel('community')">
                                 <i class="fa fa-plus"></i>
                             </button>
@@ -281,7 +281,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('bank', 'add_edit'))
-                                        <button type="button" class="text-white btn-primary"
+                                        <button type="button" class="btn-dark text-white"
                                             onclick="return openAddModel('bank')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -303,7 +303,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('bank-branch', 'add_edit'))
-                                        <button type="button" class="text-white btn-primary"
+                                        <button type="button" class="btn-dark text-white"
                                             onclick="return openAddModel('bankbranch')">
                                             <i class="fa fa-plus"></i>
                                         </button>

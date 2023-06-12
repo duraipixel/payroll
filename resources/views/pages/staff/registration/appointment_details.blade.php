@@ -30,7 +30,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('staff-category', 'add_edit'))
-                                        <button type="button"  class="btn-primary text-white"
+                                        <button type="button"  class="btn-dark text-white"
                                             onclick="return openAddModel('staff_category')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -57,7 +57,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('nature-of-employeement', 'add_edit'))
-                                        <button type="button"  class="btn-primary text-white"
+                                        <button type="button"  class="btn-dark text-white"
                                             onclick="return openAddModel('nature_of_employeement')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -82,7 +82,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('teaching-type', 'add_edit'))
-                                        <button type="button"  class="btn-primary text-white"
+                                        <button type="button"  class="btn-dark text-white"
                                             onclick="return openAddModel('teaching_type')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -107,7 +107,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('workplace', 'add_edit'))
-                                        <button type="button"  class="btn-primary text-white"
+                                        <button type="button"  class="btn-dark text-white"
                                             onclick="return openAddModel('place_of_work')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -216,7 +216,7 @@
                                                             @endforeach
                                                         @endisset
                                                     </select>
-                                                    {{-- <button type="button"  class="btn-primary text-white"
+                                                    {{-- <button type="button"  class="btn-dark text-white"
                                                         onclick="return openAddModel('order_model')">
                                                         <i class="fa fa-plus"></i>
                                                     </button> --}}

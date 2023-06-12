@@ -17,7 +17,7 @@
                 @endisset
             </select>
             @if (access()->buttonAccess('relationship', 'add_edit'))
-                <button type="button" class="btn-primary text-white" onclick="return openAddModel('relationship')">
+                <button type="button" class="btn-dark text-white" onclick="return openAddModel('relationship')">
                     <i class="fa fa-plus"></i>
                 </button>
             @endif
@@ -74,7 +74,7 @@
                 @endisset
             </select>
             @if (access()->buttonAccess('qualification', 'add_edit'))
-                <button type="button" class="btn-primary text-white" onclick="return openAddModel('qualification')">
+                <button type="button" class="btn-dark text-white" onclick="return openAddModel('qualification')">
                     <i class="fa fa-plus"></i>
                 </button>
             @endif
@@ -148,7 +148,7 @@
                 @endisset
             </select>
             @if (access()->buttonAccess('blood_group', 'add_edit'))
-                <button type="button" class="btn-primary text-white" onclick="return openAddModel('blood_group')">
+                <button type="button" class="btn-dark text-white" onclick="return openAddModel('blood_group')">
                     <i class="fa fa-plus"></i>
                 </button>
             @endif
@@ -171,7 +171,7 @@
                 @endisset
             </select>
             @if (access()->buttonAccess('nationality', 'add_edit'))
-                <button type="button" class="btn-primary text-white"
+                <button type="button" class="btn-dark text-white"
                     onclick="return openAddModel('family_nationality')">
                     <i class="fa fa-plus"></i>
                 </button>

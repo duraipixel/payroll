@@ -17,7 +17,7 @@
             </select>
             @if( access()->buttonAccess('other-school   ','add_edit') )
 
-            <button type="button" class="btn-primary text-white"
+            <button type="button" class="btn-dark text-white"
                 onclick="return openAddModel('experience_institute_name')">
                 <i class="fa fa-plus"></i>
             </button>
@@ -42,7 +42,7 @@
             </select>
             @if( access()->buttonAccess('designation','add_edit') )
 
-            <button type="button" class="btn-primary text-white"
+            <button type="button" class="btn-dark text-white"
                 onclick="return openAddModel('experience_designation')">
                 <i class="fa fa-plus"></i>
             </button>

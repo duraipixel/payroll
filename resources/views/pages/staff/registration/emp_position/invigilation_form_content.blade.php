@@ -20,7 +20,7 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('duty-class','add_edit') )
-            <button type="button" class="text-white btn-primary"
+            <button type="button" class="btn-dark text-white"
                 onclick="return openAddModel('duty_class')">
                 <i class="fa fa-plus"></i>
             </button>
@@ -43,7 +43,7 @@
             </select>
             @if( access()->buttonAccess('duty-type','add_edit') )
 
-            <button type="button" class="text-white btn-primary"
+            <button type="button" class="btn-dark text-white"
                 onclick="return openAddModel('duty_type')">
                 <i class="fa fa-plus"></i>
             </button>
@@ -66,7 +66,7 @@
                 @endisset
             </select>
             @if( access()->buttonAccess('other-school','add_edit') )
-            <button type="button" class="text-white btn-primary"
+            <button type="button" class="btn-dark text-white"
                 onclick="return openAddModel('other_school')">
                 <i class="fa fa-plus"></i>
             </button>
@@ -89,7 +89,7 @@
                 @endisset
             </select>            
             @if( access()->buttonAccess('place','add_edit') )
-            <button type="button" class="text-white btn-primary"
+            <button type="button" class="btn-dark text-white"
                 onclick="return openAddModel('other_places')">
                 <i class="fa fa-plus"></i>
             </button>

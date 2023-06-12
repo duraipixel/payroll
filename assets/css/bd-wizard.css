@@ -86,7 +86,11 @@
 
 .current .bd-wizard-step-title,
 .current .bd-wizard-step-icon i {
-    color: black !important;
+    color: white !important;
+}
+li.current {
+    background: linear-gradient(to right top, #051937, #062149, #0a295c, #12306f, #1d3883) !important;
+    color: white !important;
 }
 
 /* li.current {
