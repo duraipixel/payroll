@@ -44,7 +44,7 @@
                     <label class="form-label required"> Department </label>
                     <div class="d-flex">
                         <select name="department_id" autofocus id="department_id"
-                            onchange="return checkTeachingType(this.value)"
+                            {{-- onchange="return checkTeachingType(this.value)" --}}
                             class="form-select form-select-lg select2-option">
                             <option value="">--Select Department--</option>
                             @isset($department)
@@ -739,9 +739,7 @@
             var key_name = [
                 'designation_id',
                 'department_id',
-                'subject',
-                'scheme_id',
-                'classes'
+                'scheme_id',                
             ];
         }
 

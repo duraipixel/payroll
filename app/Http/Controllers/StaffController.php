@@ -658,9 +658,9 @@ class StaffController extends Controller
         $validateArray = [
             'designation_id' => 'required',
             'department_id' => 'required',
-            'subject' => 'required',
+            // 'subject' => 'required',
             'scheme_id' => 'required',
-            'class_id' => 'required',
+            // 'class_id' => 'required',
             // 'division_id' => 'required',
         ];
         if ($global_is_teaching) {
