@@ -259,7 +259,9 @@
 .form-input::placeholder {
     font-size: 12px !important;
 }
-
+.form-input[type=file]{
+    padding:  0 !important;
+}
 .form-input {
     border: solid 1px #c0c0c094 !important;
     outline: none;
