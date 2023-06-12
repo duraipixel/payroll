@@ -308,9 +308,10 @@
                         $('#typeahead-search-list').html(panel);
 
                     } else {
-                        $('#typeadd-search-panel1').addClass('d-none');
-                        $('#search_staff_id').val('');
-                        $('#global_search').val('');
+                        // $('#typeadd-search-panel1').addClass('d-none');
+                        // $('#search_staff_id').val('');
+                        // $('#global_search').val('');
+                        $('#typeahead-search-list').html(`<li class="typeahead-pane-li" >No Records </li>`);
                     }
                 }
             })
