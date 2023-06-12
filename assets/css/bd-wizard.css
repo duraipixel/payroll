@@ -275,3 +275,6 @@
 .form-input:focus {
     border: solid 1px royalblue !important;
 }
+.form-input.border-danger {
+    border: solid 1px #F1416C  !important;
+}
