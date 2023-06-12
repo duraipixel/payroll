@@ -1,5 +1,14 @@
 <div data-kt-stepper-element="content">
-
+    <style>
+        #studied_table thead th {
+            position: sticky;
+            top: -9px;
+            background: white;
+        }
+        #studied_table tr:hover {
+            background: #ededf4;
+        }
+    </style>
     <div class="w-100">
 
         <div class="pb-5 pb-lg-5">
@@ -22,15 +31,15 @@
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('designation','add_edit') )
-                        <button type="button"  class="text-white btn-primary"
-                            onclick="return openAddModel('designation')">
-                            <i class="fa fa-plus"></i>
-                        </button>
+                        @if (access()->buttonAccess('designation', 'add_edit'))
+                            <button type="button" class="text-white btn-primary"
+                                onclick="return openAddModel('designation')">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         @endif
                     </div>
                 </div>
-                
+
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required"> Department </label>
                     <div class="d-flex">
@@ -46,11 +55,11 @@
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('department','add_edit') )
-                        <button type="button"  class="text-white btn-primary"
-                            onclick="return openAddModel('department')">
-                            <i class="fa fa-plus"></i>
-                        </button>
+                        @if (access()->buttonAccess('department', 'add_edit'))
+                            <button type="button" class="text-white btn-primary"
+                                onclick="return openAddModel('department')">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         @endif
                     </div>
                 </div>
@@ -67,16 +76,17 @@
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('division','add_edit') )
-                        <button type="button"  class="text-white btn-primary"
-                            onclick="return openAddModel('division')">
-                            <i class="fa fa-plus"></i>
-                        </button>
+                        @if (access()->buttonAccess('division', 'add_edit'))
+                            <button type="button" class="text-white btn-primary"
+                                onclick="return openAddModel('division')">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         @endif
                     </div>
                 </div>
                 <!--end::Input group-->
-                <div class="col-lg-4 mb-5 teaching" style="display: @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'yes' ) block @else none @endif">
+                <div class="col-lg-4 mb-5 teaching"
+                    style="display: @if (isset($staff_details->position->is_teaching_staff) && $staff_details->position->is_teaching_staff == 'yes') block @else none @endif">
                     <label class="form-label required">Class Handling</label>
                     <div class="d-flex">
                         <select id="classes" name="class_id[]" class="form-control big_box select2-option"
@@ -88,16 +98,17 @@
                                 @endforeach
                             @endisset
                         </select>
-                        @if( access()->buttonAccess('class','add_edit') )
-                        <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0 p-4"
-                            onclick="return openAddModel('class')">
-                            <i class="fa fa-plus"></i>
-                        </span>
+                        @if (access()->buttonAccess('class', 'add_edit'))
+                            <span class="z-index-85 position-absolute btn btn-success btn-md top-0 end-0 p-4"
+                                onclick="return openAddModel('class')">
+                                <i class="fa fa-plus"></i>
+                            </span>
                         @endif
                     </div>
                 </div>
                 <!--begin::Input group-->
-                <div class="col-lg-4 mb-5 teaching" style="display: @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'yes' ) block @else none @endif">
+                <div class="col-lg-4 mb-5 teaching"
+                    style="display: @if (isset($staff_details->position->is_teaching_staff) && $staff_details->position->is_teaching_staff == 'yes') block @else none @endif">
                     <label class="form-label required">Handling Subject</label>
                     <div class="d-flex">
                         <select name="subject[]" autofocus id="subject" multiple
@@ -111,8 +122,7 @@
                                 @endforeach
                             @endisset
                         </select>
-                        <button type="button"  class="text-white btn-primary"
-                            onclick="return openAddModel('subject')">
+                        <button type="button" class="text-white btn-primary" onclick="return openAddModel('subject')">
                             <i class="fa fa-plus"></i>
                         </button>
                     </div>
@@ -134,7 +144,7 @@
                                 @endforeach
                             @endisset
                         </select>
-                        {{-- @if( access()->buttonAccess('scheme','add_edit') )
+                        {{-- @if (access()->buttonAccess('scheme', 'add_edit'))
                         <button type="button"  class="text-white btn-primary"
                             onclick="return openAddModel('scheme')">
                             <i class="fa fa-plus"></i>
@@ -146,7 +156,8 @@
                 <hr class="bg-lt-clr mt-3">
                 </hr>
                 <!--begin::Tables Widget 13-->
-                <div class="card mb-0 mb-xl-0 wdth-40percent teaching" style="display: @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'yes' ) block @else none @endif">
+                <div class="card mb-0 mb-xl-0 wdth-40percent teaching"
+                    style="display: @if (isset($staff_details->position->is_teaching_staff) && $staff_details->position->is_teaching_staff == 'yes') block @else none @endif">
                     <!--begin::Header-->
                     <div class="card-header border-0 pt-0">
                         <h3 class="card-title align-items-start flex-column">
@@ -158,9 +169,78 @@
                         <!--begin::Table container-->
                         <div class="table-responsive" id="studied_pane">
                             <!--begin::Table-->
-                            @include('pages.staff.registration.emp_position.studied_subject_pane')
+                            {{-- @include('pages.staff.registration.emp_position.studied_subject_pane') --}}
                             <!--end::Table-->
                         </div>
+                        <!--end::Table container-->
+                    </div>
+                    <!--begin::Body-->
+                </div>
+                <div class="tble-fnton mt-5 card mb-5 mb-xl-8">
+
+                    <div class="bg-primary p-2 d-flex align-items-center justify-content-between py-2">
+                        <h3 class="fs-7 text-white m-0">
+                            <span class="card-label fw-bolder fs-5 mb-1">Staff Studied Subjects</span>
+                        </h3>
+                    </div>
+
+                    <div class="card-body py-3" id="studied_subject_table" style="height: 400px;overflow:auto">
+
+                        <table id="studied_table"
+                            class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+
+                            <thead>
+                                <tr class="fw-bolder text-muted">
+                                    <th class="min-w-50px">Subjects</th>
+                                    @isset($classes)
+                                        @foreach ($classes as $item)
+                                            <th class="min-w-30px text-center" id="{{ $item->id }}">
+                                                {{ $item->name }}</th>
+                                        @endforeach
+                                    @endisset
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @isset($subjects)
+                                    @foreach ($subjects as $items)
+                                        <tr>
+                                            <td class="text-dark fw-bolder text-hover-primary fs-6">
+                                                {{ $items->name }}
+                                            </td>
+                                            @isset($classes)
+                                                @foreach ($classes as $item)
+                                                    <td class="text-center m-w-30px">
+                                                        <div
+                                                            class="form-check justify-content-center form-check-sm form-check-custom form-check-solid">
+                                                            <input class="form-check-input widget-13-check"
+                                                                style="border: 1px solid #797474;" name="studied[]"
+                                                                id="subject_class" type="checkbox"
+                                                                value="{{ $items->id }}_{{ $item->id }}"
+                                                                @if (isset($staff_details->id) && getStudiedSubjects($staff_details->id, $items->id, $item->id)) checked @endif />
+                                                        </div>
+                                                    </td>
+                                                @endforeach
+                                            @endisset
+                                            {{-- <td>
+                                                <div
+                                                    class="form-check justify-content-center form-check-sm form-check-custom form-check-solid">
+                                                    <input class="form-check-input widget-13-check"
+                                                        style="border: 1px solid #797474;" type="checkbox"
+                                                        @if (isset($staff_details->id) &&
+                                                                getStudiedSubjects($staff_details->id, $items->id) &&
+                                                                getStudiedSubjects($staff_details->id, $items->id)->class_id == null) checked @endif
+                                                        name="no_studied[]" value="{{ $items->id }}" />
+                                                </div>
+                                            </td> --}}
+                                        </tr>
+                                    @endforeach
+                                @endisset
+
+                            </tbody>
+
+                        </table>
+
                         <!--end::Table container-->
                     </div>
                     <!--begin::Body-->
@@ -173,8 +253,7 @@
                         <h3 class="fs-7 text-white m-0">
                             <span class="card-label fw-bolder fs-5 mb-1">Invigilation Duty Details</span>
                         </h3>
-                        <button onclick="openInviligationForm()"
-                            class="btn btn-sm btn-success"
+                        <button onclick="openInviligationForm()" class="btn btn-sm btn-success"
                             title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-dismiss="click" data-bs-trigger="hover">
                             <span id="kt_engage_demos_label">
@@ -191,9 +270,9 @@
                                 </span> Add New</span>
                         </button>
                         <button id="kt_new_data_toggle_duty" style="display:none"
-                            class="engage-demos-toggle btn btn-sm btn-success"
-                            title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
-                            data-bs-dismiss="click" data-bs-trigger="hover">
+                            class="engage-demos-toggle btn btn-sm btn-success" title="Click Here to add More"
+                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-dismiss="click"
+                            data-bs-trigger="hover">
 
                         </button>
 
@@ -213,8 +292,7 @@
                         <h3 class="fs-7 text-white m-0">
                             <span class="card-label fw-bolder fs-5 mb-1">Training Details</span>
                         </h3>
-                        <button onclick="openTrainingForm()"
-                            class=" btn btn-sm btn-success"
+                        <button onclick="openTrainingForm()" class=" btn btn-sm btn-success"
                             title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-dismiss="click" data-bs-trigger="hover">
                             <span id="kt_engage_demos_label"><span class="svg-icon svg-icon-3">
@@ -230,9 +308,9 @@
                                 </span> Add New </span>
                         </button>
                         <button id="kt_new_data_toggle_train" style="display:none;"
-                            class="engage-demos-toggle btn btn-sm btn-success"
-                            title="Click Here to add More" data-bs-toggle="tooltip" data-bs-placement="left"
-                            data-bs-dismiss="click" data-bs-trigger="hover">
+                            class="engage-demos-toggle btn btn-sm btn-success" title="Click Here to add More"
+                            data-bs-toggle="tooltip" data-bs-placement="left" data-bs-dismiss="click"
+                            data-bs-trigger="hover">
                             <span id="kt_engage_demos_label"><span class="svg-icon svg-icon-3">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         viewBox="0 0 24 24" fill="none">
@@ -275,14 +353,14 @@
 <div id="kt_help" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="help" data-kt-drawer-activate="true"
     data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'350px', 'md': '725px'}"
     data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_new_data_toggle_train"
-    data-kt-drawer-close="#kt_help_close"  style="z-index: 2222;">
+    data-kt-drawer-close="#kt_help_close" style="z-index: 2222;">
     <!--begin::Card-->
     @include('pages.staff.registration.emp_position.add_training')
     <!--end::Card-->
 </div>
 <script>
     var global_is_teaching = false;
-    @if(isset( $staff_details->position->is_teaching_staff ) && $staff_details->position->is_teaching_staff == 'no' )
+    @if (isset($staff_details->position->is_teaching_staff) && $staff_details->position->is_teaching_staff == 'no')
         global_is_teaching = true;
     @endif
     function checkTeachingType(id) {
@@ -654,16 +732,16 @@
             var key_name = [
                 'designation_id',
                 'department_id',
-                'scheme_id'              
+                'scheme_id'
             ];
         } else {
 
             var key_name = [
                 'designation_id',
-                'department_id',                
+                'department_id',
                 'subject',
                 'scheme_id',
-                'classes'              
+                'classes'
             ];
         }
 

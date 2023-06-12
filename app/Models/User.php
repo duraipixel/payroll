@@ -192,6 +192,11 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(StaffStudiedSubject::class, 'staff_id', 'id');
     }
 
+    public function studiedSubjectOnly()
+    {
+        return $this->hasMany(StaffStudiedSubject::class, 'staff_id', 'id')->selectRaw('count(*) as total, subject_id')->groupBy('subject_id');
+    }
+
     public function experiencedSubject()
     {
         return $this->hasMany(StaffExperiencedSubject::class, 'staff_id', 'id');

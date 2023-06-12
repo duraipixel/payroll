@@ -20,6 +20,7 @@ class StaffPfEsiDetail extends Model implements Auditable
         'end_date',	
         'location',	
         'description',	
-        'status'
+        'status',
+        'name'
     ];
 }

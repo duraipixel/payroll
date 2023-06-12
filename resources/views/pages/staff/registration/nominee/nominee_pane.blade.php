@@ -1,7 +1,7 @@
 <div class="tble-fnton card mt-10 mb-5 mb-xl-8">
     <div class="card-header bg-primary border-0 pt-0">
         <h3 class="card-title align-items-start flex-column">
-            <span class="card-label fw-bolder fs-5 mb-1">Nominee required</span>
+            <span class="card-label fw-bolder fs-5 mb-1 text-white">Nominee required</span>
         </h3>
 
         <button onclick="return openNomineeForm()"

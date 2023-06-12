@@ -4,20 +4,20 @@
         <!--begin::Table head-->
         <thead>
             <tr class="fw-bolder text-muted">
-                <th class="min-w-50px">Relationship Type</th>
-                <th class="min-w-140px">Name</th>
-                <th class="min-w-120px">Date of Birth</th>
-                <th class="min-w-120px">Qualification </th>
-                <th class="min-w-120px">Profession Type</th>
-                <th class="min-w-120px">Premises </th>
-                <th class="min-w-120px">Residential Address</th>
-                <th class="min-w-120px">Occupational /School address</th>
-                <th class="min-w-120px">Contact No</th>
-                <th class="min-w-120px">Blood Group</th>
-                <th class="min-w-120px">Nationality</th>
-                <th class="min-w-120px">Remarks</th>
-                {{-- <th class="min-w-120px">Son / Daughter</th> --}}
-                <th class="min-w-120px text-end">Actions</th>
+                <th class="w-100px">Relationship Type</th>
+                <th class="w-140px">Name</th>
+                <th class="w-120px">Date of Birth</th>
+                <th class="w-120px">Qualification </th>
+                <th class="w-120px">Profession Type</th>
+                <th class="w-120px">Premises </th>
+                <th class="w-120px">Residential Address</th>
+                <th class="w-120px">Occupational /School address</th>
+                <th class="w-120px">Contact No</th>
+                <th class="w-120px">Blood Group</th>
+                <th class="w-120px">Nationality</th>
+                <th class="w-120px">Remarks</th>
+                {{-- <th class="w-120px">Son / Daughter</th> --}}
+                <th class="w-120px text-end">Actions</th>
             </tr>
         </thead>
         
@@ -26,7 +26,7 @@
                 @foreach ($member_details as $item)
                     
                 <tr>
-                    <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->relationship->name ?? '' }} </td>
+                    <td class="text-dark fw-bolder text-hover-primary fs-6" >{{ $item->relationship->name ?? '' }} </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->first_name ?? '' }}<span
                             class="text-muted fw-bold text-muted d-block fs-7">{{ ucfirst($item->gender) }}</span>
                     </td>

@@ -163,6 +163,16 @@
                     <td class="text-start"> ${res.gender.toUpperCase()} </td>
                 </tr>`;
                 $('#nominee-info-pane').html(tableContent);
+
+                var today = new Date();
+                var birthDate = new Date(res.dob);
+                var age = today.getFullYear() - birthDate.getFullYear();
+                var m = today.getMonth() - birthDate.getMonth();
+                if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                
+                $('#nominee_age').val(age);
             }
         })
     }

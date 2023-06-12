@@ -143,7 +143,7 @@ class StaffController extends Controller
 
         #phase5
         $relation_types = RelationshipType::where('status', 'active')->get();
-        $blood_groups = BloodGroup::where('status', 'active')->get();
+        $blood_groups = BloodGroup::where('status', 'active')->orderBy('name')->get();
         $qualificaiton = Qualification::where('status', 'active')->get();
 
         #phase7
@@ -515,7 +515,6 @@ class StaffController extends Controller
             'religion_id' => 'required',
             'caste_id' => 'required',
             'community_id' => 'required',
-            'phone_no' => 'required|numeric|digits:10',
             'emergency_no' => 'required|numeric|digits:10',
             'mobile_no_1' => 'nullable|numeric|digits:10',
             'mobile_no_2' => 'nullable|numeric|digits:10',
@@ -544,6 +543,7 @@ class StaffController extends Controller
             $ins['mobile_no1'] = $request->mobile_no_1;
             $ins['mobile_no2'] = $request->mobile_no_2;
             $ins['whatsapp_no'] = $request->whatsapp_no;
+            $ins['pincode'] = $request->pincode ?? null;
             $ins['emergency_no'] = $request->emergency_no;
             $ins['birth_place'] = $request->place_of_birth_id;
             $ins['nationality_id'] = $request->nationality_id;
@@ -577,7 +577,7 @@ class StaffController extends Controller
                 $insEsi['ac_number'] = $request->uan_no;
                 $insEsi['type'] = 'pf';
                 $insEsi['start_date'] = $request->uan_start_date ? date('Y-m-d', strtotime($request->uan_start_date)) : null;
-                $insEsi['location'] = $request->uan_area;
+                $insEsi['name'] = $request->uan_name;
                 $insEsi['status'] = 'active';
                 StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'pf'], $insEsi);
             } else {
@@ -593,6 +593,7 @@ class StaffController extends Controller
                 $insEsi['start_date'] = isset($request->esi_start_date) && !empty($request->esi_start_date) ? date('Y-m-d', strtotime($request->esi_start_date)) : null;
                 $insEsi['end_date'] = isset($request->esi_end_date) && !empty($request->esi_end_date) ? date('Y-m-d', strtotime($request->esi_end_date)) : null;
                 $insEsi['location'] = $request->esi_address;
+                $insEsi['name'] = $request->esi_name;
                 $insEsi['status'] = 'active';
                 StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'esi'], $insEsi);
             } else {
@@ -674,7 +675,7 @@ class StaffController extends Controller
         $validator      = Validator::make($request->all(), $validateArray);
 
         if ($validator->passes()) {
-
+            
             $academic_id = academicYearId();
             /***
              * 1. insert in staff_professional_datas
@@ -731,17 +732,17 @@ class StaffController extends Controller
                 }
             }
 
-            if ($request->no_studied && !empty($request->no_studied)) {
-                foreach ($request->no_studied as $item) {
+            // if ($request->no_studied && !empty($request->no_studied)) {
+            //     foreach ($request->no_studied as $item) {
 
-                    $ins2 = [];
-                    $ins2['academic_id'] = $academic_id;
-                    $ins2['staff_id'] = $id;
-                    $ins2['subject_id'] = $item;
-                    $ins2['status'] = 'active';
-                    StaffStudiedSubject::create($ins2);
-                }
-            }
+            //         $ins2 = [];
+            //         $ins2['academic_id'] = $academic_id;
+            //         $ins2['staff_id'] = $id;
+            //         $ins2['subject_id'] = $item;
+            //         $ins2['status'] = 'active';
+            //         StaffStudiedSubject::create($ins2);
+            //     }
+            // }
 
             $error      = 0;
             $message    = '';
@@ -1087,9 +1088,12 @@ class StaffController extends Controller
 
     public function print(Request $request, User $user)
     {
-
+        $classes = Classes::where('status', 'active')->get();
+        $subjects = Subject::where('status', 'active')->get();
         $joining = StaffAppointmentDetail::selectRaw('min(joining_date) as joining_date')->where('staff_id', $user->id)->first();
-        return view('pages.overview.print_view.print', compact('user', 'joining'));
+        $studied_subjects = DB::select('select count(*), subject_id from staff_studied_subjects where staff_id = '.$user->id.' group by subject_id');
+        // dd($studied_subjects);
+        return view('pages.overview.print_view.print', compact('user', 'joining', 'subjects', 'classes'));
 
     }
 }

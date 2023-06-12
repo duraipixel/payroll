@@ -87,14 +87,63 @@
             </tr>
             @include('pages.overview.print_view._position')
             <!-- -------------------------------------------------------------- !-->
+           
         </tbody>
+    </table>
+   
+    <table id="studied_table"  class="common-table" style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%"
+    cellpadding="5">
+    
+        <thead>
+            <tr style="background-color: #1b488c;-webkit-print-color-adjust: exact;">
+                <td colspan="{{ count($classes)+1 }}"
+                    style="border: 1px solid #1b488c;color:#fff;font-weight:bold;font-size:15px;vertical-align: middle;height:0px;">
+                    Employee Studied Subjects
+                </td>
+            </tr>
+            <tr class="fw-bolder text-muted" style="background-color: #ddd;-webkit-print-color-adjust: exact;">
+                <th class="" style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">Subjects</th>
+                @isset($classes)
+                    @foreach ($classes as $item)
+                        <th style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;font-size: 12px;" id="{{ $item->id }}">
+                            {{ $item->name }}</th>
+                    @endforeach
+                @endisset
+            </tr>
+        </thead>
+
+        <tbody>
+            @isset($user->studiedSubjectOnly)
+                @foreach ($user->studiedSubjectOnly as $items)
+                    <tr>
+                        <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;font-weight:bold">
+                            {{ $items->subjects->name ?? '' }}
+                        </td>
+                        @isset($classes)
+                            @foreach ($classes as $item)
+                                <td class="" style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;text-align:center">
+                                    @if (isset($user->id) && getStudiedSubjects($user->id, $items->subject_id, $item->id)) 
+                                        Yes
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                            @endforeach
+                        @endisset
+                    </tr>
+                @endforeach
+            @endisset
+
+        </tbody>
+
     </table>
 
     <div style="page-break-before:always">&nbsp;</div>
 
     @include('pages.overview.print_view._education')
 
-    <table class="common-table" style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%" cellpadding="5">
+    <table class="common-table" style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%"
+        cellpadding="5">
         <tbody>
             @include('pages.overview.print_view._language')
             @include('pages.overview.print_view._others')

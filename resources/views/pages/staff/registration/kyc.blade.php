@@ -193,14 +193,14 @@
                 </div>
 
                 <div class="col-lg-4 mb-5">
-                    <label class="form-label required">Phone No.</label>
-                    <input name="phone_no" autofocus id="phone_no" maxlength="10"
-                        class="number_only form-input "
+                    <label class="form-label ">Phone No ( Landline No )</label>
+                    <input name="phone_no" autofocus id="phone_no" 
+                        class="form-input "
                         value="{{ $staff_details->personal->phone_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
-                    <label class="form-label">Mobile No - 1</label>
-                    <input name="mobile_no_1" class="form-input number_only" maxlength="10"
+                    <label class="form-label required">Mobile No - 1</label>
+                    <input name="mobile_no_1" id="mobile_no_1" class="form-input number_only" maxlength="10"
                         value="{{ $staff_details->personal->mobile_no1 ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
@@ -237,15 +237,29 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-lg-6 mb-5">
-                    <label class="form-label required">Contact Address</label>
-                    <textarea name="contact_address" autofocus id="contact_address" class="form-input " rows="3"
-                        required>{{ $staff_details->personal->contact_address ?? '' }}</textarea>
-                </div>
-                <div class="col-lg-6 mb-5">
-                    <label class="form-label required">Permanent Address</label>
-                    <textarea name="permanent_address" autofocus id="permanent_address" class="form-input "
-                        rows="3" required>{{ $staff_details->personal->permanent_address ?? '' }}</textarea>
+                <div class="row">
+
+                    <div class="col-lg-4 mb-5">
+                        <label class="form-label required">Contact Address</label>
+                        <textarea name="contact_address" autofocus id="contact_address" class="form-input " rows="3"
+                            required>{{ $staff_details->personal->contact_address ?? '' }}</textarea>
+                    </div>
+                    <div class="col-lg-4 mb-5">
+                        <label class="form-label required">Permanent Address
+                            <span class="float-right">
+                                <small class="fs-10">
+                                    <input type="checkbox" name="is_same" id="is_same"> Same as Contact Address
+                                </small>
+                            </span>
+                        </label>
+                        <textarea name="permanent_address" autofocus id="permanent_address" class="form-input "
+                            rows="3" required>{{ $staff_details->personal->permanent_address ?? '' }}</textarea>
+                    </div>
+                    <div class="col-lg-4 mb-5">
+                        <label class="form-label ">Pincode</label>
+                        <input name="pincode" class="form-input number_only" maxlength="6"
+                            value="{{ $staff_details->personal->pincode ?? '' }}" />
+                    </div>
                 </div>
                 <hr>
                 <div class="row mb-5">
@@ -438,8 +452,8 @@
 
                             </div>
                             <div class="col-4">
-                                <input name="uan_area" id="uan_area" class="form-input "
-                                    placeholder="Area" value="{{ $staff_details->pf->location ?? '' }}" />
+                                <input name="uan_name" id="uan_name" class="form-input "
+                                    placeholder="Name" value="{{ $staff_details->pf->name ?? '' }}" />
                             </div>
                         </div>
                     </div>
@@ -487,7 +501,11 @@
                             </div>
                             <div class="col-3">
                                 <input name="esi_address" class="form-input " placeholder="Area"
-                                    value="{{ $staff_details->pf->location ?? '' }}" />
+                                    value="{{ $staff_details->esi->location ?? '' }}" />
+                            </div>
+                            <div class="col-3 mt-3">
+                                <input name="esi_name" class="form-input " placeholder="Name"
+                                    value="{{ $staff_details->esi->name ?? '' }}" />
                             </div>
                         </div>
                     </div>
@@ -598,7 +616,7 @@
             'religion_id',
             'caste_id',
             'community_id',
-            'phone_no',
+            'mobile_no_1',
             'emergency_no',
             'contact_address',
             'permanent_address'
@@ -662,4 +680,13 @@
             return true;
         }
     }
+
+    $('#is_same').change(function(){
+        if( $(this).is(":checked") ) {
+            var old_data = $('#contact_address').val();
+            $('#permanent_address').val(old_data);
+        } else {
+            $('#permanent_address').val('');
+        }
+    })
 </script>

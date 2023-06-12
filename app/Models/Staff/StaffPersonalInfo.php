@@ -44,7 +44,8 @@ class StaffPersonalInfo extends Model implements Auditable
         'community_id',	
         'contact_address',	
         'permanent_address',	
-        'status'       
+        'status',
+        'pincode'       
     ];
 
     // protected static function booted()
