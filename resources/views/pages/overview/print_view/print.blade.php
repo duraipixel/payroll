@@ -113,7 +113,7 @@
         </thead>
 
         <tbody>
-            @isset($user->studiedSubjectOnly)
+            @if( isset($user->studiedSubjectOnly ) && count( $user->studiedSubjectOnly) > 0 )
                 @foreach ($user->studiedSubjectOnly as $items)
                     <tr>
                         <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;font-weight:bold">
