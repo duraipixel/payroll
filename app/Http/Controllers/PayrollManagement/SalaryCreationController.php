@@ -125,7 +125,6 @@ class SalaryCreationController extends Controller
         if( $request->from ) {
             return redirect('staff/register/'.$staff_id)->with('status', $error);
         } else {
-
             return redirect('/salary/creation')->with('status', $error);
         }
 
