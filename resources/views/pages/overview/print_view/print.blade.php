@@ -90,7 +90,7 @@
            
         </tbody>
     </table>
-
+    @if( isset($subject_details) && count($subject_details) > 0 )
     <table id="studied_table"  class="common-table" style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%"
     cellpadding="5">
     
@@ -137,11 +137,11 @@
         </tbody>
         
     </table>
+    @endif
     
-   
+    @if( isset($user->studiedSubjectOnly ) && count( $user->studiedSubjectOnly) > 0 )
     <table id="studied_table"  class="common-table" style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%"
     cellpadding="5">
-    
         <thead>
             <tr style="background-color: #1b488c;-webkit-print-color-adjust: exact;">
                 <td colspan="{{ count($classes)+1 }}"
@@ -153,13 +153,12 @@
                 <th class="" style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">Subjects</th>
                 @isset($classes)
                     @foreach ($classes as $item)
-                        <th style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;font-size: 12px;" id="{{ $item->id }}">
+                        <th style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:center;font-size: 12px;" id="{{ $item->id }}">
                             {{ $item->name }}</th>
                     @endforeach
                 @endisset
             </tr>
         </thead>
-
         <tbody>
             @if( isset($user->studiedSubjectOnly ) && count( $user->studiedSubjectOnly) > 0 )
                 @foreach ($user->studiedSubjectOnly as $items)
@@ -181,10 +180,9 @@
                     </tr>
                 @endforeach
             @endisset
-
         </tbody>
-
     </table>
+    @endif
 
     <div style="page-break-before:always">&nbsp;</div>
 
