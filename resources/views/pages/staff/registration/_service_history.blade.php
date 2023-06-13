@@ -41,6 +41,7 @@
                             @if ($item->appointment_doc && !empty($item->appointment_doc))
                                 @php
                                     $url = Storage::url($item->appointment_doc);
+                                  
                                 @endphp
                                 <a href="{{ asset('public' . $url) }}" target="_blank" class="btn btn-sm btn-light-info">
                                     <i class="fa fa-eye"></i>
