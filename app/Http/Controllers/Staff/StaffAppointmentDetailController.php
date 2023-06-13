@@ -244,7 +244,7 @@ class StaffAppointmentDetailController extends Controller
 
                 
                 $all_files =   Storage::allFiles('public/'.$directory);
-                Storage::delete($all_files);
+                // Storage::delete($all_files);
 
                 $filename  = $directory . '/' . $imageName;
 
