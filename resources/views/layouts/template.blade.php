@@ -172,6 +172,7 @@
 
             var start = moment().subtract(29, 'days');
             var end = moment();
+            console.log(end, 'end');
 
             function cb(start, end) {
                 $('#search_home_date span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -188,6 +189,9 @@
                     'This Month': [moment().startOf('month'), moment().endOf('month')],
                     'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
                         'month').endOf('month')]
+                },
+                locale: {
+                    format: 'DD/MM/YYYY'
                 }
             }, cb);
 
@@ -311,7 +315,8 @@
                         // $('#typeadd-search-panel1').addClass('d-none');
                         // $('#search_staff_id').val('');
                         // $('#global_search').val('');
-                        $('#typeahead-search-list').html(`<li class="typeahead-pane-li" >No Records </li>`);
+                        $('#typeahead-search-list').html(
+                            `<li class="typeahead-pane-li" >No Records </li>`);
                     }
                 }
             })

@@ -35,7 +35,7 @@
                 @endisset
             </select>
             @if (request()->routeIs(['home']))
-                <input type="text" name="search_home_date" id="search_home_date" class="border outline-0 px-3">
+                <input type="text" name="search_home_date" id="search_home_date"  class="border outline-0 px-3">
             @endif
             <div class="btn p-0 px-2 btn-light d-flex align-items-center justify-content-center">
                 <div>

@@ -90,6 +90,54 @@
            
         </tbody>
     </table>
+
+    <table id="studied_table"  class="common-table" style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%"
+    cellpadding="5">
+    
+        <thead>
+            <tr style="background-color: #1b488c;-webkit-print-color-adjust: exact;">
+                <td colspan="{{ count($classes)+1 }}"
+                    style="border: 1px solid #1b488c;color:#fff;font-weight:bold;font-size:15px;vertical-align: middle;height:0px;">
+                    Employee Handling Subjects
+                </td>
+            </tr>
+            <tr class="fw-bolder text-muted" style="background-color: #ddd;-webkit-print-color-adjust: exact;">
+                <th class="" style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">Subjects</th>
+                @if( isset($class_details) && count($class_details) > 0 )
+                    @foreach ($class_details as $item)
+                        <th style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:center;font-size: 12px;" id="{{ $item->id }}">
+                            {{ $item->name }}</th>
+                    @endforeach
+                @endisset
+            </tr>
+        </thead>
+     
+        <tbody>
+            @if( isset($subject_details) && count($subject_details) > 0 )
+                @foreach ($subject_details as $items)
+                <tr>
+                    <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;font-weight:bold">
+                        {{ $items->name ?? '' }}
+                    </td>
+                   
+                    @if( isset($class_details) && count($class_details) > 0 )
+                        @foreach ($class_details as $item)
+                        <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;font-size: 12px;text-align:center">
+                            @if( isset($user->id) && getHandlingSubjects( $user->id, $items->id, $item->id )) 
+                                Yes
+                            @else
+                            -
+                            @endif
+                        </td>
+                        @endforeach
+                    @endif
+                </tr>
+                @endforeach
+            @endif
+        </tbody>
+        
+    </table>
+    
    
     <table id="studied_table"  class="common-table" style="font-family: arial, sans-serif;border-collapse: collapse;" width="100%"
     cellpadding="5">
