@@ -35,6 +35,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\PayrollManagement\StaffSalary;
+use App\Models\PayrollManagement\StaffSalaryPattern;
 
 class User extends Authenticatable implements Auditable
 {
@@ -139,7 +140,7 @@ class User extends Authenticatable implements Auditable
 
     
     public function aadhaar() {
-        return $this->hasOne(StaffDocument::class, 'staff_id', 'id')->select('staff_documents.*')->join('document_types', 'document_types.id', '=', 'staff_documents.document_type_id')->where('name', 'Adhaar');
+        return $this->hasOne(StaffDocument::class, 'staff_id', 'id')->select('staff_documents.*')->join('document_types', 'document_types.id', '=', 'staff_documents.document_type_id')->where('name', 'Adhaar')->orWhere('name', 'Aadhaar');
     }
 
     public function pan() {
@@ -318,6 +319,12 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasMany(StaffSalary::class, 'staff_id', 'id');
     }
+
+    public function currentSalaryPattern()
+    {
+        return $this->hasOne(StaffSalaryPattern::class, 'staff_id', 'id')->where('status', 'active');
+    }
+    
     public function salaryApproved()
     {
         return $this->hasMany(StaffSalary::class, 'staff_id', 'id')->where('is_salary_processed','yes');

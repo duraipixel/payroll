@@ -282,7 +282,7 @@ class StaffController extends Controller
             $data = User::updateOrCreate(['emp_code' => $request->previous_code], $ins);
 
             if ($request->aadhar_name && !empty($request->aadhar_name)) {
-                $aadhar_id = DocumentType::where('name', 'Adhaar')->first();
+                $aadhar_id = DocumentType::where('name', 'Adhaar')->orwhere('name', 'Aadhaar')->first();
                 $ins_aa = [];
                 $ins_aa['academic_id'] = $academic_id;
                 $ins_aa['staff_id'] = $data->id;

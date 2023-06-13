@@ -101,6 +101,7 @@
                                 @isset($staff_details->aadhaar->multi_file)
                                     @php
                                         $paths = explode(',', $staff_details->aadhaar->multi_file);
+                                        
                                     @endphp
                                     @isset($paths)
 

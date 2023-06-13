@@ -471,6 +471,7 @@
                         'salary.lic',
                         'professional-tax',
                         'payroll.overview',
+                        'holdsalary'
                     ])) hover show @endif">
                         <span class="menu-link">
                             <span class="menu-icon">
@@ -509,6 +510,17 @@
                                         <span class="bullet bullet-dot"></span>
                                     </span>
                                     <span class="menu-title">Salary Revision</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link  @if (request()->routeIs(['holdsalary'])) active @endif"
+                                    href="{{ route('holdsalary') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Hold Salary</span>
                                 </a>
                             </div>
                         </div>

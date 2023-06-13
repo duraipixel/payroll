@@ -270,6 +270,15 @@ Route::group(['middleware' => 'auth'],  function () {
 
     Route::get('professional/tax',[App\Http\Controllers\PayrollManagement\ProfessionTaxController::class,'index'])->name('professional-tax');
     Route::post('professional/tax/save',[App\Http\Controllers\PayrollManagement\ProfessionTaxController::class,'save'])->name('save.professional-tax');
+    /**
+     * Hold salary routes
+     */
+    Route::get('holdsalary',[App\Http\Controllers\PayrollManagement\HoldSalaryController::class,'index'])->name('holdsalary');
+    Route::post('holdsalary/add',[App\Http\Controllers\PayrollManagement\HoldSalaryController::class,'addEdit'])->name('holdsalary.add_edit');
+    Route::post('holdsalary/save',[App\Http\Controllers\PayrollManagement\HoldSalaryController::class,'save'])->name('holdsalary.save');
+    Route::any('holdsalary/view',[App\Http\Controllers\PayrollManagement\HoldSalaryController::class,'view'])->name('holdsalary.view');
+    Route::post('holdsalary/delete',[App\Http\Controllers\PayrollManagement\HoldSalaryController::class,'delete'])->name('holdsalary.delete');
+
 
     /**
      *  Set working day calendar 

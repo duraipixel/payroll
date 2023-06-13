@@ -76,6 +76,41 @@
 
 
             </div>
+            <div class="row mt-3">
+                <div class="col-sm-4">
+
+                    <div class="form-group">
+                        <label for="" class="fs-5 required"> Effective From </label>
+                        <div class="mt-3">
+                            <input type="date" name="effective_from" id="effective_from" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-5">
+                        <label for="" class="fs-5"> Employee Remarks </label>
+                        <div class="mt-3">
+                            <textarea name="employee_remarks" class="form-control" id="employee_remarks" cols="30" rows="3" placeholder="This will be visible to employee"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+              
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="" class="fs-5 required"> Payout Month </label>
+                        <div class="mt-3">
+                            <select name="payout_month" id="payout_month" class="form-control" required>
+                                <option value="">-select-</option>
+                                @if( isset( $payout_year ) && !empty( $payout_year ) )
+                                    @foreach ($payout_year as $item)
+                                        <option value="{{ $item }}"> {{ date('F Y', strtotime($item)) }} </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="form-group mt-5 text-end">
                 <button class="btn btn-primary btn-sm" type="submit"> Submit & Lock </button>
                 <a class="btn btn-dark btn-sm"

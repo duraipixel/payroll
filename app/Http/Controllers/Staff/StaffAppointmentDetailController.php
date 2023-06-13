@@ -67,10 +67,6 @@ class StaffAppointmentDetailController extends Controller
 
                 $directory = 'staff/' . $staff_info->emp_code . '/appointment';
 
-                
-                $all_files =   Storage::allFiles('public/'.$directory);
-                // Storage::delete($all_files);
-
                 $filename  = $directory . '/' . $imageName;
 
                 Storage::disk('public')->put($filename, File::get($files));
@@ -203,6 +199,7 @@ class StaffAppointmentDetailController extends Controller
     }
 
     public function doUpdateAppointmentModal(Request $request) {
+
         $validator      = Validator::make($request->all(), [
             'staff_category_id' => 'required',
             'nature_of_employment_id' => 'required',
@@ -241,10 +238,6 @@ class StaffAppointmentDetailController extends Controller
                 $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
 
                 $directory = 'staff/' . $staff_info->emp_code . '/appointment';
-
-                
-                $all_files =   Storage::allFiles('public/'.$directory);
-                // Storage::delete($all_files);
 
                 $filename  = $directory . '/' . $imageName;
 

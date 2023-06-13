@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\PayrollManagement;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
 use App\Models\PayrollManagement\SalaryHead;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
@@ -38,7 +39,18 @@ class SalaryCreationController extends Controller
 
         $employees = User::where('status', 'active')->whereNull('is_super_admin')->get();
         $salary_heads = SalaryHead::where('status', 'active')->get();
-        return view('pages.payroll_management.salary_creation.index', compact('breadcrums', 'employees', 'salary_heads', 'staff_id', 'salary_info', 'salary_heads'));
+
+        $acYear = AcademicYear::find(academicYearId());
+
+        $start_year = '01-'.$acYear->from_month.'-'.$acYear->from_year;
+        $end_year = '01-'.$acYear->to_month.'-'.$acYear->to_year;
+        $start_Date = date('Y-m-d', strtotime($start_year));
+        $payout_year = [];
+        for ($i=1; $i <= 12; $i++) { 
+            $payout_year[] = array(date('Y-m-d', strtotime($start_Date.' + '.$i.' months')));
+        }
+        
+        return view('pages.payroll_management.salary_creation.index', compact('breadcrums', 'employees', 'salary_heads', 'staff_id', 'salary_info', 'salary_heads', 'payout_year'));
 
     }
 
@@ -71,7 +83,7 @@ class SalaryCreationController extends Controller
             }
         }
         $net_pay = $earnings - $deductions;
-        
+        $payout_month = date('Y-m-1', strtotime($request->payout_month));
 
         if( !empty( $ins )) {
             $insert_data = [];
@@ -83,8 +95,12 @@ class SalaryCreationController extends Controller
             $insert_data['net_salary'] = $net_pay;
             $insert_data['is_salary_processed'] = 'no';
             $insert_data['status'] = 'active';
+            $insert_data['effective_from'] = date('Y-m-d', strtotime($request->effective_from));
+            $insert_data['employee_remarks'] = $request->employee_remarks;
+            $insert_data['payout_month'] = $payout_month;
+            $insert_data['verification_status'] = 'pending';
             
-            $salary_info = StaffSalaryPattern::updateOrCreate(['staff_id' => $staff_id], $insert_data);
+            $salary_info = StaffSalaryPattern::updateOrCreate(['staff_id' => $staff_id, 'payout_month' => $payout_month], $insert_data);
 
             StaffSalaryPatternField::where('staff_salary_pattern_id', $salary_info->id )->forceDelete();
 
@@ -121,7 +137,17 @@ class SalaryCreationController extends Controller
 
         $salary_info = StaffSalaryPattern::where('staff_id', $staff_id)->first();
         $salary_heads = SalaryHead::where('status', 'active')->get();
-        return view('pages.payroll_management.salary_creation.fields', compact('salary_heads', 'salary_info' ) );
+        $acYear = AcademicYear::find(academicYearId());
+
+        $start_year = '01-'.$acYear->from_month.'-'.$acYear->from_year;
+        $end_year = '01-'.$acYear->to_month.'-'.$acYear->to_year;
+        $start_Date = date('Y-m-d', strtotime($start_year));
+        $payout_year = [];
+        for ($i=1; $i <= 12; $i++) { 
+            $payout_year[] = date('Y-m-d', strtotime($start_Date.' + '.$i.' months'));
+        }
+        
+        return view('pages.payroll_management.salary_creation.fields', compact('salary_heads', 'salary_info', 'payout_year' ) );
     }
 
     public function salaryModalView(Request $request)
