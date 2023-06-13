@@ -113,8 +113,12 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::post('/workplace/save', [App\Http\Controllers\Master\PlaceOfWorkController::class, 'save'])->name('save.work_place');
         Route::post('/ordermodel/save', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'save'])->name('save.order_model');
         Route::post('/appointment/save', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'save'])->name('staff.save.appointment');
+        Route::post('/appointment/delete', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'delete'])->name('staff.delete.appointment');
+        Route::post('/appointment/update', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'updateAppointmentModal'])->name('staff.add_edit.appointment');
+        Route::post('/appointment/update/do', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'doUpdateAppointmentModal'])->name('staff.update.appointment');
 
         Route::post('/appointment/generate/preview', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'generateModelPreview'])->name('staff.appointment.preview');
+        Route::post('/appointment/list', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'list'])->name('staff.appointment.list');
 
     });
 

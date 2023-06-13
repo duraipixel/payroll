@@ -30,7 +30,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('staff-category', 'add_edit'))
-                                        <button type="button"  class="btn-dark text-white"
+                                        <button type="button" class="btn-dark text-white"
                                             onclick="return openAddModel('staff_category')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -57,7 +57,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('nature-of-employeement', 'add_edit'))
-                                        <button type="button"  class="btn-dark text-white"
+                                        <button type="button" class="btn-dark text-white"
                                             onclick="return openAddModel('nature_of_employeement')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -82,7 +82,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('teaching-type', 'add_edit'))
-                                        <button type="button"  class="btn-dark text-white"
+                                        <button type="button" class="btn-dark text-white"
                                             onclick="return openAddModel('teaching_type')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -107,7 +107,7 @@
                                         @endisset
                                     </select>
                                     @if (access()->buttonAccess('workplace', 'add_edit'))
-                                        <button type="button"  class="btn-dark text-white"
+                                        <button type="button" class="btn-dark text-white"
                                             onclick="return openAddModel('place_of_work')">
                                             <i class="fa fa-plus"></i>
                                         </button>
@@ -118,7 +118,7 @@
                             <div class="col-md-4 fv-row mb-5">
                                 <label class="required fs-6 fw-bold mb-2"> Date of Joining </label>
                                 <div class="position-relative d-flex align-items-center">
-                                    
+
                                     <input class="form-control  ps-12" placeholder="Select a date" name="joining_date"
                                         id="joining_date" type="date"
                                         value="{{ $staff_details->appointment->joining_date ?? '' }}" />
@@ -174,7 +174,7 @@
                                             <div class="col-lg-6 mb-5">
                                                 <label class="form-label required">Period of Appointment (From)</label>
                                                 <div class="position-relative d-flex align-items-center">
-                                                    
+
                                                     <input class="form-control  ps-12" placeholder="Select a date"
                                                         name="from_appointment" id="from_appointment" type="date"
                                                         value="{{ $staff_details->appointment->from_appointment ?? '' }}" />
@@ -185,7 +185,7 @@
                                                 <label class="form-label required">Period of Appointment (To)</label>
 
                                                 <div class="position-relative d-flex align-items-center">
-                                                    
+
                                                     <input class="form-control ps-12" placeholder="Select a date"
                                                         name="to_appointment" id="to_appointment" type="date"
                                                         value="{{ $staff_details->appointment->to_appointment ?? '' }}" />
@@ -203,8 +203,7 @@
                                                 {{-- <a href="javascript:void(0)" class="float-end" onclick="return selectAppointmentModel()"> Select Model </a> --}}
                                                 <div class="position-relative">
                                                     <select name="appointment_order_model_id" autofocus
-                                                        id="appointment_order_model_id"
-                                                        class="form-input " required>
+                                                        id="appointment_order_model_id" class="form-input " required>
                                                         <option value=""> -- Select Order Model -- </option>
                                                         @isset($order_models)
                                                             @foreach ($order_models as $item)
@@ -263,13 +262,13 @@
                                             @endisset
                                         </div>
                                     </div>
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-12" id="service_history_staff">
                                         {{-- service history view --}}
                                         @include('pages.staff.registration._service_history')
                                     </div>
 
                                     <div class="col-md-12 fv-row">
-                                        @if ( isset( $staff_details ) && !empty( $staff_details ) && getStaffVerificationStatus($staff_details->id, 'salary_entry'))
+                                        @if (isset($staff_details) && !empty($staff_details) && getStaffVerificationStatus($staff_details->id, 'salary_entry'))
                                             <div class="row">
                                                 <div class="col-sm-12 mt-6">
                                                     <div class="alert alert-success">
@@ -297,12 +296,9 @@
                                             </div>
 
                                             <a class="btn btn-warning w-100"
-                                            @if ( isset( $staff_details ) && !empty( $staff_details ) )
-                                                href="{{ route('salary.creation', ['staff_id' => $staff_details->id]) }}"
+                                                @if (isset($staff_details) && !empty($staff_details)) href="{{ route('salary.creation', ['staff_id' => $staff_details->id]) }}"
                                             @else 
-                                                href="{{ route('salary.creation') }}"
-                                            @endif
-                                                >
+                                                href="{{ route('salary.creation') }}" @endif>
                                                 Create Salary Database </a>
                                         @endif
                                     </div>
@@ -319,21 +315,94 @@
     </form>
 </div>
 <script>
-    $(function() {
+    function deleteStaffAppointment(appointment_id) {
+        Swal.fire({
+            text: "Are you sure you want to delete?",
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, Delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-        // $("#joining_date").datepicker({
-        //     dateFormat: 'd-mm-yy'
-        // });
+                $.ajax({
+                    url: "{{ route('staff.delete.appointment') }}",
+                    type: 'POST',
+                    data: {
+                        id: appointment_id
+                    },
+                    success: function(res) {
+                        $('#service_history_staff').html(res);
+                        Swal.fire({
+                            title: "Updated!",
+                            text: res.message,
+                            icon: "success",
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-success"
+                            },
+                            timer: 3000
+                        });
 
-        // $("#from_appointment").datepicker({
-        //     dateFormat: 'd-mm-yy'
-        // });
+                    },
+                    error: function(xhr, err) {
+                        if (xhr.status == 403) {
+                            toastr.error(xhr.statusText, 'UnAuthorized Access');
+                        }
+                    }
+                });
+            }
+        });
+    }
 
-        // $("#to_appointment").datepicker({
-        //     dateFormat: 'd-mm-yy'
-        // });
+    function editStaffAppointment(appointment_id) {
 
-    });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('staff.add_edit.appointment') }}",
+            type: 'POST',
+            data: {
+                id: appointment_id
+            },
+            success: function(res) {
+                $('#kt_dynamic_app').modal('show');
+                $('#kt_dynamic_app').html(res);
+            }
+        })
+    }
+
+    function listStaffAppointment(staff_id) {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('staff.appointment.list') }}",
+            type: 'POST',
+            data: {
+                staff_id: staff_id
+            },
+            success: function(res) {
+               $('#service_history_staff').html(res);
+            }
+        })
+    }
 
     $('input[name=probation]').change(function() {
 
@@ -474,5 +543,88 @@
                 $('#kt_dynamic_app').html(res);
             }
         })
+    }
+
+    function dovalidateAppointmentForm() {
+        event.preventDefault();
+        var appointment_error = false;
+
+        var key_name = [
+            'staff_category_id_update',
+            'nature_of_employment_id_update',
+            'teaching_type_id_update',
+            'place_of_work_id_update',
+            'joining_date_update',
+            'salary_scale_update',
+            'from_appointment_update',
+            'to_appointment_update',
+            'appointment_order_model_id_update'
+        ];
+
+        $('.form-control,.form-select').removeClass('border-danger');
+
+        const pattern = /_/gi;
+        const replacement = " ";
+
+        key_name.forEach(element => {
+            var name_input = document.getElementById(element).value;
+
+            if (name_input == '' || name_input == undefined) {
+
+                appointment_error = true;
+                var elementValues = element.replace(pattern, replacement);
+                var name_input_error =
+                    '<div class="fv-plugins-message-container appointment-form-errors invalid-feedback"><div data-validator="notEmpty">' +
+                    elementValues.toUpperCase() + ' is required</div></div>';
+                // $('#' + element).after(name_input_error);
+                $('#' + element).addClass('border-danger')
+                $('#' + element).focus();
+            }
+        });
+
+        if (!appointment_error) {
+
+            loading();
+            var forms = $('#staff_appointment_order_update')[0];
+            var formData = new FormData(forms);
+            // var staff_id = $('#outer_staff_id').val();
+            // formData.append('staff_id', staff_id);
+            $('#service_history_tbody').addClass('blur_table');
+            $('#validate_appointment_button').attr('disabled', true);
+            const kycResponse = fetch("{{ route('staff.update.appointment') }}", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    unloading();
+               
+                    $('#validate_appointment_button').attr('disabled', false);
+                    if (data.error == 1) {
+                        $('#service_history_tbody').removeClass('blur_table');
+                        var err_message = '';
+                        if (data.message) {
+                            data.message.forEach(element => {
+                                err_message += '<p>' + element + '</p>';
+                            });
+                            toastr.error("Error", err_message);
+                        }
+                        return false;
+                    } else {
+                        toastr.success("Success", 'Staff Appointment Order Details Saved Successfully');
+                        $('#kt_dynamic_app').modal('hide');
+                        setTimeout(() => {
+                            $('#service_history_tbody').removeClass('blur_table');
+                            listStaffAppointment(data.staff_id)
+                        }, 1000);
+                        return true;
+                    }
+
+                });
+            return kycResponse;
+
+        } else {
+            return true;
+        }
     }
 </script>

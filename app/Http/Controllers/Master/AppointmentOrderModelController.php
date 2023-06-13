@@ -165,10 +165,12 @@ class AppointmentOrderModelController extends Controller
         
         return response()->json(['message'=>"Successfully deleted state!",'status'=>1]);
     }
+
     public function export()
     {
         return Excel::download(new AppointmentOrderModelExport,'appointment_order.xlsx');
     }
+
     public function appointmentOrderView(Request $request)
     {
         $info=AppointmentOrderModel::find($request->id);
@@ -176,4 +178,6 @@ class AppointmentOrderModelController extends Controller
         $content = view('pages.masters.appointment_order_model.view',compact('info','title'));
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
+
+    
 }

@@ -9,6 +9,9 @@
         top: 0;
         z-index: 1;
     }
+    .blur_table {
+        filter: blur(1px);
+    }
 </style>
 <div class="table-responsive tableFixHead mt-5" style="box-shadow: 1px 2px 3px 4px #98aac173;">
     <h3 class="p-3 text-center"> Service History</h3>
@@ -20,11 +23,11 @@
                 <th class="p-0 p-3 bg-dark">To</th>
                 <th class="p-0 p-3 bg-dark pe-12">Appointment</th>
                 <th class="p-0 p-3 bg-dark pe-7">Category</th>
-                <th class="p-0 p-3 bg-dark">View</th>
+                <th class="p-0 p-3 bg-dark text-center">Action</th>
             </tr>
         </thead>
 
-        <tbody>
+        <tbody id="service_history_tbody">
             
             @if (isset($staff_details->allAppointment) && !empty($staff_details->allAppointment))
                 @foreach ($staff_details->allAppointment as $item)
@@ -39,10 +42,16 @@
                                 @php
                                     $url = Storage::url($item->appointment_doc);
                                 @endphp
-                                <a href="{{ asset('public' . $url) }}" target="_blank" class="btn btn-light-info">
+                                <a href="{{ asset('public' . $url) }}" target="_blank" class="btn btn-sm btn-light-info">
                                     <i class="fa fa-eye"></i>
                                 </a>
                             @endif
+                            <a href="javascript:void(0)" class="btn btn-sm btn-light-primary" onclick="return editStaffAppointment({{ $item->id }})">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="javascript:void(0)" class="btn btn-sm btn-light-danger" onclick="return deleteStaffAppointment({{ $item->id }})">
+                                <i class="fa fa-trash"></i>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
