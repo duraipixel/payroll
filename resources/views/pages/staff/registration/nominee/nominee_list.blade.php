@@ -27,7 +27,9 @@
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ ucwords($item->relationship->name) }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ date('d-m-Y', strtotime($item->dob)) }}</td>
+                            {{-- {{ date('d-m-Y', strtotime($item->dob)) }} --}}
+                            {{ commonDateFormat($item->dob) }}
+                        </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ strtoupper($item->gender) }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">

@@ -30,11 +30,12 @@
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->course_name ?? '' }}</td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->boards->name ?? '' }}</td>
-                    <td class="text-dark fw-bolder text-hover-primary fs-6">{{ date('d-m-Y', strtotime($item->course_completed_year)) }}</td>
+                    <td class="text-dark fw-bolder text-hover-primary fs-6">{{ date('M/Y', strtotime($item->course_completed_year)) }}</td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->mainSubject->name ?? '' }}</td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->mainSubject->name ?? '' }}</td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">
-                        {{ date('d-m-Y', strtotime($item->submitted_date)) }}
+                        {{-- {{ date('d-m-Y', strtotime($item->submitted_date)) }} --}}
+                        {{ commonDateFormat($item->submitted_date) }}
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">
                         {{ $item->eduType->name ?? '' }}

@@ -148,3 +148,11 @@
         {{ $user->personal->permanent_address ?? 'n/a' }}
     </td>
 </tr>
+<tr>
+    <td style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
+        Pincode
+    </td>
+    <td colspan="7" style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
+        {{ $user->personal->pincode ?? 'n/a' }}
+    </td>
+</tr>

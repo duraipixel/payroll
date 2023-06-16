@@ -24,7 +24,7 @@
                             {{ strtoupper($item->designation->name) }}
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ date('d-m-Y', strtotime($item->from)) }} - {{ date('d-m-Y', strtotime($item->to)) }}
+                            {{ commonDateFormat($item->from) }} - {{ commonDateFormat($item->to) }}
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->address }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">

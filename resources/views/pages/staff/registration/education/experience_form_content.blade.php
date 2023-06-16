@@ -53,7 +53,7 @@
     <div class="col-lg-6 mb-5">
         <label class="form-label required">Period (From)</label>
         <div class="position-relative d-flex align-items-center">
-            {!! dobSVG() !!}
+            {{-- {!! dobSVG() !!} --}}
             <input class="form-control form-control-solid ps-12" placeholder="Select a date"
                 name="experience_from" type="date" required id="experience_from" value="{{ $experience_info->from ?? '' }}" />
         </div>
@@ -61,7 +61,7 @@
     <div class="col-lg-6 mb-5">
         <label class="form-label required">Period (To)</label>
         <div class="position-relative d-flex align-items-center">
-            {!! dobSVG() !!}
+            {{-- {!! dobSVG() !!} --}}
             <input class="form-control form-control-solid ps-12" placeholder="Select a date"
                 name="experience_to" type="date" required id="experience_to" value="{{ $experience_info->to ?? '' }}" />
         </div>

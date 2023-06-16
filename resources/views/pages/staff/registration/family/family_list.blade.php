@@ -31,7 +31,8 @@
                             class="text-muted fw-bold text-muted d-block fs-7">{{ ucfirst($item->gender) }}</span>
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">
-                        {{ date('d-m-Y', strtotime($item->dob)) }}
+                        {{-- {{ date('d-m-Y', strtotime($item->dob)) }} --}}
+                        {{ commonDateFormat($item->dob) }}
                         <span class="text-muted fw-bold text-muted d-block fs-7">
                             Age -
                             {{ $item->age }}

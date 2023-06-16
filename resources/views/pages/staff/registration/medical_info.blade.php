@@ -40,23 +40,23 @@
                             </div>
                             
                             <div class="col-lg-4 mb-5">
-                                <label class="form-label required">Identification mark</label>
+                                <label class="form-label required">Identification mark1</label>
                                 <input name="identification_mark" id="identification_mark" value="{{ $staff_details->healthDetails->identification_mark ?? ''  }}"
                                     class="form-control form-control-lg " />
                             </div>
     
                             <div class="col-lg-4 mb-5">
-                                <label class="form-label">Identification mark 1</label>
+                                <label class="form-label">Identification mark 2</label>
                                 <input name="identification_mark1" id="identification_mark1" value="{{ $staff_details->healthDetails->identification_mark1 ?? ''  }}"
                                     class="form-control form-control-lg " />
                             </div>
                             
-                            <div class="col-lg-4 mb-5">
+                            {{-- <div class="col-lg-4 mb-5">
                                 <label class="form-label">Identification mark 2</label>
                                 <input name="identification_mark2" id="identification_mark2" value="{{ $staff_details->healthDetails->identification_mark2 ?? ''  }}"
                                     class="form-control form-control-lg " />
                             </div>
-                            
+                             --}}
                             <div class="col-lg-4 mb-5">
                                 <label class="form-label">Family Doctor Name</label>
                                 <input name="family_doctor_name" id="family_doctor_name" class="form-control form-control-lg " value="{{ $staff_details->healthDetails->family_doctor_name ?? ''  }}" />

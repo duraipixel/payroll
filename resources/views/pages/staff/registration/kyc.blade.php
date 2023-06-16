@@ -480,12 +480,13 @@
                         </label>
                         <div class="row fv-row" id="esi_display_pane">
                             <div class="col-3">
+                                <label for=""> Esi No</label>
                                 <input name="esi_no" id="esi_no" class="form-input "
                                     placeholder="Number" value="{{ $staff_details->esi->ac_number ?? '' }}" />
                             </div>
                             <div class="col-3">
                                 <div class="position-relative d-flex align-items-center">
-                                    
+                                    <label for=""> Esi Start Date</label>
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="Start date"
                                         name="esi_start_date" id="esi_start_date" autofocus type="date"
                                         value="{{ $staff_details->esi->start_date ?? '' }}" />
@@ -493,17 +494,19 @@
                             </div>
                             <div class="col-3">
                                 <div class="position-relative d-flex align-items-center">
-                                    
+                                    <label for=""> Esi End Date</label>
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="End date"
                                         name="esi_end_date" id="esi_end_date" autofocus type="date"
                                         value="{{ $staff_details->esi->end_date ?? '' }}" />
                                 </div>
                             </div>
                             <div class="col-3">
+                                <label for=""> Esi Location</label>
                                 <input name="esi_address" class="form-input " placeholder="Area"
                                     value="{{ $staff_details->esi->location ?? '' }}" />
                             </div>
                             <div class="col-3 mt-3">
+                                <label for=""> Esi Name</label>
                                 <input name="esi_name" class="form-input " placeholder="Name"
                                     value="{{ $staff_details->esi->name ?? '' }}" />
                             </div>

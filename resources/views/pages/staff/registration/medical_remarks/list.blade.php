@@ -16,7 +16,8 @@
                 @foreach ($medical_remarks as $item)
                     <tr>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ date('d-m-Y', strtotime($item->medic_date)) }}
+                            {{-- {{ date('d-m-Y', strtotime($item->medic_date)) }} --}}
+                            {{ commonDateFormat($item->medic_date) }}
                             {{-- <span class="text-muted fw-bold text-muted d-block fs-7">
                                 Age - 30
                             </span> --}}

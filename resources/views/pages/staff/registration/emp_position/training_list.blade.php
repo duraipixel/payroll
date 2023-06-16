@@ -26,10 +26,13 @@
                         </a>
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">
-                        {{ date('d-M-Y', strtotime($item->from)) }}
+                        {{-- {{ date('d-M-Y', strtotime($item->from)) }} --}}
+                        {{ commonDateFormat($item->from) }}
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">
-                        {{ date('d-M-Y', strtotime($item->to)) }}
+                        {{-- {{ date('d-M-Y', strtotime($item->to)) }} --}}
+                        {{ commonDateFormat($item->to) }}
+
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->trainer_name }}</td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->topics->name }}

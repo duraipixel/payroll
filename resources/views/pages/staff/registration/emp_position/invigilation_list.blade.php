@@ -32,10 +32,10 @@
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ ucwords($item->school->name ?? '')}}</td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->place->name ?? '' }}
                     </td>
-                    <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->from_date }}
+                    <td class="text-dark fw-bolder text-hover-primary fs-6">{{ commonDateFormat($item->from_date) }}
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">
-                        {{ $item->to_date }}
+                        {{ commonDateFormat($item->to_date) }}
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">
                         {{ $item->facility }}

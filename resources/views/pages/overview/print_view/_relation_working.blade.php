@@ -33,7 +33,7 @@
                        {{ $item->belonger->emp_code ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->belonger->work_place->name ?? 'N/A' }}
+                        {{ $item->belonger->appointment->work_place->name ?? 'N/A' }}
                     </td>
                 </tr>
             @endforeach

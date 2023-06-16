@@ -33,8 +33,8 @@
                 @foreach ($staff_details->allAppointment as $item)
                     <tr>
                         <td class="p-3"> {{ $loop->iteration }} </td>
-                        <td class="p-3">{{ $item->from_appointment }}</td>
-                        <td class="p-3">{{ $item->to_appointment }}</td>
+                        <td class="p-3">{{ commonDateFormat($item->from_appointment) }}</td>
+                        <td class="p-3">{{ commonDateFormat($item->to_appointment) }}</td>
                         <td class="p-3">{{ $item->appointmentOrderModel->name ?? '' }}</td>
                         <td class="p-3">{{ $item->staffCategory->name ?? '' }}</td>
                         <td class="p-3">

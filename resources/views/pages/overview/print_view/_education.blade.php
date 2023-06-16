@@ -63,10 +63,13 @@
                         {{ $item->axSubject->name ?? 'N/A' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->submitted_date ?? 'N/A' }}
+                        {{ isset($item->submitted_date) && !empty( $item->submitted_date ) ? commonDateFormat($item->submitted_date) : 'N/A' }}
+                        
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
-                        {{ $item->returned_date ?? 'N/A' }}
+                        {{ isset($item->returned_date) && !empty( $item->returned_date ) ? commonDateFormat($item->returned_date) : 'N/A' }}
+
+                        
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;">
                         {{ $item->eduType->name ?? 'N/A' }}
