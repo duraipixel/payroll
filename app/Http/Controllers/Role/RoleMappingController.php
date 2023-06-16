@@ -38,7 +38,7 @@ class RoleMappingController extends Controller
             $data=RoleMapping::leftJoin('users as staff','staff.id','=','role_mappings.staff_id')
                 ->leftJoin('users as created','created.id','=','role_mappings.role_created_id')  
                 ->leftJoin('roles','roles.id','=','role_mappings.role_id')
-                ->select('staff.name as staff_name','created.name as created_by_name','roles.name as role_name','role_mappings.*'); 
+                ->select('staff.name as staff_name', 'staff.society_emp_code','created.name as created_by_name','roles.name as role_name','role_mappings.*'); 
             $status = $request->get('role_mappings.status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
@@ -58,6 +58,9 @@ class RoleMappingController extends Controller
                 }
             })
             ->addIndexColumn()
+            ->editColumn('staff_name', function ($row) {                
+                return $row->staff_name.' - '.$row->society_emp_code;
+            })
             ->editColumn('status', function ($row) {
                 $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return roleMappingChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
                 return $status;

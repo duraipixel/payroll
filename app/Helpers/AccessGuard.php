@@ -57,7 +57,7 @@ class AccessGuard
             if (is_string($module)) {
                 $module = array($module);
             }
-
+            
             if (isset($module) && !empty($module) && is_array($module)) {
                 if ($permission_module == '') {
                     $top_menu = array();

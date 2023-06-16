@@ -122,6 +122,7 @@ class SalaryCreationController extends Controller
         } else {
             $error = 'Error while setting Salary Fields';
         }
+        
         if( $request->from ) {
             return redirect('staff/register/'.$staff_id)->with('status', $error);
         } else {
@@ -146,17 +147,37 @@ class SalaryCreationController extends Controller
             $payout_year[] = date('Y-m-d', strtotime($start_Date.' + '.$i.' months'));
         }
         
+        return view('pages.payroll_management.salary_creation._button_fields', compact('salary_heads', 'salary_info', 'payout_year' ) );
+    }
+
+    public function getStaffSalaryDetailsPane(Request $request)
+    {
+
+        $staff_id = $request->staff_id;
+
+        $salary_info = StaffSalaryPattern::where('staff_id', $staff_id)->first();
+        $salary_heads = SalaryHead::where('status', 'active')->get();
+        $acYear = AcademicYear::find(academicYearId());
+
+        $start_year = '01-'.$acYear->from_month.'-'.$acYear->from_year;
+        $end_year = '01-'.$acYear->to_month.'-'.$acYear->to_year;
+        $start_Date = date('Y-m-d', strtotime($start_year));
+        $payout_year = [];
+        for ($i=1; $i <= 12; $i++) { 
+            $payout_year[] = date('Y-m-d', strtotime($start_Date.' + '.$i.' months'));
+        }
+        
         return view('pages.payroll_management.salary_creation.fields', compact('salary_heads', 'salary_info', 'payout_year' ) );
     }
 
     public function salaryModalView(Request $request)
     {
+
         $staff_id = $request->staff_id;
         $staff_info = User::find($staff_id);
         $salary_info = StaffSalaryPattern::where('staff_id', $staff_id)->first();
         $salary_heads = SalaryHead::where('status', 'active')->get();
         $title = 'Salary Preview';
-
         return view('pages.payroll_management.salary_creation._modal_view_salary', compact('salary_info', 'salary_heads', 'title', 'staff_info'));
 
     }
