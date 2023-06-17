@@ -49,9 +49,9 @@
             Status
         </label>
         <div >
-            <input type="radio" id="active" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif >
+            <input type="radio" id="active" class="form-check-input" value="active" name="status" @if(isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif >
             <label class="pe-3" for="active">Active</label>
-            <input type="radio" id="inactive" class="form-check-input" value="0" name="status" @if(isset($info->status) && $info->status != 'active') checked  @endif >
+            <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status" @if(isset($info->status) && $info->status != 'active') checked  @endif >
             <label for="inactive">Inactive</label>
         </div>
     </div>

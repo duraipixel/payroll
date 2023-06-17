@@ -43969,7 +43969,7 @@ code:not([class*=language-]) {
 }
 
 .form-check.form-check-solid .form-check-input {
-  border: 0;
+  border: 1px solid #b0bfe3;
   background-color: #EFF2F5;
 }
 
@@ -55024,4 +55024,15 @@ body {
   background-color: #0b0e18;
   color: white;
   cursor: pointer;
+}
+
+.form-control, .form-input {
+  border: 1px solid #b0bfe3 !important;
+}
+.select2.select2-container{
+  border: 1px solid #b0bfe3;
+}
+
+.form-control:focus {
+  border: 1px solid #173478 !important;
 }

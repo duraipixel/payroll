@@ -4,6 +4,12 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
+<style>
+    #institution_table td {
+        padding-left: 10px;
+        padding-right: 3px;
+    }
+</style>
     <div class="card">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
@@ -46,27 +52,31 @@
         <div class="card-body py-4">
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="table-responsive">
-                    <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
+                    <table class="table align-middle  table-hover table-bordered table-striped fs-7 no-footer"
                         id="institution_table">
                         <thead class="bg-primary">
-                            <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="text-center text-white" >
-                                Date
-                            </th>
-                                <th class="text-center text-white" >
+                            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                
+                                <th class="px-3 text-white" >
                                     Name
                                 </th>
-                                <th class="text-center text-white" >
+                                <th class="px-3 text-white" >
                                     Code
                                 </th>
-                                <th class="text-center text-white" >
+                                <th class="px-3 text-white" >
                                     Society
                                 </th>
+                                <th class="px-3 text-white" >
+                                    Address
+                                </th>
+                                <th class="px-3 text-white">
+                                    Last Updated
+                                </th>
 
-                                <th class="text-center text-white">
+                                <th class="px-3 text-white">
                                     Status
                                 </th>
-                                <th class="text-center text-white">
+                                <th class="px-3 text-white">
                                     Actions
                                 </th>
                             </tr>
@@ -99,10 +109,7 @@
             },
 
             columns: [
-                {
-                data: 'created_at',
-                name: 'created_at',
-                },
+               
                 {
                     data: 'name',
                     name: 'name'
@@ -115,6 +122,15 @@
                 {
                     data: 'society',
                     data: 'society'
+                },
+                {
+                    data: 'address',
+                    data: 'address'
+                },
+                {
+                    data: 'last_updated',
+                    data: 'last_updated',
+                    searchable: false
                 },
                 {
                     data: 'status',

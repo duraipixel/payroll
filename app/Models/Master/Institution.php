@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\Master\Society;
+use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Institution extends Model implements Auditable
@@ -34,10 +35,20 @@ class Institution extends Model implements Auditable
         'school_recognise',
         'fax',
         'address',
-        'status'
+        'status',
+        'addedBy',
+        'updatedBy'
     ];
     public function society()
     {
         return $this->belongsTo(Society::class,'society_id','id');
+    }
+
+    public function lastUpdatedBy() {
+        return $this->hasOne(User::class, 'id', 'updatedBy');
+    }
+
+    public function added() {
+        return $this->hasOne(User::class, 'id', 'addedBy');
     }
 }

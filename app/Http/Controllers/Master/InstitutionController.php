@@ -49,6 +49,15 @@ class InstitutionController extends Controller
                 }
             })
             ->addIndexColumn()
+            ->addColumn('last_updated', function ($row) {
+                $society_emp_code = $row->lastUpdatedBy->society_emp_code ?? ''; 
+                $updated_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['updated_at'])->format('d/M/Y H:i A');
+                $updated_html = '<div><div>'.$updated_at.'</div><div>'.($society_emp_code ? 'By '.$society_emp_code: '').'</div></div>';
+                return $updated_html;
+            })
+            ->orderColumn('last_updated', function ($query, $order) {
+                $query->orderBy('updated_at', $order);
+            })
             ->editColumn('status', function ($row) {
                 $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return institutionChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
                 return $status;
@@ -85,7 +94,7 @@ class InstitutionController extends Controller
 
                     return $edit_btn . $del_btn;
                 })
-                ->rawColumns(['action', 'status','society']);
+                ->rawColumns(['action', 'status','society', 'last_updated']);
             return $datatables->make(true);
 
         }
@@ -109,18 +118,11 @@ class InstitutionController extends Controller
             $ins['name'] = $request->institute_name;
             $ins['code'] = $request->institute_code;
             $ins['address'] = $request->address;
-            if(isset($request->form_type))
-            {
-                if($request->status)
-                {
-                    $ins['status'] = 'active';
-                }
-                else{
-                    $ins['status'] = 'inactive';
-                }
-            }
-            else{
-                $ins['status'] = 'active';
+            $ins['status'] = $request->status;
+            if( isset( $id ) && !empty( $id )) {
+                $ins['updatedBy'] = auth()->user()->id;
+            } else {
+                $ins['addedBy'] = auth()->user()->id;
             }
             
             $data = Institution::updateOrCreate(['id' => $id], $ins);

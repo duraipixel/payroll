@@ -275,9 +275,11 @@ class StaffController extends Controller
             // $ins['division_id'] = $request->division_id;
             $ins['reporting_manager_id'] = $request->reporting_manager_id;
             $ins['status'] = 'active';
-            $ins['addedBy'] = auth()->id();
-
-
+            if( isset( $request->previous_code ) && !empty( $request->previous_code )) {
+                $ins['updatedBy'] = auth()->id();
+            } else {
+                $ins['addedBy'] = auth()->id();
+            }
 
             $data = User::updateOrCreate(['emp_code' => $request->previous_code], $ins);
 
@@ -618,13 +620,27 @@ class StaffController extends Controller
                 $insEsi['start_date'] = $request->uan_start_date ? date('Y-m-d', strtotime($request->uan_start_date)) : null;
                 $insEsi['name'] = $request->uan_name;
                 $insEsi['status'] = 'active';
+
+                if ($request->hasFile('uan_document')) {
+
+                    $files = $request->file('uan_document');
+                    $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
+    
+                    $directory              = 'staff/' . $staff_info->emp_code . '/uan';
+                    $filename               = $directory . '/' . $imageName;
+    
+                    Storage::disk('public')->put($filename, File::get($files));
+                    // $ins['image'] = $filename;
+                    $insEsi['document'] = $filename;
+                }
+
                 StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'pf'], $insEsi);
             } else {
                 StaffPfEsiDetail::where(['staff_id' => $id, 'type' => 'pf'])->delete();
             }
 
             if (!empty($request->esi_no) && $request->is_esi == 'yes') {
-
+                $insEsi = [];
                 $insEsi['academic_id'] = $academic_id;
                 $insEsi['staff_id'] = $id;
                 $insEsi['ac_number'] = $request->esi_no;
@@ -634,6 +650,19 @@ class StaffController extends Controller
                 $insEsi['location'] = $request->esi_address;
                 $insEsi['name'] = $request->esi_name;
                 $insEsi['status'] = 'active';
+
+                if ($request->hasFile('esi_document')) {
+
+                    $files = $request->file('esi_document');
+                    $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
+    
+                    $directory              = 'staff/' . $staff_info->emp_code . '/esi';
+                    $filename               = $directory . '/' . $imageName;
+    
+                    Storage::disk('public')->put($filename, File::get($files));
+                    // $ins['image'] = $filename;
+                    $insEsi['document'] = $filename;
+                }
                 StaffPfEsiDetail::updateOrCreate(['staff_id' => $id, 'type' => 'esi'], $insEsi);
             } else {
                 StaffPfEsiDetail::where(['staff_id' => $id, 'type' => 'esi'])->delete();

@@ -267,7 +267,7 @@ li.current {
     padding:  0 !important;
 }
 .form-input {
-    border: solid 1px #c0c0c094 !important;
+    border: solid 1px #c0c0c094;
     outline: none;
     width: 100%;
     font-size: 12px !important;

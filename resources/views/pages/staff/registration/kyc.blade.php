@@ -10,7 +10,7 @@
                 <div class="col-md-4 fv-row mb-5">
                     <label class="required fs-6 fw-bold mb-2">Date of Birth</label>
                     <div class="position-relative d-flex align-items-center">
-                        
+
                         <input class="form-control  ps-12" autocomplete="off" placeholder="Select a date"
                             name="date_of_birth" id="date_of_birth" autofocus type="date"
                             value="{{ $staff_details->personal->dob ?? '' }}" />
@@ -53,7 +53,7 @@
                     @if (isset($staff_details->personal) && $staff_details->personal->marital_status == 'married') style="display:block" @else style="display:none;" @endif>
                     <label class="fs-6 fw-bold mb-2 required">Marriage Date</label>
                     <div class="position-relative d-flex align-items-center">
-                        
+
                         <input class="form-control  ps-12" type="date" placeholder="Select a date"
                             name="marriage_date" id="marriage_date"
                             value="{{ $staff_details->personal->marriage_date ?? '' }}" />
@@ -95,8 +95,7 @@
                             @endisset
                         </select>
                         @if (access()->buttonAccess('place', 'add_edit'))
-                            <button type="button" class="btn-dark text-white"
-                                onclick="return openAddModel('places')">
+                            <button type="button" class="btn-dark text-white" onclick="return openAddModel('places')">
                                 <i class="fa fa-plus"></i>
                             </button>
                         @endif
@@ -194,8 +193,7 @@
 
                 <div class="col-lg-4 mb-5">
                     <label class="form-label ">Phone No ( Landline No )</label>
-                    <input name="phone_no" autofocus id="phone_no" 
-                        class="form-input "
+                    <input name="phone_no" autofocus id="phone_no" class="form-input "
                         value="{{ $staff_details->personal->phone_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
@@ -215,9 +213,8 @@
                 </div>
                 <div class="col-lg-4 mb-5">
                     <label class="form-label required">Emergency No.</label>
-                    <input name="emergency_no" autofocus id="emergency_no"
-                        class="form-input number_only" maxlength="10"
-                        value="{{ $staff_details->personal->emergency_no ?? '' }}" />
+                    <input name="emergency_no" autofocus id="emergency_no" class="form-input number_only"
+                        maxlength="10" value="{{ $staff_details->personal->emergency_no ?? '' }}" />
                 </div>
                 <div class="col-lg-4 mb-5">
                     <div>
@@ -241,19 +238,17 @@
 
                     <div class="col-lg-4 mb-5">
                         <label class="form-label required">Contact Address</label>
-                        <textarea name="contact_address" autofocus id="contact_address" class="form-input " rows="3"
-                            required>{{ $staff_details->personal->contact_address ?? '' }}</textarea>
+                        <textarea name="contact_address" autofocus id="contact_address" class="form-input " rows="3" required>{{ $staff_details->personal->contact_address ?? '' }}</textarea>
                     </div>
                     <div class="col-lg-4 mb-5">
-                        <label class="form-label required">Permanent Address
+                        <label class="form-label required w-100">Permanent Address
                             <span class="float-right">
                                 <small class="fs-10">
                                     <input type="checkbox" name="is_same" id="is_same"> Same as Contact Address
                                 </small>
                             </span>
                         </label>
-                        <textarea name="permanent_address" autofocus id="permanent_address" class="form-input "
-                            rows="3" required>{{ $staff_details->personal->permanent_address ?? '' }}</textarea>
+                        <textarea name="permanent_address" autofocus id="permanent_address" class="form-input " rows="3" required>{{ $staff_details->personal->permanent_address ?? '' }}</textarea>
                     </div>
                     <div class="col-lg-4 mb-5">
                         <label class="form-label ">Pincode</label>
@@ -312,14 +307,12 @@
                             </div>
 
                             <div class="col-3">
-                                <input name="account_name" class="form-input "
-                                    placeholder="Account Name"
+                                <input name="account_name" class="form-input " placeholder="Account Name"
                                     value="{{ $staff_details->bank->account_name ?? '' }}" />
                             </div>
 
                             <div class="col-3">
-                                <input name="account_no" class="number_only form-input "
-                                    placeholder="Account Number"
+                                <input name="account_no" class="number_only form-input " placeholder="Account Number"
                                     value="{{ $staff_details->bank->account_number ?? '' }}" />
                             </div>
 
@@ -437,23 +430,40 @@
                             </div>
                         </label>
                         <div class="row fv-row" id="uan_display_pane">
-                            <div class="col-4">
-                                <input name="uan_no" id="uan_no" class="form-input "
-                                    placeholder="Number" value="{{ $staff_details->pf->ac_number ?? '' }}" />
+                            <div class="col-3">
+                                <label for=""> UAN No</label>
+                                <input name="uan_no" id="uan_no" class="form-input " placeholder="Number"
+                                    value="{{ $staff_details->pf->ac_number ?? '' }}" />
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
 
+                                <label for=""> UAN Start Date</label>
                                 <div class="position-relative d-flex align-items-center">
-                                    
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="Start date"
                                         name="uan_start_date" id="uan_start_date" type="date"
                                         value="{{ $staff_details->pf->start_date ?? '' }}" autofocus />
                                 </div>
 
                             </div>
-                            <div class="col-4">
-                                <input name="uan_name" id="uan_name" class="form-input "
-                                    placeholder="Name" value="{{ $staff_details->pf->name ?? '' }}" />
+                            <div class="col-3">
+                                <label for=""> UAN Name </label>
+                                <input name="uan_name" id="uan_name" class="form-input " placeholder="Name"
+                                    value="{{ $staff_details->pf->name ?? '' }}" />
+                            </div>
+                            <div class="col-3 ">
+                                <label for=""> UAN Document </label>
+                                <input name="uan_document" id="uan_document" class="form-input mb-5" type="file" />
+                                <div>
+                                    @if (isset($staff_details->pf->document) && !empty($staff_details->pf->document))
+                                        @php
+                                            $url = Storage::url($staff_details->pf->document);
+                                        @endphp
+                                        <a class="btn-sm btn-outline-info" href="{{ asset('public' . $url) }}"
+                                            target="_blank">View File
+                                        </a>
+                                    @endif
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -481,20 +491,20 @@
                         <div class="row fv-row" id="esi_display_pane">
                             <div class="col-3">
                                 <label for=""> Esi No</label>
-                                <input name="esi_no" id="esi_no" class="form-input "
-                                    placeholder="Number" value="{{ $staff_details->esi->ac_number ?? '' }}" />
+                                <input name="esi_no" id="esi_no" class="form-input " placeholder="Number"
+                                    value="{{ $staff_details->esi->ac_number ?? '' }}" />
                             </div>
                             <div class="col-3">
+                                <label for=""> Esi Start Date</label>
                                 <div class="position-relative d-flex align-items-center">
-                                    <label for=""> Esi Start Date</label>
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="Start date"
                                         name="esi_start_date" id="esi_start_date" autofocus type="date"
                                         value="{{ $staff_details->esi->start_date ?? '' }}" />
                                 </div>
                             </div>
                             <div class="col-3">
+                                <label for=""> Esi End Date</label>
                                 <div class="position-relative d-flex align-items-center">
-                                    <label for=""> Esi End Date</label>
                                     <input class="form-control  ps-12" autocomplete="off" placeholder="End date"
                                         name="esi_end_date" id="esi_end_date" autofocus type="date"
                                         value="{{ $staff_details->esi->end_date ?? '' }}" />
@@ -509,6 +519,21 @@
                                 <label for=""> Esi Name</label>
                                 <input name="esi_name" class="form-input " placeholder="Name"
                                     value="{{ $staff_details->esi->name ?? '' }}" />
+                            </div>
+                            <div class="col-3 mt-3">
+                                <label for=""> Esi Document </label>
+                                <input name="esi_document" class="form-input mb-5" type="file" />
+                                <div>
+                                    @if (isset($staff_details->esi->document) && !empty($staff_details->esi->document))
+                                        @php
+                                            $url = Storage::url($staff_details->esi->document);
+                                        @endphp
+                                        <a class="btn-sm btn-outline-info mt-3" href="{{ asset('public' . $url) }}"
+                                            target="_blank">View File
+                                        </a>
+                                    @endif
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -684,8 +709,8 @@
         }
     }
 
-    $('#is_same').change(function(){
-        if( $(this).is(":checked") ) {
+    $('#is_same').change(function() {
+        if ($(this).is(":checked")) {
             var old_data = $('#contact_address').val();
             $('#permanent_address').val(old_data);
         } else {

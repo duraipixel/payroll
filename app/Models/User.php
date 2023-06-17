@@ -65,7 +65,8 @@ class User extends Authenticatable implements Auditable
         'is_super_admin',
         'addedBy',
         'is_top_level',
-        'image'
+        'image',
+        'updatedBy'
     ];
 
     protected $hidden = [

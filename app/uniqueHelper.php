@@ -49,7 +49,7 @@ if (!function_exists('getStaffInstitutionCode')) {
         $countNo = '0000';
         $new_emp_code = $institute_code->code.$countNo;
         $codes = DB::table('users')->orderBy('institute_emp_code', 'desc')->first();
-        if( $codes ) {
+        if( $codes->institute_emp_code && !empty( $codes->institute_emp_code) ) {
             $emp_code = substr($codes->institute_emp_code, -4);
             
             $emp_code = $emp_code + 1;
