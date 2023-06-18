@@ -275,7 +275,7 @@ class StaffController extends Controller
             // $ins['division_id'] = $request->division_id;
             $ins['reporting_manager_id'] = $request->reporting_manager_id;
             $ins['status'] = 'active';
-            if( isset( $request->previous_code ) && !empty( $request->previous_code )) {
+            if (isset($request->previous_code) && !empty($request->previous_code)) {
                 $ins['updatedBy'] = auth()->id();
             } else {
                 $ins['addedBy'] = auth()->id();
@@ -625,10 +625,10 @@ class StaffController extends Controller
 
                     $files = $request->file('uan_document');
                     $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
-    
+
                     $directory              = 'staff/' . $staff_info->emp_code . '/uan';
                     $filename               = $directory . '/' . $imageName;
-    
+
                     Storage::disk('public')->put($filename, File::get($files));
                     // $ins['image'] = $filename;
                     $insEsi['document'] = $filename;
@@ -655,10 +655,10 @@ class StaffController extends Controller
 
                     $files = $request->file('esi_document');
                     $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
-    
+
                     $directory              = 'staff/' . $staff_info->emp_code . '/esi';
                     $filename               = $directory . '/' . $imageName;
-    
+
                     Storage::disk('public')->put($filename, File::get($files));
                     // $ins['image'] = $filename;
                     $insEsi['document'] = $filename;
@@ -800,34 +800,24 @@ class StaffController extends Controller
                 }
             }
 
-
-            if ($request->studied && !empty($request->studied)) {
-                StaffStudiedSubject::where('staff_id', $id)->delete();
-                foreach ($request->studied as $item) {
-                    $ids = explode('_', $item);
-                    $class_id = $ids[1];
-                    $subject_id = $ids[0];
-                    $ins2 = [];
-                    $ins2['academic_id'] = $academic_id;
-                    $ins2['staff_id'] = $id;
-                    $ins2['subject_id'] = $subject_id;
-                    $ins2['class_id'] = $class_id;
-                    $ins2['status'] = 'active';
-                    StaffStudiedSubject::create($ins2);
+            $subjects = Subject::where('status', 'active')->get();
+            StaffStudiedSubject::where('staff_id', $id)->delete();
+            if (isset($subjects) && !empty($subjects)) {
+                foreach ($subjects as $sub) {
+                    if ($_POST['studied_' . $sub->id] ?? '') {
+                        $sub_data = explode('_', $_POST['studied_' . $sub->id]);
+                        $ins2 = [];
+                        $ins2['academic_id'] = $academic_id;
+                        $ins2['staff_id'] = $id;
+                        $ins2['subject_id'] = $sub->id;
+                        $ins2['subjects'] = $sub->name;
+                        $ins2['classes'] = end($sub_data);
+                        $ins2['status'] = 'active';
+                        StaffStudiedSubject::create($ins2);
+                    }
                 }
             }
 
-            // if ($request->no_studied && !empty($request->no_studied)) {
-            //     foreach ($request->no_studied as $item) {
-
-            //         $ins2 = [];
-            //         $ins2['academic_id'] = $academic_id;
-            //         $ins2['staff_id'] = $id;
-            //         $ins2['subject_id'] = $item;
-            //         $ins2['status'] = 'active';
-            //         StaffStudiedSubject::create($ins2);
-            //     }
-            // }
 
             $error      = 0;
             $message    = '';
@@ -1212,7 +1202,7 @@ class StaffController extends Controller
             $class_string = explode(",", $class_string);
             $class_details = Classes::whereIn('id', $class_string)->get();
         }
-        
+
         $params = array(
             'user' => $user,
             'joining' => $joining,
@@ -1221,9 +1211,8 @@ class StaffController extends Controller
             'class_details' => $class_details ?? [],
             'subject_details' => $subject_details ?? []
         );
-        
-        return view( 'pages.overview.print_view.print', $params );
 
+        return view('pages.overview.print_view.print', $params);
     }
 
     public function getStaffHandlingDetails(Request $request)

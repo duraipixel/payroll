@@ -55,7 +55,7 @@
                                     Emp Code
                                 </th>
                                 <th class="text-center text-white" >
-                                    Profile Compleation
+                                    Profile Completion
                                 </th>
                                 <th class="text-center text-white" >
                                     Status

@@ -6,18 +6,17 @@
 
 <div class="card-body py-3" id="studied_subject_table" style="height: 400px;overflow:auto">
 
-    <table id="studied_table"
-        class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+    <table id="studied_table" class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
 
         <thead>
             <tr class="fw-bolder text-muted">
                 <th class="min-w-50px">Subjects</th>
-                @isset($classes)
-                    @foreach ($classes as $item)
-                        <th class="min-w-30px text-center" id="{{ $item->id }}">
-                            {{ $item->name }}</th>
+                @if(config('constant.staff_studied_classes'))
+                    @foreach (config('constant.staff_studied_classes') as $item)
+                        <th class="min-w-30px text-center" id="{{ $item }}">
+                            {{ $item }}</th>
                     @endforeach
-                @endisset
+                @endif
             </tr>
         </thead>
 
@@ -28,31 +27,20 @@
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ $items->name }}
                         </td>
-                        @isset($classes)
-                            @foreach ($classes as $item)
+                        @if(config('constant.staff_studied_classes'))
+                            @foreach (config('constant.staff_studied_classes') as $item)
                                 <td class="text-center m-w-30px">
                                     <div
                                         class="form-check justify-content-center form-check-sm form-check-custom form-check-solid">
-                                        <input class="form-check-input widget-13-check"
-                                            style="border: 1px solid #797474;" name="studied[]"
-                                            id="subject_class" type="checkbox"
-                                            value="{{ $items->id }}_{{ $item->id }}"
-                                            @if (isset($staff_details->id) && getStudiedSubjects($staff_details->id, $items->id, $item->id)) checked @endif />
+                                        <input class="form-check-input widget-13-check" style="border: 1px solid #797474;"
+                                            name="studied_{{$items->id}}" id="subject_class" type="radio"
+                                            value="{{ $items->id }}_{{ $item }}"
+                                            @if (isset($staff_details->id) && getStudiedSubjects($staff_details->id, $items->id, $item)) checked @endif 
+                                            />
                                     </div>
                                 </td>
                             @endforeach
-                        @endisset
-                        {{-- <td>
-                            <div
-                                class="form-check justify-content-center form-check-sm form-check-custom form-check-solid">
-                                <input class="form-check-input widget-13-check"
-                                    style="border: 1px solid #797474;" type="checkbox"
-                                    @if (isset($staff_details->id) &&
-                                            getStudiedSubjects($staff_details->id, $items->id) &&
-                                            getStudiedSubjects($staff_details->id, $items->id)->class_id == null) checked @endif
-                                    name="no_studied[]" value="{{ $items->id }}" />
-                            </div>
-                        </td> --}}
+                        @endif
                     </tr>
                 @endforeach
             @endisset

@@ -17,7 +17,9 @@ class StaffStudiedSubject extends Model implements Auditable
         'staff_id',
         'subject_id',
         'class_id',	
-        'status'
+        'status',
+        'subjects',
+        'classes'
     ];
     
     public function subjects() {
