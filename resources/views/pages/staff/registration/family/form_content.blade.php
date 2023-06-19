@@ -102,6 +102,11 @@
                         @if (isset($family_details->profession) && $family_details->profession == 'studying') checked @endif />
                     <span class="form-check-label fw-bold">Studying</span>
                 </label>
+                <label class="form-check form-check-custom form-check-solid me-10 mt-3">
+                    <input class="form-check-input h-20px w-20px" type="radio" name="profession_type" value="others"
+                        @if (isset($family_details->profession) && $family_details->profession == 'others') checked @endif />
+                    <span class="form-check-label fw-bold">Others</span>
+                </label>
             </div>
         </div>
     </div>
@@ -124,6 +129,16 @@
                 </label>
             </div>
         </div>
+    </div>
+    <div class="col-lg-6 mb-5 other_profession" @if (isset($family_details->profession) && $family_details->profession == 'others') @else style="display:none" @endif>
+        
+        <label class="form-label">
+            Profession Remarks
+        </label>
+        <input name="other_profession" id="other_profession"
+            value="{{ $family_details->other_profession ?? '' }}"
+            class="form-control form-control-lg form-control-solid" />
+        
     </div>
 
     <div class="col-lg-6 mb-5">
@@ -259,18 +274,18 @@
     });
 
 
-    // let premises = document.getElementsByName("premises");
-    // premises.forEach(element => {
+    let professions = document.getElementsByName("profession_type");
+    professions.forEach(element => {
 
-    //     element.addEventListener('click', function() {
+        element.addEventListener('click', function() {
 
-    //         if (this.value == 'others') {
-    //             $('.own_premises').hide();
-    //         } else {
-    //             $('.own_premises').show();
-    //         }
-    //     })
-    // });
+            if (this.value == 'others') {
+                $('.other_profession').show();
+            } else {
+                $('.other_profession').hide();
+            }
+        })
+    });
 
     function getAge(dob) {
         console.log(dob, 'date');

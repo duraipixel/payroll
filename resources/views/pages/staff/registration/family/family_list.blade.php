@@ -33,13 +33,17 @@
                     <td class="text-dark fw-bolder text-hover-primary fs-6">
                         {{-- {{ date('d-m-Y', strtotime($item->dob)) }} --}}
                         {{ commonDateFormat($item->dob) }}
-                        <span class="text-muted fw-bold text-muted d-block fs-7">
+                        <span class="text-muted fw-bold  d-block fs-7">
                             Age -
                             {{ $item->age }}
                         </span>
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->qualification->name }}</td>
-                    <td class="text-dark fw-bolder text-hover-primary fs-6"> {{ ucfirst($item->profession) }}
+                    <td class="text-dark fw-bolder text-hover-primary fs-6"> 
+                        {{ ucfirst($item->profession) }}
+                        <div>
+                            <small class="text-muted"> {{ $item->other_profession ?? '' }}</small>
+                        </div>
                     </td>
                     <td class="text-dark fw-bolder text-hover-primary fs-6"> {{ ucfirst($item->premises) }}
                     </td>

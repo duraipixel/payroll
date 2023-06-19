@@ -17,6 +17,7 @@ use PDF;
 
 class SalaryCreationController extends Controller
 {
+    
     public function index(Request $request)
     {
 

@@ -62,6 +62,7 @@ class StaffFamilyMemberController extends Controller
             $ins['residential_address'] = $request->family_residential_address;           
             $ins['occupational_address'] = $request->occupation_address;           
             $ins['profession'] = $request->profession_type;  
+            $ins['other_profession'] = ($request->profession_type == 'others') ? $request->other_profession : null;  
             $ins['registration_no'] = $request->relation_register_no ?? '';         
             $ins['standard'] = $request->relation_standard ?? '';         
             $ins['status'] = 'active';           

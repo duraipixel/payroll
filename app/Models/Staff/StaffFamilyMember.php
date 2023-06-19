@@ -37,7 +37,8 @@ class StaffFamilyMember extends Model implements Auditable
         'profession',
         'contact_no',
         'registration_no',
-        'standard'
+        'standard',
+        'other_profession'
     ];
 
     public function relationship()

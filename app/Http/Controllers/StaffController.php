@@ -1232,4 +1232,5 @@ class StaffController extends Controller
 
         return view('pages.staff.registration.emp_position._handling_subject', compact('subject_details', 'class_details', 'staff_details'));
     }
+    
 }
