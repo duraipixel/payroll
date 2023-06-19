@@ -173,7 +173,6 @@ class StaffController extends Controller
         $scheme = AttendanceScheme::where('status', 'active')->get();
         $training_topics = TopicTraining::where('status', 'active')->get();
 
-
         #phase4
         $boards = Board::where('status', 'active')->get();
         $types = ProfessionType::where('status', 'active')->get();
@@ -817,7 +816,6 @@ class StaffController extends Controller
                     }
                 }
             }
-
 
             $error      = 0;
             $message    = '';

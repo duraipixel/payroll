@@ -1,21 +1,11 @@
 <div class="modal-dialog modal-dialog-centered mw-900px">
-    <!--begin::Modal content-->
     <div class="modal-content">
-        <!--begin::Modal header-->
         <div class="modal-header">
-            <!--begin::Modal title-->
             <h2>{{ isset($title) ? ucwords(str_replace(['-', '_'], ' ', $title)) : 'Add Form' }}</h2>
-            <!--end::Modal title-->
-            <!--begin::Close-->
             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                 {!! cancelSvg() !!}
-                <!--end::Svg Icon-->
             </div>
-            <!--end::Close-->
         </div>
-        <!--end::Modal header-->
-        <!--begin::Modal body-->
         <div class="modal-body py-lg-10 px-lg-10" id="dynamic_content">
             <form id="staff_appointment_order_update">
                 @csrf
@@ -28,7 +18,8 @@
                                         <label class="form-label required"> Academic Year </label>
                                         <div class="d-flex">
                                             <select name="academic_id" autofocus id="academic_id_update"
-                                                class="form-control select2-option" disabled>
+                                                class="form-control select2-option"
+                                                @if (!empty($details)) disabled @endif>
                                                 <option value="">-- Select Year --</option>
                                                 @isset($global_academic_year)
                                                     @foreach ($global_academic_year as $item)
@@ -40,7 +31,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="id" value="{{ $details->id ?? '' }}" >
+                                    <input type="hidden" name="id" value="{{ $details->id ?? '' }}">
                                     <div class="col-lg-4 mb-5">
                                         <label class="form-label required"> Category of Staff </label>
                                         <div class="d-flex">
@@ -220,6 +211,7 @@
 
 
 
+
                                         <div class="col-lg-6 mb-5">
                                             <label class="form-label required">
                                                 Appointment order model
@@ -246,11 +238,20 @@
                                                             </button> --}}
                                             </div>
                                         </div>
+                                        <div class="col-lg-6">
+                                            <button type="button" class="btn btn-success mt-8" id="generate_order"
+                                                onclick="return generateAppointmentModel()"> Generate
+                                                Appointment
+                                                Order
+                                            </button>
+                                        </div>
 
 
                                         <div class="col-md-6 fv-row">
-                                            <label class="required fs-6 fw-bold form-label mb-2">Upload Appointment
-                                                Order</label>
+                                            <label class=" fs-6 fw-bold form-label mb-2">
+                                                Upload Appointment
+                                                Order
+                                            </label>
                                             <div class="row">
                                                 <div class="col-4">
                                                     <label class="col-form-label text-lg-right">Upload
@@ -277,21 +278,15 @@
                                                 @endisset
                                             </div>
                                         </div>
-                                        {{-- <div class="col-lg-6">
-                                            <button type="button" class="btn btn-success mt-8" id="generate_order"
-                                                @if (isset($details->appointment_order_model_id) && !empty($details->appointment_order_model_id)) @else disabled @endif
-                                                onclick="return generateAppointmentModel()"> Generate
-                                                Appointment
-                                                Order
-                                            </button>
-                                        </div> --}}
+
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12 text-end">
                                         <button type="button" class="btn btn-light-dark mx-2"
                                             data-bs-dismiss="modal"> cancel </button>
-                                        <button type="button" class="btn btn-primary" id="validate_appointment_button"
+                                        <button type="button" class="btn btn-primary"
+                                            id="validate_appointment_button"
                                             onclick="return dovalidateAppointmentForm()"> Save </button>
                                     </div>
                                 </div>

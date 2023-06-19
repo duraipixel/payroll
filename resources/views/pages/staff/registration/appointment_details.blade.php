@@ -6,266 +6,32 @@
                 <div class="pt-0">
                     <div class="mb-10 fv-row" id="kt_ecommerce_add_product_discount_percentage">
                         <div class="row">
-                            <div class="row">
-                                <div class="col-md-12 fv-row mt-10 mb-5">
-                                    <div class="pb-5 pb-lg-5">
-                                        <h2 class="fw-bolder text-dark">Appointment Details</h2>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="tble-fnton card mt-0 mb-5 mb-xl-8">
+                                <!--begin::Header-->
+                                <div class="card-header bg-primary border-0 pt-0">
 
-                            <div class="col-lg-4 mb-5">
-                                <label class="form-label required"> Category of Staff </label>
-                                <div class="d-flex">
-                                    <select name="staff_category_id" autofocus id="staff_category_id"
-                                        class="form-input select2-option" required>
-                                        <option value="">-- Select Category --</option>
-                                        @isset($staff_category)
-                                            @foreach ($staff_category as $item)
-                                                <option value="{{ $item->id }}"
-                                                    @if (isset($staff_details->appointment->category_id) && $staff_details->appointment->category_id == $item->id) selected @endif>
-                                                    {{ $item->name }}
-                                                </option>
-                                            @endforeach
-                                        @endisset
-                                    </select>
-                                    @if (access()->buttonAccess('staff-category', 'add_edit'))
-                                        <button type="button" class="btn-dark text-white"
-                                            onclick="return openAddModel('staff_category')">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    @endif
-                                </div>
-                            </div>
+                                    <h3 class="card-title align-items-start flex-column">
+                                        <span class="card-label fw-bolder fs-5 mb-1 text-white"> Service History </span>
+                                    </h3>
 
-                            <div class="col-lg-4 mb-5">
-
-                                <label class="form-label required">Nature of Employment</label>
-
-                                <div class="d-flex">
-                                    <select name="nature_of_employment_id" autofocus id="nature_of_employment_id"
-                                        class="form-input select2-option" required>
-                                        <option value="">-- Select Nature --</option>
-                                        @isset($employments)
-                                            @foreach ($employments as $item)
-                                                <option value="{{ $item->id }}"
-                                                    @if (isset($staff_details->appointment->nature_of_employment_id) &&
-                                                            $staff_details->appointment->nature_of_employment_id == $item->id) selected @endif>
-                                                    {{ $item->name }}
-                                                </option>
-                                            @endforeach
-                                        @endisset
-                                    </select>
-                                    @if (access()->buttonAccess('nature-of-employeement', 'add_edit'))
-                                        <button type="button" class="btn-dark text-white"
-                                            onclick="return openAddModel('nature_of_employeement')">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 mb-5">
-                                <label class="form-label required"> Teaching Type </label>
-
-                                <div class="d-flex">
-                                    <select name="teaching_type_id" autofocus id="teaching_type_id"
-                                        class="form-input select2-option" required>
-                                        <option value="">-- Select Teaching Type --</option>
-                                        @isset($teaching_types)
-                                            @foreach ($teaching_types as $item)
-                                                <option value="{{ $item->id }}"
-                                                    @if (isset($staff_details->appointment->teaching_type_id) && $staff_details->appointment->teaching_type_id == $item->id) selected @endif>
-                                                    {{ $item->name }}
-                                                </option>
-                                            @endforeach
-                                        @endisset
-                                    </select>
-                                    @if (access()->buttonAccess('teaching-type', 'add_edit'))
-                                        <button type="button" class="btn-dark text-white"
-                                            onclick="return openAddModel('teaching_type')">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 mb-5">
-                                <label class="form-label required"> Place of Work </label>
-
-                                <div class="d-flex">
-                                    <select name="place_of_work_id" autofocus id="place_of_work_id"
-                                        class="form-input select2-option" required>
-                                        <option value=""> -- Select Place Of Work -- </option>
-                                        @isset($place_of_works)
-                                            @foreach ($place_of_works as $item)
-                                                <option value="{{ $item->id }}"
-                                                    @if (isset($staff_details->appointment->place_of_work_id) && $staff_details->appointment->place_of_work_id == $item->id) selected @endif>
-                                                    {{ $item->name }}
-                                                </option>
-                                            @endforeach
-                                        @endisset
-                                    </select>
-                                    @if (access()->buttonAccess('workplace', 'add_edit'))
-                                        <button type="button" class="btn-dark text-white"
-                                            onclick="return openAddModel('place_of_work')">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <div class="col-md-4 fv-row mb-5">
-                                <label class="required fs-6 fw-bold mb-2"> Date of Joining </label>
-                                <div class="position-relative d-flex align-items-center">
-
-                                    <input class="form-control  ps-12" placeholder="Select a date" name="joining_date"
-                                        id="joining_date" type="date"
-                                        value="{{ $staff_details->appointment->joining_date ?? '' }}" />
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 mb-5">
-                                <label class="form-label required">Salary Scale
-                                    <small class="text-muted fs-9">( for appointment order purpose and not for salary
-                                        calculation )</small>
-                                </label>
-                                <input name="salary_scale" id="salary_scale"
-                                    value="{{ $staff_details->appointment->salary_scale ?? '' }}"
-                                    class="form-control form-control-lg" />
-                            </div>
-                            <div class="mb-5 col-lg-4 fv-row">
-                                <div class="d-inline-block flex-stack">
-
-                                    <div class="fw-bold me-5">
-                                        <label class="fs-6">probation</label>
-                                    </div>
-                                    <div class="d-block mt-5 align-items-center cstm-zeed">
-                                        <label class="form-check form-check-custom form-check-solid me-10">
-                                            <input class="form-check-input h-20px w-20px" type="radio"
-                                                name="probation" value="yes"
-                                                @if (isset($staff_details->appointment->has_probation) && $staff_details->appointment->has_probation == 'yes') checked @endif />
-                                            <span class="form-check-label fw-bold">Yes </span>
-                                        </label>
-                                        <label class="form-check form-check-custom form-check-solid me-10">
-                                            <input class="form-check-input h-20px w-20px" type="radio"
-                                                name="probation" value="no"
-                                                @if (
-                                                    (isset($staff_details->appointment->has_probation) && $staff_details->appointment->has_probation == 'no') ||
-                                                        !isset($staff_details->appointment->has_probation)) checked @endif />
-                                            <span class="form-check-label fw-bold">No</span>
-                                        </label>
-                                    </div>
+                                    <button onclick="return editStaffAppointment()" type="button"
+                                        class="btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5"
+                                        title="Click Here to add More" data-bs-toggle="tooltip"
+                                        data-bs-placement="left">
+                                        <span id="kt_engage_demos_label">
+                                            {!! plusSvg() !!}
+                                            Add New
+                                        </span>
+                                    </button>
 
                                 </div>
-                                <div id="probation_pane" class="mt-5"
-                                    @if (isset($staff_details->appointment->has_probation) && $staff_details->appointment->has_probation == 'yes') @else style="display:none" @endif>
-                                    <input type="text" name="probation_period" placeholder="Probation Period"
-                                        value="{{ $staff_details->appointment->probation_period ?? '' }}"
-                                        id="probation_period" class="form-control">
+                                <div class="card-body py-3" id="appointment-list-pane">
+                                    @include('pages.staff.registration.appointment.list')
                                 </div>
                             </div>
                             <hr>
                             <div class="row my-3">
                                 <div class="col-sm-8">
-
-                                    <div class="col-sm-12">
-                                        <div class="row">
-                                            <div class="col-lg-6 mb-5">
-                                                <label class="form-label required">Period of Appointment (From)</label>
-                                                <div class="position-relative d-flex align-items-center">
-
-                                                    <input class="form-control  ps-12" placeholder="Select a date"
-                                                        name="from_appointment" id="from_appointment" type="date"
-                                                        value="{{ $staff_details->appointment->from_appointment ?? '' }}" />
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6 mb-5">
-                                                <label class="form-label required">Period of Appointment (To)</label>
-
-                                                <div class="position-relative d-flex align-items-center">
-
-                                                    <input class="form-control ps-12" placeholder="Select a date"
-                                                        name="to_appointment" id="to_appointment" type="date"
-                                                        value="{{ $staff_details->appointment->to_appointment ?? '' }}" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="row">
-
-                                            <div class="col-lg-6 mb-5">
-                                                <label class="form-label required">
-                                                    Appointment order model
-                                                </label>
-                                                {{-- <a href="javascript:void(0)" class="float-end" onclick="return selectAppointmentModel()"> Select Model </a> --}}
-                                                <div class="position-relative">
-                                                    <select name="appointment_order_model_id" autofocus
-                                                        id="appointment_order_model_id" class="form-input " required>
-                                                        <option value=""> -- Select Order Model -- </option>
-                                                        @isset($order_models)
-                                                            @foreach ($order_models as $item)
-                                                                <option value="{{ $item->id }}"
-                                                                    @if (isset($staff_details->appointment->appointment_order_model_id) &&
-                                                                            $staff_details->appointment->appointment_order_model_id == $item->id) selected @endif>
-                                                                    {{ $item->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        @endisset
-                                                    </select>
-                                                    {{-- <button type="button"  class="btn-dark text-white"
-                                                        onclick="return openAddModel('order_model')">
-                                                        <i class="fa fa-plus"></i>
-                                                    </button> --}}
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-6">
-                                                <button type="button" class="btn btn-success mt-8"
-                                                    id="generate_order"
-                                                    @if (isset($staff_details->appointment->appointment_order_model_id) &&
-                                                            !empty($staff_details->appointment->appointment_order_model_id)) @else disabled @endif
-                                                    onclick="return generateAppointmentModel()"> Generate Appointment
-                                                    Order
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 fv-row">
-                                        <label class="required fs-6 fw-bold form-label mb-2">Upload Appointment
-                                            Order</label>
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <label class="col-form-label text-lg-right">Upload
-                                                    File:</label>
-                                            </div>
-                                            <div class="col-8">
-                                                <input class="form-control form-control-sm" style=""
-                                                    type="file" name="appointment_order_doc">
-                                            </div>
-                                            @isset($staff_details->appointment->appointment_doc)
-                                                <div class="col-12">
-                                                    <div class="d-flex justiy-content-around flex-wrap">
-                                                        @php
-                                                            $url = Storage::url($staff_details->appointment->appointment_doc);
-                                                        @endphp
-                                                        <div class="d-inline-block p-2 bg-light m-1">
-                                                            <a class="btn-sm btn-success"
-                                                                href="{{ asset('public' . $url) }}" target="_blank">View
-                                                                File </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endisset
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12" id="service_history_staff">
-                                        {{-- service history view --}}
-                                        @include('pages.staff.registration._service_history')
-                                    </div>
 
                                     <div class="col-md-12 fv-row">
                                         @if (isset($staff_details) && !empty($staff_details) && getStaffVerificationStatus($staff_details->id, 'salary_entry'))
@@ -289,7 +55,7 @@
                                             <div class="row">
                                                 <div class="col-sm-12 mt-6">
                                                     <div class="alert alert-warning">
-                                                        Salary is not processing to create salary database click below
+                                                        Salary is not processing. To create salary database click below
                                                         button
                                                     </div>
                                                 </div>
@@ -342,7 +108,7 @@
                         id: appointment_id
                     },
                     success: function(res) {
-                        $('#service_history_staff').html(res);
+                        $('#appointment-list-pane').html(res);
                         Swal.fire({
                             title: "Updated!",
                             text: res.message,
@@ -365,7 +131,7 @@
         });
     }
 
-    function editStaffAppointment(appointment_id) {
+    function editStaffAppointment(appointment_id = '') {
 
         $.ajaxSetup({
             headers: {
@@ -399,7 +165,7 @@
                 staff_id: staff_id
             },
             success: function(res) {
-               $('#service_history_staff').html(res);
+                $('#appointment-list-pane').html(res);
             }
         })
     }
@@ -455,7 +221,7 @@
 
         if (!appointment_error) {
             loading();
-            var forms = $('#staff_appointment_order')[0];
+            var forms = $('#staff_appointment_order_update')[0];
             var formData = new FormData(forms);
             var staff_id = $('#outer_staff_id').val();
             formData.append('staff_id', staff_id);
@@ -495,13 +261,26 @@
 
     function generateAppointmentModel() {
 
-        var order_model_id = $('#appointment_order_model_id').val();
-        if (order_model_id == '' || appointment_order_model_id == 'undefined' || appointment_order_model_id == null) {
+        var staff_category_id_update = $('#staff_category_id_update').val();
+        var nature_of_employment_id = $('#nature_of_employment_id_update').val();
+        var teaching_type_id_update = $('#teaching_type_id_update').val();
+        var place_of_work_id_update = $('#place_of_work_id_update').val();
+        var joining_date_update = $('#joining_date_update').val();
+        var salary_scale_update = $('#salary_scale_update').val();
+
+        if (staff_category_id_update == '' || nature_of_employment_id == '' || teaching_type_id_update == '' ||
+            place_of_work_id_update == '' || salary_scale_update == '' || joining_date_update == '') {
+            toastr.error('Please fill all mandatory fields');
+            return false;
+        }
+
+        var order_model_id = $('#appointment_order_model_id_update').val();
+        if (order_model_id == '' || order_model_id == 'undefined' || order_model_id == null) {
             toastr.error('Please select Appointment order model');
             return false;
         }
 
-        var forms = $('#staff_appointment_order').serializeArray();
+        var forms = $('#staff_appointment_order_update').serializeArray();
 
         var staff_id = $('#outer_staff_id').val();
         forms.push({
@@ -587,9 +366,8 @@
             loading();
             var forms = $('#staff_appointment_order_update')[0];
             var formData = new FormData(forms);
-            // var staff_id = $('#outer_staff_id').val();
-            // formData.append('staff_id', staff_id);
-            $('#service_history_tbody').addClass('blur_table');
+            var staff_id = $('#outer_staff_id').val();
+            formData.append('staff_id', staff_id);
             $('#validate_appointment_button').attr('disabled', true);
             const kycResponse = fetch("{{ route('staff.update.appointment') }}", {
                     method: 'POST',
@@ -598,10 +376,9 @@
                 .then((response) => response.json())
                 .then((data) => {
                     unloading();
-               
+
                     $('#validate_appointment_button').attr('disabled', false);
                     if (data.error == 1) {
-                        $('#service_history_tbody').removeClass('blur_table');
                         var err_message = '';
                         if (data.message) {
                             data.message.forEach(element => {
@@ -614,7 +391,6 @@
                         toastr.success("Success", 'Staff Appointment Order Details Saved Successfully');
                         $('#kt_dynamic_app').modal('hide');
                         setTimeout(() => {
-                            $('#service_history_tbody').removeClass('blur_table');
                             listStaffAppointment(data.staff_id)
                         }, 1000);
                         return true;
