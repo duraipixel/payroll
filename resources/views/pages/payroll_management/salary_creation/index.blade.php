@@ -12,6 +12,44 @@
         .blur-loading {
             filter: blur(2px);
         }
+
+        .pay-salary-month ul li {
+            padding: 20px 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #173377;
+            background-image: linear-gradient(120deg, #616789, #6464bf, #183479);
+            background: #80808024;
+            text-align: center;
+            border-radius: 3px;
+            box-shadow: 2px 2px 2px 2px #ddd;
+        }
+
+        .pay-salary-month ul li:hover {
+            background: #ffffc4;
+            box-shadow: 2px 2px 2px 2px #f9f9b8;
+        }
+
+        .pay-salary-month ul li.active {
+            background: #75ee53;
+            box-shadow: 2px 2px 2px 2px #cff9b8;
+        }
+
+        .w-35 {
+            width: 35% !important;
+        }
+
+        .w-30 {
+            width: 30% !important;
+        }
+
+        .payrow:hover {
+            background: #f6f7ff;
+        }
+
+        .payrow {
+            border-bottom: 1px dashed #ddd
+        }
     </style>
     <div class="card">
         @if (session('status'))
@@ -59,14 +97,10 @@
             </div>
 
             <div class="card-body py-4 @if (isset($staff_id) && !empty($staff_id)) @else d-none @endif" id="salary-creation-panel">
-                @if (isset($staff_id) && !empty($staff_id))
-                    @include('pages.payroll_management.salary_creation.fields')
-                @endif
-                
             </div>
-            <div class="card-body py-4">
+            {{-- <div class="py-4 bg">
                 @include('pages.payroll_management.salary_creation._list')
-            </div>
+            </div> --}}
         </form>
     </div>
 
@@ -137,10 +171,11 @@
                     },
                     beforeSend: function() {
                         $('#payroll_button_pane').html('');
+                        $('#salary-creation-panel').html('');
                     },
                     success: function(res) {
-
-                        $('#salary-creation-panel').html('');
+                        $('#salary-creation-panel').removeClass('d-none');
+                        $('#salary-creation-panel').html(res);
                     }
                 });
 

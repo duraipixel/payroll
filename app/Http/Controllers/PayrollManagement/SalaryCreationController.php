@@ -146,8 +146,17 @@ class SalaryCreationController extends Controller
         for ($i=1; $i <= 12; $i++) { 
             $payout_year[] = date('Y-m-d', strtotime($start_Date.' + '.$i.' months'));
         }
-        
-        return view('pages.payroll_management.salary_creation._button_fields', compact('salary_heads', 'salary_info', 'payout_year' ) );
+        /**
+         * CHECK SALARY IS ALREADY CREATED
+         */
+        if( !$salary_info ) {
+
+            return view('pages.payroll_management.salary_creation._salary_create', compact('salary_heads', 'salary_info', 'payout_year' ) );
+        } else {
+            return view('pages.payroll_management.salary_creation._revision_list', compact('salary_heads', 'salary_info', 'payout_year' ) );
+
+        }
+
     }
 
     public function getStaffSalaryDetailsPane(Request $request)
