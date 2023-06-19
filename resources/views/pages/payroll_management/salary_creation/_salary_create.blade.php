@@ -47,7 +47,7 @@
                                                             @endif
                                                         </span>
                                                         <input type="text" name="amount_{{ $item_fields->id }}"
-                                                            onkeyup="getNetSalary(this.value)"
+                                                            onkeyup="getNetSalary(this.value, '{{ $item_fields->id }}', '{{ $item_fields->short_name }}')"
                                                             id="{{ str_replace(' ', '_', $item_fields->short_name) }}_input"
                                                             value="{{ $old_data->amount ?? '' }}"
                                                             @if ($item_fields->no_of_numerals) maxlength="{{ $item_fields->no_of_numerals }}" @endif

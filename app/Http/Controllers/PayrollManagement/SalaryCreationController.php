@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PayrollManagement;
 
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
+use App\Models\PayrollManagement\SalaryField;
 use App\Models\PayrollManagement\SalaryHead;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
@@ -136,15 +137,16 @@ class SalaryCreationController extends Controller
     {
         $staff_id = $request->staff_id;
 
-        $salary_info = StaffSalaryPattern::where('staff_id', $staff_id)->first();
+        $salary_info = StaffSalaryPattern::where('staff_id', $staff_id)->where('status', 'active')->first();
         $salary_heads = SalaryHead::where('status', 'active')->get();
         $acYear = AcademicYear::find(academicYearId());
 
         $start_year = '01-'.$acYear->from_month.'-'.$acYear->from_year;
         $end_year = '01-'.$acYear->to_month.'-'.$acYear->to_year;
         $start_Date = date('Y-m-d', strtotime($start_year));
+        
         $payout_year = [];
-        for ($i=1; $i <= 12; $i++) { 
+        for ($i=0; $i < 12; $i++) { 
             $payout_year[] = date('Y-m-d', strtotime($start_Date.' + '.$i.' months'));
         }
         /**
@@ -154,7 +156,8 @@ class SalaryCreationController extends Controller
 
             return view('pages.payroll_management.salary_creation._salary_create', compact('salary_heads', 'salary_info', 'payout_year' ) );
         } else {
-            return view('pages.payroll_management.salary_creation._revision_list', compact('salary_heads', 'salary_info', 'payout_year' ) );
+            $all_salary_patterns = StaffSalaryPattern::where('staff_id', $staff_id)->get();
+            return view('pages.payroll_management.salary_creation._revision_list', compact('salary_heads', 'all_salary_patterns', 'salary_info', 'payout_year' ) );
 
         }
 
@@ -228,6 +231,42 @@ class SalaryCreationController extends Controller
         }
 
         return view('layouts.modal.show_modal', compact('content', 'title'));
+
+    }
+
+    public function getAmountBasedField(Request $request) {
+        $amount = $request->amount;
+        $field_id = $request->field_id;
+        $field_name = $request->field_name;
+
+        $all_fields = SalaryField::where('salary_head_id', 1)
+                    ->where(['status' => 'active', 'entry_type' => 'calculation'])->get();
+        $field_amounts = [];
+        foreach ($all_fields as $key => $value) {
+            $tmp = [];
+            // dump( $value );
+            // dump( $value->field_items );
+            $tmp['id'] = $value->id;
+            $tmp['short_name'] = str_replace(' ', '_', $value->short_name);
+            $tmp['name'] = $value->name;
+
+            if( isset( $value->field_items  ) && count($value->field_items ) > 0 ) {
+
+                foreach ($value->field_items as $sitem ) {
+                    $percentage = 0;
+                    $percentage_amount = 0;
+
+                    if( $sitem->field_name == 'BASIC'){
+                        $percentage = $sitem->percentage;
+                        $percentage_amount = getPercentageAmount($percentage, $amount);
+                        $tmp['basic_percentage_amount'] = $percentage_amount;
+                    }
+                }
+                
+            }
+            $field_amounts[] = $tmp;
+        }
+        return $field_amounts;
 
     }
 

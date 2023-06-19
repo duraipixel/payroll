@@ -255,32 +255,32 @@ class StaffController extends Controller
             'institute_name' => 'required',
             'name' => 'required',
             'email' => 'required|string|unique:users,email,' . $id,
-            'previous_code' => 'required'
+            // 'previous_code' => 'required'
             // 'previous_code' => 'required|string|unique:users,emp_code,'.$id,
         ]);
 
         if ($validator->passes()) {
+            $previous_code = $request->previous_code ?? date('dmyhis');
+            $isExistUser = User::where('emp_code', $previous_code)->first();
 
             $academic_id = academicYearId();
-
             $ins['name'] = $request->name;
             $ins['email'] = $request->email;
             $ins['institute_id'] = $request->institute_name;
             $ins['academic_id'] = $academic_id;
-            $ins['emp_code'] = $request->previous_code;
-            $ins['locker_no'] = 'AMIDL' . $request->previous_code;
+            $ins['emp_code'] = $previous_code;
+            $ins['locker_no'] = 'AMIDL' . $previous_code;
             $ins['first_name_tamil'] = $request->first_name_tamil;
             $ins['short_name'] = $request->short_name;
-            // $ins['division_id'] = $request->division_id;
             $ins['reporting_manager_id'] = $request->reporting_manager_id;
             $ins['status'] = 'active';
-            if (isset($request->previous_code) && !empty($request->previous_code)) {
+            if ($isExistUser) {
                 $ins['updatedBy'] = auth()->id();
             } else {
                 $ins['addedBy'] = auth()->id();
             }
 
-            $data = User::updateOrCreate(['emp_code' => $request->previous_code], $ins);
+            $data = User::updateOrCreate(['emp_code' => $previous_code], $ins);
 
             if ($request->aadhar_name && !empty($request->aadhar_name)) {
                 $aadhar_id = DocumentType::where('name', 'Adhaar')->orwhere('name', 'Aadhaar')->first();
@@ -305,7 +305,7 @@ class StaffController extends Controller
                         $imageName = uniqid() . Str::replace(' ', "-", $file->getClientOriginalName());
 
 
-                        $directory              = 'staff/' . $request->previous_code . '/aadhar';
+                        $directory              = 'staff/' . $previous_code . '/aadhar';
                         $filename               = $directory . '/' . $imageName;
 
                         Storage::disk('public')->put($filename, File::get($file));
@@ -799,7 +799,6 @@ class StaffController extends Controller
                 }
             }
 
-
             StaffStudiedSubject::where('staff_id', $id)->delete();
             if (config('constant.staff_studied_subjects')) {
 
@@ -817,7 +816,6 @@ class StaffController extends Controller
                     }
                 }
             }
-
 
             $error      = 0;
             $message    = '';

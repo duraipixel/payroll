@@ -252,6 +252,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('salary/creation_add',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryAdd'])->name('salary.creation_add');
     Route::post('salary/get/staff',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryInfo'])->name('salary.get.staff');
     // Route::post('salary/get/staff',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryDetailsPane'])->name('salary.get.staff');
+    Route::post('salary/get/field/amount',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getAmountBasedField'])->name('salary.get.field.amount');
     Route::post('salary/get/view',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryModalView'])->name('salary.modal.view');
     Route::get('salary/download/preview/{staff_id}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'downloadSalaryPreviewPdf'])->name('salary.preview.pdf');
     Route::post('salary/get/others/info',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getOthersData'])->name('show.loans.info');

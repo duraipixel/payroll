@@ -549,6 +549,7 @@ if (!function_exists('getStaffVerificationStatus')) {
                 break;
         }
     }
+}
 
     function canGenerateEmpCode($staff_id) {
         $personalInfo = StaffPersonalInfo::where('staff_id', $staff_id)->first();
@@ -594,4 +595,9 @@ if (!function_exists('getStaffVerificationStatus')) {
         }
         return $is_return;
     }
-}
+
+    function getPercentageAmount($percentage, $amount) {
+        return ($percentage/100) * $amount;
+    }
+
+    

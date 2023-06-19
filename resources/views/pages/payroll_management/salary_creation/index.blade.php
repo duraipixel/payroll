@@ -31,8 +31,9 @@
         }
 
         .pay-salary-month ul li.active {
-            background: #75ee53;
-            box-shadow: 2px 2px 2px 2px #cff9b8;
+            background: #1a3a88;
+            box-shadow: 2px 2px 2px 2px #4e57d2;
+            color: white;
         }
 
         .w-35 {
@@ -108,7 +109,7 @@
 
 @section('add_on_script')
     <script>
-        function getNetSalary(amount) {
+        function doAmountCalculation() {
             var earnings = 0;
             var deductions = 0;
             var netSalary = 0;
@@ -117,14 +118,17 @@
             var automatic_calculation_input = document.querySelector('.automatic_calculation');
             console.log(automatic_calculation_input, 'automatic_calculation_input');
             add_input.forEach(element => {
-                // console.log('first, ', $(element).val());
-                if ($(element).val() != '' && $(element).val() != 'undefined' && $(element).val() != null) {
-                    earnings += parseFloat($(element).val());
+                console.log('first, ', $(element).val());
+                if (!$(element).is(':disabled')) {
+
+                    if ($(element).val() != '' && $(element).val() != 'undefined' && $(element).val() != null) {
+                        earnings += parseFloat($(element).val());
+                    }
                 }
             });
 
             minus_input.forEach(element => {
-                // console.log('first, ', $(element).val());
+
                 if ($(element).val() != '' && $(element).val() != 'undefined' && $(element).val() != null) {
                     deductions += parseFloat($(element).val());
                 }
@@ -133,6 +137,44 @@
             netSalary = earnings - deductions;
             $('#net_salary').val(netSalary);
             $('#net_salary_text').html(netSalary.toFixed(2));
+        }
+
+        function getNetSalary(amount, field_id = '', field_name = '') {
+            // console.log(field_name, 'field_name');
+            doAmountCalculation();
+
+            if (field_name.toLowerCase() == 'basic') {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('salary.get.field.amount') }}",
+                    type: 'POST',
+                    data: {
+                        amount: amount,
+                        field_id: field_id,
+                        field_name: field_name
+                    },
+                    beforeSend: function() {
+
+                    },
+                    success: function(res) {
+
+                        if (res.length > 0) {
+                            res.map((item) => {
+                                // console.log(item);
+                                $('#' + item.short_name + '_input').val(item.basic_percentage_amount
+                                    .toFixed(2));
+                            })
+                        }
+                        //    $('#amount_'+res)
+                    }
+                });
+            }
+
         }
 
         $('#staff_id').select2({
@@ -151,6 +193,7 @@
                 $('#' + types + '_input').attr('disabled', true).prop('checked', false);
 
             }
+            doAmountCalculation();
         }
 
         function getSalaryHeadFields(staff_id) {
