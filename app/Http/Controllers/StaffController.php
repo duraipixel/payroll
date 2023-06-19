@@ -799,23 +799,25 @@ class StaffController extends Controller
                 }
             }
 
-            $subjects = Subject::where('status', 'active')->get();
+
             StaffStudiedSubject::where('staff_id', $id)->delete();
-            if (isset($subjects) && !empty($subjects)) {
-                foreach ($subjects as $sub) {
-                    if ($_POST['studied_' . $sub->id] ?? '') {
-                        $sub_data = explode('_', $_POST['studied_' . $sub->id]);
+            if (config('constant.staff_studied_subjects')) {
+
+                foreach (config('constant.staff_studied_subjects') as $sitems) {
+
+                    if ($_POST['studied_' . $sitems] ?? '') {
+                        $sub_data = explode('_', $_POST['studied_' . $sitems]);
                         $ins2 = [];
                         $ins2['academic_id'] = $academic_id;
                         $ins2['staff_id'] = $id;
-                        $ins2['subject_id'] = $sub->id;
-                        $ins2['subjects'] = $sub->name;
+                        $ins2['subjects'] = $sitems;
                         $ins2['classes'] = end($sub_data);
                         $ins2['status'] = 'active';
                         StaffStudiedSubject::create($ins2);
                     }
                 }
             }
+
 
             $error      = 0;
             $message    = '';
@@ -1232,5 +1234,4 @@ class StaffController extends Controller
 
         return view('pages.staff.registration.emp_position._handling_subject', compact('subject_details', 'class_details', 'staff_details'));
     }
-    
 }

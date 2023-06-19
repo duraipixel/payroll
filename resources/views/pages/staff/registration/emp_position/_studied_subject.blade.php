@@ -21,11 +21,11 @@
         </thead>
 
         <tbody>
-            @isset($subjects)
-                @foreach ($subjects as $items)
+            @if(config('constant.staff_studied_subjects'))
+            @foreach (config('constant.staff_studied_subjects') as $items)
                     <tr>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $items->name }}
+                            {{ $items }}
                         </td>
                         @if(config('constant.staff_studied_classes'))
                             @foreach (config('constant.staff_studied_classes') as $item)
@@ -33,9 +33,9 @@
                                     <div
                                         class="form-check justify-content-center form-check-sm form-check-custom form-check-solid">
                                         <input class="form-check-input widget-13-check" style="border: 1px solid #797474;"
-                                            name="studied_{{$items->id}}" id="subject_class" type="radio"
-                                            value="{{ $items->id }}_{{ $item }}"
-                                            @if (isset($staff_details->id) && getStudiedSubjects($staff_details->id, $items->id, $item)) checked @endif 
+                                            name="studied_{{$items}}" id="subject_class" type="radio"
+                                            value="{{ $items }}_{{ $item }}"
+                                            @if (isset($staff_details->id) && getStudiedSubjects($staff_details->id, $items, $item)) checked @endif 
                                             />
                                     </div>
                                 </td>

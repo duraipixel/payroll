@@ -169,17 +169,17 @@
         </thead>
         <tbody>
             @if (isset($user->studiedSubjectOnly) && count($user->studiedSubjectOnly) > 0)
-                @foreach ($user->studiedSubjectOnly as $items)
+                @foreach (config('constant.staff_studied_subjects') as $items)
                     <tr>
                         <td
                             style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;font-weight:bold">
-                            {{ $items->subjects->name ?? '' }}
+                            {{ $items ?? '' }}
                         </td>
                         @if (config('constant.staff_studied_classes'))
                             @foreach (config('constant.staff_studied_classes') as $item)
                                 <td class=""
                                     style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;text-align:center">
-                                    @if (isset($user->id) && getStudiedSubjects($user->id, $items->subject_id, $item))
+                                    @if (isset($user->id) && getStudiedSubjects($user->id, $items, $item))
                                         Yes
                                     @else
                                         -

@@ -211,10 +211,10 @@ if (!function_exists('getStaffProfileCompilation')) {
 
 
 if (!function_exists('getStudiedSubjects')) {
-    function getStudiedSubjects($staff_id, $subject_id, $class = '')
+    function getStudiedSubjects($staff_id, $subject, $class = '')
     {
         return StaffStudiedSubject::where('staff_id', $staff_id)
-            ->where('subject_id', $subject_id)
+            ->where('subjects', $subject)
             ->when($class != '', function ($q) use ($class) {
                 return $q->where('classes', $class);
             })->first();
