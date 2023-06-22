@@ -17,8 +17,8 @@ class SalaryFieldSeeder extends Seeder
         $ins['description'] = 'Employee Provident Fund';
         $ins['status'] = 'active';
         $ins['salary_head_id'] = 2;
-        $ins['entry_type'] = 'inbuilt_calculation';
-        $ins['is_static'] = 'yes';
+        $ins['entry_type'] = 'calculation';
+        $ins['is_static'] = 'no';
         $ins['order_in_salary_slip'] = 1;
         $ins['added_by'] = 1;
 

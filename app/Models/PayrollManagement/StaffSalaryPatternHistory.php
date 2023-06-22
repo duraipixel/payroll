@@ -4,12 +4,10 @@ namespace App\Models\PayrollManagement;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OwenIt\Auditing\Contracts\Auditable;
 
-class StaffSalaryPattern extends Model implements Auditable
+class StaffSalaryPatternHistory extends Model
 {
     use HasFactory;
-    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'staff_id',
@@ -28,14 +26,7 @@ class StaffSalaryPattern extends Model implements Auditable
         'payout_month',
         'remarks',
         'employee_remarks',
-        'verification_status',
-        'addedBy',
-        'lastUpdatedBy',
-        'is_current'
+        'verification_status'
     ];
-
-    public function patternFields() {
-        return $this->hasMany(StaffSalaryPatternField::class, 'staff_salary_pattern_id', 'id');
-    }
 
 }

@@ -72,6 +72,9 @@
                         <thead class="bg-primary">
                             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                                 <th class=" text-white">
+                                    Employee Nature
+                                </th>
+                                <th class=" text-white">
                                     Salary Head
                                 </th>
                                 <th class="text-start text-white" >
@@ -120,6 +123,10 @@
             },
 
             columns: [
+                {
+                    data: 'nature',
+                    name: 'nature'
+                },
                 {
                     data: 'salary_head',
                     name: 'salary_head'

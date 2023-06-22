@@ -1,9 +1,14 @@
 <form action="" class="" id="dynamic_form">
+    <style>
+        #multi_field + .select2.select2-container {
+            width: 100% !important;
+        }
+    </style>
     <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
     <div class="fv-row mb-10">
         <div class="row">
-            <div class="col-sm-12">
-                <div class="form-group col-sm-6">
+            <div class="col-sm-6">
+                <div class="form-group ">
                     <label class="form-label required" for="">
                         Salary Heads
                     </label>
@@ -13,7 +18,27 @@
                             <option value="">-select salary head-</option>
                             @isset($heads)
                                 @foreach ($heads as $item)
-                                    <option value="{{ $item->id }}" @if( isset($info->salary_head_id) && $info->salary_head_id == $item->id) selected @endif>{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}" @if (isset($info->salary_head_id) && $info->salary_head_id == $item->id) selected @endif>
+                                        {{ $item->name }}</option>
+                                @endforeach
+                            @endisset
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="form-label required" for="">
+                        Nature of Employee
+                    </label>
+                    <div>
+                        <select name="nature_id" id="nature_id" class="form-control"
+                            onchange="return getHeadFields(this.value)">
+                            <option value="">-select-</option>
+                            @isset($nature)
+                                @foreach ($nature as $item)
+                                    <option value="{{ $item->id }}" @if (isset($info->nature_id) && $info->nature_id == $item->id) selected @endif>
+                                        {{ $item->name }}</option>
                                 @endforeach
                             @endisset
                         </select>
@@ -26,7 +51,8 @@
                         Salary Field Name
                     </label>
                     <div>
-                        <input type="text" class="form-control" name="name" value="{{ $info->name ?? '' }}" id="name" required>
+                        <input type="text" class="form-control" name="name" value="{{ $info->name ?? '' }}"
+                            id="name" required>
                     </div>
                 </div>
             </div>
@@ -36,8 +62,8 @@
                         Salary Field Short Name
                     </label>
                     <div>
-                        <input type="text" class="form-control" name="short_name" value="{{ $info->short_name ?? '' }}"
-                            id="short_name" required>
+                        <input type="text" class="form-control" name="short_name"
+                            value="{{ $info->short_name ?? '' }}" id="short_name" required>
                     </div>
                 </div>
             </div>
@@ -53,8 +79,9 @@
                     <input type="radio" id="calculation" onchange="return getEntryType(this)" class="form-check-input"
                         value="calculation" name="entry_type" @if (isset($info->entry_type) && $info->entry_type == 'calculation') checked @endif>
                     <label for="calculation" class="pe-3">Calculation</label>
-                    <input type="radio" id="inbuilt_calculation" onchange="return getEntryType(this)" class="form-check-input"
-                        value="inbuilt_calculation" name="entry_type" @if (isset($info->entry_type) && $info->entry_type == 'inbuilt_calculation') checked @endif>
+                    <input type="radio" id="inbuilt_calculation" onchange="return getEntryType(this)"
+                        class="form-check-input" value="inbuilt_calculation" name="entry_type"
+                        @if (isset($info->entry_type) && $info->entry_type == 'inbuilt_calculation') checked @endif>
                     <label for="inbuilt_calculation">InBuilt Calculation</label>
                 </div>
             </div>
@@ -72,30 +99,23 @@
         </div>
 
     </div>
-    
-    <div class="fv-row form-group mb-10  @if (isset($info->entry_type) && $info->entry_type == 'manual') d-none @endif" id="calcuation-pane">
-        <h4>Select Fields with Percentage</h4>
-        <ul type="none" class="w-75 p-0" id="field-item-pane">
-            @isset($info->field_items)
-                @foreach ($info->field_items as $items)
-                    
-                <li class="border border-2 p-2 field-item-pane">
-                    <div class="d-flex w-100">
-                        <div class="w-50 d-flex align-items-center">
-                            <input type="checkbox" checked name="field_name[]" id="basic{{ $items->field_id }}" value="{{ $items->field_id }}" data-id="basic{{ $items->field_id }}" onchange="getInputValue(this)" class="mx-5 field-checbox">
-                            <input type="hidden" name="field_id[]" value="{{ $items->field_id }}">
-                            <label for="basic{{ $items->field_id }}" role="button"> {{ $items->field_name }} </label>
-                        </div>
-                        <div class="w-50">
-                            <input type="text" class="form-control field-input" id="basic{{ $items->field_id }}_input" value="{{ $items->percentage }}" name="percentage[]"
-                                id="" required>
-                        </div>
-                    </div>
-                </li>
-                @endforeach
-            @endisset
 
-        </ul>
+    <div class="fv-row form-group mb-10  @if (isset($info->entry_type) && $info->entry_type == 'manual') d-none @elseif(!isset($info->entry_type)) d-none  @endif" id="calcuation-pane">
+        <h4>Select Fields with Percentage</h4>
+        <div class="row"  id="field-item-pane">
+            <div class="col-sm-6" >
+                <select name="multi_field[]" id="multi_field" class="form-control" multiple>
+                   
+                </select>
+            </div>
+            <div class="col-sm-6">
+                <div class="w-100">
+                    <input type="text" class="form-control field-input numberonly"
+                        id="basic_input" value="" placeholder="Percentage %"
+                        name="percentage" id="" required>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-6">
@@ -108,12 +128,12 @@
                         <input type="radio" id="active" class="form-check-input" value="active" name="status"
                             @if (isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif>
                         <label class="pe-3" for="active">Active</label>
-                        <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status"
-                            @if (isset($info->status) && $info->status != 'active') checked @endif>
+                        <input type="radio" id="inactive" class="form-check-input" value="inactive"
+                            name="status" @if (isset($info->status) && $info->status != 'active') checked @endif>
                         <label for="inactive">Inactive</label>
                     </div>
                 </div>
-                
+
             </div>
         </div>
         <div class="col-sm-6">
@@ -122,12 +142,13 @@
                     Order in the Salary slip
                 </label>
                 <div>
-                    <input type="text" name="order_in_salary_slip" value="{{ $info->order_in_salary_slip ?? '' }}" id="order_in_salary_slip" class="form-control">
+                    <input type="text" name="order_in_salary_slip" value="{{ $info->order_in_salary_slip ?? '' }}"
+                        id="order_in_salary_slip" class="form-control">
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn">
@@ -143,7 +164,15 @@
         if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
     });
 
+    $('#multi_field').select2({
+        theme: 'bootstrap-5',
+        dropdownParent: $("#kt_dynamic_app")
+    });
+
     function getHeadFields(head_id) {
+        $('input[name=entry_type]').attr('checked', false);
+        let nature_id = $('#nature_id').val();
+        let salary_head_id = $('#salary_head_id').val();
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -153,35 +182,24 @@
             url: "{{ route('salary-field.head.fields') }}",
             type: 'POST',
             data: {
-                head_id: head_id,
+                head_id: salary_head_id,
+                nature_id: nature_id
             },
             success: function(res) {
                 if (res) {
                     $('#calcuation-pane').addClass('d-none');
                     var html_content = '';
                     res.map((item) => {
-                        html_content += `<li class="border border-2 p-2 field-item-pane">
-                                            <div class="d-flex w-100">
-                                                <div class="w-50 d-flex align-items-center">
-                                                    <input type="checkbox" name="field_name[]" id="basic${item.id}" value="${item.id}" data-id="basic${item.id}" onchange="getInputValue(this)" class="mx-5 field-checbox">
-                                                    <input type="hidden" name="field_id[]" value="${item.id}">
-                                                    <label for="basic${item.id}" role="button"> ${item.name} </label>
-                                                </div>
-                                                <div class="w-50">
-                                                    <input type="text" class="form-control field-input" id="basic${item.id}_input" value="" name="percentage[]"
-                                                        id="" disabled required>
-                                                </div>
-                                            </div>
-                                        </li>`;
+                        html_content += `<option value="${item.id}">${item.name}</option>`;
                     })
-                    $('#field-item-pane').html(html_content);
+                    $('#multi_field').html(html_content);
                 }
             }
         })
     }
 
     function getInputValue(en) {
-        
+
         let types = $(en).data('id');
         if (en.checked) {
 
@@ -206,7 +224,7 @@
             $('#entry_type_pane').removeClass('d-none');
             $('#calcuation-pane').addClass('d-none');
 
-        } else if(value.value == 'inbuilt_calculation') {
+        } else if (value.value == 'inbuilt_calculation') {
 
             $('#calcuation-pane').addClass('d-none');
             $('#entry_type_pane').addClass('d-none');
@@ -235,6 +253,13 @@
                                 },
                             }
                         },
+                        'nature_id': {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Employee Nature is required'
+                                },
+                            }
+                        },
                         'name': {
                             validators: {
                                 notEmpty: {
@@ -242,7 +267,7 @@
                                 },
                             }
                         },
-                        'short_name':{
+                        'short_name': {
                             validators: {
                                 notEmpty: {
                                     message: 'Salary Field Short Name is required'

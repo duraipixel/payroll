@@ -14,7 +14,16 @@ class SalaryFieldCalculationItem extends Model
         'field_id',
         'field_name',
         'percentage',
-        'order_by'
+        'order_by',
+        'multi_field_id'
     ];
+
+    public function parentField() {
+        return $this->hasOne(SalaryField::class, 'id', 'parent_field_id');
+    }
+
+    public function currentField() {
+        return $this->hasOne(SalaryField::class, 'id', 'field_id');
+    }
 
 }

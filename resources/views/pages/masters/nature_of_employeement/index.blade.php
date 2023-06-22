@@ -42,24 +42,26 @@
             </div>
         </div>
     </div>
-
+    <style>
+        #nature_of_employeement_table td {
+            padding-left: 10px;
+        }
+    </style>
     <div class="card-body py-4">
         <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="table-responsive">
-                <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
+                <table class="table align-middle table-hover table-bordered table-striped fs-7 no-footer"
                     id="nature_of_employeement_table">
                     <thead class="bg-primary">
-                        <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                            <th class="text-center text-white" >
-                            Date
-                        </th>
-                            <th class="text-center text-white" >
+                        <tr class="text-start  text-muted fw-bolder fs-7 text-uppercase gs-0">
+                           
+                            <th class=" text-white ps-3" >
                                 Profession Type Name
                             </th>
-                            <th class="text-center text-white">
+                            <th class=" text-white">
                                 Status
                             </th>
-                            <th class="text-center text-white">
+                            <th class=" text-white">
                                 Actions
                             </th>
                         </tr>
@@ -94,10 +96,7 @@
         },
 
         columns: [
-            {
-                data: 'created_at',
-                name: 'created_at',
-            },
+           
             {
                 data: 'name',
                 name: 'name'

@@ -109,6 +109,7 @@
 
 @section('add_on_script')
     <script>
+        var epf_values = '';
         function doAmountCalculation() {
             var earnings = 0;
             var deductions = 0;
@@ -116,9 +117,9 @@
             var add_input = document.querySelectorAll('.add_input');
             var minus_input = document.querySelectorAll('.minus_input');
             var automatic_calculation_input = document.querySelector('.automatic_calculation');
-            console.log(automatic_calculation_input, 'automatic_calculation_input');
+            // console.log(automatic_calculation_input, 'automatic_calculation_input');
             add_input.forEach(element => {
-                console.log('first, ', $(element).val());
+
                 if (!$(element).is(':disabled')) {
 
                     if ($(element).val() != '' && $(element).val() != 'undefined' && $(element).val() != null) {
@@ -128,22 +129,23 @@
             });
 
             minus_input.forEach(element => {
-
-                if ($(element).val() != '' && $(element).val() != 'undefined' && $(element).val() != null) {
-                    deductions += parseFloat($(element).val());
+                if (!$(element).is(':disabled')) {
+                    if ($(element).val() != '' && $(element).val() != 'undefined' && $(element).val() != null) {
+                        deductions += parseFloat($(element).val());
+                    }
                 }
             });
 
             netSalary = earnings - deductions;
-            $('#net_salary').val(netSalary);
-            $('#net_salary_text').html(netSalary.toFixed(2));
+            $('#net_salary').val(netSalary.toFixed(2));
+            // $('#net_salary_text').html(netSalary.toFixed(2));
         }
 
         function getNetSalary(amount, field_id = '', field_name = '') {
-            // console.log(field_name, 'field_name');
+            console.log(field_name, 'field_name');
             doAmountCalculation();
 
-            if (field_name.toLowerCase() == 'basic') {
+            if (field_name.toLowerCase() == 'basic' || field_name.toLowerCase() == 'pba') {
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -185,8 +187,48 @@
 
             let types = $(en).data('id');
             if (en.checked) {
-
+                console.log(types);
                 $('#' + types + '_input').attr('disabled', false);
+                if (types.toLowerCase() == 'epf') {
+                    /*
+                    get pf amount based on nature of employement
+                    */
+                    let staff_id = $('#staff_id').val();
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ route('salary.get.epf.amount') }}",
+                        type: 'POST',
+                        data: {
+                            staff_id: staff_id,
+                            types: types
+                        },
+                        beforeSend: function() {
+                           /* 
+                           do loader here  if needed 
+                           */
+                        },
+                        success: function(res) {
+                            epf_values = res.field_name;
+                            let epf_value_arr =epf_values.split(",");
+                            let total = 0;
+                            epf_value_arr.map((item) => {
+                                let sum = $('#'+item+'_input').val() || 0;
+                                total += parseFloat(sum);
+                            });
+                            let percentage = res.percentage || 0;
+                            let final_epf = (percentage/100) * parseFloat(total);
+                            final_epf = Math.round(final_epf);
+                            $('#'+types+'_input').val(final_epf);
+
+                            doAmountCalculation();
+                        }
+                    });
+                }
 
             } else {
 

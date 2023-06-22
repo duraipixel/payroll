@@ -92,7 +92,7 @@ class DepartmentController extends Controller
         if ($validator->passes()) {
             $ins['academic_id'] = academicYearId();
             $ins['name'] = $request->department_name;
-            $ins['is_teaching'] = $request->is_teaching;
+            $ins['is_teaching'] = $request->is_teaching ?? 'no';
             if(isset($request->form_type))
             {
                 if($request->status)

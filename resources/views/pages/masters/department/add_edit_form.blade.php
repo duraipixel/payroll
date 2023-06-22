@@ -9,7 +9,7 @@
             <input type="text" class="form-control" name="department_name" id="department_name" value="{{ $info->name ?? '' }}" required >
         </div>
     </div>
-    <div class="fv-row form-group mb-10">
+    {{-- <div class="fv-row form-group mb-10">
         <label class="form-label" for="">
             Is Teaching
         </label>
@@ -27,7 +27,7 @@
 
             </div>
         </div>
-    </div>
+    </div> --}}
     @if(isset($from) && !empty($from))
     <div class="fv-row form-group mb-10">
         <label class="form-label" for="">

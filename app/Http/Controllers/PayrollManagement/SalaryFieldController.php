@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PayrollManagement;
 
 use App\Exports\SalaryFieldExport;
 use App\Http\Controllers\Controller;
+use App\Models\Master\NatureOfEmployment;
 use App\Models\PayrollManagement\SalaryField;
 use App\Models\PayrollManagement\SalaryFieldCalculationItem;
 use App\Models\PayrollManagement\SalaryHead;
@@ -12,6 +13,7 @@ use DataTables;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SalaryFieldController extends Controller
@@ -57,9 +59,9 @@ class SalaryFieldController extends Controller
                 ->editColumn('entry_type', function($row){
                     return ucfirst(str_replace('_', " ", $row->entry_type));
                 })
-                ->editColumn('created_at', function ($row) {
-                    $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
-                    return $created_at;
+                ->addColumn('nature', function($row){
+                    // dd($row->employeeNature);
+                    return $row->employeeNature->name ?? '';
                 })
                 ->addColumn('action', function ($row) {
                     $route_name = request()->route()->getName();
@@ -82,7 +84,7 @@ class SalaryFieldController extends Controller
 
                     return $edit_btn . $del_btn;
                 })
-                ->rawColumns(['action', 'status']);
+                ->rawColumns(['action', 'status', 'nature']);
             return $datatables->make(true);
         }
         return view('pages.payroll_management.salary_field.index', compact('breadcrums'));
@@ -95,13 +97,14 @@ class SalaryFieldController extends Controller
         $info = [];
         $title = 'Add Salary Fields';
         $heads = SalaryHead::where('status', 'active')->get();
+        $nature = NatureOfEmployment::where('status', 'active')->get();
         $from = 'master';
         if (isset($id) && !empty($id)) {
             $info = SalaryField::find($id);
             $title = 'Update Salary Fields';
         }
 
-        $content = view('pages.payroll_management.salary_field.add_edit_form', compact('info', 'title','heads', 'from'));
+        $content = view('pages.payroll_management.salary_field.add_edit_form', compact('info', 'title','heads', 'from', 'nature'));
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
 
@@ -109,19 +112,30 @@ class SalaryFieldController extends Controller
     {
        
         $id = $request->id ?? '';
+        $nature_id = $request->nature_id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'name' => 'required|unique:salary_fields,name,' . $id . ',id,deleted_at,NULL',
+            'name' => 'required|unique:salary_fields,name,' . $id . ',id,nature_id,'.$nature_id.',id,deleted_at,null',
+            'name' => ['required','string',
+                        Rule::unique('salary_fields')->where(function ($query) use($id, $nature_id) {
+                            return $query->where('nature_id', $nature_id)->where('deleted_at', NULL)->when($id != '', function($q) use($id){
+                                return $q->where('id', '!=', $id);
+                            });
+                        }),
+                        ],
+            'nature_id' => 'required',
             'entry_type' => 'required',
             'no_of_numerals' => 'required_if:entry_type,==,manual',
-            'percentage' => 'required_if:entry_type,==,calculation|array',
-            'percentage.*' => 'required_if:entry_type,==,calculation'
+            'percentage' => 'required_if:entry_type,==,calculation',
+            'multi_field' => 'required_if:entry_type,==,calculation'
         ]);
 
-        if ($validator->passes()) {
-            
+        if ($validator->passes()) {            
+
+            $multi_field = $request->multi_field ?? [];
             $ins['academic_id'] = academicYearId();
             $ins['name']        = $request->name;
+            $ins['nature_id']   = $nature_id;
             $ins['short_name']  = $request->short_name;
             $ins['description'] = $request->description;
             $ins['added_by']    = Auth::user()->id;
@@ -133,24 +147,25 @@ class SalaryFieldController extends Controller
 
             $data = SalaryField::updateOrCreate(['id' => $id], $ins);
 
-            if( $request->field_name && !empty( $request->field_name ) ) {
+            if( count($multi_field) > 0 ) {
+
+                $salaryCombineField = SalaryField::select('short_name')->whereIn('id', $multi_field)->get();
+                $field_name = [];
+                if( $salaryCombineField ) {
+                    foreach ($salaryCombineField as $fo ) {
+                        $field_name[] = $fo->short_name;
+                    }
+                }
                 /**
                  * Insert in SalaryfieldCalculationItems
                  */
-                SalaryFieldCalculationItem::where('parent_field_id', $data->id)->forceDelete();
-                for ($i=0; $i < count($request->field_name); $i++) { 
-                    $salary_field_info = SalaryField::find($_POST['field_name'][$i]);
-                    if( $salary_field_info ) {
-
-                        $field_ins = [];
-                        $field_ins['parent_field_id'] = $data->id;
-                        $field_ins['field_id'] = $salary_field_info->id;
-                        $field_ins['field_name'] = $salary_field_info->name;
-                        $field_ins['percentage'] = $_POST['percentage'][$i];
-                        
-                        SalaryFieldCalculationItem::create($field_ins);
-                    }
-                }
+                $field_ins = [];
+                $field_ins['parent_field_id'] = $data->id;
+                $field_ins['multi_field_id'] = implode(',', $multi_field);
+                $field_ins['field_name'] = implode(',', $field_name);
+                $field_ins['percentage'] = $request->percentage ?? null;
+                
+                SalaryFieldCalculationItem::updateOrCreate(['parent_field_id' => $data->id], $field_ins);
             }
             $error = 0;
             $message = 'Added successfully';
@@ -195,9 +210,14 @@ class SalaryFieldController extends Controller
     {
         
         $head_id = $request->head_id;
-        $fields = SalaryField::select('id', 'name')->where('salary_head_id', $head_id)->where('status', 'active')
-                    ->orderBy('order_in_salary_slip')->get()->toArray();
+        $nature_id = $request->nature_id;
 
+        $fields = SalaryField::select('id', 'name')
+                    ->where('salary_head_id', 1)
+                    ->where('nature_id', $nature_id)
+                    ->where('status', 'active')
+                    ->orderBy('order_in_salary_slip')->get()->toArray();
+        
         return $fields;
     }
 

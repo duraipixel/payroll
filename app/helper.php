@@ -600,4 +600,9 @@ if (!function_exists('getStaffVerificationStatus')) {
         return ($percentage/100) * $amount;
     }
 
+    function previousSalaryData($pattern_id, $field_id) {
+        return StaffSalaryPatternField::where('staff_salary_pattern_id', $pattern_id)
+                ->where('field_id', $field_id)->first();
+    }
+
     
