@@ -7,7 +7,7 @@
                 Salary Heads
             </div>
             <div class="w-35 text-end">
-                Previous Pay
+                Current Pay
             </div>
             <div class="w-35 text-end">
                 Revision Pay
@@ -117,7 +117,7 @@
                 <div class="form-group">
                     <label for="" class="fs-5 required"> Effective From </label>
                     <div class="mt-3">
-                        <input type="date" name="effective_from" id="effective_from" class="form-control" required>
+                        <input type="date" value="{{ $current_pattern->effective_from ?? '' }}" name="effective_from" id="effective_from" class="form-control" required>
                     </div>
                 </div>
 
@@ -125,7 +125,7 @@
                     <label for="" class="fs-5"> Employee Remarks </label>
                     <div class="mt-3">
                         <textarea name="employee_remarks" class="form-control" id="employee_remarks" cols="30" rows="3"
-                            placeholder="This will be visible to employee"></textarea>
+                            placeholder="This will be visible to employee">{{ $current_pattern->employee_remarks ?? '' }}</textarea>
                     </div>
                 </div>
 
@@ -135,29 +135,30 @@
                 <div class="form-group">
                     <label for="" class="fs-5 required"> Payout Month </label>
                     <div class="mt-3">
-                        <select name="payout_month" id="payout_month" class="form-control" required>
+                        <input type="text" name="payout_month" id="payout_month" class="form-control" value="{{ date('F Y', strtotime($current_pattern->payout_month)) }}" readonly>
+                        {{-- <select name="payout_month" id="payout_month" class="form-control" required readonly>
                             <option value="">-select-</option>
                             @if (isset($payout_year) && !empty($payout_year))
                                 @foreach ($payout_year as $item)
-                                    <option value="{{ $item }}"> {{ date('F Y', strtotime($item)) }}
+                                    <option value="{{ $item }}" @if( isset( $current_pattern->payout_month) && $current_pattern->payout_month == $item ) selected @endif> {{ date('F Y', strtotime($item)) }}
                                     </option>
                                 @endforeach
                             @endif
-                        </select>
+                        </select> --}}
                     </div>
                 </div>
             </div>
         </div>
         <div class="form-group mt-5 text-end">
-            <button class="btn btn-primary btn-sm" type="button" id="submit_button" onclick="return newRevisionFormSubmit()"> Submit & Lock </button>
-            <a class="btn btn-dark btn-sm" href="{{ route('salary.creation') }}">
-                Cancel
+            <button class="btn btn-primary btn-sm" type="button" id="submit_button" onclick="return updateRevisionFormSubmit()"> Save </button>
+            <a class="btn btn-danger btn-sm" href="#">
+                Delete Revision
             </a>
         </div>
     </form>
 </div>
 <script>
-    function newRevisionFormSubmit() {
+    function updateRevisionFormSubmit() {
 
         var form = document.getElementById('add_new_revision');
         const submitButton = document.getElementById('submit_button');

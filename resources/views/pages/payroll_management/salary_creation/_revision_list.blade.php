@@ -107,7 +107,7 @@
             type: 'POST',
             data: {
                 staff_id: staff_id,
-                payout_date: payout_date
+                payout_date: payout_month
             },
             beforeSend: function() {
                 $('#payout-salary-revision').addClass('blur_loading_3px');
