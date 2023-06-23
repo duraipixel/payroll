@@ -173,7 +173,7 @@
                     <tr>
                         <td
                             style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;font-size: 12px;font-weight:bold">
-                            {{ $items ?? '' }}
+                            {{ str_replace('_', ' ',$items ?? '') }}
                         </td>
                         @if (config('constant.staff_studied_classes'))
                             @foreach (config('constant.staff_studied_classes') as $item)

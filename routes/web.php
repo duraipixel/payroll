@@ -251,8 +251,10 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
     Route::post('salary/creation_add',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryAdd'])->name('salary.creation_add');
     Route::post('salary/update/pattern',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'updateSalaryPattern'])->name('salary.update.pattern');
+    Route::post('salary/update/month/pattern',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'updateCurrentSalaryPattern'])->name('salary.update.current.pattern');
     Route::post('salary/get/staff',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryInfo'])->name('salary.get.staff');
     Route::post('salary/get/epf/amount',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffEpfAmount'])->name('salary.get.epf.amount');
+    Route::post('salary/pattern/list',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryPattern'])->name('salary.pattern.list');
     // Route::post('salary/get/staff',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryDetailsPane'])->name('salary.get.staff');
     Route::post('salary/get/field/amount',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getAmountBasedField'])->name('salary.get.field.amount');
     Route::post('salary/get/view',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryModalView'])->name('salary.modal.view');

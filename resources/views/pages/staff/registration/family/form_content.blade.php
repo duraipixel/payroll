@@ -224,7 +224,12 @@
     <!--end::Input group-->
     <div class="col-lg-12 mb-5">
         <!--end::Label-->
-        <label class="form-label">Residential Address</label>
+        <label class="form-label w-100 position-relative">Residential Address
+            <span role="button" class="position-absolute" style="right: 0">
+                <input type="checkbox" name="same_as_personal_address" id="same_as_personal_address">
+                Same as Personal Address
+            </span>
+        </label>
         <textarea name="family_residential_address" id="family_residential_address"
             class="form-control form-control-lg form-control-solid" rows="3">{{ $family_details->residential_address ?? '' }}</textarea>
         <!--end::Input-->
@@ -272,6 +277,19 @@
         // });
 
     });
+    $('#same_as_personal_address').change(function(){
+      
+        if( this.checked){
+            let addres = $('#contact_address').val();
+            if( addres == 'undefined') {
+                addres = '';
+            }
+            $('#family_residential_address').val(addres);
+        } else {
+            $('#family_residential_address').val('');
+
+        }
+    })
 
 
     let professions = document.getElementsByName("profession_type");

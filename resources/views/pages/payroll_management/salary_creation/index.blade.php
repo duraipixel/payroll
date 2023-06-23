@@ -58,8 +58,7 @@
                 {{ session('status') }}
             </div>
         @endif
-        <form id="salary-calculation" name="salary-calculation" method="post" action="{{ route('salary.creation_add') }}">
-            @csrf
+       
             <div class="card-header border-0 pt-6">
 
                 <div class="card-title w-100">
@@ -102,7 +101,6 @@
             {{-- <div class="py-4 bg">
                 @include('pages.payroll_management.salary_creation._list')
             </div> --}}
-        </form>
     </div>
 
 @endsection

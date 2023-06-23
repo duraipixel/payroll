@@ -25,7 +25,7 @@
             @foreach (config('constant.staff_studied_subjects') as $items)
                     <tr>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $items }}
+                            {{ str_replace('_', ' ',$items) }}
                         </td>
                         @if(config('constant.staff_studied_classes'))
                             @foreach (config('constant.staff_studied_classes') as $item)

@@ -25,6 +25,46 @@
         </div>
     @endif
     <!--begin::Stepper-->
+    @if( isset( $staff_details ) && !empty( $staff_details ))
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="mb-2 d-flex justify-content-between">
+                <div class="p-2 px-4 border border-2 w-200px">
+                    <div class="fw-bold">
+                        Staff Name:
+                    </div>
+                    <div class="badge badge-light-info fs-6">
+                        {{ $staff_details->name }}
+                    </div>
+                </div>
+                <div class="p-2 px-4 border border-2 w-200px">
+                    <div class="fw-bold">
+                        Society Code:
+                    </div>
+                    <div class="badge badge-light-success fs-6">
+                        {{ $staff_details->society_emp_code ?? 'n/a' }}
+                    </div>
+                </div>
+                <div class="p-2 px-4 border border-2 w-200px">
+                    <div class="fw-bold">
+                        Designation
+                    </div>
+                    <div class="badge badge-light-warning fs-6">
+                        {{ $staff_details->position->designation->name ?? 'n/a' }}
+                    </div>
+                </div>
+                <div class="p-2 px-4 border border-2 w-200px">
+                    <div class="fw-bold">
+                        Nature of Work
+                    </div>
+                    <div class="badge badge-light-primary fs-6">
+                        {{ $staff_details->appointment->employment_nature->name ?? 'n/a' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
     <div id="wizard" class="wizard-section border shadow">
         <h3>
             <div class="media">

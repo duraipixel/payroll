@@ -16,7 +16,7 @@ return [
         'society_name'
     ),
     'staff_studied_subjects' => array(    
-        'Tamil', 'English', 'Maths', 'Science', 'Social Science', 'Hindi', 'French'
+        'Tamil', 'English', 'Maths', 'Science', 'Social_Science', 'Hindi', 'French'
     ),
     'staff_studied_classes' => array('X', 'XII', 'UG', 'PG', 'HIGHER', 'NO')
 ];

@@ -18,6 +18,8 @@ use App\Models\Staff\StaffInsurance;
 use App\Models\User;
 use Illuminate\Http\Request;
 use PDF;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class SalaryCreationController extends Controller
 {
@@ -63,90 +65,123 @@ class SalaryCreationController extends Controller
 
         $salary_heads = SalaryHead::where('status', 'active')->get();
         $staff_id = $request->staff_id;
+        $id = $request->id ?? '';
         $staff_info = User::find($staff_id);
+        $payout_month = $request->payout_month;
         $earnings = 0;
         $deductions = 0;
         $net_pay = 0;
         
-        if ($salary_heads) {
-            $ins = [];
-            foreach ($salary_heads as $items) {
-                if (isset($items->fields) && !empty($items->fields)) {
-                    foreach ($items->fields as $item_fields) {
-                        if (isset($_POST['amount_' . $item_fields->id])) {
-                            $amount = $_POST['amount_' . $item_fields->id];
-                            $ins[] = array('field_id' => $item_fields->id, 'name' => $item_fields->name, 'amount' => $amount, 'reference_type' => $items->name, 'reference_id' => $items->id);
-                            if ($items->name == 'EARNINGS') {
-                                $earnings += $amount;
-                            } else {
-                                $deductions += $amount;
+        $validator      = Validator::make($request->all(), [
+            'payout_month' => ['required','string',
+                        Rule::unique('staff_salary_patterns')->where(function ($query) use($staff_id, $payout_month, $id) {
+                            return $query->where('payout_month', $payout_month)
+                            ->where('deleted_at', NULL)
+                            ->where('staff_id', $staff_id)
+                            ->when($id != '', function($q) use($id){
+                                return $q->where('id', '!=', $id);
+                            });
+                        }),
+                        ],
+            'staff_id' => 'required',
+            'effective_from' => 'required',
+            'net_salary' => 'required'
+          
+        ]);
+
+        if ($validator->passes()) {   
+            
+            if ($salary_heads) {
+                $ins = [];
+                foreach ($salary_heads as $items) {
+                    if (isset($items->fields) && !empty($items->fields)) {
+                        foreach ($items->fields as $item_fields) {
+                            if (isset($_POST['amount_' . $item_fields->id])) {
+                                $amount = $_POST['amount_' . $item_fields->id];
+                                $ins[] = array('field_id' => $item_fields->id, 'name' => $item_fields->name, 'amount' => $amount, 'reference_type' => $items->name, 'reference_id' => $items->id);
+                                if ($items->name == 'EARNINGS') {
+                                    $earnings += $amount;
+                                } else {
+                                    $deductions += $amount;
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-        $net_pay = $earnings - $deductions;
-        $payout_month = date('Y-m-1', strtotime($request->payout_month));
+            $net_pay = $earnings - $deductions;
+            $payout_month = date('Y-m-1', strtotime($request->payout_month));
+    
+            if (!empty($ins)) {
+                /**
+                 * check exists
+                 * 
+                 */
+                $exist = StaffSalaryPattern::where(['staff_id' => $staff_id, 'payout_month' => $payout_month])->first();
+                StaffSalaryPattern::where(['staff_id' => $staff_id])->update(['is_current' => 'no']);
 
-        if (!empty($ins)) {
-            /**
-             * check exists
-             * 
-             */
-            $exist = StaffSalaryPattern::where(['staff_id' => $staff_id, 'payout_month' => $payout_month])->first();
-            $insert_data = [];
-            $insert_data['staff_id'] = $staff_id;
-            $insert_data['salary_no'] = date('ymdhis');
-            $insert_data['total_earnings'] = $earnings;
-            $insert_data['total_deductions'] = $deductions;
-            $insert_data['gross_salary'] = $earnings;
-            $insert_data['net_salary'] = $net_pay;
-            $insert_data['is_salary_processed'] = 'no';
-            $insert_data['status'] = 'active';
-            $insert_data['effective_from'] = date('Y-m-d', strtotime($request->effective_from));
-            $insert_data['employee_remarks'] = $request->employee_remarks;
-            $insert_data['payout_month'] = $payout_month;
-            $insert_data['verification_status'] = 'pending';
-            $insert_data['is_current'] = $exist->is_current ?? 'yes';
-
-            if( !$exist ) {
-                $insert_data['addedBy'] = auth()->id();
+                $insert_data = [];
+                $insert_data['staff_id'] = $staff_id;
+                $insert_data['salary_no'] = date('ymdhis');
+                $insert_data['total_earnings'] = $earnings;
+                $insert_data['total_deductions'] = $deductions;
+                $insert_data['gross_salary'] = $earnings;
+                $insert_data['net_salary'] = $net_pay;
+                $insert_data['is_salary_processed'] = 'no';
+                $insert_data['status'] = 'active';
+                $insert_data['effective_from'] = date('Y-m-d', strtotime($request->effective_from));
+                $insert_data['employee_remarks'] = $request->employee_remarks;
+                $insert_data['payout_month'] = $payout_month;
+                $insert_data['verification_status'] = 'pending';
+                $insert_data['is_current'] = $exist->is_current ?? 'yes';
+    
+                if (!$exist) {
+                    $insert_data['addedBy'] = auth()->id();
+                } else {
+                    $insert_data['lastUpdatedBy'] = auth()->id();
+                }
+    
+                $salary_info = StaffSalaryPattern::updateOrCreate(['staff_id' => $staff_id, 'payout_month' => $payout_month], $insert_data);
+                $history_info = StaffSalaryPatternHistory::create($insert_data);
+                StaffSalaryPatternField::where('staff_salary_pattern_id', $salary_info->id)->forceDelete();
+    
+                foreach ($ins as $items_pay) {
+    
+                    $field_data = [];
+                    $field_data['staff_id'] = $staff_id;
+                    $field_data['staff_salary_pattern_id'] = $salary_info->id;
+                    $field_data['field_id'] = $items_pay['field_id'];
+                    $field_data['field_name'] = $items_pay['name'];
+                    $field_data['amount'] = $items_pay['amount'];
+                    $field_data['percentage'] = '';
+                    $field_data['reference_type'] = $items_pay['reference_type'];
+                    $field_data['reference_id'] = $items_pay['reference_id'];
+                    StaffSalaryPatternField::create($field_data);
+    
+                    $field_data['staff_salary_pattern_id'] = $history_info->id;
+                    StaffSalaryPatternFieldHistory::create($field_data);
+                }
+                $error = 'Salary is set successfully';
             } else {
-                $insert_data['lastUpdatedBy'] = auth()->id();
+                $error = 'Error while setting Salary Fields';
             }
+            if( $request->from != 'ajax_revision') {
 
-            $salary_info = StaffSalaryPattern::updateOrCreate(['staff_id' => $staff_id, 'payout_month' => $payout_month], $insert_data);
-            $history_info = StaffSalaryPatternHistory::create($insert_data);
-            StaffSalaryPatternField::where('staff_salary_pattern_id', $salary_info->id)->forceDelete();
+                if ($request->from ) {
+                    return redirect('staff/register/' . $staff_id)->with('status', $error);
+                } else {
+                    return redirect('/salary/creation')->with('status', $error);
+                }
+            } 
 
-            foreach ($ins as $items_pay) {
-
-                $field_data = [];
-                $field_data['staff_id'] = $staff_id;
-                $field_data['staff_salary_pattern_id'] = $salary_info->id;
-                $field_data['field_id'] = $items_pay['field_id'];
-                $field_data['field_name'] = $items_pay['name'];
-                $field_data['amount'] = $items_pay['amount'];
-                $field_data['percentage'] = '';
-                $field_data['reference_type'] = $items_pay['reference_type'];
-                $field_data['reference_id'] = $items_pay['reference_id'];
-                StaffSalaryPatternField::create($field_data);
-
-                $field_data['staff_salary_pattern_id'] = $history_info->id;
-                StaffSalaryPatternFieldHistory::create($field_data);
-
-            }
-            $error = 'Salary is set successfully';
+            $error = 0;
+            $message = 'Added successfully';
         } else {
-            $error = 'Error while setting Salary Fields';
-        }
-
-        if ($request->from) {
-            return redirect('staff/register/' . $staff_id)->with('status', $error);
-        } else {
-            return redirect('/salary/creation')->with('status', $error);
-        }
+            $error = 1;
+            $message = $validator->errors()->all();
+        }    
+        return response()->json(['error' => $error, 'message' => $message]);
+        
     }
 
     public function getStaffSalaryInfo(Request $request)
@@ -197,7 +232,8 @@ class SalaryCreationController extends Controller
             'message' => $message,
             'salary_fields' => $salary_fields,
             'earnings_data' => $earnings_data ?? [],
-            'deduction_data' => $deduction_data ?? []
+            'deduction_data' => $deduction_data ?? [],
+            'staff_id' => $staff_id
 
         );
         if (!$salary_info) {
@@ -287,14 +323,14 @@ class SalaryCreationController extends Controller
         $field_id = $request->field_id;
         $field_name = $request->field_name;
 
-        $fieldCalculation = SalaryFieldCalculationItem::whereRaw("CHARINDEX('".$field_id."', multi_field_id) <> 0")->get();
-        
+        $fieldCalculation = SalaryFieldCalculationItem::whereRaw("CHARINDEX('" . $field_id . "', multi_field_id) <> 0")->get();
+
         $related_amount = [];
-        if( isset( $fieldCalculation ) && count( $fieldCalculation) > 0 ) {
+        if (isset($fieldCalculation) && count($fieldCalculation) > 0) {
             foreach ($fieldCalculation as $items) {
                 $percentage = 0;
                 $percentage_amount = 0;
-                if( !strpos($items->multi_field_id, ',')){
+                if (!strpos($items->multi_field_id, ',')) {
 
                     $tmp = [];
                     $tmp['id'] = $items->parentField->id;
@@ -305,33 +341,33 @@ class SalaryCreationController extends Controller
                     $tmp['basic_percentage_amount'] = round($percentage_amount);
                     $related_amount[] = $tmp;
                 }
-    
             }
         }
-        
+
         return $related_amount;
     }
 
-    public function getStaffEpfAmount(Request $request) {
+    public function getStaffEpfAmount(Request $request)
+    {
 
         $staff_id = $request->staff_id;
         $types = $request->types;
 
-        $staff_info = User::find( $staff_id );
+        $staff_info = User::find($staff_id);
         $nature_of_employment_id = $staff_info->appointment->employment_nature->id;
 
         $salary_fields = SalaryField::where('salary_head_id', 2)->where('nature_id', $nature_of_employment_id)
-                            ->where('short_name', $types)->first();
-   
-        return array('field_name' => $salary_fields->field_items->field_name ?? '', 'multi_field_id' => $salary_fields->field_items->multi_field_id, 'percentage' => $salary_fields->field_items->percentage );
+            ->where('short_name', $types)->first();
 
+        return array('field_name' => $salary_fields->field_items->field_name ?? '', 'multi_field_id' => $salary_fields->field_items->multi_field_id, 'percentage' => $salary_fields->field_items->percentage);
     }
 
-    public function updateSalaryPattern(Request $request) {
+    public function updateSalaryPattern(Request $request)
+    {
         $staff_id = $request->staff_id;
-        $staff_info = User::find( $staff_id );
+        $staff_info = User::find($staff_id);
         $nature_of_employment_id = $staff_info->appointment->employment_nature->id;
-        $current_pattern = StaffSalaryPattern::where(['status' => 'active', 'is_current' => 'yes', 'staff_id' => $staff_id ])->first();
+        $current_pattern = StaffSalaryPattern::where(['status' => 'active', 'is_current' => 'yes', 'staff_id' => $staff_id])->first();
 
 
         $earnings_data = SalaryField::where('nature_id', $nature_of_employment_id)
@@ -346,12 +382,81 @@ class SalaryCreationController extends Controller
             ->where('salary_head_id', 2)
             ->orderBy('order_in_salary_slip')
             ->get();
+        
+        $acYear = AcademicYear::find(academicYearId());
 
+        $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
+        $end_year = '01-' . $acYear->to_month . '-' . $acYear->to_year;
+        $start_Date = date('Y-m-d', strtotime($start_year));
+       
+        $payout_year = [];
+        for ($i = 0; $i < 12; $i++) {
+            $payout_year[] = date('Y-m-d', strtotime($start_Date . ' + ' . $i . ' months'));
+        }
+        
         $params = array(
             'current_pattern' => $current_pattern,
             'earnings_data' => $earnings_data,
-            'deduction_data' => $deduction_data
+            'deduction_data' => $deduction_data,
+            'payout_year' => $payout_year,
         );
+        
         return view('pages.payroll_management.salary_creation._salary_update', $params);
+    }
+
+    public function getStaffSalaryPattern(Request $request) {
+
+        $staff_id = $request->staff_id;
+        $payout_date = $request->payout_date;
+
+        $current_pattern = StaffSalaryPattern::where(['staff_id' => $staff_id, 'payout_month' => $payout_date])->first();
+        $params['current_pattern'] = $current_pattern;
+        return view('pages.payroll_management.salary_creation._salary_view', $params);
+
+    }
+
+    public function updateCurrentSalaryPattern(Request $request) {
+        
+        $staff_id = $request->staff_id;
+        $payout_date = $request->payout_date;
+        $current_pattern = StaffSalaryPattern::where(['staff_id' => $staff_id, 'payout_month' => $payout_date])->first();
+        $params['current_pattern'] = $current_pattern;
+
+        $staff_id = $request->staff_id;
+        $staff_info = User::find($staff_id);
+        $nature_of_employment_id = $staff_info->appointment->employment_nature->id;
+
+        $earnings_data = SalaryField::where('nature_id', $nature_of_employment_id)
+                        ->where('salary_head_id', 1)
+                        ->orderBy('order_in_salary_slip')
+                        ->get();
+
+        $deduction_data = SalaryField::where(function ($q) use ($nature_of_employment_id) {
+                            $q->where('nature_id', $nature_of_employment_id)
+                                ->orWhere('entry_type', 'inbuilt_calculation');
+                        })
+                        ->where('salary_head_id', 2)
+                        ->orderBy('order_in_salary_slip')
+                        ->get();
+        
+        $acYear = AcademicYear::find(academicYearId());
+
+        $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
+        $start_Date = date('Y-m-d', strtotime($start_year));
+       
+        $payout_year = [];
+        for ($i = 0; $i < 12; $i++) {
+            $payout_year[] = date('Y-m-d', strtotime($start_Date . ' + ' . $i . ' months'));
+        }
+        
+        $params = array(
+            'current_pattern' => $current_pattern,
+            'earnings_data' => $earnings_data,
+            'deduction_data' => $deduction_data,
+            'payout_year' => $payout_year,
+        );
+
+        return view('pages.payroll_management.salary_creation._current_salary_update', $params);
+
     }
 }
