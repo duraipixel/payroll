@@ -203,7 +203,7 @@
         <!--end::Input-->
     </div>
 
-    <div class="col-lg-6 mb-5 own_premises" @if (isset($family_details->premises) && $family_details->premises == 'others') style="display:none" @endif>
+    <div class="col-lg-6 mb-5 own_premises" >
         <!--begin::Label-->
         <label class="form-label">
             If Son/Daughter Regn No
