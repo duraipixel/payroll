@@ -52606,7 +52606,7 @@ code:not([class*=language-]) {
   pre,
   div {
     scrollbar-width: thin;
-    scrollbar-color: #EFF2F5 transparent;
+    scrollbar-color: #1a3a82 #ddd;
   }
 
   main::-webkit-scrollbar,
@@ -52625,7 +52625,7 @@ code:not([class*=language-]) {
   ul::-webkit-scrollbar-thumb,
   pre::-webkit-scrollbar-thumb,
   div::-webkit-scrollbar-thumb {
-    background-color: #EFF2F5;
+    background-color: #b4c9f9;
   }
 
   main:hover,
@@ -52634,7 +52634,7 @@ code:not([class*=language-]) {
   ul:hover,
   pre:hover,
   div:hover {
-    scrollbar-color: #e9edf1 transparent;
+    scrollbar-color: #1a3a82  #ddd;
   }
 
   main:hover::-webkit-scrollbar-thumb,
@@ -52643,7 +52643,7 @@ code:not([class*=language-]) {
   ul:hover::-webkit-scrollbar-thumb,
   pre:hover::-webkit-scrollbar-thumb,
   div:hover::-webkit-scrollbar-thumb {
-    background-color: #e9edf1;
+    background-color: #1a3a82;
   }
 }
 
