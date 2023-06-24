@@ -1,5 +1,5 @@
 <hr>
-<form id="salary-calculation" name="salary-calculation" method="post" action="{{ route('salary.creation_add') }}">
+<form id="update_new_revision">
     @csrf
     <input type="hidden" name="staff_id" value="{{ $staff_id }}">
     <div class="row mt-3">
@@ -188,7 +188,7 @@
                         </div>
                     </div>
                     <div class="form-group mt-5 text-end">
-                        <button class="btn btn-primary btn-sm" type="submit"> Submit & Lock </button>
+                        <button class="btn btn-primary btn-sm" id="submit_button" type="button" onclick="return addRevisionFormSubmit()"> Submit & Lock </button>
                         <a class="btn btn-dark btn-sm"
                             href="@if (isset($staff_id) && !empty($staff_id)) {{ route('staff.register', ['id' => $staff_id]) }} @else {{ route('salary.creation') }} @endif">
                             Cancel </a>
@@ -226,6 +226,83 @@
                             console.log('outside');
                         });
                     })
+
+                    function addRevisionFormSubmit() {
+
+                        var form = document.getElementById('update_new_revision');
+                        const submitButton = document.getElementById('submit_button');
+
+                        event.preventDefault();
+                        var revision_form_error = false;
+
+                        var key_name = [
+                            'effective_from',
+                            'payout_month',
+                            'net_salary',
+                        ];
+
+                        $('.revision-form-errors').remove();
+                        $('.form-control,.form-select').removeClass('border-danger');
+
+                        const pattern = /_/gi;
+                        const replacement = " ";
+
+                        key_name.forEach(element => {
+                            var name_input = document.getElementById(element).value;
+
+                            if (name_input == '' || name_input == undefined) {
+
+                                revision_form_error = true;
+                                var elementValues = element.replace(pattern, replacement);
+                                var name_input_error =
+                                    '<div class="fv-plugins-message-container revision-form-errors invalid-feedback"><div data-validator="notEmpty">' +
+                                    elementValues.toUpperCase() + ' is required</div></div>';
+                                $('#' + element).after(name_input_error);
+                                $('#' + element).addClass('border-danger')
+                                $('#' + element).focus();
+                            }
+                        });
+
+                        // Validate form before submit
+
+                        if (!revision_form_error) {
+                            submitButton.disabled = true;
+                            let staff_id = $('#staff_id').val();
+                            var forms = $('#update_new_revision')[0];
+                            var formData = new FormData(forms);
+                            formData.append('staff_id', staff_id);
+
+                            $.ajax({
+                                url: "{{ route('salary.creation_add') }}",
+                                type: "POST",
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function(res) {
+
+                                    submitButton.disabled = false;
+
+                                    if (res.error == 1) {
+                                        if (res.message) {
+                                            res.message.forEach(element => {
+                                                toastr.error("Error",
+                                                    element);
+                                            });
+                                        }
+                                    } else {
+                                        toastr.success(
+                                            "Salary revision updated successfully"
+                                        );
+
+                                        getSalaryHeadFields(staff_id);
+
+                                    }
+                                }
+                            })
+
+                        }
+
+                    }
                 </script>
             </div>
         @endif

@@ -5,10 +5,12 @@ namespace App\Models\PayrollManagement;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StaffSalary extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'staff_id',
@@ -22,7 +24,8 @@ class StaffSalary extends Model
         'is_salary_processed',
         'salary_approved_by',
         'salary_processed_on',
-        'status'
+        'status',
+        'salary_pattern_id'
     ];
 
     public function fields()

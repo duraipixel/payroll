@@ -58,47 +58,47 @@
                 {{ session('status') }}
             </div>
         @endif
-       
-            <div class="card-header border-0 pt-6">
 
-                <div class="card-title w-100">
-                    <input type="hidden" name="from" value="@if (isset($staff_id) && !empty($staff_id)) 'staff' @endif">
-                    <div class=" w-100 custom_select position-relative my-1 salary-selection">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="pe-8">
-                                    <h4> Select Staff</h4>
-                                </div>
-                                <div class="form-group mt-3">
+        <div class="card-header border-0 pt-6">
 
-                                    <select name="staff_id" id="staff_id" class="form-control"
-                                        onchange="getSalaryHeadFields(this.value)" required>
-                                        <option value="">--Select Employee--</option>
-                                        @isset($employees)
-                                            @foreach ($employees as $item)
-                                                <option value="{{ $item->id }}"
-                                                    @if (isset($staff_id) && $staff_id == $item->id) selected @endif>{{ $item->name }}
-                                                </option>
-                                            @endforeach
-                                        @endisset
-                                    </select>
-
-                                </div>
+            <div class="card-title w-100">
+                <input type="hidden" name="from" value="@if (isset($staff_id) && !empty($staff_id)) 'staff' @endif">
+                <div class=" w-100 custom_select position-relative my-1 salary-selection">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="pe-8">
+                                <h4> Select Staff</h4>
                             </div>
-                            <div class="col-sm-4" id="payroll_button_pane">
+                            <div class="form-group mt-3">
+
+                                <select name="staff_id" id="staff_id" class="form-control"
+                                    onchange="getSalaryHeadFields(this.value)" required>
+                                    <option value="">--Select Employee--</option>
+                                    @isset($employees)
+                                        @foreach ($employees as $item)
+                                            <option value="{{ $item->id }}"
+                                                @if (isset($staff_id) && $staff_id == $item->id) selected @endif>{{ $item->name }}
+                                            </option>
+                                        @endforeach
+                                    @endisset
+                                </select>
 
                             </div>
-                            <div class="col-sm-4"></div>
                         </div>
+                        <div class="col-sm-4" id="payroll_button_pane">
 
+                        </div>
+                        <div class="col-sm-4"></div>
                     </div>
 
                 </div>
-            </div>
 
-            <div class="card-body py-4 @if (isset($staff_id) && !empty($staff_id)) @else d-none @endif" id="salary-creation-panel">
             </div>
-            {{-- <div class="py-4 bg">
+        </div>
+
+        <div class="card-body py-4 @if (isset($staff_id) && !empty($staff_id)) @else d-none @endif" id="salary-creation-panel">
+        </div>
+        {{-- <div class="py-4 bg">
                 @include('pages.payroll_management.salary_creation._list')
             </div> --}}
     </div>
@@ -108,6 +108,7 @@
 @section('add_on_script')
     <script>
         var epf_values = '';
+
         function doAmountCalculation() {
             var earnings = 0;
             var deductions = 0;
@@ -143,37 +144,35 @@
             console.log(field_name, 'field_name');
             doAmountCalculation();
 
-            if (field_name.toLowerCase() == 'basic' || field_name.toLowerCase() == 'pba') {
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $.ajax({
+                url: "{{ route('salary.get.field.amount') }}",
+                type: 'POST',
+                data: {
+                    amount: amount,
+                    field_id: field_id,
+                    field_name: field_name
+                },
+                beforeSend: function() {
+
+                },
+                success: function(res) {
+
+                    if (res.length > 0) {
+                        res.map((item) => {
+                            // console.log(item);
+                            $('#' + item.short_name + '_input').val(item.basic_percentage_amount
+                                .toFixed(2));
+                        })
                     }
-                });
-
-                $.ajax({
-                    url: "{{ route('salary.get.field.amount') }}",
-                    type: 'POST',
-                    data: {
-                        amount: amount,
-                        field_id: field_id,
-                        field_name: field_name
-                    },
-                    beforeSend: function() {
-
-                    },
-                    success: function(res) {
-
-                        if (res.length > 0) {
-                            res.map((item) => {
-                                // console.log(item);
-                                $('#' + item.short_name + '_input').val(item.basic_percentage_amount
-                                    .toFixed(2));
-                            })
-                        }
-                        //    $('#amount_'+res)
-                    }
-                });
-            }
+                    //    $('#amount_'+res)
+                }
+            });
 
         }
 
@@ -206,22 +205,22 @@
                             types: types
                         },
                         beforeSend: function() {
-                           /* 
-                           do loader here  if needed 
-                           */
+                            /* 
+                            do loader here  if needed 
+                            */
                         },
                         success: function(res) {
                             epf_values = res.field_name;
-                            let epf_value_arr =epf_values.split(",");
+                            let epf_value_arr = epf_values.split(",");
                             let total = 0;
                             epf_value_arr.map((item) => {
-                                let sum = $('#'+item+'_input').val() || 0;
+                                let sum = $('#' + item + '_input').val() || 0;
                                 total += parseFloat(sum);
                             });
                             let percentage = res.percentage || 0;
-                            let final_epf = (percentage/100) * parseFloat(total);
+                            let final_epf = (percentage / 100) * parseFloat(total);
                             final_epf = Math.round(final_epf);
-                            $('#'+types+'_input').val(final_epf);
+                            $('#' + types + '_input').val(final_epf);
 
                             doAmountCalculation();
                         }

@@ -246,8 +246,9 @@ Route::group(['middleware' => 'auth'],  function () {
 
     Route::get('payroll/overview',[App\Http\Controllers\PayrollManagement\OverviewController::class,'index'])->name('payroll.overview');
     Route::post('payroll/overview/month',[App\Http\Controllers\PayrollManagement\OverviewController::class,'getMonthData'])->name('payroll.get.month.chart');
-
+    #salary revision approval
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
+    ## salary creation & update & revison
     Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
     Route::post('salary/creation_add',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryAdd'])->name('salary.creation_add');
     Route::post('salary/update/pattern',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'updateSalaryPattern'])->name('salary.update.pattern');
@@ -255,11 +256,11 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('salary/get/staff',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryInfo'])->name('salary.get.staff');
     Route::post('salary/get/epf/amount',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffEpfAmount'])->name('salary.get.epf.amount');
     Route::post('salary/pattern/list',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryPattern'])->name('salary.pattern.list');
-    // Route::post('salary/get/staff',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryDetailsPane'])->name('salary.get.staff');
     Route::post('salary/get/field/amount',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getAmountBasedField'])->name('salary.get.field.amount');
     Route::post('salary/get/view',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryModalView'])->name('salary.modal.view');
     Route::get('salary/download/preview/{staff_id}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'downloadSalaryPreviewPdf'])->name('salary.preview.pdf');
     Route::post('salary/get/others/info',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getOthersData'])->name('show.loans.info');
+    Route::post('salary/pattern/delete',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'deleteSalaryPattern'])->name('salary.pattern.delete');
     
     Route::get('salary/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'index'])->name('salary.loan');
     Route::post('salary/save/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'save'])->name('save.loan');

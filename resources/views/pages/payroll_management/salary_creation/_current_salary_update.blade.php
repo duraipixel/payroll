@@ -1,7 +1,8 @@
 <div class="payheads-pane p-3 border border-2">
-    <form id="add_new_revision">
+    <form id="update_new_revision">
         @csrf
         <input type="hidden" name="from" value="ajax_revision">
+        <input type="hidden" name="id" value="{{ $current_pattern->id }}">
         <div class="d-flex w-100 m-2 p-2 bg-primary text-white">
             <div class="w-30">
                 Salary Heads
@@ -117,7 +118,8 @@
                 <div class="form-group">
                     <label for="" class="fs-5 required"> Effective From </label>
                     <div class="mt-3">
-                        <input type="date" value="{{ $current_pattern->effective_from ?? '' }}" name="effective_from" id="effective_from" class="form-control" required>
+                        <input type="date" value="{{ $current_pattern->effective_from ?? '' }}"
+                            name="effective_from" id="effective_from" class="form-control" required>
                     </div>
                 </div>
 
@@ -135,12 +137,13 @@
                 <div class="form-group">
                     <label for="" class="fs-5 required"> Payout Month </label>
                     <div class="mt-3">
-                        <input type="text" name="payout_month" id="payout_month" class="form-control" value="{{ date('F Y', strtotime($current_pattern->payout_month)) }}" readonly>
+                        <input type="text" name="payout_month" id="payout_month" class="form-control"
+                            value="{{ date('F Y', strtotime($current_pattern->payout_month)) }}" readonly>
                         {{-- <select name="payout_month" id="payout_month" class="form-control" required readonly>
                             <option value="">-select-</option>
                             @if (isset($payout_year) && !empty($payout_year))
                                 @foreach ($payout_year as $item)
-                                    <option value="{{ $item }}" @if( isset( $current_pattern->payout_month) && $current_pattern->payout_month == $item ) selected @endif> {{ date('F Y', strtotime($item)) }}
+                                    <option value="{{ $item }}" @if (isset($current_pattern->payout_month) && $current_pattern->payout_month == $item) selected @endif> {{ date('F Y', strtotime($item)) }}
                                     </option>
                                 @endforeach
                             @endif
@@ -150,8 +153,10 @@
             </div>
         </div>
         <div class="form-group mt-5 text-end">
-            <button class="btn btn-primary btn-sm" type="button" id="submit_button" onclick="return updateRevisionFormSubmit()"> Save </button>
-            <a class="btn btn-danger btn-sm" href="#">
+            <button class="btn btn-primary btn-sm" type="button" id="submit_button"
+                onclick="return updateRevisionFormSubmit()"> Save </button>
+            <a class="btn btn-danger btn-sm" href="javascript:void(0)"
+                onclick="return deleteRevision('{{ $current_pattern->id }}')">
                 Delete Revision
             </a>
         </div>
@@ -160,7 +165,7 @@
 <script>
     function updateRevisionFormSubmit() {
 
-        var form = document.getElementById('add_new_revision');
+        var form = document.getElementById('update_new_revision');
         const submitButton = document.getElementById('submit_button');
 
         event.preventDefault();
@@ -188,18 +193,18 @@
                 var name_input_error =
                     '<div class="fv-plugins-message-container revision-form-errors invalid-feedback"><div data-validator="notEmpty">' +
                     elementValues.toUpperCase() + ' is required</div></div>';
-                // $('#' + element).after(name_input_error);
+                $('#' + element).after(name_input_error);
                 $('#' + element).addClass('border-danger')
                 $('#' + element).focus();
             }
         });
 
         // Validate form before submit
-        
+
         if (!revision_form_error) {
             submitButton.disabled = true;
             let staff_id = $('#staff_id').val();
-            var forms = $('#add_new_revision')[0];
+            var forms = $('#update_new_revision')[0];
             var formData = new FormData(forms);
             formData.append('staff_id', staff_id);
 
@@ -222,7 +227,7 @@
                         }
                     } else {
                         toastr.success(
-                            "Salary revision added successfully"
+                            "Salary revision updated successfully"
                         );
 
                         getSalaryHeadFields(staff_id);
@@ -233,5 +238,68 @@
 
         }
 
+    }
+
+    function deleteRevision(pattern_id) {
+
+        Swal.fire({
+            text: "Are you sure you would like to delete salary?",
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, Delete it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('salary.pattern.delete') }}",
+                    type: 'POST',
+                    data: {
+                        id: pattern_id
+                    },
+                    success: function(res) {
+                        if (res.error == 0) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: res.message,
+                                icon: "success",
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-success"
+                                },
+                                timer: 3000
+                            });
+                            getSalaryHeadFields(res.staff_id);
+                        } else {
+                            Swal.fire({
+                                title: "Can not Delete!",
+                                text: res.message,
+                                icon: "warning",
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-danger"
+                                },
+                                timer: 3000
+                            });
+                        }
+                    },
+                    error: function(xhr, err) {
+                        if (xhr.status == 403) {
+                            toastr.error(xhr.statusText, 'UnAuthorized Access');
+                        }
+                    }
+                });
+            }
+        });
     }
 </script>

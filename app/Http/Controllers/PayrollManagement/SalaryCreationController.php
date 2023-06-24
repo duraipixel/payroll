@@ -78,6 +78,7 @@ class SalaryCreationController extends Controller
                             return $query->where('payout_month', $payout_month)
                             ->where('deleted_at', NULL)
                             ->where('staff_id', $staff_id)
+                            ->where('verification_status', '!=', 'rejected')
                             ->when($id != '', function($q) use($id){
                                 return $q->where('id', '!=', $id);
                             });
@@ -110,17 +111,25 @@ class SalaryCreationController extends Controller
                 }
             }
             $net_pay = $earnings - $deductions;
-            $payout_month = date('Y-m-1', strtotime($request->payout_month));
+            $payout_month = date('Y-m-01', strtotime($request->payout_month));
     
             if (!empty($ins)) {
                 /**
                  * check exists
                  * 
                  */
-                $exist = StaffSalaryPattern::where(['staff_id' => $staff_id, 'payout_month' => $payout_month])->first();
-                StaffSalaryPattern::where(['staff_id' => $staff_id])->update(['is_current' => 'no']);
-
                 $insert_data = [];
+
+                $exist = StaffSalaryPattern::where(['id' => $id])->first();
+                $current_active = StaffSalaryPattern::where(['staff_id' => $staff_id, 'is_current' => 'yes'])->orderBY('payout_month', 'desc')->first();
+               
+                if( $current_active && $current_active->payout_month < $payout_month ) {
+                    StaffSalaryPattern::where(['staff_id' => $staff_id])->update(['is_current' => 'no']);
+                    $is_current = $exist->is_current ?? 'yes';
+                } else {
+                    $is_current = $exist->is_current ?? 'no';
+                }
+
                 $insert_data['staff_id'] = $staff_id;
                 $insert_data['salary_no'] = date('ymdhis');
                 $insert_data['total_earnings'] = $earnings;
@@ -133,7 +142,7 @@ class SalaryCreationController extends Controller
                 $insert_data['employee_remarks'] = $request->employee_remarks;
                 $insert_data['payout_month'] = $payout_month;
                 $insert_data['verification_status'] = 'pending';
-                $insert_data['is_current'] = $exist->is_current ?? 'yes';
+                $insert_data['is_current'] = $is_current;
     
                 if (!$exist) {
                     $insert_data['addedBy'] = auth()->id();
@@ -141,7 +150,7 @@ class SalaryCreationController extends Controller
                     $insert_data['lastUpdatedBy'] = auth()->id();
                 }
     
-                $salary_info = StaffSalaryPattern::updateOrCreate(['staff_id' => $staff_id, 'payout_month' => $payout_month], $insert_data);
+                $salary_info = StaffSalaryPattern::updateOrCreate(['id' => $id], $insert_data);
                 $history_info = StaffSalaryPatternHistory::create($insert_data);
                 StaffSalaryPatternField::where('staff_salary_pattern_id', $salary_info->id)->forceDelete();
     
@@ -161,21 +170,23 @@ class SalaryCreationController extends Controller
                     $field_data['staff_salary_pattern_id'] = $history_info->id;
                     StaffSalaryPatternFieldHistory::create($field_data);
                 }
-                $error = 'Salary is set successfully';
+                $message = 'Salary is set successfully';
+                $error = 0;
+
             } else {
-                $error = 'Error while setting Salary Fields';
+                $message = 'Error while setting Salary Fields, Please make sure salary fiedls are mapped';
+                $error = 1;
+
             }
-            if( $request->from != 'ajax_revision') {
+            // if( $request->from != 'ajax_revision') {
 
-                if ($request->from ) {
-                    return redirect('staff/register/' . $staff_id)->with('status', $error);
-                } else {
-                    return redirect('/salary/creation')->with('status', $error);
-                }
-            } 
+            //     if ($request->from ) {
+            //         return redirect('staff/register/' . $staff_id)->with('status', $error);
+            //     } else {
+            //         return redirect('/salary/creation')->with('status', $error);
+            //     }
+            // } 
 
-            $error = 0;
-            $message = 'Added successfully';
         } else {
             $error = 1;
             $message = $validator->errors()->all();
@@ -240,10 +251,12 @@ class SalaryCreationController extends Controller
             return view('pages.payroll_management.salary_creation._salary_create', $params);
         } else {
 
-            $all_salary_patterns = StaffSalaryPattern::where('staff_id', $staff_id)->get();
+            $all_salary_patterns = StaffSalaryPattern::where('staff_id', $staff_id)->orderBy('id', 'desc')->get();
             $current_pattern = StaffSalaryPattern::where(['staff_id' => $staff_id, 'is_current' => 'yes'])->first();
+            $staff_details = User::find( $staff_id );
             $params['all_salary_patterns'] = $all_salary_patterns;
             $params['current_pattern'] = $current_pattern;
+            $params['staff_details'] = $staff_details;
             return view('pages.payroll_management.salary_creation._revision_list', $params);
         }
     }
@@ -458,5 +471,38 @@ class SalaryCreationController extends Controller
 
         return view('pages.payroll_management.salary_creation._current_salary_update', $params);
 
+    }
+
+    public function deleteSalaryPattern(Request $request) {
+        $id = $request->id;
+
+        $info = StaffSalaryPattern::find($id);
+        $staff_id = $info->staff_id;
+        /**
+         * check salary created for this pattern if yes don't allow to delete
+         */
+        $exist = StaffSalary::where('salary_pattern_id', $id)->first();
+        if( $exist ) {
+            $error = 1;
+            $message = 'Salary provided for this payout, To delete this contact Administrator';
+        } else {
+
+            $is_current = false;
+            if( $info->is_current == 'yes') {
+                $is_current = true;
+            }
+
+            $info->patternFields()->delete();
+            $info->delete();
+            if( $is_current ) {
+                $last_info = StaffSalaryPattern::where('staff_id', $staff_id)->orderBy('payout_month', 'desc')->first();
+                $last_info->is_current = 'yes';
+                $last_info->save();
+            }
+            $error = 0;
+            $message = 'Successfully deleted Salary Revision';
+        }
+
+        return array('error' => $error, 'message' => $message, 'staff_id' => $staff_id);
     }
 }
