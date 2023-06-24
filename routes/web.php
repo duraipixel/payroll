@@ -248,6 +248,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('payroll/overview/month',[App\Http\Controllers\PayrollManagement\OverviewController::class,'getMonthData'])->name('payroll.get.month.chart');
     #salary revision approval
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
+    Route::post('salary/revision/status/change/modal',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatusModal'])->name('salary.revision.status.modal');
+    Route::post('salary/revision/status/change',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatus'])->name('salary.revision.status.change');
     ## salary creation & update & revison
     Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
     Route::post('salary/creation_add',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryAdd'])->name('salary.creation_add');

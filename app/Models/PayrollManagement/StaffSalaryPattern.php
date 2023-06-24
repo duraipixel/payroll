@@ -2,6 +2,7 @@
 
 namespace App\Models\PayrollManagement;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,11 +34,20 @@ class StaffSalaryPattern extends Model implements Auditable
         'verification_status',
         'addedBy',
         'lastUpdatedBy',
-        'is_current'
+        'is_current',
+        'approved_on',
+        'rejected_on',
+        'rejectedBy',
+        'approved_remarks',
+        'removed_remarks'
     ];
 
     public function patternFields() {
         return $this->hasMany(StaffSalaryPatternField::class, 'staff_salary_pattern_id', 'id');
+    }
+
+    public function staff() {
+        return $this->hasOne(User::class, 'id', 'staff_id');
     }
 
 }
