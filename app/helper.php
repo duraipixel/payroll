@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Role\Permission;
 use App\Helpers\AccessGuard;
 use App\Models\AttendanceManagement\LeaveMapping;
+use App\Models\ItTabulation;
 use App\Models\Master\Institution;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
@@ -603,6 +604,14 @@ if (!function_exists('getStaffVerificationStatus')) {
     function previousSalaryData($pattern_id, $field_id) {
         return StaffSalaryPatternField::where('staff_salary_pattern_id', $pattern_id)
                 ->where('field_id', $field_id)->first();
+    }
+
+    function getITSlabeInfo($from_amount, $to_amount, $slug) {
+        return ItTabulation::where(['from_amount' => $from_amount, 'to_amount' => $to_amount, 'slug' => $slug])->first();
+    }
+
+    function getItSlabInfo($slug) {
+        return ItTabulation::where(['slug' => $slug])->first();
     }
 
     

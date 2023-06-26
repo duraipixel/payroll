@@ -472,7 +472,11 @@
                         'professional-tax',
                         'payroll.overview',
                         'holdsalary',
-                        'salary.revision'
+                        'salary.revision',
+                        'it.tabulation',
+                        'taxscheme',
+                        'taxsection',
+                        'taxsection-item'
                     ])) hover show @endif">
                         <span class="menu-link">
                             <span class="menu-icon">
@@ -560,12 +564,12 @@
                         </div>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['salary.revision'])) active @endif"
-                                    href="{{ route('salary.revision') }}">
+                                <a class="menu-link  @if (request()->routeIs(['it.tabulation'])) active @endif"
+                                    href="{{ route('it.tabulation') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
-                                    <span class="menu-title">Income Tax</span>
+                                    <span class="menu-title">Income Tax Tabulation</span>
                                 </a>
                             </div>
                         </div>
@@ -590,6 +594,39 @@
                                         <span class="bullet bullet-dot"></span>
                                     </span>
                                     <span class="menu-title">Salary Fields</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link  @if (request()->routeIs(['taxscheme'])) active @endif"
+                                    href="{{ route('taxscheme') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Tax Schemes</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link  @if (request()->routeIs(['taxsection'])) active @endif"
+                                    href="{{ route('taxsection') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Scheme Section</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link  @if (request()->routeIs(['taxsection-item'])) active @endif"
+                                    href="{{ route('taxsection-item') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Scheme Section Item</span>
                                 </a>
                             </div>
                         </div>

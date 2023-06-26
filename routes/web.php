@@ -250,6 +250,33 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
     Route::post('salary/revision/status/change/modal',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatusModal'])->name('salary.revision.status.modal');
     Route::post('salary/revision/status/change',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatus'])->name('salary.revision.status.change');
+    #Income Tax Calculations
+    Route::get('it/tabulation',[App\Http\Controllers\PayrollManagement\ItTabulationController::class,'index'])->name('it.tabulation');
+    Route::post('it/tabulation/add_edit',[App\Http\Controllers\PayrollManagement\ItTabulationController::class,'addEditModal'])->name('it.tabulation.modal');
+    Route::post('it/tabulation/save',[App\Http\Controllers\PayrollManagement\ItTabulationController::class,'save'])->name('it.tabulation.save');
+    Route::post('it/tabulation/change/status',[App\Http\Controllers\PayrollManagement\ItTabulationController::class,'changeStatus'])->name('it.tabulation.status.change');
+    #Tax Schemes
+    Route::get('taxscheme',[App\Http\Controllers\Tax\TaxSchemeController::class,'index'])->name('taxscheme');
+    Route::post('taxscheme/add',[App\Http\Controllers\Tax\TaxSchemeController::class,'add_edit'])->name('taxscheme.add_edit');
+    Route::post('taxscheme/save',[App\Http\Controllers\Tax\TaxSchemeController::class,'save'])->name('taxscheme.save');
+    Route::post('taxscheme/status/change',[App\Http\Controllers\Tax\TaxSchemeController::class,'changeStatus'])->name('taxscheme.change.status');
+    Route::post('taxscheme/delete',[App\Http\Controllers\Tax\TaxSchemeController::class,'delete'])->name('taxscheme.delete');
+    Route::get('taxscheme/export',[App\Http\Controllers\Tax\TaxSchemeController::class,'export'])->name('taxscheme.export');
+    Route::post('taxscheme/set/current',[App\Http\Controllers\Tax\TaxSchemeController::class,'setCurrent'])->name('taxscheme.set.current');
+    #Tax Scheme Section
+    Route::get('taxsection',[App\Http\Controllers\Tax\TaxSchemeSectionController::class,'index'])->name('taxsection');
+    Route::post('taxsection/add',[App\Http\Controllers\Tax\TaxSchemeSectionController::class,'add_edit'])->name('taxsection.add_edit');
+    Route::post('taxsection/save',[App\Http\Controllers\Tax\TaxSchemeSectionController::class,'save'])->name('taxsection.save');
+    Route::post('taxsection/status/change',[App\Http\Controllers\Tax\TaxSchemeSectionController::class,'changeStatus'])->name('taxsection.change.status');
+    Route::post('taxsection/delete',[App\Http\Controllers\Tax\TaxSchemeSectionController::class,'delete'])->name('taxsection.delete');
+    Route::get('taxsection/export',[App\Http\Controllers\Tax\TaxSchemeSectionController::class,'export'])->name('taxsection.export');
+    #Tax Scheme Section Items
+    Route::get('taxsection-item',[App\Http\Controllers\Tax\TaxSchemeSectionItemController::class,'index'])->name('taxsection-item');
+    Route::post('taxsection-itemadd',[App\Http\Controllers\Tax\TaxSchemeSectionItemController::class,'add_edit'])->name('taxsection-item.add_edit');
+    Route::post('taxsection-itemsave',[App\Http\Controllers\Tax\TaxSchemeSectionItemController::class,'save'])->name('taxsection-item.save');
+    Route::post('taxsection-itemstatus/change',[App\Http\Controllers\Tax\TaxSchemeSectionItemController::class,'changeStatus'])->name('taxsection-item.change.status');
+    Route::post('taxsection-itemdelete',[App\Http\Controllers\Tax\TaxSchemeSectionItemController::class,'delete'])->name('taxsection-item.delete');
+    Route::get('taxsection-itemexport',[App\Http\Controllers\Tax\TaxSchemeSectionItemController::class,'export'])->name('taxsection-item.export');
     ## salary creation & update & revison
     Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
     Route::post('salary/creation_add',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryAdd'])->name('salary.creation_add');

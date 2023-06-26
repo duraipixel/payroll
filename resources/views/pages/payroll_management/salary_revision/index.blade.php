@@ -203,13 +203,18 @@
         function changeRevisionStatus(stat) {
 
             let count = $(".revision_check:checked").length;
-            console.log(count, 'count');
+            onsole.log(count, 'count');
             if (count == 0) {
                 toastr.error('Error', 'Select atleast one checkbox to continue')
                 return false;
             }
 
             var fromData = $('#revision_form').serialize();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: "{{ route('salary.revision.status.modal') }}",
                 type: 'POST',
