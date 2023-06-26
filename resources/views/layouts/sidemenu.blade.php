@@ -471,7 +471,8 @@
                         'salary.lic',
                         'professional-tax',
                         'payroll.overview',
-                        'holdsalary'
+                        'holdsalary',
+                        'salary.revision'
                     ])) hover show @endif">
                         <span class="menu-link">
                             <span class="menu-icon">

@@ -63,7 +63,7 @@
             // Handle submit button
             submitButton.addEventListener('click', e => {
                 e.preventDefault();
-                console.log("111");
+                
                 // Validate form before submit
                 if (validator) {
                     validator.validate().then(function(status) {
@@ -89,10 +89,9 @@
                                         'data-kt-indicator');
                                     if (res.error == 1) {
                                         if (res.message) {
-                                            res.message.forEach(element => {
-                                                toastr.error("Error",
-                                                    element);
-                                            });
+                                            toastr.error("Error",
+                                            res.message);
+                                           
                                         }
                                     } else {
                                         toastr.success(res.message);

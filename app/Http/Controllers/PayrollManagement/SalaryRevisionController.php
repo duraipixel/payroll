@@ -89,6 +89,15 @@ class SalaryRevisionController extends Controller
                 $patter_info = StaffSalaryPattern::find($item);
                 if( $patter_info ) {
                     if( $status == 'approved') {
+
+                        $check_exist= StaffSalaryPattern::where('staff_id', $patter_info->staff_id)
+                                        ->where('payout_month', $patter_info->payout_month)
+                                        ->where('verification_status', '!=', 'rejected')
+                                        ->first();
+                        // dd( $check_exist );
+                        if( $check_exist ) {
+                            return array('error' => 1, 'message' => 'Cannot approve. Revision for payout month in list');
+                        }
                         $patter_info->approved_on = date('Y-m-d H:i:s');
                         $patter_info->approved_remarks = $remarks;
                         $patter_info->verification_status = $status;
@@ -108,7 +117,6 @@ class SalaryRevisionController extends Controller
                         $patter_info->approved_remarks = null;
                         $patter_info->salary_approved_by = null;
                         $message = 'Rejected successfully';
-
                     }
                     $patter_info->save();
                 }

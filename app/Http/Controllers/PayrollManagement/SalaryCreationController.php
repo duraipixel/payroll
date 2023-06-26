@@ -251,7 +251,8 @@ class SalaryCreationController extends Controller
             return view('pages.payroll_management.salary_creation._salary_create', $params);
         } else {
 
-            $all_salary_patterns = StaffSalaryPattern::where('staff_id', $staff_id)->orderBy('id', 'desc')->get();
+            $all_salary_patterns = StaffSalaryPattern::where('staff_id', $staff_id)->orderBy('id', 'desc')
+                                    ->where('verification_status', '!=', 'rejected')->get();
             $current_pattern = StaffSalaryPattern::where(['staff_id' => $staff_id, 'is_current' => 'yes'])->first();
             $staff_details = User::find( $staff_id );
             $params['all_salary_patterns'] = $all_salary_patterns;
@@ -312,7 +313,6 @@ class SalaryCreationController extends Controller
 
     public function getOthersData(Request $request)
     {
-
 
         $staff_id = $request->staff_id;
         $data_id = $request->data_id;
