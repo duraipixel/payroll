@@ -42,21 +42,21 @@
                 </div>
             </div>
         </div> --}}
-        {{-- <div class="col-sm-6">
+        <div class="col-sm-6">
             <div class="fv-row form-group mb-10 mt-2">
                 <label class="form-label" for="">
-                    Status
+                    Is Automatic EPF Calculation
                 </label>
                 <div>
-                    <input type="radio" id="active" class="form-check-input" value="active" name="status"
-                        @if (isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif>
-                    <label class="pe-3" for="active">Active</label>
-                    <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status"
-                        @if (isset($info->status) && $info->status != 'active') checked @endif>
-                    <label for="inactive">Inactive</label>
+                    <input type="radio" id="active" class="form-check-input" value="yes" name="is_pf_calculation"
+                        @if (isset($info->is_pf_calculation) && $info->is_pf_calculation == 'yes') checked @endif>
+                    <label class="pe-3" for="active">Yes</label>
+                    <input type="radio" id="inactive" class="form-check-input" value="no" name="is_pf_calculation"
+                        @if (isset($info->is_pf_calculation) && $info->is_pf_calculation == 'no') checked  @elseif(!isset($info->is_pf_calculation)) checked  @endif>
+                    <label for="inactive">No</label>
                 </div>
             </div>
-        </div> --}}
+        </div>
 
     </div>
 

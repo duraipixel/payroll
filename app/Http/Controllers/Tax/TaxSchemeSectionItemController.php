@@ -121,6 +121,7 @@ class TaxSchemeSectionItemController extends Controller
             $ins['academic_id'] = academicYearId();
             $ins['tax_scheme_id'] = $section_info->tax_scheme_id;
             $ins['tax_section_id'] = $request->section_id;
+            $ins['is_pf_calculation'] = $request->is_pf_calculation;
             $ins['name'] = $request->name;
             $ins['slug'] = Str::slug($request->name.' '.$section_info->name);
             $ins['added_by'] = auth()->id();

@@ -544,6 +544,17 @@
                         </div>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
+                                <a class="menu-link  @if (request()->routeIs(['it-calculation'])) active @endif"
+                                    href="{{ route('it-calculation') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Income Tax Calculation </span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['salary.loan'])) active @endif"
                                     href="{{ route('salary.loan') }}">
                                     <span class="menu-bullet">

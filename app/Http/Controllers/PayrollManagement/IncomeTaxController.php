@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\PayrollManagement;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
+use App\Models\PayrollManagement\OtherIncome;
+use App\Models\PayrollManagement\StaffSalaryPattern;
+use App\Models\PayrollManagement\StaffSalaryPatternField;
 use App\Models\Staff\StaffDeduction;
+use App\Models\Staff\StaffOtherIncome;
 use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
@@ -40,15 +45,19 @@ class IncomeTaxController extends Controller
                 case 'income':
                     return view('pages.income_tax._income_pane');
                     break;
+
                 case 'deductions':
                     $sections = TaxSection::where('tax_scheme_id', $current_scheme->id)->get();
-                    $params['sections'] = $sections;
-                    
+                    $params['sections'] = $sections;                    
                     return view('pages.income_tax._deduction_pane', $params);
                     break;
+
                 case 'other_income':
+                    $params['other_incomes'] = OtherIncome::where('status', 'active')->get();
+                    $params['staff_other_incomes'] = StaffOtherIncome::where('staff_id', $staff_id)->get();
                     return view('pages.income_tax._other_income', $params);
                     break;
+
                 case 'regime':
                     return view('pages.income_tax._scheme_pane', $params);
                     break;
@@ -63,10 +72,37 @@ class IncomeTaxController extends Controller
     }
 
     public function getDeductionRow(Request $request) {
+
         $section_id = $request->section_id;
         $staff_id = $request->staff_id;
         $from = $request->from;
-        $items = TaxSectionItem::where('tax_section_id', $section_id)->get();
+        $items = TaxSectionItem::where('tax_section_id', $section_id)
+                ->where('is_pf_calculation', 'no')->get();
+        $academic_data = AcademicYear::find(academicYearId());
+
+        if( $academic_data ) {
+
+            $sdate = $academic_data->from_year.'-'.$academic_data->from_month.'-01';
+            $start_date = date('Y-m-d', strtotime($sdate));
+            $edate = $academic_data->to_year.'-'.$academic_data->to_month.'-01';
+            $end_date = date('Y-m-t', strtotime($edate));
+
+            $salary_pattern = StaffSalaryPattern::where(['staff_id' => $staff_id, 'verification_status' => 'approved'])
+                            ->where(function($q) use($start_date, $end_date){
+                                $q->where('payout_month', '>=', $start_date);
+                                $q->where('payout_month', '<=', $end_date);
+                            })
+                            ->first();
+            
+            $pf_data = StaffSalaryPatternField::join('salary_fields', 'salary_fields.id', '=', 'staff_salary_pattern_fields.field_id') 
+                        ->where('staff_salary_pattern_id', $salary_pattern->id)
+                        ->where('salary_fields.short_name', 'EPF')
+                        ->first();
+                        
+        }
+        
+        $pf_calc_data = TaxSectionItem::where('tax_section_id', $section_id)
+                        ->where('is_pf_calculation', 'yes')->get();
         $section_info = TaxSection::find($section_id);
         $deductions = StaffDeduction::where('staff_id', $staff_id)->where('tax_section_id', $section_id)->get();
         $params = array(
@@ -74,9 +110,12 @@ class IncomeTaxController extends Controller
             'staff_id' => $staff_id,
             'section_info' => $section_info,
             'deductions' => $deductions,
-            'from' => $from
+            'from' => $from,
+            'pf_calc_data' => $pf_calc_data,
+            'pf_data' => $pf_data ?? []
         );
         return view('pages.income_tax._deduction_row', $params);
+
     }
 
     public function saveDeduction(Request $request) {
@@ -113,6 +152,50 @@ class IncomeTaxController extends Controller
             }
             $error = 0;
             $message = 'Deduction items added successfully';
+        } else {
+            $message = $validator->errors()->all();
+            $error = 1;
+        }
+        return array( 'error' => $error, 'message' => $message );
+    }
+
+    public function getOtherIncomeRow(Request $request) {
+
+        $params['other_incomes'] = OtherIncome::where('status', 'active')->get();
+        return view('pages.income_tax._other_income_row', $params);
+
+    }
+
+    public function saveOtherIncome(Request $request) {
+        $validator      = Validator::make($request->all(), [
+            'staff_id' => 'required' 
+        ]);
+
+        if ($validator->passes()) { 
+
+            $description_id = $request->description_id;
+            $amount = $request->amount;
+            $remarks = $request->remarks;
+            $staff_id = $request->staff_id;
+
+            if( $description_id && count($description_id) > 0 ) {
+                StaffOtherIncome::where(['staff_id' => $staff_id])->delete();
+                for ($i=0; $i < count($description_id); $i++) { 
+                    $ins = [];
+                    $ins['academic_id'] = academicYearId();
+                    $ins['staff_id'] = $staff_id;
+                    $ins['other_income_id'] = $description_id[$i];
+                    $ins['remarks'] = $remarks[$i];
+                    $ins['amount'] = $amount[$i];
+                    $ins['status'] = 'active';
+                    $ins['added_by'] = auth()->id();
+                    $ins['updated_by'] = auth()->id();
+
+                    StaffOtherIncome::create($ins);
+                }
+            }
+            $error = 0;
+            $message = 'Other Income items added successfully';
         } else {
             $message = $validator->errors()->all();
             $error = 1;

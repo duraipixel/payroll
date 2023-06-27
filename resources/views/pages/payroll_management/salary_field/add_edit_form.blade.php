@@ -1,6 +1,6 @@
 <form action="" class="" id="dynamic_form">
     <style>
-        #multi_field + .select2.select2-container {
+        #multi_field+.select2.select2-container {
             width: 100% !important;
         }
     </style>
@@ -100,19 +100,28 @@
 
     </div>
 
-    <div class="fv-row form-group mb-10  @if (isset($info->entry_type) && $info->entry_type == 'manual') d-none @elseif(!isset($info->entry_type)) d-none  @endif" id="calcuation-pane">
+    <div class="fv-row form-group mb-10  @if (isset($info->entry_type) && $info->entry_type == 'manual') d-none @elseif(!isset($info->entry_type)) d-none @endif"
+        id="calcuation-pane">
         <h4>Select Fields with Percentage</h4>
-        <div class="row"  id="field-item-pane">
-            <div class="col-sm-6" >
+        <div class="row" id="field-item-pane">
+            <div class="col-sm-6">
                 <select name="multi_field[]" id="multi_field" class="form-control" multiple>
-                   
+                    @if (isset($fields) && !empty($fields) && count($fields) > 0)
+                        @php
+                            $selected_id = $info->field_items->multi_field_id ?? '';
+                            $selected_id = explode(',', $selected_id);
+                        @endphp
+                        @foreach ($fields as $item)
+                            <option value="{{ $item->id }}" @if (isset($selected_id) && in_array($item->id, $selected_id)) selected @endif>
+                                {{ $item->name }}</option>
+                        @endforeach
+                    @endif
                 </select>
             </div>
             <div class="col-sm-6">
                 <div class="w-100">
-                    <input type="text" class="form-control field-input numberonly"
-                        id="basic_input" value="" placeholder="Percentage %"
-                        name="percentage" id="" required>
+                    <input type="text" class="form-control field-input numberonly" id="basic_input" value="{{ $info->field_items->percentage ?? '' }}"
+                        placeholder="Percentage %" name="percentage"  id="" required>
                 </div>
             </div>
         </div>
@@ -142,8 +151,9 @@
                     Order in the Salary slip
                 </label>
                 <div>
-                    <input type="text" name="order_in_salary_slip" value="{{ $info->order_in_salary_slip ?? '' }}"
-                        id="order_in_salary_slip" class="form-control">
+                    <input type="text" name="order_in_salary_slip"
+                        value="{{ $info->order_in_salary_slip ?? '' }}" id="order_in_salary_slip"
+                        class="form-control">
                 </div>
             </div>
         </div>

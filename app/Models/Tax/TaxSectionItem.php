@@ -22,7 +22,8 @@ class TaxSectionItem extends Model
         'reference_slug',	
         'added_by',	
         'updated_by',
-        'tax_section_id'
+        'tax_section_id',
+        'is_pf_calculation'
     ];
 
     public function section() {

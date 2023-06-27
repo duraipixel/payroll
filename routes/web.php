@@ -289,6 +289,10 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('it/tab',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'getTab'])->name('it.tab');
     Route::post('it/deduction/row',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'getDeductionRow'])->name('it.deduction.row');
     Route::post('it/deduction/save',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'saveDeduction'])->name('it.deduction.save');
+    Route::post('it/other/income/row',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'getOtherIncomeRow'])->name('it.other.income.row');
+    Route::post('it/other/income/save',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'saveOtherIncome'])->name('it.other.income.save');
+    #income tax calculation
+    Route::get('it-calculation',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'index'])->name('it-calculation');
 
     ## salary creation & update & revison
     Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');

@@ -54,6 +54,9 @@
     <li class="nav-item">
         <a class="nav-link tax-link regime" data-id="regime" onclick="return getTaxTabInfo('regime')" href="javascript:void(0)">Regime / Schemes </a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link tax-link taxpayable" data-id="taxpayable" onclick="return getTaxTabInfo('taxpayable')" href="javascript:void(0)"> TaxPayable Calculation </a>
+    </li>
 </ul>
 <div id="tab_load_content" class="p-3">
     @include('pages.income_tax._income_pane')

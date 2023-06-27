@@ -102,9 +102,27 @@ class SalaryFieldController extends Controller
         if (isset($id) && !empty($id)) {
             $info = SalaryField::find($id);
             $title = 'Update Salary Fields';
+            
+            $nature_id = $info->nature_id;
+            $fields = SalaryField::select('id', 'name')
+                    ->where('salary_head_id', 1)
+                    ->where('nature_id', $nature_id)
+                    ->where('status', 'active')
+                    ->orderBy('order_in_salary_slip')->get();
+            
+            
         }
 
-        $content = view('pages.payroll_management.salary_field.add_edit_form', compact('info', 'title','heads', 'from', 'nature'));
+        $params = array(
+            'info' => $info,
+            'title' => $title,
+            'heads' => $heads,
+            'from' => $from,
+            'nature' => $nature,
+            'fields' => $fields ?? []
+        );
+
+        $content = view('pages.payroll_management.salary_field.add_edit_form', $params);
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
 
