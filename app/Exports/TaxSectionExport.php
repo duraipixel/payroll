@@ -52,19 +52,5 @@ class TaxSectionExport implements FromCollection, WithMapping, WithHeadings
             'Created At',
         ];
     }
-    // public function collection()
-    // {
-    //     return TaxSection::with('scheme.name')->selectRaw('tax_sections.name, maximum_limit,tax_sections.status,tax_sections.created_at');
-    // }
-
-    // public function headings(): array
-    // {
-    //     return [
-    //     'Tax Scheme',
-    //     'Tax Section',
-    //     'Maximum Limit',
-    //     'Status',
-    //     'Created At',
-    //     ]; 
-    // }
+    
 }

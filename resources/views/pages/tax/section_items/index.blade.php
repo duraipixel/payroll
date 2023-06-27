@@ -26,7 +26,7 @@
                             ->getName();
                     @endphp
                     @if (access()->buttonAccess($route_name, 'export'))
-                        <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('taxsection.export') }}">
+                        <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('taxsection-item.export') }}">
                             {!! exportSvg() !!}
                             Export
                         </a>

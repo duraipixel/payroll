@@ -25,8 +25,8 @@
                     Item Name
                 </label>
                 <div>
-                    <input type="text" class="form-control" name="item_name" value="{{ $info->name ?? '' }}"
-                        id="item_name" required>
+                    <input type="text" class="form-control" name="name" value="{{ $info->name ?? '' }}"
+                        id="name" required>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@
                                 },
                             }
                         },
-                        'item_name': {
+                        'name': {
                             validators: {
                                 notEmpty: {
                                     message: 'Item name is required'

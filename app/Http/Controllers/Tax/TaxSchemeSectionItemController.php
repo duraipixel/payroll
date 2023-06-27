@@ -13,6 +13,7 @@ use DataTables;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TaxSchemeSectionItemController extends Controller
 {
@@ -100,9 +101,18 @@ class TaxSchemeSectionItemController extends Controller
     public function save(Request $request)
     {
         $id = $request->id ?? '';
+        $section_id = $request->section_id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'item_name' => 'required|string',
+            'name' => ['required','string',
+                        Rule::unique('tax_section_items')->where(function ($query) use($section_id, $id) {
+                            return $query->where('deleted_at', NULL)
+                            ->where('tax_section_id', $section_id)
+                            ->when($id != '', function($q) use($id){
+                                return $q->where('id', '!=', $id);
+                            });
+                        }),
+                    ],
             'section_id' => 'required'
         ]);
         
@@ -111,8 +121,8 @@ class TaxSchemeSectionItemController extends Controller
             $ins['academic_id'] = academicYearId();
             $ins['tax_scheme_id'] = $section_info->tax_scheme_id;
             $ins['tax_section_id'] = $request->section_id;
-            $ins['name'] = $request->item_name;
-            $ins['slug'] = Str::slug($request->item_name.' '.$section_info->name);
+            $ins['name'] = $request->name;
+            $ins['slug'] = Str::slug($request->name.' '.$section_info->name);
             $ins['added_by'] = auth()->id();
             $ins['updated_by'] = auth()->id();
 
