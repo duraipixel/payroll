@@ -25,8 +25,8 @@
                     Tax Section Name
                 </label>
                 <div>
-                    <input type="text" class="form-control" name="section" value="{{ $info->name ?? '' }}"
-                        id="section" required>
+                    <input type="text" class="form-control" name="name" value="{{ $info->name ?? '' }}"
+                        id="name" required>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@
                                 },
                             }
                         },
-                        'section': {
+                        'name': {
                             validators: {
                                 notEmpty: {
                                     message: 'Tax Section is required'

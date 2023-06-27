@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PayrollManagement;
 
 use App\Http\Controllers\Controller;
 use App\Models\ItTabulation;
+use App\Models\Tax\TaxScheme;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -35,11 +36,13 @@ class ItTabulationController extends Controller
     public function addEditModal(Request $request) {
         $title = 'Add New Tax Scheme';
         $slug = $request->slug;
+        $tax_scheme = TaxScheme::where('status', 'active')->get();
         if( $slug ) {
             $details = ItTabulation::where('slug', $slug)->get();
         }
         $params = array(
-            'details' => $details ?? ''
+            'details' => $details ?? '',
+            'tax_scheme' => $tax_scheme
         );
 
         $content = view('pages.payroll_management.it_tabulation.add_edit_form', $params);
@@ -51,13 +54,14 @@ class ItTabulationController extends Controller
         
         $id = $request->id;
         $validator      = Validator::make($request->all(), [
-            'scheme' => 'required',
+            'scheme_id' => 'required',
             'slab_amount' => 'required' 
         ]);
 
         if ($validator->passes()) { 
             
-            $scheme = $request->scheme;
+            $scheme_id = $request->scheme_id;
+            $scheme_info = TaxScheme::find($scheme_id);
             $slab_amount = $request->slab_amount;
             $from_amount = $request->from_amount;
             $to_amount = $request->to_amount;
@@ -69,8 +73,9 @@ class ItTabulationController extends Controller
                 }
                 for ($i=0; $i < count( $from_amount); $i++) { 
                     $ins = [];
-                    $ins['scheme'] = $scheme;
-                    $ins['slug'] = Str::slug($scheme);
+                    $ins['scheme_id'] = $scheme_id;
+                    $ins['scheme'] = $scheme_info->name;
+                    $ins['slug'] = Str::slug($scheme_info->name);
                     $ins['slab_amount'] = $slab_amount;
                     $ins['from_amount'] = $from_amount[$i];
                     $ins['to_amount'] = $to_amount[$i];

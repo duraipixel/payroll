@@ -139,11 +139,16 @@ class TaxSchemeController extends Controller
     public function setCurrent(Request $request)
     {
         $id             = $request->id;
-        TaxScheme::where('status', 'active')->update(['is_current' => 'no']);
-        $info           = TaxScheme::find($id);
-        $info->is_current   = 'yes';
-        $info->update();
-        return response()->json(['message' => "You set current Scheme!", 'status' => 1]);
+        if( $id ){
+
+            TaxScheme::where('status', 'active')->update(['is_current' => 'no']);
+            $info           = TaxScheme::find($id);
+            $info->is_current   = 'yes';
+            $info->update();
+            return response()->json(['message' => "You set current Scheme!", 'status' => 0]);
+        } else {
+            return response()->json(['message' => "Scheme is required!", 'status' => 1]);
+        }
     }
 
     public function delete(Request $request)

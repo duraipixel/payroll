@@ -476,7 +476,9 @@
                         'it.tabulation',
                         'taxscheme',
                         'taxsection',
-                        'taxsection-item'
+                        'taxsection-item',
+                        'it',
+                        'other-income'
                     ])) hover show @endif">
                         <span class="menu-link">
                             <span class="menu-icon">
@@ -526,6 +528,17 @@
                                         <span class="bullet bullet-dot"></span>
                                     </span>
                                     <span class="menu-title">Hold Salary</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link  @if (request()->routeIs(['it'])) active @endif"
+                                    href="{{ route('it') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Income Tax</span>
                                 </a>
                             </div>
                         </div>
@@ -627,6 +640,17 @@
                                         <span class="bullet bullet-dot"></span>
                                     </span>
                                     <span class="menu-title">Scheme Section Item</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link  @if (request()->routeIs(['other-income'])) active @endif"
+                                    href="{{ route('other-income') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Other Income</span>
                                 </a>
                             </div>
                         </div>

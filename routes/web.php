@@ -250,6 +250,13 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
     Route::post('salary/revision/status/change/modal',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatusModal'])->name('salary.revision.status.modal');
     Route::post('salary/revision/status/change',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatus'])->name('salary.revision.status.change');
+    #Other Income Section
+    Route::get('other-income',[App\Http\Controllers\PayrollManagement\OtherIncomeController::class,'index'])->name('other-income');
+    Route::post('other-income/add',[App\Http\Controllers\PayrollManagement\OtherIncomeController::class,'add_edit'])->name('other-income.add_edit');
+    Route::post('other-income/save',[App\Http\Controllers\PayrollManagement\OtherIncomeController::class,'save'])->name('other-income.save');
+    Route::post('other-income/status/change',[App\Http\Controllers\PayrollManagement\OtherIncomeController::class,'changeStatus'])->name('other-income.change.status');
+    Route::post('other-income/delete',[App\Http\Controllers\PayrollManagement\OtherIncomeController::class,'delete'])->name('other-income.delete');
+    Route::get('other-income/export',[App\Http\Controllers\PayrollManagement\OtherIncomeController::class,'export'])->name('other-income.export');
     #Income Tax Calculations
     Route::get('it/tabulation',[App\Http\Controllers\PayrollManagement\ItTabulationController::class,'index'])->name('it.tabulation');
     Route::post('it/tabulation/add_edit',[App\Http\Controllers\PayrollManagement\ItTabulationController::class,'addEditModal'])->name('it.tabulation.modal');
@@ -277,6 +284,12 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('taxsection-itemstatus/change',[App\Http\Controllers\Tax\TaxSchemeSectionItemController::class,'changeStatus'])->name('taxsection-item.change.status');
     Route::post('taxsection-itemdelete',[App\Http\Controllers\Tax\TaxSchemeSectionItemController::class,'delete'])->name('taxsection-item.delete');
     Route::get('taxsection-itemexport',[App\Http\Controllers\Tax\TaxSchemeSectionItemController::class,'export'])->name('taxsection-item.export');
+    #income tax
+    Route::get('it',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'index'])->name('it');
+    Route::post('it/tab',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'getTab'])->name('it.tab');
+    Route::post('it/deduction/row',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'getDeductionRow'])->name('it.deduction.row');
+    Route::post('it/deduction/save',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'saveDeduction'])->name('it.deduction.save');
+
     ## salary creation & update & revison
     Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
     Route::post('salary/creation_add',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryAdd'])->name('salary.creation_add');

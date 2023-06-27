@@ -70,7 +70,8 @@
                                     @if (isset($scheme) && count($scheme) > 0)
                                         @foreach ($scheme as $item)
                                             <td class="p-3 text-center">
-                                                {{ getITSlabeInfo($sitem->from_amount, $sitem->to_amount, $item->slug)->percentage ? (int) getITSlabeInfo($sitem->from_amount, $sitem->to_amount, $item->slug)->percentage : 0 }}%
+                                                {{-- {{ getITSlabeInfo($sitem->from_amount, $sitem->to_amount, $item->slug)->percentage ? (int) getITSlabeInfo($sitem->from_amount, $sitem->to_amount, $item->slug)->percentage : 0 }}% --}}
+                                                {{ getITSlabeInfo($sitem->from_amount, $sitem->to_amount, $item->slug) ? (int) getITSlabeInfo($sitem->from_amount, $sitem->to_amount, $item->slug)->percentage : 0 }}%
                                             </td>
                                         @endforeach
                                     @endif

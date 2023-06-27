@@ -3,19 +3,13 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
-    <style>
-        #tax_section_item_table td,
-        th {
-            padding: 0px 10px;
-        }
-    </style>
     <div class="card">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! searchSvg() !!}
-                    <input type="text" data-kt-user-table-filter="search" id="tax_section_item_datatable"
-                        class="form-control form-control-solid w-250px ps-14" placeholder="Search Tax Section Items">
+                    <input type="text" data-kt-user-table-filter="search" id="other_income_datatable_search"
+                        class="form-control form-control-solid w-250px ps-14" placeholder="Search Other Income">
                 </div>
             </div>
             <div class="card-toolbar">
@@ -26,14 +20,14 @@
                             ->getName();
                     @endphp
                     @if (access()->buttonAccess($route_name, 'export'))
-                        <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('taxsection-item.export') }}">
+                        <a type="button" class="btn btn-light-primary btn-sm me-3" href="{{ route('other-income.export') }}">
                             {!! exportSvg() !!}
                             Export
                         </a>
                     @endif
                     @if (access()->buttonAccess($route_name, 'add_edit'))
-                        <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getTaxSectionItemModal()">
-                            {!! plusSvg() !!} Add Tax Section Items
+                        <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getOtherIncomeModal()">
+                            {!! plusSvg() !!} Add Other Income
                         </button>
                     @endif
 
@@ -53,28 +47,19 @@
         <div class="card-body py-4">
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="table-responsive">
-                    <table class="table align-middle table-hover table-bordered table-striped fs-7 no-footer"
-                        id="tax_section_item_table">
+                    <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
+                        id="other_income_table">
                         <thead class="bg-primary">
-                            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                <th class=" text-white  p-3">
-                                    Scheme
-                                </th>
-                                <th class=" text-white w-200px p-3">
-                                    Section
-                                </th>
-                                <th class=" text-white p-3">
-                                    Item
-                                </th>
-                                {{-- <th class=" text-white p-3">
-                                    Maximum Limit
-                                </th> --}}
-                                {{-- <th class=" text-white p-3">
-                                    Status
-                                </th> --}}
-                                <th class=" text-white p-3">
-                                    Actions
-                                </th>
+
+                            <th class="text-center text-white">
+                                Other Income Name
+                            </th>
+                            <th class="text-center text-white">
+                                Status
+                            </th>
+                            <th class="text-center text-white">
+                                Actions
+                            </th>
                             </tr>
                         </thead>
 
@@ -85,44 +70,36 @@
 
             </div>
         </div>
-        <!--end::Card body-->
     </div>
 @endsection
 
 @section('add_on_script')
     <script>
-        var dtTable = $('#tax_section_item_table').DataTable({
+        var dtTable = $('#other_income_table').DataTable({
 
             processing: true,
             serverSide: true,
-            order: [0, 'desc'],
+            order: [
+                [0, "DESC"]
+            ],
             type: 'POST',
             ajax: {
-                "url": "{{ route('taxsection-item') }}",
+                "url": "{{ route('other-income') }}",
                 "data": function(d) {
-                    d.datatable_search = $('#tax_section_item_datatable').val();
+                    d.datatable_search = $('#other_income_datatable_search').val();
                 }
             },
 
             columns: [
-                {
-                    data: 'section.scheme.name',
-                    name: 'section.scheme.name',
-                },
-                {
-                    data: 'section.name',
-                    name: 'section.name',
-                },
 
                 {
                     data: 'name',
-                    name: 'name',
+                    name: 'name'
                 },
-                // {
-                //     data: 'maximum_limit',
-                //     name: 'maximum_limit'
-                // },
-
+                {
+                    data: 'status',
+                    name: 'status'
+                },
                 {
                     data: 'action',
                     name: 'action',
@@ -146,35 +123,22 @@
         $('.dataTables_filter').addClass('position-absolute end-0 top-0');
         $('.dataTables_length label select').addClass('form-control form-control-solid');
 
-        document.querySelector('#tax_section_item_datatable').addEventListener("keyup", function(e) {
-                dtTable.draw();
-            }),
-
-            $('#search-form').on('submit', function(e) {
-                dtTable.draw();
-                e.preventDefault();
-            });
-        $('#search-form').on('reset', function(e) {
-            $('select[name=filter_status]').val(0).change();
-
+        document.querySelector('#other_income_datatable_search').addEventListener("keyup", function(e) {
             dtTable.draw();
-            e.preventDefault();
         });
 
-        function getTaxSectionItemModal(id = '') {
+        function getOtherIncomeModal(id = '') {
 
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var formMethod = "addEdit";
             $.ajax({
-                url: "{{ route('taxsection-item.add_edit') }}",
+                url: "{{ route('other-income.add_edit') }}",
                 type: 'POST',
                 data: {
                     id: id,
-
                 },
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');
@@ -184,7 +148,7 @@
 
         }
 
-        function taxSectionItemChangeStatus(id, status) {
+        function otherIncomeChangeStatus(id, status) {
 
             Swal.fire({
                 text: "Are you sure you would like to change status?",
@@ -206,7 +170,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('taxsection-item.change.status') }}",
+                        url: "{{ route('other-income.change.status') }}",
                         type: 'POST',
                         data: {
                             id: id,
@@ -236,7 +200,8 @@
             });
         }
 
-        function deleteTaxSectionItem(id) {
+        function deleteOtherIncome(id) {
+
             Swal.fire({
                 text: "Are you sure you would like to delete record?",
                 icon: "warning",
@@ -257,12 +222,13 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('taxsection-item.delete') }}",
+                        url: "{{ route('other-income.delete') }}",
                         type: 'POST',
                         data: {
                             id: id,
                         },
                         success: function(res) {
+                            
                             dtTable.ajax.reload();
                             Swal.fire({
                                 title: "Updated!",
@@ -285,6 +251,5 @@
                 }
             });
         }
-
     </script>
 @endsection

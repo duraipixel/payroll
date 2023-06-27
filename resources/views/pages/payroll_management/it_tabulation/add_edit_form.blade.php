@@ -1,14 +1,20 @@
 <form class="" id="it_slab_form">
     @csrf
-    
+
     <div class="row form-group ">
         <div class="col-md-6">
             <label class="form-label required" for="">
                 Tax Scheme
             </label>
             <div>
-                <input type="text" name="scheme" id="scheme" class="form-input"
-                    value="{{ $details[0]->scheme ?? '' }}" required>
+                <select name="scheme_id" id="scheme_id" class="form-input w-100">
+                    <option value="">--select--</option>
+                    @if (isset($tax_scheme) && !empty($tax_scheme))
+                        @foreach ($tax_scheme as $item)
+                        <option value="{{ $item->id }}" @if( isset( $details[0]->scheme_id ) && $details[0]->scheme_id == $item->id ) selected @endif>{{ $item->name }}</option>
+                        @endforeach
+                    @endif
+                </select>
             </div>
         </div>
         <input type="hidden" name="slug" value="{{ $details[0]->slug ?? '' }}">
@@ -28,14 +34,16 @@
                         <div class="form-group w-25">
                             <label for="">From Amount</label>
                             <div>
-                                <input type="text" name="from_amount[]" value="{{ $item->from_amount ? (int)($item->from_amount) : '' }}" id="from_amount" required
-                                    class="form-input price ">
+                                <input type="text" name="from_amount[]"
+                                    value="{{ $item->from_amount ? (int) $item->from_amount : '' }}" id="from_amount"
+                                    required class="form-input price ">
                             </div>
                         </div>
                         <div class="form-group w-25">
                             <label for="">To Amount</label>
                             <div>
-                                <input type="text" name="to_amount[]" id="to_amount" value="{{ $item->to_amount ? (int)($item->to_amount) : '' }}" required
+                                <input type="text" name="to_amount[]" id="to_amount"
+                                    value="{{ $item->to_amount ? (int) $item->to_amount : '' }}" required
                                     class="form-input price ">
                             </div>
                         </div>
@@ -43,7 +51,8 @@
                             <label class="" for="">Percentage</label>
                             <div>
                                 <input type="text" name="percentage[]" required id="percentage"
-                                    class="form-input price w-100 text-end" value="{{ $item->percentage ? (int)$item->percentage : '' }}">
+                                    class="form-input price w-100 text-end"
+                                    value="{{ $item->percentage ? (int) $item->percentage : '' }}">
 
                             </div>
                         </div>

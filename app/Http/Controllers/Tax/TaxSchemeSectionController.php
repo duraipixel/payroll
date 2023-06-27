@@ -12,6 +12,7 @@ use DataTables;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TaxSchemeSectionController extends Controller
 {
@@ -99,18 +100,29 @@ class TaxSchemeSectionController extends Controller
     public function save(Request $request)
     {
         $id = $request->id ?? '';
+        $scheme_id = $request->scheme_id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'section' => 'required|string|unique:tax_sections,name,' . $id .',id,deleted_at,NULL',
+            
+            'name' => ['required','string',
+                        Rule::unique('tax_sections')->where(function ($query) use($scheme_id, $id) {
+                            return $query->where('deleted_at', NULL)
+                            ->where('tax_scheme_id', $scheme_id)
+                            ->when($id != '', function($q) use($id){
+                                return $q->where('id', '!=', $id);
+                            });
+                        }),
+                    ],
             'scheme_id' => 'required'
         ]);
+
         
         if ($validator->passes()) {
 
             $ins['academic_id'] = academicYearId();
             $ins['tax_scheme_id'] = $request->scheme_id;
-            $ins['name'] = $request->section;
-            $ins['slug'] = Str::slug($request->scheme);
+            $ins['name'] = $request->name;
+            $ins['slug'] = Str::slug($request->name);
             $ins['maximum_limit'] = $request->maximum_limit;
             $ins['status'] = $request->status;
             $ins['added_by'] = auth()->id();
