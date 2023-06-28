@@ -29,7 +29,7 @@
                                         <option value="">--select--</option>
                                         @if (isset($other_incomes) && !empty($other_incomes))
                                             @foreach ($other_incomes as $item)
-                                                <option value="{{ $item->id }}" @if(isset($sitem) && $sitem->id == $item->id ) selected @endif>{{ $item->name }}</option>
+                                                <option value="{{ $item->id }}" @if(isset($sitem) && $sitem->other_income_id == $item->id ) selected @endif>{{ $item->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>

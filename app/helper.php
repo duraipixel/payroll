@@ -27,7 +27,10 @@ use App\Models\Master\Institution;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
 use App\Models\PayrollManagement\StaffSalaryPatternField;
+use App\Models\Staff\StaffDeduction;
 use App\Models\Staff\StaffHandlingSubject;
+use App\Models\Staff\StaffOtherIncome;
+use App\Models\Tax\TaxScheme;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -613,5 +616,83 @@ if (!function_exists('getStaffVerificationStatus')) {
     function getItSlabInfo($slug) {
         return ItTabulation::where(['slug' => $slug])->first();
     }
+
+function getProfessionTaxAmount($amount, $pay_start_date) {
+    
+}
+
+function getStaffOtherIncomeAmount($staff_id, $other_income_id) {
+    $academic_id = academicYearId();
+    $info = StaffOtherIncome::where('academic_id', $academic_id)->where(['staff_id' => $staff_id, 'other_income_id' => $other_income_id, 'status' => 'active'])->first();
+    return $info->amount ?? 0;
+}
+
+function getStaffDeductionAmount($staff_id, $slug) {
+    $academic_id = academicYearId();
+    $info = StaffDeduction::selectRaw('sum(amount) as amount')->join('tax_sections', 'tax_sections.id', '=', 'staff_deductions.tax_section_id')
+    ->where('tax_sections.slug', 'self-occupied-house')
+    ->where('staff_deductions.staff_id', $staff_id)
+    ->where('staff_deductions.status', 'active')->where('staff_deductions.academic_id', $academic_id)
+    ->first();
+    return $info->amount ?? 0;
+}
+
+function getStaffDeduction80CAmount($staff_id, $section_item_id ) {
+    $academic_id = academicYearId();
+
+    $info = StaffDeduction::where(['academic_id' => $academic_id, 'staff_id' => $staff_id, 'tax_section_item_id' => $section_item_id])->first();
+    return $info->amount ?? 0;
+}
+
+function getCurrentTaxSchemeId() {
+    $current_tax_schemes = TaxScheme::where('is_current', 'yes')->first();
+    return $current_tax_schemes->id ?? '';
+}
+
+function roundOff($amount) {
+    $last_number = substr($amount, -1);
+    if( $last_number > 0 ) {
+        $amount  = $amount + 1;
+    }
+    return $amount;
+}
+
+function getTaxablePayAmountUsingSlabs($amount) {
+    
+    // $amount = '842500';
+    $total_amount = $amount;
+    $tax_amount = 0;
+    // $slab_details = ItTabulation::where('scheme_id',  getCurrentTaxSchemeId())->where('status', 'active')
+    $slab_details = ItTabulation::where('scheme_id',  1)->where('status', 'active')
+                    ->orderBy('from_amount')->get();
+    $tax = [];
+    if( isset( $slab_details ) && !empty( $slab_details ) ) {
+        foreach ( $slab_details as $slab ) {
+            $tmp = [];
+            $slab_amount = $slab->slab_amount ?? 0;
+            
+            if( $slab->to_amount <= $total_amount ) {
+                $amount = $amount - $slab_amount;
+                $tmp['balance_amount'] = $amount;
+                $tmp['percentage'] = $slab->percentage;
+                $tmp['percentage_amount'] = getPercentageAmount( $slab->percentage, $slab_amount);
+                $tax_amount += $tmp['percentage_amount'];
+            } else if( $slab->from_amount <= $total_amount && $slab->to_amount >= $total_amount ) {
+                $tmp['balance_amount'] = $amount;
+                $tmp['percentage'] = $slab->percentage;
+                $tmp['percentage_amount'] = getPercentageAmount( $slab->percentage, $amount);
+                $tax_amount += $tmp['percentage_amount'];
+            }
+            $tax[] = $tmp;
+        }
+    }
+    
+    return $tax_amount;
+    
+}
+
+function checkSlabAmount($slab_amount, $from_amount, $to_amount, $amount ) {
+
+}
 
     

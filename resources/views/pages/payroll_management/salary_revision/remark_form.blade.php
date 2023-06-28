@@ -2,6 +2,7 @@
     @csrf
     {{-- <input type="hidden" name="revision[]" value="<?php print_r($revision ?? ''); ?>"> --}}
     <input type="hidden" name="status" value="{{ $status ?? '' }}">
+    <input type="hidden" name="revision_status" value="{{ $revision_status ?? '' }}">
 
     <div class="row form-group ">
         <div class="col-md-12">

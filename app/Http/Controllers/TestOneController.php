@@ -55,4 +55,10 @@ class TestOneController extends Controller
         Excel::import( new OldStaffEntryImport, request()->file('file') );
         return response()->json(['error'=> 0, 'message' => 'Imported successfully']);
     }
+
+    public function sampleITStatement() {
+        $data = [];
+        $pdf = PDF::loadView('pages.sample.pdf.income_tax_statement', [ 'data' => $data])->setPaper('a4', 'portrait');
+        return $pdf->stream('appointment.pdf');
+    }
 }

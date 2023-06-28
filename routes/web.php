@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test-appointment-pdf', [App\Http\Controllers\TestOneController::class, 'testAppointmentPdf']);
+Route::get('/sample-it-statement', [App\Http\Controllers\TestOneController::class, 'sampleITStatement']);
 
 Route::get('/delete_preview_pdf', [App\Http\Controllers\TestOneController::class, 'deletePreviewPdf']);
 Route::get('/leave-application', [App\Http\Controllers\LeaveFormGeneratorController::class, 'leaveApplication']);
@@ -293,6 +294,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('it/other/income/save',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'saveOtherIncome'])->name('it.other.income.save');
     #income tax calculation
     Route::get('it-calculation',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'index'])->name('it-calculation');
+    Route::get('it-calculation/generate/pdf',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'generatePdf'])->name('it-calculation.generate.pdf');
+    Route::post('it-calculation/get/calculation/form',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'getCalculationForm'])->name('it-calculation.calculation.form');
 
     ## salary creation & update & revison
     Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');

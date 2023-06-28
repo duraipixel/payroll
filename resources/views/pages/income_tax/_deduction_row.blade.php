@@ -1,4 +1,4 @@
-@if (isset($pf_calc_data) && count($pf_calc_data) > 0  && $pf_data )
+@if (isset($pf_calc_data) && count($pf_calc_data) > 0  && $pf_data && $from )
     {{-- @foreach ($pf_calc_data as $pf_item) --}}
         <tr class="delete_row">
             <td class="p-2">

@@ -93,11 +93,15 @@ class IncomeTaxController extends Controller
                                 $q->where('payout_month', '<=', $end_date);
                             })
                             ->first();
+            if( $salary_pattern ) {
+
+                $pf_data = StaffSalaryPatternField::join('salary_fields', 'salary_fields.id', '=', 'staff_salary_pattern_fields.field_id') 
+                            ->where('staff_salary_pattern_id', $salary_pattern->id)
+                            ->where('salary_fields.short_name', 'EPF')
+                            ->first();
+
+            }
             
-            $pf_data = StaffSalaryPatternField::join('salary_fields', 'salary_fields.id', '=', 'staff_salary_pattern_fields.field_id') 
-                        ->where('staff_salary_pattern_id', $salary_pattern->id)
-                        ->where('salary_fields.short_name', 'EPF')
-                        ->first();
                         
         }
         
@@ -177,7 +181,7 @@ class IncomeTaxController extends Controller
             $amount = $request->amount;
             $remarks = $request->remarks;
             $staff_id = $request->staff_id;
-
+            // dd( $request->all() );
             if( $description_id && count($description_id) > 0 ) {
                 StaffOtherIncome::where(['staff_id' => $staff_id])->delete();
                 for ($i=0; $i < count($description_id); $i++) { 

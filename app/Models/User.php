@@ -36,6 +36,7 @@ use Laravel\Sanctum\HasApiTokens;
 use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryPattern;
+use App\Models\Staff\StaffDeduction;
 
 class User extends Authenticatable implements Auditable
 {
@@ -378,5 +379,23 @@ class User extends Authenticatable implements Auditable
     } 
     public function StaffAppointmentDetail() {
         return $this->hasMany(StaffAppointmentDetail::class, 'staff_id', 'id')->where('status', 'active');
+    }
+
+    public function staffNationalPestion() {
+        return $this->hasOne(StaffDeduction::class, 'staff_id', 'id')->join('tax_section_items', 'tax_section_items.id', '=', 'staff_deductions.tax_section_item_id')
+                    ->where('tax_section_items.academic_id', academicYearId())->where('tax_section_items.tax_scheme_id', getCurrentTaxSchemeId())
+                    ->where('tax_section_items.slug', 'national-pension-system-80-ccd-1b');
+    }
+
+    public function staffMedicalPolicyDeduction() {
+        return $this->hasOne(StaffDeduction::class, 'staff_id', 'id')->join('tax_section_items', 'tax_section_items.id', '=', 'staff_deductions.tax_section_item_id')
+        ->where('tax_section_items.academic_id', academicYearId())->where('tax_section_items.tax_scheme_id', getCurrentTaxSchemeId())
+        ->where('tax_section_items.slug', 'medical-insurance-for-assessee-or-any-member-of-the-family-medical-insurance');
+    }
+
+    public function staffBankInterest80TTADedcution() {
+        return $this->hasOne(StaffDeduction::class, 'staff_id', 'id')->join('tax_section_items', 'tax_section_items.id', '=', 'staff_deductions.tax_section_item_id')
+        ->where('tax_section_items.academic_id', academicYearId())->where('tax_section_items.tax_scheme_id', getCurrentTaxSchemeId())
+        ->where('tax_section_items.slug', 'savings-bank-interest-80tta');
     }
 }

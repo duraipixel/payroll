@@ -63,11 +63,13 @@ class SalaryRevisionController extends Controller
 
         $revision = $request->revision;
         $status = $request->status;
+        $revision_status = $request->revision_status;
         $title = ucfirst($status).' Remarks';
          
         $params = array(
             'revision' => $revision,
-            'status' => $status
+            'status' => $status,
+            'revision_status' => $revision_status
         );
 
         $content = view('pages.payroll_management.salary_revision.remark_form', $params);
@@ -79,6 +81,7 @@ class SalaryRevisionController extends Controller
 
         $status = $request->status;
         $remarks = $request->remarks;
+        $revision_status = $request->revision_status;
         $revision = $request->revision;
         $revision = explode(',', $revision);
         $message = 'Error occured while changing status';
@@ -89,14 +92,17 @@ class SalaryRevisionController extends Controller
                 $patter_info = StaffSalaryPattern::find($item);
                 if( $patter_info ) {
                     if( $status == 'approved') {
+                        if( $revision_status != 'pending') {
 
-                        $check_exist= StaffSalaryPattern::where('staff_id', $patter_info->staff_id)
-                                        ->where('payout_month', $patter_info->payout_month)
-                                        ->where('verification_status', '!=', 'rejected')
-                                        ->first();
-                        // dd( $check_exist );
-                        if( $check_exist ) {
-                            return array('error' => 1, 'message' => 'Cannot approve. Revision for payout month in list');
+                            $check_exist= StaffSalaryPattern::where('staff_id', $patter_info->staff_id)
+                                            ->where('payout_month', $patter_info->payout_month)
+                                            ->where('verification_status', '!=', 'rejected')
+                                            ->where('verification_status', '!=', 'rejected')
+                                            ->first();
+                            // dd( $check_exist );
+                            if( $check_exist ) {
+                                return array('error' => 1, 'message' => 'Cannot approve. Revision for payout month in list');
+                            }
                         }
                         $patter_info->approved_on = date('Y-m-d H:i:s');
                         $patter_info->approved_remarks = $remarks;

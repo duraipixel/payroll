@@ -125,9 +125,9 @@ class SalaryCreationController extends Controller
                
                 if( $current_active && $current_active->payout_month < $payout_month ) {
                     StaffSalaryPattern::where(['staff_id' => $staff_id])->update(['is_current' => 'no']);
-                    $is_current = $exist->is_current ?? 'yes';
+                    $is_current = 'yes';
                 } else {
-                    $is_current = $exist->is_current ?? 'no';
+                    $is_current = $exist->is_current ?? 'yes';
                 }
 
                 $insert_data['staff_id'] = $staff_id;
@@ -258,6 +258,7 @@ class SalaryCreationController extends Controller
             $params['all_salary_patterns'] = $all_salary_patterns;
             $params['current_pattern'] = $current_pattern;
             $params['staff_details'] = $staff_details;
+            
             return view('pages.payroll_management.salary_creation._revision_list', $params);
         }
     }

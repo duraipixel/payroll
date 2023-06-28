@@ -203,7 +203,7 @@
         function changeRevisionStatus(stat) {
 
             let count = $(".revision_check:checked").length;
-            onsole.log(count, 'count');
+            var revision_status = $('#revision_status').val();
             if (count == 0) {
                 toastr.error('Error', 'Select atleast one checkbox to continue')
                 return false;
@@ -218,7 +218,7 @@
             $.ajax({
                 url: "{{ route('salary.revision.status.modal') }}",
                 type: 'POST',
-                data: fromData+'&status='+stat,
+                data: fromData+'&status='+stat+'&revision_status='+revision_status,
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');
                     $('#kt_dynamic_app').html(res);

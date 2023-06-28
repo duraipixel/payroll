@@ -141,8 +141,7 @@
         }
 
         function getNetSalary(amount, field_id = '', field_name = '') {
-            console.log(field_name, 'field_name');
-            doAmountCalculation();
+            // console.log(field_name, 'field_name');
 
             $.ajaxSetup({
                 headers: {
@@ -170,6 +169,8 @@
                                 .toFixed(2));
                         })
                     }
+                    doAmountCalculation();
+
                     //    $('#amount_'+res)
                 }
             });
