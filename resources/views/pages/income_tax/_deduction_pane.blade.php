@@ -18,8 +18,11 @@
                     </div>
                 </div>
                 <div class="from-group">
+                    @if( isset( $statement_data ) && !empty( $statement_data ))
+                    @else
                     <button type="button" class="btn btn-primary btn-sm" onclick="return addDeductionItem()"> Add New
                     </button>
+                    @endif
                 </div>
             </div>
         </div>

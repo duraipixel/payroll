@@ -52,11 +52,16 @@
         <a class="nav-link tax-link other_income" data-id="other_income" onclick="return getTaxTabInfo('other_income')" href="javascript:void(0)">Other Income</a>
     </li>
     <li class="nav-item">
+        <a class="nav-link tax-link rent" data-id="rent" onclick="return getTaxTabInfo('rent')" href="javascript:void(0)">House Rent</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link tax-link regime" data-id="regime" onclick="return getTaxTabInfo('regime')" href="javascript:void(0)">Regime / Schemes </a>
     </li>
+    @if( isset( $statement_data ) && !empty( $statement_data ) && $statement_data->is_staff_calculation_done == 'no' )
     <li class="nav-item">
         <a class="nav-link tax-link taxpayable" data-id="taxpayable" onclick="return getTaxTabInfo('taxpayable')" href="javascript:void(0)"> TaxPayable Calculation </a>
     </li>
+    @endif
 </ul>
 <div id="tab_load_content" class="p-3">
     @include('pages.income_tax._income_pane')

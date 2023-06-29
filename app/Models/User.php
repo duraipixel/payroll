@@ -37,6 +37,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\Staff\StaffDeduction;
+use App\Models\Staff\StaffRentDetail;
 
 class User extends Authenticatable implements Auditable
 {
@@ -397,5 +398,13 @@ class User extends Authenticatable implements Auditable
         return $this->hasOne(StaffDeduction::class, 'staff_id', 'id')->join('tax_section_items', 'tax_section_items.id', '=', 'staff_deductions.tax_section_item_id')
         ->where('tax_section_items.academic_id', academicYearId())->where('tax_section_items.tax_scheme_id', getCurrentTaxSchemeId())
         ->where('tax_section_items.slug', 'savings-bank-interest-80tta');
+    }
+
+    public function staffRentByAcademic() {
+        return $this->hasOne(StaffRentDetail::class, 'staff_id', 'id')->where('academic_id', academicYearId());
+    }
+
+    public function staffRents() {
+        return $this->hasOne(StaffRentDetail::class, 'staff_id', 'id');
     }
 }

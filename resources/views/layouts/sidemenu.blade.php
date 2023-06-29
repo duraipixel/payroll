@@ -478,7 +478,8 @@
                         'taxsection',
                         'taxsection-item',
                         'it',
-                        'other-income'
+                        'other-income',
+                        'it-calculation'
                     ])) hover show @endif">
                         <span class="menu-link">
                             <span class="menu-icon">

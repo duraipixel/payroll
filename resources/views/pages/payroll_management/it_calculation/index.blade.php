@@ -71,7 +71,7 @@
         });
 
         function getStaffTaxCalculationPane(staff_id) {
-            console.log(staff_id);
+            
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -24,19 +24,24 @@ use App\Helpers\AccessGuard;
 use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\ItTabulation;
 use App\Models\Master\Institution;
+use App\Models\PayrollManagement\ItStaffStatement;
+use App\Models\PayrollManagement\OtherIncome;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
+use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\PayrollManagement\StaffSalaryPatternField;
 use App\Models\Staff\StaffDeduction;
 use App\Models\Staff\StaffHandlingSubject;
 use App\Models\Staff\StaffOtherIncome;
 use App\Models\Tax\TaxScheme;
+use App\Models\Tax\TaxSection;
+use App\Models\Tax\TaxSectionItem;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
     {
         $data = AcademicYear::where('is_current', 1)->first();
-        if( session()->get('academic_id') && !empty( session()->get('academic_id') ) ) {
+        if (session()->get('academic_id') && !empty(session()->get('academic_id'))) {
             return session()->get('academic_id');
         }
         return $data->id;
@@ -48,7 +53,7 @@ if (!function_exists('access')) {
     {
         return new AccessGuard();
     }
-} 
+}
 
 if (!function_exists('dotReplaceUnderscore')) {
     function dotReplaceUnderscore($value)
@@ -56,22 +61,19 @@ if (!function_exists('dotReplaceUnderscore')) {
         $str = str_replace('.', '__', $value);
         return $str;
     }
-} 
+}
 
 if (!function_exists('permissionCheckAll')) {
-    function permissionCheckAll($role_id,$menu_type)
+    function permissionCheckAll($role_id, $menu_type)
     {
-        $check_array=[];
+        $check_array = [];
         foreach ($menu_type as $key => $value) {
-            $menu_check = Permission::where('role_id', $role_id)->where('add_edit_menu','1')
-            ->where('view_menu','1')->where('delete_menu','1')->where('export_menu','1')->where('route_name',$key)->first();   
-            if($menu_check)
-            {
-                $check_array=1;
-            }
-            else
-            {
-                $check_array=0;
+            $menu_check = Permission::where('role_id', $role_id)->where('add_edit_menu', '1')
+                ->where('view_menu', '1')->where('delete_menu', '1')->where('export_menu', '1')->where('route_name', $key)->first();
+            if ($menu_check) {
+                $check_array = 1;
+            } else {
+                $check_array = 0;
             }
         }
         return $check_array;
@@ -79,32 +81,23 @@ if (!function_exists('permissionCheckAll')) {
 }
 
 if (!function_exists('permissionCheck')) {
-    function permissionCheck($role_id,$key,$type)
+    function permissionCheck($role_id, $key, $type)
     {
-        if($type=='add_edit')
-        {
-            $menu_check = Permission::where('role_id', $role_id)->where('add_edit_menu','1')->where('route_name',$key)->first();            
+        if ($type == 'add_edit') {
+            $menu_check = Permission::where('role_id', $role_id)->where('add_edit_menu', '1')->where('route_name', $key)->first();
+        } else if ($type == 'view') {
+            $menu_check = Permission::where('role_id', $role_id)->where('view_menu', '1')->where('route_name', $key)->first();
+        } else if ($type == 'delete') {
+            $menu_check = Permission::where('role_id', $role_id)->where('delete_menu', '1')->where('route_name', $key)->first();
+        } else if ($type == 'export') {
+            $menu_check = Permission::where('role_id', $role_id)->where('export_menu', '1')->where('route_name', $key)->first();
+        } else {
+            return false;
         }
-        else if($type=='view')
-        {
-            $menu_check = Permission::where('role_id', $role_id)->where('view_menu','1')->where('route_name',$key)->first(); 
-        }
-        else if($type=='delete')
-        {
-            $menu_check = Permission::where('role_id', $role_id)->where('delete_menu','1')->where('route_name',$key)->first(); 
-        }
-        else if($type=='export')
-        {
-            $menu_check = Permission::where('role_id', $role_id)->where('export_menu','1')->where('route_name',$key)->first();
-        }
+        if ($menu_check)
+            return true;
         else
-        {
-            return false; 
-        }
-        if($menu_check)            
-            return true;           
-        else            
-            return false;         
+            return false;
     }
 }
 
@@ -351,14 +344,15 @@ if (!function_exists('generateLeaveForm')) {
         return true;
     }
 
-    function buildTree( $reportee_id ) {
-        
+    function buildTree($reportee_id)
+    {
+
         $info = ReportingManager::where('reportee_id', $reportee_id)->where('is_top_level', 'no')->get();
         $tree_view = '';
-        if( isset( $info ) && !empty( $info )) {
+        if (isset($info) && !empty($info)) {
             $tree_view = '<ul class="active">';
             foreach ($info as $item_value) {
-                
+
                 $tree_view .= ' <li>
                                     <a href="javascript:void(0);">
                                         <div class="member-view-box">
@@ -366,12 +360,12 @@ if (!function_exists('generateLeaveForm')) {
                                                 <img src="http://localhost/amalpayroll/assets/images/no_Image.jpg"
                                                     alt="Member">
                                                 <div class="member-details">
-                                                    <h3>'.$item_value->manager->name.'</h3>
+                                                    <h3>' . $item_value->manager->name . '</h3>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>';
-                
+
                 $tree_view .= buildChild($item_value->manager_id);
                 $tree_view .= '</li>';
             }
@@ -381,15 +375,16 @@ if (!function_exists('generateLeaveForm')) {
         echo $tree_view;
     }
 
-    function buildChild( $reportee_id ) {
-        
+    function buildChild($reportee_id)
+    {
+
         $list  = '';
         $info = ReportingManager::where('reportee_id', $reportee_id)->where('is_top_level', 'no')->get();
-        
-        if( isset( $info ) && !empty( $info )) {
+
+        if (isset($info) && !empty($info)) {
             $list = '<ul class="active">';
             foreach ($info as $item_value) {
-                
+
                 $list .= ' <li>
                                     <a href="javascript:void(0);">
                                         <div class="member-view-box">
@@ -397,7 +392,7 @@ if (!function_exists('generateLeaveForm')) {
                                                 <img src="http://localhost/amalpayroll/assets/images/no_Image.jpg"
                                                     alt="Member">
                                                 <div class="member-details">
-                                                    <h3>'.$item_value->manager->name.'</h3>
+                                                    <h3>' . $item_value->manager->name . '</h3>
                                                 </div>
                                             </div>
                                         </div>
@@ -411,74 +406,76 @@ if (!function_exists('generateLeaveForm')) {
         return $list;
     }
 
-    function getTotalExperience($staff_id) {
-        return '1 year';//need to do calculation
+    function getTotalExperience($staff_id)
+    {
+        return '1 year'; //need to do calculation
     }
 
-    function commonDateFormat( $date ) {
+    function commonDateFormat($date)
+    {
 
-        if( $date ) {            
+        if ($date) {
             return date('d/m/Y', strtotime($date));
         }
-        
     }
 
-    function getTotalLeaveCount($staff_id) {
+    function getTotalLeaveCount($staff_id)
+    {
         $staff_info = User::find($staff_id);
         $allocated_total_leave = 0;
         $taken_leave = 0;
         $balance_leave = 0;
-        if( $staff_info->appointment->nature_of_employment_id ?? '' ){
+        if ($staff_info->appointment->nature_of_employment_id ?? '') {
             $total_leaves = LeaveMapping::selectRaw('sum(CAST(leave_mappings.leave_days AS DECIMAL(10, 2))) as total')->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)->where('status', 'active')->first();
-            
-            if( $total_leaves ) {
+
+            if ($total_leaves) {
                 $allocated_total_leave = $total_leaves->total;
             }
         }
         $leaves = StaffLeave::selectRaw('SUM(no_of_days) as taken_leave')->where('staff_id', $staff_id)
-                    // ->where('status', 'approved')
-                    ->first();
-        if( $leaves ) {
+            // ->where('status', 'approved')
+            ->first();
+        if ($leaves) {
             $taken_leave = $leaves->taken_leave ?? 0;
         }
-        if( $allocated_total_leave >= $taken_leave ) {
+        if ($allocated_total_leave >= $taken_leave) {
             $balance_leave = $allocated_total_leave - $taken_leave;
         }
-        return array( 
-                    'allocated_total_leave' => $allocated_total_leave,
-                    'taken_leave' => $taken_leave,
-                    'balance_leave' => $balance_leave
-                );
-        
+        return array(
+            'allocated_total_leave' => $allocated_total_leave,
+            'taken_leave' => $taken_leave,
+            'balance_leave' => $balance_leave
+        );
     }
 
     function attendanceYear()
     {
-        $date = '1/Jan/'.date('Y').' - 31/Dec/'.date('Y');
+        $date = '1/Jan/' . date('Y') . ' - 31/Dec/' . date('Y');
         return $date;
     }
 
-    function getAllInstitute() {
+    function getAllInstitute()
+    {
         return Institution::where('status', 'active')->get();
     }
 
-    function getInstituteInfo($id) {
+    function getInstituteInfo($id)
+    {
         return Institution::find($id);
     }
 
     function getSalarySelectedFields($staff_id, $staff_salary_id, $field_id)
     {
         return StaffSalaryPatternField::where('staff_id', $staff_id)->where('staff_salary_pattern_id', $staff_salary_id)
-                ->where('field_id', $field_id)->first();
+            ->where('field_id', $field_id)->first();
     }
-
 }
 
 if (!function_exists('getStaffVerificationStatus')) {
     function getStaffVerificationStatus($staff_id, $module)
     {
 
-        $user_info = User::find( $staff_id );
+        $user_info = User::find($staff_id);
 
         switch ($module) {
             case 'data_entry':
@@ -493,8 +490,8 @@ if (!function_exists('getStaffVerificationStatus')) {
                 // $studienSubject = StaffStudiedSubject::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $return = false;
-                
-                if( $personalInfo && $professional_data && count( $education ) > 0 && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($expeince) > 0 &&  count($knownLanguages) > 0 && count($staffbank) > 0  ){
+
+                if ($personalInfo && $professional_data && count($education) > 0 && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($expeince) > 0 &&  count($knownLanguages) > 0 && count($staffbank) > 0) {
                     $return = true;
                 }
                 return $return;
@@ -512,9 +509,9 @@ if (!function_exists('getStaffVerificationStatus')) {
                 $doc_expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
                 $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $return = false;
-            
-                if( count($education) > 0 && count($doc_education) == 0 && count( $expeince ) > 0 && count($doc_expeince) == 0 && count($personal_doc) > 0 ) {
-                  $return = true;
+
+                if (count($education) > 0 && count($doc_education) == 0 && count($expeince) > 0 && count($doc_expeince) == 0 && count($personal_doc) > 0) {
+                    $return = true;
                 }
                 return $return;
                 break;
@@ -532,9 +529,9 @@ if (!function_exists('getStaffVerificationStatus')) {
                 $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $count_personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'verification_status' => 'approved'])->get();
                 $return = false;
-                if( count( $education ) > 0 &&  count($expeince) > 0 && count($personal_doc) > 0 ) {
+                if (count($education) > 0 &&  count($expeince) > 0 && count($personal_doc) > 0) {
 
-                    if( ( count($education) == count($doc_education) )  && ( count( $expeince ) == count($doc_expeince) ) && count($personal_doc) == count($count_personal_doc) ) {
+                    if ((count($education) == count($doc_education))  && (count($expeince) == count($doc_expeince)) && count($personal_doc) == count($count_personal_doc)) {
                         $return = true;
                     }
                 }
@@ -543,11 +540,11 @@ if (!function_exists('getStaffVerificationStatus')) {
             case 'salary_entry';
                 $return = false;
                 $staff_salaries = StaffSalary::where('staff_id', $staff_id)->where('status', 'active')->first();
-                if( $staff_salaries ) {
+                if ($staff_salaries) {
                     $return = true;
                 }
                 return $return;
-            break;
+                break;
             default:
                 return false;
                 break;
@@ -555,144 +552,269 @@ if (!function_exists('getStaffVerificationStatus')) {
     }
 }
 
-    function canGenerateEmpCode($staff_id) {
-        $personalInfo = StaffPersonalInfo::where('staff_id', $staff_id)->first();
-        $professional_data = StaffProfessionalData::where('staff_id', $staff_id)->first();
-        $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $family_members = StaffFamilyMember::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $nominee = StaffNominee::where(['staff_id' => $staff_id])->get();
-        $health_details = StaffHealthDetail::where('staff_id', $staff_id)->first();
-        $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $knownLanguages = StaffKnownLanguage::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $studienSubject = StaffStudiedSubject::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $personal_return = false;
-        if( $personalInfo && $professional_data && count( $education ) > 0 && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($expeince) > 0 &&  count($knownLanguages) > 0 && count($studienSubject) > 0 && count($staffbank) > 0  ){
-            $personal_return = true;
-        }
-
-        $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
-        $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $doc_expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
-        $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $edu_return = false;
-    
-        if( count($education) > 0 && count($doc_education) == 0 && count( $expeince ) > 0 && count($doc_expeince) == 0 && count($personal_doc) > 0 ) {
-          $edu_return = true;
-        }
-
-        $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id,  'verification_status' => 'approved'])->whereNotNull('doc_file')->get();
-        $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $doc_expeince = StaffWorkExperience::where(['staff_id' => $staff_id,  'verification_status' => 'approved'])->whereNotNull('doc_file')->get();
-        $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-        $count_personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'verification_status' => 'approved'])->get();
-        $verified_return = false;
-        if( ( count($education) == count($doc_education) )  && ( count( $expeince ) == count($doc_expeince) ) && count($personal_doc) == count($count_personal_doc) ) {
-            $verified_return = true;
-        }
-
-        $is_return = false;
-        if( $verified_return && $edu_return && $personal_return ){
-            $is_return = true;
-        }
-        return $is_return;
+function canGenerateEmpCode($staff_id)
+{
+    $personalInfo = StaffPersonalInfo::where('staff_id', $staff_id)->first();
+    $professional_data = StaffProfessionalData::where('staff_id', $staff_id)->first();
+    $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $family_members = StaffFamilyMember::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $nominee = StaffNominee::where(['staff_id' => $staff_id])->get();
+    $health_details = StaffHealthDetail::where('staff_id', $staff_id)->first();
+    $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $knownLanguages = StaffKnownLanguage::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $studienSubject = StaffStudiedSubject::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $personal_return = false;
+    if ($personalInfo && $professional_data && count($education) > 0 && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($expeince) > 0 &&  count($knownLanguages) > 0 && count($studienSubject) > 0 && count($staffbank) > 0) {
+        $personal_return = true;
     }
 
-    function getPercentageAmount($percentage, $amount) {
-        return ($percentage/100) * $amount;
+    $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
+    $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $doc_expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
+    $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $edu_return = false;
+
+    if (count($education) > 0 && count($doc_education) == 0 && count($expeince) > 0 && count($doc_expeince) == 0 && count($personal_doc) > 0) {
+        $edu_return = true;
     }
 
-    function previousSalaryData($pattern_id, $field_id) {
-        return StaffSalaryPatternField::where('staff_salary_pattern_id', $pattern_id)
-                ->where('field_id', $field_id)->first();
+    $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id,  'verification_status' => 'approved'])->whereNotNull('doc_file')->get();
+    $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $doc_expeince = StaffWorkExperience::where(['staff_id' => $staff_id,  'verification_status' => 'approved'])->whereNotNull('doc_file')->get();
+    $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    $count_personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'verification_status' => 'approved'])->get();
+    $verified_return = false;
+    if ((count($education) == count($doc_education))  && (count($expeince) == count($doc_expeince)) && count($personal_doc) == count($count_personal_doc)) {
+        $verified_return = true;
     }
 
-    function getITSlabeInfo($from_amount, $to_amount, $slug) {
-        return ItTabulation::where(['from_amount' => $from_amount, 'to_amount' => $to_amount, 'slug' => $slug])->first();
+    $is_return = false;
+    if ($verified_return && $edu_return && $personal_return) {
+        $is_return = true;
     }
-
-    function getItSlabInfo($slug) {
-        return ItTabulation::where(['slug' => $slug])->first();
-    }
-
-function getProfessionTaxAmount($amount, $pay_start_date) {
-    
+    return $is_return;
 }
 
-function getStaffOtherIncomeAmount($staff_id, $other_income_id) {
+function getPercentageAmount($percentage, $amount)
+{
+    return ($percentage / 100) * $amount;
+}
+
+function previousSalaryData($pattern_id, $field_id)
+{
+    return StaffSalaryPatternField::where('staff_salary_pattern_id', $pattern_id)
+        ->where('field_id', $field_id)->first();
+}
+
+function getITSlabeInfo($from_amount, $to_amount, $slug)
+{
+    return ItTabulation::where(['from_amount' => $from_amount, 'to_amount' => $to_amount, 'slug' => $slug])->first();
+}
+
+function getItSlabInfo($slug)
+{
+    return ItTabulation::where(['slug' => $slug])->first();
+}
+
+function getProfessionTaxAmount($salary_pattern)
+{
+}
+
+function getStaffOtherIncomeAmount($staff_id, $other_income_id)
+{
     $academic_id = academicYearId();
     $info = StaffOtherIncome::where('academic_id', $academic_id)->where(['staff_id' => $staff_id, 'other_income_id' => $other_income_id, 'status' => 'active'])->first();
     return $info->amount ?? 0;
 }
 
-function getStaffDeductionAmount($staff_id, $slug) {
+function getStaffDeductionAmount($staff_id, $slug)
+{
     $academic_id = academicYearId();
     $info = StaffDeduction::selectRaw('sum(amount) as amount')->join('tax_sections', 'tax_sections.id', '=', 'staff_deductions.tax_section_id')
-    ->where('tax_sections.slug', 'self-occupied-house')
-    ->where('staff_deductions.staff_id', $staff_id)
-    ->where('staff_deductions.status', 'active')->where('staff_deductions.academic_id', $academic_id)
-    ->first();
+        ->where('tax_sections.slug', 'self-occupied-house')
+        ->where('staff_deductions.staff_id', $staff_id)
+        ->where('staff_deductions.status', 'active')->where('staff_deductions.academic_id', $academic_id)
+        ->first();
     return $info->amount ?? 0;
 }
 
-function getStaffDeduction80CAmount($staff_id, $section_item_id ) {
+function getStaffDeduction80CAmount($staff_id, $section_item_id)
+{
     $academic_id = academicYearId();
 
     $info = StaffDeduction::where(['academic_id' => $academic_id, 'staff_id' => $staff_id, 'tax_section_item_id' => $section_item_id])->first();
     return $info->amount ?? 0;
 }
 
-function getCurrentTaxSchemeId() {
+function getCurrentTaxSchemeId()
+{
     $current_tax_schemes = TaxScheme::where('is_current', 'yes')->first();
     return $current_tax_schemes->id ?? '';
 }
 
-function roundOff($amount) {
+function roundOff($amount)
+{
     $last_number = substr($amount, -1);
-    if( $last_number > 0 ) {
+    if ($last_number > 0) {
         $amount  = $amount + 1;
     }
     return $amount;
 }
 
-function getTaxablePayAmountUsingSlabs($amount) {
-    
+function getTaxablePayAmountUsingSlabs($amount)
+{
+
     // $amount = '842500';
     $total_amount = $amount;
     $tax_amount = 0;
     // $slab_details = ItTabulation::where('scheme_id',  getCurrentTaxSchemeId())->where('status', 'active')
     $slab_details = ItTabulation::where('scheme_id',  1)->where('status', 'active')
-                    ->orderBy('from_amount')->get();
+        ->orderBy('from_amount')->get();
     $tax = [];
-    if( isset( $slab_details ) && !empty( $slab_details ) ) {
-        foreach ( $slab_details as $slab ) {
+    if (isset($slab_details) && !empty($slab_details)) {
+        foreach ($slab_details as $slab) {
             $tmp = [];
             $slab_amount = $slab->slab_amount ?? 0;
-            
-            if( $slab->to_amount <= $total_amount ) {
+
+            if ($slab->to_amount <= $total_amount) {
                 $amount = $amount - $slab_amount;
                 $tmp['balance_amount'] = $amount;
                 $tmp['percentage'] = $slab->percentage;
-                $tmp['percentage_amount'] = getPercentageAmount( $slab->percentage, $slab_amount);
+                $tmp['percentage_amount'] = getPercentageAmount($slab->percentage, $slab_amount);
                 $tax_amount += $tmp['percentage_amount'];
-            } else if( $slab->from_amount <= $total_amount && $slab->to_amount >= $total_amount ) {
+            } else if ($slab->from_amount <= $total_amount && $slab->to_amount >= $total_amount) {
                 $tmp['balance_amount'] = $amount;
                 $tmp['percentage'] = $slab->percentage;
-                $tmp['percentage_amount'] = getPercentageAmount( $slab->percentage, $amount);
+                $tmp['percentage_amount'] = getPercentageAmount($slab->percentage, $amount);
                 $tax_amount += $tmp['percentage_amount'];
             }
             $tax[] = $tmp;
         }
     }
-    
-    return $tax_amount;
-    
+
+    return round($tax_amount);
 }
 
-function checkSlabAmount($slab_amount, $from_amount, $to_amount, $amount ) {
+function getHRAAmount($scheme_id, $staff_id, $salary_pattern)
+{
 
+    /**
+     * 1. Get Actual HRA
+     * 2. Get Rent Annual Amount
+     * 3. Excess of  (BASIC + DA )*12 - ANNUAL_RENT_AMOUNT
+     * 4. Find lowest value of these and return values;
+     */
+
+    $staff_info = User::find($staff_id);
+    $actual_hra_amount = ($salary_pattern->hra->amount ?? 0) * 12;
+    $rent_amount = $staff_info->staffRentByAcademic->annual_rent ?? 0;
+    $basic = ($salary_pattern->basic->amount ?? 0) * 12;
+    $da = ($salary_pattern->da->amount ?? 0) * 12;
+    $excess_amount = getPercentageAmount(10, (($basic + $da) - $rent_amount));
+
+    $hra_amount = $actual_hra_amount;
+    if ($excess_amount < $actual_hra_amount) {
+        $hra_amount = $excess_amount;
+    }
+    return $hra_amount;
 }
 
-    
+function getTaxOtherSalaryCalulatedMonth($salary_pattern)
+{
+    $academic_info = AcademicYear::find(academicYearId());
+    $start_year = $academic_info->from_year . '-04-01';
+    $end_year = $academic_info->to_year . '-03-31';
+    $s_date = date('Y-m-d', strtotime($start_year));
+    $e_date = date('Y-m-d', strtotime($end_year));
+    $payout_month = $salary_pattern->payout_month; //2022-04-01
+    $payout_month = date('Y-m-d', strtotime($payout_month));
+    $counted_months = 12;
+    if ($payout_month > $start_year && $payout_month < $e_date) {
+        //find diff month
+        $counted_months = findDiffMonth($payout_month, $e_date);
+    }
+    return $counted_months;
+}
+
+function findDiffMonth($date1, $date2)
+{
+    //$date1 must be small date and $date2 must be big date
+    $ts1 = strtotime($date1);
+    $ts2 = strtotime($date2);
+
+    $year1 = date('Y', $ts1);
+    $year2 = date('Y', $ts2);
+
+    $month1 = date('m', $ts1);
+    $month2 = date('m', $ts2);
+
+    $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+    return $diff + 1;
+}
+
+function generateIncomeTaxStatementPdfByStaff($statement_id)
+{
+    $info = ItStaffStatement::find($statement_id);
+
+    $file_name = time() . '_ITStatement.pdf';
+
+    $directory              = 'public/it/statement/' . $info->staff->society_emp_code;
+    $filename               = $directory . '/' . $file_name;
+
+    $sdate = $info->academic->from_year . '-' . $info->academic->from_month . '-01';
+    $start_date = date('Y-m-d', strtotime($sdate));
+    $edate = $info->academic->to_year . '-' . $info->academic->to_month . '-01';
+    $end_date = date('Y-m-t', strtotime($edate));
+
+    $salary_pattern = StaffSalaryPattern::where(['staff_id' => $info->staff_id, 'verification_status' => 'approved'])
+        ->where(function ($q) use ($start_date, $end_date) {
+            $q->where('payout_month', '>=', $start_date);
+            $q->where('payout_month', '<=', $end_date);
+        })
+        ->first();
+
+    if (isset($salary_pattern) && !empty($salary_pattern)) {
+
+        $salary_calculated_month = getTaxOtherSalaryCalulatedMonth($salary_pattern);
+    }
+
+    $current_tax_schemes = TaxScheme::where('is_current', 'yes')->first();
+    $other_income = OtherIncome::where('status', 'active')->get();
+    $deduction_80c = TaxSectionItem::select('tax_section_items.*')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
+        ->where('tax_sections.slug', '80c')
+        ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->get();
+    $deduction_80c_info = TaxSection::where('slug', '80c')->where('tax_scheme_id', $current_tax_schemes->id)->first();
+    $medical_insurance = TaxSectionItem::select('tax_section_items.*', 'tax_sections.maximum_limit')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
+        ->where('tax_sections.slug', 'medical-insurance')
+        ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->first();
+    $bank_interest_80tta = TaxSectionItem::select('tax_section_items.*', 'tax_sections.maximum_limit')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
+        ->where('tax_sections.slug', '80tta')
+        ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->first();
+
+    $national_pension_80cc1b = TaxSectionItem::select('tax_section_items.*', 'tax_sections.maximum_limit')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
+        ->where('tax_sections.slug', '80-ccd-1b')
+        ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->first();
+
+    $params = array(
+        'pf_data' => $pf_data ?? [],
+        'other_income' => $other_income,
+        'deduction_80c' => $deduction_80c,
+        'deduction_80c_info' => $deduction_80c_info,
+        'medical_insurance' => $medical_insurance,
+        'bank_interest_80tta' => $bank_interest_80tta,
+        'national_pension_80cc1b' => $national_pension_80cc1b,
+        'salary_calculated_month' => $salary_calculated_month ?? 0,
+        'info' => $info,
+        'salary_pattern' => $salary_pattern
+    );
+
+    $pdf = PDF::loadView('pages.payroll_management.it_calculation._pdf_view', $params)->setPaper('a4', 'portrait');
+    // return $pdf->stream('appointment.pdf');
+    Storage::put($filename, $pdf->output());
+    $info->document = $file_name;
+    $info->save();
+
+}

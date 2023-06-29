@@ -67,7 +67,10 @@
                     <input type="text" name="remarks[]" value="{{ $ded->remarks ?? '' }}" class="form-input">
                 </td>
                 <td class="p-2 text-center">
+                    @if( isset( $statement_data ) && !empty( $statement_data ) ) 
+                    @else 
                     <i class="fa fa-trash p-2 text-danger" role="button" onclick="return removeDeductionRow(this)"></i>
+                    @endif
                 </td>
             </tr>
         @endforeach

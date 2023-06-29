@@ -292,10 +292,16 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('it/deduction/save',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'saveDeduction'])->name('it.deduction.save');
     Route::post('it/other/income/row',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'getOtherIncomeRow'])->name('it.other.income.row');
     Route::post('it/other/income/save',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'saveOtherIncome'])->name('it.other.income.save');
+    Route::post('it/rent/add',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'rentModal'])->name('it.rent.add');
+    Route::post('it/rent/save',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'saveRent'])->name('staff.rent.save');
+    Route::post('it/rent/list',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'rentList'])->name('it.rent.list');
+    Route::post('it/rent/delete',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'rentDelete'])->name('it.rent.delete');
     #income tax calculation
     Route::get('it-calculation',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'index'])->name('it-calculation');
     Route::get('it-calculation/generate/pdf',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'generatePdf'])->name('it-calculation.generate.pdf');
     Route::post('it-calculation/get/calculation/form',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'getCalculationForm'])->name('it-calculation.calculation.form');
+    Route::post('it-calculation/get/tax/calculation',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'ajaxTaxCalculation'])->name('it-calculation.calculation.ajax');
+    Route::post('it-calculation/save/statement',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'saveItStatement'])->name('it-calculation.save.statement');
 
     ## salary creation & update & revison
     Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');

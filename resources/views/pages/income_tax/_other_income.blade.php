@@ -6,7 +6,10 @@
                     <label> Other Income </label>
                 </div>
                 <div class="from-group">
+                    @if( isset( $statement_data ) && !empty( $statement_data ))
+                    @else
                     <button type="button" class="btn btn-primary btn-sm" onclick="return getOIRow()"> Add New </button>
+                    @endif
                 </div>
             </div>
         </div>

@@ -50,4 +50,16 @@ class StaffSalaryPattern extends Model implements Auditable
         return $this->hasOne(User::class, 'id', 'staff_id');
     }
 
+    public function hra() {
+        return $this->hasOne(StaffSalaryPatternField::class, 'staff_salary_pattern_id', 'id')->where('field_name', 'HRA');
+    }
+
+    public function basic() {
+        return $this->hasOne(StaffSalaryPatternField::class, 'staff_salary_pattern_id', 'id')->where('field_name', 'basic');
+    }
+
+    public function da() {
+        return $this->hasOne(StaffSalaryPatternField::class, 'staff_salary_pattern_id', 'id')->where('field_name', 'Dearance Allowance');
+    }
+
 }
