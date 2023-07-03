@@ -33,6 +33,7 @@ use App\Models\PayrollManagement\StaffSalaryPatternField;
 use App\Models\Staff\StaffDeduction;
 use App\Models\Staff\StaffHandlingSubject;
 use App\Models\Staff\StaffOtherIncome;
+use App\Models\Staff\StaffTaxSeperation;
 use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
@@ -816,5 +817,27 @@ function generateIncomeTaxStatementPdfByStaff($statement_id)
     Storage::put($filename, $pdf->output());
     $info->document = $file_name;
     $info->save();
+}
 
+function getStaffPatterFieldAmount($staff_id, $salary_pattern_id, $field_id = '', $field_name = '')
+{
+
+    $info = StaffSalaryPatternField::where('staff_id', $staff_id)->where('staff_salary_pattern_id', $salary_pattern_id)
+        ->when(!empty($field_id), function ($query) use ($field_id) {
+            $query->where('field_id', $field_id)->first();
+        })
+        ->when(!empty($field_name), function ($query) use ($field_name) {
+            $query->where('field_name', $field_name);
+        })->first();
+    return $info->amount ?? 0;
+}
+
+function staffMonthTax($staff_id, $month)
+{
+    // dd(strtolower($month));
+    $info = StaffTaxSeperation::where('staff_id', $staff_id)->where('status', 'active')->where('academic_id', academicYearId())->first();
+    if ($info) {
+        $month = strtolower($month);
+        return $info->$month;
+    }
 }

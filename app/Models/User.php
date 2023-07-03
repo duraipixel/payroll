@@ -38,6 +38,7 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\Staff\StaffDeduction;
 use App\Models\Staff\StaffRentDetail;
+use App\Models\Staff\StaffTaxSeperation;
 
 class User extends Authenticatable implements Auditable
 {
@@ -406,5 +407,9 @@ class User extends Authenticatable implements Auditable
 
     public function staffRents() {
         return $this->hasOne(StaffRentDetail::class, 'staff_id', 'id');
+    }
+
+    public function staffSeperation() {
+        return $this->hasOne(StaffTaxSeperation::class, 'staff_id', 'id')->where('academic_id', academicYearId());
     }
 }

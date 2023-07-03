@@ -296,6 +296,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('it/rent/save',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'saveRent'])->name('staff.rent.save');
     Route::post('it/rent/list',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'rentList'])->name('it.rent.list');
     Route::post('it/rent/delete',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'rentDelete'])->name('it.rent.delete');
+    Route::post('it/tax/add',[App\Http\Controllers\PayrollManagement\IncomeTaxController::class,'addTax'])->name('it.tax.add');
+
     #income tax calculation
     Route::get('it-calculation',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'index'])->name('it-calculation');
     Route::get('it-calculation/generate/pdf',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'generatePdf'])->name('it-calculation.generate.pdf');

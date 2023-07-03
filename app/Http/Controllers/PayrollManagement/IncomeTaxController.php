@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
 use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\PayrollManagement\OtherIncome;
+use App\Models\PayrollManagement\SalaryField;
 use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\PayrollManagement\StaffSalaryPatternField;
 use App\Models\Staff\StaffDeduction;
 use App\Models\Staff\StaffOtherIncome;
 use App\Models\Staff\StaffRentDetail;
+use App\Models\Staff\StaffTaxSeperation;
 use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
@@ -24,8 +26,9 @@ use Illuminate\Validation\Rule;
 
 class IncomeTaxController extends Controller
 {
-    public function index(Request $request) {
-        
+    public function index(Request $request)
+    {
+
         $employees = User::where('status', 'active')->whereNull('is_super_admin')->get();
         $params = array(
             'employees' => $employees
@@ -34,29 +37,64 @@ class IncomeTaxController extends Controller
         return view('pages.income_tax.index', $params);
     }
 
-    public function getTab(Request $request) {
+    public function getTab(Request $request)
+    {
 
         $tab = $request->tab ?? '';
         $staff_id = $request->staff_id;
         $from = $request->from ?? '';
         $params['staff_details'] = User::find($staff_id);
+        $nature_of_employment_id = $params['staff_details']->appointment->nature_of_employment_id ?? '';
+        $params['salary_field'] = SalaryField::where('nature_id', $nature_of_employment_id)->where('salary_head_id', 1)->orderBy('order_in_salary_slip')->get();
+
         $params['tax_scheme'] = TaxScheme::where('status', 'active')->get();
         $current_scheme = TaxScheme::where('is_current', 'yes')->where('status', 'active')->first();
         $statement_data = ItStaffStatement::where(['staff_id' => $staff_id, 'academic_id' => academicYearId(), 'status' => 'active'])->first();
         $params['current_scheme'] = $current_scheme;
         $params['statement_data'] = $statement_data;
-        if( !empty( $from ) ) {
+
+        $academic_data = AcademicYear::find(academicYearId());
+
+        $statement_data = ItStaffStatement::where(['staff_id' => $staff_id, 'academic_id' => $academic_data->id, 'status' => 'active'])->first();
+
+        if ($academic_data) {
+
+            $sdate = $academic_data->from_year . '-' . $academic_data->from_month . '-01';
+            $start_date = date('Y-m-d', strtotime($sdate));
+            $edate = $academic_data->to_year . '-' . $academic_data->to_month . '-01';
+            $end_date = date('Y-m-t', strtotime($edate));
+            $params['start_list_date'] = date('Y-m-d', strtotime($sdate . ' - 1 month'));
+            $salary_pattern = StaffSalaryPattern::where(['staff_id' => $staff_id, 'verification_status' => 'approved'])
+                ->where(function ($q) use ($start_date, $end_date) {
+                    $q->where('payout_month', '>=', $start_date);
+                    $q->where('payout_month', '<=', $end_date);
+                })
+                ->first();
+            if ($salary_pattern) {
+
+                $deduct_data = StaffSalaryPatternField::join('salary_fields', 'salary_fields.id', '=', 'staff_salary_pattern_fields.field_id')
+                    ->where('staff_salary_pattern_id', $salary_pattern->id)
+                    ->where('staff_salary_pattern_fields.reference_type', 'DEDUCTIONS')
+                    ->get();
+
+                $params['deduct_data'] = $deduct_data;
+            }
+        }
+        $params['salary_pattern'] = $salary_pattern;
+
+        if (!empty($from)) {
             return view('pages.income_tax._staff_pane', $params);
         } else {
 
             switch ($tab) {
                 case 'income':
-                    return view('pages.income_tax._income_pane');
+
+                    return view('pages.income_tax._income_pane', $params);
                     break;
 
                 case 'deductions':
                     $sections = TaxSection::where('tax_scheme_id', $current_scheme->id)->get();
-                    $params['sections'] = $sections;  
+                    $params['sections'] = $sections;
 
                     return view('pages.income_tax._deduction_pane', $params);
                     break;
@@ -78,54 +116,50 @@ class IncomeTaxController extends Controller
 
                 case 'taxpayable':
                     return view('pages.income_tax.__taxpayable_form', $params);
-                
+
                 default:
                     # code...
                     break;
             }
-
         }
-
     }
 
-    public function getDeductionRow(Request $request) {
+    public function getDeductionRow(Request $request)
+    {
 
         $section_id = $request->section_id;
         $staff_id = $request->staff_id;
         $from = $request->from;
         $items = TaxSectionItem::where('tax_section_id', $section_id)
-                ->where('is_pf_calculation', 'no')->get();
+            ->where('is_pf_calculation', 'no')->get();
         $academic_data = AcademicYear::find(academicYearId());
 
         $statement_data = ItStaffStatement::where(['staff_id' => $staff_id, 'academic_id' => $academic_data->id, 'status' => 'active'])->first();
 
-        if( $academic_data ) {
+        if ($academic_data) {
 
-            $sdate = $academic_data->from_year.'-'.$academic_data->from_month.'-01';
+            $sdate = $academic_data->from_year . '-' . $academic_data->from_month . '-01';
             $start_date = date('Y-m-d', strtotime($sdate));
-            $edate = $academic_data->to_year.'-'.$academic_data->to_month.'-01';
+            $edate = $academic_data->to_year . '-' . $academic_data->to_month . '-01';
             $end_date = date('Y-m-t', strtotime($edate));
 
             $salary_pattern = StaffSalaryPattern::where(['staff_id' => $staff_id, 'verification_status' => 'approved'])
-                            ->where(function($q) use($start_date, $end_date){
-                                $q->where('payout_month', '>=', $start_date);
-                                $q->where('payout_month', '<=', $end_date);
-                            })
-                            ->first();
-            if( $salary_pattern ) {
+                ->where(function ($q) use ($start_date, $end_date) {
+                    $q->where('payout_month', '>=', $start_date);
+                    $q->where('payout_month', '<=', $end_date);
+                })
+                ->first();
+            if ($salary_pattern) {
 
-                $pf_data = StaffSalaryPatternField::join('salary_fields', 'salary_fields.id', '=', 'staff_salary_pattern_fields.field_id') 
-                            ->where('staff_salary_pattern_id', $salary_pattern->id)
-                            ->where('salary_fields.short_name', 'EPF')
-                            ->first();
-
+                $pf_data = StaffSalaryPatternField::join('salary_fields', 'salary_fields.id', '=', 'staff_salary_pattern_fields.field_id')
+                    ->where('staff_salary_pattern_id', $salary_pattern->id)
+                    ->where('salary_fields.short_name', 'EPF')
+                    ->first();
             }
-            
-                        
         }
-        
+
         $pf_calc_data = TaxSectionItem::where('tax_section_id', $section_id)
-                        ->where('is_pf_calculation', 'yes')->get();
+            ->where('is_pf_calculation', 'yes')->get();
         $section_info = TaxSection::find($section_id);
         $deductions = StaffDeduction::where('staff_id', $staff_id)->where('tax_section_id', $section_id)->get();
         $params = array(
@@ -139,17 +173,17 @@ class IncomeTaxController extends Controller
             'statement_data' => $statement_data ?? ''
         );
         return view('pages.income_tax._deduction_row', $params);
-
     }
 
-    public function saveDeduction(Request $request) {
+    public function saveDeduction(Request $request)
+    {
 
         $validator      = Validator::make($request->all(), [
             'section_id' => 'required',
-            'staff_id' => 'required' 
+            'staff_id' => 'required'
         ]);
 
-        if ($validator->passes()) { 
+        if ($validator->passes()) {
 
             $items = $request->items;
             $amount = $request->amount;
@@ -157,9 +191,9 @@ class IncomeTaxController extends Controller
             $staff_id = $request->staff_id;
             $section_id = $request->section_id;
 
-            if( $items && count($items) > 0 ) {
+            if ($items && count($items) > 0) {
                 StaffDeduction::where(['staff_id' => $staff_id, 'tax_section_id' => $section_id])->delete();
-                for ($i=0; $i < count($items); $i++) { 
+                for ($i = 0; $i < count($items); $i++) {
                     $ins = [];
                     $ins['academic_id'] = academicYearId();
                     $ins['staff_id'] = $staff_id;
@@ -180,31 +214,32 @@ class IncomeTaxController extends Controller
             $message = $validator->errors()->all();
             $error = 1;
         }
-        return array( 'error' => $error, 'message' => $message );
+        return array('error' => $error, 'message' => $message);
     }
 
-    public function getOtherIncomeRow(Request $request) {
+    public function getOtherIncomeRow(Request $request)
+    {
 
         $params['other_incomes'] = OtherIncome::where('status', 'active')->get();
         return view('pages.income_tax._other_income_row', $params);
-
     }
 
-    public function saveOtherIncome(Request $request) {
+    public function saveOtherIncome(Request $request)
+    {
         $validator      = Validator::make($request->all(), [
-            'staff_id' => 'required' 
+            'staff_id' => 'required'
         ]);
 
-        if ($validator->passes()) { 
+        if ($validator->passes()) {
 
             $description_id = $request->description_id;
             $amount = $request->amount;
             $remarks = $request->remarks;
             $staff_id = $request->staff_id;
             // dd( $request->all() );
-            if( $description_id && count($description_id) > 0 ) {
+            if ($description_id && count($description_id) > 0) {
                 StaffOtherIncome::where(['staff_id' => $staff_id])->delete();
-                for ($i=0; $i < count($description_id); $i++) { 
+                for ($i = 0; $i < count($description_id); $i++) {
                     $ins = [];
                     $ins['academic_id'] = academicYearId();
                     $ins['staff_id'] = $staff_id;
@@ -224,51 +259,53 @@ class IncomeTaxController extends Controller
             $message = $validator->errors()->all();
             $error = 1;
         }
-        return array( 'error' => $error, 'message' => $message );
+        return array('error' => $error, 'message' => $message);
     }
 
-    public function rentModal(Request $request) {
+    public function rentModal(Request $request)
+    {
 
         $staff_id = $request->staff_id;
         $academic_data = AcademicYear::find(academicYearId());
-        $title = 'Add Month Rent for ( '.$academic_data->from_year .' / '.$academic_data->to_year.' )';
+        $title = 'Add Month Rent for ( ' . $academic_data->from_year . ' / ' . $academic_data->to_year . ' )';
         $params = array(
             'staff_id' => $staff_id
         );
         $content = view('pages.income_tax._rent_form', $params);
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
-
     }
 
-    public function rentList(Request $request) {
+    public function rentList(Request $request)
+    {
 
         $staff_id = $request->staff_id;
         $staff_details = User::find($staff_id);
         $params['staff_details'] = $staff_details;
         return view('pages.income_tax._rent_table', $params);
-
     }
 
-    public function saveRent(Request $request) {
+    public function saveRent(Request $request)
+    {
         $id = $request->id ?? '';
         $staff_id = $request->staff_id;
         $academic_id = academicYearId();
         $validator      = Validator::make($request->all(), [
             'amount' => 'required',
-            'staff_id' => ['required','string',
-                                Rule::unique('staff_rent_details')->where(function ($query) use($staff_id, $academic_id, $id) {
-                                    return $query->where('deleted_at', NULL)
-                                    ->where('staff_id', $staff_id)
-                                    ->where('academic_id', $academic_id)
-                                    ->when($id != '', function($q) use($id){
-                                        return $q->where('id', '!=', $id);
-                                    });
-                                }),
-                                ]
-        ],['staff_id.unique' => 'Rent already updated on this year, If you want to add then delete previous data to continue']);
+            'staff_id' => [
+                'required', 'string',
+                Rule::unique('staff_rent_details')->where(function ($query) use ($staff_id, $academic_id, $id) {
+                    return $query->where('deleted_at', NULL)
+                        ->where('staff_id', $staff_id)
+                        ->where('academic_id', $academic_id)
+                        ->when($id != '', function ($q) use ($id) {
+                            return $q->where('id', '!=', $id);
+                        });
+                }),
+            ]
+        ], ['staff_id.unique' => 'Rent already updated on this year, If you want to add then delete previous data to continue']);
 
-        if ($validator->passes()) { 
-            
+        if ($validator->passes()) {
+
             $ins['academic_id'] = academicYearId();
             $ins['staff_id'] = $request->staff_id;
             $ins['amount'] = $request->amount;
@@ -276,11 +313,11 @@ class IncomeTaxController extends Controller
             $ins['annual_rent'] = $request->amount * 12;
             $staff_info = User::find($request->staff_id);
             if ($request->hasFile('document')) {
-    
+
                 $files = $request->file('document');
                 $imageName = uniqid() . Str::replace([' ', '  ', ''], '', $files->getClientOriginalName());
 
-                $directory = 'staff/' . $staff_info->emp_code . '/rent/'.academicYearId();
+                $directory = 'staff/' . $staff_info->emp_code . '/rent/' . academicYearId();
                 $filename  = $directory . '/' . $imageName;
 
                 Storage::disk('public')->put($filename, File::get($files));
@@ -294,14 +331,48 @@ class IncomeTaxController extends Controller
             $message = $validator->errors()->all();
             $error = 1;
         }
-        return array( 'error' => $error, 'message' => $message, 'staff_id' => $request->staff_id );
+        return array('error' => $error, 'message' => $message, 'staff_id' => $request->staff_id);
     }
 
-    public function rentDelete(Request $request) {
+    public function rentDelete(Request $request)
+    {
 
         $rent_id = $request->rent_id;
         StaffRentDetail::where('id', $rent_id)->delete();
-        return array( 'error' => 0, 'message' => 'Rent has been deleted successfully');
+        return array('error' => 0, 'message' => 'Rent has been deleted successfully');
+    }
 
+    public function addTax(Request $request)
+    {
+
+        $income_tax_id = $request->income_tax_id;
+        $income_info = ItStaffStatement::find($income_tax_id);
+        $staff_id = $income_info->staff_id;
+        $error = 1;
+        $message = 'Error occured while adding tax seperations';
+        if ($income_info) {
+
+            $ins['academic_id'] = academicYearId();
+            $ins['staff_id'] = $staff_id;
+            $ins['income_tax_id'] = $income_tax_id;
+            $ins['april'] = $request->apr_amount;
+            $ins['may'] = $request->may_amount;
+            $ins['june'] = $request->jun_amount;
+            $ins['july'] = $request->jul_amount;
+            $ins['august'] = $request->aug_amount;
+            $ins['september'] = $request->sep_amount;
+            $ins['october'] = $request->oct_amount;
+            $ins['november'] = $request->nov_amount;
+            $ins['december'] = $request->dec_amount;
+            $ins['january'] = $request->jan_amount;
+            $ins['february'] = $request->feb_amount;
+            $ins['march'] = $request->mar_amount;
+            $ins['total_tax'] = $income_info->total_income_tax_payable;
+            StaffTaxSeperation::updateOrCreate(['staff_id' => $staff_id, 'income_tax_id' => $income_tax_id], $ins);
+            $error = 0;
+            $message = 'Added Successfully';
+        }
+
+        return array('error' => $error, 'message' => $message, 'staff_id' => $request->staff_id);
     }
 }

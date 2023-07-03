@@ -92,9 +92,10 @@
             {
                 data: 'current_salary_pattern',
                 render: function(data) {
-                    return data ? data.net_salary : '';
+                    // console.log(data, 'data');
+                    return data.net_salary || '';
                 },
-                name: 'current_salary_pattern.net_salary'
+                name: 'current_salary_pattern'
             },
             {
                 data: 'hold_month',

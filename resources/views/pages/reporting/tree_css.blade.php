@@ -50,7 +50,7 @@
         text-align: center;
         list-style-type: none;
         position: relative;
-        padding: 20px 5px 0 5px;
+        padding: 20px 76px 4px 78px;
     }
 
     .genealogy-tree li::before,
