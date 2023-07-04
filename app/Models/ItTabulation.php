@@ -14,6 +14,7 @@ class ItTabulation extends Model implements Auditable
     use SoftDeletes;
 
     protected $fillable = [
+        'academic_id',
         'scheme',
         'scheme_id',
         'slug',

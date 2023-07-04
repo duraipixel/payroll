@@ -73,6 +73,7 @@ class ItTabulationController extends Controller
                 }
                 for ($i=0; $i < count( $from_amount); $i++) { 
                     $ins = [];
+                    $ins['academic_id'] = academicYearId();
                     $ins['scheme_id'] = $scheme_id;
                     $ins['scheme'] = $scheme_info->name;
                     $ins['slug'] = Str::slug($scheme_info->name);

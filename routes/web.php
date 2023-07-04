@@ -218,7 +218,6 @@ Route::group(['middleware' => 'auth'],  function () {
      * ajax form data reload
      */
     Route::post('get/nationlity/list', [App\Http\Controllers\Master\NationalityController::class, 'getAjaxList'])->name('nationality.ajax.list');
-
     Route::post('get/head/fields', [App\Http\Controllers\PayrollManagement\SalaryFieldController::class, 'getHeadBasedFields'])->name('salary-field.head.fields');
 
     Route::get('appointment-order', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'index'])->name('appointment.orders');
@@ -240,13 +239,13 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::get('/',[App\Http\Controllers\LogController::class,'index'])->name('logs');
         Route::post('/view',[App\Http\Controllers\LogController::class,'view'])->name('logs.view');
     });
-
     // Settings Start
     Route::get('account/settings',[App\Http\Controllers\Account\SettingsController::class,'index'])->name('account.settings');
-    // Settings End
 
     Route::get('payroll/overview',[App\Http\Controllers\PayrollManagement\OverviewController::class,'index'])->name('payroll.overview');
     Route::post('payroll/overview/month',[App\Http\Controllers\PayrollManagement\OverviewController::class,'getMonthData'])->name('payroll.get.month.chart');
+    Route::post('payroll/set/permission',[App\Http\Controllers\PayrollManagement\OverviewController::class,'setPermission'])->name('payroll.set.permission');
+    Route::post('payroll/permission/modal',[App\Http\Controllers\PayrollManagement\OverviewController::class,'openPermissionModal'])->name('payroll.open.permission');
     #salary revision approval
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
     Route::post('salary/revision/status/change/modal',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatusModal'])->name('salary.revision.status.modal');
@@ -341,8 +340,6 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('holdsalary/save',[App\Http\Controllers\PayrollManagement\HoldSalaryController::class,'save'])->name('holdsalary.save');
     Route::any('holdsalary/view',[App\Http\Controllers\PayrollManagement\HoldSalaryController::class,'view'])->name('holdsalary.view');
     Route::post('holdsalary/delete',[App\Http\Controllers\PayrollManagement\HoldSalaryController::class,'delete'])->name('holdsalary.delete');
-
-
     /**
      *  Set working day calendar 
      */
