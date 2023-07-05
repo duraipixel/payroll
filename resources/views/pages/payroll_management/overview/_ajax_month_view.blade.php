@@ -53,7 +53,7 @@
                         @if( isset($payroll->payroll_date) && !empty( $payroll->payroll_date) )
                         <label class="badge badge-light-success"> Payroll processed on {{ date('d/M/Y', strtotime($payroll->payroll_date)) }} </label>
                         @else 
-                        <label class="badge badge-light-warning"> Payroll not process </label>
+                        <label class="badge badge-light-danger"> Payroll not processed </label>
                         @endif
                     </div>
                 </div>

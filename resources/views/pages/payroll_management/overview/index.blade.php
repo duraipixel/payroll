@@ -10,14 +10,14 @@
         <div class="month_row d-flex">
             @php
                 $months = 4;
-                $dates = date('Y-03-01');
+                $dates = date($from_year.'-03-01');
             @endphp
             @for ($i = 0; $i < 12; $i++)
             @php
                 $dates = date('Y-m-d', strtotime($dates."+1 months"));
             @endphp
                 <div id="payroll_month_{{ $months }}" role="button"
-                    class="payroll_month @if (date('m') == $months) active @endif"
+                    class="payroll_month @if ($i == 0) active @endif"
                     onclick="getPayrollOverviewInfo('{{ $dates }}', {{ $months }})">
                     {{-- <div class="month_name">{{ date('M', mktime(0, 0, 0, $months, 10)) }}</div> --}}
                     <div class="month_name">{{ date('M', strtotime($dates)) }}</div>

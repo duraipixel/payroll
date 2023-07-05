@@ -323,4 +323,39 @@ class StaffAppointmentDetailController extends Controller
         $staff_details = User::find($staff_id);
         return view('pages.staff.registration.appointment.list', compact('staff_details'));
     }
+
+    public function verifyStaff(Request $request) {
+        
+        $staff_id = $request->id;
+        $is_verified = true;
+        if( !getStaffVerificationStatus( $staff_id, 'doc_verified' ) ) {
+            $is_verified = false;
+        }
+        if( !getStaffVerificationStatus( $staff_id, 'data_entry' ) ) {
+            $is_verified = false;
+        }
+        if( !getStaffVerificationStatus( $staff_id, 'doc_uploaded' ) ) {
+            $is_verified = false;
+        }
+        if( !getStaffVerificationStatus( $staff_id, 'salary_entry' ) ) {
+            $is_verified = false;
+        }
+
+        if( $is_verified ) {
+            //user can verify
+            $error = 0;
+            $message = 'Employee Verified Successfully';
+            $staff_info = User::find($staff_id);
+            $staff_info->verification_status = 'approved';
+            $staff_info->save();
+        } else {
+            //use cannot verify
+            $error = 1;
+            $message = 'Cannot Verify employee, Please complete all verification';
+        }
+
+        return array('error' => $error, 'message' => $message );
+
+    }
+
 }

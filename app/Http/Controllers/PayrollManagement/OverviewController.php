@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 class OverviewController extends Controller
 {
     public function index() {
+
         $breadcrums = array(
             'title' => 'Payroll Overview',
             'breadcrums' => array(
@@ -19,27 +20,39 @@ class OverviewController extends Controller
                 ),
             )
         );
-        $date = date('Y-m-d');
+        $acYear = AcademicYear::find(academicYearId());
+        $from_year = $acYear->from_year;
+        $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
+        $end_year = '01-' . $acYear->to_month . '-' . $acYear->to_year;
+
+        $date = $start_year;
         $from_date = date('Y-m-01', strtotime($date));
         $to_date = date('Y-m-t', strtotime($date));
         $working_days = date('t', strtotime($date));
+        
         $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
         $previous_month_start = date('Y-m-01', strtotime($date.' - 1 month'));
         $previous_month_end = date('Y-m-t', strtotime($date.' - 1 month'));
 
         $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->first();
         
-        return view('pages.payroll_management.overview.index', compact('breadcrums', 'date', 'payroll', 'working_days', 'previous_payroll'));
+        return view('pages.payroll_management.overview.index', compact('breadcrums', 'date', 'payroll', 'working_days', 'previous_payroll', 'from_year'));
 
     }
 
     public function getMonthData(Request $request)
     {
         $academic_id = session()->get('academic_id');
-        $academic_info = AcademicYear::find($academic_id);
+
+        $acYear = AcademicYear::find(academicYearId());
+        $from_year = $acYear->from_year;
+        $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
+        $end_year = '01-' . $acYear->to_month . '-' . $acYear->to_year;
+
         
         $dates = $request->dates;
         $month_no = $request->month_no;
+        $start_year = date('Y-m-01', strtotime($start_year));
         $payout_date = date('Y-m-01', strtotime($dates));
 
         $from_date = date('Y-m-01', strtotime($dates));
@@ -51,7 +64,9 @@ class OverviewController extends Controller
         $previous_month_end = date('Y-m-t', strtotime($dates.' - 1 month'));
 
         $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->first();
-
+        if( $start_year == $payout_date ) {
+            $previous_payroll = 'yes';
+        }
         $lock_info = PayrollPermission::where(['academic_id' => academicYearId(), 'payout_month' => $payout_date])->first();
         /** 
          * check previous month payroll created
@@ -147,7 +162,7 @@ class OverviewController extends Controller
     public function processPayrollModal(Request $request) {
         $date = $request->date;
         $payout_id = $request->payout_id;
-        dd( $request->all() );
+        
 
         /**
          * 1. Employee it declaration Pending
@@ -161,7 +176,7 @@ class OverviewController extends Controller
          /**
           * select * from users where verification_status = 'approved';
           */
-
+        $title = 'Payroll Process Confirmation';
         $params = array(
             'date' => $date,
             'payout_id' => $payout_id

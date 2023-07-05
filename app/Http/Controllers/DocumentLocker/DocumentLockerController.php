@@ -28,38 +28,51 @@ class DocumentLockerController extends Controller
 {
     public function index(Request $request)
     {
-        $total_documents          = 0;
-        $review_pending_documents = 0;
-        $user_count               = 0;
-        $user                     = User::all();
         $auth_user  = auth()->user();
-        $result = User::with([
-            "position.designation",
-            "position.department",
-            "StaffDocument",
-            "StaffEducationDetail",
-            "StaffWorkExperience",
-            "StaffLeave",
-            "StaffSalary",
-            "StaffAppointmentDetail"
+        $result = User::withCount([
+            'staffDocuments',
+            'StaffEducationDetail',
+            'StaffWorkExperience',
+            'StaffLeave',
+            'StaffSalary',
+            'StaffAppointmentDetail',
+            'staffDocumentsPending',
+            'staffEducationDocPending',
+            'staffExperienceDocPending',
+            'leavesPending'          
+            
         ])->when(!is_null($auth_user->reporting_manager_id), function ($q) use ($auth_user) {
             $q->where('reporting_manager_id', $auth_user->id);
         })->get();
+        
+        // Retrieve the total user count
+        $totalUserCount = $result->count();
+        
+        // Calculate the total count for all relationships
+        $totalDocumentCount = $result->sum('staff_documents_count');
+        $totalEducationCount = $result->sum('staff_education_detail_count');
+        $totalWorkExperienceCount = $result->sum('staff_work_experience_count');
+        $totalLeaveCount = $result->sum('staff_leave_count');
+        $totalSalaryCount = $result->sum('staff_salary_count');
+        $totalAppointmentCount = $result->sum('staff_appointment_detail_count');
 
-        foreach ($result as $key => $row) {
-            $total_documents += count($row->StaffDocument)
-            + count($row->StaffEducationDetail)
-            + count($row->StaffWorkExperience)
-            + count($row->StaffLeave)
-            + count($row->StaffSalary)
-            + count($row->StaffAppointmentDetail);
+        $totalStaffDocumentsPendingCount = $result->sum('staff_documents_pending_count');
+        $totalstaffEducationDocPendingCount = $result->sum('staff_education_doc_pending_count');
+        $totalstaffExperienceDocPendingCount = $result->sum('staff_experience_doc_pending_count');
+        $totalleavesPendingCount = $result->sum('leaves_pending_count');
 
-            $review_pending_documents += count($row->staffDocumentsPending)
-            + count($row->staffEducationDocPending)
-            + count($row->staffExperienceDocPending)
-            + count($row->leavesPending);
-        }
+        $totalstaffDocumentsApproved = $result->sum('staff_documents_approved_count');
+        $totalstaffEducationDocApproved = $result->sum('staff_education_doc_approved_count');
+        $totalstaffExperienceDocApproved = $result->sum('staff_experience_doc_approved_count');
+        $totalleavesApproved = $result->sum('leaves_approved_count');
 
+        $review_pending_documents = $totalStaffDocumentsPendingCount + $totalstaffEducationDocPendingCount + $totalstaffExperienceDocPendingCount + $totalleavesPendingCount;
+        $total_documents = $totalDocumentCount + $totalEducationCount + $totalWorkExperienceCount + $totalLeaveCount + $totalSalaryCount + $totalAppointmentCount;
+        $approved_documents = $totalstaffDocumentsApproved + $totalstaffEducationDocApproved + $totalstaffExperienceDocApproved + $totalleavesApproved;
+
+        $user_count               = 0;
+        $user                     = User::all();
+      
         if ($request->ajax()) { 
             return DataTables::of($result)
                 ->addColumn('department', function ($row) {
@@ -69,18 +82,16 @@ class DocumentLockerController extends Controller
                     return !is_null($row->position) ? $row->position->designation->name : null;
                 })
                 ->addColumn('total_documents', function ($row) {
-                    return count($row->StaffDocument)
-                        + count($row->StaffEducationDetail)
-                        + count($row->StaffWorkExperience)
-                        + count($row->StaffLeave)
-                        + count($row->StaffSalary)
-                        + count($row->StaffAppointmentDetail);
+                    return $row->staff_documents_count + $row->staff_education_detail_count + $row->staff_work_experience_count + $row->staff_leave_count + $row->staff_salary_count + $row->staff_appointment_detail_count;
+                    // return 0;
                 })
                 ->addColumn('approved_documents', function ($row) {
-                    return count($row->staffDocumentsApproved) + count($row->staffEducationDocApproved) + count($row->staffExperienceDocApproved) + count($row->leavesApproved) + count($row->appointmentCount);
+                    return $row->staff_documents_approved_count + $row->staff_education_doc_approved_count + $row->staff_experience_doc_approved_count + $row->leaves_approved_count + $row->staff_appointment_detail_count;
+                    // return 0;
                 })
                 ->addColumn('pending_documents', function ($row) {
-                    return count($row->staffDocumentsPending) + count($row->staffEducationDocPending) + count($row->staffExperienceDocPending) + count($row->leavesPending);
+                    return $row->staff_documents_pending_count + $row->staff_education_doc_pending_count + $row->staff_experience_doc_pending_count + $row->leaves_pending_count;
+                    // return 0;
                 })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('user.dl_view', ['id' => $row->id]) . '"
@@ -97,10 +108,10 @@ class DocumentLockerController extends Controller
         $designation     = Designation::where('status', 'active')->get();
         $staffCategory   = StaffCategory::where('status', 'active')->get();
         $department      = Department::where('status', 'active')->get();
-        //dd($institution);
 
         return view('pages.document_locker.index', compact('institution', 'employee_nature', 'user', 'place_of_work', 'total_documents', 'review_pending_documents',  'user_count', 'designation', 'department', 'staffCategory'));
     }
+
     public  function changeDocumentStaus(Request $request)
     {
         $id             = $request->id;

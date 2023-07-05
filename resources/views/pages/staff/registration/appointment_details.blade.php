@@ -35,21 +35,37 @@
 
                                     <div class="col-md-12 fv-row">
                                         @if (isset($staff_details) && !empty($staff_details) && getStaffVerificationStatus($staff_details->id, 'salary_entry'))
-                                            <div class="row">
+                                            {{-- <div class="row">
                                                 <div class="col-sm-12 mt-6">
                                                     <div class="alert alert-success">
                                                         Salary Database is created
                                                     </div>
                                                 </div>
+                                            </div> --}}
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="fs-6 text-muted">Salary Process has started </div>
+                                                    <div class="d-flex align-items-center mt-3">
+                                                        <div class="w-50 text-success">
+                                                            View Salary details click
+                                                            <i class="fa-regular fa-hand-point-right"></i>
+                                                        </div>
+                                                        <div class="mx-3 w-50">
+                                                            <a class="btn btn-light-info w-50"
+                                                                href="{{ route('salary.creation', ['staff_id' => $staff_details->id]) }}">
+                                                                Edit Salary Database </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="d-flex">
 
-                                                <a href="javascript:void(0)"
+                                                {{-- <a href="javascript:void(0)"
                                                     onclick="return getSalarySlipView('{{ $staff_details->id }}')"
                                                     class="btn btn-light-info w-50"> View Salary </a>
                                                 <a class="btn btn-warning w-50"
                                                     href="{{ route('salary.creation', ['staff_id' => $staff_details->id]) }}">
-                                                    Edit Salary Database </a>
+                                                    Edit Salary Database </a> --}}
                                             </div>
                                         @else
                                             <div class="row">
@@ -182,81 +198,72 @@
     })
 
     async function validateAppointmentForm() {
+
         event.preventDefault();
-        var appointment_error = false;
+        Swal.fire({
+            text: "Are you sure you would like to Complete all process and verify employee?",
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, Verify it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function(result) {
+            if (result.value) {
 
-        var key_name = [
-            'staff_category_id',
-            'nature_of_employment_id',
-            'teaching_type_id',
-            'place_of_work_id',
-            'joining_date',
-            'salary_scale',
-            'from_appointment',
-            'to_appointment',
-            'appointment_order_model_id'
-        ];
+                var staff_id = $('#outer_staff_id').val();
 
-        $('.appointment-form-errors').remove();
-        $('.form-control,.form-select').removeClass('border-danger');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-        const pattern = /_/gi;
-        const replacement = " ";
+                $.ajax({
+                    url: "{{ route('staff.verify') }}",
+                    type: 'POST',
+                    data: {
+                        id: staff_id
+                    },
+                    success: function(res) {
+                        if (res.error == 0) {
+                            Swal.fire({
+                                title: "Verifed!",
+                                text: res.message,
+                                icon: "success",
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-success"
+                                },
+                                timer: 3000
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error!",
+                                text: res.message,
+                                icon: "danger",
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-danger"
+                                },
+                                timer: 3000
+                            });
+                        }
 
-        key_name.forEach(element => {
-            var name_input = document.getElementById(element).value;
 
-            if (name_input == '' || name_input == undefined) {
-
-                appointment_error = true;
-                var elementValues = element.replace(pattern, replacement);
-                var name_input_error =
-                    '<div class="fv-plugins-message-container appointment-form-errors invalid-feedback"><div data-validator="notEmpty">' +
-                    elementValues.toUpperCase() + ' is required</div></div>';
-                // $('#' + element).after(name_input_error);
-                $('#' + element).addClass('border-danger')
-                $('#' + element).focus();
+                    },
+                    error: function(xhr, err) {
+                        if (xhr.status == 403) {
+                            toastr.error(xhr.statusText, 'UnAuthorized Access');
+                        }
+                    }
+                });
             }
         });
 
-        if (!appointment_error) {
-            loading();
-            var forms = $('#staff_appointment_order_update')[0];
-            var formData = new FormData(forms);
-            var staff_id = $('#outer_staff_id').val();
-            formData.append('staff_id', staff_id);
-
-            const kycResponse = await fetch("{{ route('staff.save.appointment') }}", {
-                    method: 'POST',
-                    body: formData
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                    unloading();
-
-                    if (data.error == 1) {
-                        var err_message = '';
-                        if (data.message) {
-                            data.message.forEach(element => {
-                                err_message += '<p>' + element + '</p>';
-                            });
-                            toastr.error("Error", err_message);
-                        }
-                        return false;
-                    } else {
-                        toastr.success("Success", 'Staff Appointment Order Details Saved Successfully');
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000);
-                        return true;
-                    }
-
-                });
-            return kycResponse;
-
-        } else {
-            return true;
-        }
     }
 
     function generateAppointmentModel() {

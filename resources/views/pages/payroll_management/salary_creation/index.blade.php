@@ -107,6 +107,10 @@
 
 @section('add_on_script')
     <script>
+        var staff_id = '{{ $staff_id }}';
+        if( staff_id ) {
+            getSalaryHeadFields(staff_id);
+        }
         var epf_values = '';
 
         function doAmountCalculation() {

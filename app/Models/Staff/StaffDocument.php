@@ -43,4 +43,9 @@ class StaffDocument extends Model implements Auditable
     {
         return $this->hasOne(DocumentType::class, 'id', 'document_type_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'staff_id', 'id');
+    }
 }

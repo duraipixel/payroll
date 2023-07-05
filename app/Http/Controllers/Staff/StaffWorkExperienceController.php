@@ -43,6 +43,7 @@ class StaffWorkExperienceController extends Controller
             $ins['address'] = $request->experince_institute_address;
             $ins['salary_drawn'] = $request->salary_drawn;
             $ins['experience_year'] = $request->experience_year;
+            $ins['experience_month'] = $request->experience_month ?? '';
             $ins['remarks'] = $request->experience_remarks;
             $ins['status'] = 'active';
 

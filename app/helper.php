@@ -540,7 +540,7 @@ if (!function_exists('getStaffVerificationStatus')) {
                 break;
             case 'salary_entry';
                 $return = false;
-                $staff_salaries = StaffSalary::where('staff_id', $staff_id)->where('status', 'active')->first();
+                $staff_salaries = StaffSalaryPattern::where('staff_id', $staff_id)->where('status', 'active')->first();
                 if ($staff_salaries) {
                     $return = true;
                 }

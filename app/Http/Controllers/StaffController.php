@@ -1004,6 +1004,10 @@ class StaffController extends Controller
                     $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return staffChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
                     return $status;
                 })
+                ->editColumn('name', function($row){
+                    // return $row->name.' <i class="fas fa-certificate text-success"></i>';
+                    return $row->name;
+                })
                 ->editColumn('institute_name', function ($row) {
                     return $row->institute->name ?? '';
                 })
@@ -1039,7 +1043,7 @@ class StaffController extends Controller
 
                     return $edit_btn . $view_btn . $print_btn . $del_btn;
                 })
-                ->rawColumns(['action', 'status', 'verification_status']);
+                ->rawColumns(['action', 'status', 'verification_status', 'name']);
             return $datatables->make(true);
 
 

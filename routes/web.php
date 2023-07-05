@@ -120,6 +120,7 @@ Route::group(['middleware' => 'auth'],  function () {
 
         Route::post('/appointment/generate/preview', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'generateModelPreview'])->name('staff.appointment.preview');
         Route::post('/appointment/list', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'list'])->name('staff.appointment.list');
+        Route::post('/staff/verify', [App\Http\Controllers\Staff\StaffAppointmentDetailController::class, 'verifyStaff'])->name('staff.verify');
 
     });
 

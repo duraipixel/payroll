@@ -29,7 +29,8 @@ class StaffWorkExperience extends Model implements Auditable
         'experience_year',
         'experience_month',
         'remarks',
-        'doc_file'
+        'doc_file',
+        'months'
     ];
 
     public function institute()
