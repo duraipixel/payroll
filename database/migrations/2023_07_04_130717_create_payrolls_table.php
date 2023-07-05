@@ -19,12 +19,15 @@ return new class extends Migration
             $table->string('to_date')->nullable();
             $table->string('name')->nullable();
             $table->date('employee_loc_date')->nullable();
+            $table->date('employee_it_view_lock_date')->nullable();
             $table->date('payroll_input_loc_date')->nullable();
             $table->date('payroll_lock_date')->nullable();
             $table->date('payroll_release_date')->nullable();
             $table->date('payroll_input_release_date')->nullable();
             $table->date('employee_release_date')->nullable();
+            $table->date('employee_it_view_release_date')->nullable();
             $table->enum('locked', ['yes', 'no'])->nullable();
+            $table->unsignedBigInteger('added_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

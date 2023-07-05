@@ -246,6 +246,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('payroll/overview/month',[App\Http\Controllers\PayrollManagement\OverviewController::class,'getMonthData'])->name('payroll.get.month.chart');
     Route::post('payroll/set/permission',[App\Http\Controllers\PayrollManagement\OverviewController::class,'setPermission'])->name('payroll.set.permission');
     Route::post('payroll/permission/modal',[App\Http\Controllers\PayrollManagement\OverviewController::class,'openPermissionModal'])->name('payroll.open.permission');
+    Route::post('payroll/create',[App\Http\Controllers\PayrollManagement\OverviewController::class,'createPayroll'])->name('payroll.create');
+    Route::post('payroll/process/modal',[App\Http\Controllers\PayrollManagement\OverviewController::class,'processPayrollModal'])->name('payroll.process.modal');
     #salary revision approval
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
     Route::post('salary/revision/status/change/modal',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatusModal'])->name('salary.revision.status.modal');

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('payroll_permissions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('academic_id')->nullable();
+            $table->unsignedBigInteger('payroll_id')->nullable();
             $table->date('payout_month')->nullable();
             $table->enum('payroll_inputs',['lock', 'unlock'])->nullable();
             $table->enum('emp_view_release',['lock', 'unlock'])->nullable();

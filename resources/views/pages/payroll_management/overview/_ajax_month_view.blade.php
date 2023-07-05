@@ -43,215 +43,202 @@
     }
 </style>
 <div id="payroll_overview_data">
+    @if (isset($payroll) && !empty($payroll))
 
-    <div class="container bg-primary bg-light-outline">
-        <div class="py-5 mt-3">
-            <div class="fs-3 fw-bold text-white"> {{ date('F Y', strtotime($date)) }} </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6 p-5">
-            <div class="container">
-
-                <div class="fs-3 fw-bold text-muted "> Payout Details </div>
-                @php
-                    $leave_chart_data = [13, 3, 10];
-                    $leave_chart_label = ['Net Pay', 'Gross Pay', 'Deductions'];
-                @endphp
-                <div class="d-flex flex-center me-9 my-5">
-                    <canvas id="leave_chart" style="height: 200px; width: 100%;"></canvas>
+        <div class="container bg-primary bg-light-outline">
+            <div class="py-5 mt-3 d-flex justify-content-between align-items-center">
+                <div class="fs-3 fw-bold text-white"> 
+                    {{ date('F Y', strtotime($date)) }} 
+                    <div>
+                        @if( isset($payroll->payroll_date) && !empty( $payroll->payroll_date) )
+                        <label class="badge badge-light-success"> Payroll processed on {{ date('d/M/Y', strtotime($payroll->payroll_date)) }} </label>
+                        @else 
+                        <label class="badge badge-light-warning"> Payroll not process </label>
+                        @endif
+                    </div>
                 </div>
                 <div>
-                    <table class="w-100">
-                        <tr>
-                            <td class="w-50">
-                                <div>
-                                    <span class="bullet bg-primary mb-1 me-2" style="background-color: #a6b7f7"></span>
-                                    <span class="secondary-info fs-6">Rs 53,16,760.00</span>
-                                </div>
-                                <div class="card-subinfo ptl1 ms-5 text-muted small">Net Pay</div>
-                            </td>
-                            <td class="w-50">
-                                <div>
-                                    <span class="bullet bg-primary mb-1 me-2" style="background-color: #a6b7f7"></span>
-                                    <span class="secondary-info fs-6">Rs 53,16,760.00</span>
-                                </div>
-                                <div class="card-subinfo ptl1 ms-5 text-muted small">Gross Pay</div>
-                            </td>
-                        <tr class="">
-                            <td class="w-50 pt-3">
-                                <div>
-                                    <span class="bullet bg-primary mb-1 me-2" style="background-color: #a6b7f7"></span>
-                                    <span class="secondary-info fs-6">Rs 16,760.00</span>
-                                </div>
-                                <div class="card-subinfo ptl1 ms-5 text-muted small">Total Deduction</div>
-                            </td>
-                            <td class="w-50">
-                                <div>
-                                    <span class="bullet bg-primary mb-1 me-2" style="background-color: #a6b7f7"></span>
-                                    <span class="secondary-info fs-6">31</span>
-                                </div>
-                                <div class="card-subinfo ptl1 ms-5 text-muted small">Working Days</div>
-                            </td>
-                        </tr>
-                    </table>
+                    <button class="btn btn-light-success" onclick="processPayroll('{{ $date }}')">Process
+                        Payroll</button>
                 </div>
             </div>
         </div>
-        <div class="col-sm-6">
-            <div class="d-flex  p-3 fs-4 border border-3 mt-5">
-                <div class="w-50"> Payroll Input </div>
-                <div class="payroll-radio w-50 d-flex justify-content-end">
-                    <span class="@if (isset($lock_info) && $lock_info->payroll_inputs == 'unlock') active @endif pl-btn payroll_inputs" role="button"
-                        onclick="setPayrollSetting('payroll_inputs', 'unlock', this)">
-                        Unlock </span>
-                    <span class="pl-btn @if (isset($lock_info) && $lock_info->payroll_inputs == 'lock') active @endif payroll_inputs" role="button"
-                        onclick="setPayrollSetting('payroll_inputs', 'lock', this)"> Lock
-                    </span>
+        <div class="row">
+            <div class="col-sm-6 p-5">
+                <div class="container">
+
+                    <div class="fs-3 fw-bold text-muted "> Payout Details </div>
+                    @php
+                        $leave_chart_data = [13, 3, 10];
+                        $leave_chart_label = ['Net Pay', 'Gross Pay', 'Deductions'];
+                    @endphp
+                    <div class="d-flex flex-center me-9 my-5">
+                        <canvas id="leave_chart" style="height: 200px; width: 100%;"></canvas>
+                    </div>
+                    <div>
+                        <table class="w-100">
+                            <tr>
+                                <td class="w-50">
+                                    <div>
+                                        <span class="bullet bg-primary mb-1 me-2"
+                                            style="background-color: #a6b7f7"></span>
+                                        <span class="secondary-info fs-6">Rs 0</span>
+                                    </div>
+                                    <div class="card-subinfo ptl1 ms-5 text-muted small">Net Pay</div>
+                                </td>
+                                <td class="w-50">
+                                    <div>
+                                        <span class="bullet bg-primary mb-1 me-2"
+                                            style="background-color: #a6b7f7"></span>
+                                        <span class="secondary-info fs-6">Rs 0</span>
+                                    </div>
+                                    <div class="card-subinfo ptl1 ms-5 text-muted small">Gross Pay</div>
+                                </td>
+                            <tr class="">
+                                <td class="w-50 pt-3">
+                                    <div>
+                                        <span class="bullet bg-primary mb-1 me-2"
+                                            style="background-color: #a6b7f7"></span>
+                                        <span class="secondary-info fs-6">Rs 0</span>
+                                    </div>
+                                    <div class="card-subinfo ptl1 ms-5 text-muted small">Total Deduction</div>
+                                </td>
+                                <td class="w-50">
+                                    <div>
+                                        <span class="bullet bg-primary mb-1 me-2"
+                                            style="background-color: #a6b7f7"></span>
+                                        <span class="secondary-info fs-6">{{ $working_days ?? 0 }}</span>
+                                    </div>
+                                    <div class="card-subinfo ptl1 ms-5 text-muted small">Working Days</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="d-flex  p-3 fs-4 border border-3">
-                <div class="w-50"> Employee View Release </div>
-                <div class="payroll-radio w-50 d-flex justify-content-end">
-                    <span class="pl-btn emp_view_release @if (isset($lock_info) && $lock_info->emp_view_release == 'unlock') active @endif" role="button"
-                        onclick="setPayrollSetting('emp_view_release', 'unlock', this)"> Unlock </span>
-                    <span class="pl-btn emp_view_release @if (isset($lock_info) && $lock_info->emp_view_release == 'lock') active @endif" role="button"
-                        onclick="setPayrollSetting('emp_view_release', 'lock', this)"> Lock
-                    </span>
+            <div class="col-sm-6">
+                <div class="d-flex  p-3 fs-4 border border-3 mt-5 align-items-center">
+                    <div class="w-50">
+                        Payroll Input
+                        <div>
+                            <div class="small badge badge-light-info"> Bank Loan </div>
+                            <div class="small badge badge-light-info"> Lic </div>
+                            <div class="small badge badge-light-info"> Other Income </div>
+                            <div class="small badge badge-light-info"> Salary Fields & others </div>
+                        </div>
+                    </div>
+                    <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
+                        <span class="@if (isset($lock_info) && $lock_info->payroll_inputs == 'unlock') active @endif pl-btn payroll_inputs"
+                            role="button" onclick="setPayrollSetting('payroll_inputs', 'unlock', this)">
+                            Unlock </span>
+                        <span class="pl-btn @if (isset($lock_info) && $lock_info->payroll_inputs == 'lock') active @endif payroll_inputs"
+                            role="button" onclick="setPayrollSetting('payroll_inputs', 'lock', this)"> Lock
+                        </span>
+                    </div>
                 </div>
-            </div>
-            <div class="d-flex  p-3 fs-4 border border-3">
-                <div class="w-50"> It Statement Employee View </div>
-                <div class="payroll-radio w-50 d-flex justify-content-end">
-                    <span class="pl-btn it_statement_view @if (isset($lock_info) && $lock_info->it_statement_view == 'unlock') active @endif"
-                        role="button" onclick="setPayrollSetting('it_statement_view', 'unlock', this)"> Unlock </span>
-                    <span class="pl-btn it_statement_view @if (isset($lock_info) && $lock_info->it_statement_view == 'lock') active @endif"
-                        role="button" onclick="setPayrollSetting('it_statement_view', 'lock', this)"> Lock
-                    </span>
+                <div class="d-flex  p-3 fs-4 border border-3 align-items-center">
+                    <div class="w-50"> Employee View Release </div>
+                    <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
+                        <span class="pl-btn emp_view_release @if (isset($lock_info) && $lock_info->emp_view_release == 'unlock') active @endif"
+                            role="button" onclick="setPayrollSetting('emp_view_release', 'unlock', this)"> Unlock
+                        </span>
+                        <span class="pl-btn emp_view_release @if (isset($lock_info) && $lock_info->emp_view_release == 'lock') active @endif"
+                            role="button" onclick="setPayrollSetting('emp_view_release', 'lock', this)"> Lock
+                        </span>
+                    </div>
                 </div>
-            </div>
-            <div class="d-flex  p-3 fs-4 border border-3">
-                <div class="w-50"> Payroll </div>
-                <div class="payroll-radio w-50 d-flex justify-content-end">
-                    <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == 'unlock') active @endif" role="button"
-                        onclick="setPayrollSetting('payroll', 'unlock', this)"> Unlock </span>
-                    <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == 'lock') active @endif" role="button"
-                        onclick="setPayrollSetting('payroll', 'lock', this)"> Lock
-                    </span>
+                <div class="d-flex  p-3 fs-4 border border-3 align-items-center">
+                    <div class="w-50"> It Statement Employee View </div>
+                    <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
+                        <span class="pl-btn it_statement_view @if (isset($lock_info) && $lock_info->it_statement_view == 'unlock') active @endif"
+                            role="button" onclick="setPayrollSetting('it_statement_view', 'unlock', this)"> Unlock
+                        </span>
+                        <span class="pl-btn it_statement_view @if (isset($lock_info) && $lock_info->it_statement_view == 'lock') active @endif"
+                            role="button" onclick="setPayrollSetting('it_statement_view', 'lock', this)"> Lock
+                        </span>
+                    </div>
+                </div>
+                <div class="d-flex p-3 fs-4 border border-3 align-items-center">
+                    <div class="w-50">
+                        Payroll
+                        <div>
+                            <div class="small badge badge-light-info"> Publish Payslip </div>
+                            <div class="small badge badge-light-info"> Publish It Statement </div>
+                        </div>
+                    </div>
+                    <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
+                        <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == 'unlock') active @endif" role="button"
+                            onclick="setPayrollSetting('payroll', 'unlock', this)"> Unlock </span>
+                        <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == 'lock') active @endif" role="button"
+                            onclick="setPayrollSetting('payroll', 'lock', this)"> Lock
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<script>
-    var payout_date = '{{ $date }}';
-    $(document).ready(function() {
-        $("#payroll_overview_container").animate({
-            right: '0%'
-        }, 'slow');
-        var canvas = document.getElementById('leave_chart');
-        var context = canvas.getContext('2d');
+        <script>
+            var payout_date = '{{ $date }}';
+            var payout_id = '{{ $payroll->id ?? 0 }}';
+            $(document).ready(function() {
+                $("#payroll_overview_container").animate({
+                    right: '0%'
+                }, 'slow');
+                var canvas = document.getElementById('leave_chart');
+                var context = canvas.getContext('2d');
 
-        var config = {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: @json($leave_chart_data),
-                    backgroundColor: ['#00A3FF', '#cf6262', '#43a43c']
-                }],
-                labels: @json($leave_chart_label)
-            },
-            options: {
-                chart: {
-                    fontFamily: 'inherit'
-                },
-                cutout: '65%',
-                cutoutPercentage: 70,
-                responsive: true,
-                maintainAspectRatio: false,
-                title: {
-                    display: false
-                },
-                animation: {
-                    animateScale: true,
-                    animateRotate: true
-                },
-                tooltips: {
-                    enabled: true,
-                    intersect: false,
-                    mode: 'nearest',
-                    bodySpacing: 30,
-                    yPadding: 30,
-                    xPadding: 30,
-                    caretPadding: 0,
-                    displayColors: false,
-                    backgroundColor: '#20D489',
-                    titleFontColor: '#ffffff',
-                    cornerRadius: 5,
-                    footerSpacing: 0,
-                    titleSpacing: 20
-                },
-                plugins: {
-                    legend: {
-                        display: false
+                var config = {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: @json($leave_chart_data),
+                            backgroundColor: ['#00A3FF', '#cf6262', '#43a43c']
+                        }],
+                        labels: @json($leave_chart_label)
+                    },
+                    options: {
+                        chart: {
+                            fontFamily: 'inherit'
+                        },
+                        cutout: '65%',
+                        cutoutPercentage: 70,
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        title: {
+                            display: false
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        },
+                        tooltips: {
+                            enabled: true,
+                            intersect: false,
+                            mode: 'nearest',
+                            bodySpacing: 30,
+                            yPadding: 30,
+                            xPadding: 30,
+                            caretPadding: 0,
+                            displayColors: false,
+                            backgroundColor: '#20D489',
+                            titleFontColor: '#ffffff',
+                            cornerRadius: 5,
+                            footerSpacing: 0,
+                            titleSpacing: 20
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
                     }
-                }
-            }
-        };
-        var myDoughnut = new Chart(canvas, config);
+                };
+                var myDoughnut = new Chart(canvas, config);
 
-    })
+            })
 
-    function setPayrollSetting(mode_name, status, element) {
+            function setPayrollSetting(mode_name, status, element) {
 
-        if ( (mode_name == 'payroll_inputs' || mode_name == 'payroll') && status == 'lock') {
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                url: "{{ route('payroll.open.permission') }}",
-                type: 'POST',
-                data: {
-                    status: status,
-                    mode: mode_name,
-                    payout_date: payout_date
-                },
-                success: function(res) {
-                    $('#kt_dynamic_app').modal('show');
-                    $('#kt_dynamic_app').html(res);
-                },
-                error: function(xhr, err) {
-                    if (xhr.status == 403) {
-                        toastr.error(xhr.statusText, 'UnAuthorized Access');
-                    }
-                }
-            });
-
-        } else {
-            var msg = '';
-            if (mode_name == 'emp_view_release') {
-                msg = 'Employee View Release';
-            } else {
-                msg = 'It Statement Employee View';
-            }
-
-            Swal.fire({
-                text: "Are you sure you would like to " + status + " " + msg + '?',
-                icon: "warning",
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: "Yes, Change it!",
-                cancelButtonText: "No, return",
-                customClass: {
-                    confirmButton: "btn btn-danger",
-                    cancelButton: "btn btn-active-light"
-                }
-            }).then(function(result) {
-                if (result.value) {
+                if ((mode_name == 'payroll_inputs' && mode_name == 'payroll') && status == 'lock') {
 
                     $.ajaxSetup({
                         headers: {
@@ -260,27 +247,17 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('payroll.set.permission') }}",
+                        url: "{{ route('payroll.open.permission') }}",
                         type: 'POST',
                         data: {
                             status: status,
                             mode: mode_name,
-                            payout_date: payout_date
+                            payout_date: payout_date,
+                            payout_id: payout_id
                         },
                         success: function(res) {
-                            // dtTable.ajax.reload();
-                            $('.' + mode_name).removeClass('active');
-                            $(element).addClass('active');
-                            Swal.fire({
-                                title: "Updated!",
-                                text: res.message,
-                                icon: "success",
-                                confirmButtonText: "Ok, got it!",
-                                customClass: {
-                                    confirmButton: "btn btn-success"
-                                },
-                                timer: 3000
-                            });
+                            $('#kt_dynamic_app').modal('show');
+                            $('#kt_dynamic_app').html(res);
                         },
                         error: function(xhr, err) {
                             if (xhr.status == 403) {
@@ -288,9 +265,167 @@
                             }
                         }
                     });
-                }
-            });
-        }
 
+                } else {
+                    var msg = '';
+                    if (mode_name == 'emp_view_release') {
+                        msg = 'Employee View Release';
+                    } else if (mode_name == 'payroll_inputs') {
+                        msg = 'Payroll Inputs';
+                    } else if (mode_name == 'payroll') {
+                        msg = 'Payroll';
+                    } else {
+                        msg = 'It Statement Employee View';
+                    }
+
+                    Swal.fire({
+                        text: "Are you sure you would like to " + status + " " + msg + '?',
+                        icon: "warning",
+                        showCancelButton: true,
+                        buttonsStyling: false,
+                        confirmButtonText: "Yes, Change it!",
+                        cancelButtonText: "No, return",
+                        customClass: {
+                            confirmButton: "btn btn-danger",
+                            cancelButton: "btn btn-active-light"
+                        }
+                    }).then(function(result) {
+                        if (result.value) {
+
+                            $.ajaxSetup({
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                }
+                            });
+
+                            $.ajax({
+                                url: "{{ route('payroll.set.permission') }}",
+                                type: 'POST',
+                                data: {
+                                    status: status,
+                                    mode: mode_name,
+                                    payout_date: payout_date,
+                                    payout_id: payout_id
+                                },
+                                success: function(res) {
+                                    // dtTable.ajax.reload();
+                                    $('.' + mode_name).removeClass('active');
+                                    $(element).addClass('active');
+                                    Swal.fire({
+                                        title: "Updated!",
+                                        text: res.message,
+                                        icon: "success",
+                                        confirmButtonText: "Ok, got it!",
+                                        customClass: {
+                                            confirmButton: "btn btn-success"
+                                        },
+                                        timer: 3000
+                                    });
+                                },
+                                error: function(xhr, err) {
+                                    if (xhr.status == 403) {
+                                        toastr.error(xhr.statusText, 'UnAuthorized Access');
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+
+            }
+        </script>
+    @else
+        <div class="container h-400px justify-content-center">
+            @if (isset($previous_payroll) && !empty($previous_payroll))
+                <div class="h-400px d-flex justify-content-center align-items-center d-none" id="payroll-loading">
+                    <img src="{{ asset('assets/images/payroll-loading.gif') }}" width="200" alt="">
+                    <div class="text-muted">
+                        Please wait while creating Payroll
+                    </div>
+                </div>
+
+                <div class="h-400px d-flex justify-content-center align-items-center" id="payroll-content-create">
+
+                    <button class="btn btn-primary" type="button"
+                        onclick="return createPayroll('{{ $date }}')"> Create
+                        {{ date('F Y', strtotime($date)) }} Payroll </button>
+                </div>
+            @else
+                <div class="h-400px d-flex justify-content-center align-items-center" id="payroll-content-create">
+                    <label class="alert alert-danger"> Previous month Payroll not created </label>
+                </div>
+            @endif
+
+        </div>
+    @endif
+</div>
+<script>
+    function createPayroll(payroll_date) {
+
+        Swal.fire({
+            text: "Are you sure you would like to start payroll process?",
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, Do it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $('#payroll-content-create').addClass('d-none');
+                $('#payroll-loading').removeClass('d-none');
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('payroll.create') }}",
+                    type: 'POST',
+                    data: {
+                        payroll_date: payroll_date
+                    },
+                    success: function(res) {
+
+                        getPayrollOverviewInfo(res.date, res.month_no)
+                    },
+                    error: function(xhr, err) {
+                        if (xhr.status == 403) {
+                            toastr.error(xhr.statusText, 'UnAuthorized Access');
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    function processPayroll(date) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('payroll.process.modal') }}",
+            type: 'POST',
+            data: {
+                date:date,
+                payout_id: payout_id
+            },
+            success: function(res) {
+                $('#kt_dynamic_app').modal('show');
+                $('#kt_dynamic_app').html(res);
+            },
+            error: function(xhr, err) {
+                if (xhr.status == 403) {
+                    toastr.error(xhr.statusText, 'UnAuthorized Access');
+                }
+            }
+        });
     }
 </script>

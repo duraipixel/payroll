@@ -17,7 +17,8 @@ class PayrollPermission extends Model
         'it_statement_view',
         'payroll',
         'added_by',
-        'updated_by'
+        'updated_by',
+        'payroll_id'
     ];
 
 }

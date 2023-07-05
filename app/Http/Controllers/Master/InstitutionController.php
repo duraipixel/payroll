@@ -118,7 +118,7 @@ class InstitutionController extends Controller
             $ins['name'] = $request->institute_name;
             $ins['code'] = $request->institute_code;
             $ins['address'] = $request->address;
-            $ins['status'] = $request->status;
+            $ins['status'] = $request->status ?? 'active';
             if( isset( $id ) && !empty( $id )) {
                 $ins['updatedBy'] = auth()->user()->id;
             } else {
