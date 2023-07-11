@@ -28,10 +28,7 @@ class NatureOfEmploymentController extends Controller
         );
         if ($request->ajax()) {
 
-            // $data = NatureOfEmployment::select('*');
-
             $query = NatureOfEmployment::select('*');
-
             // Sort the data in descending order based on the 'id' column
             $data = $query->get()->sortByDesc('id')->values();
 

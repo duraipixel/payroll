@@ -42,9 +42,7 @@
                         id="staff_table">
                         <thead class="bg-primary">
                             <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="text-center text-white" >
-                                    Created At
-                                </th>
+                               
                                 <th class="text-center text-white" >
                                     Staff Info
                                 </th>
@@ -85,7 +83,7 @@
 
             processing: true,
             serverSide: true,
-            order :[0, 'desc'],
+            order :[2, 'desc'],
             type: 'POST',
             ajax: {
                 "url": "{{ route('staff.list') }}",
@@ -95,10 +93,7 @@
             },
 
             columns: [
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
+               
                 {
                     data: 'name',
                     name: 'name'
