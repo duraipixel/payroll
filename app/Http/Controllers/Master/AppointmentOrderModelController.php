@@ -27,10 +27,14 @@ class AppointmentOrderModelController extends Controller
         );
         if($request->ajax())
         {
-            $data = AppointmentOrderModel::select('*');
+            $query = AppointmentOrderModel::select('*');
+            // Sort the data in descending order based on the 'id' column
+            $data = $query->get()->sortByDesc('id')->values();
+
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
+
             
             $datatables =  Datatables::of($data)
             ->filter(function($query) use($status,$keywords) {
@@ -38,7 +42,6 @@ class AppointmentOrderModelController extends Controller
                 {
                     $date = date('Y-m-d',strtotime($keywords));
                     return $query->where(function($q) use($keywords,$date){
-
                         $q->where('appointment_order_models.name','like',"%{$keywords}%")
                         ->orWhereDate('appointment_order_models.created_at',$date);
                     });
@@ -55,35 +58,29 @@ class AppointmentOrderModelController extends Controller
             })
               ->addColumn('action', function ($row) {
                 $route_name = request()->route()->getName(); 
+                $edit_btn = '';
+                $view_btn = '';
+                $del_btn = '';
                 if( access()->buttonAccess($route_name,'add_edit') )
                 {
                     $edit_btn = '<a href="'.route('appointment.orders.add', ['id' => $row->id]).'"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                                     <i class="fa fa-edit"></i>
                                 </a>';
                 }
-                else
-                {
-                    $edit_btn = '';
-                }
+                
                 if( access()->buttonAccess($route_name,'view') )
                 {
                     $view_btn = '<a href="javascript:void(0);" onclick="viewAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-info btn-light-primary mx-1 w-30px h-30px" > 
                                     <i class="fa fa-eye"></i>
                                 </a>';
                 }
-                else
-                {
-                    $view_btn = '';
-                }
+                
                 if( access()->buttonAccess($route_name,'delete') )
                 {
                     $del_btn = '<a href="javascript:void(0);" onclick="deleteAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                     <i class="fa fa-trash"></i></a>';
                 }
-                else
-                {
-                    $del_btn = '';
-                }
+                
                     return $edit_btn . $del_btn . $view_btn;
                 })
                 ->rawColumns(['action', 'status']);

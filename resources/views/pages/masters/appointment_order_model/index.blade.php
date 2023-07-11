@@ -3,6 +3,11 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
+    <style>
+        #appointment_order_table td, #appointment_order_table th {
+            padding: 10px;
+        }
+    </style>
     <div class="card">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
@@ -43,25 +48,24 @@
         <div class="card-body py-4">
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="table-responsive">
-                    <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
+                    <table class="table align-middle table-hover table-bordered table-striped fs-7 no-footer"
                         id="appointment_order_table">
                         <thead class="bg-primary">
-                            <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="text-center text-white">
+                            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="text-white">
                                     Date
                                 </th>
-                                <th class="text-center text-white">
+                                <th class="text-white">
                                     Appointment Order Name
                                 </th>
-                                <th class="text-center text-white">
+                                <th class="text-white">
                                     Status
                                 </th>
-                                <th class="text-center text-white">
+                                <th class="text-white">
                                     Actions
                                 </th>
                             </tr>
                         </thead>
-
                         <tbody class="text-gray-600 fw-bold">
                         </tbody>
                     </table>
@@ -79,9 +83,6 @@
 
             processing: true,
             serverSide: true,
-            order: [
-                [0, "DESC"]
-            ],
             type: 'POST',
             ajax: {
                 "url": "{{ route('appointment.orders') }}",
