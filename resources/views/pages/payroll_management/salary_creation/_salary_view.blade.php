@@ -52,10 +52,15 @@
     <div>
         Effective From {{ commonDateFormat($current_pattern->effective_from) }}
     </div>
-    <div class="mt-3">
-        <label for="" class="text-muted"> Remarks </label>
-        <div>
-            {{ $current_pattern->employee_remarks ?? '' }}
+    <div class="mt-3 d-flex">
+        <div class="w-50">
+            <label for="" class="text-muted"> Remarks </label>
+            <div>
+                {{ $current_pattern->employee_remarks ?? '' }}
+            </div>
+        </div>
+        <div class="text-end w-50">
+            <button class="btn btn-sm btn-light-danger" onclick="deleteStaffSalaryPattern('{{ $current_pattern->id }}')"> <i class="fa fa-trash"></i> Delete </button>
         </div>
     </div>
 </div>

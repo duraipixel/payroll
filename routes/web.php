@@ -311,6 +311,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');
     Route::post('salary/creation_add',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'salaryAdd'])->name('salary.creation_add');
     Route::post('salary/update/pattern',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'updateSalaryPattern'])->name('salary.update.pattern');
+    Route::post('salary/delete/pattern',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'deleteSalaryPattern'])->name('salary.delete.pattern');
     Route::post('salary/update/month/pattern',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'updateCurrentSalaryPattern'])->name('salary.update.current.pattern');
     Route::post('salary/get/staff',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffSalaryInfo'])->name('salary.get.staff');
     Route::post('salary/get/epf/amount',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'getStaffEpfAmount'])->name('salary.get.epf.amount');

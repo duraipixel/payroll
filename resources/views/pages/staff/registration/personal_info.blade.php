@@ -56,7 +56,7 @@
                     class="form-input" />
             </div>
             <div class="col-lg-4 mb-5">
-                <label class="input-label required">Email ID</label>
+                <label class="input-label ">Email ID</label>
                 <input name="email" id="email" value="{{ $staff_details->email ?? '' }}" class="form-input" />
             </div>
 
@@ -337,7 +337,6 @@
         var key_name = [
             'institute_name',
             'name',
-            'email',
         ];
         $('.personal-form-errors').remove();
         $('.form-control,.form-select').removeClass('border-danger');

@@ -38,30 +38,32 @@
         <div class="card-body py-4">
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="table-responsive">
-                    <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
+                    <table class="table align-middle table-hover table-bordered table-striped fs-7 no-footer"
                         id="staff_table">
                         <thead class="bg-primary">
-                            <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                               
-                                <th class="text-center text-white" >
+                            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="text-white" >
+                                    Created At
+                                </th>
+                                <th class="text-white" >
                                     Staff Info
                                 </th>
-                                <th class="text-center text-white" >
+                                <th class="text-white" >
                                     Society Code
                                 </th>
-                                <th class="text-center text-white" >
+                                <th class="text-white" >
                                     Institution Code
                                 </th>
-                                <th class="text-center text-white" >
+                                <th class="text-white" >
                                     Emp Code
                                 </th>
-                                <th class="text-center text-white" >
+                                <th class="text-white" >
                                     Profile Completion
                                 </th>
-                                <th class="text-center text-white" >
+                                <th class="text-white" >
                                     Status
                                 </th>
-                                <th class="text-center text-white">
+                                <th class="text-white">
                                     Actions
                                 </th>
                             </tr>
@@ -83,7 +85,6 @@
 
             processing: true,
             serverSide: true,
-            order :[2, 'desc'],
             type: 'POST',
             ajax: {
                 "url": "{{ route('staff.list') }}",
@@ -93,7 +94,10 @@
             },
 
             columns: [
-               
+                {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
                 {
                     data: 'name',
                     name: 'name'

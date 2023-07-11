@@ -17,6 +17,7 @@ use App\Models\Staff\StaffBankLoan;
 use App\Models\Staff\StaffInsurance;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PDF;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -126,8 +127,10 @@ class SalaryCreationController extends Controller
                 if( $current_active && $current_active->payout_month < $payout_month ) {
                     StaffSalaryPattern::where(['staff_id' => $staff_id])->update(['is_current' => 'no']);
                     $is_current = 'yes';
+                } else if($current_active && $current_active->payout_month > $payout_month) {
+                    $is_current = 'no';
                 } else {
-                    $is_current = $exist->is_current ?? 'no';
+                    $is_current = $exist->is_current ?? 'yes';
                 }
 
                 $insert_data['staff_id'] = $staff_id;
@@ -476,35 +479,36 @@ class SalaryCreationController extends Controller
     }
 
     public function deleteSalaryPattern(Request $request) {
+
         $id = $request->id;
-
         $info = StaffSalaryPattern::find($id);
+        $is_current = $info->is_current;
         $staff_id = $info->staff_id;
-        /**
-         * check salary created for this pattern if yes don't allow to delete
-         */
-        $exist = StaffSalary::where('salary_pattern_id', $id)->first();
-        if( $exist ) {
-            $error = 1;
-            $message = 'Salary provided for this payout, To delete this contact Administrator';
-        } else {
+        // $info->delete;
 
-            $is_current = false;
-            if( $info->is_current == 'yes') {
-                $is_current = true;
-            }
+        if( $is_current == 'yes' ) {
 
-            $info->patternFields()->delete();
-            $info->delete();
-            if( $is_current ) {
-                $last_info = StaffSalaryPattern::where('staff_id', $staff_id)->orderBy('payout_month', 'desc')->first();
-                $last_info->is_current = 'yes';
-                $last_info->save();
+            $max_info = DB::select('SELECT ssp.id, ssp.payout_month
+                            FROM staff_salary_patterns ssp
+                            WHERE ssp.staff_id = 8
+                            AND ssp.payout_month = (
+                            SELECT MAX(payout_month)
+                            FROM staff_salary_patterns
+                            WHERE staff_id = 8 and deleted_at is null
+                            )');
+
+            if( !empty($max_info)) {
+                $pattern_id = $max_info[0]['id'];
+                if( $pattern_id ) {
+                    StaffSalaryPattern::where('staff_id', $staff_id)->update(['is_current', 'no']);
+                    StaffSalaryPattern::where('id', $pattern_id)->update(['is_current', 'yes']);
+                }
             }
-            $error = 0;
-            $message = 'Successfully deleted Salary Revision';
+            
         }
 
+        $error = 0;
+        $message = 'Staff Salary Pattern deleted successfully';
         return array('error' => $error, 'message' => $message, 'staff_id' => $staff_id);
     }
 }

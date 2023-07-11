@@ -164,4 +164,60 @@
         });
 
     }
+
+    function deleteStaffSalaryPattern(pattern_id) {
+        Swal.fire({
+            text: "Are you sure you would like to Delete Salary Pattern?",
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes, Change it!",
+            cancelButtonText: "No, return",
+            customClass: {
+                confirmButton: "btn btn-danger",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function(result) {
+            if (result.value) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('salary.delete.pattern') }}",
+                    type: 'POST',
+                    data: {
+                        id: pattern_id
+                    },
+                    beforeSend: function() {
+                        $('#payout-salary-revision').addClass('blur_loading_3px');
+                    },
+                    success: function(res) {
+
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: res.message,
+                            icon: "success",
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn btn-success"
+                            },
+                            timer: 3000
+                        });
+                        setTimeout(() => {
+                            getSalaryHeadFields(res.staff_id);
+                        }, 300);
+
+                    },
+                    error: function(xhr, err) {
+                        if (xhr.status == 403) {
+                            toastr.error(xhr.statusText, 'UnAuthorized Access');
+                        }
+                    }
+                });
+            }
+        });
+    }
 </script>

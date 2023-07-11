@@ -207,6 +207,60 @@ if (!function_exists('getStaffProfileCompilation')) {
     }
 }
 
+if (!function_exists('getStaffProfileCompilationData')) {
+    function getStaffProfileCompilationData($info)
+    {
+        $response = false;
+        $percentage = 0;
+        if ($info) {
+            $percentage = 10;
+            if ($info->personal) {
+                $percentage += 10;
+            } //
+            if ($info->position) {
+                $percentage += 10;
+            }
+            if (count($info->StaffDocument) > 0) {
+                $percentage += 10;
+            }
+            if (count($info->StaffEducationDetail) > 0) {
+                $percentage += 10;
+            }
+            if (count($info->familyMembers) > 0) {
+                $percentage += 5;
+            }
+            if (count($info->nominees) > 0) {
+                $percentage += 5;
+            }
+            //so far 60%
+            if ($info->healthDetails) {
+                $percentage += 5;
+            }
+            //65%
+            if (count($info->StaffWorkExperience) > 0) {
+                $percentage += 5;
+            } // 70%
+            if (count($info->knownLanguages) > 0) {
+                $percentage += 5;
+            } // 75%
+            if (count($info->studiedSubject) > 0) {
+                $percentage += 5;
+            } // 80%
+            if ($info->bank) {
+                $percentage += 5;
+            } // 85%
+            if ($info->appointment) {
+                $percentage += 10;
+            }
+            if ($info->verification_status == 'approved') {
+                //available status => ['approved', 'draft', 'rejected', 'cancelled', 'pending']
+                $percentage = 100;
+            }
+        }
+        return $percentage;
+    }
+}
+
 
 if (!function_exists('getStudiedSubjects')) {
     function getStudiedSubjects($staff_id, $subject, $class = '')

@@ -254,7 +254,7 @@ class StaffController extends Controller
         $validator      = Validator::make($request->all(), [
             'institute_name' => 'required',
             'name' => 'required',
-            'email' => 'required|string|unique:users,email,' . $id,
+            // 'email' => 'required|string|unique:users,email,' . $id,
             // 'previous_code' => 'required'
             // 'previous_code' => 'required|string|unique:users,emp_code,'.$id,
         ]);
@@ -940,17 +940,32 @@ class StaffController extends Controller
             )
         );
         if ($request->ajax()) {
-            
-            $data = User::select('users.*', 'institutions.name as institute_name')
-                ->join('institutions', 'institutions.id', 'users.institute_id')                            
+
+            $query = User::select('users.*', 'institutions.name as institute_name')
+                ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
+                ->with([
+                    'personal',
+                    'position',
+                    'StaffDocument',
+                    'StaffEducationDetail',
+                    'familyMembers',
+                    'nominees',
+                    'healthDetails',
+                    'StaffWorkExperience',
+                    'knownLanguages',
+                    'studiedSubject',
+                    'bank',
+                    'appointment'
+                ])
                 ->whereNull('is_super_admin');
+
+            $data = $query->get()->sortByDesc('society_emp_code')->values();
 
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
-            $datatables =  Datatables::of($data)
+            $datatables = Datatables::of($data)
                 ->filter(function ($query) use ($keywords, $status) {
-
                     if ($keywords) {
                         $date = date('Y-m-d', strtotime($keywords));
                         return $query->where(function ($q) use ($keywords, $date) {
@@ -959,6 +974,8 @@ class StaffController extends Controller
                                 ->orWhere('users.status', 'like', "%{$keywords}%")
                                 ->orWhere('users.email', 'like', "%{$keywords}%")
                                 ->orWhere('users.emp_code', 'like', "%{$keywords}%")
+                                ->orWhere('users.society_emp_code', 'like', "%{$keywords}%")
+                                ->orWhere('users.institute_emp_code', 'like', "%{$keywords}%")
                                 ->orWhere('users.first_name_tamil', 'like', "%{$keywords}%")
                                 ->orWhereDate("users.created_at", $date);
                         });
@@ -966,17 +983,18 @@ class StaffController extends Controller
                 })
                 ->addIndexColumn()
                 ->editColumn('verification_status', function ($row) {
+                    $completed_percentage = getStaffProfileCompilationData($row);
                     $status = '
                             <div class="d-flex align-items-center w-100px w-sm-200px flex-column mt-3">
                                 <div class="d-flex justify-content-between w-100 mt-auto">
                                     <span class="fw-semibold fs-6 text-gray-400">' . ucwords($row->verification_status) . '</span>
-                                    <span class="fw-bold fs-6">' . getStaffProfileCompilation($row->id) . '%</span>
+                                    <span class="fw-bold fs-6">' . $completed_percentage . '%</span>
                                 </div>
                                 <div class="h-5px mx-3 w-100 bg-light">
-                                    <div class="bg-success rounded h-5px" role="progressbar" aria-valuenow="' . getStaffProfileCompilation($row->id) . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . getStaffProfileCompilation($row->id) . '%;"></div>
+                                    <div class="bg-success rounded h-5px" role="progressbar" aria-valuenow="' . $completed_percentage . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $completed_percentage . '%;"></div>
                                 </div>
                             </div>';
-                    return $status;
+                    return $status ?? '';
                 })
                 ->editColumn('status', function ($row) {
                     $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return staffChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
@@ -989,12 +1007,10 @@ class StaffController extends Controller
                 ->editColumn('institute_name', function ($row) {
                     return $row->institute->name ?? '';
                 })
-
                 ->editColumn('created_at', function ($row) {
                     $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row->created_at)->format('d-m-Y');
                     return $created_at;
                 })
-
                 ->addColumn('action', function ($row) {
                     $route_name = request()->route()->getName();
                     if (access()->buttonAccess($route_name, 'add_edit')) {
@@ -1022,6 +1038,7 @@ class StaffController extends Controller
                     return $edit_btn . $view_btn . $print_btn . $del_btn;
                 })
                 ->rawColumns(['action', 'status', 'verification_status', 'name']);
+
             return $datatables->make(true);
         }
         return view('pages.staff.list', compact('breadcrums'));

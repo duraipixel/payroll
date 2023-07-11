@@ -31,7 +31,8 @@
                             {{$item->salary_drawn}}
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $item->experience_year }}
+                            {{ isset($item->experience_year) && !empty( $item->experience_year ) ? (($item->experience_year > 1) ? $item->experience_year.' years': $item->experience_year.' year' ) : '' }}
+                            {{ isset($item->experience_month) && !empty( $item->experience_month ) ? (($item->experience_month > 1) ? $item->experience_month.' months': $item->experience_month.' month' ) : '' }}
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ $item->remarks }}
