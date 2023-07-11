@@ -940,31 +940,10 @@ class StaffController extends Controller
             )
         );
         if ($request->ajax()) {
-
-
+            
             $data = User::select('users.*', 'institutions.name as institute_name')
-                ->join('institutions', 'institutions.id', 'users.institute_id')
-                // ->when(!empty(session()->get('academic_id')), function ($query) {
-                //     $query->where('users.academic_id', session()->get('academic_id'));
-                // })
+                ->join('institutions', 'institutions.id', 'users.institute_id')                            
                 ->whereNull('is_super_admin');
-            /*
-            $subquery = User::select('users.*', 'institutions.name as institute_name')
-                ->join('institutions', 'institutions.id', 'users.institute_id')
-                ->where('users.academic_id', session()->get('academic_id'))
-                ->whereNull('is_super_admin')
-                ->getQuery();
-
-            $countQuery = DB::table(DB::raw("({$subquery->toSql()}) as count_row_table"))
-                ->select(DB::raw('count(*) as aggregate'))
-                ->mergeBindings($subquery)
-                ->first();
-
-            $data = DB::table(DB::raw("({$subquery->toSql()}) as count_row_table"))
-                ->select('count_row_table.*', 'count_row_table.institute_name')
-                ->mergeBindings($subquery)
-                ->orderBy('count_row_table.created_at', 'desc')
-                ->get(); */
 
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
@@ -986,7 +965,6 @@ class StaffController extends Controller
                     }
                 })
                 ->addIndexColumn()
-
                 ->editColumn('verification_status', function ($row) {
                     $status = '
                             <div class="d-flex align-items-center w-100px w-sm-200px flex-column mt-3">
@@ -1004,7 +982,7 @@ class StaffController extends Controller
                     $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return staffChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
                     return $status;
                 })
-                ->editColumn('name', function($row){
+                ->editColumn('name', function ($row) {
                     // return $row->name.' <i class="fas fa-certificate text-success"></i>';
                     return $row->name;
                 })

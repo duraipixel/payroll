@@ -86,7 +86,7 @@
 
         processing: true,
         serverSide: true,
-        order: [[0, "DESC"]],
+        // order: [[0, "DESC"]],
         type: 'POST',
         ajax: {
             "url": "{{ route('nature-of-employeement') }}",

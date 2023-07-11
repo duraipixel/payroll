@@ -726,8 +726,8 @@ function getHRAAmount($scheme_id, $staff_id, $salary_pattern)
 function getTaxOtherSalaryCalulatedMonth($salary_pattern)
 {
     $academic_info = AcademicYear::find(academicYearId());
-    $start_year = $academic_info->from_year . '-04-01';
-    $end_year = $academic_info->to_year . '-03-31';
+    $start_year = $academic_info->from_year . '-03-01';
+    $end_year = $academic_info->to_year . '-02-28';
     $s_date = date('Y-m-d', strtotime($start_year));
     $e_date = date('Y-m-d', strtotime($end_year));
     $payout_month = $salary_pattern->payout_month; //2022-04-01

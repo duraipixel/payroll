@@ -127,7 +127,7 @@ class SalaryCreationController extends Controller
                     StaffSalaryPattern::where(['staff_id' => $staff_id])->update(['is_current' => 'no']);
                     $is_current = 'yes';
                 } else {
-                    $is_current = $exist->is_current ?? 'yes';
+                    $is_current = $exist->is_current ?? 'no';
                 }
 
                 $insert_data['staff_id'] = $staff_id;
@@ -337,8 +337,9 @@ class SalaryCreationController extends Controller
         $field_id = $request->field_id;
         $field_name = $request->field_name;
 
-        $fieldCalculation = SalaryFieldCalculationItem::whereRaw("CHARINDEX('" . $field_id . "', multi_field_id) <> 0")->get();
-
+        // $fieldCalculation = SalaryFieldCalculationItem::whereRaw("CHARINDEX('" . $field_id . "', multi_field_id) <> 0")->dd();
+        $fieldCalculation = SalaryFieldCalculationItem::whereRaw("(',' + RTRIM(multi_field_id) + ',') LIKE '%,$field_id,%'")->get();
+        
         $related_amount = [];
         if (isset($fieldCalculation) && count($fieldCalculation) > 0) {
             foreach ($fieldCalculation as $items) {
