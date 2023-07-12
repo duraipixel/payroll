@@ -62,4 +62,8 @@ class StaffSalaryPattern extends Model implements Auditable
         return $this->hasOne(StaffSalaryPatternField::class, 'staff_salary_pattern_id', 'id')->where('field_name', 'Dearance Allowance');
     }
 
+    public function salaries() {
+        return $this->hasMany(StaffSalary::class, 'salary_pattern_id', 'id');
+    }
+
 }

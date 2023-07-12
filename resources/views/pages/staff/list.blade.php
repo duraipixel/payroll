@@ -3,6 +3,13 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
+<style>
+    #staff_table td {
+        padding-left: 10px;
+    }
+</style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css" />
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
     <div class="card">
 
         <div class="card-header border-0 pt-6">
@@ -12,25 +19,26 @@
                 <div class="d-flex align-items-center position-relative my-1">
 
                     {!! searchSvg() !!}
-                    <input type="text" name="datatable_search" data-kt-user-table-filter="search"
-                        id="staff_datable_search" class="form-control form-control-solid w-250px ps-14"
-                        placeholder="Search user">
+                    <input type="text" name="datatable_search" data-kt-user-table-filter="search" id="staff_datable_search"
+                        class="form-control form-control-solid w-250px ps-14" placeholder="Search user">
                 </div>
 
             </div>
             @php
-            $route_name = request()->route()->getName();               
-        @endphp
-       
-         @if( access()->buttonAccess($route_name,'add_edit') )
-            <div class="card-toolbar">
-                <div class="d-flex justify-content-end" >
-                    <a href="{{ route('staff.register') }}" class="btn btn-primary btn-sm" >
-                        {!! plusSvg() !!}
-                        Add User
-                    </a>
+                $route_name = request()
+                    ->route()
+                    ->getName();
+            @endphp
+
+            @if (access()->buttonAccess($route_name, 'add_edit'))
+                <div class="card-toolbar">
+                    <div class="d-flex justify-content-end">
+                        <a href="{{ route('staff.register') }}" class="btn btn-primary btn-sm">
+                            {!! plusSvg() !!}
+                            Add User
+                        </a>
+                    </div>
                 </div>
-            </div>
             @endif
 
         </div>
@@ -41,26 +49,21 @@
                     <table class="table align-middle table-hover table-bordered table-striped fs-7 no-footer"
                         id="staff_table">
                         <thead class="bg-primary">
-                            <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="text-white" >
-                                    Created At
-                                </th>
-                                <th class="text-white" >
+                            <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
+
+                                <th class="text-white text-start ps-3">
                                     Staff Info
                                 </th>
-                                <th class="text-white" >
+                                <th class="text-white text-start ps-3">
                                     Society Code
                                 </th>
-                                <th class="text-white" >
+                                <th class="text-white text-start ps-3">
                                     Institution Code
                                 </th>
-                                <th class="text-white" >
-                                    Emp Code
-                                </th>
-                                <th class="text-white" >
+                                <th class="text-white text-start ps-3">
                                     Profile Completion
                                 </th>
-                                <th class="text-white" >
+                                <th class="text-white">
                                     Status
                                 </th>
                                 <th class="text-white">
@@ -81,83 +84,44 @@
 
 @section('add_on_script')
     <script>
-        var dtTable = $('#staff_table').DataTable({
+        $(document).ready(function() {
+            var staff_Table = $('#staff_table').DataTable({
+                "serverSide": true,
+                "processing": true,
+                "ajax": {
+                    "url": "{{ route('staff.list') }}",
+                    "dataType": "json",
+                    "type": "GET",
+                    "data": function(d){
+                        d._token = "{{ csrf_token() }}",
+                        d.staff_datable_search = $('#staff_datable_search').val()
+                    }
+                },
+                "columns": [{
+                        "data": "name"
+                    },
+                    {
+                        "data": "society_code"
+                    },
+                    {
+                        "data": "institute_code"
+                    },
+                    {
+                        "data": "profile"
+                    },
+                    {
+                        "data": "status"
+                    },
+                    {
+                        "data": "actions"
+                    }
+                ]
 
-            processing: true,
-            serverSide: true,
-            type: 'POST',
-            ajax: {
-                "url": "{{ route('staff.list') }}",
-                "data": function(d) {
-                    d.datatable_search = $('#staff_datable_search').val();
-                }
-            },
-
-            columns: [
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'society_emp_code',
-                    name: 'society_emp_code'
-                },
-                {
-                    data: 'institute_emp_code',
-                    name: 'institute_emp_code'
-                },
-                {
-                    data: 'emp_code',
-                    name: 'emp_code'
-                },
-                {
-                    data: 'verification_status',
-                    name: 'verification_status'
-                },
-                {
-                    data: 'status',
-                    name: 'status'
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                },
-            ],
-            language: {
-                paginate: {
-                    next: '<i class="fa fa-angle-right"></i>', // or '→'
-                    previous: '<i class="fa fa-angle-left"></i>' // or '←' 
-                }
-            },
-            "aaSorting": [],
-            "pageLength": 25
-        });
-
-        $('.dataTables_wrapper').addClass('position-relative');
-        $('.dataTables_info').addClass('position-absolute');
-        $('.dataTables_filter label input').addClass('form-control form-control-solid w-250px ps-14');
-        $('.dataTables_filter').addClass('position-absolute end-0 top-0');
-        $('.dataTables_length label select').addClass('form-control form-control-solid');
-
-        document.querySelector('#staff_datable_search').addEventListener("keyup", function(e) {
-                dtTable.draw();
-            }),
-
-            $('#search-form').on('submit', function(e) {
-                dtTable.draw();
-                e.preventDefault();
             });
-        $('#search-form').on('reset', function(e) {
-            $('select[name=filter_status]').val(0).change();
 
-            dtTable.draw();
-            e.preventDefault();
+            document.querySelector('#staff_datable_search').addEventListener("keyup", function(e) {
+                staff_Table.ajax.reload();
+            });
         });
 
         function staffChangeStatus(id, status) {

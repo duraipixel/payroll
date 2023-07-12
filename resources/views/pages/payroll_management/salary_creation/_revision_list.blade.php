@@ -195,20 +195,33 @@
                         $('#payout-salary-revision').addClass('blur_loading_3px');
                     },
                     success: function(res) {
+                        if (res.error == 0) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: res.message,
+                                icon: "success",
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-success"
+                                },
+                                timer: 3000
+                            });
+                            setTimeout(() => {
+                                getSalaryHeadFields(res.staff_id);
+                            }, 300);
+                        } else {
+                            Swal.fire({
+                                title: "Error!",
+                                text: res.message,
+                                icon: "danger",
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-danger"
+                                },
+                                timer: 3000
+                            });
+                        }
 
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: res.message,
-                            icon: "success",
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn btn-success"
-                            },
-                            timer: 3000
-                        });
-                        setTimeout(() => {
-                            getSalaryHeadFields(res.staff_id);
-                        }, 300);
 
                     },
                     error: function(xhr, err) {

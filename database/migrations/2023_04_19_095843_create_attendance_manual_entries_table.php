@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attendance_manual_entries');
+        Schema::dropIfExists('');
     }
 };

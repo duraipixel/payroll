@@ -257,6 +257,9 @@ class SalaryCreationController extends Controller
             $all_salary_patterns = StaffSalaryPattern::where('staff_id', $staff_id)->orderBy('id', 'desc')
                                     ->where('verification_status', '!=', 'rejected')->get();
             $current_pattern = StaffSalaryPattern::where(['staff_id' => $staff_id, 'is_current' => 'yes'])->first();
+            if( !$current_pattern ) {
+                $current_pattern = StaffSalaryPattern::where(['staff_id' => $staff_id, 'is_current' => 'no'])->orderBy('payout_month', 'desc')->first();
+            }
             $staff_details = User::find( $staff_id );
             $params['all_salary_patterns'] = $all_salary_patterns;
             $params['current_pattern'] = $current_pattern;
@@ -482,33 +485,44 @@ class SalaryCreationController extends Controller
 
         $id = $request->id;
         $info = StaffSalaryPattern::find($id);
-        $is_current = $info->is_current;
         $staff_id = $info->staff_id;
-        // $info->delete;
+        if( isset($info->salaries) && count($info->salaries) > 0 ) {
 
-        if( $is_current == 'yes' ) {
+            $error = 1;
+            $message = 'Cannot delete Staff Salary Pattern. It has salary dependencies';
 
-            $max_info = DB::select('SELECT ssp.id, ssp.payout_month
-                            FROM staff_salary_patterns ssp
-                            WHERE ssp.staff_id = 8
-                            AND ssp.payout_month = (
-                            SELECT MAX(payout_month)
-                            FROM staff_salary_patterns
-                            WHERE staff_id = 8 and deleted_at is null
-                            )');
+        } else {
 
-            if( !empty($max_info)) {
-                $pattern_id = $max_info[0]['id'];
-                if( $pattern_id ) {
-                    StaffSalaryPattern::where('staff_id', $staff_id)->update(['is_current', 'no']);
-                    StaffSalaryPattern::where('id', $pattern_id)->update(['is_current', 'yes']);
+            $is_current = $info->is_current;
+            $info->delete();
+
+            if( $is_current == 'yes' ) {
+    
+                $max_info = DB::select('SELECT ssp.id, ssp.payout_month
+                                FROM staff_salary_patterns ssp
+                                WHERE ssp.staff_id = '.$staff_id.'
+                                AND ssp.payout_month = (
+                                SELECT MAX(payout_month)
+                                FROM staff_salary_patterns
+                                WHERE staff_id = '.$staff_id.' and deleted_at is null
+                                )');
+    
+                if( !empty($max_info)) {
+                    
+                    $pattern_id = $max_info[0]->id ?? '';
+                    if( $pattern_id ) {
+                        StaffSalaryPattern::where('staff_id', $staff_id)->update(['is_current' => 'no']);
+                        StaffSalaryPattern::where('id', $pattern_id)->update(['is_current' => 'yes']);
+                    }
                 }
+                
             }
-            
+    
+            $error = 0;
+            $message = 'Staff Salary Pattern deleted successfully';
         }
 
-        $error = 0;
-        $message = 'Staff Salary Pattern deleted successfully';
         return array('error' => $error, 'message' => $message, 'staff_id' => $staff_id);
     }
+
 }

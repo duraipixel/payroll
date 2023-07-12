@@ -21,6 +21,13 @@ class AttendanceManualEntry extends Model
         'reason',
         'status',
         'from_time',
-        'to_time'
+        'to_time',
+        'total_time',
+        'total_worked',
+        'duty_duration',
+        'break_out',
+        'break_in',
+        'break_duration',
+        'actual_break'
     ];
 }

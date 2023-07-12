@@ -940,6 +940,178 @@ class StaffController extends Controller
             )
         );
         if ($request->ajax()) {
+            $staff_datable_search = $request->staff_datable_search;
+
+            $totalFilteredRecord = $totalDataRecord = $draw_val = "";
+            $columns_list = array(
+                0 => 'id',
+                1 => 'name',
+                2 => 'emp_code',
+                3 => 'created_at',
+                4 => 'id',
+            );
+
+            $totalDataRecord = User::select('users.*', 'institutions.name as institute_name')
+                ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
+                ->with([
+                    'personal',
+                    'position',
+                    'StaffDocument',
+                    'StaffEducationDetail',
+                    'familyMembers',
+                    'nominees',
+                    'healthDetails',
+                    'StaffWorkExperience',
+                    'knownLanguages',
+                    'studiedSubject',
+                    'bank',
+                    'appointment'
+                ])
+                ->whereNull('is_super_admin')->count();
+
+            $totalFilteredRecord = $totalDataRecord;
+
+            $limit_val = $request->input('length');
+            $start_val = $request->input('start');
+            $order_val = $columns_list[$request->input('order.0.column')];
+            $dir_val = $request->input('order.0.dir');
+
+            $search_text = $staff_datable_search;
+
+            $post_data = User::select('users.*', 'institutions.name as institute_name')
+                ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
+                ->with([
+                    'personal',
+                    'position',
+                    'StaffDocument',
+                    'StaffEducationDetail',
+                    'familyMembers',
+                    'nominees',
+                    'healthDetails',
+                    'StaffWorkExperience',
+                    'knownLanguages',
+                    'studiedSubject',
+                    'bank',
+                    'appointment'
+                ])
+                ->whereNull('is_super_admin')
+                ->when(!empty($staff_datable_search), function ($q) use ($search_text) {
+                    $q->where('users.name', 'like', "%{$search_text}%")
+                        ->orWhere('users.status', 'like', "%{$search_text}%")
+                        ->orWhere('users.email', 'like', "%{$search_text}%")
+                        ->orWhere('users.emp_code', 'like', "%{$search_text}%")
+                        ->orWhere('users.society_emp_code', 'like', "%{$search_text}%")
+                        ->orWhere('users.institute_emp_code', 'like', "%{$search_text}%")
+                        ->orWhere('users.first_name_tamil', 'like', "%{$search_text}%");
+                })
+                ->offset($start_val)
+                ->limit($limit_val)
+                ->orderBy('society_emp_code', 'desc')
+                ->get();
+
+            if (!empty($request->input('search.value'))) {
+
+                $totalFilteredRecord = User::select('users.*', 'institutions.name as institute_name')
+                    ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
+                    ->with([
+                        'personal',
+                        'position',
+                        'StaffDocument',
+                        'StaffEducationDetail',
+                        'familyMembers',
+                        'nominees',
+                        'healthDetails',
+                        'StaffWorkExperience',
+                        'knownLanguages',
+                        'studiedSubject',
+                        'bank',
+                        'appointment'
+                    ])
+                    ->whereNull('is_super_admin')
+                    ->when(!empty($request->input('search.value')), function ($q) use ($search_text) {
+                        $q->where('users.name', 'like', "%{$search_text}%")
+                            ->orWhere('users.status', 'like', "%{$search_text}%")
+                            ->orWhere('users.email', 'like', "%{$search_text}%")
+                            ->orWhere('users.emp_code', 'like', "%{$search_text}%")
+                            ->orWhere('users.society_emp_code', 'like', "%{$search_text}%")
+                            ->orWhere('users.institute_emp_code', 'like', "%{$search_text}%")
+                            ->orWhere('users.first_name_tamil', 'like', "%{$search_text}%");
+                    })
+                    ->count();
+            }
+
+
+            $data_val = array();
+            if (!empty($post_data)) {
+                foreach ($post_data as $post_val) {
+
+                    $edit_btn = $view_btn = $print_btn = $del_btn = '';
+
+                    $completed_percentage = getStaffProfileCompilationData($post_val);
+                    $profile_status = '
+                            <div class="d-flex align-items-center w-100px w-sm-200px flex-column mt-3">
+                                <div class="d-flex justify-content-between w-100 mt-auto">
+                                    <span class="fw-semibold fs-6 text-gray-400">' . ucwords($post_val->verification_status) . '</span>
+                                    <span class="fw-bold fs-6">' . $completed_percentage . '%</span>
+                                </div>
+                                <div class="h-5px mx-3 w-100 bg-light">
+                                    <div class="bg-success rounded h-5px" role="progressbar" aria-valuenow="' . $completed_percentage . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $completed_percentage . '%;"></div>
+                                </div>
+                            </div>';
+
+                    $route_name = request()->route()->getName();
+                    if (access()->buttonAccess($route_name, 'add_edit')) {
+                        $edit_btn = '<a href="' . route('staff.register', ['id' => $post_val->id]) . '"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                        <i class="fa fa-edit"></i>
+                        </a>';
+                    }
+                    if (access()->buttonAccess($route_name, 'delete')) {
+                        $del_btn = '<a href="javascript:void(0);" onclick="deleteStaff(' . $post_val->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                        <i class="fa fa-trash"></i></a>';
+                    }
+
+                    $view_btn = '<a href="' . route('staff.view', ['user' => $post_val->id]) . '"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px" > 
+                                    <i class="fa fa-eye"></i>
+                                </a>';
+
+                    $print_btn = '<a target="_blank" href="' . route('staff.print', ['user' => $post_val->id]) . '"  class="btn btn-icon btn-active-info btn-light-dark mx-1 w-30px h-30px" > 
+                                    <i class="fa fa-print"></i>
+                                </a>';
+
+                    $postnestedData['name'] = $post_val->name;
+                    $postnestedData['society_code'] = $post_val->society_emp_code;
+                    $postnestedData['institute_code'] = $post_val->institute_emp_code;
+                    $postnestedData['profile'] = $profile_status;
+                    $postnestedData['status'] = '<a href="javascript:void(0);" class="badge badge-light-' . (($post_val->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($post_val->status) . '" onclick="return staffChangeStatus(' . $post_val->id . ',\'' . ($post_val->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($post_val->status) . '</a>';
+                    $postnestedData['actions'] = '<div class="w-100 text-end">'.$edit_btn . $view_btn . $print_btn . $del_btn.'</div>';
+                    $data_val[] = $postnestedData;
+                }
+            }
+            $draw_val = $request->input('draw');
+            $get_json_data = array(
+                "draw"            => intval($draw_val),
+                "recordsTotal"    => intval($totalDataRecord),
+                "recordsFiltered" => intval($totalFilteredRecord),
+                "data"            => $data_val
+            );
+
+            return json_encode($get_json_data);
+        }
+        return view('pages.staff.list', compact('breadcrums'));
+    }
+
+    public function list1(Request $request)
+    {
+
+        $breadcrums = array(
+            'title' => 'Staff Management',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => 'Staff List'
+                ),
+            )
+        );
+        if ($request->ajax()) {
 
             $query = User::select('users.*', 'institutions.name as institute_name')
                 ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
@@ -983,7 +1155,8 @@ class StaffController extends Controller
                 })
                 ->addIndexColumn()
                 ->editColumn('verification_status', function ($row) {
-                    $completed_percentage = getStaffProfileCompilationData($row);
+                    // $completed_percentage = getStaffProfileCompilationData($row);
+                    $completed_percentage = 0;
                     $status = '
                             <div class="d-flex align-items-center w-100px w-sm-200px flex-column mt-3">
                                 <div class="d-flex justify-content-between w-100 mt-auto">

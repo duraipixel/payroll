@@ -895,3 +895,11 @@ function staffMonthTax($staff_id, $month)
         return $info->$month;
     }
 }
+
+function getHoursBetweenHours($from, $to)
+{
+    $time1 = strtotime($from);
+    $time2 = strtotime($to);
+    $difference = round(abs($time2 - $time1) / 3600, 2);
+    return $difference;
+}
