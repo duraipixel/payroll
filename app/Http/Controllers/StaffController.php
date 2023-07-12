@@ -1004,10 +1004,13 @@ class StaffController extends Controller
                         ->orWhere('users.institute_emp_code', 'like', "%{$search_text}%")
                         ->orWhere('users.first_name_tamil', 'like', "%{$search_text}%");
                 })
-                ->offset($start_val)
-                ->limit($limit_val)
-                ->orderBy('society_emp_code', 'desc')
-                ->get();
+                ->orderBy('society_emp_code', 'desc');
+
+            if ($limit_val > 0) {
+                $post_data = $post_data->offset($start_val)->limit($limit_val)->get();
+            } else {
+                $post_data = $post_data->get();
+            }
 
             if (!empty($request->input('search.value'))) {
 
@@ -1083,7 +1086,7 @@ class StaffController extends Controller
                     $postnestedData['institute_code'] = $post_val->institute_emp_code;
                     $postnestedData['profile'] = $profile_status;
                     $postnestedData['status'] = '<a href="javascript:void(0);" class="badge badge-light-' . (($post_val->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($post_val->status) . '" onclick="return staffChangeStatus(' . $post_val->id . ',\'' . ($post_val->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($post_val->status) . '</a>';
-                    $postnestedData['actions'] = '<div class="w-100 text-end">'.$edit_btn . $view_btn . $print_btn . $del_btn.'</div>';
+                    $postnestedData['actions'] = '<div class="w-100 text-end">' . $edit_btn . $view_btn . $print_btn . $del_btn . '</div>';
                     $data_val[] = $postnestedData;
                 }
             }
