@@ -12,8 +12,8 @@ class StaffNomineeController extends Controller
 {
     public function getStaffNominee(Request $request)
     {
-        $staff_id = $request->staff_id;
 
+        $staff_id = $request->staff_id;
         return StaffFamilyMember::where('status', 'active')->where('staff_id', $staff_id)->get();
 
     }
@@ -76,12 +76,17 @@ class StaffNomineeController extends Controller
 
     public function formContent(Request $request)
     {
+
         $nominee_id = $request->nominee_id;
         $nominee_info = StaffNominee::find($nominee_id);
+
+        StaffFamilyMember::where('status', 'active')->where('staff_id', $nominee_info->staff_id)->get();
+
         $params = array(
             'nominee_info' => $nominee_info
         );
         return view('pages.staff.registration.nominee.form_content', $params );
+
     }
 
     function deleteStaffNominee(Request $request) {

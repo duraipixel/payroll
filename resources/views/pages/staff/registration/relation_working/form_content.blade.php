@@ -99,7 +99,7 @@
         
         if( resl ) {
             $('#working_institute_id').val(resl.institute.name);
-            $('#working_emp_code').val(resl.emp_code);
+            $('#working_emp_code').val(resl.society_emp_code);
         } else {
             $('#working_institute_id').val('');
             $('#working_emp_code').val('');

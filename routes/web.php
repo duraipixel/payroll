@@ -242,6 +242,11 @@ Route::group(['middleware' => 'auth'],  function () {
     });
     // Settings Start
     Route::get('account/settings',[App\Http\Controllers\Account\SettingsController::class,'index'])->name('account.settings');
+    #Attendance 
+    Route::get('attendance/overview',[App\Http\Controllers\AttendanceManagement\OverviewController::class,'index'])->name('attendance.overview');
+
+    Route::any('attendance/ajax/view', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'ajax_view'])->name('attendance.ajax.view');
+    Route::any('attendance/ajax/datatable', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'ajaxDatatable'])->name('attendance.ajax.datatable');
 
     Route::get('payroll/overview',[App\Http\Controllers\PayrollManagement\OverviewController::class,'index'])->name('payroll.overview');
     Route::post('payroll/overview/month',[App\Http\Controllers\PayrollManagement\OverviewController::class,'getMonthData'])->name('payroll.get.month.chart');

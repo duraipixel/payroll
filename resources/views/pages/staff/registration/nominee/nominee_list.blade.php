@@ -35,7 +35,11 @@
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ $item->age }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $item->minor_name ?? '' }}</td>
+                            {{ $item->minor_name ?? '' }}
+                            <div>
+                                {{ $item->minor_address ?? '' }}
+                            </div>
+                        </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ $item->share }}%</td>
                         <td class="text-end">

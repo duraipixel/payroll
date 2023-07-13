@@ -16,7 +16,7 @@ class StaffWorkingRelationController extends Controller
         $id = $request->relation_working_id ?? '';
         $data = '';
         $validator = Validator::make($request->all(), [
-                                'working_relation_id' => 'required|unique:staff_working_relations,belonger_id,'.$id,
+                                'working_relation_id' => 'required',
                                 'working_relationship_type_id' => 'required',
                                 'working_emp_code' => 'required',
                                 'working_institute_id' => 'required'

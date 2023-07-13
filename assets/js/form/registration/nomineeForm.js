@@ -35,6 +35,7 @@ function editNomineeForm(staff_id, nominee_id) {
         success: function(res) {
             $('#nominee_form').html(res);
             $('#nominee_form_title').html('Update Your Nominee Details');
+            getNominee();
         }
     })
 

@@ -24,7 +24,8 @@ class StaffNominee extends Model implements Auditable
         'minor_name',
         'share',
         'minor_address',
-        'minor_contact_no'
+        'minor_contact_no',
+        'guardian_name'
     ];
 
     public function nominee()

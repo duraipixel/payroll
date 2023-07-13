@@ -717,7 +717,6 @@ class StaffController extends Controller
 
     public function insertEmployeePosition(Request $request)
     {
-
         #subjectid_classid
         $id = $request->id ?? '';
         $global_is_teaching = $request->global_is_teaching;

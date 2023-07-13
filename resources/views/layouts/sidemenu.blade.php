@@ -307,7 +307,7 @@
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link" href="javascript:void(0)">
+                                <a class="menu-link @if (request()->routeIs(['att-manual-entry'])) active @endif" href="{{ route('attendance.overview') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
@@ -323,7 +323,7 @@
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                                        <span class="menu-title">Manual Entry</span>
+                                        <span class="menu-title">Attendance Entry</span>
                                     </a>
                                 </div>
                             @endif

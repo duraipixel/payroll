@@ -75,7 +75,7 @@
                 <option value="">--Select Leave Status--</option>
                 @isset($leave_status)
                     @foreach ($leave_status as $item)
-                        <option value="{{ $item->id }}" @if (isset($info->attendance_status) && $info->attendance_status == $item->id) selected @endif>
+                        <option value="{{ $item->id }}" @if (isset($info->attendance_status_id) && $info->attendance_status_id == $item->id) selected @endif>
                             {{ $item->name }}
                         </option>
                     @endforeach
@@ -103,9 +103,9 @@
             Status
         </label>
         <div >
-            <input type="radio" id="active" class="form-check-input" value="1" name="status" @if(isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif >
+            <input type="radio" id="active" class="form-check-input" value="active" name="status" @if(isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif >
             <label class="pe-3" for="active">Active</label>
-            <input type="radio" id="inactive" class="form-check-input" value="0" name="status" @if(isset($info->status) && $info->status != 'active') checked  @endif >
+            <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status" @if(isset($info->status) && $info->status == 'inactive') checked  @endif >
             <label for="inactive">Inactive</label>
         </div>
     </div>

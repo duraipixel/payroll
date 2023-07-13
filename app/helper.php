@@ -903,3 +903,15 @@ function getHoursBetweenHours($from, $to)
     $difference = round(abs($time2 - $time1) / 3600, 2);
     return $difference;
 }
+
+function getStaffLeaveRequestStatus($staff_id, $date) {
+    $info = StaffLeave::where('staff_id', $staff_id)
+            ->where('from_date', '>=', $date)->where('to_date', '<=', $date)
+            ->first();
+    $status = 'Request Pending';
+    if( $info ) {
+
+    } else {
+        return $status;
+    }
+}

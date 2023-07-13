@@ -26,13 +26,13 @@ class AttEntrySeeder extends Seeder
             $absent_ids = array_column($absents, 'id');
         }
         $holiday = ['saturday', 'sunday'];
-        $date = '2023-06-01';
+        $date = '2023-03-01';
         $month_start = date('Y-m-d', strtotime($date));
         $month_end = date('Y-m-t', strtotime($date));
 
 
-        $start_date = date_create('2022-01-01');
-        $end_date = date_create('2022-01-30');
+        $start_date = date_create('2022-03-01');
+        $end_date = date_create('2022-03-31');
         $interval = new DateInterval('P1D');
         $date_range = new DatePeriod($start_date, $interval, $end_date);
         

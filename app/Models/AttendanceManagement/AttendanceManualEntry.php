@@ -28,6 +28,8 @@ class AttendanceManualEntry extends Model
         'break_out',
         'break_in',
         'break_duration',
-        'actual_break'
+        'actual_break',
+        'mode',
+        'attendance_status_id'
     ];
 }

@@ -22,7 +22,7 @@
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ ucwords($item->relationship->name) }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ $item->belonger->emp_code }}</td>
+                            {{ $item->belonger->society_emp_code }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ $item->belonger->institute->name ?? '' }}</td>
                         <td class="text-end">

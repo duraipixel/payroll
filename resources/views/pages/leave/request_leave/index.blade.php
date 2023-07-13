@@ -3,6 +3,11 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
+    <style>
+        .modal-open .daterangepicker {
+            z-index: 3001 ;
+        }
+    </style>
     <div class="card">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
@@ -15,13 +20,16 @@
             <div class="card-toolbar">
                 <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
-                @php
-                    $route_name = request()->route()->getName();               
-                @endphp
-                @if( access()->buttonAccess($route_name,'add_edit') )
-                    <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="getRequestLeaveModal()">
-                        {!! plusSvg() !!} Request Leave
-                    </button>
+                    @php
+                        $route_name = request()
+                            ->route()
+                            ->getName();
+                    @endphp
+                    @if (access()->buttonAccess($route_name, 'add_edit'))
+                        <button type="button" class="btn btn-primary btn-sm" id="add_modal"
+                            onclick="getRequestLeaveModal()">
+                            {!! plusSvg() !!} Request Leave
+                        </button>
                     @endif
                 </div>
 
@@ -166,13 +174,13 @@
         $('.dataTables_length label select').addClass('form-control form-control-solid');
 
         document.querySelector('#leave_dataTable_search').addEventListener("keyup", function(e) {
-            dtTable.draw();
-        }),
+                dtTable.draw();
+            }),
 
-        $('#search-form').on('submit', function(e) {
-            dtTable.draw();
-            e.preventDefault();
-        });
+            $('#search-form').on('submit', function(e) {
+                dtTable.draw();
+                e.preventDefault();
+            });
 
         $('#search-form').on('reset', function(e) {
             $('select[name=filter_status]').val(0).change();
@@ -201,7 +209,5 @@
             })
 
         }
-
-        
     </script>
 @endsection
