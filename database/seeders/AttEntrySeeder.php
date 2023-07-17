@@ -21,23 +21,24 @@ class AttEntrySeeder extends Seeder
     {
         $users = User::select('id')->whereNull('is_super_admin')->get();
         
-        $absents = User::select('id')->get()->random(15)->toArray();
-        if (isset($absents) && !empty($absents)) {
-            $absent_ids = array_column($absents, 'id');
-        }
+       
         $holiday = ['saturday', 'sunday'];
         $date = '2023-03-01';
         $month_start = date('Y-m-d', strtotime($date));
         $month_end = date('Y-m-t', strtotime($date));
 
 
-        $start_date = date_create('2022-03-01');
-        $end_date = date_create('2022-03-31');
+        $start_date = date_create('2023-03-01');
+        $end_date = date_create('2023-03-31');
         $interval = new DateInterval('P1D');
         $date_range = new DatePeriod($start_date, $interval, $end_date);
         
         foreach ($date_range as $date) {
 
+            $absents = User::select('id')->get()->random(15)->toArray();
+            if (isset($absents) && !empty($absents)) {
+                $absent_ids = array_column($absents, 'id');
+            }
             $current_date = $date->format('Y-m-d');
             $current_day = date('l', strtotime($current_date));
             if (!in_array(strtolower($current_day), $holiday)) {

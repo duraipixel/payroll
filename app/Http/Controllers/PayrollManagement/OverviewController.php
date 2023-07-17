@@ -4,12 +4,20 @@ namespace App\Http\Controllers\PayrollManagement;
 
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
+use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\PayrollManagement\Payroll;
 use App\Models\PayrollManagement\PayrollPermission;
+use App\Repositories\PayrollChecklistRepository;
 use Illuminate\Http\Request;
 
 class OverviewController extends Controller
 {
+    private $checklistRepository;
+
+    public function __construct(PayrollChecklistRepository $checklistRepository) {
+        $this->checklistRepository = $checklistRepository;
+    }
+
     public function index() {
 
         $breadcrums = array(
@@ -160,9 +168,9 @@ class OverviewController extends Controller
     }
 
     public function processPayrollModal(Request $request) {
+
         $date = $request->date;
         $payout_id = $request->payout_id;
-        
 
         /**
          * 1. Employee it declaration Pending
@@ -176,10 +184,15 @@ class OverviewController extends Controller
          /**
           * select * from users where verification_status = 'approved';
           */
+       
+        $leave_data = $this->checklistRepository->getPendingRequestLeave($date);
+        
+
         $title = 'Payroll Process Confirmation';
         $params = array(
             'date' => $date,
-            'payout_id' => $payout_id
+            'payout_id' => $payout_id,
+            'leave_data' => $leave_data
         );
 
         $content = view('pages.payroll_management.overview._payroll_form', $params);

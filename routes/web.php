@@ -138,6 +138,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('/working/days', [App\Http\Controllers\Leave\LeaveController::class, 'setWorkingDays'])->name('leaves.set.workingday'); 
     Route::post('/leaves/add', [App\Http\Controllers\Leave\LeaveController::class, 'addEditModal'])->name('leaves.add_edit'); 
     Route::post('/leaves/save', [App\Http\Controllers\Leave\LeaveController::class, 'saveLeaveRequest'])->name('save.leaves'); 
+    Route::post('/leaves/delete', [App\Http\Controllers\Leave\LeaveController::class, 'deleteLeave'])->name('delete.leaves'); 
     Route::post('/get/staff/info', [App\Http\Controllers\CommonController::class, 'getStaffInfo'])->name('get.staff'); 
     Route::post('/get/staff/leaveinfo', [App\Http\Controllers\CommonController::class, 'getStaffLeaveInfo'])->name('get.staff.leave.info'); 
     Route::post('/get/leave/form', [App\Http\Controllers\CommonController::class, 'getLeaveForm'])->name('get.leave.form'); 

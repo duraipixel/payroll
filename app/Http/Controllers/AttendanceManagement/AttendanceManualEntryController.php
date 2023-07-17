@@ -9,14 +9,9 @@ use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\Staff\StaffAppointmentDetail;
 use Illuminate\Http\Request;
-use App\Models\Master\NatureOfEmployment;
 use App\Models\AttendanceManagement\LeaveStatus;
 use App\Models\AttendanceManagement\LeaveHead;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Str;
-use DataTables;
-use Carbon\Carbon;
 use App\Models\User;
 use App\Repositories\AttendanceRepository;
 use Maatwebsite\Excel\Facades\Excel;
@@ -73,7 +68,7 @@ class AttendanceManualEntryController extends Controller
         $validator      = Validator::make($request->all(), [
             'employee_id' => 'required',
             'attendance_date' => 'required',
-            'reporting_id' => 'required',
+            // 'reporting_id' => 'required',
             'leave_status_id' => 'required',
             'reason' => 'required',
         ]);
@@ -85,27 +80,25 @@ class AttendanceManualEntryController extends Controller
             $ins['attendance_date'] = $request->attendance_date;
             $ins['from_time'] = $request->from_time;
             $ins['to_time'] = $request->to_time;
-            $ins['reporting_manager'] = $request->reporting_id;
+            // $ins['reporting_manager'] = $request->reporting_id;
             $ins['attendance_status_id'] = $request->leave_status_id;
             $leave_status = LeaveStatus::find($request->leave_status_id);
-
-            if ($leave_status->name === 'Absent') {
-                $ins['absent_status'] = 'Pending';
-            } else {
-                $ins['absent_status'] = '';
-            }
+            $ins['attendance_status'] = $leave_status->name;
             $ins['reason'] = $request->reason;
-            $ins['status'] = $$request->status;
-
+            $ins['status'] = $request->status;
+            // dd( $ins );
             $data = AttendanceManualEntry::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
+
         } else {
 
             $error = 1;
             $message = $validator->errors()->all();
+
         }
         return response()->json(['error' => $error, 'message' => $message, 'inserted_data' => $data]);
+
     }
 
     public function add_edit(Request $request)

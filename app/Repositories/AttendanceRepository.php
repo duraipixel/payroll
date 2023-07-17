@@ -40,8 +40,7 @@ class AttendanceRepository extends Controller
                         $q->where('users.name', 'like', "%{$keywords}%")
                             ->orWhere('leave_statuses.name', 'like', "%{$keywords}%")
                             ->orWhere('reason', 'like', "%{$keywords}%")
-                            ->orWhereDate('attendance_date', $date)
-                            ->orWhereDate('attendance_manual_entries.created_at', $date);
+                            ->orWhereDate('attendance_date', $date);
                     });
                 }
             })
@@ -54,10 +53,22 @@ class AttendanceRepository extends Controller
                 $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
                 return $created_at;
             })
+            ->editColumn('reporting_manager', function($row) {
+                return $row->reportingManager()->name ?? '';
+            } )
             ->addColumn('leave_status', function($row){
                 $leave_status = 'n/a';
-                if( $row->attendance_status == 'Absence'){
-                    $leave_status = '<a href="javascript:void(0);" class="btn btn-sm btn-light-danger">Request Pending</a>';
+                if( $row->attendance_status == 'Absence') {
+                    
+                    $text = getStaffLeaveRequestStatus($row->employment_id, $row->attendance_date);
+                    $class = 'danger';
+                    if( $text == 'Leave Approval Pending' ) {
+                        $class = 'warning';
+                    } else if( $text == 'Leave Approved') {
+                        $class = 'success';
+                    }
+                    $leave_status = '<a href="javascript:void(0);" class="small btn btn-sm btn-light-'.$class.'">'.$text.'</a>';
+
                 }
                 return $leave_status;
             })

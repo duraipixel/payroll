@@ -321,7 +321,7 @@ if (!function_exists('generateLeaveForm')) {
         $data['address'] = $leave_info->address ?? '';
         $data['staff_name'] = $leave_info->staff_info->name;
         $data['staff_code'] = $leave_info->staff_info->institute_emp_code ?? $leave_info->staff_info->emp_code;
-        $data['taken_leave'] = '';
+        $data['taken_leave'] = $taken_leave = StaffLeave::where('staff_id', $leave_info->staff_id)->where('from_date', '<', $leave_info->from_date)->count();
         $data['holiday_date'] = $leave_info->holiday_date ? date('d/M/Y', strtotime($leave_info->holiday_date)) : '';
         $data['is_leave_granted'] = $leave_info->is_granted ? ucfirst($leave_info->is_granted) : '';
         $data['granted_days'] = $leave_info->granted_days ?? '';
@@ -905,13 +905,20 @@ function getHoursBetweenHours($from, $to)
 }
 
 function getStaffLeaveRequestStatus($staff_id, $date) {
+    // dump( $date );
+    // dump( $staff_id );
     $info = StaffLeave::where('staff_id', $staff_id)
             ->where('from_date', '>=', $date)->where('to_date', '<=', $date)
             ->first();
-    $status = 'Request Pending';
+    $status = 'Leave Request Pending';
     if( $info ) {
+        if( $info->status == 'pending' ) {
+            $status = 'Leave Approval Pending';
+        } else {
+            $status  = 'Leave Approved';
+        }
+    } 
+    return $status;
+    
 
-    } else {
-        return $status;
-    }
 }

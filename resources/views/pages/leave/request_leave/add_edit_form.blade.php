@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-dialog-centered mw-1000px">
+<div class="modal-dialog modal-xl modal-dialog-centered mw-1000px">
     <style>
         .typeahead-pane {
             position: absolute;
@@ -38,6 +38,16 @@
 
         .daterangepicker.show-calendar .ranges {
             height: 0;
+        }
+
+        #leave_table_staff th,
+        #nature_table_staff th {
+            padding: 5px;
+        }
+
+        #leave_table_staff td,
+        #nature_table_staff td {
+            padding: 5px;
         }
     </style>
     <div class="modal-content">
@@ -80,9 +90,17 @@
                                 </label>
                             </div>
                             <div class="col-sm-7">
+                                @if( isset( $info->from_date ) && !empty( $info->from_date ) )
+                                <input type="hidden" name="requested_date" id="requested_date"
+                                    value="{{ isset($info->from_date) ? date('d/m/Y', strtotime($info->from_date)) . ' - ' . date('d/m/Y', strtotime($info->to_date)) : '' }}"
+                                    class="form-control">
+                                    <label for="" class="mt-3"> {{ isset($info->from_date) ? date('d/m/Y', strtotime($info->from_date)) . ' - ' . date('d/m/Y', strtotime($info->to_date)) : '' }} </label>
+                                @else 
                                 <input type="text" name="requested_date" id="requested_date"
                                     value="{{ isset($info->from_date) ? date('d/m/Y', strtotime($info->from_date)) . ' - ' . date('d/m/Y', strtotime($info->to_date)) : '' }}"
                                     class="form-control">
+                                @endif
+                                
                             </div>
                         </div>
                         <div class="fv-row form-group mb-3 row">
@@ -121,6 +139,70 @@
                                 @include('pages.leave.request_leave.el_form')
                             @endif
                         </div>
+                        @if (isset($info) && !empty($info))
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - {{ count($taken_leave) }} </h6>
+                                    @if( isset( $taken_leave ) && count( $taken_leave ) > 0 )
+                                    <div class="table-wrap table-responsive " style="max-height: 400px;">
+                                        <table id="leave_table_staff" class="table table-hover table-bordered">
+                                            <thead class="bg-dark text-white">
+                                                <tr>
+                                                    <th>
+                                                        Date
+                                                    </th>
+                                                    <th>
+                                                        Type
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($taken_leave as $item)
+                                                <tr>
+                                                    <td>
+                                                        {{ commonDateFormat($item->from_date) .' - '. commonDateFormat($item->to_date) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $item->leave_category }}
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    @endif
+                                </div>
+                                <div class="col-sm-4">
+                                    <label class="mt-3 alert alert-info small"> Leave Allocated </label>
+                                    <div class="table-wrap table-responsive " style="max-height: 400px;">
+                                        <table id="nature_table_staff" class="table table-hover table-bordered">
+                                            <thead class="bg-dark text-white">
+                                                <tr>
+                                                    <th>Type</th>
+                                                    <th>Allocated</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (isset($info->staff_info->appointment->leaveAllocated) && count($info->staff_info->appointment->leaveAllocated) > 0)
+                                                    @foreach ($info->staff_info->appointment->leaveAllocated as $item)
+                                                        <tr>
+                                                            <td>
+                                                                {{ $item->leave_head->name ?? '' }}
+                                                            </td>
+                                                            <td class="text-center">
+                                                                {{ $item->leave_days ?? 0 }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
                     <div class="col-sm-6">
                         <div class="fv-row form-group mb-3 row">
@@ -151,8 +233,9 @@
                                 </label>
                             </div>
                             <div class="col-sm-7">
-                                <input type="text" name="staff_code" value="{{ $info->staff_info->emp_code ?? '' }}"
-                                    readonly id="staff_code" class="form-control">
+                                <input type="text" name="staff_code"
+                                    value="{{ $info->staff_info->emp_code ?? '' }}" readonly id="staff_code"
+                                    class="form-control">
                             </div>
                         </div>
                         <div class="fv-row form-group mb-3 row">

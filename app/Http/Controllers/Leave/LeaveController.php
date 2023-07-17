@@ -7,6 +7,7 @@ use App\Models\AttendanceManagement\Holiday;
 use App\Models\AttendanceManagement\LeaveHead;
 use App\Models\CalendarDays;
 use App\Models\Leave\StaffLeave;
+use App\Models\PayrollManagement\Payroll;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -81,7 +82,7 @@ class LeaveController extends Controller
                         $edit_btn = '';
                     }
                     if (access()->buttonAccess($route_name, 'delete')) {
-                        $del_btn = '<a href="javascript:void(0);" onclick="deleteAppointmentOrder(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                        $del_btn = '<a href="javascript:void(0);" onclick="deleteLeave(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                                 <i class="fa fa-trash"></i></a>';
                     } else {
                         $del_btn = '';
@@ -99,12 +100,14 @@ class LeaveController extends Controller
         $title = 'Add Leave Request';
         $id = $request->id;
         $info = '';
+        $taken_leave  = [];
         if ($id) {
             $title = 'Approve Leave Request';
             $info = StaffLeave::find($id);
+            $taken_leave = StaffLeave::where('staff_id', $info->staff_id)->where('from_date', '<', $info->from_date)->get();
         }
         $leave_category = LeaveHead::where('status', 'active')->get();
-        return view('pages.leave.request_leave.add_edit_form', compact('title', 'leave_category', 'info'));
+        return view('pages.leave.request_leave.add_edit_form', compact('title', 'leave_category', 'info', 'taken_leave'));
     }
 
     public function saveLeaveRequest(Request $request)
@@ -178,15 +181,12 @@ class LeaveController extends Controller
                         return response()->json(['error' => $error, 'message' => $message]);
                     }
                     $ins['is_granted'] = $request->leave_granted;
-                    if( $request->leave_granted=='yes')
-                    {
+                    if ($request->leave_granted == 'yes') {
                         $approved_date = Carbon::now();
-                        $ins['approved_date']=$approved_date->toDateTimeString();                       
-                    }
-                    else
-                    {
+                        $ins['approved_date'] = $approved_date->toDateTimeString();
+                    } else {
                         $rejected_date = Carbon::now();
-                        $ins['rejected_date']=$rejected_date->toDateTimeString();      
+                        $ins['rejected_date'] = $rejected_date->toDateTimeString();
                     }
                     $ins['granted_days'] = $request->no_of_days_granted;
                     $ins['remarks']  = $request->remarks;
@@ -218,11 +218,11 @@ class LeaveController extends Controller
                     if ($request->leave_granted == 'yes') {
                         $ins['status'] = 'approved';
                         $approved_date = Carbon::now();
-                        $ins['approved_date']=$approved_date->toDateTimeString(); 
+                        $ins['approved_date'] = $approved_date->toDateTimeString();
                     } else {
                         $ins['status'] = 'rejected';
                         $rejected_date = Carbon::now();
-                        $ins['rejected_date']=$rejected_date->toDateTimeString();
+                        $ins['rejected_date'] = $rejected_date->toDateTimeString();
                     }
                 } else {
                     $ins['status'] = 'pending';
@@ -254,9 +254,9 @@ class LeaveController extends Controller
 
         $user = User::where('status', 'active')
             // ->where('verification_status', 'approved')
-            ->when(!empty( session()->get('staff_institute_id') ), function($q) {
-                $q->where('institute_id', session()->get('staff_institute_id') );
-            } )
+            ->when(!empty(session()->get('staff_institute_id')), function ($q) {
+                $q->where('institute_id', session()->get('staff_institute_id'));
+            })
             ->get();
 
         return view('pages.leave.overview', compact('breadcrums', 'user'));
@@ -274,12 +274,11 @@ class LeaveController extends Controller
         );
 
         return view('pages.leave.working_days', compact('breadcrums'));
-
     }
 
     public function getStaffLeaveInfo(Request $request)
     {
-        
+
         $staff_id = $request->staff_id;
         $month_start = date('Y-m-1');
         $month_end = date('Y-m-t');
@@ -294,13 +293,38 @@ class LeaveController extends Controller
 
         $user = User::find($staff_id);
         $leaves = StaffLeave::selectRaw('sum(no_of_days) as leaves, staff_leaves.*')
-                    ->where('staff_id', $staff_id)->where('from_date', '>=', $month_start)
-                    ->where('to_date', '<=', $month_end)
-                    // ->where('status', 'approved')
-                    ->groupBy('staff_leaves.leave_category')
-                    ->get();
-        
-        return view('pages.leave._staff_leave_details', compact('user', 'leaves', 'month', 'working_days', 'holidays', 'week_off'));
+            ->where('staff_id', $staff_id)->where('from_date', '>=', $month_start)
+            ->where('to_date', '<=', $month_end)
+            // ->where('status', 'approved')
+            ->groupBy('staff_leaves.leave_category')
+            ->get();
 
+        return view('pages.leave._staff_leave_details', compact('user', 'leaves', 'month', 'working_days', 'holidays', 'week_off'));
+    }
+
+    public function deleteLeave(Request $request)
+    {
+
+        $id = $request->id;
+        $info = StaffLeave::find($id);
+        /**
+         *  1. Make sure payroll has done for that month
+         * 
+         */
+        $payroll_check = Payroll::whereDate('from_date', '<=', $info->from_date)
+            ->whereDate('to_date', '>=', $info->from_date)
+            ->whereNull('payroll_date')->first();
+
+        if ($payroll_check) {
+
+            $error = 0;
+            $message = 'Successfully deleted';
+            $info->delete();
+        } else {
+            $error = 1;
+            $message = 'Payroll already processed. Cannot delete Please contact administrator';
+        }
+
+        return array('error' => $error, 'message' => $message);
     }
 }

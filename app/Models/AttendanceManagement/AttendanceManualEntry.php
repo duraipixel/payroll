@@ -2,6 +2,7 @@
 
 namespace App\Models\AttendanceManagement;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -32,4 +33,10 @@ class AttendanceManualEntry extends Model
         'mode',
         'attendance_status_id'
     ];
+
+    public function reportingManager() {
+        return $this->hasOne(User::class, 'reporting_manager', 'id');
+    }
+
+   
 }

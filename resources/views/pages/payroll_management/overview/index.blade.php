@@ -9,12 +9,17 @@
     <div class="card">
         <div class="month_row d-flex">
             @php
-                $months = 4;
+                $months = $start_month = 4;
                 $dates = date($from_year.'-03-01');
+                $start_year = '';
             @endphp
             @for ($i = 0; $i < 12; $i++)
             @php
                 $dates = date('Y-m-d', strtotime($dates."+1 months"));
+                if( $i ==  0) {
+
+                    $start_year = $dates;
+                }
             @endphp
                 <div id="payroll_month_{{ $months }}" role="button"
                     class="payroll_month @if ($i == 0) active @endif"
@@ -36,13 +41,17 @@
     </div>
     <div class="card mt-3">
         <div class="payroll_info" id="payroll_overview_container">
-           @include('pages.payroll_management.overview._ajax_month_view')
+           {{-- @include('pages.payroll_management.overview._ajax_month_view') --}}
         </div>
     </div>
 @endsection
 
 @section('add_on_script')
     <script>
+        @if($start_month == 4 )
+        getPayrollOverviewInfo('{{ $start_year }}', '{{ $start_month }}');
+        @endif
+
         function getPayrollOverviewInfo(dates, month_no) {
             $('.payroll_month').removeClass('active');
             $('#payroll_month_' + month_no).addClass('active');

@@ -5,7 +5,7 @@
 @section('content')
     <style>
         .modal-open .daterangepicker {
-            z-index: 3001 ;
+            z-index: 3001;
         }
     </style>
     <div class="card">
@@ -208,6 +208,70 @@
                 }
             })
 
+        }
+
+        function deleteLeave(id) {
+            Swal.fire({
+                text: "Are you sure you would like to delete Leave?",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "Yes, Delete it!",
+                cancelButtonText: "No, return",
+                customClass: {
+                    confirmButton: "btn btn-danger",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function(result) {
+                if (result.value) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ route('delete.leaves') }}",
+                        type: 'POST',
+                        data: {
+                            id: id,
+                        },
+                        success: function(res) {
+                            if (res.error == 1) {
+                                Swal.fire({
+                                    title: "Cannot Delete!",
+                                    text: res.message,
+                                    icon: "danger",
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-danger"
+                                    },
+                                    timer: 3000
+                                });
+                            } else {
+                                dtTable.ajax.reload();
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: res.message,
+                                    icon: "success",
+                                    confirmButtonText: "Ok, got it!",
+                                    customClass: {
+                                        confirmButton: "btn btn-success"
+                                    },
+                                    timer: 3000
+                                });
+                            }
+
+
+                        },
+                        error: function(xhr, err) {
+                            if (xhr.status == 403) {
+                                toastr.error(xhr.statusText, 'UnAuthorized Access');
+                            }
+                        }
+                    });
+                }
+            });
         }
     </script>
 @endsection

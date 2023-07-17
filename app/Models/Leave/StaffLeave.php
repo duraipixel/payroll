@@ -2,15 +2,17 @@
 
 namespace App\Models\Leave;
 
+use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\Scopes\AcademicScope;
 use App\Models\Scopes\InstitutionScope;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StaffLeave extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'academic_id',
@@ -64,8 +66,13 @@ class StaffLeave extends Model
         return $this->hasOne(User::class, 'id', 'granted_by');
     }
 
-    public function reporting_info ()
+    public function reporting_info()
     {
         return $this->hasOne(User::class, 'id', 'reporting_id');
     }
+
+    public function leaveMapping() {
+        return $this->hasOne(LeaveMapping::class, 'id', 'leave_category_id');
+    }
+    
 }

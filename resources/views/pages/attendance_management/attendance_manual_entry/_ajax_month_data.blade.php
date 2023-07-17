@@ -51,14 +51,12 @@
                     id="attendance_manual_entry_table">
                     <thead class="bg-primary">
                         <tr class="text-start  text-muted fw-bolder fs-7 text-uppercase gs-0">
+                            
                             <th class=" text-white px-2">
-                                Date
+                                Attendance Date
                             </th>
                             <th class=" text-white px-2">
                                 Staff Name
-                            </th>
-                            <th class=" text-white px-2">
-                                Attendance Date
                             </th>
                             <th class=" text-white px-2">
                                 From Time
@@ -66,9 +64,7 @@
                             <th class=" text-white px-2">
                                 To Time
                             </th>
-                            <th class=" text-white px-2">
-                                Reporting Manager
-                            </th>
+                          
                             <th class=" text-white px-2">
                                 Attendance Status
                             </th>
@@ -117,17 +113,14 @@
             }
         },
 
-        columns: [{
-                data: 'created_at',
-                name: 'created_at',
+        columns: [
+            {
+                data: 'attendance_date',
+                name: 'attendance_date'
             },
             {
                 data: 'staff_name',
                 name: 'staff_name'
-            },
-            {
-                data: 'attendance_date',
-                name: 'attendance_date'
             },
             {
                 data: 'from_time',
@@ -137,10 +130,7 @@
                 data: 'to_time',
                 name: 'to_time'
             },
-            {
-                data: 'reporting_manager',
-                name: 'reporting_manager'
-            },
+           
             {
                 data: 'attendance_status',
                 name: 'attendance_status'
