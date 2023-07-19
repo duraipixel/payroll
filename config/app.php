@@ -200,6 +200,10 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        /**
+         * Repository service provider
+         */
+        App\Providers\RepositoryServiceProvider::class
 
     ],
 

@@ -11,7 +11,7 @@
                     <label class="required fs-6 fw-bold mb-2">Date of Birth</label>
                     <div class="position-relative d-flex align-items-center">
 
-                        <input class="form-control  ps-12" autocomplete="off" placeholder="Select a date"
+                        <input class="form-control ps-12" autocomplete="off" placeholder="Select a date"
                             name="date_of_birth" id="date_of_birth" autofocus type="date"
                             value="{{ $staff_details->personal->dob ?? '' }}" />
                     </div>
@@ -668,7 +668,11 @@
                     elementValues.toUpperCase() + ' is required</div></div>';
                 // $('#' + element).after(name_input_error);
                 $('#' + element).addClass('border-danger')
+                $('#'+element+' + .select2.select2-container').addClass('border-danger')
                 $('#' + element).focus();
+            } else {
+                $('#' + element).removeClass('border-danger')
+                $('#'+element+' + .select2.select2-container').removeClass('border-danger')
             }
         });
 

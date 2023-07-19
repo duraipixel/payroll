@@ -55027,7 +55027,7 @@ body {
 }
 
 .form-control, .form-input {
-  border: 1px solid #b0bfe3 !important;
+  border: 1px solid #b0bfe3;
 }
 .select2.select2-container{
   border: 1px solid #b0bfe3;

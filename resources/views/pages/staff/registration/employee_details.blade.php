@@ -626,7 +626,11 @@
                     element.replace('_', ' ').toUpperCase() + ' is required</div></div>';
                 // $('#' + element).after(name_input_error);
                 $('#' + element).addClass('border-danger')
+                $('#'+element+' + .select2.select2-container').addClass('border-danger')
                 $('#' + element).focus();
+            } else {
+                $('#' + element).removeClass('border-danger')
+                $('#'+element+' + .select2.select2-container').removeClass('border-danger')
             }
         });
 
@@ -763,7 +767,11 @@
                     elementValues.toUpperCase() + ' is required</div></div>';
                 // $('#' + element).after(name_input_error);
                 $('#' + element).addClass('border-danger')
+                $('#'+element+' + .select2.select2-container').addClass('border-danger')
                 $('#' + element).focus();
+            } else {
+                $('#' + element).removeClass('border-danger')
+                $('#'+element+' + .select2.select2-container').removeClass('border-danger')
             }
         });
 

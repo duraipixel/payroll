@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 
 class OverviewController extends Controller
 {
+
     private $checklistRepository;
 
     public function __construct(PayrollChecklistRepository $checklistRepository) {
@@ -192,11 +193,12 @@ class OverviewController extends Controller
         $params = array(
             'date' => $date,
             'payout_id' => $payout_id,
-            'leave_data' => $leave_data
+            'leave_data' => $leave_data,
+            'title' => $title
         );
-
-        $content = view('pages.payroll_management.overview._payroll_form', $params);
-        return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+        
+        return view('pages.payroll_management.overview._payroll_form', $params);
+        // return view('layouts.modal.dynamic_modal', compact('content', 'title'));
 
     }
 }

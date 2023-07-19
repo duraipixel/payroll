@@ -322,6 +322,10 @@
                 // $('#' + element).after(name_input_error);
                 $('#' + element).addClass('border-danger')
                 $('#' + element).focus();
+                $('#'+element+' + .select2.select2-container').addClass('border-danger')
+            } else {
+                $('#' + element).removeClass('border-danger')
+                $('#'+element+' + .select2.select2-container').removeClass('border-danger')
             }
         });
 
