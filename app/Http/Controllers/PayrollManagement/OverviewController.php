@@ -187,6 +187,7 @@ class OverviewController extends Controller
           */
        
         $leave_data = $this->checklistRepository->getPendingRequestLeave($date);
+        $employee_data = $this->checklistRepository->getEmployeePendingPayroll();
         
 
         $title = 'Payroll Process Confirmation';
@@ -194,7 +195,8 @@ class OverviewController extends Controller
             'date' => $date,
             'payout_id' => $payout_id,
             'leave_data' => $leave_data,
-            'title' => $title
+            'title' => $title,
+            'employee_data' => $employee_data
         );
         
         return view('pages.payroll_management.overview._payroll_form', $params);

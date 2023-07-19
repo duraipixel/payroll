@@ -32,11 +32,22 @@ class SalaryFieldController extends Controller
             $data = SalaryField::select('salary_fields.*', 'salary_heads.name as salary_head')->join('salary_heads', 'salary_heads.id', '=', 'salary_fields.salary_head_id');
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
+            $datatable_nature_id = $request->datatable_nature_id ?? '';
+            $datatable_salary_head_id = $request->datatable_salary_head_id ?? '';
             $keywords = $datatable_search;
             $datatables = Datatables::of($data)
-                ->filter(function ($query) use ($status, $keywords) {
+                ->filter(function ($query) use ($status, $keywords, $datatable_nature_id, $datatable_salary_head_id) {
                     if ($status) {
                         return $query->where('salary_fields.status', '=', "$status");
+                    }
+                    if( $datatable_nature_id || $datatable_salary_head_id ) {
+                        return $query->when( !empty( $datatable_nature_id ), function($q) use($datatable_nature_id){
+
+                            return $q->where('salary_fields.nature_id', $datatable_nature_id);
+                        })->when( !empty( $datatable_salary_head_id ), function($q) use($datatable_salary_head_id){
+
+                            return $q->where('salary_fields.salary_head_id', $datatable_salary_head_id);
+                        });
                     }
                     if ($keywords) {
                         $date = date('Y-m-d', strtotime($keywords));
@@ -87,7 +98,10 @@ class SalaryFieldController extends Controller
                 ->rawColumns(['action', 'status', 'nature']);
             return $datatables->make(true);
         }
-        return view('pages.payroll_management.salary_field.index', compact('breadcrums'));
+        $nature = NatureOfEmployment::where('status', 'active')->get();
+        $heads = SalaryHead::where('status', 'active')->get();
+
+        return view('pages.payroll_management.salary_field.index', compact('breadcrums', 'nature', 'heads'));
     }
 
     public function add_edit(Request $request)
@@ -131,12 +145,15 @@ class SalaryFieldController extends Controller
        
         $id = $request->id ?? '';
         $nature_id = $request->nature_id ?? '';
+        $salary_head_id = $request->salary_head_id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
             'name' => 'required|unique:salary_fields,name,' . $id . ',id,nature_id,'.$nature_id.',id,deleted_at,null',
             'name' => ['required','string',
-                        Rule::unique('salary_fields')->where(function ($query) use($id, $nature_id) {
-                            return $query->where('nature_id', $nature_id)->where('deleted_at', NULL)->when($id != '', function($q) use($id){
+                        Rule::unique('salary_fields')->where(function ($query) use($id, $nature_id, $salary_head_id) {
+                            return $query->where('nature_id', $nature_id)->where('deleted_at', NULL)
+                            ->where('salary_head_id', $salary_head_id)
+                            ->when($id != '', function($q) use($id){
                                 return $q->where('id', '!=', $id);
                             });
                         }),

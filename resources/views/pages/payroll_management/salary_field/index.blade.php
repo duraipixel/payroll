@@ -13,6 +13,22 @@
                     {!! searchSvg() !!}
                     <input type="text" data-kt-user-table-filter="search" id="salary_field_dataTable_search"
                         class="form-control form-control-solid w-250px ps-14" placeholder="Search Salary Field">
+                    <select name="nature_id" id="datatable_nature_id" class="form-control">
+                        <option value="">All Employee Nature</option>
+                        @if (isset($nature) && count($nature) > 0)
+                            @foreach ($nature as $item)
+                                <option value="{{ $item->id }}"> {{ $item->name }} </option>
+                            @endforeach
+                        @endif
+                    </select>
+                    <select name="salary_head_id" id="datatable_salary_head_id" class="form-control">
+                        <option value="">All Salary Head</option>
+                        @if (isset($heads) && count($heads) > 0)
+                            @foreach ($heads as $item)
+                                <option value="{{ $item->id }}"> {{ $item->name }} </option>
+                            @endforeach
+                        @endif
+                    </select>
                 </div>
                 <!--end::Search-->
             </div>
@@ -77,10 +93,10 @@
                                 <th class=" text-white">
                                     Salary Head
                                 </th>
-                                <th class="text-start text-white" >
+                                <th class="text-start text-white">
                                     Salary Field Name
                                 </th>
-                                <th class="text-start text-white" >
+                                <th class="text-start text-white">
                                     Code
                                 </th>
                                 <th class="text-start text-white"> Entry Type </th>
@@ -119,11 +135,12 @@
                 "url": "{{ route('salary-field') }}",
                 "data": function(d) {
                     d.datatable_search = $('#salary_field_dataTable_search').val();
+                    d.datatable_nature_id = $('#datatable_nature_id').val();
+                    d.datatable_salary_head_id = $('#datatable_salary_head_id').val();
                 }
             },
 
-            columns: [
-                {
+            columns: [{
                     data: 'nature',
                     name: 'nature'
                 },
@@ -131,7 +148,7 @@
                     data: 'salary_head',
                     name: 'salary_head'
                 },
-                
+
                 {
                     data: 'name',
                     name: 'name'
@@ -184,6 +201,12 @@
                 dtTable.draw();
                 e.preventDefault();
             });
+        document.querySelector('#datatable_nature_id').addEventListener("change", function(e) {
+            dtTable.draw();
+        });
+        document.querySelector('#datatable_salary_head_id').addEventListener("change", function(e) {
+            dtTable.draw();
+        });
         $('#search-form').on('reset', function(e) {
             $('select[name=filter_status]').val(0).change();
 

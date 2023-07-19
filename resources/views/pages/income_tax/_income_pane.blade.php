@@ -43,10 +43,10 @@
                     $total_pf_tax = 0;
                 @endphp
                 @for ($i = 0; $i < 12; $i++)
-
                     <tr>
                         <td class="p-2 bg-secondary text-black">
-                            <label for="" class="">{{ date('F Y', strtotime($start_list_date . ' + ' . $i . ' month')) }}</label>
+                            <label for=""
+                                class="">{{ date('F Y', strtotime($start_list_date . ' + ' . $i . ' month')) }}</label>
                         </td>
                         @php
                             $gross = 0;
@@ -69,7 +69,7 @@
                         @php
                             $epf = getStaffPatterFieldAmount($staff_details->id, $salary_pattern->id, '', 'Employee Provident Fund');
                             $lic = getStaffPatterFieldAmount($staff_details->id, $salary_pattern->id, '', 'Life Insurance Corporation');
-                            $it_tax = staffMonthTax( $staff_details->id, date('F', strtotime($start_list_date . ' + ' . ($i+1) . ' month')) );
+                            $it_tax = staffMonthTax($staff_details->id, date('F', strtotime($start_list_date . ' + ' . ($i + 1) . ' month')));
                         @endphp
                         <td class="p-2">{{ $epf }}</td>
                         <td class="p-2">{{ $lic }}</td>
@@ -78,7 +78,7 @@
                             $total_epf += $epf;
                             $total_lic += $lic;
                             $total_tax += $it_tax;
-                            $total_gross += $gross
+                            $total_gross += $gross;
                         @endphp
                     </tr>
                 @endfor
@@ -89,7 +89,8 @@
                     @if (isset($salary_field) && !empty($salary_field))
                         @foreach ($salary_field as $item)
                             <th class="p-2">
-                                {{ getStaffPatterFieldAmount($staff_details->id, $salary_pattern->id, $item->id) * 12 }}</th>
+                                {{ getStaffPatterFieldAmount($staff_details->id, $salary_pattern->id, $item->id) * 12 }}
+                            </th>
                         @endforeach
                     @endif
                     <th> {{ $total_gross }} </th>

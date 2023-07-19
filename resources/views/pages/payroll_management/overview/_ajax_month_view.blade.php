@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div>
-                    <button class="btn btn-light-success" onclick="processPayroll('{{ $date }}')">Process
+                    <button class="btn btn-light-success" id="process_payroll_btn" onclick="processPayroll('{{ $date }}')">Process
                         Payroll</button>
                 </div>
             </div>
@@ -417,7 +417,11 @@
                 date:date,
                 payout_id: payout_id
             },
+            beforeSend: function(){
+                $('#process_payroll_btn').attr('disabled', true);
+            },
             success: function(res) {
+                $('#process_payroll_btn').attr('disabled', false);
                 $('#kt_dynamic_app').modal('show');
                 $('#kt_dynamic_app').html(res);
             },

@@ -3,9 +3,11 @@
         .w-30 {
             width: 30% !important;
         }
+
         .w-20 {
             width: 20% !important;
         }
+
         .w-40 {
             width: 40% !important;
         }
@@ -29,15 +31,16 @@
             <form action="" class="" id="dynamic_form">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="d-flex">
-                            <div class="form-group p-2 w-50">
-                                <input type="checkbox" id="leave_days" name="payroll_points[]" value="leave_days">
+                        <div class="d-flex border-bottom mb-3">
+                            <div class="form-group p-2 w-30">
+                                <input type="checkbox" id="leave_days" onchange="setCompleted(this)"
+                                    name="payroll_points[]" value="leave_days">
                                 <label for="leave_days" class="mx-3"> Leave Days </label>
                             </div>
-                            <div class="w-30 d-flex">
+                            <div class="w-50 d-flex" id="leave_days_pane">
                                 @if (isset($leave_data) && !empty($leave_data))
                                     @foreach ($leave_data as $key => $value)
-                                        <div class="">
+                                        <div class="px-2 border border-2">
                                             <div class="small">
                                                 {{ ucwords(str_replace('_', ' ', $key)) }}
                                             </div>
@@ -48,8 +51,47 @@
                                     @endforeach
                                 @endif
                             </div>
-                            <div class="w-20">
-                                
+                            <div id="leave_days_approved" class="w-20 d-flex justify-content-center align-items-center">
+                                <div>
+                                    <a class="btn btn-light-primary btn-sm small" href="{{ route('leaves.list') }}"> Go
+                                        to Approve
+                                        Leave</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex border-bottom mb-3">
+                            <div class="form-group p-2 w-30">
+                                <input type="checkbox" id="employees" onchange="setCompleted(this)"
+                                    name="payroll_points[]" value="employees">
+                                <label for="employees" class="mx-3"> New Employees </label>
+                            </div>
+                            <div class="w-50 d-flex" id="employees_pane">
+                                @if (isset($employee_data) && !empty($employee_data))
+                                    <div class="px-2 border border-2">
+                                        <div class="small">
+                                            Verification Approved
+                                        </div>
+                                        <div class="text-muted">
+                                            {{ $employee_data['approved'] }}
+                                        </div>
+                                    </div>
+
+                                    <div class="px-2 border border-2">
+                                        <div class="small">
+                                            Verification Pending
+                                        </div>
+                                        <div class="text-muted">
+                                            {{ $employee_data['pending_approval'] }}
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div id="employees_approved" class="w-20 d-flex justify-content-center align-items-center">
+                                <div>
+                                    <a class="btn btn-light-primary btn-sm small" href="{{ route('staff.list') }}">
+                                        Go to Staff List
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -65,6 +107,7 @@
                             <input type="checkbox" id="discipline" name="payroll_points[]" value="discipline">
                             <label for="discipline" class="mx-3"> Hold Due to Discipline </label>
                         </div>
+
                         <div class="form-group p-2">
                             <input type="checkbox" id="income_tax" name="payroll_points[]" value="income_tax">
                             <label for="income_tax" class="mx-3"> Income Tax </label>
@@ -90,3 +133,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    function setCompleted(element) {
+        console.log(element, 'element');
+        var id_name = $(element).attr('id');
+        if ($(element).is(':checked')) {
+
+            $('#' + id_name + '_pane').addClass('text-decoration-line-through');
+            $('#' + id_name + '_approved').addClass('d-none');
+        } else {
+            $('#' + id_name + '_pane').removeClass('text-decoration-line-through');
+            $('#' + id_name + '_approved').removeClass('d-none');
+        }
+    }
+</script>

@@ -11,18 +11,18 @@ class SalaryFieldSeeder extends Seeder
     
     public function run()
     {
-        $ins['academic_id'] = academicYearId();
-        $ins['name'] = 'Employee Provident Fund';
-        $ins['short_name'] = 'EPF';
-        $ins['description'] = 'Employee Provident Fund';
-        $ins['status'] = 'active';
-        $ins['salary_head_id'] = 2;
-        $ins['entry_type'] = 'calculation';
-        $ins['is_static'] = 'no';
-        $ins['order_in_salary_slip'] = 1;
-        $ins['added_by'] = 1;
+        // $ins['academic_id'] = academicYearId();
+        // $ins['name'] = 'Employee Provident Fund';
+        // $ins['short_name'] = 'EPF';
+        // $ins['description'] = 'Employee Provident Fund';
+        // $ins['status'] = 'active';
+        // $ins['salary_head_id'] = 2;
+        // $ins['entry_type'] = 'calculation';
+        // $ins['is_static'] = 'no';
+        // $ins['order_in_salary_slip'] = 1;
+        // $ins['added_by'] = 1;
 
-        SalaryField::updateOrcreate(['short_name' => 'EPF'], $ins);
+        // SalaryField::updateOrcreate(['short_name' => 'EPF'], $ins);
 
         $ins = [];
         $ins['academic_id'] = academicYearId();

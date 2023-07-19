@@ -108,7 +108,7 @@
 @section('add_on_script')
     <script>
         var staff_id = '{{ $staff_id }}';
-        if( staff_id ) {
+        if (staff_id) {
             getSalaryHeadFields(staff_id);
         }
         var epf_values = '';
@@ -189,8 +189,8 @@
 
             let types = $(en).data('id');
             if (en.checked) {
-                console.log(types);
-                $('#' + types + '_input').attr('disabled', false);
+                
+                $(`#${types}_input`).attr('disabled', false);
                 if (types.toLowerCase() == 'epf') {
                     /*
                     get pf amount based on nature of employement
@@ -230,6 +230,38 @@
                             doAmountCalculation();
                         }
                     });
+                } else if (types.toLowerCase() == 'esi') {
+                    /*
+                    get esi amount based on nature of employement
+                    */
+                   var esi_amount_gross = 0;
+                    var add_input = document.querySelectorAll('.add_input');
+                    add_input.forEach(element => {
+
+                        if (!$(element).is(':disabled')) {
+
+                            if ($(element).val() != '' && $(element).val() != 'undefined' && $(element).val() !=
+                                null) {
+                                esi_amount_gross += parseFloat($(element).val());
+                            }
+                        }
+                    });
+
+                    let total = esi_amount_gross;
+                    if( total > 21000 ) {
+                        toastr.error('Error', 'Esi amount not eligible for greater than 21000');
+                        $(`#${types}_input`).attr('disabled', false);
+                        $('#' + types + '_input').val(0);
+                        $(en).attr('checked', false);
+                    } else {
+
+                        let percentage = 0.75; //for esi percentage
+                        let esi = (percentage / 100) * parseFloat(total);
+                        esi = Math.round(esi);
+                        $('#' + types + '_input').val(esi);
+    
+                        doAmountCalculation();
+                    }
                 }
 
             } else {
