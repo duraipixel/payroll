@@ -120,8 +120,9 @@
             </div>
             <div class="col-sm-6">
                 <div class="w-100">
-                    <input type="text" class="form-control field-input numberonly" id="basic_input" value="{{ $info->field_items->percentage ?? '' }}"
-                        placeholder="Percentage %" name="percentage"  id="" required>
+                    <input type="text" class="form-control field-input numberonly" id="basic_input"
+                        value="{{ $info->field_items->percentage ?? '' }}" placeholder="Percentage %" name="percentage"
+                        id="" required>
                 </div>
             </div>
         </div>
@@ -213,13 +214,86 @@
         let types = $(en).data('id');
         if (en.checked) {
 
-            $('#' + types + '_input').attr('disabled', false);
+            $(`#${types}_input`).attr('disabled', false);
+            if (types.toLowerCase() == 'epf') {
+                /*
+                get pf amount based on nature of employement
+                */
+                let staff_id = $('#staff_id').val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('salary.get.epf.amount') }}",
+                    type: 'POST',
+                    data: {
+                        staff_id: staff_id,
+                        types: types
+                    },
+                    beforeSend: function() {
+                        /* 
+                        do loader here  if needed 
+                        */
+                    },
+                    success: function(res) {
+                        epf_values = res.field_name;
+                        let epf_value_arr = epf_values.split(",");
+                        let total = 0;
+                        epf_value_arr.map((item) => {
+                            let sum = $('#' + item + '_input').val() || 0;
+                            total += parseFloat(sum);
+                        });
+                        let percentage = res.percentage || 0;
+                        let final_epf = (percentage / 100) * parseFloat(total);
+                        final_epf = Math.round(final_epf);
+                        $('#' + types + '_input').val(final_epf);
+
+                        doAmountCalculation();
+                    }
+                });
+            } else if (types.toLowerCase() == 'esi') {
+                /*
+                get esi amount based on nature of employement
+                */
+                var esi_amount_gross = 0;
+                var add_input = document.querySelectorAll('.add_input');
+                add_input.forEach(element => {
+
+                    if (!$(element).is(':disabled')) {
+
+                        if ($(element).val() != '' && $(element).val() != 'undefined' && $(element).val() !=
+                            null) {
+                            esi_amount_gross += parseFloat($(element).val());
+                        }
+                    }
+                });
+
+                let total = esi_amount_gross;
+                if (total > 21000) {
+                    toastr.error('Error', 'Esi amount not eligible for greater than 21000');
+                    $(`#${types}_input`).attr('disabled', false);
+                    $('#' + types + '_input').val(0);
+                    $(en).attr('checked', false);
+                } else {
+
+                    let percentage = 0.75; //for esi percentage
+                    let esi = (percentage / 100) * parseFloat(total);
+                    esi = Math.round(esi);
+                    $('#' + types + '_input').val(esi);
+
+                    doAmountCalculation();
+                }
+            }
 
         } else {
 
             $('#' + types + '_input').attr('disabled', true).prop('checked', false);
 
         }
+        doAmountCalculation();
     }
 
     function getEntryType(value) {
