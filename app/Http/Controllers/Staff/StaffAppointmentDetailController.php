@@ -112,7 +112,9 @@ class StaffAppointmentDetailController extends Controller
          */
 
         $model_info = AppointmentOrderModel::find($appointment_order_model_id);
+        
         if (isset($model_info->document) && !empty($model_info->document)) {
+            
             $document = $model_info->document;
             $user_info = User::find($request->staff_id);
             $society_info = Society::find(1);

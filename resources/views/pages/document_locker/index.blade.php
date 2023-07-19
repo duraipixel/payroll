@@ -46,7 +46,7 @@
                     <select id="staff_id" onchange="return showOptions();" class="form-input">
                         <option value="">Select Staff</option>
                         @foreach ($user as $users)
-                            <option value="{{ $users->id }}">{{ $users->name }} - {{ $users->emp_code }}</option>
+                            <option value="{{ $users->id }}">{{ $users->name }} - {{ $users->society_emp_code }}</option>
                         @endforeach
                     </select>
                     <select id="emp_nature_id" class="form-input">

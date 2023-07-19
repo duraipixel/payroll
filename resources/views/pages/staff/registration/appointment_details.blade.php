@@ -294,15 +294,17 @@
             name: 'staff_id',
             value: staff_id
         });
-        $('#generate_order').attr('disabled', true);
+       
 
         $.ajax({
             url: "{{ route('staff.appointment.preview') }}",
             type: "POST",
             data: forms,
             success: function(res) {
-                if (res) {
-                    $('#generate_order').attr('disabled', false);
+                $('#generate_order').attr('disabled', false);
+                if (res.error == 1 ) {
+                    toastr.error('Error', 'Appointment Order content not available');
+                } else {
                     var link = document.createElement('a');
                     link.href = res;
                     link.target = "_blank";

@@ -238,7 +238,7 @@ class SalaryFieldController extends Controller
 
     public function export()
     {
-        return Excel::download(new SalaryFieldExport, 'SalaryField.xlsx');
+        return Excel::download(new SalaryFieldExport, 'SalaryField_'.date('ymdhis').'.xlsx');
     }
 
     public function getHeadBasedFields(Request $request)

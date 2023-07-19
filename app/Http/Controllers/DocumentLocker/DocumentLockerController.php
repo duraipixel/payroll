@@ -165,6 +165,7 @@ class DocumentLockerController extends Controller
         $info->update();
         return response()->json(['message' => "You are " . $status . " the document!", 'status' => 1]);
     }
+
     public  function documentView($id)
     {
         $user            = User::find($id);
@@ -177,6 +178,7 @@ class DocumentLockerController extends Controller
         $salary_doc      = StaffSalary::where('staff_id', $id)->get();
         return view('pages.document_locker.document_view', compact('user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc'));
     }
+    
     public function searchData(Request $request)
     {
         $user = '';

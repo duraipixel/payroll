@@ -71,6 +71,23 @@
                 </div>
             </td>
         </tr>
+        @if( isset( $staff_details ) && $staff_details->verification_status == 'pending' )
+        <tr class="text-center">
+            <td colspan="2">
+                <div class="alert alert-danger small">
+                    Verification not Completed. Click finish button to Approve Verification.
+                </div>
+            </td>
+        </tr>
+        @else
+        <tr class="text-center">
+            <td colspan="2">
+                <div class="alert alert-success small">
+                    Approved
+                </div>
+            </td>
+        </tr>
+        @endif
 
     </tbody>
 

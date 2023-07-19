@@ -950,6 +950,9 @@ class StaffController extends Controller
                 4 => 'id',
             );
 
+            $verification_status = $request->verification_status ?? '';
+            $datatable_institute_id = $request->datatable_institute_id ?? '';
+
             $totalDataRecord = User::select('users.*', 'institutions.name as institute_name')
                 ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
                 ->with([
@@ -966,6 +969,12 @@ class StaffController extends Controller
                     'bank',
                     'appointment'
                 ])
+                ->when(!empty( $verification_status ), function($q) use($verification_status){
+                    $q->where('users.verification_status', $verification_status);
+                })
+                ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
+                    $q->where('users.institute_id', $datatable_institute_id);
+                })
                 ->whereNull('is_super_admin')->count();
 
             $totalFilteredRecord = $totalDataRecord;
@@ -976,6 +985,7 @@ class StaffController extends Controller
             $dir_val = $request->input('order.0.dir');
 
             $search_text = $staff_datable_search;
+           
 
             $post_data = User::select('users.*', 'institutions.name as institute_name')
                 ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
@@ -1002,6 +1012,12 @@ class StaffController extends Controller
                         ->orWhere('users.society_emp_code', 'like', "%{$search_text}%")
                         ->orWhere('users.institute_emp_code', 'like', "%{$search_text}%")
                         ->orWhere('users.first_name_tamil', 'like', "%{$search_text}%");
+                })
+                ->when(!empty( $verification_status ), function($q) use($verification_status){
+                    $q->where('users.verification_status', $verification_status);
+                })
+                ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
+                    $q->where('users.institute_id', $datatable_institute_id);
                 })
                 ->orderBy('society_emp_code', 'desc');
 
@@ -1038,6 +1054,12 @@ class StaffController extends Controller
                             ->orWhere('users.society_emp_code', 'like', "%{$search_text}%")
                             ->orWhere('users.institute_emp_code', 'like', "%{$search_text}%")
                             ->orWhere('users.first_name_tamil', 'like', "%{$search_text}%");
+                    })
+                    ->when(!empty( $verification_status ), function($q) use($verification_status){
+                        $q->where('users.verification_status', $verification_status);
+                    })
+                    ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
+                        $q->where('users.institute_id', $datatable_institute_id);
                     })
                     ->count();
             }
@@ -1099,7 +1121,8 @@ class StaffController extends Controller
 
             return json_encode($get_json_data);
         }
-        return view('pages.staff.list', compact('breadcrums'));
+        $institutions = Institution::where('status', 'active')->get();
+        return view('pages.staff.list', compact('breadcrums', 'institutions'));
     }
 
     public function list1(Request $request)

@@ -3,14 +3,15 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
-<style>
-    #staff_table td {
-        padding-left: 10px;
-    }
-    #staff_table_filter {
-        display: none;
-    }
-</style>
+    <style>
+        #staff_table td {
+            padding-left: 10px;
+        }
+
+        #staff_table_filter {
+            display: none;
+        }
+    </style>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css" />
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
     <div class="card">
@@ -20,10 +21,32 @@
             <div class="card-title">
 
                 <div class="d-flex align-items-center position-relative my-1">
+                    <div>
 
-                    {!! searchSvg() !!}
-                    <input type="text" name="datatable_search" data-kt-user-table-filter="search" id="staff_datable_search"
-                        class="form-control form-control-solid w-250px ps-14" placeholder="Search user">
+                        {!! searchSvg() !!}
+                        <input type="text" name="datatable_search" data-kt-user-table-filter="search"
+                            id="staff_datable_search" class="form-control form-control-solid w-250px ps-14"
+                            placeholder="Search user">
+                    </div>
+
+                    <div class="form-group">
+                        <select name="verification_status" id="verification_status" class="form-control">
+                            <option value=""> All Profile Status </option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select name="datatable_institute_id" id="datatable_institute_id" class="form-control">
+                            <option value=""> All Institution </option>
+                            @if (isset($institutions) && !empty($institutions))
+                                @foreach ($institutions as $item)
+                                    <option value="{{ $item->id }}"> {{ $item->name }}</option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
                 </div>
 
             </div>
@@ -95,9 +118,11 @@
                     "url": "{{ route('staff.list') }}",
                     "dataType": "json",
                     "type": "GET",
-                    "data": function(d){
+                    "data": function(d) {
                         d._token = "{{ csrf_token() }}",
-                        d.staff_datable_search = $('#staff_datable_search').val()
+                        d.staff_datable_search = $('#staff_datable_search').val(),
+                        d.verification_status = $('#verification_status').val(),
+                        d.datatable_institute_id = $('#datatable_institute_id').val()
                     }
                 },
                 "columns": [{
@@ -123,6 +148,12 @@
             });
 
             document.querySelector('#staff_datable_search').addEventListener("keyup", function(e) {
+                staff_Table.ajax.reload();
+            });
+            document.querySelector('#verification_status').addEventListener("change", function(e) {
+                staff_Table.ajax.reload();
+            });
+            document.querySelector('#datatable_institute_id').addEventListener("change", function(e) {
                 staff_Table.ajax.reload();
             });
         });

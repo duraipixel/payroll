@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="modal-body py-lg-10 px-lg-10" id="dynamic_content">
-            <form action="" class="" id="dynamic_form">
+            <form id="checklist_form">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="d-flex border-bottom mb-3">
@@ -118,7 +118,8 @@
                 <div class="form-group mt-10 text-start">
                     <button type="button" class="btn btn-sm btn-light-primary" data-bs-dismiss="modal"> Cancel
                     </button>
-                    <button type="button" class="btn btn-sm btn-primary" id="form-submit-btn">
+                    <button type="button" class="btn btn-sm btn-primary" id="form-submit-process-btn"
+                        onclick="doPayrollProcess()">
                         <span class="indicator-label">
                             Submit
                         </span>
@@ -146,5 +147,22 @@
             $('#' + id_name + '_pane').removeClass('text-decoration-line-through');
             $('#' + id_name + '_approved').removeClass('d-none');
         }
+    }
+
+    function doPayrollProcess() {
+        var total_check = 6;
+        var arrays = []
+        var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            arrays.push(checkboxes[i].value)
+        }
+        if( total_check == arrays.length ) {
+            console.log('do payroll process');
+        } else {
+            toastr.error('Error', 'Please select all checklist to continue');
+            return false;
+        }
+        
     }
 </script>

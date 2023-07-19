@@ -13,15 +13,21 @@ class SalaryFieldExport implements FromCollection,WithHeadings
     */
     public function collection()
     {
-        return SalaryField::select('name','description','status','created_at')->get();
+        return SalaryField::select( 'nature_of_employments.name as nature', 'salary_heads.name as head_name', 'salary_fields.name', 'short_name', 'entry_type', 'order_in_salary_slip', 'salary_fields.status')
+                    ->join('nature_of_employments', 'nature_of_employments.id', '=', 'salary_fields.nature_id')
+                    ->join('salary_heads', 'salary_heads.id', '=', 'salary_fields.salary_head_id')
+                    ->get();
     }
     public function headings(): array
     {
         return [
-        'Name',
-        'Description',
-        'Status',
-        'Created At',
+        'Employee Nature',
+        'Salary Head',
+        'Salary Field Name',
+        'Code',
+        'Entry Type',
+        'Sort Order',
+        'Status'
         ]; 
     }
 }

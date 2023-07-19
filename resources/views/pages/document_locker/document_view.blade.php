@@ -117,7 +117,7 @@
                                     <th class="fw-bold text-primary"> Employee id </th>
                                     <td>:</td>
                                     <th class="fw-bold">
-                                        {{ $user->emp_code }}
+                                        {{ $user->society_emp_code }}
                                     </th>
                                 </tr>
                             @endif
