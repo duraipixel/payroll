@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="ps-0 text-end">{{ date('F Y', strtotime($item->marriage_date)) }}</td>
+                            <td class="ps-0 text-end">{{ date('d F', strtotime($item->marriage_date)) }} </td>
                         </tr>
                     @endforeach
                 @endisset
