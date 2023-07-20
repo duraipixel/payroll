@@ -67,6 +67,16 @@ return [
     'payroll_management' => [
         'salary-head' => 'Salary Heads',
         'salary-field' => 'Salary Fields',
+        'salary.creation' => 'Salary Creation',
+        'salary.revision' => 'Salary Revision',
+        'salary.loan' => 'Loan',
+        'salary.lic' => 'Insurance',
+        'taxscheme' => 'Tax Scheme',
+        'taxsection' => 'Tax Section',
+        'taxsection-item' => 'Tax Section Item',
+        'it' => 'Income',
+        'it.tabulation' => 'IT Tabulation',
+        'it-calculation' => 'IT Calculation'
         
     ],
     
