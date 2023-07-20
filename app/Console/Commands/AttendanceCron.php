@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Repositories\CronRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -26,10 +27,13 @@ class AttendanceCron extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(CronRepository $cron)
     {
         \Log::info("Cron is working fine!");
+
         $values = array('name' => 'Durairaj', 'created_at' => date('Y-m-d H:i:s'));
         DB::table('cron_tests')->insert($values);
+
+        \Log::info($cron->getData());
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
+use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\User;
 
 class PayrollChecklistRepository extends Controller
@@ -57,5 +58,21 @@ class PayrollChecklistRepository extends Controller
             ->whereNull('is_super_admin')->count();
         return $response;
         
+    }
+
+    public function getPendingITEntry() {
+
+        $response['verified_user'] = User::where('verification_status', 'approved')
+                            ->whereNull('is_super_admin')->count();
+        $response['pending_it'] = User::join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
+                            ->where('verification_status', 'approved')
+                            ->where('it_staff_statements.academic_id', session()->get('academic_id'))
+                            ->whereNull('is_super_admin')->count();
+        $process = false;
+        if( $response['verified_user'] == $response['pending_it'] ) {
+            $process = true;
+        }
+        $response['process_it'] = $process;
+        return $response;
     }
 }

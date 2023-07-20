@@ -43,25 +43,25 @@
         <div class="card-header align-items-center justify-content-center bg-light">
             <div>
                 <div class="input-group">
-                    <select id="staff_id" onchange="return showOptions();" class="form-input">
+                    <select id="staff_id" name="staff_id" class="form-input">
                         <option value="">Select Staff</option>
                         @foreach ($user as $users)
                             <option value="{{ $users->id }}">{{ $users->name }} - {{ $users->society_emp_code }}</option>
                         @endforeach
                     </select>
-                    <select id="emp_nature_id" class="form-input">
+                    {{-- <select id="emp_nature_id" name="emp_nature_id" class="form-input">
                         <option value="">Nature Of Employment </option>
                         @foreach ($employee_nature as $employment_value)
                             <option value="{{ $employment_value->id }}">{{ $employment_value->name }}</option>
                         @endforeach
                     </select>
-                    <select id="work_place_id" class="form-input">
+                    <select id="work_place_id" name="work_place_id" class="form-input">
                         <option value="">Place of Work</option>
                         @foreach ($place_of_work as $work_value)
                             <option value="{{ $work_value->id }}">{{ $work_value->name }}</option>
                         @endforeach
-                    </select>
-                    <button type="button" class="btn btn-primary" onclick="return search_dl();">Search</button>
+                    </select> --}}
+                    <button type="button" class="btn btn-primary" id="search_doc_form">Search</button>
                 </div>
             </div>
         </div>
@@ -79,8 +79,8 @@
                                 <th class="text-center text-white">Department</th>
                                 <th class="text-center text-white">Designation</th>
                                 <th class="text-center text-white">Total Documents</th>
-                                <th class="text-center text-white">Aprroved Documents</th>
-                                <th class="text-center text-white">Pending Documents</th>
+                                {{-- <th class="text-center text-white">Aprroved Documents</th> --}}
+                                {{-- <th class="text-center text-white">Pending Documents</th> --}}
                                 <th class="text-center text-white">Action</th>
                             </tr>
                         </thead>
@@ -104,13 +104,21 @@
 
     <script>
         $(document).ready(function() {
-            $('#document_locker').DataTable({
-                // processing: true,    
-                serverSide: true,
-                // order: [
-                //     [0, "DESC"]
-                // ],
-                ajax: "{{ route('user.document_locker') }}",
+            var doc_table = $('#document_locker').DataTable({
+                
+                "serverSide": true,
+                "processing": true,
+                "ajax": {
+                    "url": "{{ route('user.document_locker') }}",
+                    "dataType": "json",
+                    "type": "GET",
+                    "data": function(d) {
+                        d._token = "{{ csrf_token() }}",
+                        d.staff_id = $('#staff_id').val()
+                        // d.emp_nature_id = $('#emp_nature_id').val(),
+                        // d.work_place_id = $('#work_place_id').val()
+                    }
+                },
                 columns: [{
                         data: 'id',
                         name: 'id'
@@ -120,25 +128,18 @@
                         name: 'name'
                     },
                     {
-                        data: 'department',
-                        name: 'department'
+                        data: 'department_name',
+                        data: 'department_name'
                     },
                     {
-                        data: 'designation',
-                        name: 'designation'
+                        data: 'designation_name',
+                        data: 'designation_name'
                     },
                     {
-                        data: 'total_documents',
-                        name: 'total_documents'
+                        data: 'total_document',
+                        data: 'total_document'
                     },
-                    {
-                        data: 'approved_documents',
-                        name: 'approved_documents'
-                    },
-                    {
-                        data: 'pending_documents',
-                        name: 'pending_documents'
-                    },
+                    
                     {
                         data: 'action',
                         name: 'action',
@@ -147,6 +148,11 @@
                     },
                 ]
             });
+
+            document.getElementById('search_doc_form').addEventListener('click', function(){
+                console.log('button clickced');
+                doc_table.ajax.reload();
+            })
         });
 
         $('#staff_id').select2({
@@ -213,36 +219,7 @@
 
         // Search Staff details Start
 
-        function search_dl() {
-            var staff_id = $("#staff_id").val();
-            var emp_nature_id = $("#emp_nature_id").val();
-            var work_place_id = $("#work_place_id").val();
-            if (staff_id == '' && emp_nature_id == '' && work_place_id == '') {
-                $(".invalid-feedback").show();
-                return false;
-            } else {
-                $(".invalid-feedback").hide();
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{ route('user.search_staff') }}",
-                    type: 'POST',
-                    data: {
-                        staff_id: staff_id,
-                        emp_nature_id: emp_nature_id,
-                        work_place_id: work_place_id,
-                    },
-                    success: function(res) {
-                        $("#defalut_div").hide();
-                        $('#kt_dynamic_app').html(res);
-                    }
-                })
-            }
-
-        }
+       
         //Search Staff details End 
     </script>
 @endsection

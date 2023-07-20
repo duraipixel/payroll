@@ -31,7 +31,7 @@
             <form id="checklist_form">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="d-flex border-bottom mb-3">
+                        <div class="d-flex border-bottom mb-3 p-3">
                             <div class="form-group p-2 w-30">
                                 <input type="checkbox" id="leave_days" onchange="setCompleted(this)"
                                     name="payroll_points[]" value="leave_days">
@@ -51,19 +51,24 @@
                                     @endforeach
                                 @endif
                             </div>
-                            <div id="leave_days_approved" class="w-20 d-flex justify-content-center align-items-center">
+                            <div id="leave_days_approved" class="w-30 d-flex justify-content-center align-items-center">
                                 <div>
                                     <a class="btn btn-light-primary btn-sm small" href="{{ route('leaves.list') }}"> Go
                                         to Approve
                                         Leave</a>
                                 </div>
                             </div>
+                            <div id="leave_days_message" class="w-30 d-none small p-1 text-danger d-flex justify-content-center align-items-center">
+                                <div>
+                                    Employees will lose compensation if they don't request a leave of absence, their request is denied, and it remains outstanding.
+                                </div>
+                            </div>
                         </div>
-                        <div class="d-flex border-bottom mb-3">
+                        <div class="d-flex border-bottom mb-3 p-3">
                             <div class="form-group p-2 w-30">
                                 <input type="checkbox" id="employees" onchange="setCompleted(this)"
                                     name="payroll_points[]" value="employees">
-                                <label for="employees" class="mx-3"> New Employees </label>
+                                <label for="employees" class="mx-3"> Employees </label>
                             </div>
                             <div class="w-50 d-flex" id="employees_pane">
                                 @if (isset($employee_data) && !empty($employee_data))
@@ -86,11 +91,58 @@
                                     </div>
                                 @endif
                             </div>
-                            <div id="employees_approved" class="w-20 d-flex justify-content-center align-items-center">
+                            <div id="employees_approved" class="w-30 d-flex justify-content-center align-items-center">
                                 <div>
                                     <a class="btn btn-light-primary btn-sm small" href="{{ route('staff.list') }}">
                                         Go to Staff List
                                     </a>
+                                </div>
+                            </div>
+                            <div id="employees_message" class="w-30 d-flex d-none p-1 text-danger small justify-content-center align-items-center">
+                                <div>
+                                    All employee verification must be completed before the payroll process can begin. Whenever an employee's verification is pending. Payroll processing is limited to verified employees only.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex border-bottom mb-3 p-3">
+                            <div class="form-group p-2 w-30">
+                                <input type="checkbox" id="income_tax" onchange="setCompleted(this)"
+                                    name="payroll_points[]" value="income_tax">
+                                <label for="income_tax" class="mx-3"> Income Tax </label>
+                                <input type="hidden" name="process_it" id="process_it" value="{{ $income_tax_data['process_it'] }}">
+                            </div>
+                            <div class="w-50 d-flex" id="income_tax_pane">
+                                @if (isset($income_tax_data) && !empty($income_tax_data))
+                                    <div class="px-2 border border-2">
+                                        <div class="small">
+                                            Verified Employee
+                                        </div>
+                                        <div class="text-muted">
+                                           {{ $income_tax_data['pending_it'] }} / {{ $income_tax_data['verified_user'] }}
+                                        </div>
+                                    </div>
+
+                                    <div class="px-2 border border-2">
+                                        <div class="small">
+                                            Verification Pending
+                                        </div>
+                                        <div class="text-muted">
+                                            {{ $employee_data['pending_approval'] }}
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+                            <div id="income_tax_approved" class="w-30 d-flex justify-content-center align-items-center">
+                                <div>
+                                    <a class="btn btn-light-primary btn-sm small" href="{{ route('it-calculation') }}">
+                                        Go to Income Tax
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="income_tax_message" class="w-30 d-none p-1 d-flex justify-content-center text-danger small align-items-center">
+                                <div>
+                                    Income tax Entries all should be done.Otherwise Payroll process will not continue
                                 </div>
                             </div>
                         </div>
@@ -99,19 +151,14 @@
                             <input type="checkbox" id="resigned" name="payroll_points[]" value="resigned">
                             <label for="resigned" class="mx-3"> Resigned </label>
                         </div>
+
                         <div class="form-group p-2">
                             <input type="checkbox" id="hold_salary" name="payroll_points[]" value="hold_salary">
                             <label for="hold_salary" class="mx-3"> Checked Hold Salary </label>
                         </div>
-                        <div class="form-group p-2">
-                            <input type="checkbox" id="discipline" name="payroll_points[]" value="discipline">
-                            <label for="discipline" class="mx-3"> Hold Due to Discipline </label>
-                        </div>
-
-                        <div class="form-group p-2">
-                            <input type="checkbox" id="income_tax" name="payroll_points[]" value="income_tax">
-                            <label for="income_tax" class="mx-3"> Income Tax </label>
-                        </div>
+                        
+                        
+                        
                     </div>
                 </div>
 
@@ -143,14 +190,17 @@
 
             $('#' + id_name + '_pane').addClass('text-decoration-line-through');
             $('#' + id_name + '_approved').addClass('d-none');
+            $('#' + id_name + '_message').removeClass('d-none');
         } else {
             $('#' + id_name + '_pane').removeClass('text-decoration-line-through');
             $('#' + id_name + '_approved').removeClass('d-none');
+            $('#' + id_name + '_message').addClass('d-none');
+
         }
     }
 
     function doPayrollProcess() {
-        var total_check = 6;
+        var total_check = 5;
         var arrays = []
         var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
 
@@ -161,6 +211,12 @@
             console.log('do payroll process');
         } else {
             toastr.error('Error', 'Please select all checklist to continue');
+            return false;
+        }
+
+        var process_it = $('#process_it').val();
+        if( !process_it ) {
+            toastr.error('Error', 'Can not continue Payroll process. Please complete all income tax entries');
             return false;
         }
         

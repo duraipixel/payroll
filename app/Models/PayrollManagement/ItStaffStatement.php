@@ -47,6 +47,14 @@ class ItStaffStatement extends Model implements Auditable
         'is_staff_calculation_done'
     ];
 
+    public function scopeHasAcademic($query)
+    {
+        if( session()->get('academic_id') && !empty( session()->get('academic_id') ) ){
+
+            return $query->where('it_staff_statements.academic_id', session()->get('academic_id'));
+        }
+    }
+
     public function staff() {
         return $this->hasOne(User::class, 'id', 'staff_id' );
     }

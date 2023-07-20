@@ -39,15 +39,15 @@ class DocumentLockerController extends Controller
             'staffDocumentsPending',
             'staffEducationDocPending',
             'staffExperienceDocPending',
-            'leavesPending'          
-            
+            'leavesPending'
+
         ])->when(!is_null($auth_user->reporting_manager_id), function ($q) use ($auth_user) {
             $q->where('reporting_manager_id', $auth_user->id);
         })->get();
-        
+
         // Retrieve the total user count
         $totalUserCount = $result->count();
-        
+
         // Calculate the total count for all relationships
         $totalDocumentCount = $result->sum('staff_documents_count');
         $totalEducationCount = $result->sum('staff_education_detail_count');
@@ -72,36 +72,77 @@ class DocumentLockerController extends Controller
 
         $user_count               = 0;
         $user                     = User::all();
-      
-        if ($request->ajax()) { 
-            return DataTables::of($result)
-                ->addColumn('department', function ($row) {
-                    return !is_null($row->position) ? $row->position->department->name : null;
+
+        if ($request->ajax()) {
+
+            $staff_id = $request->staff_id;
+            $emp_nature_id = $request->emp_nature_id;
+            $work_place_id = $request->work_place_id;
+
+            $data = User::withCount([
+                'staffDocuments',
+                'StaffEducationDetail',
+                'StaffWorkExperience',
+                'StaffLeave',
+                'StaffSalary',
+                'StaffAppointmentDetail',
+                'staffDocumentsPending',
+                'staffEducationDocPending',
+                'staffExperienceDocPending',
+                'leavesPending'    
+            ])->with(['position.department', 'position.designation'])->select('*')
+            ->when( !empty( $staff_id ), function($q) use($staff_id){
+                $q->where('users.id', $staff_id);
+            });
+            $status = $request->get('status');
+            $datatable_search = $request->datatable_search ?? '';
+            $key_search = $request->search['value'];
+            
+            $keywords = $key_search;
+
+            $datatables =  Datatables::of($data)
+                ->filter(function ($query) use ($status, $keywords) {
+                    if($keywords)
+                    {
+                        $date = date('Y-m-d',strtotime($keywords));
+                        return $query->where(function($q) use($keywords,$date){
+
+                            $q->where('users.name','like',"%{$keywords}%")
+                            ->orWhere('users.society_emp_code','like',"%{$keywords}%")
+                            ->orWhereDate('users.created_at',$date);
+                        });
+                    }
                 })
-                ->addColumn('designation', function ($row) {
-                    return !is_null($row->position) ? $row->position->designation->name : null;
+                ->addIndexColumn()
+                ->addColumn('department_name', function ($row) {
+                    return $row->position->department->name ?? '';
                 })
-                ->addColumn('total_documents', function ($row) {
-                    return $row->staff_documents_count + $row->staff_education_detail_count + $row->staff_work_experience_count + $row->staff_leave_count + $row->staff_salary_count + $row->staff_appointment_detail_count;
-                    // return 0;
+                ->addColumn('designation_name', function($row){
+                    return $row->position->designation->name ?? '';
                 })
-                ->addColumn('approved_documents', function ($row) {
-                    return $row->staff_documents_approved_count + $row->staff_education_doc_approved_count + $row->staff_experience_doc_approved_count + $row->leaves_approved_count + $row->staff_appointment_detail_count;
-                    // return 0;
+                ->addColumn('total_document', function($row){
+                    $total_DocumentCount = $row->staffDocuments->count();
+                    $total_EducationCount = $row->StaffEducationDetail->count();
+                    $total_WorkExperienceCount = $row->StaffWorkExperience->count();
+                    $total_LeaveCount = $row->StaffLeave->count();
+                    $total_SalaryCount = $row->StaffSalary->count();
+                    $total_AppointmentCount = $row->StaffAppointmentDetail->count();
+
+                    return $total_DocumentCount + $total_EducationCount + $total_WorkExperienceCount + $total_LeaveCount + $total_SalaryCount + $total_AppointmentCount;
                 })
-                ->addColumn('pending_documents', function ($row) {
-                    return $row->staff_documents_pending_count + $row->staff_education_doc_pending_count + $row->staff_experience_doc_pending_count + $row->leaves_pending_count;
-                    // return 0;
+                ->editColumn('created_at', function ($row) {
+                    $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
+                    return $created_at;
                 })
                 ->addColumn('action', function ($row) {
                     return '<a href="' . route('user.dl_view', ['id' => $row->id]) . '"
-                        class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px">
-                        <i class="fa fa-eye"></i>
-                    </a>';
+                    class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px">
+                    <i class="fa fa-eye"></i>
+                </a>';
                 })
-                ->rawColumns(['action'])
-                ->make(true);
-        } 
+                ->rawColumns(['action', 'department_name', 'designation_name', 'total_document']);
+            return $datatables->make(true);
+        }
         $institution     = Institution::where('status', 'active')->get();
         $employee_nature = NatureOfEmployment::where('status', 'active')->get();
         $place_of_work   = PlaceOfWork::where('status', 'active')->get();
@@ -178,7 +219,7 @@ class DocumentLockerController extends Controller
         $salary_doc      = StaffSalary::where('staff_id', $id)->get();
         return view('pages.document_locker.document_view', compact('user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc'));
     }
-    
+
     public function searchData(Request $request)
     {
         $user = '';
@@ -208,6 +249,7 @@ class DocumentLockerController extends Controller
         }
         return view('pages.document_locker.table_ajax', compact('user'));
     }
+
     public function showOptions(Request $request)
     {
         $staff_details = StaffAppointmentDetail::where('staff_id', $request->staff_id)->first();

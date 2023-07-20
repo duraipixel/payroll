@@ -360,3 +360,7 @@ Route::group(['middleware' => 'auth'],  function () {
     include 'crud.php';
     
 });
+
+// Route::fallback(function () {   // if you want to override 404 page you can use
+//     echo 'tsing';
+// });
