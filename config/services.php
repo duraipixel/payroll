@@ -66,7 +66,8 @@ return [
     ],
     'payroll_management' => [
         'salary-head' => 'Salary Heads',
-       // 'SalaryFields' => 'Salary Fields',
+        'salary-field' => 'Salary Fields',
+        
     ],
     
     'gratuity_calculations' =>

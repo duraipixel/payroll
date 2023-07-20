@@ -157,24 +157,24 @@ class StaffController extends Controller
         $classes = Classes::where('status', 'active')->get();
         $duty_classes = DutyClass::where('status', 'active')->get();
         $duty_types = TypeOfDuty::where('status', 'active')->get();
-        $other_schools = OtherSchool::where('status', 'active')->get();
-        $mother_tongues = Language::where('status', 'active')->get();
-        $nationalities = Nationality::where('status', 'active')->get();
-        $places = OtherSchoolPlace::where('status', 'active')->get();
-        $religions = Religion::where('status', 'active')->get();
-        $castes = Caste::where('status', 'active')->get();
-        $communities = Community::where('status', 'active')->get();
-        $banks = Bank::where('status', 'active')->get();
+        $other_schools = OtherSchool::where('status', 'active')->orderBy('name', 'asc')->get();
+        $mother_tongues = Language::where('status', 'active')->orderBy('name', 'asc')->get();
+        $nationalities = Nationality::where('status', 'active')->orderBy('name', 'asc')->get();
+        $places = OtherSchoolPlace::where('status', 'active')->orderBy('name', 'asc')->get();
+        $religions = Religion::where('status', 'active')->orderBy('name', 'asc')->get();
+        $castes = Caste::where('status', 'active')->orderBy('name', 'asc')->get();
+        $communities = Community::where('status', 'active')->orderBy('name', 'asc')->get();
+        $banks = Bank::where('status', 'active')->orderBy('name', 'asc')->get();
 
         #phase3
-        $designation = Designation::where('status', 'active')->get();
-        $department = Department::where('status', 'active')->get();
-        $subjects = Subject::where('status', 'active')->get();
-        $scheme = AttendanceScheme::where('status', 'active')->get();
-        $training_topics = TopicTraining::where('status', 'active')->get();
+        $designation = Designation::where('status', 'active')->orderBy('name', 'asc')->get();
+        $department = Department::where('status', 'active')->orderBy('name', 'asc')->get();
+        $subjects = Subject::where('status', 'active')->orderBy('name', 'asc')->get();
+        $scheme = AttendanceScheme::where('status', 'active')->orderBy('name', 'asc')->get();
+        $training_topics = TopicTraining::where('status', 'active')->orderBy('name', 'asc')->get();
 
         #phase4
-        $boards = Board::where('status', 'active')->get();
+        $boards = Board::where('status', 'active')->orderBy('name', 'asc')->get();
         $types = ProfessionType::where('status', 'active')->get();
 
         #phase5
