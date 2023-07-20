@@ -203,7 +203,8 @@ return [
         /**
          * Repository service provider
          */
-        App\Providers\RepositoryServiceProvider::class
+        App\Providers\RepositoryServiceProvider::class,
+        App\Providers\CustomBladeDirectivesServiceProvider::class,
 
     ],
 

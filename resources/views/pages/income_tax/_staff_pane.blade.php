@@ -40,44 +40,55 @@
         </div>
         <hr>
     @endif
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active tax-link income" data-id="income" onclick="return getTaxTabInfo('income')"
-                aria-current="page" href="javascript:void(0)">
-                Income
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link tax-link deductions" data-id="deductions" onclick="return getTaxTabInfo('deductions')"
-                href="javascript:void(0)">Deductions</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link tax-link other_income" data-id="other_income"
-                onclick="return getTaxTabInfo('other_income')" href="javascript:void(0)">Other Income</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link tax-link rent" data-id="rent" onclick="return getTaxTabInfo('rent')"
-                href="javascript:void(0)">House Rent</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link tax-link regime" data-id="regime" onclick="return getTaxTabInfo('regime')"
-                href="javascript:void(0)">Regime / Schemes </a>
-        </li>
-        @if (isset($statement_data) && !empty($statement_data) && $statement_data->is_staff_calculation_done == 'no')
+    @if (isset($statement_data) && !empty($statement_data))
+        <ul class="nav nav-tabs">
             <li class="nav-item">
-                <a class="nav-link tax-link taxpayable" data-id="taxpayable"
-                    onclick="return getTaxTabInfo('taxpayable')" href="javascript:void(0)"> TaxPayable Calculation </a>
+                <a class="nav-link active tax-link income" data-id="income" onclick="return getTaxTabInfo('income')"
+                    aria-current="page" href="javascript:void(0)">
+                    Income
+                </a>
             </li>
-        @endif
-    </ul>
-    <div id="tab_load_content" class="p-3">
-        @include('pages.income_tax._income_pane')
-    </div>
+            <li class="nav-item">
+                <a class="nav-link tax-link deductions" data-id="deductions"
+                    onclick="return getTaxTabInfo('deductions')" href="javascript:void(0)">Deductions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link tax-link other_income" data-id="other_income"
+                    onclick="return getTaxTabInfo('other_income')" href="javascript:void(0)">Other Income</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link tax-link rent" data-id="rent" onclick="return getTaxTabInfo('rent')"
+                    href="javascript:void(0)">House Rent</a>
+            </li>
+            {{-- <li class="nav-item">
+                <a class="nav-link tax-link regime" data-id="regime" onclick="return getTaxTabInfo('regime')"
+                    href="javascript:void(0)">Regime / Schemes </a>
+            </li> --}}
+            @if ($statement_data->is_staff_calculation_done == 'no' && $statement_data->total_income_tax_payable > 0 )
+                <li class="nav-item">
+                    <a class="nav-link tax-link taxpayable" data-id="taxpayable"
+                        onclick="return getTaxTabInfo('taxpayable')" href="javascript:void(0)"> TaxPayable Calculation
+                    </a>
+                </li>
+            @endif
+        </ul>
+        <div id="tab_load_content" class="p-3">
+            @include('pages.income_tax._income_pane')
+        </div>
+    @else
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-danger">
+                    <label> Income tax statement not generated </label>
+                </div>
+            </div>
+        </div>
+    @endif
 @else
     <div class="row">
         <div class="col-sm-12">
             <div class="alert alert-danger">
-                <label> Salary not Created </label>
+                <label> Salary not Created or Salary Approval pending </label>
             </div>
         </div>
     </div>

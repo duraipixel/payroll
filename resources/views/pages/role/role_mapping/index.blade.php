@@ -3,14 +3,21 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
-
+<style>
+    #role_mapping_table td {
+        padding: 5px;
+    }
+    #role_mapping_table th {
+        padding: 5px;
+    }
+</style>
 <div class="card">
     <div class="card-header border-0 pt-6">
         <div class="card-title">
             <div class="d-flex align-items-center position-relative my-1">
                 {!! searchSvg() !!}
                 <input type="text" data-kt-user-table-filter="search" id="role_mapping_dataTable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Branch">
+                    class="form-control form-control-solid w-250px ps-14" placeholder="Search ">
             </div>
         </div>
         <div class="card-toolbar">
@@ -46,29 +53,25 @@
     <div class="card-body py-4">
         <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="table-responsive">
-                <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
+                <table class="table align-middle  table-hover table-bordered table-striped fs-7 no-footer"
                     id="role_mapping_table">
                     <thead class="bg-primary">
-                        <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                            <th class="text-center text-white" >
-                            Date
-                        </th>
-                            <th class="text-center text-white" >
+                        <tr class="text-start  text-muted fw-bolder fs-7 text-uppercase gs-0">
+                            
+                            <th class=" text-white" >
                                 Staff Name
                             </th>
-                            <th class="text-center text-white" >
+                            <th class=" text-white" >
                                Role
                             </th>
-                            <th class="text-center text-white" >
+                            <th class=" text-white" >
                               Role Created By
                             </th>                           
-                            <th class="text-center text-white">
+                            <th class=" text-white">
                                 Actions
                             </th>
                         </tr>
                     </thead>
-
-
                     <tbody class="text-gray-600 fw-bold">
                     </tbody>
                 </table>
@@ -98,10 +101,7 @@
         },
 
         columns: [
-            {
-                data: 'created_at',
-                name: 'created_at',
-            },
+           
             {
                 data:'staff_name',
                 name:'staff_name',

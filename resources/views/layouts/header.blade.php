@@ -27,12 +27,12 @@
                 @endisset
             </select>
             <select name="academic_year" id="academic_year" onchange="return setGlobalAcademicYear(this.value)" class="form-select">
-                @isset($global_academic_year)
-                    @foreach ($global_academic_year as $item)
+                @if(getGlobalAcademicYear())
+                    @foreach (getGlobalAcademicYear() as $item)
                         <option value="{{ $item->id }}" @if (session()->get('academic_id') == $item->id) selected @endif>
                             {{ $item->from_year . ' - ' . $item->to_year }} </option>
                     @endforeach
-                @endisset
+                @endif
             </select>
             @if (request()->routeIs(['home']))
                 <input type="text" name="search_home_date" id="search_home_date"  class="border outline-0 px-3">

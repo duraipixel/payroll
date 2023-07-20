@@ -29,7 +29,7 @@ class IncomeTaxController extends Controller
     public function index(Request $request)
     {
 
-        $employees = User::where('status', 'active')->whereNull('is_super_admin')->get();
+        $employees = User::where('status', 'active')->orderBy('name', 'asc')->whereNull('is_super_admin')->get();
         $params = array(
             'employees' => $employees
         );
@@ -131,7 +131,8 @@ class IncomeTaxController extends Controller
         $staff_id = $request->staff_id;
         $from = $request->from;
         $items = TaxSectionItem::where('tax_section_id', $section_id)
-            ->where('is_pf_calculation', 'no')->get();
+            // ->where('is_pf_calculation', 'no')
+            ->get();
         $academic_data = AcademicYear::find(academicYearId());
 
         $statement_data = ItStaffStatement::where(['staff_id' => $staff_id, 'academic_id' => $academic_data->id, 'status' => 'active'])->first();
@@ -158,8 +159,8 @@ class IncomeTaxController extends Controller
             }
         }
 
-        $pf_calc_data = TaxSectionItem::where('tax_section_id', $section_id)
-            ->where('is_pf_calculation', 'yes')->get();
+        // $pf_calc_data = TaxSectionItem::where('tax_section_id', $section_id)
+        //     ->where('is_pf_calculation', 'yes')->get();
         $section_info = TaxSection::find($section_id);
         $deductions = StaffDeduction::where('staff_id', $staff_id)->where('tax_section_id', $section_id)->get();
         $params = array(
@@ -168,7 +169,7 @@ class IncomeTaxController extends Controller
             'section_info' => $section_info,
             'deductions' => $deductions,
             'from' => $from,
-            'pf_calc_data' => $pf_calc_data,
+            'pf_calc_data' => $pf_calc_data ?? [],
             'pf_data' => $pf_data ?? [],
             'statement_data' => $statement_data ?? ''
         );
@@ -190,9 +191,9 @@ class IncomeTaxController extends Controller
             $remarks = $request->remarks;
             $staff_id = $request->staff_id;
             $section_id = $request->section_id;
-
+            
             if ($items && count($items) > 0) {
-                StaffDeduction::where(['staff_id' => $staff_id, 'tax_section_id' => $section_id])->delete();
+                StaffDeduction::where(['staff_id' => $staff_id, 'tax_section_id' => $section_id, 'non_editable' => 'no'])->delete();
                 for ($i = 0; $i < count($items); $i++) {
                     $ins = [];
                     $ins['academic_id'] = academicYearId();

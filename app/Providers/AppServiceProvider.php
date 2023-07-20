@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\AcademicYear;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,8 +26,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $academic = AcademicYear::where('status', 'active')->orderBy('from_year', 'desc')->get();
-        View::share('global_academic_year',$academic);
+
+        Blade::directive('isCheck', function ($expression) {
+            // Custom logic for your directive
+            return "<?php if (isset($expression) && !empty($expression)) { ?>";
+        });
         
+        Blade::directive('el', function () {
+            return '<?php } else { ?>';
+        });
+        
+        Blade::directive('endIsCheck', function () {
+            return '<?php } ?>';
+        });     
+
     }
 }

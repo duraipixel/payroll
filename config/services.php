@@ -65,6 +65,7 @@ return [
         'holiday' => 'Holidays', 
     ],
     'payroll_management' => [
+        
         'salary-head' => 'Salary Heads',
         'salary-field' => 'Salary Fields',
         'salary.creation' => 'Salary Creation',
@@ -76,8 +77,11 @@ return [
         'taxsection-item' => 'Tax Section Item',
         'it' => 'Income',
         'it.tabulation' => 'IT Tabulation',
-        'it-calculation' => 'IT Calculation'
-        
+        'it-calculation' => 'IT Calculation',
+        'other-income' => 'Other Income',
+        'professional-tax' => 'Professional Tax',
+        'holdsalary' => 'Hold Salary',
+        'payroll.overview' => 'Payroll Overview'        
     ],
     
     'gratuity_calculations' =>

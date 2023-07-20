@@ -12,6 +12,7 @@ use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
 use App\Models\User;
+use App\Repositories\TaxCalculationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -19,10 +20,16 @@ use PDF;
 
 class IncomeTaxCalculationController extends Controller
 {
+    private $taxRepository;
+    public function __construct(TaxCalculationRepository $taxRepository)
+    {
+        $this->taxRepository = $taxRepository;
+    }
+
     public function index(Request $request)
     {
 
-        $employees = User::where('status', 'active')->whereNull('is_super_admin')->get();
+        $employees = User::where('status', 'active')->orderBy('name', 'asc')->whereNull('is_super_admin')->get();
                
         // die;
         $params = array(
@@ -134,6 +141,7 @@ class IncomeTaxCalculationController extends Controller
     public function saveItStatement(Request $request)
     {
         $staff_id = $request->staff_id;
+      
         $academic_id = academicYearId();
         $id = $request->id ?? '';
         $validator      = Validator::make($request->all(), [
@@ -153,7 +161,7 @@ class IncomeTaxCalculationController extends Controller
         if ($validator->passes()) {
 
             $staff_details = User::find($staff_id);
-
+            $mode = $request->mode ?? '';
             $ins = array(
                 'academic_id' => academicYearId(),
                 'staff_id' => $staff_id,
@@ -183,19 +191,40 @@ class IncomeTaxCalculationController extends Controller
                 'total_income_tax_payable' => $request->total_income_tax_payable,
                 'added_by' => auth()->id()
             );
+            if( $mode ) {
+                $ins['lock_calculation'] = 'yes';
+            }
 
-            $statement_id = ItStaffStatement::create($ins)->id;
+            $statement_id = ItStaffStatement::updateOrCreate(['id' => $id], $ins);
             /**
              * generate it statement pdf
              */
-            generateIncomeTaxStatementPdfByStaff($statement_id);
+            generateIncomeTaxStatementPdfByStaff($id);
+
             $error = 0;
             $message = 'Statement saved successfully';
+
         } else {
 
             $message = $validator->errors()->all();
             $error = 1;
         }
         return array('error' => $error, 'message' => $message, 'staff_id' => $request->staff_id);
+    }
+
+    public function generateNewStatement(Request $request) {
+
+        $staff_id = $request->staff_id;
+        $error = 0;
+        $message = '';
+        if( $staff_id ){
+            if($this->taxRepository->generateStatementForStaff($staff_id)){
+                $message = 'Successfully generated';
+            } else {
+                $error = 1;
+                $message = 'Error occurred while generating.Please contact Administrator';
+            }
+        }
+        return ['error' => $error, 'message' => $message];
     }
 }

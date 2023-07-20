@@ -460,10 +460,8 @@
 
                     </div>
                 @endif
-                @if (access()->hasAccess(['salary-head', 'salary-field']))
-                    <div data-kt-menu-trigger="click"
-                        class="menu-item menu-accordion
-                @if (request()->routeIs([
+                @php
+                    $payroll_menu = [
                         'salary-head',
                         'salary-field',
                         'salary.creation',
@@ -480,7 +478,12 @@
                         'it',
                         'other-income',
                         'it-calculation'
-                    ])) hover show @endif">
+                ];
+                @endphp
+                @if (access()->hasAccess($payroll_menu))
+                    <div data-kt-menu-trigger="click"
+                        class="menu-item menu-accordion
+                @if (request()->routeIs($payroll_menu)) hover show @endif">
                         <span class="menu-link">
                             <span class="menu-icon">
                                 <i class="fas fa-money-check"></i>
@@ -488,6 +491,7 @@
                             <span class="menu-title">Payroll Management</span>
                             <span class="menu-arrow"></span>
                         </span>
+                        @if (access()->hasAccess('payroll.overview', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['payroll.overview'])) active @endif"
@@ -499,6 +503,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('salary.creation', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['salary.creation'])) active @endif"
@@ -510,6 +516,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('salary.revision', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['salary.revision'])) active @endif"
@@ -521,6 +529,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('holdsalary', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['holdsalary'])) active @endif"
@@ -532,6 +542,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('it', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['it'])) active @endif"
@@ -543,6 +555,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('it-calculation', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['it-calculation'])) active @endif"
@@ -554,6 +568,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('salary.loan', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['salary.loan'])) active @endif"
@@ -565,6 +581,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('salary.lic', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['salary.lic'])) active @endif"
@@ -576,6 +594,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('professional-tax', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['professional-tax'])) active @endif"
@@ -587,6 +607,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('it.tabulation', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['it.tabulation'])) active @endif"
@@ -598,6 +620,7 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
                         @if (access()->hasAccess('salary-head', 'view'))
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
@@ -611,6 +634,7 @@
                                 </div>
                             </div>
                         @endif
+                        @if (access()->hasAccess('salary-field', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['salary-field'])) active @endif"
@@ -622,6 +646,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('taxscheme', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['taxscheme'])) active @endif"
@@ -633,6 +659,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('taxsection', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['taxsection'])) active @endif"
@@ -644,6 +672,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('taxsection-item', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['taxsection-item'])) active @endif"
@@ -655,6 +685,8 @@
                                 </a>
                             </div>
                         </div>
+                        @endif
+                        @if (access()->hasAccess('other-income', 'view'))
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link  @if (request()->routeIs(['other-income'])) active @endif"
@@ -666,7 +698,7 @@
                                 </a>
                             </div>
                         </div>
-
+                        @endif
                     </div>
                 @endif
                 @if (access()->hasAccess(['salary-head']))

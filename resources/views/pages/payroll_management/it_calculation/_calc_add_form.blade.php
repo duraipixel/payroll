@@ -18,8 +18,7 @@
             <tr>
                 <td> Designation </td>
                 <td colspan="2">
-                    <label
-                        for="">{{ $staff_details->position->designation->name ?? '' }}</label>
+                    <label for="">{{ $staff_details->position->designation->name ?? '' }}</label>
                     <input type="hidden" name="designation_id" class="form-input text-end"
                         value="{{ $staff_details->position->designation_id ?? '' }}">
                 </td>
@@ -32,7 +31,7 @@
                         value="{{ $staff_details->pan->doc_number ?? '' }}">
                 </td>
             </tr>
-           
+            <input type="hidden" name="id" value="{{ $statement_info->id }}">
             <tr>
                 <td>Total Income during the financial year 2021-2022 </td>
                 <td class="w-120px text-end"> {{ $salary_pattern->gross_salary ?? 0 }} x
@@ -48,7 +47,7 @@
                 <td>
                     Less : Standard Deduction
                 </td>
-                <td class="w-120px text-end">{{ $statement_info->standard_deduction ?? 50,000 }}</td>
+                <td class="w-120px text-end">{{ $statement_info->standard_deduction ?? 50000 }}</td>
                 <td>
                     <input type="hidden" name="standard_deduction" id="standard_deduction"
                         class="form-input text-end first_deduct" value="50000"

@@ -21,13 +21,13 @@
                                                 class="form-control select2-option"
                                                 @if (!empty($details)) disabled @endif>
                                                 <option value="">-- Select Year --</option>
-                                                @isset($global_academic_year)
-                                                    @foreach ($global_academic_year as $item)
+                                                @if(getGlobalAcademicYear())
+                                                    @foreach (getGlobalAcademicYear() as $item)
                                                         <option value="{{ $item->id }}"
                                                             @if (isset($details->academic_id) && $details->academic_id == $item->id) selected @endif>
                                                             {{ $item->from_year . ' - ' . $item->to_year }} </option>
                                                     @endforeach
-                                                @endisset
+                                                @endif
                                             </select>
                                         </div>
                                     </div>

@@ -4,6 +4,14 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
+<style>
+    #document_locker td {
+        padding: 5px;
+    }
+    #document_locker th {
+        padding: 5px;
+    }
+</style>
     <div class="row container">
         <div class="col-md-4">
             <div class="alert alert-primary fade show" role="alert">
@@ -70,15 +78,15 @@
             <div class="col-12">
                 <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                     <table id="document_locker"
-                        class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
+                        class="table align-middle  table-hover table-bordered table-striped fs-7 no-footer"
                         style="width:100%">
                         <thead class="bg-primary">
-                            <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="text-center text-white" style="width:85px;">Staff ID</th>
-                                <th class="text-center text-white">Staff Name</th>
-                                <th class="text-center text-white">Department</th>
-                                <th class="text-center text-white">Designation</th>
-                                <th class="text-center text-white">Total Documents</th>
+                            <tr class="text-start  text-muted fw-bolder fs-7 text-uppercase gs-0">
+                                <th class=" text-white" style="width:85px;">Staff ID</th>
+                                <th class=" text-white">Staff Name</th>
+                                <th class=" text-white">Department</th>
+                                <th class=" text-white">Designation</th>
+                                <th class=" text-white">Total Documents</th>
                                 {{-- <th class="text-center text-white">Aprroved Documents</th> --}}
                                 {{-- <th class="text-center text-white">Pending Documents</th> --}}
                                 <th class="text-center text-white">Action</th>
@@ -120,8 +128,8 @@
                     }
                 },
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'society_emp_code',
+                        name: 'society_emp_code'
                     },
                     {
                         data: 'name',

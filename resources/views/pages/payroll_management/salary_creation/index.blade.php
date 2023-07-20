@@ -77,7 +77,8 @@
                                     @isset($employees)
                                         @foreach ($employees as $item)
                                             <option value="{{ $item->id }}"
-                                                @if (isset($staff_id) && $staff_id == $item->id) selected @endif>{{ $item->name }}
+                                                @if (isset($staff_id) && $staff_id == $item->id) selected @endif>
+                                                {{ $item->name }} - {{ $item->institute_emp_code }}
                                             </option>
                                         @endforeach
                                     @endisset

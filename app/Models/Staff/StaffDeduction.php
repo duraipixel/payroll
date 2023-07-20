@@ -24,7 +24,8 @@ class StaffDeduction extends Model implements Auditable
         'status',	
         'added_by',	
         'updated_by',
-        'staff_id'
+        'staff_id',
+        'non_editable'
     ];
 
     public function section() {

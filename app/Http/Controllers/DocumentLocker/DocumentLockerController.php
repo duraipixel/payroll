@@ -43,7 +43,7 @@ class DocumentLockerController extends Controller
 
         ])->when(!is_null($auth_user->reporting_manager_id), function ($q) use ($auth_user) {
             $q->where('reporting_manager_id', $auth_user->id);
-        })->get();
+        })->where('is_super_admin', '=', null)->get();
 
         // Retrieve the total user count
         $totalUserCount = $result->count();
@@ -93,7 +93,7 @@ class DocumentLockerController extends Controller
             ])->with(['position.department', 'position.designation'])->select('*')
             ->when( !empty( $staff_id ), function($q) use($staff_id){
                 $q->where('users.id', $staff_id);
-            });
+            })->where('is_super_admin', '=', null);
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $key_search = $request->search['value'];

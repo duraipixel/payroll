@@ -13,38 +13,61 @@
             </div>
         </div>
     @else
-        <form id="it_statement_form">
-            <div class="row">
-                <div class="col-sm-9">
-                    @if (isset($statement_info) && !empty($statement_info))
-                        @include('pages.payroll_management.it_calculation._calc_update_form')
-                    @else
-                        @include('pages.payroll_management.it_calculation._calc_add_form')
-                    @endif
-                    <div class="row">
-                        <div class="col-sm-12 mt-3 text-end">
-                            @if (isset($statement_info) && !empty($statement_info))
-                                @php
-                                    $file_path = 'public/it/statement/' . $info->staff->society_emp_code . '/' . $info->document;
-                                    $file_path = Storage::url($file_path);
-                                @endphp
-                                <a href="{{ asset('public'.$file_path) }}" target="_blank" class="btn btn-info btn-sm"
-                                    onclick="return previewStatement()">
-                                    <i class="fa fa-file-pdf"></i> Preview
-                                </a>
-                            @else
-                                <button type="button" class="btn btn-success btn-sm"
-                                    onclick="return submitTaxCalculation()"> Submit Calculation </button>
-                            @endif
+        @if (isset($statement_info) && !empty($statement_info))
+            <form id="it_statement_form">
+                <div class="row">
+                    <div class="col-sm-9">
+                        @if (isset($statement_info) && !empty($statement_info) && $statement_info->lock_calculation == 'yes')
+                            @include('pages.payroll_management.it_calculation._calc_update_form')
+                        @elseif(isset($statement_info) && !empty($statement_info))
+                            @include('pages.payroll_management.it_calculation._calc_add_form')
+                        @endif
+                        <div class="row">
+                            <div class="col-sm-12 mt-3 text-end">
+
+                                @if (isset($statement_info) && !empty($statement_info))
+
+                                    @php
+                                        $file_path = 'public/it/statement/' . $info->staff->society_emp_code . '/' . $info->document;
+                                        $file_path = Storage::url($file_path);
+                                    @endphp
+                                    @if ($statement_info->is_staff_calculation_done == 'no' && $statement_info->total_income_tax_payable > 0)
+                                        <label for="" class="text-danger"> Staff does not enter tax adjustment
+                                            data.
+                                        </label>
+                                    @endif
+                                    @if ($statement_info->lock_calculation == 'no')
+                                        <button type="button" class="btn btn-success btn-sm"
+                                            onclick="return submitTaxCalculation('lock')">
+                                            Lock Calculation
+                                        </button>
+                                    @endif
+                                    <a href="{{ asset('public' . $file_path) }}" target="_blank"
+                                        class="btn btn-info btn-sm" onclick="return previewStatement()">
+                                        <i class="fa fa-file-pdf"></i> Preview
+                                    </a>
+                                @else
+                                    <button type="button" class="btn btn-success btn-sm"
+                                        onclick="return submitTaxCalculation()"> Submit Calculation </button>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </form>
+            </form>
+        @else
+            @include('pages.payroll_management.it_calculation._init_view')
+            {{-- @include('pages.payroll_management.it_calculation._calc_add_form') --}}
+        @endif
     @endif
 @endif
-
+<div class="h-400px d-flex justify-content-center align-items-center d-none" id="payroll-loading">
+    <img src="{{ asset('assets/images/payroll-loading.gif') }}" width="200" alt="">
+    <div class="text-muted">
+        Please wait while creating income tax generating form
+    </div>
+</div>
 <script>
     function doTaxCalculation() {
 
@@ -121,7 +144,7 @@
         })
     }
 
-    function submitTaxCalculation() {
+    function submitTaxCalculation(mode= '') {
 
         Swal.fire({
             text: "Are you sure you would like to submit tax calculation?",
@@ -147,17 +170,53 @@
                 $.ajax({
                     url: "{{ route('it-calculation.save.statement') }}",
                     type: 'POST',
-                    data: formData + '&staff_id=' + staff_id,
+                    data: formData + '&staff_id=' + staff_id+'&mode='+mode,
                     beforeSend: function() {
                         $('#it_statement_form').addClass('blur_loading_3px');
                     },
                     success: function(res) {
+
                         $('#it_statement_form').removeClass('blur_loading_3px');
-                        getStaffTaxCalculationPane(staff_id);
+                        if( res.error == 1 ) {
+                            toastr.error('Error', res.message );
+                        } else {
+                            toastr.success('Success', 'Calculation added successfully');
+                            getStaffTaxCalculationPane(staff_id);
+                        }
                     }
                 })
             }
 
         });
+    }
+
+    function generateCalculationForm() {
+
+        var staff_id = $('#staff_id').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('it-calculation.generate.statement') }}",
+            type: 'POST',
+            data: {staff_id:staff_id},
+            beforeSend: function() {
+                $('#generate-pane').addClass('d-none');
+                $('#payroll-loading').removeClass('d-none');
+            },
+            success: function(res) {
+                if( res.error == 0 ) {
+                    setTimeout(() => {
+                        getStaffTaxCalculationPane(staff_id);
+                        $('#payroll-loading').addClass('d-none');
+                    }, 1000);
+                } else {
+                    $('#payroll-loading').addClass('d-none');
+                    toastr.error('Error', res.message);
+                }
+            }
+        })
     }
 </script>

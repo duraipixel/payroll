@@ -44,7 +44,8 @@ class ItStaffStatement extends Model implements Auditable
         'document',
         'status',	
         'added_by',
-        'is_staff_calculation_done'
+        'is_staff_calculation_done',
+        'lock_calculation'
     ];
 
     public function scopeHasAcademic($query)

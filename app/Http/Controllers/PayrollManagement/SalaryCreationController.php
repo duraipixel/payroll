@@ -45,7 +45,7 @@ class SalaryCreationController extends Controller
             $salary_heads = '';
         }
 
-        $employees = User::where('status', 'active')->whereNull('is_super_admin')->get();
+        $employees = User::where('status', 'active')->orderBY('name', 'asc')->whereNull('is_super_admin')->get();
         $salary_heads = SalaryHead::where('status', 'active')->get();
 
         $acYear = AcademicYear::find(academicYearId());

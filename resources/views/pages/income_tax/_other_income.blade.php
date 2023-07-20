@@ -6,7 +6,7 @@
                     <label> Other Income </label>
                 </div>
                 <div class="from-group">
-                    @if( isset( $statement_data ) && !empty( $statement_data ))
+                    @if( isset( $statement_data ) && !empty( $statement_data ) && $statement_data->lock_calculation == 'yes')
                     @else
                     <button type="button" class="btn btn-primary btn-sm" onclick="return getOIRow()"> Add New </button>
                     @endif
@@ -76,10 +76,12 @@
                 </tbody>
             </table>
         </div>
+        @if( isset( $statement_data ) && !empty( $statement_data ) && $statement_data->lock_calculation == 'no')
         <div class="col-sm-12 text-end mt-3">
             <button class="btn btn-dark btn-sm" type="button"> cancel </button>
             <button class="btn btn-success btn-sm" type="submit"> Save </button>
         </div>
+        @endif
     </div>
 </form>
 <script>

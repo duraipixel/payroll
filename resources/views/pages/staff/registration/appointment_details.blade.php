@@ -240,6 +240,9 @@
                                 },
                                 timer: 3000
                             });
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
                         } else {
                             Swal.fire({
                                 title: "Error!",

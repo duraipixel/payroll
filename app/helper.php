@@ -701,6 +701,7 @@ function getStaffDeduction80CAmount($staff_id, $section_item_id)
     $academic_id = academicYearId();
 
     $info = StaffDeduction::where(['academic_id' => $academic_id, 'staff_id' => $staff_id, 'tax_section_item_id' => $section_item_id])->first();
+    // dd( $info );
     return $info->amount ?? 0;
 }
 
@@ -765,11 +766,12 @@ function getHRAAmount($scheme_id, $staff_id, $salary_pattern)
 
     $staff_info = User::find($staff_id);
     $actual_hra_amount = ($salary_pattern->hra->amount ?? 0) * 12;
+
     $rent_amount = $staff_info->staffRentByAcademic->annual_rent ?? 0;
     $basic = ($salary_pattern->basic->amount ?? 0) * 12;
     $da = ($salary_pattern->da->amount ?? 0) * 12;
     $excess_amount = getPercentageAmount(10, (($basic + $da) - $rent_amount));
-
+ 
     $hra_amount = $actual_hra_amount;
     if ($excess_amount < $actual_hra_amount) {
         $hra_amount = $excess_amount;
@@ -785,7 +787,7 @@ function getTaxOtherSalaryCalulatedMonth($salary_pattern)
     $s_date = date('Y-m-d', strtotime($start_year));
     $e_date = date('Y-m-d', strtotime($end_year));
     $payout_month = $salary_pattern->payout_month; //2022-04-01
-    $payout_month = date('Y-m-d', strtotime($payout_month));
+    $payout_month = date('Y-m-d', strtotime($payout_month.'-1 month'));
     $counted_months = 12;
     if ($payout_month > $start_year && $payout_month < $e_date) {
         //find diff month
@@ -921,4 +923,13 @@ function getStaffLeaveRequestStatus($staff_id, $date) {
     return $status;
     
 
+}
+
+function getGlobalAcademicYear() {
+
+    if( !session()->has('global_academic_year')) {
+        $academic = AcademicYear::where('status', 'active')->orderBy('from_year', 'desc')->get();
+        session()->put('global_academic_year', $academic);
+    }
+    return session()->get('global_academic_year');
 }
