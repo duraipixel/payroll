@@ -32,6 +32,7 @@ class OverviewController extends Controller
                 ),
             )
         );
+
         $acYear = AcademicYear::find(academicYearId());
         $from_year = $acYear->from_year;
         $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
@@ -49,6 +50,7 @@ class OverviewController extends Controller
         $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->first();
 
         return view('pages.payroll_management.overview.index', compact('breadcrums', 'date', 'payroll', 'working_days', 'previous_payroll', 'from_year'));
+        
     }
 
     public function getMonthData(Request $request)
@@ -206,6 +208,12 @@ class OverviewController extends Controller
 
         return view('pages.payroll_management.overview._payroll_form', $params);
         
+    }
+
+    public function setPayrollProcessing(Request $request) {
+
+        
 
     }
+
 }

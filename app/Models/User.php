@@ -39,10 +39,11 @@ use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\Staff\StaffDeduction;
 use App\Models\Staff\StaffRentDetail;
 use App\Models\Staff\StaffTaxSeperation;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements Auditable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [

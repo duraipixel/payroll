@@ -191,7 +191,7 @@ class IncomeTaxCalculationController extends Controller
                 'total_income_tax_payable' => $request->total_income_tax_payable,
                 'added_by' => auth()->id()
             );
-            if( $mode ) {
+            if( isset($mode) && $mode == 'lock' ) {
                 $ins['lock_calculation'] = 'yes';
             }
 

@@ -29,6 +29,8 @@
         </div>
         <div class="modal-body py-lg-10 px-lg-10" id="dynamic_content">
             <form id="checklist_form">
+                <input type="hidden" name="date" value="{{ $date ?? '' }}">
+                <input type="hidden" name="payout_id" value="{{ $payout_id ?? '' }}">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="d-flex border-bottom mb-3 p-3">
@@ -58,9 +60,11 @@
                                         Leave</a>
                                 </div>
                             </div>
-                            <div id="leave_days_message" class="w-30 d-none small p-1 text-danger d-flex justify-content-center align-items-center">
+                            <div id="leave_days_message"
+                                class="w-30 d-none small p-1 text-danger d-flex justify-content-center align-items-center">
                                 <div>
-                                    Employees will lose compensation if they don't request a leave of absence, their request is denied, and it remains outstanding.
+                                    Employees will lose compensation if they don't request a leave of absence, their
+                                    request is denied, and it remains outstanding.
                                 </div>
                             </div>
                         </div>
@@ -98,9 +102,12 @@
                                     </a>
                                 </div>
                             </div>
-                            <div id="employees_message" class="w-30 d-flex d-none p-1 text-danger small justify-content-center align-items-center">
+                            <div id="employees_message"
+                                class="w-30 d-flex d-none p-1 text-danger small justify-content-center align-items-center">
                                 <div>
-                                    All employee verification must be completed before the payroll process can begin. Whenever an employee's verification is pending. Payroll processing is limited to verified employees only.
+                                    All employee verification must be completed before the payroll process can begin.
+                                    Whenever an employee's verification is pending. Payroll processing is limited to
+                                    verified employees only.
                                 </div>
                             </div>
                         </div>
@@ -110,7 +117,8 @@
                                 <input type="checkbox" id="income_tax" onchange="setCompleted(this)"
                                     name="payroll_points[]" value="income_tax">
                                 <label for="income_tax" class="mx-3"> Income Tax </label>
-                                <input type="hidden" name="process_it" id="process_it" value="{{ $income_tax_data['process_it'] }}">
+                                <input type="hidden" name="process_it" id="process_it"
+                                    value="{{ $income_tax_data['process_it'] }}">
                             </div>
                             <div class="w-50 d-flex" id="income_tax_pane">
                                 @if (isset($income_tax_data) && !empty($income_tax_data))
@@ -119,7 +127,8 @@
                                             Verified Employee
                                         </div>
                                         <div class="text-muted">
-                                           {{ $income_tax_data['pending_it'] }} / {{ $income_tax_data['verified_user'] }}
+                                            {{ $income_tax_data['pending_it'] }} /
+                                            {{ $income_tax_data['verified_user'] }}
                                         </div>
                                     </div>
 
@@ -140,7 +149,8 @@
                                     </a>
                                 </div>
                             </div>
-                            <div id="income_tax_message" class="w-30 d-none p-1 d-flex justify-content-center text-danger small align-items-center">
+                            <div id="income_tax_message"
+                                class="w-30 d-none p-1 d-flex justify-content-center text-danger small align-items-center">
                                 <div>
                                     Income tax Entries all should be done.Otherwise Payroll process will not continue
                                 </div>
@@ -156,9 +166,6 @@
                             <input type="checkbox" id="hold_salary" name="payroll_points[]" value="hold_salary">
                             <label for="hold_salary" class="mx-3"> Checked Hold Salary </label>
                         </div>
-                        
-                        
-                        
                     </div>
                 </div>
 
@@ -207,7 +214,7 @@
         for (var i = 0; i < checkboxes.length; i++) {
             arrays.push(checkboxes[i].value)
         }
-        if( total_check == arrays.length ) {
+        if (total_check == arrays.length) {
             console.log('do payroll process');
         } else {
             toastr.error('Error', 'Please select all checklist to continue');
@@ -215,10 +222,29 @@
         }
 
         var process_it = $('#process_it').val();
-        if( !process_it ) {
+        if (!process_it) {
             toastr.error('Error', 'Can not continue Payroll process. Please complete all income tax entries');
             return false;
         }
-        
+        var formData = $('#checklist_form').serialize();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('payroll.set.processing') }}",
+            type: 'POST',
+            data: formData,
+            success: function(res) {
+                // $('#payroll_overview_container').html(res);
+            },
+            error: function(xhr, err) {
+               
+            }
+        });
+
     }
 </script>

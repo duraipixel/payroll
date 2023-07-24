@@ -357,7 +357,7 @@
             </tr>
             <tr>
                 <td colspan="2">
-                    Less : Tax already paid (suim of total tax paid so far)
+                    Less : Tax already paid (sum of total tax paid so far)
                 </td>
                 <td>
                     <label></label>

@@ -260,7 +260,9 @@ class StaffController extends Controller
         ]);
 
         if ($validator->passes()) {
+
             $previous_code = $request->previous_code ?? date('dmyhis');
+            
             $isExistUser = User::where('emp_code', $previous_code)->first();
 
             $academic_id = academicYearId();
@@ -1274,6 +1276,7 @@ class StaffController extends Controller
 
         $info = $user;
         return view('pages.overview.index', compact('info', 'breadcrums'));
+
     }
 
     public function print(Request $request, User $user)
@@ -1348,5 +1351,16 @@ class StaffController extends Controller
         }
 
         return view('pages.staff.registration.emp_position._handling_subject', compact('subject_details', 'class_details', 'staff_details'));
+
+    }
+
+    public function deleteStaff(Request $request) {
+
+        $staff_id = $request->id;
+
+        User::where('id', $staff_id)->delete();
+
+        return response()->json(['message' => "You deleted", 'status' => 1]);
+        
     }
 }

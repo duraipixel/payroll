@@ -26,7 +26,7 @@
                 readonly>
         </td>
         <td class="p-2">
-            <input type="text" value="{{ $ded->remarks ?? '' }}" class="form-input" readonly>
+            <input type="text" value="{{ $ded->remarks ?? '' }}" class="form-input" readonly >
         </td>
         <td class="p-2 text-center">
             {{-- <i class="fa fa-trash p-2 text-danger" role="button" onclick="return removeDeductionRow(this)"></i> --}}
@@ -67,7 +67,7 @@
                     <input type="hidden" @if (isset($ded) && $ded->non_editable == 'yes') disabled @endif name="id[]"
                         value="{{ $ded->id ?? '' }}">
                     <input type="text" @if (isset($ded) && $ded->non_editable == 'yes') disabled @endif name="remarks[]"
-                        value="{{ $ded->remarks ?? '' }}" class="form-input">
+                        value="{{ $ded->remarks ?? '' }}" class="form-input" required>
                 </td>
                 <td class="p-2 text-center">
                     @if (isset($statement_data) && !empty($statement_data))
@@ -106,7 +106,7 @@
                 <input type="text" name="amount[]" class="form-input price text-end" required>
             </td>
             <td class="p-2">
-                <input type="text" name="remarks[]" class="form-input">
+                <input type="text" name="remarks[]" class="form-input" required>
             </td>
             <td class="p-2 text-center">
                 <i class="fa fa-trash p-2 text-danger" role="button" onclick="return removeDeductionRow(this)"></i>
@@ -138,7 +138,7 @@
             <input type="text" name="amount[]" class="form-input price text-end" required>
         </td>
         <td class="p-2">
-            <input type="text" name="remarks[]" class="form-input">
+            <input type="text" name="remarks[]" class="form-input" required>
         </td>
         <td class="p-2 text-center">
             <i class="fa fa-trash p-2 text-danger" role="button" onclick="return removeDeductionRow(this)"></i>

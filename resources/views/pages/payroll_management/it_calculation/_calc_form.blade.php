@@ -37,6 +37,10 @@
                                         </label>
                                     @endif
                                     @if ($statement_info->lock_calculation == 'no')
+                                        <button type="button" class="btn btn-primary btn-sm"
+                                            onclick="return submitTaxCalculation('update')">
+                                            Update Calculation
+                                        </button>
                                         <button type="button" class="btn btn-success btn-sm"
                                             onclick="return submitTaxCalculation('lock')">
                                             Lock Calculation
@@ -144,7 +148,7 @@
         })
     }
 
-    function submitTaxCalculation(mode= '') {
+    function submitTaxCalculation(mode = '') {
 
         Swal.fire({
             text: "Are you sure you would like to submit tax calculation?",
@@ -170,18 +174,19 @@
                 $.ajax({
                     url: "{{ route('it-calculation.save.statement') }}",
                     type: 'POST',
-                    data: formData + '&staff_id=' + staff_id+'&mode='+mode,
+                    data: formData + '&staff_id=' + staff_id + '&mode=' + mode,
                     beforeSend: function() {
                         $('#it_statement_form').addClass('blur_loading_3px');
                     },
                     success: function(res) {
 
                         $('#it_statement_form').removeClass('blur_loading_3px');
-                        if( res.error == 1 ) {
-                            toastr.error('Error', res.message );
+                        if (res.error == 1) {
+                            toastr.error('Error', res.message);
                         } else {
                             toastr.success('Success', 'Calculation added successfully');
                             getStaffTaxCalculationPane(staff_id);
+                            getTaxTabInfo('taxpayable');
                         }
                     }
                 })
@@ -201,13 +206,15 @@
         $.ajax({
             url: "{{ route('it-calculation.generate.statement') }}",
             type: 'POST',
-            data: {staff_id:staff_id},
+            data: {
+                staff_id: staff_id
+            },
             beforeSend: function() {
                 $('#generate-pane').addClass('d-none');
                 $('#payroll-loading').removeClass('d-none');
             },
             success: function(res) {
-                if( res.error == 0 ) {
+                if (res.error == 0) {
                     setTimeout(() => {
                         getStaffTaxCalculationPane(staff_id);
                         $('#payroll-loading').addClass('d-none');

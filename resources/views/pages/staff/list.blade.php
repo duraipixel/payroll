@@ -110,7 +110,6 @@
 
 @section('add_on_script')
     <script>
-        $(document).ready(function() {
             var staff_Table = $('#staff_table').DataTable({
                 "serverSide": true,
                 "processing": true,
@@ -156,7 +155,6 @@
             document.querySelector('#datatable_institute_id').addEventListener("change", function(e) {
                 staff_Table.ajax.reload();
             });
-        });
 
         function staffChangeStatus(id, status) {
             Swal.fire({
@@ -186,9 +184,60 @@
                             status: status
                         },
                         success: function(res) {
-                            dtTable.ajax.reload();
+                            staff_Table.ajax.reload();
                             Swal.fire({
                                 title: "Updated!",
+                                text: res.message,
+                                icon: "success",
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-success"
+                                },
+                                timer: 3000
+                            });
+
+                        },
+                        error: function(xhr, err) {
+                            if (xhr.status == 403) {
+                                toastr.error(xhr.statusText, 'UnAuthorized Access');
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function deleteStaff(id) {
+
+            Swal.fire({
+                text: "Are you sure you would like to delete?",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "Yes, Delete it!",
+                cancelButtonText: "No, return",
+                customClass: {
+                    confirmButton: "btn btn-danger",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function(result) {
+                if (result.value) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ route('staff.delete') }}",
+                        type: 'POST',
+                        data: {
+                            id: id
+                        },
+                        success: function(res) {
+                            staff_Table.ajax.reload();
+                            Swal.fire({
+                                title: "Deleted!",
                                 text: res.message,
                                 icon: "success",
                                 confirmButtonText: "Ok, got it!",

@@ -369,7 +369,10 @@ class IncomeTaxController extends Controller
             $ins['february'] = $request->feb_amount;
             $ins['march'] = $request->mar_amount;
             $ins['total_tax'] = $income_info->total_income_tax_payable;
+
             StaffTaxSeperation::updateOrCreate(['staff_id' => $staff_id, 'income_tax_id' => $income_tax_id], $ins);
+
+            ItStaffStatement::where('id', $income_tax_id)->update(['is_staff_calculation_done' => 'yes']);
             $error = 0;
             $message = 'Added Successfully';
         }

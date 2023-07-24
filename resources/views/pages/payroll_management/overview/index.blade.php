@@ -17,7 +17,6 @@
             @php
                 $dates = date('Y-m-d', strtotime($dates."+1 months"));
                 if( $i ==  0) {
-
                     $start_year = $dates;
                 }
             @endphp
