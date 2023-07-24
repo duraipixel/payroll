@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\PayrollManagement\ItStaffStatement;
+use App\Models\PayrollManagement\SalaryField;
 use App\Models\User;
 
 class PayrollChecklistRepository extends Controller
@@ -50,29 +51,61 @@ class PayrollChecklistRepository extends Controller
 
     public function getEmployeePendingPayroll()
     {
-        
+
         $response['pending_approval'] = User::where('verification_status', 'pending')
             ->whereNull('is_super_admin')->count();
 
         $response['approved'] = User::where('verification_status', 'approved')
             ->whereNull('is_super_admin')->count();
         return $response;
-        
     }
 
-    public function getPendingITEntry() {
+    public function getPendingITEntry()
+    {
 
         $response['verified_user'] = User::where('verification_status', 'approved')
-                            ->whereNull('is_super_admin')->count();
+            ->whereNull('is_super_admin')->count();
         $response['pending_it'] = User::join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
-                            ->where('verification_status', 'approved')
-                            ->where('it_staff_statements.academic_id', session()->get('academic_id'))
-                            ->whereNull('is_super_admin')->count();
+            ->where('verification_status', 'approved')
+            ->where('it_staff_statements.academic_id', session()->get('academic_id'))
+            ->whereNull('is_super_admin')->count();
         $process = false;
-        if( $response['verified_user'] == $response['pending_it'] ) {
+        if ($response['verified_user'] == $response['pending_it']) {
             $process = true;
         }
         $response['process_it'] = $process;
         return $response;
     }
+
+    public function getToPayEmployee($date)
+    {
+
+        $date = date('Y-m-d', strtotime($date. '-1 month'));
+        $month_start = date('Y-m-01', strtotime($date));
+        $month_end = date('Y-m-t', strtotime($date));
+
+        /**
+         *  1. Get payable staff & Join Date;
+         *  2. Month working days
+         *  3. Month worked days
+         *  4. Get salary pattern for staff
+         *  5. Finalize Their Salary and show
+         */
+        
+        $users = User::select('users.*')->
+            with(['workedDays' => function ($query) use ($month_start, $month_end) {
+                $query->whereDate('attendance_date', '>=', $month_start);
+                $query->whereDate('attendance_date', '<=', $month_end);
+            }, 'currentSalaryPattern', 'firstAppointment'])
+            ->join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
+            ->where('verification_status', 'approved')
+            ->where('it_staff_statements.academic_id', session()->get('academic_id'))
+            ->whereNull('is_super_admin')
+            ->get();
+        
+        return $users;
+
+    }
+
+  
 }

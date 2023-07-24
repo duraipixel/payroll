@@ -35,7 +35,11 @@ class AttendanceManualEntry extends Model
     ];
 
     public function reportingManager() {
-        return $this->hasOne(User::class, 'reporting_manager', 'id');
+        return $this->hasOne( User::class, 'reporting_manager', 'id' );
+    }
+
+    public function user() {
+        return $this->belongsTo( User::class, 'employment_id', 'id' );
     }
 
    

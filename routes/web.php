@@ -256,7 +256,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('payroll/permission/modal',[App\Http\Controllers\PayrollManagement\OverviewController::class,'openPermissionModal'])->name('payroll.open.permission');
     Route::post('payroll/create',[App\Http\Controllers\PayrollManagement\OverviewController::class,'createPayroll'])->name('payroll.create');
     Route::post('payroll/process/modal',[App\Http\Controllers\PayrollManagement\OverviewController::class,'processPayrollModal'])->name('payroll.process.modal');
-    Route::post('payroll/set/processing',[App\Http\Controllers\PayrollManagement\OverviewController::class,'setPayrollProcessing'])->name('payroll.set.processing');
+    Route::post('payroll/processing',[App\Http\Controllers\PayrollManagement\OverviewController::class,'setPayrollProcessing'])->name('payroll.set.processing');
+    Route::post('payroll/processing/continue',[App\Http\Controllers\PayrollManagement\OverviewController::class,'continuePayrollProcessing'])->name('payroll.continue.processing');
     #salary revision approval
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
     Route::post('salary/revision/status/change/modal',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatusModal'])->name('salary.revision.status.modal');

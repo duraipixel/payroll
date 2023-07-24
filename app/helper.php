@@ -875,7 +875,7 @@ function generateIncomeTaxStatementPdfByStaff($statement_id)
     $info->save();
 }
 
-function getStaffPatterFieldAmount($staff_id, $salary_pattern_id, $field_id = '', $field_name = '')
+function getStaffPatterFieldAmount($staff_id, $salary_pattern_id, $field_id = '', $field_name = '', $reference_type = '')
 {
 
     $info = StaffSalaryPatternField::where('staff_id', $staff_id)->where('staff_salary_pattern_id', $salary_pattern_id)
@@ -884,7 +884,11 @@ function getStaffPatterFieldAmount($staff_id, $salary_pattern_id, $field_id = ''
         })
         ->when(!empty($field_name), function ($query) use ($field_name) {
             $query->where('field_name', $field_name);
-        })->first();
+        })
+        ->when(!empty( $reference_type ), function($query) use($reference_type){
+            $query->where('reference_type', $reference_type);
+        })
+        ->first();
     return $info->amount ?? 0;
 }
 
@@ -894,7 +898,7 @@ function staffMonthTax($staff_id, $month)
     $info = StaffTaxSeperation::where('staff_id', $staff_id)->where('status', 'active')->where('academic_id', academicYearId())->first();
     if ($info) {
         $month = strtolower($month);
-        return $info->$month;
+        return $info->$month ?? 0;
     }
 }
 

@@ -7,6 +7,7 @@ use App\Models\AcademicYear;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\PayrollManagement\Payroll;
 use App\Models\PayrollManagement\PayrollPermission;
+use App\Models\PayrollManagement\SalaryField;
 use App\Repositories\PayrollChecklistRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -212,12 +213,35 @@ class OverviewController extends Controller
 
     public function setPayrollProcessing(Request $request) {
 
-        dd( $request->all() );
-
         $date = $request->date;
         $payout_id = $request->payout_id;
         $payroll_points = $request->payroll_points;
         $process_it = $request->process_it;
+        $payroll_date = date('Y-m-d', strtotime($date. '-1 month'));
+        $month_start = date('Y-m-01', strtotime($payroll_date));
+        $month_end = date('Y-m-t', strtotime($payroll_date));
+
+
+        $payout_data = $this->checklistRepository->getToPayEmployee( $date );
+        $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3 )->get();
+        $deductions_field = SalaryField::where('salary_head_id', 2)
+                            ->where(function($query){
+                                $query->where('is_static', 'yes');
+                                $query->orWhere('nature_id', 3 );
+                            })->get();
+        // dd( $payout_data[0]->workedDays->count() );
+        $params = array(
+            'date' => $date,
+            'payout_id' => $payout_id,
+            'payroll_points' => $payroll_points,
+            'process_it' => $process_it,
+            'payout_data' => $payout_data,
+            'earings_field' => $earings_field,
+            'deductions_field' => $deductions_field,
+            'working_day' => date('d', strtotime($month_end))
+        );
+
+        return view('pages.payroll_management.overview._payroll_process', $params );
 
     }
 

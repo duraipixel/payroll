@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\Leave\StaffLeave;
 use App\Models\Master\Institution;
 use App\Models\Role\RoleMapping;
@@ -412,5 +413,14 @@ class User extends Authenticatable implements Auditable
 
     public function staffSeperation() {
         return $this->hasOne(StaffTaxSeperation::class, 'staff_id', 'id')->where('academic_id', academicYearId());
+    }
+
+    public function workedDays() {
+        return $this->hasMany(AttendanceManualEntry::class, 'employment_id', 'id')
+        ->where('attendance_status', 'Present');
+    }
+
+    public function leaveDays() {
+        return $this->hasMany(AttendanceManualEntry::class, 'employment_id', 'id')->where('attendance_status', 'Absence');
     }
 }

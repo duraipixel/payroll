@@ -28,7 +28,8 @@
             </div>
         </div>
         <div class="modal-body py-lg-10 px-lg-10" id="dynamic_content">
-            <form id="checklist_form">
+            <form method="POST" id="checklist_form" action="{{ route('payroll.set.processing') }}">
+                @csrf
                 <input type="hidden" name="date" value="{{ $date ?? '' }}">
                 <input type="hidden" name="payout_id" value="{{ $payout_id ?? '' }}">
                 <div class="row">
@@ -226,25 +227,7 @@
             toastr.error('Error', 'Can not continue Payroll process. Please complete all income tax entries');
             return false;
         }
-        var formData = $('#checklist_form').serialize();
-
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $.ajax({
-            url: "{{ route('payroll.set.processing') }}",
-            type: 'POST',
-            data: formData,
-            success: function(res) {
-                // $('#payroll_overview_container').html(res);
-            },
-            error: function(xhr, err) {
-               
-            }
-        });
-
+        
+        $('#checklist_form').submit();
     }
 </script>
