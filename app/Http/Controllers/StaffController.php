@@ -256,7 +256,7 @@ class StaffController extends Controller
             'name' => 'required',
             // 'email' => 'required|string|unique:users,email,' . $id,
             // 'previous_code' => 'required'
-            'previous_code' => 'required|string|unique:users,emp_code,'.$id,
+            'previous_code' => 'required|string|unique:users,emp_code,'.$id.',id,deleted_at,NULL',
         ]);
 
         if ($validator->passes()) {

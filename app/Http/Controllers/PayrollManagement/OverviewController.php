@@ -212,7 +212,12 @@ class OverviewController extends Controller
 
     public function setPayrollProcessing(Request $request) {
 
-        
+        dd( $request->all() );
+
+        $date = $request->date;
+        $payout_id = $request->payout_id;
+        $payroll_points = $request->payroll_points;
+        $process_it = $request->process_it;
 
     }
 
