@@ -71,7 +71,7 @@
                 </div>
             </td>
         </tr>
-        @if( isset( $staff_details ) && $staff_details->verification_status == 'pending' )
+        @if( isset( $staff_details->verification_status ) && $staff_details->verification_status == 'pending' )
         <tr class="text-center">
             <td colspan="2">
                 <div class="alert alert-danger small">
