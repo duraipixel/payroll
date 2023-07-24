@@ -33,7 +33,7 @@
             <div class="col-lg-4 mb-5 rd-only position-relative">
                 <label class="input-label">Previous Code</label>
                 <input name="previous_code" id="previous_code" class="form-input"
-                    value="{{ $staff_details->emp_code ?? '' }}"  @if( isset($staff_details->emp_code) && !empty( $staff_details->emp_code ) ) readonly @endif/>
+                    value="{{ $staff_details->emp_code ?? '' }}"  @if( isset($staff_details->emp_code) && !empty( $staff_details->emp_code ) )  @endif/>
             </div>
 
             <div class="col-lg-4 mb-5">
