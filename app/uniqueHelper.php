@@ -107,7 +107,7 @@ if (!function_exists('appointmentOrderNo')) {
         $appoint = StaffAppointmentDetail::orderBy('id', 'desc')->first();
         // $year = date('Y');
         $countNo = '00001';
-        $appointment_order_no = $countNo.'/'.$institute_code.'/'.$year;
+        $appointment_order_no = $countNo.'/AEWS/'.$institute_code.'/'.$year;
         if( $appoint ) {
             $code = explode('/', $appoint->appointment_order_no);
             $emp_code = current( $code );
@@ -120,7 +120,7 @@ if (!function_exists('appointmentOrderNo')) {
                 }
                 $order_no = $new_no . $emp_code;
                 
-                $appointment_order_no = $order_no.'/'.$institute_code.'/'.$year;
+                $appointment_order_no = $order_no.'/AEWS/'.$institute_code.'/'.$year;
             }
         }   
         return $appointment_order_no;

@@ -124,7 +124,7 @@ class StaffAppointmentDetailController extends Controller
             $appointment_variables = array(
                 'date' => date('d-m-Y'),
                 'appointment_order_no' => appointmentOrderNo($user_info->id),
-                'appointment_date' => $request->from_appointment,
+                'appointment_date' => commonDateFormat($request->from_appointment),
                 'designation' => $user_info->position->designation->name ?? null,
                 'staff_name' => $staff_name . $user_info->name,
                 'institution_name' => $user_info->institute->name ?? null,

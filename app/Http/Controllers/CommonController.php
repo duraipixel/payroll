@@ -15,7 +15,11 @@ class CommonController extends Controller
     {
         $form_type = $request->form_type;
         $bank_id = $request->bank_id ?? '';
-        $title = 'Add '.ucfirst($form_type);
+        if( $form_type == 'intitution' ) {
+            $title = 'Add Institution';
+        } else {
+            $title = 'Add '.ucfirst($form_type);
+        }
         $society = Society::where('status', 'active')->get();
         $content = '';
 
