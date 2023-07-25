@@ -162,7 +162,7 @@
                                 <th class="fw-bold text-primary">Total Experience</th>
                                 <td>:</td>
                                 <th class="fw-bold">
-                                    10 Years
+                                    {{-- 10 Years --}}
                                 </th>
                             </tr>
                         </tbody>
