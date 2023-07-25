@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('staff_salaries', function (Blueprint $table) {
             $table->text('document')->nullable();
+            $table->unsignedInteger('payroll_id')->nullable();
         });
     }
 
@@ -26,6 +27,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('staff_salaries', function (Blueprint $table) {
+            $table->dropColumn('payroll_id');
             $table->dropColumn('document');
         });
     }

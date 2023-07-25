@@ -8,6 +8,8 @@ use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\PayrollManagement\Payroll;
 use App\Models\PayrollManagement\PayrollPermission;
 use App\Models\PayrollManagement\SalaryField;
+use App\Models\PayrollManagement\StaffSalary;
+use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Repositories\PayrollChecklistRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -24,7 +26,7 @@ class OverviewController extends Controller
 
     public function index()
     {
-        
+
         $breadcrums = array(
             'title' => 'Payroll Overview',
             'breadcrums' => array(
@@ -51,7 +53,6 @@ class OverviewController extends Controller
         $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->first();
 
         return view('pages.payroll_management.overview.index', compact('breadcrums', 'date', 'payroll', 'working_days', 'previous_payroll', 'from_year'));
-        
     }
 
     public function getMonthData(Request $request)
@@ -195,7 +196,7 @@ class OverviewController extends Controller
         $leave_data = $this->checklistRepository->getPendingRequestLeave($date);
         $employee_data = $this->checklistRepository->getEmployeePendingPayroll();
         $income_tax_data = $this->checklistRepository->getPendingITEntry();
-        
+
 
         $title = 'Payroll Process Confirmation';
         $params = array(
@@ -208,27 +209,29 @@ class OverviewController extends Controller
         );
 
         return view('pages.payroll_management.overview._payroll_form', $params);
-        
     }
 
-    public function setPayrollProcessing(Request $request) {
+    public function setPayrollProcessing(Request $request)
+    {
 
         $date = $request->date;
         $payout_id = $request->payout_id;
         $payroll_points = $request->payroll_points;
         $process_it = $request->process_it;
-        $payroll_date = date('Y-m-d', strtotime($date. '-1 month'));
+        $payroll_date = date('Y-m-d', strtotime($date . '-1 month'));
         $month_start = date('Y-m-01', strtotime($payroll_date));
         $month_end = date('Y-m-t', strtotime($payroll_date));
 
 
-        $payout_data = $this->checklistRepository->getToPayEmployee( $date );
-        $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3 )->get();
+        $payout_data = $this->checklistRepository->getToPayEmployee($date);
+
+        $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
         $deductions_field = SalaryField::where('salary_head_id', 2)
-                            ->where(function($query){
-                                $query->where('is_static', 'yes');
-                                $query->orWhere('nature_id', 3 );
-                            })->get();
+            ->where(function ($query) {
+                $query->where('is_static', 'yes');
+                $query->orWhere('nature_id', 3);
+            })->get();
+
         // dd( $payout_data[0]->workedDays->count() );
         $params = array(
             'date' => $date,
@@ -243,11 +246,11 @@ class OverviewController extends Controller
 
         // dd( $params );
 
-        return view('pages.payroll_management.overview._payroll_process', $params );
-
+        return view('pages.payroll_management.overview._payroll_process', $params);
     }
 
-    public function continuePayrollProcessing(Request $request) {
+    public function continuePayrollProcessing(Request $request)
+    {
 
         /**
          * 1. Need to generate salary pdf for every staff
@@ -259,16 +262,83 @@ class OverviewController extends Controller
         $payout_id = $request->payout_id;
         $date = $request->date;
 
-
-        $payroll_date = date('Y-m-d', strtotime($date. '-1 month'));
+        $payroll_date = date('Y-m-d', strtotime($date . '-1 month'));
         $month_start = date('Y-m-01', strtotime($payroll_date));
         $month_end = date('Y-m-t', strtotime($payroll_date));
 
+        $payroll_info = Payroll::find( $payout_id );
+        $payout_data = $this->checklistRepository->getToPayEmployee($date);
 
-        $payout_data = $this->checklistRepository->getToPayEmployee( $date );
-        
-        dd( $request->all());
+        /** 
+         * 1. staff salary
+         */
+        $salary_month = date('F', strtotime( $payroll_date));
+        $salary_year = date('Y', strtotime( $payroll_date));
+        if (isset($payout_data) && count($payout_data)) {
+            foreach ($payout_data as $key => $value) {
 
+                if( $value->appointment->employment_nature->id ) {
+
+                    $nature_id = $value->appointment->employment_nature->id;
+                    $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', $nature_id)->get();
+                    $deductions_field = SalaryField::where('salary_head_id', $nature_id)
+                                        ->where(function ($query) use ($nature_id) {
+                                            $query->where('is_static', 'yes');
+                                            $query->orWhere('nature_id', $nature_id);
+                                        })->get();
+
+                    $gross = $value->currentSalaryPattern->gross_salary;
+                    $deduction = 0;
+                    if (isset($earings_field) && !empty($earings_field)) {
+                        foreach ($earings_field as $eitem) {
+                            $amounts = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $eitem->name);
+                        }
+                    }
+                }
+                $staff_id = $value->id;
+                /**
+                 *  get current salary pattern
+                 */
+                $pattern_info = StaffSalaryPattern::find($value->currentSalaryPattern->id);
+
+              
+                
+                dd( $pattern_info->patternFields );
+
+                $sal['staff_id'] = $staff_id;
+                $sal['payroll_id'] = $payout_id;
+                $sal['salary_month'] = $salary_month;
+                $sal['salary_year'] = $salary_year;
+                $sal['is_salary_processed'] = 'yes';
+                $sal['status'] = 'active';
+
+                $salary_info = StaffSalary::updateOrCreate(['staff_id' => $staff_id, 'payroll_id' => $payout_id], $sal);
+                
+                /**
+                 * insert in salary fields
+                 */
+
+
+            }
+        }
+
+
+        $sal['staff_id'] = '';
+        $sal['salary_no'] = '';
+        $sal['total_earnings'] = '';
+        $sal['total_deductions'] = '';
+        $sal['gross_salary'] = '';
+        $sal['net_salary'] = '';
+        $sal['salary_month'] = '';
+        $sal['salary_year'] = '';
+        $sal['is_salary_processed'] = '';
+        $sal['salary_processed_on'] = '';
+        $sal['status'] = '';
+        $sal['salary_pattern_id'] = '';
+        $sal['payroll_id'] = '';
+        $sal['document'] = '';
+
+        dd($request->all());
+        StaffSalary::updateOrCreate(['staff_id' => $staff_id, 'payroll_id' => $payout_id], $sal);
     }
-
 }

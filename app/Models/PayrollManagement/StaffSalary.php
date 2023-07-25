@@ -26,7 +26,8 @@ class StaffSalary extends Model
         'salary_processed_on',
         'status',
         'salary_pattern_id',
-        'document'
+        'document',
+        'payroll_id'
     ];
 
     public function fields()
