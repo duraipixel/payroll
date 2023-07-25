@@ -8,6 +8,7 @@ return [
         'designation',
         'staff_name',
         'institution_name',
+        'institution_address',
         'place',
         'salary',
         'date_of_completion',

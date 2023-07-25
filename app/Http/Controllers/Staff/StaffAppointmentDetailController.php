@@ -128,6 +128,7 @@ class StaffAppointmentDetailController extends Controller
                 'designation' => $user_info->position->designation->name ?? null,
                 'staff_name' => $staff_name . $user_info->name,
                 'institution_name' => $user_info->institute->name ?? null,
+                'institution_address' => $user_info->institute->address,
                 'place' => $place_of_work->name ?? null,
                 'salary' => $request->salary_scale,
                 'date_of_completion' => '',
