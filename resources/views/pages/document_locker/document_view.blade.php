@@ -222,7 +222,7 @@
                                         <a href="{{ url('storage/app/public' . '/' . $personal_docs->multi_file) }}"
                                             class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
                                             target="_blank" >
-                                            <i class="fa fa-download"></i></a>
+                                            <i class="fa fa-eye"></i></a>
                                     </td>
                                 </tr>
                             @empty
@@ -285,7 +285,7 @@
                                     <td> <a href="{{ url('storage/app/public' . '/' . $education_docs->doc_file) }}"
                                             class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
                                             target="_blank" >
-                                            <i class="fa fa-download"></i>
+                                            <i class="fa fa-eye"></i>
                                         </a></td>
                                 </tr>
                             @empty
@@ -351,7 +351,7 @@
                                     <td> <a href=" {{ url('storage/app/public' . '/' . $experince_docs->doc_file) }}"
                                             class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
                                             target="_blank">
-                                            <i class="fa fa-download"></i>
+                                            <i class="fa fa-eye"></i>
                                         </a></td>
                                 </tr>
                             @empty
@@ -418,13 +418,13 @@
                                             <a href="{{ url('storage/app' . '/' . $leave_docs->document) }}"
                                                 class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
                                                 target="_blank" >
-                                                <i class="fa fa-download"></i>
+                                                <i class="fa fa-eye"></i>
                                             </a>
                                         @else
                                             <a href="{{ url('storage/app' . '/' . $leave_docs->approved_document) }}"
                                                 class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
                                                 target="_blank" >
-                                                <i class="fa fa-download"></i>
+                                                <i class="fa fa-eye"></i>
                                             </a>
                                         @endif
                                     </td>
@@ -465,7 +465,7 @@
                                             <a href="{{ url('storage/app/public' . '/' . $appointment_docs->appointment_doc) }}"
                                                 class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
                                                 target="_blank">
-                                                <i class="fa fa-download"></i>
+                                                <i class="fa fa-eye"></i>
                                             </a>
                                         @endif
                                     </td>

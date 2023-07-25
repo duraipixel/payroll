@@ -158,8 +158,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/user/show-options', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'showOptions'])->name('user.show_options'); 
     Route::get('autocomplete-search', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'autocompleteSearch'])->name('autocomplete-search'); 
     Route::post('/document-status', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'changeDocumentStaus'])->name('document_status'); 
+
     //Document Locker End
-   
     Route::post('/scheme_view', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'schemeView'])->name('scheme.view');
     $routeArray = array(
         'institutions' => App\Http\Controllers\Master\InstitutionController::class,
@@ -258,6 +258,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('payroll/process/modal',[App\Http\Controllers\PayrollManagement\OverviewController::class,'processPayrollModal'])->name('payroll.process.modal');
     Route::post('payroll/processing',[App\Http\Controllers\PayrollManagement\OverviewController::class,'setPayrollProcessing'])->name('payroll.set.processing');
     Route::post('payroll/processing/continue',[App\Http\Controllers\PayrollManagement\OverviewController::class,'continuePayrollProcessing'])->name('payroll.continue.processing');
+    Route::post('payroll/completed',[App\Http\Controllers\PayrollManagement\OverviewController::class,'doPayrollProcessing'])->name('payroll.do.processing');
     #salary revision approval
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
     Route::post('salary/revision/status/change/modal',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatusModal'])->name('salary.revision.status.modal');

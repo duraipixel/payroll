@@ -241,7 +241,33 @@ class OverviewController extends Controller
             'working_day' => date('d', strtotime($month_end))
         );
 
+        // dd( $params );
+
         return view('pages.payroll_management.overview._payroll_process', $params );
+
+    }
+
+    public function continuePayrollProcessing(Request $request) {
+
+        /**
+         * 1. Need to generate salary pdf for every staff
+         * 2. Make entries in database         
+         * 3. Make Payroll Log for payroll generation History
+         */
+        $total_net_pay = $request->total_net_pay;
+        $working_day = $request->working_day;
+        $payout_id = $request->payout_id;
+        $date = $request->date;
+
+
+        $payroll_date = date('Y-m-d', strtotime($date. '-1 month'));
+        $month_start = date('Y-m-01', strtotime($payroll_date));
+        $month_end = date('Y-m-t', strtotime($payroll_date));
+
+
+        $payout_data = $this->checklistRepository->getToPayEmployee( $date );
+        
+        dd( $request->all());
 
     }
 

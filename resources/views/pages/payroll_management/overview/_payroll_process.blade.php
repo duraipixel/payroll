@@ -31,7 +31,7 @@
             left: 150px;
         }
     </style>
-    <div class="card">
+    <div class="card position-relative">
         <div class="card-header mt-10 text-center">
             <h3> Payroll Processing for Month {{ date('d/M/Y', strtotime($date)) }} </h3>
             @php
@@ -46,6 +46,10 @@
                 <div class="table-responsive">
                     <form id="revision_form">
                         @csrf
+                        <input type="hidden" name="date" value="{{ $date }}">
+                        <input type="hidden" name="payout_id" value="{{ $payout_id }}">
+                        <input type="hidden" name="process_it" value="{{ $process_it }}">
+                        <input type="hidden" name="working_day" value="{{ $working_day }}">
                         <table class="table align-middle  table-hover table-bordered table-striped fs-7 no-footer"
                             id="revision_table">
                             <thead class="bg-primary">
@@ -197,8 +201,16 @@
                 </div>
             </div>
         </div>
+        <div class="position-absolute w-100 h-100 bg-white d-none" id="payroll-loading">
+    
+            <div class="h-400px d-flex justify-content-center align-items-center bg-white" >
+                <img src="{{ asset('assets/images/payroll-loading.gif') }}" width="200" alt="">
+                <div class="text-muted">
+                    Please wait while creating Payroll
+                </div>
+            </div>
+        </div>
     </div>
-
 @endsection
 
 @section('add_on_script')
@@ -222,37 +234,17 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
+                    var formData = $('#revision_form').serialize();
+
                     $.ajax({
                         url: "{{ route('payroll.continue.processing') }}",
                         type: 'POST',
-                        data: {
-                            id: pattern_id
+                        data: formData,
+                        beforeSend: function() {
+                            $('#payroll-loading').removeClass('d-none');
                         },
                         success: function(res) {
-                            if (res.error == 0) {
-                                Swal.fire({
-                                    title: "Deleted!",
-                                    text: res.message,
-                                    icon: "success",
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-success"
-                                    },
-                                    timer: 3000
-                                });
-                                getSalaryHeadFields(res.staff_id);
-                            } else {
-                                Swal.fire({
-                                    title: "Can not Delete!",
-                                    text: res.message,
-                                    icon: "warning",
-                                    confirmButtonText: "Ok, got it!",
-                                    customClass: {
-                                        confirmButton: "btn btn-danger"
-                                    },
-                                    timer: 3000
-                                });
-                            }
+                            $('#payroll-loading').addClass('d-none');
                         },
                         error: function(xhr, err) {
                             if (xhr.status == 403) {
