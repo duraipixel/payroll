@@ -221,7 +221,7 @@
                                     <td>
                                         <a href="{{ url('storage/app/public' . '/' . $personal_docs->multi_file) }}"
                                             class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
-                                            target="_blank" download>
+                                            target="_blank" >
                                             <i class="fa fa-download"></i></a>
                                     </td>
                                 </tr>
@@ -284,7 +284,7 @@
                                     </td>
                                     <td> <a href="{{ url('storage/app/public' . '/' . $education_docs->doc_file) }}"
                                             class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
-                                            target="_blank" download>
+                                            target="_blank" >
                                             <i class="fa fa-download"></i>
                                         </a></td>
                                 </tr>
@@ -350,7 +350,7 @@
                                     </td>
                                     <td> <a href=" {{ url('storage/app/public' . '/' . $experince_docs->doc_file) }}"
                                             class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
-                                            target="_blank" download>
+                                            target="_blank">
                                             <i class="fa fa-download"></i>
                                         </a></td>
                                 </tr>
@@ -417,13 +417,13 @@
                                         @if ($leave_docs->status == 'pending')
                                             <a href="{{ url('storage/app' . '/' . $leave_docs->document) }}"
                                                 class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
-                                                target="_blank" download>
+                                                target="_blank" >
                                                 <i class="fa fa-download"></i>
                                             </a>
                                         @else
                                             <a href="{{ url('storage/app' . '/' . $leave_docs->approved_document) }}"
                                                 class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
-                                                target="_blank" download>
+                                                target="_blank" >
                                                 <i class="fa fa-download"></i>
                                             </a>
                                         @endif
@@ -460,24 +460,21 @@
                                     <td> {{ $appointment_docs->appointmentOrderModel->name ?? '' }}</td>
                                     <td>{{ ucfirst($appointment_docs->employment_nature->name ?? '') }}</td>
                                     <td> {{ $appointment_docs->joining_date ?? '' }}</td>
-
                                     <td>
                                         @if ($appointment_docs->appointment_doc)
                                             <a href="{{ url('storage/app/public' . '/' . $appointment_docs->appointment_doc) }}"
                                                 class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
-                                                target="_blank" download>
+                                                target="_blank">
                                                 <i class="fa fa-download"></i>
                                             </a>
                                         @endif
                                     </td>
-
                                 </tr>
                             @empty
                                 <tr>
                                     <td colspan="4"> <strong>Appointment Documents not Uploaded</strong> </td>
                                 </tr>
                             @endforelse
-
                         </table>
                     </div>
                 @endif
