@@ -97,7 +97,7 @@
                                 <tr>
                                     <th class="fw-bold text-primary"> DOB </th>
                                     <td>:</td>
-                                    <th class="fw-bold">{{ $user->personal->dob ?? '' }}</th>
+                                    <th class="fw-bold">{{ $user->personal->dob ? commonDateFormat($user->personal->dob) : '' }}</th>
                                 </tr>
                             @endif
                             @if (isset($user->email))
