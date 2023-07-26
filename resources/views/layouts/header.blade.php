@@ -1,4 +1,4 @@
-<div id="kt_header" class="header align-items-stretch maa-header" style="z-index:999 !important;">
+<div id="kt_header" class="header align-items-stretch maa-header" style="z-index:9 !important;">
     <div class="container-fluid d-flex align-items-center justify-content-center px-3">
         <div class="input-group">
             <div id="kt_aside_toggle" class="btn btn-primary btn-icon" data-kt-toggle="true"
