@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\OldStaffEntryImport;
 use App\Models\Master\AppointmentOrderModel;
+use App\Models\PayrollManagement\StaffSalary;
 use Illuminate\Http\Request;
 use App\Models\Test;
 use Illuminate\Support\Facades\Validator;
@@ -59,6 +60,21 @@ class TestOneController extends Controller
     public function sampleITStatement() {
         $data = [];
         $pdf = PDF::loadView('pages.sample.pdf.income_tax_statement', [ 'data' => $data])->setPaper('a4', 'portrait');
+        return $pdf->stream('appointment.pdf');
+    }
+
+    public function testSalaryPdf()
+    {
+
+        $info = StaffSalary::find(1);
+
+        
+
+        
+       
+        
+
+        $pdf = PDF::loadView('pages.payroll_management.overview.statement._auto_gen_pdf', [ ])->setPaper('a4', 'portrait');
         return $pdf->stream('appointment.pdf');
     }
 }

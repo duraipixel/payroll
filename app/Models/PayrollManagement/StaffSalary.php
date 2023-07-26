@@ -27,7 +27,10 @@ class StaffSalary extends Model
         'status',
         'salary_pattern_id',
         'document',
-        'payroll_id'
+        'payroll_id',
+        'working_days',
+        'worked_days',
+        'leave_days'
     ];
 
     public function fields()
@@ -47,5 +50,9 @@ class StaffSalary extends Model
     public function salaryApprovedBy()
     {
         return $this->hasOne(User::class, 'id', 'salary_approved_by');
+    }
+
+    public function staff() {
+        return $this->hasOne(User::class, 'id', 'staff_id' );
     }
 }

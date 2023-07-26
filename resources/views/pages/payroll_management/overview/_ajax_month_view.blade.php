@@ -44,7 +44,9 @@
 </style>
 <div id="payroll_overview_data">
     @if (isset($payroll) && !empty($payroll))
-
+        @php
+            $month_start_no = date('m', strtotime($date) );
+        @endphp
         <div class="container bg-primary bg-light-outline">
             <div class="py-5 mt-3 d-flex justify-content-between align-items-center">
                 <div class="fs-3 fw-bold text-white"> 
@@ -58,8 +60,14 @@
                     </div>
                 </div>
                 <div>
-                    <button class="btn btn-light-success" id="process_payroll_btn" onclick="processPayroll('{{ $date }}')">Process
-                        Payroll</button>
+                    @if( isset( $lock_info->payroll_lock ) && !empty( $lock_info->payroll_lock ) ) 
+                    <label class="badge badge-light-danger">Payroll Locked on {{ date('d/M/Y H:i A', strtotime($lock_info->payroll_lock)) }}</label>
+                    @else
+                    <button class="btn btn-light-success" id="process_payroll_btn" onclick="processPayroll('{{ $date }}')">
+                        Process Payroll
+                    </button>
+                    @endif
+                   
                 </div>
             </div>
         </div>
@@ -136,7 +144,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="d-flex  p-3 fs-4 border border-3 align-items-center">
+                <div class="d-flex p-3 fs-4 border border-3 align-items-center">
                     <div class="w-50"> Employee View Release </div>
                     <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
                         <span class="pl-btn emp_view_release @if (isset($lock_info) && $lock_info->emp_view_release == 'unlock') active @endif"
@@ -160,7 +168,7 @@
                 </div>
                 <div class="d-flex p-3 fs-4 border border-3 align-items-center">
                     <div class="w-50">
-                        Payroll
+                        Payroll Statement
                         <div>
                             <div class="small badge badge-light-info"> Publish Payslip </div>
                             <div class="small badge badge-light-info"> Publish It Statement </div>
@@ -172,6 +180,20 @@
                         <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == 'lock') active @endif" role="button"
                             onclick="setPayrollSetting('payroll', 'lock', this)"> Lock
                         </span>
+                    </div>
+                </div>
+                    <div class="d-flex p-3 fs-4 border border-3 align-items-center">
+                        <div class="w-50">
+                            Payroll Process
+                           
+                        </div>
+                        <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
+                            <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll_lock == null) active @endif" role="button"
+                                onclick="setPayrollSetting('payroll_lock', 'unlock', this)"> Unlock </span>
+                            <span class="pl-btn payroll @if (isset($lock_info) && !empty($lock_info->payroll_lock)) active @endif" role="button"
+                                onclick="setPayrollSetting('payroll_lock', 'lock', this)"> Lock
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -274,7 +296,9 @@
                         msg = 'Payroll Inputs';
                     } else if (mode_name == 'payroll') {
                         msg = 'Payroll';
-                    } else {
+                    } else if( mode_name == 'payroll_lock') {
+                        msg = 'Payroll Lock';
+                    } else { 
                         msg = 'It Statement Employee View';
                     }
 
@@ -321,6 +345,7 @@
                                         },
                                         timer: 3000
                                     });
+                                    getPayrollOverviewInfo('{{ $date }}', '{{ $month_start_no }}');
                                 },
                                 error: function(xhr, err) {
                                     if (xhr.status == 403) {

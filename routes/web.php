@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/test-appointment-pdf', [App\Http\Controllers\TestOneController::class, 'testAppointmentPdf']);
+Route::get('/test-salary-pdf', [App\Http\Controllers\TestOneController::class, 'testSalaryPdf']);
 Route::get('/sample-it-statement', [App\Http\Controllers\TestOneController::class, 'sampleITStatement']);
 
 Route::get('/delete_preview_pdf', [App\Http\Controllers\TestOneController::class, 'deletePreviewPdf']);
@@ -260,6 +261,9 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('payroll/processing',[App\Http\Controllers\PayrollManagement\OverviewController::class,'setPayrollProcessing'])->name('payroll.set.processing');
     Route::post('payroll/processing/continue',[App\Http\Controllers\PayrollManagement\OverviewController::class,'continuePayrollProcessing'])->name('payroll.continue.processing');
     Route::post('payroll/completed',[App\Http\Controllers\PayrollManagement\OverviewController::class,'doPayrollProcessing'])->name('payroll.do.processing');
+    Route::get('payroll/statement/{id}',[App\Http\Controllers\PayrollManagement\OverviewController::class,'payrollStatement'])->name('payroll.statement');
+    Route::post('payroll/statement/list',[App\Http\Controllers\PayrollManagement\OverviewController::class,'payrollStatementList'])->name('payroll.statement.list');
+    Route::get('payroll/statement/export/{payroll_id}/{staff_id?}',[App\Http\Controllers\PayrollManagement\OverviewController::class,'exportStatement'])->name('payroll.statement.export');
     #salary revision approval
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
     Route::post('salary/revision/status/change/modal',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatusModal'])->name('salary.revision.status.modal');

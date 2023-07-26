@@ -30,7 +30,7 @@ class SalaryRevisionController extends Controller
                     $q->where('staff_id', $staff_id);
                 });
 
-            $datatables =  Datatables::of($data)
+            $datatables = Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('checkbox', function ($row) {
                     $status = '<input type="checkbox" role="button" name="revision[]" class="revision_check" value="' . $row->id . '">';

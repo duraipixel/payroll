@@ -900,6 +900,7 @@ function staffMonthTax($staff_id, $month)
         $month = strtolower($month);
         return $info->$month ?? 0;
     }
+    return 0;
 }
 
 function getHoursBetweenHours($from, $to)
@@ -936,4 +937,29 @@ function getGlobalAcademicYear() {
         session()->put('global_academic_year', $academic);
     }
     return session()->get('global_academic_year');
+}
+
+function getStaffSalaryFieldAmount($staff_id, $salary_id, $field_id = '', $field_name = '', $reference_type = '')
+{
+
+    $info = StaffSalaryField::where('staff_id', $staff_id)->where('staff_salary_id', $salary_id)
+        ->when(!empty($field_id), function ($query) use ($field_id) {
+            $query->where('field_id', $field_id)->first();
+        })
+        ->when(!empty($field_name), function ($query) use ($field_name) {
+            $query->where('field_name', $field_name);
+        })
+        ->when(!empty( $reference_type ), function($query) use($reference_type){
+            $query->where('reference_type', $reference_type);
+        })
+        ->first();
+    return $info->amount ?? 0;
+}
+
+function RsFormat($amount) {
+    return 'Rs '.number_format( $amount , 2 );
+}
+
+function amountFormat($amount) {
+    return number_format( $amount , 2 );
 }

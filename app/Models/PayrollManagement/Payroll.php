@@ -24,7 +24,12 @@ class Payroll extends Model
         'employee_release_date',
         'employee_it_view_release_date',
         'locked',
-        'added_by'
+        'added_by',
+        'payroll_lock'
     ];
+
+    public function salaryStaff() {
+        return $this->hasMany(StaffSalary::class, 'payroll_id', 'id');
+    }
 
 }

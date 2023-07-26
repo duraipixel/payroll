@@ -38,7 +38,7 @@
                 $month = date('F', strtotime($date));
             @endphp
         </div>
-        <div class="card-body py-4">
+        <div class="card-body py-4" id="dynamic_content_test">
             <div class="text-end">
                 <button class="btn btn-info my-3" type="button" onclick="return changeSalaryDetails('{{ $date }}')"> Change Salary Details </button>
             </div>
@@ -184,7 +184,7 @@
                         </table>
                         <input type="hidden" name="total_net_pay" value="{{ $total_net_pay }}">
                     </form>
-                </div>
+                </div> 
                 <div class="w-100 text-end mt-3">
                     <label for="" class="text-end fs-3 fw-bold">
                         Total Pay : Rs. {{ $total_net_pay }}
@@ -245,6 +245,14 @@
                         },
                         success: function(res) {
                             $('#payroll-loading').addClass('d-none');
+
+                            if( res.error == 1 ) {
+                                toastr.error( 'Error', res.message );
+                            } else {
+                                toastr.success( 'Success', res.message );
+                                $('#dynamic_content_test').html(res.html);
+                            }
+
                         },
                         error: function(xhr, err) {
                             if (xhr.status == 403) {
