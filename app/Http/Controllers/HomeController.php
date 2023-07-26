@@ -44,10 +44,11 @@ class HomeController extends Controller
                     $q->where('users.institute_id', session()->get('staff_institute_id'));
                 })->Academic()
                 // ->orderByRaw("CONVERT(VARCHAR(5), dob, 110)  > '".date('m')."-".date('d')."' desc")
-                ->orderByRaw("CASE
-                WHEN CONVERT(VARCHAR(5), dob, 110) > '".date('m')."-".date('d')."' THEN 1
-                ELSE 0
-            END DESC;")
+            //     ->orderByRaw("CASE
+            //     WHEN CONVERT(VARCHAR(5), dob, 110) > '".date('m')."-".date('d')."' THEN 1
+            //     ELSE 0
+            // END DESC;")
+                ->orderByRaw("MONTH(dob), DAY(dob)")
                 ->get();
 
         $anniversary = StaffPersonalInfo::whereRaw("CONVERT(VARCHAR(5), marriage_date, 110) >= '".$month."-01' and CONVERT(VARCHAR(5), marriage_date, 110) <= '".$month."-".$end."'")
@@ -55,10 +56,11 @@ class HomeController extends Controller
                         ->when(session()->get('staff_institute_id'), function($q) {
                             $q->where('users.institute_id', session()->get('staff_institute_id'));
                         })->Academic()
-                        ->orderByRaw("CASE
-                WHEN CONVERT(VARCHAR(5), marriage_date, 110) > '".date('m')."-".date('d')."' THEN 1
-                ELSE 0
-            END DESC;")
+            //             ->orderByRaw("CASE
+            //     WHEN CONVERT(VARCHAR(5), marriage_date, 110) > '".date('m')."-".date('d')."' THEN 1
+            //     ELSE 0
+            // END DESC;")
+                        ->orderByRaw("MONTH(marriage_date), DAY(marriage_date)")
                         ->get();
 
         $result_month_for = date('1 M, Y').' - '.date('t M, Y');

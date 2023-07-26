@@ -291,6 +291,7 @@ class OverviewController extends Controller
                     $deduction = 0;
                     if (isset($earings_field) && !empty($earings_field)) {
                         foreach ($earings_field as $eitem) {
+                            $tmp = ['field_id' => $eitem->id, 'field_name' => $eitem->name];
                             dump( $eitem );
                             $amounts = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $eitem->name);
                             dump( $amounts );
