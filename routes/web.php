@@ -1,4 +1,5 @@
 <?php
+include('reports.php');
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;

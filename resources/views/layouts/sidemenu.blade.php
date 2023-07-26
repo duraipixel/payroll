@@ -1155,7 +1155,14 @@
                         </div>
                     </div>
                 @endif
-
+                <div class="menu-item menu-accordion">
+                    <a href="{{ route('reports.index') }}" class="menu-link">
+                        <span class="menu-icon">
+                            <i class="fa fa-file-text" aria-hidden="true"></i>
+                        </span>
+                        <span class="menu-title">Reports</span>
+                    </a>
+                </div>
             </div>
             <!--end::Menu-->
         </div>
