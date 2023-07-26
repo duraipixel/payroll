@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Hash;
 use PDF;
 
 
@@ -351,6 +352,9 @@ class StaffAppointmentDetailController extends Controller
             $message = 'Employee Verified Successfully';
             $staff_info = User::find($staff_id);
             $staff_info->verification_status = 'approved';
+            if( empty( $staff_info->password ) ) {
+                $staff_info->password = Hash::make('12345678');
+            }
             $staff_info->save();
         } else {
             //use cannot verify

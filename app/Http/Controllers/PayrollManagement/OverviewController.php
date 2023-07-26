@@ -291,17 +291,18 @@ class OverviewController extends Controller
                     $deduction = 0;
                     if (isset($earings_field) && !empty($earings_field)) {
                         foreach ($earings_field as $eitem) {
+                            dump( $eitem );
                             $amounts = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $eitem->name);
+                            dump( $amounts );
                         }
                     }
                 }
+                die;
                 $staff_id = $value->id;
                 /**
                  *  get current salary pattern
                  */
                 $pattern_info = StaffSalaryPattern::find($value->currentSalaryPattern->id);
-
-              
                 
                 dd( $pattern_info->patternFields );
 
@@ -311,6 +312,7 @@ class OverviewController extends Controller
                 $sal['salary_year'] = $salary_year;
                 $sal['is_salary_processed'] = 'yes';
                 $sal['status'] = 'active';
+                $sal['salary_pattern_id'] = $value->currentSalaryPattern->id;
 
                 $salary_info = StaffSalary::updateOrCreate(['staff_id' => $staff_id, 'payroll_id' => $payout_id], $sal);
                 
