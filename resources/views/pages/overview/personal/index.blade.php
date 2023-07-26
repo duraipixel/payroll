@@ -289,7 +289,7 @@
     
     @include('pages.overview.personal.salary_details')
     @include('pages.overview.personal.appointment')
-    @include('pages.overview.personal.locker_details')
+    {{-- @include('pages.overview.personal.locker_details') --}}
     @include('pages.overview.personal.medical_info')
     
 </div>

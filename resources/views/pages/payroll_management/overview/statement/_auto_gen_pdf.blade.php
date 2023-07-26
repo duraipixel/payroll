@@ -14,17 +14,20 @@
         text-align: left;
         padding: 8px;
     }
+
     th {
         background-color: lightgray !important
     }
+
     .none-td {
         padding: 0 !important;
         border: none !important
     }
+
     .border-0 {
         border-left: 1px solid black !important;
     }
-    
+
     .border-0 td:nth-child(1) {
         border-top: none !important;
         border-left: none !important;
@@ -41,13 +44,15 @@
         <thead>
             <tr>
                 <th colspan="4">
-                    <center><h4>AMALORPAVAM HR. SEC. SCHOOL</h4></center>
-                </td>
+                    <center>
+                        <h4>AMALORPAVAM HR. SEC. SCHOOL</h4>
+                    </center>
+                    </td>
             </tr>
             <tr>
                 <th colspan="4">
                     <center>Lourdes Campus, Vanarapet, Puducherry - 605001</center>
-                </td>
+                    </td>
             </tr>
             <tr>
                 <th colspan="4">
@@ -77,21 +82,55 @@
                     <table class="border-0">
                         @for ($i = 0; $i < 10; $i++)
                             <tr>
-                                <td>Earnings</td>
-                                <td>-</td>
+                                <td style="width: 60%">Earnings</td>
+                                <td style="width: 40%;text-align:right"> 450000</td>
                             </tr>
                         @endfor
+                        <tr>
+                            <td style="width: 60%">Gross</td>
+                            <td style="width: 40%;text-align:right"> 450000</td>
+                        </tr>
                     </table>
                 </td>
                 <td colspan="2" class="none-td">
                     <table class="border-0" style="border-right: 1px solid black !important;">
                         @for ($i = 0; $i < 10; $i++)
                             <tr>
-                                <td>Deductions</td>
-                                <td>-</td>
+                                <td style="width: 60%">Tax</td>
+                                <td style="width: 40%;text-align:right"> 0</td>
                             </tr>
                         @endfor
+                        <tr>
+                            <td style="width: 60%">Deductions</td>
+                            <td style="width: 40%;text-align:right"> 0</td>
+                        </tr>
                     </table>
+                </td>
+            </tr>
+            <tr style="margin: 0 !important">
+                <td colspan="2" style="border-top:none;border-right:none;">
+                </td>
+                <td colspan="2" class="none-td">
+                    <table>
+                        <tr>
+                            <th style="width: 60%;border-top:none;border-bottom:none">
+                                Net Salary
+                            </th>
+                            <td style="width: 40%;border-top:none;text-align:right;border-bottom:none">
+                                898989
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    "Do not work for the food that perishes, but for the food that endures for eternal life"
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    Note: This computer generated salary slip cannot be produced any where as an authenticated certificate.
                 </td>
             </tr>
         </tbody>

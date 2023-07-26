@@ -15,7 +15,7 @@
             Branch 
         </label>
         <div >
-            <input type="text" class="form-control" name="branch_name" id="branch_name" >
+            <input type="text" class="form-control" name="name" id="name" >
         </div>
     </div>
     <div class="fv-row form-group mb-10">
@@ -62,7 +62,7 @@ var KTAppEcommerceSaveBranch = function () {
             form,
             {
                 fields: {
-                    'branch_name': {
+                    'name': {
 						validators: {
 							notEmpty: {
 								message: 'Branch Name is required'

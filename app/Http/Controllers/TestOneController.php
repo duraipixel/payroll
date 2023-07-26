@@ -66,15 +66,8 @@ class TestOneController extends Controller
     public function testSalaryPdf()
     {
 
-        $info = StaffSalary::find(1);
-
-        
-
-        
-       
-        
-
+        // $info = StaffSalary::find(1);
         $pdf = PDF::loadView('pages.payroll_management.overview.statement._auto_gen_pdf', [ ])->setPaper('a4', 'portrait');
-        return $pdf->stream('appointment.pdf');
+        return $pdf->stream('salaryslip.pdf');
     }
 }
