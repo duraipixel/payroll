@@ -26,93 +26,94 @@ class BankBranchController extends Controller
                 ),
             )
         );
-        if($request->ajax())
-        {
-            $data = BankBranch::leftJoin('banks','banks.id','=','bank_branches.bank_id')
-            ->select('banks.name as bank_name','bank_branches.*');
+        if ($request->ajax()) {
+            $data = BankBranch::leftJoin('banks', 'banks.id', '=', 'bank_branches.bank_id')
+                ->select('banks.name as bank_name', 'bank_branches.*');
             // ->select('banks.name as bank_name','bank_branches.name','bank_branches.address','bank_branches.ifsc_code','bank_branches.created_at');
             $status = $request->get('bank_branches.status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
-            
-            $datatables =  Datatables::of($data)
-            ->filter(function($query) use($status,$keywords) {
-                if($keywords)
-                {
-                    $date = date('Y-m-d',strtotime($keywords));
-                    return $query->where(function($q) use($keywords,$date){
 
-                        $q->where('bank_branches.name','like',"%{$keywords}%")
-                        ->orWhere('banks.name','like',"%{$keywords}%")
-                        ->orWhere('bank_branches.address','like',"%{$keywords}%")
-                        ->orWhere('bank_branches.ifsc_code','like',"%{$keywords}%")
-                        ->orWhereDate('bank_branches.created_at',$date);
-                    });
-                }
-            })
-            ->addIndexColumn()
-            ->editColumn('status', function ($row) {
-                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return branchChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
-                return $status;
-            })
-            ->editColumn('created_at', function ($row) {
-                $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
-                return $created_at;
-            })
-              ->addColumn('action', function ($row) {
-                $route_name = request()->route()->getName(); 
-                if( access()->buttonAccess($route_name,'add_edit') )
-                {
-                    $edit_btn = '<a href="javascript:void(0);" onclick="getBranchModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+            $datatables =  Datatables::of($data)
+                ->filter(function ($query) use ($status, $keywords) {
+                    if ($keywords) {
+                        $date = date('Y-m-d', strtotime($keywords));
+                        return $query->where(function ($q) use ($keywords, $date) {
+
+                            $q->where('bank_branches.name', 'like', "%{$keywords}%")
+                                ->orWhere('banks.name', 'like', "%{$keywords}%")
+                                ->orWhere('bank_branches.address', 'like', "%{$keywords}%")
+                                ->orWhere('bank_branches.ifsc_code', 'like', "%{$keywords}%")
+                                ->orWhereDate('bank_branches.created_at', $date);
+                        });
+                    }
+                })
+                ->addIndexColumn()
+                ->editColumn('status', function ($row) {
+                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return branchChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                    return $status;
+                })
+                ->editColumn('created_at', function ($row) {
+                    $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
+                    return $created_at;
+                })
+                ->addColumn('action', function ($row) {
+                    $route_name = request()->route()->getName();
+                    if (access()->buttonAccess($route_name, 'add_edit')) {
+                        $edit_btn = '<a href="javascript:void(0);" onclick="getBranchModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                     <i class="fa fa-edit"></i>
                     </a>';
-                }
-                else
-                {
-                    $edit_btn = '';
-                }
-                if( access()->buttonAccess($route_name,'delete') )
-                {
-                    $del_btn = '<a href="javascript:void(0);" onclick="deleteBranch(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
-                    <i class="fa fa-trash"></i></a>';                  
-                }
-                else
-                {
-                    $del_btn = '';
-                }
-                return $edit_btn . $del_btn;
-            })
+                    } else {
+                        $edit_btn = '';
+                    }
+                    if (access()->buttonAccess($route_name, 'delete')) {
+                        $del_btn = '<a href="javascript:void(0);" onclick="deleteBranch(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                    <i class="fa fa-trash"></i></a>';
+                    } else {
+                        $del_btn = '';
+                    }
+                    return $edit_btn . $del_btn;
+                })
                 ->rawColumns(['action', 'status']);
             return $datatables->make(true);
         }
-        return view('pages.masters.bankbranch.index',compact('breadcrums'));
+        return view('pages.masters.bankbranch.index', compact('breadcrums'));
     }
+
     public function save(Request $request)
     {
+
         $id = $request->id ?? '';
+        $bank_id = $request->bank_id;
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'branch_name' => 'required|string|unique:bank_branches,name,' . $id .',id,deleted_at,NULL',
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('bank_branches')->where(function ($query) use ($bank_id, $id) {
+                    return $query->where('deleted_at', NULL)
+                        ->where('bank_id', $bank_id)
+                        ->when($id != '', function ($q) use ($id) {
+                            return $q->where('id', '!=', $id);
+                        });
+                }),
+            ],
         ]);
-        
+
         if ($validator->passes()) {
 
             $ins['academic_id'] = academicYearId();
             $ins['bank_id'] = $request->bank_id;
-            $ins['name'] = $request->branch_name;
+            $ins['name'] = $request->name;
             $ins['ifsc_code'] = $request->ifsc_code;
             $ins['address'] = $request->address;
-            if(isset($request->form_type))
-            {
-                if($request->status)
-                {
+            if (isset($request->form_type)) {
+                if ($request->status) {
                     $ins['status'] = 'active';
-                }
-                else{
+                } else {
                     $ins['status'] = 'inactive';
                 }
-            }
-            else{
+            } else {
                 $ins['status'] = 'active';
             }
             $data = BankBranch::updateOrCreate(['id' => $id], $ins);
@@ -120,7 +121,6 @@ class BankBranchController extends Controller
             $message = 'Added successfully';
 
             $branch_data = BankBranch::where('bank_id', $request->bank_id)->where('status', 'active')->get();
-
         } else {
             $error = 1;
             $message = $validator->errors()->all();
@@ -134,22 +134,21 @@ class BankBranchController extends Controller
         $branch_data = BankBranch::where('bank_id', $request->bank_id)->where('status', 'active')->get();
 
         return response()->json(['branch_data' => $branch_data ?? []]);
-        
     }
+
     public function add_edit(Request $request)
     {
         $id = $request->id;
         $info = [];
         $title = 'Add Bank Branch';
         $from = 'master';
-        $bank = Bank::where('status','active')->get();
-        if(isset($id) && !empty($id))
-        {
+        $bank = Bank::where('status', 'active')->get();
+        if (isset($id) && !empty($id)) {
             $info = BankBranch::find($id);
             $title = 'Update Bank Branch';
         }
-         $content = view('pages.masters.bankbranch.add_edit_master_form',compact('info','title', 'from','bank'));
-         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+        $content = view('pages.masters.bankbranch.add_edit_master_form', compact('info', 'title', 'from', 'bank'));
+        return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
     public function changeStatus(Request $request)
     {
@@ -166,12 +165,11 @@ class BankBranchController extends Controller
         $id         = $request->id;
         $info       = BankBranch::find($id);
         $info->delete();
-        
-        return response()->json(['message'=>"Successfully deleted state!",'status'=>1]);
+
+        return response()->json(['message' => "Successfully deleted state!", 'status' => 1]);
     }
     public function export()
     {
-        return Excel::download(new BankBranchExport,'branch.xlsx');
+        return Excel::download(new BankBranchExport, 'branch.xlsx');
     }
-
 }

@@ -99,11 +99,11 @@ class StaffCategoryController extends Controller
                 {
                     $ins['status'] = 'active';
                 }
-                else{
+                else {
                     $ins['status'] = 'inactive';
                 }
             }
-            else{
+            else {
                 $ins['status'] = 'active';
             }
             $data = StaffCategory::updateOrCreate(['id' => $id], $ins);

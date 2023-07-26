@@ -20,7 +20,7 @@
             Branch 
         </label>
         <div >
-            <input type="text" class="form-control" name="branch_name" value="{{ $info->name ?? '' }}" id="branch_name" >
+            <input type="text" class="form-control" name="name" value="{{ $info->name ?? '' }}" id="name" >
         </div>
     </div>
     <div class="fv-row form-group mb-10">
@@ -88,7 +88,7 @@ var KTAppEcommerceSaveBranch = function () {
 							},
 						}
 					},
-                    'branch_name': {
+                    'name': {
 						validators: {
 							notEmpty: {
 								message: 'Branch Name is required'
