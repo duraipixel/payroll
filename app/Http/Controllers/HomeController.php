@@ -42,7 +42,8 @@ class HomeController extends Controller
                 ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
                 ->when(session()->get('staff_institute_id'), function($q) {
                     $q->where('users.institute_id', session()->get('staff_institute_id'));
-                })->Academic()
+                })
+                // ->Academic()
                 // ->orderByRaw("CONVERT(VARCHAR(5), dob, 110)  > '".date('m')."-".date('d')."' desc")
             //     ->orderByRaw("CASE
             //     WHEN CONVERT(VARCHAR(5), dob, 110) > '".date('m')."-".date('d')."' THEN 1
@@ -55,7 +56,8 @@ class HomeController extends Controller
                         ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
                         ->when(session()->get('staff_institute_id'), function($q) {
                             $q->where('users.institute_id', session()->get('staff_institute_id'));
-                        })->Academic()
+                        })
+                        // ->Academic()
             //             ->orderByRaw("CASE
             //     WHEN CONVERT(VARCHAR(5), marriage_date, 110) > '".date('m')."-".date('d')."' THEN 1
             //     ELSE 0

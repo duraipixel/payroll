@@ -289,15 +289,22 @@ class OverviewController extends Controller
 
                     $gross = $value->currentSalaryPattern->gross_salary;
                     $deduction = 0;
+                    $earnings = 0;
+                    $used_fields = [];
                     if (isset($earings_field) && !empty($earings_field)) {
                         foreach ($earings_field as $eitem) {
+                            $tmp = [];
                             $tmp = ['field_id' => $eitem->id, 'field_name' => $eitem->name];
-                            dump( $eitem );
                             $amounts = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $eitem->name);
-                            dump( $amounts );
+                            if( $amounts > 0 ) {
+                                $tmp['amount'] = $amounts;
+                                $used_fields[] = $tmp;
+                                $earnings += $amounts;
+                            }
                         }
                     }
                 }
+                dd( $used_fields );
                 die;
                 $staff_id = $value->id;
                 /**
