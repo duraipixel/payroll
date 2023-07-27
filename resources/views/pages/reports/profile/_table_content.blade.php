@@ -1,5 +1,6 @@
 @if (isset($details) && !empty($details))
     @foreach ($details as $item)
+        
         <tr>
             <td>
                 {{ $loop->iteration }}
@@ -12,8 +13,8 @@
             <td>{{ $item->name ?? '' }}</td>
             <td>{{ $item->society_emp_code ?? '' }}</td>
             <td> {{ $item->institute_emp_code ?? '' }}</td>
-            <td>{{ isset($item->dob) && !empty( $item->dob) ? commonDateFormat($item->dob) : '-'  }}</td>
-            <td>{{ ucfirst($item->gender ?? '') }}</td>
+            <td>{{ isset($item->personal->dob) && !empty( $item->personal->dob) ? commonDateFormat($item->personal->dob) : '-'  }}</td>
+            <td>{{ ucfirst($item->personal->gender ?? '') }}</td>
             <td>{{ $item->position->designation->name ?? '-' }}</td>
             {{-- <td>Place Of Work</td> --}}
             <td>{{ $item->personal->motherTongue->name ?? '-' }}</td>
