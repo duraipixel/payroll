@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Master\BoardController;
+use App\Models\Leave\StaffLeave;
 use App\Models\Master\AppointmentOrderModel;
 use App\Models\Master\AttendanceScheme;
 use App\Models\Master\Bank;
@@ -33,6 +34,7 @@ use App\Models\Master\Subject;
 use App\Models\Master\TeachingType;
 use App\Models\Master\TopicTraining;
 use App\Models\Master\TypeOfDuty;
+use App\Models\PayrollManagement\StaffSalary;
 use App\Models\ReportingManager;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Staff\StaffBankDetail;
@@ -1274,8 +1276,16 @@ class StaffController extends Controller
             )
         );
 
+        $personal_doc    = StaffDocument::where('staff_id', $user->id)->get();
+        $education_doc   = StaffEducationDetail::where('staff_id', $user->id)->get();
+        $experince_doc   = StaffWorkExperience::where('staff_id', $user->id)->get();
+        $acadamic_id     = academicYearId();
+        $leave_doc       = StaffLeave::where('staff_id', $user->id)->where('academic_id', $acadamic_id)->get();
+        $appointment_doc = StaffAppointmentDetail::where('staff_id', $user->id)->get();
+        $salary_doc      = StaffSalary::where('staff_id', $user->id)->get();
+        $from_view = 'user';
         $info = $user;
-        return view('pages.overview.index', compact('info', 'breadcrums'));
+        return view('pages.overview.index', compact('info', 'breadcrums', 'user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc', 'from_view'));
 
     }
 

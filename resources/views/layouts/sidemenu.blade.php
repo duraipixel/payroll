@@ -1169,14 +1169,30 @@
                         </div>
                     </div>
                 @endif
-                <div class="menu-item menu-accordion">
-                    <a href="{{ route('reports.index') }}" class="menu-link">
+               
+
+                @if (access()->hasAccess(['reports.profile']))
+                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                    <span class="menu-link">
                         <span class="menu-icon">
-                            <i class="fa fa-file-text" aria-hidden="true"></i>
+                            <i class="fa fa-print"></i>
                         </span>
                         <span class="menu-title">Reports</span>
-                    </a>
+                        <span class="menu-arrow"></span>
+                    </span>
+                    <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        <div class="menu-item">
+                            <a class="menu-link" href="{{ route('reports.profile') }}">
+                                <span class="menu-bullet">
+                                    <span class="bullet bullet-dot"></span>
+                                </span>
+                                <span class="menu-title">Staff Profile Report</span>
+                            </a>
+                        </div>
+                    </div>
+                   
                 </div>
+            @endif
             </div>
             <!--end::Menu-->
         </div>

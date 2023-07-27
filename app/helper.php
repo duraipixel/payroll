@@ -38,6 +38,7 @@ use App\Models\Staff\StaffTaxSeperation;
 use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -482,7 +483,23 @@ if (!function_exists('generateLeaveForm')) {
         $taken_leave = 0;
         $balance_leave = 0;
         if ($staff_info->appointment->nature_of_employment_id ?? '') {
-            $total_leaves = LeaveMapping::selectRaw('sum(CAST(leave_mappings.leave_days AS DECIMAL(10, 2))) as total')->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)->where('status', 'active')->first();
+            if( isFemale($staff_id)) {
+                
+                $total_leaves = LeaveMapping::selectRaw('sum(CAST(leave_mappings.leave_days AS DECIMAL(10, 2))) as total')
+                                    ->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)
+                                    ->where('status', 'active')
+                                    ->first();
+            } else {
+                $total_leaves = LeaveMapping::selectRaw('sum(CAST(leave_mappings.leave_days AS DECIMAL(10, 2))) as total')
+                ->join('leave_heads', function($join){
+                    $join->on('leave_heads.id', '=', 'leave_mappings.leave_head_id');
+                    // $join->on('leave_heads.code', '!=', DB::raw('"ML"'));
+                })
+                ->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)
+                ->where('leave_mappings.status', 'active')
+                ->where('leave_heads.code', '!=','ML')
+                ->first();
+            }
 
             if ($total_leaves) {
                 $allocated_total_leave = $total_leaves->total;
@@ -772,7 +789,7 @@ function getHRAAmount($scheme_id, $staff_id, $salary_pattern)
     $basic = ($salary_pattern->basic->amount ?? 0) * 12;
     $da = ($salary_pattern->da->amount ?? 0) * 12;
     $excess_amount = getPercentageAmount(10, (($basic + $da) - $rent_amount));
- 
+
     $hra_amount = $actual_hra_amount;
     if ($excess_amount < $actual_hra_amount) {
         $hra_amount = $excess_amount;
@@ -788,7 +805,7 @@ function getTaxOtherSalaryCalulatedMonth($salary_pattern)
     $s_date = date('Y-m-d', strtotime($start_year));
     $e_date = date('Y-m-d', strtotime($end_year));
     $payout_month = $salary_pattern->payout_month; //2022-04-01
-    $payout_month = date('Y-m-d', strtotime($payout_month.'-1 month'));
+    $payout_month = date('Y-m-d', strtotime($payout_month . '-1 month'));
     $counted_months = 12;
     if ($payout_month > $start_year && $payout_month < $e_date) {
         //find diff month
@@ -886,7 +903,7 @@ function getStaffPatterFieldAmount($staff_id, $salary_pattern_id, $field_id = ''
         ->when(!empty($field_name), function ($query) use ($field_name) {
             $query->where('field_name', $field_name);
         })
-        ->when(!empty( $reference_type ), function($query) use($reference_type){
+        ->when(!empty($reference_type), function ($query) use ($reference_type) {
             $query->where('reference_type', $reference_type);
         })
         ->first();
@@ -912,28 +929,28 @@ function getHoursBetweenHours($from, $to)
     return $difference;
 }
 
-function getStaffLeaveRequestStatus($staff_id, $date) {
+function getStaffLeaveRequestStatus($staff_id, $date)
+{
     // dump( $date );
     // dump( $staff_id );
     $info = StaffLeave::where('staff_id', $staff_id)
-            ->where('from_date', '>=', $date)->where('to_date', '<=', $date)
-            ->first();
+        ->where('from_date', '>=', $date)->where('to_date', '<=', $date)
+        ->first();
     $status = 'Leave Request Pending';
-    if( $info ) {
-        if( $info->status == 'pending' ) {
+    if ($info) {
+        if ($info->status == 'pending') {
             $status = 'Leave Approval Pending';
         } else {
             $status  = 'Leave Approved';
         }
-    } 
+    }
     return $status;
-    
-
 }
 
-function getGlobalAcademicYear() {
+function getGlobalAcademicYear()
+{
 
-    if( !session()->has('global_academic_year')) {
+    if (!session()->has('global_academic_year')) {
         $academic = AcademicYear::where('status', 'active')->orderBy('from_year', 'desc')->get();
         session()->put('global_academic_year', $academic);
     }
@@ -950,31 +967,56 @@ function getStaffSalaryFieldAmount($staff_id, $salary_id, $field_id = '', $field
         ->when(!empty($field_name), function ($query) use ($field_name) {
             $query->where('field_name', $field_name);
         })
-        ->when(!empty( $reference_type ), function($query) use($reference_type){
+        ->when(!empty($reference_type), function ($query) use ($reference_type) {
             $query->where('reference_type', $reference_type);
         })
         ->first();
     return $info->amount ?? 0;
 }
 
-function RsFormat($amount) {
-    return 'Rs '.number_format( $amount , 2 );
+function RsFormat($amount)
+{
+    return 'Rs ' . number_format($amount, 2);
 }
 
-function amountFormat($amount) {
-    return number_format( $amount , 2 );
+function amountFormat($amount)
+{
+    return number_format($amount, 2);
 }
 
-function payrollCheck($month, $module) {
+function payrollCheck($month, $module)
+{
 
     $month = date('Y-m-1', strtotime($month));
     $info = PayrollPermission::where('payout_month', $month)->first();
-    if( $info ) {
-        if( $info->$module) {
+    if ($info) {
+        if ($info->$module) {
             // dump( $info->$module );
             return $info->$module == 'lock' ? true : false;
-        } 
-        
-    } 
+        }
+    }
     return false;
+}
+
+if (!function_exists('isFemale')) {
+    function isFemale($id)
+    {
+        $info = User::find($id);
+        
+        if ($info->personal->gender == 'female') {
+            return true;
+        }
+        return false;
+    }
+}
+
+function getStaffImage($image_path) {
+    if( isset( $image_path ) && !empty( $image_path ) ) {
+
+        $profile_image = Storage::url($image_path);
+        return asset('public' . $profile_image);
+    
+    } else {
+        return false;
+    }
 }
