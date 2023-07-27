@@ -469,6 +469,7 @@
                         'salary.lic',
                         'professional-tax',
                         'payroll.overview',
+                        'payroll.list',
                         'holdsalary',
                         'salary.revision',
                         'it.tabulation',
@@ -500,6 +501,19 @@
                                         <span class="bullet bullet-dot"></span>
                                     </span>
                                     <span class="menu-title"> Overview </span>
+                                </a>
+                            </div>
+                        </div>
+                        @endif
+                        @if (access()->hasAccess('payroll.list', 'view'))
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link  @if (request()->routeIs(['payroll.list'])) active @endif"
+                                    href="{{ route('payroll.list') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title"> Payroll </span>
                                 </a>
                             </div>
                         </div>

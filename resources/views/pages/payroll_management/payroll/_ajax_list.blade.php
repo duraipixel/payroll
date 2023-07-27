@@ -90,6 +90,10 @@
                         </td>
                     </tr>
                 @endforeach
+            @else 
+                <tr>
+                    <td> No Payroll records </td>
+                </tr>
             @endif
         </tbody>
 
@@ -99,8 +103,8 @@
     Total Generated : {{ count($salary_info) }}
 </div>
 
-<div class="row">
+{{-- <div class="row">
     <div class="col-sm-12 text-end mt-3">
         <a href="{{ route('payroll.overview') }}" class="btn btn-dark"> Move to Payroll Overview </a>
     </div>
-</div>
+</div> --}}

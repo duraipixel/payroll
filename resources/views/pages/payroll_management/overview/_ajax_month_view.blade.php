@@ -75,9 +75,16 @@
             <div class="col-sm-6 p-5">
                 <div class="container">
 
-                    <div class="fs-3 fw-bold text-muted "> Payout Details </div>
+                    <div class="fs-3 fw-bold text-muted "> 
+                        Payout Details 
+                        <a href="{{ route('payroll.list') }}" class="small float-end" > 
+                            <i class="fa fa-eye"></i>
+                            View Details 
+                        </a>
+
+                    </div>
                     @php
-                        $leave_chart_data = [13, 3, 10];
+                        $leave_chart_data = [ $payroll->salaryStaff->sum('net_salary') ?? 0 , $payroll->salaryStaff->sum('gross_salary') ?? 0, $payroll->salaryStaff->sum('total_deductions') ?? 0];
                         $leave_chart_label = ['Net Pay', 'Gross Pay', 'Deductions'];
                     @endphp
                     <div class="d-flex flex-center me-9 my-5">
@@ -88,26 +95,26 @@
                             <tr>
                                 <td class="w-50">
                                     <div>
-                                        <span class="bullet bg-primary mb-1 me-2"
-                                            style="background-color: #a6b7f7"></span>
-                                        <span class="secondary-info fs-6">Rs 0</span>
+                                        <span class="bullet bg-info mb-1 me-2"
+                                            style="background-color: #8ca1ed"></span>
+                                        <span class="secondary-info fs-6">Rs {{ $payroll->salaryStaff->sum('net_salary') ?? 0 }}</span>
                                     </div>
                                     <div class="card-subinfo ptl1 ms-5 text-muted small">Net Pay</div>
                                 </td>
                                 <td class="w-50">
                                     <div>
-                                        <span class="bullet bg-primary mb-1 me-2"
-                                            style="background-color: #a6b7f7"></span>
-                                        <span class="secondary-info fs-6">Rs 0</span>
+                                        <span class="bullet bg-success mb-1 me-2"
+                                            style="background-color: #34c349"></span>
+                                        <span class="secondary-info fs-6">Rs {{ $payroll->salaryStaff->sum('gross_salary') ?? 0 }}</span>
                                     </div>
                                     <div class="card-subinfo ptl1 ms-5 text-muted small">Gross Pay</div>
                                 </td>
                             <tr class="">
                                 <td class="w-50 pt-3">
                                     <div>
-                                        <span class="bullet bg-primary mb-1 me-2"
-                                            style="background-color: #a6b7f7"></span>
-                                        <span class="secondary-info fs-6">Rs 0</span>
+                                        <span class="bullet bg-danger mb-1 me-2"
+                                            style="background-color: #ad5b2b"></span>
+                                        <span class="secondary-info fs-6">Rs {{ $payroll->salaryStaff->sum('total_deductions') ?? 0 }}</span>
                                     </div>
                                     <div class="card-subinfo ptl1 ms-5 text-muted small">Total Deduction</div>
                                 </td>
@@ -120,6 +127,19 @@
                                     <div class="card-subinfo ptl1 ms-5 text-muted small">Working Days</div>
                                 </td>
                             </tr>
+                            <tr class="">
+                                <td class="w-50 pt-3">
+                                    <div>
+                                        <span class="bullet bg-primary mb-1 me-2"
+                                            style="background-color: #a6b7f7"></span>
+                                        <span class="secondary-info fs-6">{{ $payroll->salaryStaff->count() ?? 0 }}</span>
+                                    </div>
+                                    <div class="card-subinfo ptl1 ms-5 text-muted small">Paid Employee</div>
+                                </td>
+                                <td class="w-50">
+                                  
+                                </td>
+                            </tr>
                         </table>
                     </div>
                 </div>
@@ -129,10 +149,9 @@
                     <div class="w-50">
                         Payroll Input
                         <div>
-                            <div class="small badge badge-light-info"> Bank Loan </div>
-                            <div class="small badge badge-light-info"> Lic </div>
-                            <div class="small badge badge-light-info"> Other Income </div>
-                            <div class="small badge badge-light-info"> Salary Fields & others </div>
+                            <div class="small badge badge-light-info"> Salary Creation </div>
+                            {{-- <div class="small badge badge-light-info"> Salary Revision </div> --}}
+                            <div class="small badge badge-light-info"> Hold Salary </div>
                         </div>
                     </div>
                     <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
@@ -145,7 +164,12 @@
                     </div>
                 </div>
                 <div class="d-flex p-3 fs-4 border border-3 align-items-center">
-                    <div class="w-50"> Employee View Release </div>
+                    <div class="w-50"> 
+                        Employee View Release 
+                        <div>
+                            <div class="small badge badge-light-info"> Publish Payslip </div>
+                        </div>
+                    </div>
                     <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
                         <span class="pl-btn emp_view_release @if (isset($lock_info) && $lock_info->emp_view_release == 'unlock') active @endif"
                             role="button" onclick="setPayrollSetting('emp_view_release', 'unlock', this)"> Unlock
@@ -155,8 +179,13 @@
                         </span>
                     </div>
                 </div>
-                <div class="d-flex  p-3 fs-4 border border-3 align-items-center">
-                    <div class="w-50"> It Statement Employee View </div>
+                {{-- <div class="d-flex  p-3 fs-4 border border-3 align-items-center">
+                    <div class="w-50"> 
+                        It Statement Employee View 
+                        <div>
+                            <div class="small badge badge-light-info"> Add, Update, Delete Income Tax Income, Deduction and others  </div>
+                        </div>
+                    </div>
                     <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
                         <span class="pl-btn it_statement_view @if (isset($lock_info) && $lock_info->it_statement_view == 'unlock') active @endif"
                             role="button" onclick="setPayrollSetting('it_statement_view', 'unlock', this)"> Unlock
@@ -165,13 +194,12 @@
                             role="button" onclick="setPayrollSetting('it_statement_view', 'lock', this)"> Lock
                         </span>
                     </div>
-                </div>
+                </div> --}}
                 <div class="d-flex p-3 fs-4 border border-3 align-items-center">
                     <div class="w-50">
                         Payroll Statement
                         <div>
-                            <div class="small badge badge-light-info"> Publish Payslip </div>
-                            <div class="small badge badge-light-info"> Publish It Statement </div>
+                            <div class="small badge badge-light-info"> View and Export Payroll Statement </div>
                         </div>
                     </div>
                     <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
@@ -213,7 +241,7 @@
                     data: {
                         datasets: [{
                             data: @json($leave_chart_data),
-                            backgroundColor: ['#00A3FF', '#cf6262', '#43a43c']
+                            backgroundColor: [ '#00A3FF', '#43a43c','#cf6262',]
                         }],
                         labels: @json($leave_chart_label)
                     },

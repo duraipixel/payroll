@@ -66,8 +66,19 @@ class TestOneController extends Controller
     public function testSalaryPdf()
     {
 
-        // $info = StaffSalary::find(1);
-        $pdf = PDF::loadView('pages.payroll_management.overview.statement._auto_gen_pdf', [ ])->setPaper('a4', 'portrait');
+        $info = StaffSalary::find(1);
+        $date_string = $info->salary_year.'-'.$info->salary_month.'-01';
+        $date = date('d/M/Y', strtotime($date_string));
+        
+        $params = [
+            'institution_name' => $info->staff->institute->name ?? '',
+            'institution_address' => $info->staff->institute->address ?? '',
+            'pay_month' => 'Pay Slip for the month of '.$info->salary_month.'-'.$info->salary_year,
+            'info' => $info,
+            'date' => $date
+        ];
+        // return view('pages.payroll_management.overview.statement._auto_gen_pdf', $params);
+        $pdf = PDF::loadView('pages.payroll_management.overview.statement._auto_gen_pdf', $params)->setPaper('a4', 'portrait');
         return $pdf->stream('salaryslip.pdf');
     }
 }

@@ -26,6 +26,7 @@ use App\Models\ItTabulation;
 use App\Models\Master\Institution;
 use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\PayrollManagement\OtherIncome;
+use App\Models\PayrollManagement\PayrollPermission;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
 use App\Models\PayrollManagement\StaffSalaryPattern;
@@ -962,4 +963,18 @@ function RsFormat($amount) {
 
 function amountFormat($amount) {
     return number_format( $amount , 2 );
+}
+
+function payrollCheck($month, $module) {
+
+    $month = date('Y-m-1', strtotime($month));
+    $info = PayrollPermission::where('payout_month', $month)->first();
+    if( $info ) {
+        if( $info->$module) {
+            // dump( $info->$module );
+            return $info->$module == 'lock' ? true : false;
+        } 
+        
+    } 
+    return false;
 }

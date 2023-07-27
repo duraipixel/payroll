@@ -15,6 +15,7 @@ use App\Models\PayrollManagement\StaffSalaryField;
 use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\User;
 use App\Repositories\PayrollChecklistRepository;
+use App\Repositories\PayrollRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,10 +24,12 @@ class OverviewController extends Controller
 {
 
     private $checklistRepository;
+    private $payrollRepository;
 
-    public function __construct(PayrollChecklistRepository $checklistRepository)
+    public function __construct(PayrollChecklistRepository $checklistRepository, PayrollRepository $payrollRepository)
     {
         $this->checklistRepository = $checklistRepository;
+        $this->payrollRepository = $payrollRepository;
     }
 
     public function index()
@@ -389,8 +392,14 @@ class OverviewController extends Controller
                     $salary_info->net_salary = $net_pay ?? 0;
                     $salary_info->is_salary_processed = 'yes';
                     $salary_info->salary_processed_on = date('Y-m-d H:i:s');
-                    // $salary_info->document = '';
 
+                    /**
+                     * generate document for staff salary
+                     */
+                    
+                    $salary_info->save();
+                    // dump( $salary_info );
+                    $salary_info->document = $this->payrollRepository->generateSalarySlip($salary_info);
                     $salary_info->save();
                 }
             }
@@ -407,6 +416,7 @@ class OverviewController extends Controller
         }
 
         return ['error' => $error, 'message' => $message, 'html' => "$html" ?? ''];
+        
     }
 
     public function payrollStatement(Request $request)

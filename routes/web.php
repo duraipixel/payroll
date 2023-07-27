@@ -264,6 +264,11 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('payroll/statement/{id}',[App\Http\Controllers\PayrollManagement\OverviewController::class,'payrollStatement'])->name('payroll.statement');
     Route::post('payroll/statement/list',[App\Http\Controllers\PayrollManagement\OverviewController::class,'payrollStatementList'])->name('payroll.statement.list');
     Route::get('payroll/statement/export/{payroll_id}/{staff_id?}',[App\Http\Controllers\PayrollManagement\OverviewController::class,'exportStatement'])->name('payroll.statement.export');
+
+    Route::get('payroll/list',[App\Http\Controllers\PayrollManagement\PayrollController::class,'index'])->name('payroll.list');
+    Route::post('payroll/processed/list',[App\Http\Controllers\PayrollManagement\PayrollController::class,'processedList'])->name('payroll.processed.list');
+    Route::post('payroll/ajax/list',[App\Http\Controllers\PayrollManagement\PayrollController::class,'getAjaxProcessedList'])->name('payroll.ajax.list');
+
     #salary revision approval
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
     Route::post('salary/revision/status/change/modal',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatusModal'])->name('salary.revision.status.modal');

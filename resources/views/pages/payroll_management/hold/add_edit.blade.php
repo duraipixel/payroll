@@ -20,7 +20,7 @@
                                         Staff list only displays salaries created. 
                                     </span>
                                     <div class="d-flex">
-                                        <select name="employee_id" autofocus id="employee_id"
+                                        <select name="staff_id" autofocus id="staff_id"
                                             class="form-control" required>
                                             <option value="">-- Select staff --</option>
                                             @isset($staff)
@@ -68,7 +68,7 @@ function doHold() {
         var hold_error = false;
 
         var key_name = [
-            'employee_id',
+            'staff_id',
             'hold_reason'
         ];
 
@@ -110,10 +110,13 @@ function doHold() {
                     if (data.error == 1) {
                         var err_message = '';
                         if (data.message) {
-                            data.message.forEach(element => {
-                                err_message += '<p>' + element + '</p>';
-                            });
-                            toastr.error("Error", err_message);
+
+                            toastr.error("Error", data.message);
+
+                            // data.message.forEach(element => {
+                            //     err_message += '<p>' + element + '</p>';
+                            // });
+                            // toastr.error("Error", err_message);
                         }
                         return false;
                     } else {

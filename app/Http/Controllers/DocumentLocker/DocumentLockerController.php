@@ -209,6 +209,7 @@ class DocumentLockerController extends Controller
 
     public  function documentView($id)
     {
+
         $user            = User::find($id);
         $personal_doc    = StaffDocument::where('staff_id', $id)->get();
         $education_doc   = StaffEducationDetail::where('staff_id', $id)->get();
@@ -218,6 +219,7 @@ class DocumentLockerController extends Controller
         $appointment_doc = StaffAppointmentDetail::where('staff_id', $id)->get();
         $salary_doc      = StaffSalary::where('staff_id', $id)->get();
         return view('pages.document_locker.document_view', compact('user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc'));
+        
     }
 
     public function searchData(Request $request)

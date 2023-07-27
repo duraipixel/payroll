@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
+use Illuminate\Validation\Rule;
 
 class HoldSalaryController extends Controller
 {
@@ -21,9 +22,9 @@ class HoldSalaryController extends Controller
                     'link' => '', 'title' => 'Hold Salary'
                 ),
             )
-        );   
-        $search_date = date('Y-m-d');     
-        
+        );
+        $search_date = date('Y-m-d');
+
         return view('pages.payroll_management.hold.index', compact('breadcrums', 'search_date'));
     }
 
@@ -31,9 +32,9 @@ class HoldSalaryController extends Controller
     {
         $title = 'Hold Salary';
         $staff = User::select('users.*')->join('staff_salary_patterns', 'staff_salary_patterns.staff_id', '=', 'users.id')
-                ->where('users.status', 'active')
-                ->where('staff_salary_patterns.status', 'active')
-                ->get();
+            ->where('users.status', 'active')
+            ->where('staff_salary_patterns.status', 'active')
+            ->get();
         $payroll_hold_month = $request->payroll_hold_month;
 
         $params = array(
@@ -48,24 +49,38 @@ class HoldSalaryController extends Controller
     {
 
         $id = $request->id ?? '';
+        $staff_id = $request->staff_id;
+        $hold_check_date = date('Y-m-d', strtotime($request->hold_month));
         $validator = Validator::make($request->all(), [
-            'employee_id' => 'required|unique:hold_salaries,staff_id,' . $id . ',id,deleted_at,NULL',
+            'staff_id' => ['required', 'string', Rule::unique('hold_salaries')->where(function ($query) use ($hold_check_date, $id) {
+                return $query->where('hold_month', $hold_check_date)
+                    ->where('deleted_at', NULL)
+                    ->when($id != '', function ($q) use ($id) {
+                        return $q->where('id', '!=', $id);
+                    });
+            })],
             'hold_reason' => 'required',
         ]);
+        //need vlaidation
 
         if ($validator->passes()) {
             
-            $ins['staff_id'] = $request->employee_id;
-            $ins['academic_id'] = academicYearId();
-            $ins['hold_reason'] = $request->hold_reason;
-            $ins['remarks'] = $request->remarks ?? '';
-            $ins['hold_at'] = date('Y-m-d H:i:s');
-            $ins['hold_by'] = auth()->id();
-            $ins['status'] = 'active';
-            $ins['hold_month'] = date('Y-m-d', strtotime($request->hold_month));
-            $data = HoldSalary::updateOrCreate(['staff_id' => $request->employee_id], $ins);
-            $error = 0;
-            $message = 'success';
+            if (!payrollCheck($hold_check_date, 'payroll_inputs')) {
+                $ins['staff_id'] = $staff_id;
+                $ins['academic_id'] = academicYearId();
+                $ins['hold_reason'] = $request->hold_reason;
+                $ins['remarks'] = $request->remarks ?? '';
+                $ins['hold_at'] = date('Y-m-d H:i:s');
+                $ins['hold_by'] = auth()->id();
+                $ins['status'] = 'active';
+                $ins['hold_month'] = date('Y-m-d', strtotime($request->hold_month));
+                $data = HoldSalary::create($ins);
+                $error = 0;
+                $message = 'success';
+            } else {
+                $error = 1;
+                $message = 'Payroll Input settings has been locked, Please unlock to further action';
+            }
         } else {
             $error = 1;
             $message = $validator->errors()->all();
@@ -73,24 +88,25 @@ class HoldSalaryController extends Controller
         return response()->json(['error' => $error, 'message' => $message]);
     }
 
-    public function view(Request $request) {
+    public function view(Request $request)
+    {
 
         $search_date = $request->dates;
-        $month_no = $request->month_no;       
-        
+        $month_no = $request->month_no;
+
         if ($request->ajax() && $request->from == '') {
             $hold_date = $request->hold_date;
             $start_date = date('Y-m-1', strtotime($hold_date));
             $end_date = date('Y-m-1', strtotime($hold_date));
-            
+
             $data = HoldSalary::with(['staff', 'staff.currentSalaryPattern'])
-                        ->when(!empty( $hold_date ), function($query) use($start_date, $end_date){
-                            $query->whereBetween('hold_month', [$start_date, $end_date]);
-                        })->select('*')->get()
-                        ->map(function ($item) {
-                            $item->current_salary_pattern = $item->staff->currentSalaryPattern ?? '-';
-                            return $item;
-                        });
+                ->when(!empty($hold_date), function ($query) use ($start_date, $end_date) {
+                    $query->whereBetween('hold_month', [$start_date, $end_date]);
+                })->select('*')->get()
+                ->map(function ($item) {
+                    $item->current_salary_pattern = $item->staff->currentSalaryPattern ?? '-';
+                    return $item;
+                });
 
             // dd( $data[0]->staff->currentSalaryPattern );
             $status = $request->get('status');
@@ -116,18 +132,17 @@ class HoldSalaryController extends Controller
                 })
                 ->rawColumns(['action']);
             return $datatables->make(true);
-
         }
-            
+
         return view('pages.payroll_management.hold.view_ajax', compact('search_date', 'month_no'));
     }
 
-    public function delete(Request $request) {
+    public function delete(Request $request)
+    {
 
         $id = $request->id;
         HoldSalary::where('id', $id)->delete();
 
-        return response()->json([ 'message' => "Successfully deleted!", 'status' => 1 ] );
-        
+        return response()->json(['message' => "Successfully deleted!", 'status' => 1]);
     }
 }

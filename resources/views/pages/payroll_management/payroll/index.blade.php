@@ -3,9 +3,7 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
-    <style>
-        
-    </style>
+    
     <div class="card">
         <div class="month_row d-flex">
             @php
@@ -22,7 +20,7 @@
             @endphp
                 <div id="payroll_month_{{ $months }}" role="button"
                     class="payroll_month @if ($i == 0) active @endif"
-                    onclick="getPayrollOverviewInfo('{{ $dates }}', {{ $months }})">
+                    onclick="getPayrollProcessedList('{{ $dates }}', {{ $months }})">
                     {{-- <div class="month_name">{{ date('M', mktime(0, 0, 0, $months, 10)) }}</div> --}}
                     <div class="month_name">{{ date('M', strtotime($dates)) }}</div>
                     <div class="year">{{ date('Y', strtotime($dates)) }}</div>
@@ -39,7 +37,7 @@
         </div>
     </div>
     <div class="card mt-3">
-        <div class="payroll_info" id="payroll_overview_container">
+        <div class="payroll_info" id="payroll_processed_containter">
            {{-- @include('pages.payroll_management.overview._ajax_month_view') --}}
         </div>
     </div>
@@ -48,10 +46,11 @@
 @section('add_on_script')
     <script>
         @if($start_month == 4 )
-        getPayrollOverviewInfo('{{ $start_year }}', '{{ $start_month }}');
+        getPayrollProcessedList('{{ $start_year }}', '{{ $start_month }}');
         @endif
 
-        function getPayrollOverviewInfo(dates, month_no) {
+        function getPayrollProcessedList(dates, month_no) {
+
             $('.payroll_month').removeClass('active');
             $('#payroll_month_' + month_no).addClass('active');
 
@@ -62,14 +61,14 @@
             });
 
             $.ajax({
-                url: "{{ route('payroll.get.month.chart') }}",
+                url: "{{ route('payroll.processed.list') }}",
                 type: 'POST',
                 data: {
                     month_no: month_no,
                     dates:dates
                 },
                 success: function(res) {
-                    $('#payroll_overview_container').html( res );
+                    $('#payroll_processed_containter').html( res );
                 },
                 error: function(xhr, err) {
                     if (xhr.status == 403) {
@@ -77,6 +76,7 @@
                     }
                 }
             });
+
         }
     </script>
 @endsection

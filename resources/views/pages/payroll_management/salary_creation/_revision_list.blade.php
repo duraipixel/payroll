@@ -220,9 +220,8 @@
                                 },
                                 timer: 3000
                             });
+                            $('#payout-salary-revision').removeClass('blur_loading_3px');
                         }
-
-
                     },
                     error: function(xhr, err) {
                         if (xhr.status == 403) {

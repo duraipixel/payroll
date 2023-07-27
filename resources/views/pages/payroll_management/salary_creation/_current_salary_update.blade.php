@@ -220,10 +220,7 @@
 
                     if (res.error == 1) {
                         if (res.message) {
-                            res.message.forEach(element => {
-                                toastr.error("Error",
-                                    element);
-                            });
+                            toastr.error("Error", res.message);
                         }
                     } else {
                         toastr.success(

@@ -60,14 +60,14 @@
                         <tbody>
                             @if (isset($user->name))
                                 <tr>
-                                    <th class="fw-bold text-primary">  Name </th>
+                                    <th class="fw-bold text-primary"> Name </th>
                                     <td> : </td>
                                     <th class="fw-bold"> {{ $user->name }}</th>
                                 </tr>
                             @endif
                             @if (isset($user->personal->gender))
                                 <tr>
-                                    <th class="fw-bold text-primary">  Gender </th>
+                                    <th class="fw-bold text-primary"> Gender </th>
                                     <td> : </td>
                                     <th class="fw-bold"> {{ ucfirst($user->personal->gender ?? '') }}</th>
                                 </tr>
@@ -97,12 +97,13 @@
                                 <tr>
                                     <th class="fw-bold text-primary"> DOB </th>
                                     <td>:</td>
-                                    <th class="fw-bold">{{ $user->personal->dob ? commonDateFormat($user->personal->dob) : '' }}</th>
+                                    <th class="fw-bold">
+                                        {{ $user->personal->dob ? commonDateFormat($user->personal->dob) : '' }}</th>
                                 </tr>
                             @endif
                             @if (isset($user->email))
                                 <tr>
-                                    <th class="fw-bold text-primary">  Email </th>
+                                    <th class="fw-bold text-primary"> Email </th>
                                     <td>:</td>
                                     <th class="fw-bold">{{ $user->email ?? '' }}</th>
                                 </tr>
@@ -123,7 +124,7 @@
                             @endif
 
                             <tr>
-                                <th class="fw-bold text-primary">    Reporting Person  </th>
+                                <th class="fw-bold text-primary"> Reporting Person </th>
                                 <td>:</td>
                                 <th class="fw-bold">
                                     Admin
@@ -221,7 +222,7 @@
                                     <td>
                                         <a href="{{ url('storage/app/public' . '/' . $personal_docs->multi_file) }}"
                                             class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
-                                            target="_blank" >
+                                            target="_blank">
                                             <i class="fa fa-eye"></i></a>
                                     </td>
                                 </tr>
@@ -284,7 +285,7 @@
                                     </td>
                                     <td> <a href="{{ url('storage/app/public' . '/' . $education_docs->doc_file) }}"
                                             class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
-                                            target="_blank" >
+                                            target="_blank">
                                             <i class="fa fa-eye"></i>
                                         </a></td>
                                 </tr>
@@ -417,13 +418,13 @@
                                         @if ($leave_docs->status == 'pending')
                                             <a href="{{ url('storage/app' . '/' . $leave_docs->document) }}"
                                                 class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
-                                                target="_blank" >
+                                                target="_blank">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         @else
                                             <a href="{{ url('storage/app' . '/' . $leave_docs->approved_document) }}"
                                                 class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
-                                                target="_blank" >
+                                                target="_blank">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         @endif
@@ -486,60 +487,41 @@
                             <thead class="bg-primary p-10">
 
                                 <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
-
-
+                                    <th class="text-center text-white ps-3"> Salary Month </th>
                                     <th class="text-center text-white ps-3">Gross Salary</th>
                                     <th class="text-center text-white">Deductions</th>
-                                    <th class="text-center text-white">Approval Status</th>
-                                    <th class="text-center text-white">Approved By</th>
-                                    <th class="text-center text-white">Action</th>
+                                    <th class="text-center text-white">Net Salary</th>
                                     <th class="text-center text-white pe-3">Download</th>
                                 </tr>
 
                             </thead>
                             @forelse ($salary_doc as $salary_docs)
-                                <tr>
-                                    <td>{{ $salary_docs->total_earnings ?? '' }} </td>
-                                    <td>{{ $salary_docs->total_deductions ?? '' }}</td>
-                                    <td>
-                                        @if ($salary_docs->is_salary_processed == 'no' && $salary_docs->approved_date == '')
-                                            <span class="badge badge-secondary"> Pending</span>
-                                        @elseif ($salary_docs->is_salary_processed == 'yes' && $salary_docs->approved_date != '')
-                                            <span class="badge badge-success">
-                                                Approved</span><br>
-                                            {{ $salary_docs->approved_date ?? '' }}
-                                        @elseif ($salary_docs->is_salary_processed == 'no' && $salary_docs->rejected_date != '')
-                                            <span class="badge badge-danger">
-                                                Rejected</span><br>
-                                            {{ $salary_docs->rejected_date ?? '' }}
-                                        @endif
-                                    </td>
-                                    <td>{{ $salary_docs->salaryApprovedBy->name ?? '' }}</td>
-                                    <td>
-                                        @if ($salary_docs->is_salary_processed == 'no')
-                                            <a href="#"
-                                                onclick="return changeDocumentStatus({{ $salary_docs->id }},'salary','approved')"
+                                @php
+                                    $salary_date = $salary_docs->salary_year . '-' . $salary_docs->salary_month . '-01';
+                                    $salary_date = date('Y-m-d', strtotime( $salary_date .' +1 month'));
+                                @endphp
+                                @if (!payrollCheck($salary_date, 'emp_view_release'))
+                                    <tr>
+                                        <td>
+                                            {{ $salary_docs->salary_month . '/' . $salary_docs->salary_year }}
+                                        </td>
+                                        <td>{{ RsFormat($salary_docs->total_earnings ?? 0) }} </td>
+                                        <td>{{ RsFormat($salary_docs->total_deductions ?? 0) }}</td>
+                                        <td>{{ RsFormat($salary_docs->net_salary ?? 0) }}</td>
+                                        <td>
+                                            <a target="_blank"
+                                                href="{{ asset('public' . Storage::url($salary_docs->document)) }}"
                                                 class="btn btn-sm btn-success">
-                                                Click to Approve</a>
-                                        @else
-                                            <a href="#"
-                                                onclick="return changeDocumentStatus({{ $salary_docs->id }},'salary','rejected')"
-                                                class="btn btn-sm btn-danger">
-                                                Click to Reject</a>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($salary_docs->is_salary_processed == 'yes')
-                                            <!-- <a href="{{ url('storage/app' . '/' . $leave_docs->document) }}"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px" target="_blank" download>
-                                                                        
-                                                                    </a>      -->
-                                        @endif
-                                    </td>
+                                                <i class="fa fa-file-pdf"></i> View File
+                                            </a>
+                                        </td>
 
-                                </tr>
+                                    </tr>
+                                @else
+                                @endif
                             @empty
                                 <tr>
-                                    <td colspan="6"> <strong>Salary Documents not Uploaded</strong> </td>
+                                    <td colspan="5"> <strong>Salary Documents not Uploaded</strong> </td>
                                 </tr>
                             @endforelse
 
