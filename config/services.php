@@ -121,4 +121,7 @@ return [
         'training-topic' => 'Training Topic',
         'board' => 'University/Boards',        
      ],    
+    'reports' => [
+        'reports.profile' => 'Staff Profile Reports'
+    ]
 ];

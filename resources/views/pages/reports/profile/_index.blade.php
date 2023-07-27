@@ -116,7 +116,7 @@
                         $('#profile_table').DataTable({
                             dom: 'Blfrtip',
                             buttons: [
-                                'csv', 'excel'
+                                'excel'
                             ],
                             pageLength: 50,
                             lengthMenu: [

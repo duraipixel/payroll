@@ -113,7 +113,7 @@ class AccessGuard
         $info = User::find(auth()->id());
 
         $data = $info->roleMapped;
-        $role_id = $data->role_id;
+        $role_id = $data->role_id ?? '';
 
         if( strpos($module, '.')){
             $tmp_module = explode('.', $module);
