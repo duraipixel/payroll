@@ -3,26 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    function index() {
+    function index()
+    {
         return view('pages.reports.index');
     }
 
-    public function profileReports(Request $request) {
+    public function profileReports(Request $request)
+    {
 
-        if( $request->ajax() ){
+        if ($request->ajax()) {
             $details = User::with(['personal', 'position'])->whereNull('is_super_admin')->orderBy('society_emp_code', 'desc')->get();
-            $params = [ 'details' => $details ];
+            $params = ['details' => $details];
             return view('pages.reports.profile._table_content', $params);
         }
         return view('pages.reports.profile._index');
     }
 
-    public function commonExport(Request $request) {
+    public function commonExport(Request $request)
+    {
+    }
 
+    function attendance_index(Request $request)
+    {
+        $month         = $request->month ?? date('m');
+        $place_of_work = $request->place_of_work ?? null;
+        $date          = getStartAndEndDateOfMonth($month);
+        $month_days    = monthDays($month);
+        $attendance = User::with(['AttendancePresent', 'Attendance' => function ($query) use ($date) {
+            $query->whereBetween('attendance_date', [$date['start_date'], $date['end_date']]);
+        }])
+        ->leftJoin('staff_appointment_details', function($join){
+            $join->on('staff_appointment_details.staff_id', '=','users.id')
+                    ->where('staff_appointment_details.academic_id', academicYearId());
+        })
+        ->select('users.*','staff_appointment_details.place_of_work_id')
+        ->when(!is_null($request->place_of_work),function($q) use ($request){
+            $q->where('place_of_work_id', $request->place_of_work);
+        })
+        ->paginate(14); 
+        return view('pages.reports.attendance._index', compact('attendance', 'month_days','month','place_of_work'));
     }
 }

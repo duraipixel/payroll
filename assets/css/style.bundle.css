@@ -11,9 +11,29 @@
   font-style: normal;
   font-display: swap;
 }
+.table-centered th,
+.table-centered td {
+  vertical-align: middle !important;
+  padding: 5px !important;
+}
 
-
-
+.page-link {
+  font-size: 12px !important;
+  width: 20px !important;
+  min-width: 20px !important;
+  height: 20px !important;
+  border-radius: 50% !important;
+  background-color: #dce3e9;
+}
+.w-5 {
+  width: 25px;
+} 
+.h-5 {
+  height: 25px;
+}
+.menu-title {
+  text-transform: capitalize !important;
+}
 :root {
   --side-bar-size:225px;
   --bs-blue: #009ef6;

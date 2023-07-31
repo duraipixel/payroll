@@ -423,4 +423,11 @@ class User extends Authenticatable implements Auditable
     public function leaveDays() {
         return $this->hasMany(AttendanceManualEntry::class, 'employment_id', 'id')->where('attendance_status', 'Absence');
     }
+
+    function Attendance() {
+        return $this->hasMany(AttendanceManualEntry::class, 'employment_id', 'id');
+    }
+    function AttendancePresent() {
+        return $this->hasMany(AttendanceManualEntry::class, 'employment_id', 'id')->where('attendance_status','Present');
+    } 
 }

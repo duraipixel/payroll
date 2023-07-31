@@ -16,6 +16,7 @@ use App\Models\Staff\StaffProfessionalData;
 use App\Models\Staff\StaffStudiedSubject;
 use App\Models\Staff\StaffTalent;
 use App\Models\Staff\StaffWorkExperience;
+use App\Models\Master\PlaceOfWork;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
@@ -38,7 +39,9 @@ use App\Models\Staff\StaffTaxSeperation;
 use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Route;
+
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -483,22 +486,22 @@ if (!function_exists('generateLeaveForm')) {
         $taken_leave = 0;
         $balance_leave = 0;
         if ($staff_info->appointment->nature_of_employment_id ?? '') {
-            if( isFemale($staff_id)) {
-                
+            if (isFemale($staff_id)) {
+
                 $total_leaves = LeaveMapping::selectRaw('sum(CAST(leave_mappings.leave_days AS DECIMAL(10, 2))) as total')
-                                    ->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)
-                                    ->where('status', 'active')
-                                    ->first();
+                    ->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)
+                    ->where('status', 'active')
+                    ->first();
             } else {
                 $total_leaves = LeaveMapping::selectRaw('sum(CAST(leave_mappings.leave_days AS DECIMAL(10, 2))) as total')
-                ->join('leave_heads', function($join){
-                    $join->on('leave_heads.id', '=', 'leave_mappings.leave_head_id');
-                    // $join->on('leave_heads.code', '!=', DB::raw('"ML"'));
-                })
-                ->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)
-                ->where('leave_mappings.status', 'active')
-                ->where('leave_heads.code', '!=','ML')
-                ->first();
+                    ->join('leave_heads', function ($join) {
+                        $join->on('leave_heads.id', '=', 'leave_mappings.leave_head_id');
+                        // $join->on('leave_heads.code', '!=', DB::raw('"ML"'));
+                    })
+                    ->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)
+                    ->where('leave_mappings.status', 'active')
+                    ->where('leave_heads.code', '!=', 'ML')
+                    ->first();
             }
 
             if ($total_leaves) {
@@ -1002,7 +1005,7 @@ if (!function_exists('isFemale')) {
     function isFemale($id)
     {
         $info = User::find($id);
-        
+
         if ($info->personal->gender == 'female') {
             return true;
         }
@@ -1010,13 +1013,64 @@ if (!function_exists('isFemale')) {
     }
 }
 
-function getStaffImage($image_path) {
-    if( isset( $image_path ) && !empty( $image_path ) ) {
+function getStaffImage($image_path)
+{
+    if (isset($image_path) && !empty($image_path)) {
 
         $profile_image = Storage::url($image_path);
         return asset('public' . $profile_image);
-    
     } else {
         return false;
     }
+}
+
+function reportMenu()
+{
+    $customKey = 'is_menu';
+    $customValue = true;
+    $routes = Route::getRoutes();
+    $filteredRoutesInfo = [];
+    foreach ($routes as $route) {
+        $action = $route->getAction();
+        if (isset($action[$customKey]) && $action[$customKey] === $customValue) {
+            $prefix = str_replace('/', '', $action['prefix']);
+            $filteredRoutesInfo[] = [
+                'route' => $action['as'],
+                'prefix' => $prefix,
+                'name' => ucfirst(str_replace('.', ' ', str_replace($prefix . '.', '', $action['as']))),
+            ];
+        }
+    }
+
+    // Group by the 'age' key
+    $groupedData = array_reduce($filteredRoutesInfo, function ($result, $item) {
+        $key = $item['prefix'];
+        if (!isset($result[$key])) {
+            $result[$key] = [];
+        }
+        $result[$key][] = $item;
+        return $result;
+    }, []);
+    return $groupedData;
+}
+
+function monthDays($month)
+{
+    $year = date('Y');
+    $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+    return $daysInMonth;
+}
+
+function getStartAndEndDateOfMonth($month)
+{
+    $year      = date('Y');
+    $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+    $endDate   = Carbon::createFromDate($year, $month, 1)->endOfMonth();
+    return [
+        'start_date' => $startDate->format('Y-m-d'),
+        'end_date' => $endDate->format('Y-m-d')
+    ];
+}
+function placeOfWork(){
+    return PlaceOfWork::latest()->get();
 }

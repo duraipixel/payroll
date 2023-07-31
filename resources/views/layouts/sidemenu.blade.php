@@ -4,8 +4,8 @@
     data-kt-drawer-toggle="#kt_aside_mobile_toggle">
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
         <a href="" class="d-flex py-3 align-items-center">
-            <img alt="Logo" src="{{ asset('assets/media/logos/user-logo.png') }}"   width="100px" class="me-2"/>
-            <img alt="Logo" src="{{ asset('assets/media/logos/user-logo-1.png') }}" width="100px"  class="ms-2"  />
+            <img alt="Logo" src="{{ asset('assets/media/logos/user-logo.png') }}" width="100px" class="me-2" />
+            <img alt="Logo" src="{{ asset('assets/media/logos/user-logo-1.png') }}" width="100px" class="ms-2" />
         </a>
     </div>
 
@@ -307,7 +307,8 @@
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link @if (request()->routeIs(['att-manual-entry'])) active @endif" href="{{ route('attendance.overview') }}">
+                                <a class="menu-link @if (request()->routeIs(['att-manual-entry'])) active @endif"
+                                    href="{{ route('attendance.overview') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
@@ -461,25 +462,7 @@
                     </div>
                 @endif
                 @php
-                    $payroll_menu = [
-                        'salary-head',
-                        'salary-field',
-                        'salary.creation',
-                        'salary.loan',
-                        'salary.lic',
-                        'professional-tax',
-                        'payroll.overview',
-                        'payroll.list',
-                        'holdsalary',
-                        'salary.revision',
-                        'it.tabulation',
-                        'taxscheme',
-                        'taxsection',
-                        'taxsection-item',
-                        'it',
-                        'other-income',
-                        'it-calculation'
-                ];
+                    $payroll_menu = ['salary-head', 'salary-field', 'salary.creation', 'salary.loan', 'salary.lic', 'professional-tax', 'payroll.overview', 'payroll.list', 'holdsalary', 'salary.revision', 'it.tabulation', 'taxscheme', 'taxsection', 'taxsection-item', 'it', 'other-income', 'it-calculation'];
                 @endphp
                 @if (access()->hasAccess($payroll_menu))
                     <div data-kt-menu-trigger="click"
@@ -493,147 +476,147 @@
                             <span class="menu-arrow"></span>
                         </span>
                         @if (access()->hasAccess('payroll.overview', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['payroll.overview'])) active @endif"
-                                    href="{{ route('payroll.overview') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title"> Overview </span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['payroll.overview'])) active @endif"
+                                        href="{{ route('payroll.overview') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title"> Overview </span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('payroll.list', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['payroll.list'])) active @endif"
-                                    href="{{ route('payroll.list') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title"> Payroll </span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['payroll.list'])) active @endif"
+                                        href="{{ route('payroll.list') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title"> Payroll </span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('salary.creation', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['salary.creation'])) active @endif"
-                                    href="{{ route('salary.creation') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Salary Creation</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['salary.creation'])) active @endif"
+                                        href="{{ route('salary.creation') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Salary Creation</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('salary.revision', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['salary.revision'])) active @endif"
-                                    href="{{ route('salary.revision') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Salary Revision</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['salary.revision'])) active @endif"
+                                        href="{{ route('salary.revision') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Salary Revision</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('holdsalary', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['holdsalary'])) active @endif"
-                                    href="{{ route('holdsalary') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Hold Salary</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['holdsalary'])) active @endif"
+                                        href="{{ route('holdsalary') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Hold Salary</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('it', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['it'])) active @endif"
-                                    href="{{ route('it') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Income Tax</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['it'])) active @endif"
+                                        href="{{ route('it') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Income Tax</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('it-calculation', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['it-calculation'])) active @endif"
-                                    href="{{ route('it-calculation') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Income Tax Calculation </span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['it-calculation'])) active @endif"
+                                        href="{{ route('it-calculation') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Income Tax Calculation </span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('salary.loan', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['salary.loan'])) active @endif"
-                                    href="{{ route('salary.loan') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Bank Loan</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['salary.loan'])) active @endif"
+                                        href="{{ route('salary.loan') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Bank Loan</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('salary.lic', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['salary.lic'])) active @endif"
-                                    href="{{ route('salary.lic') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">LIC</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['salary.lic'])) active @endif"
+                                        href="{{ route('salary.lic') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">LIC</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('professional-tax', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['professional-tax'])) active @endif"
-                                    href="{{ route('professional-tax') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Professional Tax</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['professional-tax'])) active @endif"
+                                        href="{{ route('professional-tax') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Professional Tax</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('it.tabulation', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['it.tabulation'])) active @endif"
-                                    href="{{ route('it.tabulation') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Income Tax Tabulation</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['it.tabulation'])) active @endif"
+                                        href="{{ route('it.tabulation') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Income Tax Tabulation</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('salary-head', 'view'))
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
@@ -649,69 +632,69 @@
                             </div>
                         @endif
                         @if (access()->hasAccess('salary-field', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['salary-field'])) active @endif"
-                                    href="{{ route('salary-field') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Salary Fields</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['salary-field'])) active @endif"
+                                        href="{{ route('salary-field') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Salary Fields</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('taxscheme', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['taxscheme'])) active @endif"
-                                    href="{{ route('taxscheme') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Tax Schemes</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['taxscheme'])) active @endif"
+                                        href="{{ route('taxscheme') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Tax Schemes</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('taxsection', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['taxsection'])) active @endif"
-                                    href="{{ route('taxsection') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Scheme Section</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['taxsection'])) active @endif"
+                                        href="{{ route('taxsection') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Scheme Section</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('taxsection-item', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['taxsection-item'])) active @endif"
-                                    href="{{ route('taxsection-item') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Scheme Section Item</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['taxsection-item'])) active @endif"
+                                        href="{{ route('taxsection-item') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Scheme Section Item</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                         @if (access()->hasAccess('other-income', 'view'))
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            <div class="menu-item">
-                                <a class="menu-link  @if (request()->routeIs(['other-income'])) active @endif"
-                                    href="{{ route('other-income') }}">
-                                    <span class="menu-bullet">
-                                        <span class="bullet bullet-dot"></span>
-                                    </span>
-                                    <span class="menu-title">Other Income</span>
-                                </a>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['other-income'])) active @endif"
+                                        href="{{ route('other-income') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Other Income</span>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
                         @endif
                     </div>
                 @endif
@@ -1169,30 +1152,33 @@
                         </div>
                     </div>
                 @endif
-               
-
                 @if (access()->hasAccess(['reports.profile']))
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                    <span class="menu-link">
-                        <span class="menu-icon">
-                            <i class="fa fa-print"></i>
-                        </span>
-                        <span class="menu-title">Reports</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <div class="menu-sub menu-sub-accordion menu-active-bg">
-                        <div class="menu-item">
-                            <a class="menu-link" href="{{ route('reports.profile') }}">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
+                    @foreach (reportMenu() as $name => $reports)
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                            <span class="menu-link">
+                                <span class="menu-icon">
+                                    <i class="fa fa-print"></i>
                                 </span>
-                                <span class="menu-title">Staff Profile Report</span>
-                            </a>
+                                <span class="menu-title">{{ ucfirst($name) }}</span>
+                                <span class="menu-arrow"></span>
+                            </span>
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                @if(count($reports))
+                                    @foreach ($reports as $report)
+                                        <div class="menu-item">
+                                            <a class="menu-link" href="{{ route($report['route']) }}">
+                                                <span class="menu-bullet">
+                                                    <span class="bullet bullet-dot"></span>
+                                                </span>
+                                                <span class="menu-title">{{  $report['name'] }}</span>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                   
-                </div>
-            @endif
+                    @endforeach
+                @endif
             </div>
             <!--end::Menu-->
         </div>
