@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PayrollManagement;
 
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
+use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\PayrollManagement\SalaryField;
 use App\Models\PayrollManagement\SalaryFieldCalculationItem;
 use App\Models\PayrollManagement\SalaryHead;
@@ -122,8 +123,8 @@ class SalaryCreationController extends Controller
 
                 if (!empty($ins)) {
                     /**
-                     * check exists
-                     * 
+                     * 1. check exists
+                     * 2. check salary processed
                      */
                     $insert_data = [];
 
@@ -161,6 +162,12 @@ class SalaryCreationController extends Controller
 
                     $salary_info = StaffSalaryPattern::updateOrCreate(['id' => $id], $insert_data);
                     $history_info = StaffSalaryPatternHistory::create($insert_data);
+                    
+                    /**
+                     * update status in it statements
+                     */
+                    ItStaffStatement::where('academic_id', academicYearId())
+                                        ->where('staff_id', $staff_id)->update(['is_staff_calculation_done' => 'no', 'lock_calculation' => 'no', 'status' => 'inactive']);
                     StaffSalaryPatternField::where('staff_salary_pattern_id', $salary_info->id)->forceDelete();
 
                     foreach ($ins as $items_pay) {

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
+use App\Models\PayrollManagement\HoldSalary;
 use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\PayrollManagement\SalaryField;
 use App\Models\User;
@@ -79,11 +80,11 @@ class PayrollChecklistRepository extends Controller
 
     public function getToPayEmployee($date)
     {
-
+        $hold_month =  date('Y-m-01', strtotime($date));
         $date = date('Y-m-d', strtotime($date. '-1 month'));
         $month_start = date('Y-m-01', strtotime($date));
         $month_end = date('Y-m-t', strtotime($date));
-
+        
         /**
          *  1. Get payable staff & Join Date;
          *  2. Month working days
@@ -98,12 +99,26 @@ class PayrollChecklistRepository extends Controller
                 $query->whereDate('attendance_date', '<=', $month_end);
             }, 'currentSalaryPattern', 'firstAppointment'])
             ->join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
+            ->leftJoin('hold_salaries', function($join) use ( $hold_month ){
+                $join->on('hold_salaries.staff_id', '=', 'users.id')
+                ->where('hold_salaries.hold_month', '=', $hold_month);
+            })
             ->where('verification_status', 'approved')
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
             ->whereNull('is_super_admin')
+            ->whereNull('hold_salaries.hold_month')
             ->get();
         
         return $users;
+
+    }
+
+    public function getHoldSalaryEmployee($date) {
+
+        // $date = date('Y-m-d', strtotime($date . ' -1 month'));
+        $start_date = date('Y-m-01', strtotime($date));
+        $details = HoldSalary::whereDate('hold_month', $start_date)->get();
+        return $details;
 
     }
 

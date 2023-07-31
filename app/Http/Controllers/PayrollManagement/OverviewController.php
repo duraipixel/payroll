@@ -214,7 +214,8 @@ class OverviewController extends Controller
         $leave_data = $this->checklistRepository->getPendingRequestLeave($date);
         $employee_data = $this->checklistRepository->getEmployeePendingPayroll();
         $income_tax_data = $this->checklistRepository->getPendingITEntry();
-
+        $hold_salary_employee = $this->checklistRepository->getHoldSalaryEmployee($date);
+        
 
         $title = 'Payroll Process Confirmation';
         $params = array(
@@ -223,7 +224,8 @@ class OverviewController extends Controller
             'leave_data' => $leave_data,
             'title' => $title,
             'employee_data' => $employee_data,
-            'income_tax_data' => $income_tax_data
+            'income_tax_data' => $income_tax_data,
+            'hold_salary_employee' => $hold_salary_employee
         );
 
         return view('pages.payroll_management.overview._payroll_form', $params);
@@ -240,9 +242,8 @@ class OverviewController extends Controller
         $month_start = date('Y-m-01', strtotime($payroll_date));
         $month_end = date('Y-m-t', strtotime($payroll_date));
 
-
         $payout_data = $this->checklistRepository->getToPayEmployee($date);
-
+        // dd( $payout_data );
         $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
         $deductions_field = SalaryField::where('salary_head_id', 2)
             ->where(function ($query) {
@@ -294,9 +295,14 @@ class OverviewController extends Controller
          */
         $salary_month = date('F', strtotime($payroll_date));
         $salary_year = date('Y', strtotime($payroll_date));
-        if (isset($payout_data) && count($payout_data)) {
-            foreach ($payout_data as $key => $value) {
 
+        $month_length = date('t', strtotime($payroll_date));
+        if (isset($payout_data) && count($payout_data)) {
+
+            StaffSalary::where('payroll_id', $payout_id)->update(['status' => 'inactive']);
+
+            foreach ($payout_data as $key => $value) {
+                $other_description = '';
                 if ($value->appointment->employment_nature->id) {
 
                     $nature_id = $value->appointment->employment_nature->id;
@@ -338,6 +344,23 @@ class OverviewController extends Controller
                                 }
 
                                 $deduction += $deduct_amount;
+                            } else if( trim( strtolower($sitem->short_name)) == 'other') {
+
+                                $other_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                                /**
+                                 * get leave deduction amount
+                                 */
+                                $leave_amount_day = getStaffLeaveDeductionAmount( $value->id, $date ) ?? 0;
+                                $leave_amount = 0;
+                                if( $leave_amount_day ) {
+                                    $leave_amount = getDaySalaryAmount($gross, $month_length);
+                                    $leave_amount = $leave_amount * $leave_amount_day;
+                                    $other_description = $leave_amount_day > 1 ? $leave_amount_day.' days' : $leave_amount_day.'day';
+                                    $other_description .= ' leave amount deducted';
+                                }
+                                $other_amount += $leave_amount;
+
+                                $deduction += $other_amount;
                             } else {
                                 $deduct_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
                                 $deduction += $deduct_amount;
@@ -355,6 +378,7 @@ class OverviewController extends Controller
 
                 if ($earnings == $gross && !empty($used_fields)) {
 
+
                     $staff_id = $value->id;
 
                     $sal['staff_id'] = $staff_id;
@@ -366,6 +390,7 @@ class OverviewController extends Controller
                     $sal['salary_pattern_id'] = $value->currentSalaryPattern->id;
                     $sal['working_days'] = $working_day;
                     $sal['worked_days'] = $value->workedDays->count();
+                    $sal['other_description'] = $other_description;
                     $salary_info = StaffSalary::updateOrCreate(['staff_id' => $staff_id, 'payroll_id' => $payout_id], $sal);
 
                     /**
@@ -456,7 +481,7 @@ class OverviewController extends Controller
                         ->when( !empty( $staff_id ), function( $query ) use($staff_id) {
                             $query->where('staff_id', $staff_id);
                         } )
-                        
+                        ->where('status', 'active')
                         ->get();
 
         $params = [

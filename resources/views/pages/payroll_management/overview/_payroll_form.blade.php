@@ -143,9 +143,11 @@
                                     </div>
                                 @endif
                             </div>
-                            <div id="income_tax_approved" class="w-30 d-flex justify-content-center align-items-center">
+                            <div id="income_tax_approved"
+                                class="w-30 d-flex justify-content-center align-items-center">
                                 <div>
-                                    <a class="btn btn-light-primary btn-sm small" href="{{ route('it-calculation') }}">
+                                    <a class="btn btn-light-primary btn-sm small"
+                                        href="{{ route('it-calculation') }}">
                                         Go to Income Tax
                                     </a>
                                 </div>
@@ -158,15 +160,45 @@
                             </div>
                         </div>
 
-                        <div class="form-group p-2">
+                        <div class="d-flex border-bottom mb-3 p-3">
+                            <div class="form-group p-2 w-30">
+                                <input type="checkbox" id="hold_salary" onchange="setCompleted(this)"
+                                    name="payroll_points[]" value="hold_salary">
+                                <label for="hold_salary" class="mx-3"> Checked Hold Salary </label>
+                                <input type="hidden" name="hold_salary" id="hold_salary" value="">
+                            </div>
+                            <div class="w-50 d-flex" id="hold_salary_pane">
+                                <div class="px-2 border border-2">
+                                    <div class="small">
+                                        Hold Salary Employee
+                                    </div>
+                                    <div class="text-muted">    
+                                        {{ $hold_salary_employee->count() }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="hold_salary_approved"
+                                class="w-30 d-flex justify-content-center align-items-center">
+                                <div>
+                                    <a class="btn btn-light-primary btn-sm small"
+                                        href="{{ route('it-calculation') }}">
+                                        Go to Hold Salary
+                                    </a>
+                                </div>
+                            </div>
+                            <div id="hold_salary_message"
+                                class="w-30 d-none p-1 d-flex justify-content-center text-danger small align-items-center">
+                                <div>
+                                    Hold salary Staff will not receive salary untill release salary.
+                                </div>
+                            </div>
+                        </div>
+                      
+                        {{-- <div class="form-group p-2">
                             <input type="checkbox" id="resigned" name="payroll_points[]" value="resigned">
                             <label for="resigned" class="mx-3"> Resigned </label>
-                        </div>
+                        </div> --}}
 
-                        <div class="form-group p-2">
-                            <input type="checkbox" id="hold_salary" name="payroll_points[]" value="hold_salary">
-                            <label for="hold_salary" class="mx-3"> Checked Hold Salary </label>
-                        </div>
                     </div>
                 </div>
 
@@ -192,7 +224,7 @@
 
 <script>
     function setCompleted(element) {
-        console.log(element, 'element');
+        // console.log(element, 'element');
         var id_name = $(element).attr('id');
         if ($(element).is(':checked')) {
 
@@ -208,7 +240,8 @@
     }
 
     function doPayrollProcess() {
-        var total_check = 5;
+
+        var total_check = 4;
         var arrays = []
         var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
 
@@ -227,7 +260,7 @@
             toastr.error('Error', 'Can not continue Payroll process. Please complete all income tax entries');
             return false;
         }
-        
+
         $('#checklist_form').submit();
     }
 </script>

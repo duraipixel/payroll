@@ -36,11 +36,13 @@
             <h3> Payroll Processing for Month {{ date('d/M/Y', strtotime($date)) }} </h3>
             @php
                 $month = date('F', strtotime($date));
+                $month_length = date('t', strtotime($date));
             @endphp
         </div>
         <div class="card-body py-4" id="dynamic_content_test">
             <div class="text-end">
-                <button class="btn btn-info my-3" type="button" onclick="return changeSalaryDetails('{{ $date }}')"> Change Salary Details </button>
+                <button class="btn btn-info my-3" type="button" onclick="return changeSalaryDetails('{{ $date }}')">
+                    Change Salary Details </button>
             </div>
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="table-responsive">
@@ -56,7 +58,8 @@
                                 <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
                                     <th class="px-3 text-primary sticky-col first-col">
                                         <div>
-                                            <input role="button" type="radio" name="change_revision" value="none" id="select_all">
+                                            <input role="button" type="radio" name="change_revision" value="none"
+                                                id="select_all">
                                         </div>
                                     </th>
                                     <th class="px-3 text-primary sticky-col second-col">
@@ -146,12 +149,33 @@
                                                 </td>
                                             @endif
                                             @if (isset($deductions_field) && !empty($deductions_field))
-                                                @foreach ($deductions_field as $sitem)
+                                            @foreach ($deductions_field as $sitem)
+                                            
                                                     @if ($sitem->short_name == 'IT')
                                                         <td class="px-3">
                                                             {{ staffMonthTax($item->id, strtolower($month)) }}
                                                             @php
                                                                 $deduction += staffMonthTax($item->id, strtolower($month));
+                                                            @endphp
+                                                        </td>
+                                                    @elseif( trim( strtolower($sitem->short_name)) == 'other')
+                                                        <td class="px-3">
+                                                            @php
+                                                                $other_amount = getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                                                                /**
+                                                                 * get leave deduction amount
+                                                                 */
+                                                                $leave_amount_day = getStaffLeaveDeductionAmount( $item->id, $date ) ?? 0;
+                                                                $leave_amount = 0;
+                                                                if( $leave_amount_day ) {
+                                                                    $leave_amount = getDaySalaryAmount($gross, $month_length);
+                                                                    $leave_amount = $leave_amount * $leave_amount_day;
+                                                                }
+                                                                $other_amount += $leave_amount;
+                                                            @endphp
+                                                            {{ $other_amount }}
+                                                            @php
+                                                                $deduction += $other_amount;
                                                             @endphp
                                                         </td>
                                                     @else
@@ -184,7 +208,7 @@
                         </table>
                         <input type="hidden" name="total_net_pay" value="{{ $total_net_pay }}">
                     </form>
-                </div> 
+                </div>
                 <div class="w-100 text-end mt-3">
                     <label for="" class="text-end fs-3 fw-bold">
                         Total Pay : Rs. {{ $total_net_pay }}
@@ -202,8 +226,8 @@
             </div>
         </div>
         <div class="position-absolute w-100 h-100 bg-white d-none" id="payroll-loading">
-    
-            <div class="h-400px d-flex justify-content-center align-items-center bg-white" >
+
+            <div class="h-400px d-flex justify-content-center align-items-center bg-white">
                 <img src="{{ asset('assets/images/payroll-loading.gif') }}" width="200" alt="">
                 <div class="text-muted">
                     Please wait while creating Payroll
@@ -246,10 +270,10 @@
                         success: function(res) {
                             $('#payroll-loading').addClass('d-none');
 
-                            if( res.error == 1 ) {
-                                toastr.error( 'Error', res.message );
+                            if (res.error == 1) {
+                                toastr.error('Error', res.message);
                             } else {
-                                toastr.success( 'Success', res.message );
+                                toastr.success('Success', res.message);
                                 $('#dynamic_content_test').html(res.html);
                             }
 
@@ -267,16 +291,17 @@
         function changeSalaryDetails(date) {
 
             var change_revision = $('input[name="change_revision"]:checked').val();
-            
-            if( change_revision == '' || change_revision == 'undefined' || change_revision == 'none' || typeof(change_revision) == 'undefined' ) {
+
+            if (change_revision == '' || change_revision == 'undefined' || change_revision == 'none' || typeof(
+                    change_revision) == 'undefined') {
                 toastr.error('Error', 'Please select Employee to continue');
                 return false;
             } else {
-                
-                let urls = "{{ url('salary/creation/') }}"+'/'+change_revision;
+
+                let urls = "{{ url('salary/creation/') }}" + '/' + change_revision;
                 console.log(urls);
                 // window.open(urls);
-                location.href=urls;
+                location.href = urls;
             }
         }
     </script>

@@ -141,6 +141,11 @@
                         </div>
                         @if (isset($info) && !empty($info))
                             <div class="row">
+                                <div class="col-sm-12">
+                                    <label for="" class="text-warning">
+                                        Maternity Leave is only applicable for female staff
+                                    </label>
+                                </div>
                                 <div class="col-sm-8">
                                     <h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - {{ count($taken_leave) }} </h6>
                                     @if( isset( $taken_leave ) && count( $taken_leave ) > 0 )

@@ -7,7 +7,9 @@
         </div>
     </div>
     @php
-        // dd( $staff_details->staffSeperation  );
+    
+        $payout_month = $salary_pattern->payout_month;
+        
         $tax_payment = $statement_data->total_income_tax_payable;
         $round_off_taxable_gross_income = $statement_data->round_off_taxable_gross_income;
         $month_salary = $round_off_taxable_gross_income / 12;
@@ -23,91 +25,94 @@
                     <th class="p-2"> Tax Payable </th>
                     <th class="p-2"> {{ $tax_payment }} </th>
                 </tr>
+                @foreach (getAprilToMarch() as $item)
+                    
                 <tr>
-                    <th class="p-2"> Apr </th>
+                    <th class="p-2"> {{ ucfirst($item) }} </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->april ?? 0 }}" @if( isset($staff_details->staffSeperation->april) && !empty( $staff_details->staffSeperation->april ) ) readonly @endif name="apr_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->$item ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->$item) && !empty( $statement_data->staffTaxSeparation->$item ) ) readonly @endif name="apr_amount">
                     </td>
                 </tr>
-                <tr>
+                @endforeach
+                {{-- <tr>
                     <th class="p-2"> May </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->may ?? 0 }}" @if( isset($staff_details->staffSeperation->may) && !empty( $staff_details->staffSeperation->may ) ) readonly @endif name="may_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->may ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->may) && !empty( $statement_data->staffTaxSeparation->may ) ) readonly @endif name="may_amount">
                     </td>
                 </tr>
                 <tr>
                     <th class="p-2"> Jun </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->june ?? 0 }}" @if( isset($staff_details->staffSeperation->june) && !empty( $staff_details->staffSeperation->june ) ) readonly @endif name="jun_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->june ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->june) && !empty( $statement_data->staffTaxSeparation->june ) ) readonly @endif name="jun_amount">
                     </td>
                 </tr>
                 <tr>
                     <th class="p-2"> Jul </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->july ?? 0 }}" @if( isset($staff_details->staffSeperation->july) && !empty( $staff_details->staffSeperation->july ) ) readonly @endif name="jul_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->july ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->july) && !empty( $statement_data->staffTaxSeparation->july ) ) readonly @endif name="jul_amount">
                     </td>
                 </tr>
                 <tr>
                     <th class="p-2"> Aug </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->august ?? 0 }}" @if( isset($staff_details->staffSeperation->august) && !empty( $staff_details->staffSeperation->august ) ) readonly @endif name="aug_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->august ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->august) && !empty( $statement_data->staffTaxSeparation->august ) ) readonly @endif name="aug_amount">
                     </td>
                 </tr>
                 <tr>
                     <th class="p-2"> Sep </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->september ?? 0 }}" @if( isset($staff_details->staffSeperation->september) && !empty( $staff_details->staffSeperation->september ) ) readonly @endif name="sep_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->september ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->september) && !empty( $statement_data->staffTaxSeparation->september ) ) readonly @endif name="sep_amount">
                     </td>
                 </tr>
                 <tr>
                     <th class="p-2"> Oct </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->october ?? 0 }}" @if( isset($staff_details->staffSeperation->october) && !empty( $staff_details->staffSeperation->october ) ) readonly @endif name="oct_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->october ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->october) && !empty( $statement_data->staffTaxSeparation->october ) ) readonly @endif name="oct_amount">
                     </td>
                 </tr>
                 <tr>
                     <th class="p-2"> Nov </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->november ?? 0 }}" @if( isset($staff_details->staffSeperation->november) && !empty( $staff_details->staffSeperation->november ) ) readonly @endif name="nov_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->november ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->november) && !empty( $statement_data->staffTaxSeparation->november ) ) readonly @endif name="nov_amount">
                     </td>
                 </tr>
                 <tr>
                     <th class="p-2"> Dec </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->december ?? 0 }}" @if( isset($staff_details->staffSeperation->december) && !empty( $staff_details->staffSeperation->december ) ) readonly @endif name="dec_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->december ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->december) && !empty( $statement_data->staffTaxSeparation->december ) ) readonly @endif name="dec_amount">
                     </td>
                 </tr>
                 <tr>
                     <th class="p-2"> Jan </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->january ?? 0 }}" @if( isset($staff_details->staffSeperation->january) && !empty( $staff_details->staffSeperation->january ) ) readonly @endif name="jan_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->january ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->january) && !empty( $statement_data->staffTaxSeparation->january ) ) readonly @endif name="jan_amount">
                     </td>
                 </tr>
                 <tr>
                     <th class="p-2"> Feb </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->february ?? 0 }}" @if( isset($staff_details->staffSeperation->february) && !empty( $staff_details->staffSeperation->february ) ) readonly @endif name="feb_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->february ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->february) && !empty( $statement_data->staffTaxSeparation->february ) ) readonly @endif name="feb_amount">
                     </td>
                 </tr>
                 <tr>
                     <th class="p-2"> Mar </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $staff_details->staffSeperation->march ?? 0 }}" @if( isset($staff_details->staffSeperation->march) && !empty( $staff_details->staffSeperation->march ) ) readonly @endif name="mar_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->march ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->march) && !empty( $statement_data->staffTaxSeparation->march ) ) readonly @endif name="mar_amount">
                     </td>
-                </tr>
-                @if( isset($staff_details->staffSeperation->march) && !empty( $staff_details->staffSeperation->march ) )
+                </tr> --}}
+                @if( isset($statement_data->staffTaxSeparation->march) && !empty( $statement_data->staffTaxSeparation->march ) )
                 @else 
                 <tr>
                     <th class="p-2"> Balance </th>
@@ -119,7 +124,7 @@
 
             </table>
             <div class="col-sm-12 text-end mt-3">
-                @if( isset($staff_details->staffSeperation->march) && !empty( $staff_details->staffSeperation->march ) )
+                @if( isset($statement_data->staffTaxSeparation->march) && !empty( $statement_data->staffTaxSeparation->march ) )
                 @else 
                 <button type="button" id="tax_btn" class="btn btn-primary btn-sm d-none" onclick="submitTaxSeperationCalc()"> Save </button>
                 @endif

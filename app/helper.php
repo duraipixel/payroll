@@ -1074,3 +1074,37 @@ function getStartAndEndDateOfMonth($month)
 function placeOfWork(){
     return PlaceOfWork::latest()->get();
 }
+
+
+function getAprilToMarch()
+{
+    $startMonth = 'April';
+    $endMonth = 'March';
+
+    // Create DateTime objects for the start and end months
+    $startDate = new DateTime($startMonth);
+    $endDate = new DateTime($endMonth);
+
+    // If the end month comes before the start month, it means we need to go to the next year
+    if ($endDate < $startDate) {
+        $endDate->modify('+1 year');
+    }
+
+    // Adjust the start month to the 1st of April of the current year
+    $startDate->modify('first day of April this year');
+
+    // Initialize an array to store the months
+    $months = [];
+
+    // Create a DatePeriod object to loop through the months
+    $interval = new DateInterval('P1M');
+    $dateRange = new DatePeriod($startDate, $interval, $endDate);
+
+    // Loop through the months and store them in the array
+    foreach ($dateRange as $date) {
+        $months[] = strtolower($date->format('F')); // 'F' format returns the full month name
+    }
+
+    // Output the months
+    return $months;
+}

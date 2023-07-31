@@ -68,4 +68,8 @@ class ItStaffStatement extends Model implements Auditable
         return $this->hasOne(Designation::class, 'id', 'designation_id' );
     }
 
+    public function staffTaxSeparation() {
+        return $this->hasOne(StaffTaxSeperation::class, 'income_tax_id', 'id');
+    }
+
 }

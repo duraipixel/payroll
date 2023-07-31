@@ -30,7 +30,9 @@ class StaffSalary extends Model
         'payroll_id',
         'working_days',
         'worked_days',
-        'leave_days'
+        'leave_days',
+        'other_description',
+        'employee_description'
     ];
 
     public function fields()
