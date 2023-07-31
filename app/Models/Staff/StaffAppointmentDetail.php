@@ -12,10 +12,11 @@ use App\Models\Master\PlaceOfWork;
 use App\Models\Master\StaffCategory;
 use App\Models\Master\TeachingType;
 use App\Models\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StaffAppointmentDetail extends Model implements Auditable
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [

@@ -259,7 +259,7 @@ class StaffAppointmentDetailController extends Controller
                 $info->save();
             } else {
                 
-                $academic_id = academicYearId();
+                $academic_id = $request->academic_id ?? academicYearId();
 
                 $staff_id = $request->staff_id;
                 $staff_info = User::find($staff_id);
