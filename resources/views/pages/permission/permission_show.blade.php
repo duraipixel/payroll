@@ -892,6 +892,88 @@
                     <input type="hidden" name="master_row_count" id="master_row_count"
                         value="{{ $master_row }}">
                 </div>
+
+                <br>
+                {{-- report menu --}}
+                <div class="col-12 pb-3">
+                    <h4> <strong>Reports Menu</strong>
+                        <input type="checkbox" name="report_select_all"
+                            @if ($report_select_all == 1) checked @endif id="report_select_all"
+                            onclick="report_select_all_func();">
+                    </h4>
+                </div>
+                <div class="row justify-content-start">
+                    <div class="row mb-6">
+                        <div class="col-1">
+                            <b>Sl.No</b>
+                        </div>
+                        <div class="col-1"></div>
+                        <div class="col-5">
+                            <strong>Menu</strong>
+                        </div>
+                      
+                        <div class="col-1">
+                            <strong>View</strong>
+                        </div>
+                        
+                        <div class="col-1">
+                            <strong>Export</strong>
+                        </div>
+                    </div>
+                    @php
+                        $i = 1;
+                        $report_row = 0;
+                    @endphp
+                    @foreach ($report_menu as $key => $report_menus)
+                        <div class="row mb-6">
+                            <div class="col-1">
+                                {{ $i }}
+                            </div>
+                           
+                            @php
+                                $view_val = permissionCheck($role_id, $key, 'view');
+                            @endphp
+                          
+                            @php
+                                $export_val = permissionCheck($role_id, $key, 'export');
+                            @endphp
+                            @php
+                                $key_value = dotReplaceUnderscore($key);
+                            @endphp
+                            <div class="col-1">
+                                <input type="checkbox" class="report_checkox"
+                                    name="report_select_all_row_wise_{{ $i }}"
+                                    @if ($add_val == 1 && $view_val == 1 && $delete_val == 1 && $export_val == 1) checked @endif
+                                    id="report_select_all_row_wise_{{ $i }}"
+                                    onclick="report_row({{ $i }});">
+                            </div>
+                            <div class="col-5">
+                                <span class="pl-3"> {{ $report_menus }}</span>
+                                <input type="hidden" name="menu_name[]" id="menu_name"
+                                    value="{{ $key }}">
+                            </div>
+                           
+                            <div class="col-1">
+                                <input type="checkbox" class="report_checkox" name="{{ $key_value }}_view"
+                                    @if ($view_val == 1) checked @endif value="1"
+                                    id="report_view_{{ $i }}">
+                            </div>
+                            
+                            <div class="col-1">
+                                <input type="checkbox" class="report_checkox" name="{{ $key_value }}_export"
+                                    value="1" @if ($export_val == 1) checked @endif
+                                    id="report_export_{{ $i }}">
+                            </div>
+                        </div>
+                        @php
+                            $i++;
+                            $report_row++;
+                        @endphp
+                    @endforeach
+
+                    <input type="hidden" name="report_row_count" id="report_row_count"
+                        value="{{ $report_row }}">
+                </div>
                 <div class="form-group mb-10 text-end">
                     <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
                     <button type="submit" class="btn btn-primary" id="">
@@ -1279,6 +1361,36 @@
     }
 
 
+    function report_row(i) {
+        var select_all_row_wise = document.getElementById("report_select_all_row_wise_" + i);
+        if (select_all_row_wise.checked == true) {
+            document.getElementById("report_view_" + i).checked = true;
+            document.getElementById("report_export_" + i).checked = true;
+        } else {
+            console.log('row wise uncheck');
+            document.getElementById("report_view_" + i).checked = false;
+            document.getElementById("report_export_" + i).checked = false;
+            $("#report_select_all").prop("checked", false);
+        }
+    }
+
+    function report_select_all_func() {
+        var report_selectall = document.getElementById("report_select_all");
+        var row_count = $("#report_row_count").val();
+        if (report_selectall.checked == true) {
+            for (let i = 1; i <= row_count; i++) {
+                document.getElementById("report_select_all_row_wise_" + i).checked = true;
+                document.getElementById("report_view_" + i).checked = true;
+                document.getElementById("report_export_" + i).checked = true;
+            }
+        } else {
+            for (let j = 1; j <= row_count; j++) {
+                document.getElementById("report_select_all_row_wise_" + j).checked = false;
+                document.getElementById("report_view_" + j).checked = false;
+                document.getElementById("report_export_" + j).checked = false;
+            }
+        }
+    }
 
     $(document).ready(function() {
         //account  check box start

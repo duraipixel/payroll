@@ -32,6 +32,7 @@ class PermissionController extends Controller
         $leave_management = config('services.leave_management');
         $payroll_management = config('services.payroll_management');
         $master_menu = config('services.master_menu');
+        $report_menu = config('services.reports');
         $account_select_all=permissionCheckAll($role_id,$account);
         $auth_select_all=permissionCheckAll($role_id,$authentication);
         $sm_select_all=permissionCheckAll($role_id,$staff_management);
@@ -41,6 +42,7 @@ class PermissionController extends Controller
         $lm_select_all=permissionCheckAll($role_id,$leave_management);
         $pm_select_all=permissionCheckAll($role_id,$payroll_management);
         $master_select_all=permissionCheckAll($role_id,$master_menu);
+        $report_select_all=permissionCheckAll($role_id,$report_menu);
         $data=[
             'role_id'                   => $role_id,
             'form_type'                 => $form_type,
@@ -53,6 +55,7 @@ class PermissionController extends Controller
             'leave_management'          => $leave_management,
             'payroll_management'        => $payroll_management,
             'master_menu'               => $master_menu,
+            'report_menu'               => $report_menu,
             'account_select_all'        => $account_select_all,
             'auth_select_all'           => $auth_select_all,
             'sm_select_all'             => $sm_select_all,
@@ -62,6 +65,7 @@ class PermissionController extends Controller
             'lm_select_all'             => $lm_select_all,
             'pm_select_all'             => $pm_select_all,
             'master_select_all'         => $master_select_all,
+            'report_select_all'         => $report_select_all,
         ];
         return view('pages.permission.permission_show', $data); 
         }
