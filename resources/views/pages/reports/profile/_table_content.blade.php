@@ -1,6 +1,5 @@
 @if (isset($details) && !empty($details))
     @foreach ($details as $item)
-        
         <tr>
             <td>
                 {{ $loop->iteration }}

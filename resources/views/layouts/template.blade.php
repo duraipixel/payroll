@@ -24,31 +24,40 @@
             @include('layouts.sidemenu')
             <!--end::Aside-->
             <!--begin::Wrapper-->
-            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-                <!--begin::Header-->
-                @include('layouts.header')
-                <!--end::Header-->
-                <!--begin::Header-->
-                @include('layouts._header_menu')
-                <!--end::Header-->
-                <!--begin::Content-->
-                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-                    {{-- @include('layouts.parts.toolbar') --}}
-                    <!--begin::Post-->
-                    <div class="post p-3" id="kt_post">
-                        <!--begin::Container-->
-                        <div id="kt_content_container">
-                            @yield('content')
-                        </div>
-                        <!--end::Container-->
+            @if (request()->route()->getAction()['prefix'] ?? false)
+                <div class="wrapper pt-0 d-flex flex-column flex-row-fluid">
+                    <div class="content m-0">
+                        @yield('content')
                     </div>
-                    <!--end::Post-->
+                    @include('layouts.footer')
                 </div>
-                <!--end::Content-->
-                <!--begin::Footer-->
-                @include('layouts.footer')
-                <!--end::Footer-->
-            </div>
+            @else
+                <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+                    <!--begin::Header-->
+                    @include('layouts.header')
+                    <!--end::Header-->
+                    <!--begin::Header-->
+                    @include('layouts._header_menu')
+                    <!--end::Header-->
+                    <!--begin::Content-->
+                    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+                        <!--begin::Post-->
+                        <div class="post p-3" id="kt_post">
+                            <!--begin::Container-->
+                            <div id="kt_content_container">
+                                @yield('content')
+                            </div>
+                            <!--end::Container-->
+                        </div>
+                        <!--end::Post-->
+                    </div>
+                    <!--end::Content-->
+                    <!--begin::Footer-->
+                    @include('layouts.footer')
+                    <!--end::Footer-->
+                </div>
+            @endif
             <!--end::Wrapper-->
         </div>
         <!--end::Page-->

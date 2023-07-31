@@ -5,66 +5,67 @@
             padding: 10px;
         }
     </style>
-    <div class="card">
-        <div class="card-header border-0 pt-6">
-            <div class="card-title">
-                {{-- <div class="d-flex align-items-center position-relative my-1">
-                {!! searchSvg() !!}
-                <input type="text" data-kt-user-table-filter="search" id="board_dataTable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search University">
+    <div class="p-3">
+        <div class="text-center lead fw-bold my-3">Staff Report</div>
+        <div class="card border shadow m-0">
+            {{-- <div class="card-header border-0 pt-6">
+                <div class="card-title">
+                    <div class="d-flex align-items-center position-relative my-1">
+                        {!! searchSvg() !!}
+                        <input type="text" data-kt-user-table-filter="search" id="board_dataTable_search"
+                            class="form-control form-control-solid w-250px ps-14" placeholder="Search University">
+                    </div>
+                </div>
+                <div class="card-toolbar">
+                    <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                        <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('reports.export') }}">
+                            {!! exportSvg() !!}
+                            Export
+                        </a>
+                    </div>
+                </div>
             </div> --}}
-            </div>
-            <div class="card-toolbar">
-                {{-- <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
-                    <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('reports.export') }}">
-                        {!! exportSvg() !!}
-                        Export
-                    </a>
+            <div class="card-body py-4">
+                <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-hover table-bordered table-striped fs-7 no-footer"
+                            id="profile_table">
+                            <thead class="bg-primary text-white align-middle">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Image</th>
+                                    <th>Staff Name</th>
+                                    <th>Emp Code</th>
+                                    <th>Inst Emp Code</th>
+                                    <th>DOB</th>
+                                    <th>Gender</th>
+                                    <th>Designation</th>
+                                    {{-- <th>Place Of Work</th> --}}
+                                    <th>Mother Tongue</th>
+                                    <th>Phone Number</th>
+                                    <th>Whatsapp Number</th>
+                                    <th>Emergency Number</th>
+                                    <th>Place of Birth</th>
+                                    <th>Nationality</th>
+                                    <th>Religion</th>
+                                    <th>Caste</th>
+                                    <th>Community</th>
+                                    <th>Contact Address</th>
+                                    <th>Permanent Address</th>
+                                    <th>Marital Status</th>
+                                    <th>Marriage Date</th>
+                                    {{-- <th>Adhaar</th>
+                                    <th> Pan Card </th>
+                                    <th> Ration Card </th>
+                                    <th> Voter ID </th> --}}
+                                </tr>
+                            </thead>
 
-                </div> --}}
-            </div>
-        </div>
-
-        <div class="card-body py-4">
-            <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                <div class="table-responsive">
-                    <table class="table align-middle table-hover table-bordered table-striped fs-7 no-footer"
-                        id="profile_table">
-                        <thead class="bg-primary text-white align-middle">
-                            <tr>
-                                <th>No</th>
-                                <th>Image</th>
-                                <th>Staff Name</th>
-                                <th>Emp Code</th>
-                                <th>Inst Emp Code</th>
-                                <th>DOB</th>
-                                <th>Gender</th>
-                                <th>Designation</th>
-                                {{-- <th>Place Of Work</th> --}}
-                                <th>Mother Tongue</th>
-                                <th>Phone Number</th>
-                                <th>Whatsapp Number</th>
-                                <th>Emergency Number</th>
-                                <th>Place of Birth</th>
-                                <th>Nationality</th>
-                                <th>Religion</th>
-                                <th>Caste</th>
-                                <th>Community</th>
-                                <th>Contact Address</th>
-                                <th>Permanent Address</th>
-                                <th>Marital Status</th>
-                                <th>Marriage Date</th>
-                                {{-- <th>Adhaar</th>
-                                <th> Pan Card </th>
-                                <th> Ration Card </th>
-                                <th> Voter ID </th> --}}
-                            </tr>
-                        </thead>
-
-                        <tbody class="text-gray-600 fw-bold" id="profile_report_content">
-                        </tbody>
-                    </table>
+                            <tbody class="text-gray-600 fw-bold" id="profile_report_content">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
