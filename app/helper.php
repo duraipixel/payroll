@@ -22,6 +22,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Role\Permission;
 use App\Helpers\AccessGuard;
+use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\ItTabulation;
 use App\Models\Master\Institution;
@@ -1109,3 +1110,42 @@ function getAprilToMarch()
     // Output the months
     return $months;
 }
+
+
+function getStaffLeaveDeductionAmount($staff_id, $date)
+{
+
+    $attendance_date = date('Y-m-d', strtotime($date . '-1 month'));
+    $start_date = date('Y-m-1',  strtotime($attendance_date));
+    $ends_date = date('Y-m-t',  strtotime($attendance_date));
+    $attendance_status = 'Absence';
+
+    $data = AttendanceManualEntry::select('attendance_manual_entries.*', 'users.name as staff_name', 'leave_statuses.name as leave_status_name')
+        ->leftJoin('users', 'users.id', '=', 'attendance_manual_entries.employment_id')
+        ->leftJoin('leave_statuses', 'leave_statuses.id', '=', 'attendance_manual_entries.attendance_status_id')
+        ->where('attendance_date', '>=', $start_date)
+        ->where('attendance_date', '<=', $ends_date)
+        ->where('employment_id', $staff_id)
+        ->when(!empty($attendance_status), function ($q) use ($attendance_status) {
+            $q->where('attendance_status', $attendance_status);
+        })->get();
+
+    $deduction_day = 0;
+    if (isset($data) && !empty($data)) {
+        foreach ($data as $row) {
+            $status = getStaffLeaveRequestStatus($row->employment_id, $row->attendance_date);
+
+            if ($status != 'Leave Approved') {
+                $deduction_day += 1;
+            }
+        }
+    }
+    // dump( $deduction_day );
+    return $deduction_day;
+}
+
+function getDaySalaryAmount($gross, $month_length)
+{
+    return round($gross / $month_length);
+}
+
