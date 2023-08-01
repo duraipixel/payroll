@@ -69,6 +69,7 @@ class PayrollChecklistRepository extends Controller
         $response['pending_it'] = User::join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
             ->where('verification_status', 'approved')
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
+            ->where('it_staff_statements.status', 'active')
             ->whereNull('is_super_admin')->count();
         $process = false;
         if ($response['verified_user'] == $response['pending_it']) {

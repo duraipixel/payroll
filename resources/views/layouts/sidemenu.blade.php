@@ -1155,7 +1155,10 @@
                 @endif
                 @if (access()->hasAccess(['reports.profile']))
                     @foreach (reportMenu() as $name => $reports)
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                    @php
+                        $in_routes = array_column($reports, 'route');
+                    @endphp
+                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion @if( request()->routeIs($in_routes)) hover show @endif">
                             <span class="menu-link">
                                 <span class="menu-icon">
                                     <i class="fa fa-print"></i>
@@ -1167,7 +1170,7 @@
                                 @if (count($reports))
                                     @foreach ($reports as $report)
                                         <div class="menu-item">
-                                            <a class="menu-link" href="{{ route($report['route']) }}">
+                                            <a class="menu-link @if (request()->routeIs([$report['route']])) active @endif" href="{{ route($report['route']) }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>

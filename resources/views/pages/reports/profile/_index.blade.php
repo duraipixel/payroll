@@ -36,7 +36,8 @@
                                     <th>No</th>
                                     <th>Image</th>
                                     <th>Staff Name</th>
-                                    <th>Emp Code</th>
+                                    <th>Old Emp Code</th>
+                                    <th>Society Emp Code</th>
                                     <th>Inst Emp Code</th>
                                     <th>DOB</th>
                                     <th>Gender</th>

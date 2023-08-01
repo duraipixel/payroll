@@ -10,6 +10,7 @@
                 @endif
             </td>
             <td>{{ $item->name ?? '' }}</td>
+            <td>{{ $item->emp_code ?? '' }}</td>
             <td>{{ $item->society_emp_code ?? '' }}</td>
             <td> {{ $item->institute_emp_code ?? '' }}</td>
             <td>{{ isset($item->personal->dob) && !empty( $item->personal->dob) ? commonDateFormat($item->personal->dob) : '-'  }}</td>

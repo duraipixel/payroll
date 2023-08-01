@@ -8,6 +8,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports'],  function () {
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],  function () {
-    Route::get('/', [ReportController::class, 'profileReports'])->name('reports.profile');
+    Route::get('/profile', [ReportController::class, 'profileReports'])->name('reports.profile');
     Route::get('/attendance', [ReportController::class, 'attendance_index'])->name('reports.attendance');
 });
