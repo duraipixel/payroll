@@ -25,7 +25,9 @@
             <!--end::Aside-->
             <!--begin::Wrapper-->
             @if (request()->route()->getAction()['prefix'] ?? false)
-                <div class="wrapper pt-0 d-flex flex-column flex-row-fluid">
+                <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+                    @include('layouts.header')
+
                     <div class="content m-0">
                         @yield('content')
                     </div>
