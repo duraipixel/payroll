@@ -127,7 +127,7 @@ class BankLoanController extends Controller
                 ),
             )
         );
-        $employees = User::where('status', 'active')->whereNull('is_super_admin')->get();
+        $employees = User::where('status', 'active')->whereNull('is_super_admin')->orderBy('name', 'asc')->get();
         return view('pages.payroll_management.lic.index', compact('breadcrums', 'employees'));
 
     }
@@ -157,10 +157,10 @@ class BankLoanController extends Controller
         
         if ($validator->passes()) {
             $id = $request->id ?? '';
-            $staff_id = $request->staff_id;
+            $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
             $staff_info = User::find($staff_id);
             
-            $ins['staff_id'] = $request->staff_id;
+            $ins['staff_id'] = $staff_id;
             $ins['insurance_name'] = $request->insurance_name;
             $ins['policy_no'] = $request->policy_no;
             $ins['maturity_date'] = $request->policy_date;

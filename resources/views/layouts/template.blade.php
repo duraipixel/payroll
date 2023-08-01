@@ -39,7 +39,9 @@
                     @include('layouts.header')
                     <!--end::Header-->
                     <!--begin::Header-->
-                    @include('layouts._header_menu')
+                    @if (access()->buttonAccess('staff.list', 'add_edit'))
+                        @include('layouts._header_menu')
+                    @endif
                     <!--end::Header-->
                     <!--begin::Content-->
                     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">

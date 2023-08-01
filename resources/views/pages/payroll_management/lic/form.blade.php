@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
-                <input type="hidden" name="staff_id" id="staff_id" value="{{ $id ?? ($info->staff_id ?? '') }}">
+                <input type="hidden" name="staff_id" id="emp_staff_id"  value="{{ $id ?? ($info->staff_id ?? '') }}">
                 <input type="hidden" name="id" id="id" value="{{ $info->id ?? '' }}">
                 <label for="" class="required">Insurance Company</label>
                 <input type="text" name="insurance_name" id="insurance_name"

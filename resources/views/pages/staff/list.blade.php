@@ -54,6 +54,7 @@
                 $route_name = request()
                     ->route()
                     ->getName();
+                    
             @endphp
 
             @if (access()->buttonAccess($route_name, 'add_edit'))
