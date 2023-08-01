@@ -151,6 +151,7 @@ class IncomeTaxCalculationController extends Controller
                     return $query->where('deleted_at', NULL)
                         ->where('staff_id', $staff_id)
                         ->where('academic_id', $academic_id)
+                        ->where('status', 'active')
                         ->when($id != '', function ($q) use ($id) {
                             return $q->where('id', '!=', $id);
                         });

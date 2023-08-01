@@ -13,7 +13,7 @@
         }
 
         .salary-selection .select2-container {
-            width: 300px !important;
+            width: 400px !important;
             text-align: center;
         }
     </style>

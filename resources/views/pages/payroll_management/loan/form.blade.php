@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
-                <input type="hidden" name="staff_id" id="staff_id" value="{{ $id ?? ($loan_info->staff_id ?? '') }}">
+                <input type="hidden" name="staff_id" id="emp_staff_id" value="{{ $id ?? ($loan_info->staff_id ?? '') }}">
                 <input type="hidden" name="id" id="id" value="{{ $loan_info->id ?? '' }}">
                 <label for="" class="required">Bank</label>
                 <select name="bank_id" id="bank_id" class="form-control">

@@ -56,10 +56,10 @@ class BankLoanController extends Controller
 
         if ($validator->passes()) {
             $id = $request->id ?? '';
-            $staff_id = $request->staff_id;
+            $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
             $staff_info = User::find($staff_id);
             $bank_info = Bank::find($request->bank_id);
-            $ins['staff_id'] = $request->staff_id;
+            $ins['staff_id'] = $staff_id;
             $ins['bank_id'] = $request->bank_id;
             $ins['bank_name'] = $bank_info->name;
             $ins['ifsc_code'] = $request->ifsc_code;

@@ -592,6 +592,19 @@
                                 </div>
                             </div>
                         @endif
+                        @if (access()->hasAccess('other-income', 'view'))
+                            <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                <div class="menu-item">
+                                    <a class="menu-link  @if (request()->routeIs(['other-income'])) active @endif"
+                                        href="{{ route('other-income') }}">
+                                        <span class="menu-bullet">
+                                            <span class="bullet bullet-dot"></span>
+                                        </span>
+                                        <span class="menu-title">Other Income</span>
+                                    </a>
+                                </div>
+                            </div>
+                        @endif
                         @if (access()->hasAccess('professional-tax', 'view'))
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
                                 <div class="menu-item">
@@ -683,19 +696,7 @@
                                 </div>
                             </div>
                         @endif
-                        @if (access()->hasAccess('other-income', 'view'))
-                            <div class="menu-sub menu-sub-accordion menu-active-bg">
-                                <div class="menu-item">
-                                    <a class="menu-link  @if (request()->routeIs(['other-income'])) active @endif"
-                                        href="{{ route('other-income') }}">
-                                        <span class="menu-bullet">
-                                            <span class="bullet bullet-dot"></span>
-                                        </span>
-                                        <span class="menu-title">Other Income</span>
-                                    </a>
-                                </div>
-                            </div>
-                        @endif
+
                     </div>
                 @endif
                 @if (access()->hasAccess(['salary-head']))
@@ -1163,14 +1164,14 @@
                                 <span class="menu-arrow"></span>
                             </span>
                             <div class="menu-sub menu-sub-accordion menu-active-bg">
-                                @if(count($reports))
+                                @if (count($reports))
                                     @foreach ($reports as $report)
                                         <div class="menu-item">
                                             <a class="menu-link" href="{{ route($report['route']) }}">
                                                 <span class="menu-bullet">
                                                     <span class="bullet bullet-dot"></span>
                                                 </span>
-                                                <span class="menu-title">{{  $report['name'] }}</span>
+                                                <span class="menu-title">{{ $report['name'] }}</span>
                                             </a>
                                         </div>
                                     @endforeach

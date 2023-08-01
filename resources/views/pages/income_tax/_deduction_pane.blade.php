@@ -44,7 +44,7 @@
                 </tr> --}}
                 </tbody>
             </table>
-
+            {{-- {{ $statement_data->lock_calculation }} --}}
         </div>
         @if( isset( $statement_data ) && !empty( $statement_data ) && $statement_data->lock_calculation == 'no')
         <div class="col-sm-12 text-end mt-3">

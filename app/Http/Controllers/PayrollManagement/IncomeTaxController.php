@@ -41,7 +41,7 @@ class IncomeTaxController extends Controller
     {
 
         $tab = $request->tab ?? '';
-        $staff_id = $request->staff_id;
+        $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
         $from = $request->from ?? '';
         $params['staff_details'] = User::find($staff_id);
         $nature_of_employment_id = $params['staff_details']->appointment->nature_of_employment_id ?? '';
@@ -128,7 +128,7 @@ class IncomeTaxController extends Controller
     {
 
         $section_id = $request->section_id;
-        $staff_id = $request->staff_id;
+        $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
         $from = $request->from;
         $items = TaxSectionItem::where('tax_section_id', $section_id)
             // ->where('is_pf_calculation', 'no')
@@ -189,7 +189,7 @@ class IncomeTaxController extends Controller
             $items = $request->items;
             $amount = $request->amount;
             $remarks = $request->remarks;
-            $staff_id = $request->staff_id;
+            $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
             $section_id = $request->section_id;
             
             if ($items && count($items) > 0) {
@@ -236,7 +236,7 @@ class IncomeTaxController extends Controller
             $description_id = $request->description_id;
             $amount = $request->amount;
             $remarks = $request->remarks;
-            $staff_id = $request->staff_id;
+            $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
             // dd( $request->all() );
             if ($description_id && count($description_id) > 0) {
                 StaffOtherIncome::where(['staff_id' => $staff_id])->delete();
@@ -266,7 +266,7 @@ class IncomeTaxController extends Controller
     public function rentModal(Request $request)
     {
 
-        $staff_id = $request->staff_id;
+        $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
         $academic_data = AcademicYear::find(academicYearId());
         $title = 'Add Month Rent for ( ' . $academic_data->from_year . ' / ' . $academic_data->to_year . ' )';
         $params = array(
@@ -279,7 +279,7 @@ class IncomeTaxController extends Controller
     public function rentList(Request $request)
     {
 
-        $staff_id = $request->staff_id;
+        $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
         $staff_details = User::find($staff_id);
         $params['staff_details'] = $staff_details;
         return view('pages.income_tax._rent_table', $params);
@@ -288,7 +288,7 @@ class IncomeTaxController extends Controller
     public function saveRent(Request $request)
     {
         $id = $request->id ?? '';
-        $staff_id = $request->staff_id;
+        $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
         $academic_id = academicYearId();
         $validator      = Validator::make($request->all(), [
             'amount' => 'required',
@@ -308,7 +308,7 @@ class IncomeTaxController extends Controller
         if ($validator->passes()) {
 
             $ins['academic_id'] = academicYearId();
-            $ins['staff_id'] = $request->staff_id;
+            $ins['staff_id'] = $staff_id;
             $ins['amount'] = $request->amount;
             $ins['remarks'] = $request->remarks;
             $ins['annual_rent'] = $request->amount * 12;
@@ -356,18 +356,18 @@ class IncomeTaxController extends Controller
             $ins['academic_id'] = academicYearId();
             $ins['staff_id'] = $staff_id;
             $ins['income_tax_id'] = $income_tax_id;
-            $ins['april'] = $request->apr_amount;
+            $ins['april'] = $request->april_amount;
             $ins['may'] = $request->may_amount;
-            $ins['june'] = $request->jun_amount;
-            $ins['july'] = $request->jul_amount;
-            $ins['august'] = $request->aug_amount;
-            $ins['september'] = $request->sep_amount;
-            $ins['october'] = $request->oct_amount;
-            $ins['november'] = $request->nov_amount;
-            $ins['december'] = $request->dec_amount;
-            $ins['january'] = $request->jan_amount;
-            $ins['february'] = $request->feb_amount;
-            $ins['march'] = $request->mar_amount;
+            $ins['june'] = $request->june_amount;
+            $ins['july'] = $request->july_amount;
+            $ins['august'] = $request->august_amount;
+            $ins['september'] = $request->september_amount;
+            $ins['october'] = $request->october_amount;
+            $ins['november'] = $request->november_amount;
+            $ins['december'] = $request->december_amount;
+            $ins['january'] = $request->january_amount;
+            $ins['february'] = $request->february_amount;
+            $ins['march'] = $request->march_amount;
             $ins['total_tax'] = $income_info->total_income_tax_payable;
 
             StaffTaxSeperation::updateOrCreate(['staff_id' => $staff_id, 'income_tax_id' => $income_tax_id], $ins);

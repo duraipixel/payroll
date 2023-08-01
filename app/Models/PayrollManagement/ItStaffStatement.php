@@ -4,6 +4,7 @@ namespace App\Models\PayrollManagement;
 
 use App\Models\AcademicYear;
 use App\Models\Master\Designation;
+use App\Models\Staff\StaffTaxSeperation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,7 +46,8 @@ class ItStaffStatement extends Model implements Auditable
         'status',	
         'added_by',
         'is_staff_calculation_done',
-        'lock_calculation'
+        'lock_calculation',
+        'tax_scheme_id'
     ];
 
     public function scopeHasAcademic($query)

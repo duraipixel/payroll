@@ -31,7 +31,7 @@
                     <th class="p-2"> {{ ucfirst($item) }} </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->$item ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->$item) && !empty( $statement_data->staffTaxSeparation->$item ) ) readonly @endif name="apr_amount">
+                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->$item ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->$item) && !empty( $statement_data->staffTaxSeparation->$item ) ) readonly @endif name="{{$item}}_amount">
                     </td>
                 </tr>
                 @endforeach
@@ -112,7 +112,7 @@
                             onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->march ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->march) && !empty( $statement_data->staffTaxSeparation->march ) ) readonly @endif name="mar_amount">
                     </td>
                 </tr> --}}
-                @if( isset($statement_data->staffTaxSeparation->march) && !empty( $statement_data->staffTaxSeparation->march ) )
+                {{-- @if( isset($statement_data->staffTaxSeparation->march) && !empty( $statement_data->staffTaxSeparation->march ) )
                 @else 
                 <tr>
                     <th class="p-2"> Balance </th>
@@ -120,12 +120,19 @@
                         <input type="text" class="form-input text-end"  id="balance" readonly>
                     </td>
                 </tr>
-                @endif
+                @endif --}}
+                <tr>
+                    <th class="p-2"> Balance </th>
+                    <td>
+                        <input type="text" class="form-input text-end"  id="balance" readonly>
+                    </td>
+                </tr>
 
             </table>
             <div class="col-sm-12 text-end mt-3">
-                @if( isset($statement_data->staffTaxSeparation->march) && !empty( $statement_data->staffTaxSeparation->march ) )
-                @else 
+                {{-- @if( isset($statement_data->staffTaxSeparation->march) && !empty( $statement_data->staffTaxSeparation->march ) )
+                @else  --}}
+                @if( isset( $statement_data->lock_calculation ) && $statement_data->lock_calculation == 'no')
                 <button type="button" id="tax_btn" class="btn btn-primary btn-sm d-none" onclick="submitTaxSeperationCalc()"> Save </button>
                 @endif
             </div>

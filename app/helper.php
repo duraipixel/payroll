@@ -1088,6 +1088,7 @@ function getAprilToMarch()
     // If the end month comes before the start month, it means we need to go to the next year
     if ($endDate < $startDate) {
         $endDate->modify('+1 year');
+        $endDate->modify('+1 month');
     }
 
     // Adjust the start month to the 1st of April of the current year
@@ -1099,7 +1100,7 @@ function getAprilToMarch()
     // Create a DatePeriod object to loop through the months
     $interval = new DateInterval('P1M');
     $dateRange = new DatePeriod($startDate, $interval, $endDate);
-
+    // dd( $dateRange );
     // Loop through the months and store them in the array
     foreach ($dateRange as $date) {
         $months[] = strtolower($date->format('F')); // 'F' format returns the full month name
