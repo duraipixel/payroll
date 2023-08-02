@@ -113,6 +113,7 @@ class PayrollChecklistRepository extends Controller
             })
             ->where('verification_status', 'approved')
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
+            ->where('it_staff_statements.status', 'active')
             ->whereNull('is_super_admin')
             ->whereNull('hold_salaries.hold_month')
             ->get();

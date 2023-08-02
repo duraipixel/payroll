@@ -809,6 +809,8 @@ function getTaxOtherSalaryCalulatedMonth($salary_pattern)
     $s_date = date('Y-m-d', strtotime($start_year));
     $e_date = date('Y-m-d', strtotime($end_year));
     $payout_month = $salary_pattern->payout_month; //2022-04-01
+
+    // dd( $payout_month );
     $payout_month = date('Y-m-d', strtotime($payout_month . '-1 month'));
     $counted_months = 12;
     if ($payout_month > $start_year && $payout_month < $e_date) {
@@ -1077,11 +1079,13 @@ function placeOfWork(){
 }
 
 
-function getAprilToMarch()
+function getAprilToMarch( $payout_month )
 {
+    // $payout_month = date('Y-m-d', strtotime($payout_month.' - 1 month'));
+    // dd( $payout_month );
     $startMonth = 'April';
+    $startMonth = date('F', strtotime( $payout_month ));
     $endMonth = 'March';
-
     // Create DateTime objects for the start and end months
     $startDate = new DateTime($startMonth);
     $endDate = new DateTime($endMonth);
@@ -1089,11 +1093,11 @@ function getAprilToMarch()
     // If the end month comes before the start month, it means we need to go to the next year
     if ($endDate < $startDate) {
         $endDate->modify('+1 year');
-        $endDate->modify('+1 month');
+        // $endDate->modify('+1 month');
     }
 
     // Adjust the start month to the 1st of April of the current year
-    $startDate->modify('first day of April this year');
+    $startDate->modify('first day of '.$startMonth.' this year');
 
     // Initialize an array to store the months
     $months = [];

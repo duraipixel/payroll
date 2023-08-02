@@ -25,7 +25,7 @@
                     <th class="p-2"> Tax Payable </th>
                     <th class="p-2"> {{ $tax_payment }} </th>
                 </tr>
-                @foreach (getAprilToMarch() as $item)
+                @foreach (getAprilToMarch( $payout_month ) as $item)
                     
                 <tr>
                     <th class="p-2"> {{ ucfirst($item) }} </th>
@@ -218,6 +218,8 @@
                                 },
                                 timer: 3000
                             });
+
+                            getTaxTabInfo('taxpayable');
                     } else {
                         Swal.fire({
                                 title: "Error",

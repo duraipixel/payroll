@@ -522,7 +522,11 @@
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                                        <span class="menu-title">Salary Revision</span>
+                                        <span class="menu-title">Salary Revision
+                                            {{-- @if(  pendingRevisionCount() )
+                                            <small class="badge badge-circlebadge badge-danger badge-circle fs-15 mx-2">{{pendingRevisionCount()}}</small>
+                                            @endif --}}
+                                        </span>
                                     </a>
                                 </div>
                             </div>

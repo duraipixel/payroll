@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AttendanceManagement\LeaveMapping;
+use App\Models\PayrollManagement\StaffSalaryPattern;
 
 function getLeaveHeadsSeperation($nature_of_employment_id) {
     $data = LeaveMapping::where('nature_of_employment_id', $nature_of_employment_id)->get();
@@ -14,4 +15,8 @@ function getLeaveHeadsSeperation($nature_of_employment_id) {
         }
     }
     return $html;
+}
+
+function pendingRevisionCount() {
+    return StaffSalaryPattern::where(['status' => 'active', 'verification_status' => 'pending'])->count();
 }

@@ -8,6 +8,7 @@ use App\Models\User;
 use DataTables;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SalaryRevisionController extends Controller
 {
@@ -19,14 +20,14 @@ class SalaryRevisionController extends Controller
         );
 
         if ($request->ajax()) {
-            
+
             $staff_id = $request->get('staff_id');
             $revision_status = $request->get('revision_status');
             $search_status = $revision_status;
 
             $data = StaffSalaryPattern::with('staff')->select('*')
                 ->where('staff_salary_patterns.verification_status', $search_status)
-                ->when($staff_id != '', function($q) use($staff_id){
+                ->when($staff_id != '', function ($q) use ($staff_id) {
                     $q->where('staff_id', $staff_id);
                 });
 
@@ -59,13 +60,14 @@ class SalaryRevisionController extends Controller
         return view('pages.payroll_management.salary_revision.index', $params);
     }
 
-    public function changeStatusModal(Request $request) {
+    public function changeStatusModal(Request $request)
+    {
 
         $revision = $request->revision;
         $status = $request->status;
         $revision_status = $request->revision_status;
-        $title = ucfirst($status).' Remarks';
-         
+        $title = ucfirst($status) . ' Remarks';
+
         $params = array(
             'revision' => $revision,
             'status' => $status,
@@ -74,10 +76,10 @@ class SalaryRevisionController extends Controller
 
         $content = view('pages.payroll_management.salary_revision.remark_form', $params);
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
-
     }
 
-    public function changeStatus(Request $request) {
+    public function changeStatus(Request $request)
+    {
 
         $status = $request->status;
         $remarks = $request->remarks;
@@ -86,21 +88,21 @@ class SalaryRevisionController extends Controller
         $revision = explode(',', $revision);
         $message = 'Error occured while changing status';
 
-        if( isset( $revision ) ) {
+        if (isset($revision)) {
             foreach ($revision as $item) {
-                
-                $patter_info = StaffSalaryPattern::find($item);
-                if( $patter_info ) {
-                    if( $status == 'approved') {
-                        if( $revision_status != 'pending') {
 
-                            $check_exist= StaffSalaryPattern::where('staff_id', $patter_info->staff_id)
-                                            ->where('payout_month', $patter_info->payout_month)
-                                            ->where('verification_status', '!=', 'rejected')
-                                            ->where('verification_status', '!=', 'rejected')
-                                            ->first();
+                $patter_info = StaffSalaryPattern::find($item);
+                if ($patter_info) {
+                    if ($status == 'approved') {
+                        if ($revision_status != 'pending') {
+
+                            $check_exist = StaffSalaryPattern::where('staff_id', $patter_info->staff_id)
+                                ->where('payout_month', $patter_info->payout_month)
+                                ->where('verification_status', '!=', 'rejected')
+                                ->where('verification_status', '!=', 'rejected')
+                                ->first();
                             // dd( $check_exist );
-                            if( $check_exist ) {
+                            if ($check_exist) {
                                 return array('error' => 1, 'message' => 'Cannot approve. Revision for payout month in list');
                             }
                         }
@@ -113,8 +115,7 @@ class SalaryRevisionController extends Controller
                         $patter_info->rejectedBy = null;
 
                         $message = 'Approved successfully';
-
-                    } else if( $status == 'rejected') {
+                    } else if ($status == 'rejected') {
                         $patter_info->rejected_on = date('Y-m-d H:i:s');
                         $patter_info->removed_remarks = $remarks;
                         $patter_info->verification_status = $status;
@@ -125,6 +126,25 @@ class SalaryRevisionController extends Controller
                         $message = 'Rejected successfully';
                     }
                     $patter_info->save();
+
+                    //set is_current 
+                    $max_info = DB::select('SELECT ssp.id, ssp.payout_month
+                                        FROM staff_salary_patterns ssp
+                                        WHERE ssp.staff_id = ' . $patter_info->staff_id . '
+                                        AND ssp.payout_month = (
+                                        SELECT MAX(payout_month)
+                                        FROM staff_salary_patterns
+                                        WHERE staff_id = ' . $patter_info->staff_id . ' and verification_status != \'rejected\' and deleted_at is null
+                                        ) and ssp.deleted_at is null and verification_status != \'rejected\' ');
+
+                    if (!empty($max_info)) {
+
+                        $pattern_id = $max_info[0]->id ?? '';
+                        if ($pattern_id) {
+                            StaffSalaryPattern::where('staff_id', $patter_info->staff_id)->update(['is_current' => 'no']);
+                            StaffSalaryPattern::where('id', $pattern_id)->update(['is_current' => 'yes']);
+                        }
+                    }
                 }
             }
         }

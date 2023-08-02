@@ -81,7 +81,11 @@
                 url: "{{ route('it-calculation.calculation.form') }}",
                 type: 'POST',
                 data: {staff_id:staff_id},
+                beforeSend: function() {
+                    loading();
+                },
                 success: function(res) {
+                    unloading();
                     $('#staff_tax_pane').html(res);
                 }
             })

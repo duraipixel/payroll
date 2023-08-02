@@ -78,10 +78,13 @@
 
                     <div class="fs-3 fw-bold text-muted "> 
                         Payout Details 
+
+                        @if( $payroll->payroll_date )
                         <a href="{{ route('payroll.list') }}" class="small float-end" > 
                             <i class="fa fa-eye"></i>
                             View Details 
                         </a>
+                        @endif
 
                     </div>
                     @php
@@ -204,10 +207,10 @@
                         </div>
                     </div>
                     <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
-                        <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == 'unlock') active @endif" role="button"
-                            onclick="setPayrollSetting('payroll', 'unlock', this)"> Unlock </span>
-                        <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == 'lock') active @endif" role="button"
-                            onclick="setPayrollSetting('payroll', 'lock', this)"> Lock
+                        <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->it_statement_view == 'unlock') active @endif" role="button"
+                            onclick="setPayrollSetting('it_statement_view', 'unlock', this)"> Unlock </span>
+                        <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->it_statement_view == 'lock') active @endif" role="button"
+                            onclick="setPayrollSetting('it_statement_view', 'lock', this)"> Lock
                         </span>
                     </div>
                 </div>
@@ -217,9 +220,9 @@
                            
                         </div>
                         <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
-                            <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == null) active @endif" role="button"
+                            <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == 'unlock') active @endif" role="button"
                                 onclick="setPayrollSetting('payroll', 'unlock', this)"> Unlock </span>
-                            <span class="pl-btn payroll @if (isset($lock_info) && !empty($lock_info->payroll)) active @endif" role="button"
+                            <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == 'lock') active @endif" role="button"
                                 onclick="setPayrollSetting('payroll', 'lock', this)"> Lock
                             </span>
                         </div>

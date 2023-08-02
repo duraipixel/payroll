@@ -106,12 +106,12 @@ class SalaryCreationController extends Controller
                         if (isset($items->fields) && !empty($items->fields)) {
                             foreach ($items->fields as $item_fields) {
                                 if (isset($_POST['amount_' . $item_fields->id])) {
-                                    $amount = $_POST['amount_' . $item_fields->id];
-                                    $ins[] = array('field_id' => $item_fields->id, 'name' => $item_fields->name, 'amount' => $amount, 'reference_type' => $items->name, 'reference_id' => $items->id);
+                                    $amount = $_POST['amount_' . $item_fields->id] ?? 0;
+                                    $ins[] = array('field_id' => $item_fields->id, 'name' => $item_fields->name, 'amount' => !empty($amount) ? $amount : 0, 'reference_type' => $items->name, 'reference_id' => $items->id);
                                     if ($items->name == 'EARNINGS') {
-                                        $earnings += $amount;
+                                        $earnings += !empty($amount) ? $amount : 0;
                                     } else {
-                                        $deductions += $amount;
+                                        $deductions += !empty($amount) ? $amount : 0;
                                     }
                                 }
                             }
@@ -119,6 +119,7 @@ class SalaryCreationController extends Controller
                     }
                 }
                 $net_pay = $earnings - $deductions;
+                // dd( $net_pay );
                 $payout_month = date('Y-m-01', strtotime($request->payout_month));
 
                 if (!empty($ins)) {
@@ -128,7 +129,7 @@ class SalaryCreationController extends Controller
                      */
                     $insert_data = [];
 
-                    $exist = StaffSalaryPattern::where(['id' => $id])->first();
+                    $exist = StaffSalaryPattern::find( $id );
                     $current_active = StaffSalaryPattern::where(['staff_id' => $staff_id, 'is_current' => 'yes'])->orderBY('payout_month', 'desc')->first();
 
                     if ($current_active && $current_active->payout_month < $payout_month) {
@@ -159,7 +160,6 @@ class SalaryCreationController extends Controller
                     } else {
                         $insert_data['lastUpdatedBy'] = auth()->id();
                     }
-
                     $salary_info = StaffSalaryPattern::updateOrCreate(['id' => $id], $insert_data);
                     $history_info = StaffSalaryPatternHistory::create($insert_data);
                     
@@ -406,7 +406,6 @@ class SalaryCreationController extends Controller
         $nature_of_employment_id = $staff_info->appointment->employment_nature->id;
         $current_pattern = StaffSalaryPattern::where(['status' => 'active', 'is_current' => 'yes', 'staff_id' => $staff_id])->first();
 
-
         $earnings_data = SalaryField::where('nature_id', $nature_of_employment_id)
             ->where('salary_head_id', 1)
             ->orderBy('order_in_salary_slip')
@@ -530,8 +529,8 @@ class SalaryCreationController extends Controller
                                     AND ssp.payout_month = (
                                     SELECT MAX(payout_month)
                                     FROM staff_salary_patterns
-                                    WHERE staff_id = ' . $staff_id . ' and deleted_at is null
-                                    )');
+                                    WHERE staff_id = ' . $staff_id . ' and verification_status != \'rejected\' and deleted_at is null
+                                    ) and ssp.deleted_at is null and verification_status != \'rejected\'');
     
                         if (!empty($max_info)) {
     

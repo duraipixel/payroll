@@ -23,19 +23,15 @@
                 <div class="d-flex w-100 m-2 p-2 payrow">
                     <div class="w-30 d-flex">
                         <div class="me-2">
-
                             <input class="form-check-input me-1" type="checkbox"
                                 data-id="{{ str_replace(' ', '_', $item->short_name) }}" onchange="getInputValue(this)"
                                 value="" @if (isset($old_data) && !empty($old_data)) checked @endif>
                         </div>
                         <div>
-
                             {{ $item->name ?? '' }}
                             <div class="text-muted small">
-
                                 @if (isset($item->field_items) && !empty($item->field_items))
                                     [
-
                                     {{ $item->field_items->field_name }}*{{ $item->field_items->percentage }}%
                                     ]
                                 @endif

@@ -61,8 +61,9 @@ class IncomeTaxCalculationController extends Controller
                     $q->where('payout_month', '>=', $start_date);
                     $q->where('payout_month', '<=', $end_date);
                 })
+                ->where('is_current', 'yes')
                 ->first();
-
+            // dd( $salary_pattern );
             if (isset($salary_pattern) && !empty($salary_pattern)) {
 
                 $salary_calculated_month = getTaxOtherSalaryCalulatedMonth($salary_pattern);

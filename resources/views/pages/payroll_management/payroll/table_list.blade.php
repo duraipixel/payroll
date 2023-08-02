@@ -32,13 +32,13 @@
             left: 300px;
         }
     </style>
-    @if( payrollCheck( $dates, 'payroll' ))
-    <div class="card-header border-0 pt-6">
+    {{-- @if( !payrollCheck( $dates, 'payroll' )) --}}
+    {{-- <div class="card-header border-0 pt-6">
         <div class="alert alert-danger">
             Payroll statement settings locked. Please unlock to view statements
         </div>
     </div>
-    @else
+    @else --}}
     <div class="card-header border-0 pt-6">
         <div class="card-title">
             <div class="d-flex align-items-center position-relative my-1">
@@ -135,4 +135,4 @@
 
         }
     </script>
-@endif
+{{-- @endif --}}

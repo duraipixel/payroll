@@ -69,6 +69,7 @@ class IncomeTaxController extends Controller
                     $q->where('payout_month', '>=', $start_date);
                     $q->where('payout_month', '<=', $end_date);
                 })
+                ->where('is_current', 'yes')
                 ->first();
             if ($salary_pattern) {
 
