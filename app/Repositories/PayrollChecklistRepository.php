@@ -27,6 +27,13 @@ class PayrollChecklistRepository extends Controller
             ->where('attendance_status', 'Absence')
             ->get();
 
+        $present_attendance = AttendanceManualEntry::where(function ($query) use ($start_date, $end_date) {
+            $query->whereDate('attendance_date', '>=', $start_date)
+                ->whereDate('attendance_date', '<=', $end_date);
+        })
+            ->where('attendance_status', 'Present')
+            ->get();
+
         if (isset($attendance) && !empty($attendance)) {
             $not_requested = $approval_pending = $approved_leave = 0;
             foreach ($attendance as $item) {
@@ -46,6 +53,7 @@ class PayrollChecklistRepository extends Controller
         $response['leave_request_pending'] = $not_requested;
         $response['leave_approval_pending'] = $approval_pending;
         $response['approved_leave'] = $approved_leave;
+        $response['total_present'] = count( $present_attendance );
 
         return $response;
     }
@@ -82,10 +90,10 @@ class PayrollChecklistRepository extends Controller
     public function getToPayEmployee($date)
     {
         $hold_month =  date('Y-m-01', strtotime($date));
-        $date = date('Y-m-d', strtotime($date. '-1 month'));
+        $date = date('Y-m-d', strtotime($date . '-1 month'));
         $month_start = date('Y-m-01', strtotime($date));
         $month_end = date('Y-m-t', strtotime($date));
-        
+
         /**
          *  1. Get payable staff & Join Date;
          *  2. Month working days
@@ -93,35 +101,31 @@ class PayrollChecklistRepository extends Controller
          *  4. Get salary pattern for staff
          *  5. Finalize Their Salary and show
          */
-        
-        $users = User::select('users.*')->
-            with(['workedDays' => function ($query) use ($month_start, $month_end) {
+
+        $users = User::select('users.*')->with(['workedDays' => function ($query) use ($month_start, $month_end) {
                 $query->whereDate('attendance_date', '>=', $month_start);
                 $query->whereDate('attendance_date', '<=', $month_end);
             }, 'currentSalaryPattern', 'firstAppointment'])
             ->join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
-            ->leftJoin('hold_salaries', function($join) use ( $hold_month ){
+            ->leftJoin('hold_salaries', function ($join) use ($hold_month) {
                 $join->on('hold_salaries.staff_id', '=', 'users.id')
-                ->where('hold_salaries.hold_month', '=', $hold_month);
+                    ->where('hold_salaries.hold_month', '=', $hold_month);
             })
             ->where('verification_status', 'approved')
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
             ->whereNull('is_super_admin')
             ->whereNull('hold_salaries.hold_month')
             ->get();
-        
-        return $users;
 
+        return $users;
     }
 
-    public function getHoldSalaryEmployee($date) {
+    public function getHoldSalaryEmployee($date)
+    {
 
         // $date = date('Y-m-d', strtotime($date . ' -1 month'));
         $start_date = date('Y-m-01', strtotime($date));
         $details = HoldSalary::whereDate('hold_month', $start_date)->get();
         return $details;
-
     }
-
-  
 }

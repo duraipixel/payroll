@@ -68,7 +68,11 @@
                     month_no: month_no,
                     dates:dates
                 },
+                beforeSend: function(){
+                    loading();
+                },
                 success: function(res) {
+                    unloading();
                     $('#payroll_overview_container').html( res );
                 },
                 error: function(xhr, err) {

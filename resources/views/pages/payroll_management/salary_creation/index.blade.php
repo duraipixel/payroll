@@ -292,8 +292,10 @@
                     beforeSend: function() {
                         $('#payroll_button_pane').html('');
                         $('#salary-creation-panel').html('');
+                        loading()
                     },
                     success: function(res) {
+                        unloading();
                         $('#salary-creation-panel').removeClass('d-none');
                         $('#salary-creation-panel').html(res);
                     }

@@ -78,9 +78,11 @@
                     staff_id: staff_id
                 },
                 beforeSend: function() {
+                    loading()
                     $('#tab_load_content').addClass('blur_loading_3px');
                 },
                 success: function(res) {
+                    unloading();
                     $('#tab_load_content').removeClass('blur_loading_3px');
                     $('#tab_load_content').html(res);
                 }

@@ -46,6 +46,7 @@
     @if (isset($payroll) && !empty($payroll))
         @php
             $month_start_no = date('m', strtotime($date) );
+            $month_start_no = $month_start_no[0] == 0 ? ltrim($month_start_no, 0) : $month_start_no;
         @endphp
         <div class="container bg-primary bg-light-outline">
             <div class="py-5 mt-3 d-flex justify-content-between align-items-center">
@@ -216,10 +217,10 @@
                            
                         </div>
                         <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
-                            <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll_lock == null) active @endif" role="button"
-                                onclick="setPayrollSetting('payroll_lock', 'unlock', this)"> Unlock </span>
-                            <span class="pl-btn payroll @if (isset($lock_info) && !empty($lock_info->payroll_lock)) active @endif" role="button"
-                                onclick="setPayrollSetting('payroll_lock', 'lock', this)"> Lock
+                            <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->payroll == null) active @endif" role="button"
+                                onclick="setPayrollSetting('payroll', 'unlock', this)"> Unlock </span>
+                            <span class="pl-btn payroll @if (isset($lock_info) && !empty($lock_info->payroll)) active @endif" role="button"
+                                onclick="setPayrollSetting('payroll', 'lock', this)"> Lock
                             </span>
                         </div>
                     </div>
@@ -472,8 +473,10 @@
             },
             beforeSend: function(){
                 $('#process_payroll_btn').attr('disabled', true);
+                loading();
             },
             success: function(res) {
+                unloading();
                 $('#process_payroll_btn').attr('disabled', false);
                 $('#kt_dynamic_app').modal('show');
                 $('#kt_dynamic_app').html(res);

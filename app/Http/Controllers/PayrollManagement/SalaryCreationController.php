@@ -98,7 +98,7 @@ class SalaryCreationController extends Controller
 
             $payout_month = $request->payout_month;
 
-            if (!payrollCheck($payout_month, 'payroll_inputs')) {
+            if (!payrollCheck($payout_month, 'payroll_inputs') && !payrollCheck($payout_month, 'payroll')) {
 
                 if ($salary_heads) {
                     $ins = [];
@@ -504,7 +504,7 @@ class SalaryCreationController extends Controller
         $info = StaffSalaryPattern::find($id);
 
         $staff_id = $info->staff_id;
-        if (!payrollCheck($info->payout_month, 'payroll_inputs')) {
+        if (!payrollCheck($info->payout_month, 'payroll_inputs') && !payrollCheck($info->payout_month, 'payroll')) {
             if (isset($info->salaries) && count($info->salaries) > 0) {
 
                 $error = 1;

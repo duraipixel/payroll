@@ -32,6 +32,7 @@
                 @csrf
                 <input type="hidden" name="date" value="{{ $date ?? '' }}">
                 <input type="hidden" name="payout_id" value="{{ $payout_id ?? '' }}">
+                <input type="hidden" name="is_entried_min_attendance" id="is_entried_min_attendance" value="{{$is_entried_min_attendance}}">
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="d-flex border-bottom mb-3 p-3">
@@ -259,6 +260,14 @@
         if (!process_it) {
             toastr.error('Error', 'Can not continue Payroll process. Please complete all income tax entries');
             return false;
+        }
+
+        var is_entried_min_attendance = $('#is_entried_min_attendance').val();
+        if( is_entried_min_attendance == 0 ) {
+
+            toastr.error('Error', 'Can not continue Payroll process. Attendance entries not found');
+            return false;
+
         }
 
         $('#checklist_form').submit();

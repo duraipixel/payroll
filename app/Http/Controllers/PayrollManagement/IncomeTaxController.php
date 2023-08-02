@@ -81,6 +81,9 @@ class IncomeTaxController extends Controller
             }
         }
         $params['salary_pattern'] = $salary_pattern;
+        if( !$salary_pattern ) {
+            return view('pages.income_tax._staff_pane', $params);
+        }
 
         if (!empty($from)) {
             return view('pages.income_tax._staff_pane', $params);

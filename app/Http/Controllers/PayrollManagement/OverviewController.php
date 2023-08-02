@@ -144,7 +144,6 @@ class OverviewController extends Controller
             $message = 'Payroll process ' . $status . ' Successfully';
             $ins['payroll'] = $status;
         }
-        // dd( $ins );
         PayrollPermission::updateOrCreate(['payout_month' => $payout_date, 'academic_id' => academicYearId()], $ins);
         $error = 0;
         return array('error' => $error, 'message' => $message);
@@ -164,7 +163,6 @@ class OverviewController extends Controller
             'payout_date' => $payout_date,
             'mode' => $mode,
             'payout_id' => $payout_id
-
         );
 
         $content = view('pages.payroll_management.overview._payroll_input_form', $params);
@@ -184,7 +182,17 @@ class OverviewController extends Controller
         $ins['locked'] = 'no';
         $ins['added_by'] = auth()->id();
 
-        Payroll::create($ins);
+        $id = Payroll::create($ins)->id;
+
+        $ins_roll['academic_id'] = academicYearId();
+        $ins_roll['payout_month'] = $from_date;
+        $ins_roll['payroll_id'] = $id;
+        $ins_roll['payroll_inputs'] = 'unlock';
+        $ins_roll['emp_view_release'] = 'lock';
+        $ins_roll['it_statement_view'] = 'lock';
+        $ins_roll['payroll'] = 'unlock';
+
+        PayrollPermission::create($ins_roll);
 
         $error = 0;
         $date = $request->payroll_date;
@@ -216,6 +224,7 @@ class OverviewController extends Controller
         $income_tax_data = $this->checklistRepository->getPendingITEntry();
         $hold_salary_employee = $this->checklistRepository->getHoldSalaryEmployee($date);
         
+        $is_entried_min_attendance = $leave_data['total_present'] ?? 0;
 
         $title = 'Payroll Process Confirmation';
         $params = array(
@@ -225,7 +234,8 @@ class OverviewController extends Controller
             'title' => $title,
             'employee_data' => $employee_data,
             'income_tax_data' => $income_tax_data,
-            'hold_salary_employee' => $hold_salary_employee
+            'hold_salary_employee' => $hold_salary_employee,
+            'is_entried_min_attendance' => $is_entried_min_attendance
         );
 
         return view('pages.payroll_management.overview._payroll_form', $params);
