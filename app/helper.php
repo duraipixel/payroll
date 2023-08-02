@@ -30,6 +30,7 @@ use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\PayrollManagement\OtherIncome;
 use App\Models\PayrollManagement\PayrollPermission;
 use App\Models\PayrollManagement\StaffSalary;
+use App\Models\PayrollManagement\SalaryField;
 use App\Models\PayrollManagement\StaffSalaryField;
 use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\PayrollManagement\StaffSalaryPatternField;
@@ -1153,3 +1154,19 @@ function getDaySalaryAmount($gross, $month_length)
     return round($gross / $month_length);
 }
 
+
+function taxPaidPayroll( $staff_id, $salary_pattern_id ) {
+    /**
+     *  get tax id 
+     */
+    $income_tax = SalaryField::where('short_name', 'IT')->first();
+    $income_tax_id = $income_tax->id;
+
+    $info = StaffSalary::select('staff_salary_fields.amount as incometax_amount')->join('staff_salary_fields', function($join) use($income_tax_id){
+                $join->on('staff_salary_fields.staff_salary_id', '=', 'staff_salaries.id')->where('field_id', $income_tax_id);
+            })
+            ->where('staff_salaries.staff_id', $staff_id)
+            ->where('staff_salaries.salary_pattern_id', $salary_pattern_id)->get()->sum('incometax_amount');
+    
+    return $info ?? 0;
+}

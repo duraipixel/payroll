@@ -13,6 +13,7 @@
                         {{ $staff_details->society_emp_code ?? '' }}</label>
                     <input type="hidden" name="emp_code" id="emp_code" class="form-input text-end"
                         value="">
+                    <input type="hidden" name="salary_pattern_id" value="{{$salary_pattern->id ?? ''}}">
                 </td>
             </tr>
             <tr>
@@ -360,7 +361,7 @@
                     Less : Tax already paid (sum of total tax paid so far)
                 </td>
                 <td>
-                    <label></label>
+                    {{-- <label>{{ taxPaidPayroll( $staff_details->id, $salary_pattern->id ) }}</label> --}}
                 </td>
             </tr>
             <tr>

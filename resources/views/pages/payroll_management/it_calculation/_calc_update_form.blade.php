@@ -299,8 +299,8 @@
                 <td colspan="2">
                     Less : Tax already paid (suim of total tax paid so far)
                 </td>
-                <td>
-                    <input type="text" name="" class="form-input text-end" value="">
+                <td >
+                    <input type="text" name="" class="form-input text-end" readonly value="{{ taxPaidPayroll( $info->staff_id, $info->salary_pattern_id ) }}">
                 </td>
             </tr>
             <tr>
@@ -308,7 +308,7 @@
                     Total tax deducted / tax to be deducted
                 </td>
                 <td>
-                    <input type="text" name="" class="form-input text-end" value="">
+                    <input type="text" name="" class="form-input text-end" readonly value="{{ $info->total_income_tax_payable - taxPaidPayroll( $info->staff_id, $info->salary_pattern_id ) }}">
                 </td>
             </tr>
         </table>

@@ -63,7 +63,7 @@ class IncomeTaxCalculationController extends Controller
                 })
                 ->where('is_current', 'yes')
                 ->first();
-            // dd( $salary_pattern );
+            
             if (isset($salary_pattern) && !empty($salary_pattern)) {
 
                 $salary_calculated_month = getTaxOtherSalaryCalulatedMonth($salary_pattern);
@@ -75,8 +75,11 @@ class IncomeTaxCalculationController extends Controller
                     ->where('staff_salary_pattern_id', $salary_pattern->id)
                     ->where('salary_fields.short_name', 'EPF')
                     ->first();
+
             } else {
+
                 $error_message = 'Salary Approval pending or Salary not created';
+
             }
             $other_income = OtherIncome::where('status', 'active')->get();
         }
@@ -161,12 +164,13 @@ class IncomeTaxCalculationController extends Controller
         ]);
 
         if ($validator->passes()) {
-
+            // dd( $request->all() );
             $staff_details = User::find($staff_id);
             $mode = $request->mode ?? '';
             $ins = array(
                 'academic_id' => academicYearId(),
                 'staff_id' => $staff_id,
+                'salary_pattern_id' => $request->salary_pattern_id ?? '',
                 'pan_no' => $request->pan_no,
                 'designation_id' => $request->designation_id,
                 'gross_salary_anum' => $request->gross_salary_anum,
