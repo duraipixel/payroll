@@ -162,10 +162,10 @@ if (!function_exists('getStaffProfileCompilation')) {
                 $percentage += 10;
             }
 
-            $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-            if (count($education) > 0) {
-                $percentage += 10;
-            }
+            // $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+            // if (count($education) > 0) {
+            //     $percentage += 10;
+            // }
 
             $family_members = StaffFamilyMember::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
             if (count($family_members) > 0) {
@@ -233,9 +233,9 @@ if (!function_exists('getStaffProfileCompilationData')) {
             if (count($info->StaffDocument) > 0) {
                 $percentage += 10;
             }
-            if (count($info->StaffEducationDetail) > 0) {
-                $percentage += 10;
-            }
+            // if (count($info->StaffEducationDetail) > 0) {
+            //     $percentage += 10;
+            // }
             if (count($info->familyMembers) > 0) {
                 $percentage += 5;
             }
@@ -562,7 +562,7 @@ if (!function_exists('getStaffVerificationStatus')) {
             case 'data_entry':
                 $personalInfo = StaffPersonalInfo::where('staff_id', $staff_id)->first();
                 $professional_data = StaffProfessionalData::where('staff_id', $staff_id)->first();
-                $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+                // $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $family_members = StaffFamilyMember::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $nominee = StaffNominee::where(['staff_id' => $staff_id])->get();
                 $health_details = StaffHealthDetail::where('staff_id', $staff_id)->first();
@@ -572,7 +572,7 @@ if (!function_exists('getStaffVerificationStatus')) {
                 $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $return = false;
 
-                if ($personalInfo && $professional_data && count($education) > 0 && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0 && count($staffbank) > 0) {
+                if ($personalInfo && $professional_data && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0 && count($staffbank) > 0) {
                     $return = true;
                 }
                 return $return;
@@ -584,14 +584,14 @@ if (!function_exists('getStaffVerificationStatus')) {
                  * 2. experience document
                  * 3. Personal document
                  */
-                $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-                $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
+                // $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+                // $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
                 // $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 // $doc_expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
                 $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $return = false;
 
-                if (count($education) > 0 && count($doc_education) == 0 && count($personal_doc) > 0) {
+                if (count($personal_doc) > 0) {
                     $return = true;
                 }
                 return $return;
@@ -603,21 +603,22 @@ if (!function_exists('getStaffVerificationStatus')) {
                  * 2. experience document
                  * 3. Personal document
                  */
-                $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-                $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id,  'verification_status' => 'approved'])->whereNotNull('doc_file')->get();
+                // $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+                // $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id,  'verification_status' => 'approved'])->whereNotNull('doc_file')->get();
                 // $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 // $doc_expeince = StaffWorkExperience::where(['staff_id' => $staff_id,  'verification_status' => 'approved'])->whereNotNull('doc_file')->get();
                 $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $count_personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'verification_status' => 'approved'])->get();
                 $return = false;
-                if (count($education) > 0 && count($personal_doc) > 0) {
+                if (count($personal_doc) > 0) {
 
-                    if ((count($education) == count($doc_education))  && count($personal_doc) == count($count_personal_doc)) {
+                    if (count($personal_doc) == count($count_personal_doc)) {
                         $return = true;
                     }
                 }
                 return $return;
                 break;
+
             case 'salary_entry';
                 $return = false;
                 $staff_salaries = StaffSalaryPattern::where('staff_id', $staff_id)->where('status', 'active')->first();
@@ -637,7 +638,7 @@ function canGenerateEmpCode($staff_id)
 {
     $personalInfo = StaffPersonalInfo::where('staff_id', $staff_id)->first();
     $professional_data = StaffProfessionalData::where('staff_id', $staff_id)->first();
-    $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    // $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     $family_members = StaffFamilyMember::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     $nominee = StaffNominee::where(['staff_id' => $staff_id])->get();
     $health_details = StaffHealthDetail::where('staff_id', $staff_id)->first();
@@ -650,25 +651,25 @@ function canGenerateEmpCode($staff_id)
         $personal_return = true;
     }
 
-    $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-    $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
+    // $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    // $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
     // $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     // $doc_expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->whereNull('doc_file')->get();
     $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     $edu_return = false;
 
-    if (count($education) > 0 && count($doc_education) == 0 && count($personal_doc) > 0) {
+    if (count($personal_doc) > 0) {
         $edu_return = true;
     }
 
-    $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-    $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id,  'verification_status' => 'approved'])->whereNotNull('doc_file')->get();
+    // $education = StaffEducationDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    // $doc_education = StaffEducationDetail::where(['staff_id' => $staff_id,  'verification_status' => 'approved'])->whereNotNull('doc_file')->get();
     // $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     // $doc_expeince = StaffWorkExperience::where(['staff_id' => $staff_id,  'verification_status' => 'approved'])->whereNotNull('doc_file')->get();
     $personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     $count_personal_doc = StaffDocument::where(['staff_id' => $staff_id, 'verification_status' => 'approved'])->get();
     $verified_return = false;
-    if ((count($education) == count($doc_education))  && count($personal_doc) == count($count_personal_doc)) {
+    if (count($personal_doc) == count($count_personal_doc)) {
         $verified_return = true;
     }
 
