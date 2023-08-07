@@ -147,3 +147,10 @@ if (!function_exists('salaryNo')) {
         return $number;
     }
 }
+
+if (!function_exists('generateEmpCode')) {
+    function generateEmpCode()
+    {
+        return date('ymdhis');
+    }
+}

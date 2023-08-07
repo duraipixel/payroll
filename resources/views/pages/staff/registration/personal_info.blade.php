@@ -31,7 +31,9 @@
                     value="{{ $staff_details->institute_emp_code ?? 'Draft' }}" readonly />
             </div>
             <div class="col-lg-4 mb-5 rd-only position-relative">
-                <label class="input-label">Previous Code</label>
+                <label class="input-label">Previous Code 
+                <a href="javascript:void(0)" onclick="return generatePreviousCode()" class="float-end"> Generate Code </a>
+                </label>
                 <input name="previous_code" id="previous_code" class="form-input"
                     value="{{ $staff_details->emp_code ?? '' }}"  @if( isset($staff_details->emp_code) && !empty( $staff_details->emp_code ) )  @endif/>
             </div>
@@ -330,6 +332,11 @@
 </div>
 
 <script>
+
+    function generatePreviousCode() {
+        var code = '{{generateEmpCode()}}';
+        $('#previous_code').val(code);
+    }
     async function validatePersonalForm() {
 
         var personsal_error = false;
