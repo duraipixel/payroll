@@ -215,9 +215,12 @@ if (!function_exists('getStaffProfileCompilation')) {
 }
 
 if (!function_exists('getStaffProfileCompilationData')) {
-    function getStaffProfileCompilationData($info)
+    function getStaffProfileCompilationData($info, $type = '')
     {
         $response = false;
+        if( $type == 'object') {
+            $info = User::find($info->id);
+        }
         $percentage = 0;
         if ($info) {
             $percentage = 10;
