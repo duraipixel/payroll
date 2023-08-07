@@ -151,6 +151,7 @@ class SalaryCreationController extends Controller
                     $insert_data['status'] = 'active';
                     $insert_data['effective_from'] = date('Y-m-d', strtotime($request->effective_from));
                     $insert_data['employee_remarks'] = $request->employee_remarks;
+                    $insert_data['remarks'] = $request->remarks;
                     $insert_data['payout_month'] = $payout_month;
                     $insert_data['verification_status'] = 'pending';
                     $insert_data['is_current'] = $is_current;

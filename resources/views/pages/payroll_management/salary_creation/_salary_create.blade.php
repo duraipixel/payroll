@@ -69,6 +69,17 @@
                                                     </label>
                                                 @endforeach
                                             </div>
+                                            <div class="list-group">
+                                                <label class="list-group-item p-3 d-flex justify-content-between">
+                                                    <span class="px-3 w-50"> Earnings Total
+                                                        <div class="text-muted small">
+                                                        </div>
+                                                    </span>
+                                                    <span id="earnings_total">
+                                                        testings
+                                                    </span>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -128,6 +139,17 @@
                                                     </label>
                                                 @endforeach
                                             </div>
+                                            <div class="list-group">
+                                                <label class="list-group-item p-3 d-flex justify-content-between">
+                                                    <span class="px-3 w-50"> Deductions Total
+                                                        <div class="text-muted small">
+                                                        </div>
+                                                    </span>
+                                                    <span id="deduction_total">
+                                                        0.00
+                                                    </span>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -138,7 +160,7 @@
                             <h2 class="accordion-header netsalary" id="panelsStayOpen-headingOne">
 
                                 Net Salary
-                                <span class="float-end">₹
+                                <span class="float-end"> Rs.
                                     <input type="text" class="w-200px text-end h-25px" name="net_salary"
                                         id="net_salary" value="">
                                     {{-- <span id="net_salary_text">
@@ -154,8 +176,8 @@
                             <div class="form-group">
                                 <label for="" class="fs-5 required"> Effective From </label>
                                 <div class="mt-3">
-                                    <input type="date" name="effective_from" id="effective_from" class="form-control"
-                                        required>
+                                    <input type="date" name="effective_from" id="effective_from"
+                                        class="form-control" required>
                                 </div>
                             </div>
 
@@ -185,10 +207,18 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group mt-5">
+                                <label for="" class="fs-5"> Employer Remarks </label>
+                                <div class="mt-3">
+                                    <textarea name="remarks" class="form-control" id="remarks" cols="30" rows="3" placeholder=""></textarea>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="form-group mt-5 text-end">
-                        <button class="btn btn-primary btn-sm" id="submit_button" type="button" onclick="return addRevisionFormSubmit()"> Submit & Lock </button>
+                        <button class="btn btn-primary btn-sm" id="submit_button" type="button"
+                            onclick="return addRevisionFormSubmit()"> Submit & Lock </button>
                         <a class="btn btn-dark btn-sm"
                             href="@if (isset($staff_id) && !empty($staff_id)) {{ route('staff.register', ['id' => $staff_id]) }} @else {{ route('salary.creation') }} @endif">
                             Cancel </a>
@@ -284,14 +314,12 @@
 
                                     if (res.error == 1) {
                                         if (res.message) {
-                                            res.message.forEach(element => {
-                                                toastr.error("Error",
-                                                    element);
-                                            });
+                                            toastr.error("Error",
+                                                res.message);
                                         }
                                     } else {
                                         toastr.success(
-                                            "Salary revision updated successfully"
+                                            "Salary updated successfully"
                                         );
 
                                         getSalaryHeadFields(staff_id);

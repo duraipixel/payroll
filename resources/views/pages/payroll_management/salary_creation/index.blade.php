@@ -67,7 +67,7 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="pe-8">
-                                <h4> Select Staff</h4>
+                                <h4> Select Staff </h4>
                             </div>
                             <div class="form-group mt-3">
 
@@ -142,6 +142,8 @@
 
             netSalary = earnings - deductions;
             $('#net_salary').val(netSalary.toFixed(2));
+            $('#earnings_total').text(earnings.toFixed(2));
+            $('#deduction_total').text(deductions.toFixed(2));
             // $('#net_salary_text').html(netSalary.toFixed(2));
         }
 
