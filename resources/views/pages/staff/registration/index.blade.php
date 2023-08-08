@@ -58,6 +58,7 @@
                         Nature of Work
                     </div>
                     <div class="badge badge-light-primary fs-6">
+                      
                         {{ $staff_details->appointment->employment_nature->name ?? 'n/a' }}
                     </div>
                 </div>
