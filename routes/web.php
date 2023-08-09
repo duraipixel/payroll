@@ -134,6 +134,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/staff/change/status', [App\Http\Controllers\StaffController::class, 'changeStatus'])->name('staff.change.status');
     Route::post('/staff/delete', [App\Http\Controllers\StaffController::class, 'deleteStaff'])->name('staff.delete');
     Route::get('/staff/generate/overview', [App\Http\Controllers\StaffController::class, 'generateOverviewPdf'])->name('staff.generate.overview');
+    Route::post('/staff/generate/employee_code', [App\Http\Controllers\StaffController::class, 'generateEmployeeCode'])->name('staff.generate.code');
 
     Route::get('/leaves', [App\Http\Controllers\Leave\LeaveController::class, 'index'])->name('leaves.list')->middleware(['checkAccess:view']); 
     Route::get('/leaves/overview', [App\Http\Controllers\Leave\LeaveController::class, 'overview'])->name('leaves.overview')->middleware(['checkAccess:view']); 

@@ -97,6 +97,8 @@
     </form>
 </div>
 <script>
+    
+
     function deleteStaffAppointment(appointment_id) {
         Swal.fire({
             text: "Are you sure you want to delete?",

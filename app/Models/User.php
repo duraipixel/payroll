@@ -239,6 +239,7 @@ class User extends Authenticatable implements Auditable
                 $query->where(function($query1) {
                     $query1->where( 'academic_id', session()->get('academic_id') );
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+                    $query1->orWhere('is_till_active', 'yes');
                 });
             });
     }

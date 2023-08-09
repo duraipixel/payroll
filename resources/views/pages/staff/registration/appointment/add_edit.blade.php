@@ -182,6 +182,30 @@
                                                 class="form-control">
                                         </div>
                                     </div>
+                                    <div class="mb-5 col-lg-4 fv-row">
+                                        <div class="d-inline-block flex-stack">
+                                            <div class="fw-bold me-5">
+                                                <label class="fs-6">Till Active</label>
+                                            </div>
+                                            <div class="d-block mt-5 align-items-center cstm-zeed">
+                                                <label class="form-check form-check-custom form-check-solid me-10">
+                                                    <input class="form-check-input h-20px w-20px" type="radio"
+                                                        name="is_till_active" value="yes"
+                                                        @if (isset($details->is_till_active) && $details->is_till_active == 'yes') checked @endif />
+                                                    <span class="form-check-label fw-bold">Yes </span>
+                                                </label>
+                                                <label class="form-check form-check-custom form-check-solid me-10">
+                                                    <input class="form-check-input h-20px w-20px" type="radio"
+                                                        name="is_till_active" value="no"
+                                                        @if ((isset($details->is_till_active) && $details->is_till_active == 'no') || !isset($details->is_till_active)) checked @endif />
+                                                    <span class="form-check-label fw-bold">No</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label for="" class="text-danger small mt-2"> If Till Active select Yes, then this appointment will continue for until create new order</label>
+                                        </div>
+                                    </div>
                                     <hr>
                                     <div class="row my-3">
 

@@ -22,8 +22,10 @@
 
                 <div class="d-flex align-items-center position-relative my-1">
                     <div>
+                        <span class="mt-2">
 
-                        {!! searchSvg() !!}
+                            {!! searchSvg() !!}
+                        </span>
                         <input type="text" name="datatable_search" data-kt-user-table-filter="search"
                             id="staff_datable_search" class="form-control form-control-solid w-250px ps-14"
                             placeholder="Search user">

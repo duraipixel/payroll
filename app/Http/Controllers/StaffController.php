@@ -1373,4 +1373,32 @@ class StaffController extends Controller
         return response()->json(['message' => "You deleted", 'status' => 1]);
         
     }
+
+    public function generateEmployeeCode(Request $request) {
+
+        $staff_id = $request->staff_id;
+        $error = 0;
+        $message = 'Successfully Generated';
+        if (canGenerateEmpCode($staff_id)) {
+            /**
+             * generate emp code   // society_emp_code, institute_emp_code
+             */
+            $staff_info = User::find($staff_id);
+            if (!$staff_info->society_emp_code) {
+
+                $staff_info->society_emp_code = getStaffEmployeeCode();
+                $staff_info->save();
+            }
+            if (!$staff_info->institute_emp_code) {
+
+                $staff_info->institute_emp_code = getStaffInstitutionCode($staff_info->institute_id);
+                $staff_info->save();
+            }
+        } else {
+            $error = 1;
+            $message = 'Please complete Data entry, Document upload and Verification';
+        }
+
+        return array('error' => $error, 'message' => $message );
+    }
 }

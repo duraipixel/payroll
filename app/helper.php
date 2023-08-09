@@ -647,7 +647,7 @@ function canGenerateEmpCode($staff_id)
     $studienSubject = StaffStudiedSubject::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     $personal_return = false;
-    if ($personalInfo && $professional_data && count($education) > 0 && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0 && count($studienSubject) > 0 && count($staffbank) > 0) {
+    if ($personalInfo && $professional_data && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0 && count($studienSubject) > 0 && count($staffbank) > 0) {
         $personal_return = true;
     }
 

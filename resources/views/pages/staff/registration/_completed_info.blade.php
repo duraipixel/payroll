@@ -71,6 +71,13 @@
                 </div>
             </td>
         </tr>
+        @if( !$staff_details->society_emp_code )
+        <tr class="text-center">
+            <td colspan="2">
+                <button type="button" class="btn btn-light-success btn-sm"  onclick="generateEmployeeCodecheck('{{$staff_details->id}}')"> Click to generate Employee Code </button>
+            </td>
+        </tr>
+        @endif
         @if( isset( $staff_details->verification_status ) && $staff_details->verification_status == 'pending' )
         <tr class="text-center">
             <td colspan="2">
@@ -92,3 +99,30 @@
     </tbody>
 
 </table>
+
+
+<script>
+    function generateEmployeeCodecheck(staff_id) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('staff.generate.code') }}",
+            type: "POST",
+            data: {staff_id:staff_id},
+            success: function(res) {
+                if( res.error == 0 ) {
+                    toastr.success( 'Success', res.message );
+
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                } else {
+                    toastr.error( 'error', res.message );
+                }
+            }
+        });
+    }
+</script>

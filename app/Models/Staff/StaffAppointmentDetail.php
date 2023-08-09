@@ -35,7 +35,8 @@ class StaffAppointmentDetail extends Model implements Auditable
         'probation_period',
         'appointment_doc',
         'appointment_order_no',
-        'status'
+        'status',
+        'is_till_active'
     ];
     public function employment_nature()
     {

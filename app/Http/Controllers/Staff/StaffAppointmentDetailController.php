@@ -241,7 +241,12 @@ class StaffAppointmentDetailController extends Controller
                 $info->appointment_order_model_id = $request->appointment_order_model_id;
                 $info->has_probation = $request->probation_update;
                 $info->probation_period = $request->probation_update == 'yes' ? $request->probation_period : null;
+                $info->is_till_active = $request->is_till_active;
+                if( $request->is_till_active == 'yes' ) {
 
+                    StaffAppointmentDetail::where('staff_id', $info->staff_id)->update(['is_till_active', 'no' ]);
+
+                }
                 if ($request->hasFile('appointment_order_doc')) {
 
                     $files = $request->file('appointment_order_doc');
@@ -264,6 +269,8 @@ class StaffAppointmentDetailController extends Controller
                 $staff_id = $request->staff_id;
                 $staff_info = User::find($staff_id);
 
+                StaffAppointmentDetail::where('staff_id', $staff_id)->update(['is_till_active', 'no' ]);
+
                 $ins['academic_id'] = $academic_id;
                 $ins['staff_id'] = $staff_id;
                 $ins['category_id'] = $request->staff_category_id;
@@ -277,6 +284,7 @@ class StaffAppointmentDetailController extends Controller
                 $ins['appointment_order_model_id'] = $request->appointment_order_model_id;
                 $ins['has_probation'] = $request->probation_update;
                 $ins['probation_period'] = $request->probation_update == 'yes' ? $request->probation_period : null;
+                $ins['is_till_active'] = $request->is_till_active;
 
                 if ($request->hasFile('appointment_order_doc')) {
 
@@ -319,6 +327,7 @@ class StaffAppointmentDetailController extends Controller
             $message    = $validator->errors()->all();
         }
         return response()->json(['error' => $error, 'message' => $message, 'staff_id' => $staff_id ?? '']);
+        
     }
 
     public function list(Request $request)
