@@ -19,7 +19,7 @@
     </style>
     <div class="card">
         <div class="card-header border-0 pt-6">
-            @if (auth()->user()->is_super_admin)
+            {{-- @if (auth()->user()->is_super_admin) --}}
             <div class="card-title">
                 <div class="d-flex align-items-center position-relative my-1 salary-selection">
                     <h4> Select Staff to Add Bank Loan </h4>
@@ -35,7 +35,7 @@
                     </select>
                 </div>
             </div>
-            @endif
+            {{-- @endif --}}
             <div class="card-toolbar">
                 {{-- <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
             @php
@@ -67,9 +67,7 @@
 
 @section('add_on_script')
     <script>
-        @if (!auth()->user()->is_super_admin)
-        getSalaryBankLoans('{{ auth()->user()->id }}');
-        @endif
+      
         $('#staff_id').select2({
             theme: 'bootstrap-5'
         });

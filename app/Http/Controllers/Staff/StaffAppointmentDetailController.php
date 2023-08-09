@@ -273,6 +273,7 @@ class StaffAppointmentDetailController extends Controller
 
                 $ins['academic_id'] = $academic_id;
                 $ins['staff_id'] = $staff_id;
+                $ins['institution_id'] = $staff_info->institute_id;
                 $ins['category_id'] = $request->staff_category_id;
                 $ins['nature_of_employment_id'] = $request->nature_of_employment_id;
                 $ins['teaching_type_id'] = $request->teaching_type_id;

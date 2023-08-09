@@ -36,7 +36,8 @@ class StaffAppointmentDetail extends Model implements Auditable
         'appointment_doc',
         'appointment_order_no',
         'status',
-        'is_till_active'
+        'is_till_active',
+        'institution_id'
     ];
     public function employment_nature()
     {
