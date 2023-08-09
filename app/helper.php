@@ -271,7 +271,6 @@ if (!function_exists('getStaffProfileCompilationData')) {
     }
 }
 
-
 if (!function_exists('getStudiedSubjects')) {
     function getStudiedSubjects($staff_id, $subject, $class = '')
     {
