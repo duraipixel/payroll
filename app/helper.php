@@ -569,10 +569,10 @@ if (!function_exists('getStaffVerificationStatus')) {
                 // $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $knownLanguages = StaffKnownLanguage::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 // $studienSubject = StaffStudiedSubject::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-                $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+                // $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $return = false;
 
-                if ($personalInfo && $professional_data && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0 && count($staffbank) > 0) {
+                if ($personalInfo && $professional_data && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0 ) {
                     $return = true;
                 }
                 return $return;
@@ -644,10 +644,10 @@ function canGenerateEmpCode($staff_id)
     $health_details = StaffHealthDetail::where('staff_id', $staff_id)->first();
     // $expeince = StaffWorkExperience::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     $knownLanguages = StaffKnownLanguage::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-    $studienSubject = StaffStudiedSubject::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
-    $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    // $studienSubject = StaffStudiedSubject::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
+    // $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     $personal_return = false;
-    if ($personalInfo && $professional_data && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0 && count($studienSubject) > 0 && count($staffbank) > 0) {
+    if ($personalInfo && $professional_data && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0 ) {
         $personal_return = true;
     }
 
