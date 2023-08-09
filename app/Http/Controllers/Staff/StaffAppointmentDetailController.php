@@ -244,7 +244,7 @@ class StaffAppointmentDetailController extends Controller
                 $info->is_till_active = $request->is_till_active;
                 if( $request->is_till_active == 'yes' ) {
 
-                    StaffAppointmentDetail::where('staff_id', $info->staff_id)->update(['is_till_active', 'no' ]);
+                    StaffAppointmentDetail::where('staff_id', $info->staff_id)->update(['is_till_active' => 'no' ]);
 
                 }
                 if ($request->hasFile('appointment_order_doc')) {
@@ -269,7 +269,7 @@ class StaffAppointmentDetailController extends Controller
                 $staff_id = $request->staff_id;
                 $staff_info = User::find($staff_id);
 
-                StaffAppointmentDetail::where('staff_id', $staff_id)->update(['is_till_active', 'no' ]);
+                StaffAppointmentDetail::where('staff_id', $staff_id)->update(['is_till_active' => 'no' ]);
 
                 $ins['academic_id'] = $academic_id;
                 $ins['staff_id'] = $staff_id;
