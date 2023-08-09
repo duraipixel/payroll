@@ -43,7 +43,7 @@
         </div>
         <div class="w-50 text-end">
             <label for="" class="fw-bold fs-5">
-                {{ $current_pattern->net_salary ?? '' }}
+                Rs.{{ $current_pattern->net_salary ?? '' }}
             </label>
         </div>
     </div>
@@ -54,9 +54,15 @@
     </div>
     <div class="mt-3 d-flex">
         <div class="w-50">
-            <label for="" class="text-muted"> Remarks </label>
+            <label for="" class="text-muted"> Employee Remarks </label>
             <div>
                 {{ $current_pattern->employee_remarks ?? '' }}
+            </div>
+        </div>
+        <div class="w-50">
+            <label for="" class="text-muted"> Employer Remarks </label>
+            <div>
+                {{ $current_pattern->remarks ?? '' }}
             </div>
         </div>
         <div class="text-end w-50">

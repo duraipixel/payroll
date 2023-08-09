@@ -130,6 +130,7 @@
                             placeholder="This will be visible to employee">{{ $current_pattern->employee_remarks ?? '' }}</textarea>
                     </div>
                 </div>
+                
 
             </div>
 
@@ -148,6 +149,13 @@
                                 @endforeach
                             @endif
                         </select> --}}
+                    </div>
+                </div>
+                <div class="form-group mt-5">
+                    <label for="" class="fs-5"> Employer Remarks </label>
+                    <div class="mt-3">
+                        <textarea name="remarks" class="form-control" id="remarks" cols="30" rows="3"
+                            placeholder="This will be visible to employee">{{ $current_pattern->remarks ?? '' }}</textarea>
                     </div>
                 </div>
             </div>
