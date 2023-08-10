@@ -71,10 +71,10 @@ if (!function_exists('getStaffInstitutionCode')) {
          * check exist
          */
         
-        $exists = DB::table('users')->where('institute_emp_code', $new_emp_code)->first();
-        if( $exists ) {
-            getStaffInstitutionCode($institute_id);
-        }
+        // $exists = DB::table('users')->where('institute_emp_code', $new_emp_code)->first();
+        // if( $exists ) {
+        //     getStaffInstitutionCode($institute_id);
+        // }
         return $new_emp_code;
     }
 }

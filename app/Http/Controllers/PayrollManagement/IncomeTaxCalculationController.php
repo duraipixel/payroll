@@ -199,6 +199,9 @@ class IncomeTaxCalculationController extends Controller
             );
             if( isset($mode) && $mode == 'lock' ) {
                 $ins['lock_calculation'] = 'yes';
+                /*
+                check 
+                */
             }
 
             $statement_id = ItStaffStatement::updateOrCreate(['id' => $id], $ins);

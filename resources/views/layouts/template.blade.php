@@ -320,7 +320,7 @@
                         let panel = '';
                         res.map((item) => {
                             panel +=
-                                `<li class="typeahead-pane-li" onclick="return setGlobalSearchValue(${item.id}, '${item.name} - ${item.emp_code}')">${item.name} - ${item.emp_code}</li>`;
+                                `<li class="typeahead-pane-li" onclick="return setGlobalSearchValue(${item.id}, '${item.name} - ${item.emp_code}')">${item.name} - ${item.institute_emp_code}</li>`;
                         })
                         $('#typeahead-search-list').html(panel);
 

@@ -38,9 +38,13 @@
         <tr class="text-center">
             <td class="text-start ps-6">
                 <div class="fw-bold fs-6 text-gray-800">
-                    <a href="{{ route('user.dl_view',['id' => $staff_details->id])}}">
+                    @if (isset($staff_details) && !empty($staff_details))
+                        <a href="{{ route('user.dl_view', ['id' => $staff_details->id]) }}">
+                            Document Verified
+                        </a>
+                    @else
                         Document Verified
-                    </a>
+                    @endif
                 </div>
             </td>
             <td>
@@ -73,29 +77,31 @@
                 </div>
             </td>
         </tr>
-        @if( !$staff_details->society_emp_code )
-        <tr class="text-center">
-            <td colspan="2">
-                <button type="button" class="btn btn-light-success btn-sm"  onclick="generateEmployeeCodecheck('{{$staff_details->id}}')"> Click to generate Employee Code </button>
-            </td>
-        </tr>
+        @if (!$staff_details->society_emp_code)
+            <tr class="text-center">
+                <td colspan="2">
+                    <button type="button" class="btn btn-light-success btn-sm"
+                        onclick="generateEmployeeCodecheck('{{ $staff_details->id }}')"> Click to generate Employee Code
+                    </button>
+                </td>
+            </tr>
         @endif
-        @if( isset( $staff_details->verification_status ) && $staff_details->verification_status == 'pending' )
-        <tr class="text-center">
-            <td colspan="2">
-                <div class="alert alert-danger small">
-                    Verification not Completed. Click finish button to Approve Verification.
-                </div>
-            </td>
-        </tr>
+        @if (isset($staff_details->verification_status) && $staff_details->verification_status == 'pending')
+            <tr class="text-center">
+                <td colspan="2">
+                    <div class="alert alert-danger small">
+                        Verification not Completed. Click finish button to Approve Verification.
+                    </div>
+                </td>
+            </tr>
         @else
-        <tr class="text-center">
-            <td colspan="2">
-                <div class="alert alert-success small">
-                    Approved
-                </div>
-            </td>
-        </tr>
+            <tr class="text-center">
+                <td colspan="2">
+                    <div class="alert alert-success small">
+                        Approved
+                    </div>
+                </td>
+            </tr>
         @endif
 
     </tbody>
@@ -113,16 +119,18 @@
         $.ajax({
             url: "{{ route('staff.generate.code') }}",
             type: "POST",
-            data: {staff_id:staff_id},
+            data: {
+                staff_id: staff_id
+            },
             success: function(res) {
-                if( res.error == 0 ) {
-                    toastr.success( 'Success', res.message );
+                if (res.error == 0) {
+                    toastr.success('Success', res.message);
 
                     setTimeout(() => {
                         location.reload();
                     }, 500);
                 } else {
-                    toastr.error( 'error', res.message );
+                    toastr.error('error', res.message);
                 }
             }
         });
