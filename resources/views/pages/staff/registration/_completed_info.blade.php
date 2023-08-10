@@ -77,7 +77,7 @@
                 </div>
             </td>
         </tr>
-        @if (!$staff_details->society_emp_code)
+        @if ( isset($staff_details) && ! isset($staff_details->society_emp_code) )
             <tr class="text-center">
                 <td colspan="2">
                     <button type="button" class="btn btn-light-success btn-sm"
