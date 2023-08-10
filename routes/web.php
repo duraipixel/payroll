@@ -156,7 +156,7 @@ Route::group(['middleware' => 'auth'],  function () {
     
     //Document Locker Start    
     Route::get('/user/document-locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker')->middleware(['checkAccess:view']); 
-    Route::get('/user/document-locker/show/{id?}', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'documentView'])->name('user.dl_view');
+    Route::get('/user/document-locker/show/{id}', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'documentView'])->name('user.dl_view');
     Route::post('/user/search-staff', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'searchData'])->name('user.search_staff'); 
     Route::post('/user/show-options', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'showOptions'])->name('user.show_options'); 
     Route::get('autocomplete-search', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'autocompleteSearch'])->name('autocomplete-search'); 

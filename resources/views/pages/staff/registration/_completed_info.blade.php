@@ -38,7 +38,9 @@
         <tr class="text-center">
             <td class="text-start ps-6">
                 <div class="fw-bold fs-6 text-gray-800">
-                    Document Verified
+                    <a href="{{ route('user.dl_view',['id' => $staff_details->id])}}">
+                        Document Verified
+                    </a>
                 </div>
             </td>
             <td>

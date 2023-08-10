@@ -49,7 +49,8 @@ if (!function_exists('getStaffInstitutionCode')) {
         $year = date('Y');
         $countNo = '0000';
         $new_emp_code = $institute_code->code . $countNo;
-        $codes = DB::table('users')->orderBy('institute_emp_code', 'desc')->first();
+        $codes = DB::table('users')->where('institute_id', $institute_id)->orderBy('institute_emp_code', 'desc')->whereNotNull('institute_emp_code')->first();
+        
         if ($codes->institute_emp_code && !empty($codes->institute_emp_code)) {
             $emp_code = substr($codes->institute_emp_code, -4);
 
@@ -65,6 +66,14 @@ if (!function_exists('getStaffInstitutionCode')) {
             } else {
                 $new_emp_code = $institute_code->code . $emp_code;
             }
+        }
+        /**
+         * check exist
+         */
+        
+        $exists = DB::table('users')->where('institute_emp_code', $new_emp_code)->first();
+        if( $exists ) {
+            getStaffInstitutionCode($institute_id);
         }
         return $new_emp_code;
     }

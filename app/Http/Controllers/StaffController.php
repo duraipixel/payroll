@@ -1107,6 +1107,8 @@ class StaffController extends Controller
                                     <i class="fa fa-print"></i>
                                 </a>';
 
+                                
+                    $postnestedData['checkbox'] = '<input type="checkbox" role="button" name="staff_ids_action[]" class="revision_check" value="' . $post_val->id . '">';
                     $postnestedData['name'] = $post_val->name;
                     $postnestedData['society_code'] = $post_val->society_emp_code;
                     $postnestedData['institute_code'] = $post_val->institute_emp_code;
