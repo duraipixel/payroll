@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Master\Bank;
 use App\Models\Staff\StaffBankLoan;
 use App\Models\Staff\StaffInsurance;
+use App\Models\Staff\StaffLoanEmi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -55,6 +56,8 @@ class BankLoanController extends Controller
         ]);
 
         if ($validator->passes()) {
+
+            // dd( $request->all() );
             $id = $request->id ?? '';
             $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
             $staff_info = User::find($staff_id);
@@ -87,7 +90,32 @@ class BankLoanController extends Controller
                 $ins['loan_end_date'] = date('Y-m-d', strtotime($request->loan_end_date));
             }
 
-            StaffBankLoan::updateOrCreate(['id' => $id], $ins);
+            $loan_info = StaffBankLoan::updateOrCreate(['id' => $id], $ins);
+
+            $emi_month = $request->emi_month;
+            $emi_amount = $request->emi_amount;
+
+            if( count( $emi_month ) > 0 && count( $emi_amount ) > 0 ) {
+                StaffLoanEmi::where('staff_loan_id', $loan_info->id)->update(['status' => 'inactive']);
+                for($i=0;$i<count($emi_month); $i++) {
+
+                    $emi_date = $emi_month[$i];
+                    $check_date = date('Y-m-01', strtotime($emi_date));
+                    $ins = [];
+                    $ins['staff_id'] = $staff_id;
+                    $ins['staff_loan_id'] = $loan_info->id;
+                    $ins['emi_date'] = $emi_date;
+                    $ins['emi_month'] = $check_date;
+                    $ins['amount'] = $emi_amount[$i] ?? 0;
+                    $ins['loan_mode'] = $request->loan_type;
+                    $ins['loan_type'] = 'Bank Loan';
+                    $ins['status'] = 'active';
+
+                    StaffLoanEmi::updateOrCreate(['staff_loan_id' => $loan_info->id, 'emi_date' => $check_date], $ins);
+                }
+            }
+
+
             $error = 0;
             $message = 'Bank Loan added successfully';
             
@@ -209,5 +237,26 @@ class BankLoanController extends Controller
         $info->delete();
 
         return response()->json(['staff_id' => $staff_id ?? '']);
+    }
+
+
+    public function getEmiDetails(Request $request) {
+
+        $period_of_loan = $request->period_of_loan;
+        $loan_start_date = $request->loan_start_date;
+        $amount = $request->amount;
+
+        $emi_details = [];
+
+        if( $loan_start_date && $period_of_loan ){
+            for( $i=0;$i<$period_of_loan;$i++) {
+                $emi_details[] = array(
+                                    's_no' => $i+1, 
+                                    'month' => date('Y-m-d', strtotime($loan_start_date. '+'.$i.'month')), 
+                                    'amount' => $amount
+                                );
+            }
+        }
+        return view('pages.payroll_management.loan._emi', compact('emi_details'));
     }
 }

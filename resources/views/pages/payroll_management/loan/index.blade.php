@@ -73,6 +73,7 @@
         });
 
         function getSalaryBankLoans(staff_id) {
+            loading();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -85,7 +86,9 @@
                 data: {
                     id: staff_id,
                 },
+
                 success: function(res) {
+                    unloading();
                     $('#bank_loan_form').html(res);
                 }
             })

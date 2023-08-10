@@ -349,6 +349,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('salary/get/form/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'getFormAndList'])->name('ajax-view.loan');
     Route::post('salary/edit/form/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'editLoanForm'])->name('edit.loan');
     Route::post('salary/delete/loan',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'deleteLoan'])->name('delete.loan');
+    Route::post('salary/get/emi/details',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'getEmiDetails'])->name('emi.loan');
 
     Route::get('salary/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'insurance'])->name('salary.lic');
     Route::post('salary/save/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'saveInsurance'])->name('save.lic');
