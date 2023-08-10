@@ -149,8 +149,7 @@
                                                 </td>
                                             @endif
                                             @if (isset($deductions_field) && !empty($deductions_field))
-                                            @foreach ($deductions_field as $sitem)
-                                            
+                                                @foreach ($deductions_field as $sitem)
                                                     @if ($sitem->short_name == 'IT')
                                                         <td class="px-3">
                                                             {{ staffMonthTax($item->id, strtolower($month)) }}
@@ -158,16 +157,16 @@
                                                                 $deduction += staffMonthTax($item->id, strtolower($month));
                                                             @endphp
                                                         </td>
-                                                    @elseif( trim( strtolower($sitem->short_name)) == 'other')
+                                                    @elseif(trim(strtolower($sitem->short_name)) == 'other')
                                                         <td class="px-3">
                                                             @php
                                                                 $other_amount = getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
                                                                 /**
                                                                  * get leave deduction amount
                                                                  */
-                                                                $leave_amount_day = getStaffLeaveDeductionAmount( $item->id, $date ) ?? 0;
+                                                                $leave_amount_day = getStaffLeaveDeductionAmount($item->id, $date) ?? 0;
                                                                 $leave_amount = 0;
-                                                                if( $leave_amount_day ) {
+                                                                if ($leave_amount_day) {
                                                                     $leave_amount = getDaySalaryAmount($gross, $month_length);
                                                                     $leave_amount = $leave_amount * $leave_amount_day;
                                                                 }
@@ -176,6 +175,22 @@
                                                             {{ $other_amount }}
                                                             @php
                                                                 $deduction += $other_amount;
+                                                            @endphp
+                                                        </td>
+                                                    @elseif(trim(strtolower($sitem->short_name)) == 'bank loan')
+                                                        <td class="px-3">
+                                                            @php
+                                                                $bank_loan_amount = getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                                                                /**
+                                                                 * get leave deduction amount
+                                                                 */
+                                                                $other_bank_loan_amount = getBankLoansAmount($item->id, $date);
+                                                                
+                                                                $bank_loan_amount += $other_bank_loan_amount['total_amount'] ?? 0;
+                                                            @endphp
+                                                            {{ $bank_loan_amount }}
+                                                            @php
+                                                                $deduction += $bank_loan_amount;
                                                             @endphp
                                                         </td>
                                                     @else

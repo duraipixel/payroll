@@ -13,6 +13,8 @@ use App\Models\PayrollManagement\SalaryField;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
 use App\Models\PayrollManagement\StaffSalaryPattern;
+use App\Models\Staff\StaffBankLoan;
+use App\Models\Staff\StaffLoanEmi;
 use App\Models\User;
 use App\Repositories\PayrollChecklistRepository;
 use App\Repositories\PayrollRepository;
@@ -310,8 +312,9 @@ class OverviewController extends Controller
         if (isset($payout_data) && count($payout_data)) {
 
             StaffSalary::where('payroll_id', $payout_id)->update(['status' => 'inactive']);
-
+            $used_loans = [];
             foreach ($payout_data as $key => $value) {
+                $staff_info = User::find($value->id);
                 $other_description = '';
                 if ($value->appointment->employment_nature->id) {
 
@@ -370,7 +373,33 @@ class OverviewController extends Controller
                                 }
                                 $other_amount += $leave_amount;
 
+                                if( $other_amount > 0 ) {
+                                    $tmp = [];
+                                    $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2];
+                                    $tmp['amount'] = $other_amount;
+                                    $used_fields[] = $tmp;
+                                }
+
                                 $deduction += $other_amount;
+                            } else if(trim(strtolower($sitem->short_name)) == 'bank loan'){
+                                $bank_loan_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                                /**
+                                 * get leave deduction amount
+                                 */
+                                $other_bank_loan_amount = getBankLoansAmount($value->id, $date);
+                                
+                                $bank_loan_amount += $other_bank_loan_amount['total_amount'] ?? 0;
+                                if( !empty( $other_bank_loan_amount['emi']) ) {
+                                    $used_loans[] = $other_bank_loan_amount['emi'];
+                                }
+                                if( $bank_loan_amount > 0 ) {
+                                    $tmp = [];
+                                    $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2];
+                                    $tmp['amount'] = $bank_loan_amount;
+                                    $used_fields[] = $tmp;
+                                }
+
+                                $deduction += $bank_loan_amount;
                             } else {
                                 $deduct_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
                                 $deduction += $deduct_amount;
@@ -418,6 +447,36 @@ class OverviewController extends Controller
                         $field['reference_id'] = $pay_items['reference_id'];
                         $field['percentage'] = 0;
                         StaffSalaryField::updateOrCreate(['staff_salary_id' => $salary_info->id, 'reference_type' => $pay_items['reference_type'], 'staff_id' => $staff_id, 'field_id' => $pay_items['field_id']], $field);
+                    }
+                    /**
+                     * update in bank loans
+                     */
+                    if( !empty( $used_loans ) ) {
+                        $staff_loan_id = [];
+                        foreach($used_loans as $loan_items ) {
+                            if( isset( $loan_items['details'] ) && !empty( $loan_items['details'] ) ) {
+
+                                $info = StaffLoanEmi::find( $loan_items['details']->id );
+                                $info->status = 'paid';
+                                $info->save();
+
+                                $staff_loan_id[]  = $loan_items['details']->staff_loan_id;
+                            }
+                        }
+                        /**
+                         * 1. For case 1 loan paid by all month
+                         * 2. If loan close by half duration - need to do 
+                         */
+                        if( !empty( $staff_loan_id ) ) {
+                            $staff_loan_id = array_unique($staff_loan_id);
+                            foreach($staff_loan_id as $loan_ids ) {
+                                $loan_info = StaffBankLoan::with('paid_emi')->find( $loan_ids );
+                                if( $loan_info && $loan_info->period_of_loans == $loan_info->paid_emi()->count() ) {
+                                    $loan_info->status = 'completed';
+                                    $loan_info->save();
+                                }
+                            }
+                        }
                     }
 
                     $salary_info->salary_no = salaryNo();

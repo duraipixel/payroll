@@ -34,6 +34,7 @@ use App\Models\PayrollManagement\SalaryField;
 use App\Models\PayrollManagement\StaffSalaryField;
 use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\PayrollManagement\StaffSalaryPatternField;
+use App\Models\Staff\StaffBankLoan;
 use App\Models\Staff\StaffDeduction;
 use App\Models\Staff\StaffHandlingSubject;
 use App\Models\Staff\StaffOtherIncome;
@@ -483,6 +484,12 @@ if (!function_exists('generateLeaveForm')) {
         }
     }
 
+    function commonAmountFormat($amount)
+    {
+
+        return 'Rs.'.$amount ?? 0;
+    }
+
     function getTotalLeaveCount($staff_id)
     {
         $staff_info = User::find($staff_id);
@@ -859,6 +866,7 @@ function generateIncomeTaxStatementPdfByStaff($statement_id)
             $q->where('payout_month', '>=', $start_date);
             $q->where('payout_month', '<=', $end_date);
         })
+        ->where('is_current', 'yes')
         ->first();
 
     if (isset($salary_pattern) && !empty($salary_pattern)) {
@@ -1172,4 +1180,31 @@ function taxPaidPayroll( $staff_id, $salary_pattern_id ) {
             ->where('staff_salaries.salary_pattern_id', $salary_pattern_id)->get()->sum('incometax_amount');
     
     return $info ?? 0;
+}
+
+function getBankLoansAmount( $staff_id, $date ) {
+   
+    $arr = [];
+    $total_amount = 0;
+    $loan_details = StaffBankLoan::where(['status' => 'active', 'staff_id' => $staff_id])->get();
+    if( isset( $loan_details ) && !empty( $loan_details ) ) {
+        foreach ($loan_details as $item ) {
+            if( isset($item->emi) && count( $item->emi ) > 0 ) {
+                foreach ($item->emi as $emi_item ) {
+                    $tmp = [];
+                    if( $emi_item->emi_month == $date && $emi_item->status == 'active' ) {
+                        
+                        $tmp['amount'] = $emi_item->amount;
+                        $tmp['details'] = $emi_item;
+                        $total_amount += $emi_item->amount ?? 0;
+
+                        $arr[] = $tmp;
+                    }
+                }
+            }
+        }
+    }
+
+    return ['total_amount' => $total_amount, 'emi' => $arr ];
+
 }

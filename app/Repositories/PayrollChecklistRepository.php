@@ -78,6 +78,7 @@ class PayrollChecklistRepository extends Controller
             ->where('verification_status', 'approved')
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
             ->where('it_staff_statements.status', 'active')
+            ->where('it_staff_statements.lock_calculation', 'yes')
             ->whereNull('is_super_admin')->count();
         $process = false;
         if ($response['verified_user'] == $response['pending_it']) {
@@ -105,7 +106,7 @@ class PayrollChecklistRepository extends Controller
         $users = User::select('users.*')->with(['workedDays' => function ($query) use ($month_start, $month_end) {
                 $query->whereDate('attendance_date', '>=', $month_start);
                 $query->whereDate('attendance_date', '<=', $month_end);
-            }, 'currentSalaryPattern', 'firstAppointment'])
+            }, 'currentSalaryPattern', 'firstAppointment', 'appointment'])
             ->join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
             ->leftJoin('hold_salaries', function ($join) use ($hold_month) {
                 $join->on('hold_salaries.staff_id', '=', 'users.id')

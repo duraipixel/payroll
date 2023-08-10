@@ -18,7 +18,6 @@ class TaxCalculationRepository
     public function generateStatementForStaff($staff_id)
     {
 
-        $staff_id = $staff_id;
         $staff_details = User::find($staff_id);
         $academic_data = AcademicYear::find(academicYearId());
         $statement_info = ItStaffStatement::where('staff_id', $staff_id)->where(['academic_id' => academicYearId(), 'status' => 'active'])->first();
@@ -36,8 +35,10 @@ class TaxCalculationRepository
             $salary_pattern = StaffSalaryPattern::where(['staff_id' => $staff_id, 'verification_status' => 'approved'])
                 ->where(function ($q) use ($start_date, $end_date) {
                     $q->where('payout_month', '>=', $start_date);
-                    $q->where('payout_month', '<=', $end_date);
+                    // $q->where('payout_month', '<=', $end_date);
                 })
+                ->orderBy('payout_month', 'desc')
+                ->where('is_current', 'yes')
                 ->first();
 
             if (isset($salary_pattern) && !empty($salary_pattern)) {
@@ -45,7 +46,7 @@ class TaxCalculationRepository
                 $salary_calculated_month = getTaxOtherSalaryCalulatedMonth($salary_pattern);
 
                 $gross_salary_annum = $salary_pattern->gross_salary * $salary_calculated_month;
-                $professional_tax = getProfessionTaxAmount($salary_pattern->gross_salary, $salary_pattern->payout_month);
+                // $professional_tax = getProfessionTaxAmount($salary_pattern->gross_salary, $salary_pattern->payout_month);
 
                 $pf_data = StaffSalaryPatternField::join('salary_fields', 'salary_fields.id', '=', 'staff_salary_pattern_fields.field_id')
                     ->where('staff_salary_pattern_id', $salary_pattern->id)
@@ -184,10 +185,19 @@ class TaxCalculationRepository
             'tax_after_rebate_amount' => $tax_after_rebate_amount,
             'educational_cess_tax_payable' => round(getPercentageAmount(4, $tax_after_rebate_amount)),
             'total_income_tax_payable' => $total_income_tax_payable,
+            'salary_pattern_id' => $salary_pattern->id ?? null,
             'added_by' => auth()->id()
         );
+        if( $total_income_tax_payable == 0 ) {
+            $ins['lock_calculation'] = 'yes';
+        }
         // dd( $ins );
-        $statement_id = ItStaffStatement::create($ins)->id;
+        $check_exist = ItStaffStatement::where(['academic_id' => academicYearId(), 'staff_id' => $staff_id, 'salary_pattern_id' => $salary_pattern->id, 'status' => 'active' ])->first();
+        $statement_id = '';
+        if( !$check_exist ) {
+
+            $statement_id = ItStaffStatement::create($ins)->id;
+        }
         if( $statement_id ) {
             generateIncomeTaxStatementPdfByStaff($statement_id);
             return true;
@@ -195,5 +205,22 @@ class TaxCalculationRepository
             return false;
         }
         
+    }
+
+    public function generateIncomeTaxStatemenForAll() {
+
+        $staff_details = User::where('verification_status', 'approved')->get();
+        $generated = [];
+        $not_generated = [];
+        if( isset( $staff_details ) && !empty( $staff_details ) ) {
+            foreach( $staff_details as $items ) {
+                if( $this->generateStatementForStaff($items->id ) ) {
+                    $generated[] = $items;
+                }
+            }
+        }
+
+        return $generated;
+
     }
 }

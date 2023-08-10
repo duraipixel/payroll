@@ -56,6 +56,20 @@
                     </div>
                 </div>
             @endforeach
+            <div class="d-flex w-100 m-2 p-2 payrow">
+                <div class="w-30 d-flex">
+
+                    <div>
+                        Earnings Total
+                    </div>
+                </div>
+                <div class="w-35 text-end">
+
+                </div>
+                <div class="w-35 text-end">
+                    <label for="" id="earnings_total"></label>
+                </div>
+            </div>
         @endif
         <div class="d-flex w-100 m-2 p-2 bg-secondary text-muted">
             <div class="w-100">
@@ -99,6 +113,19 @@
                     </div>
                 </div>
             @endforeach
+            <div class="d-flex w-100 m-2 p-2 payrow">
+                <div class="w-30 d-flex">
+                    <div>
+                        Deductions Total
+                    </div>
+                </div>
+                <div class="w-35 text-end">
+
+                </div>
+                <div class="w-35 text-end">
+                    <label for="" id="deduction_total"></label>
+                </div>
+            </div>
         @endif
         <div class="d-flex w-100 m-2 p-2 payrow">
             <div class="w-30">
@@ -130,7 +157,7 @@
                             placeholder="This will be visible to employee">{{ $current_pattern->employee_remarks ?? '' }}</textarea>
                     </div>
                 </div>
-                
+
 
             </div>
 

@@ -4,10 +4,12 @@ namespace App\Models\Staff;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StaffBankLoan extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'staff_id',
@@ -20,7 +22,7 @@ class StaffBankLoan extends Model
         'every_month_amount',
         'loan_amount',
         'period_of_loans',
-        'status',
+        'status', //'active', 'inactive', 'completed'
         'file',
         'loan_start_date',
         'loan_end_date'
@@ -28,6 +30,10 @@ class StaffBankLoan extends Model
 
     public function emi() {
         return $this->hasMany(StaffLoanEmi::class, 'staff_loan_id', 'id')->where('status', '!=', 'inactive')->orderBy('emi_date');
+    }
+
+    public function paid_emi() {
+        return $this->hasMany(StaffLoanEmi::class, 'staff_loan_id', 'id')->where('status', '=', 'paid')->orderBy('emi_date');
     }
 
 }

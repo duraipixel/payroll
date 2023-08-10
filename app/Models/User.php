@@ -332,7 +332,9 @@ class User extends Authenticatable implements Auditable
 
     public function currentSalaryPattern()
     {
-        return $this->hasOne(StaffSalaryPattern::class, 'staff_id', 'id')->where('status', 'active');
+        return $this->hasOne(StaffSalaryPattern::class, 'staff_id', 'id')
+                ->where('status', 'active')
+                ->where('is_current', 'yes');
     }
     
     public function salaryApproved()

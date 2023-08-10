@@ -8,6 +8,7 @@ use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\PayrollManagement\OtherIncome;
 use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\PayrollManagement\StaffSalaryPatternField;
+use App\Models\Staff\StaffTaxSeperation;
 use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
@@ -30,10 +31,11 @@ class IncomeTaxCalculationController extends Controller
     {
 
         $employees = User::where('status', 'active')->orderBy('name', 'asc')->whereNull('is_super_admin')->get();
-               
+        $statement_details = ItStaffStatement::where('status', 'active')->where('academic_id', academicYearId())->get();    
         // die;
         $params = array(
             'employees' => $employees,
+            'statement_details' => $statement_details
         );
         return view('pages.payroll_management.it_calculation.index', $params);
     }
@@ -65,16 +67,20 @@ class IncomeTaxCalculationController extends Controller
                 ->first();
             
             if (isset($salary_pattern) && !empty($salary_pattern)) {
+                if( $staff_details->verification_status == 'approved') {
+                    $salary_calculated_month = getTaxOtherSalaryCalulatedMonth($salary_pattern);
 
-                $salary_calculated_month = getTaxOtherSalaryCalulatedMonth($salary_pattern);
-
-                $gross_salary_annum = $salary_pattern->gross_salary * $salary_calculated_month;
-                $professional_tax = getProfessionTaxAmount($salary_pattern->gross_salary, $salary_pattern->payout_month);
-
-                $pf_data = StaffSalaryPatternField::join('salary_fields', 'salary_fields.id', '=', 'staff_salary_pattern_fields.field_id')
-                    ->where('staff_salary_pattern_id', $salary_pattern->id)
-                    ->where('salary_fields.short_name', 'EPF')
-                    ->first();
+                    $gross_salary_annum = $salary_pattern->gross_salary * $salary_calculated_month;
+                    $professional_tax = getProfessionTaxAmount($salary_pattern->gross_salary, $salary_pattern->payout_month);
+    
+                    $pf_data = StaffSalaryPatternField::join('salary_fields', 'salary_fields.id', '=', 'staff_salary_pattern_fields.field_id')
+                        ->where('staff_salary_pattern_id', $salary_pattern->id)
+                        ->where('salary_fields.short_name', 'EPF')
+                        ->first();
+                } else {
+                    $error_message = 'Staff Verification is pending';
+                }
+               
 
             } else {
 
@@ -202,6 +208,12 @@ class IncomeTaxCalculationController extends Controller
                 /*
                 check 
                 */
+                if( $request->total_income_tax_payable > 0 ) {
+                    $checkTaxSeparation = StaffTaxSeperation::where('staff_id', $staff_id)->where('income_tax_id', $id)->first();
+                    if( !$checkTaxSeparation ) {
+                        return array('error' => 1, 'message' => 'Tax seperation amount not added by staff, Please complete staff tax seperation to lock tax calculation', 'staff_id' => $request->staff_id);
+                    }
+                }
             }
 
             $statement_id = ItStaffStatement::updateOrCreate(['id' => $id], $ins);
@@ -235,5 +247,28 @@ class IncomeTaxCalculationController extends Controller
             }
         }
         return ['error' => $error, 'message' => $message];
+    }
+
+    public function generateAllStatement(Request $request) {
+
+        $error = 0;
+        $generated = $this->taxRepository->generateIncomeTaxStatemenForAll();
+        $message = 'Successfully generated';
+       
+        return ['error' => $error, 'message' => $message, 'generated' => $generated];
+
+    }
+
+    public function list(Request $request) {
+
+        $lock_calculation = $request->lock_calculation ?? '';
+        $statement_details = ItStaffStatement::where('status', 'active')
+                            ->when(!empty( $lock_calculation ), function($query) use($lock_calculation) {
+                                $query->where('lock_calculation', $lock_calculation);
+                            })
+                            ->where('academic_id', academicYearId())
+                            ->get();    
+        return view('pages.payroll_management.it_calculation._list', compact('statement_details', 'lock_calculation'));
+        
     }
 }

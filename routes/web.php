@@ -328,6 +328,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('it-calculation/get/tax/calculation',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'ajaxTaxCalculation'])->name('it-calculation.calculation.ajax');
     Route::post('it-calculation/save/statement',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'saveItStatement'])->name('it-calculation.save.statement');
     Route::post('it-calculation/generate/newstatement',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'generateNewStatement'])->name('it-calculation.generate.statement');
+    Route::post('it-calculation/generate/statement/all',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'generateAllStatement'])->name('it-calculation.generate.all');
+    Route::post('it-calculation/list',[App\Http\Controllers\PayrollManagement\IncomeTaxCalculationController::class,'list'])->name('it-calculation.list');
 
     ## salary creation & update & revison
     Route::get('salary/creation/{staff_id?}',[App\Http\Controllers\PayrollManagement\SalaryCreationController::class,'index'])->name('salary.creation');

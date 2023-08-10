@@ -35,6 +35,10 @@
                                         <label for="" class="text-danger"> Staff does not enter tax adjustment
                                             data.
                                         </label>
+                                    @elseif($statement_info->is_staff_calculation_done == 'yes')
+                                    <label for="" class="text-success mx-3"> 
+                                        Staff has done tax adjustment details.
+                                    </label>
                                     @endif
                                     @if ($statement_info->lock_calculation == 'no')
                                         <button type="button" class="btn btn-primary btn-sm"
@@ -56,6 +60,9 @@
                                 @endif
                             </div>
                         </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="listTaxCalculation()"> Back to List </button>
                     </div>
                 </div>
 
@@ -155,7 +162,7 @@
             icon: "warning",
             showCancelButton: true,
             buttonsStyling: false,
-            confirmButtonText: "Yes, Change it!",
+            confirmButtonText: "Yes, Do it!",
             cancelButtonText: "No, return",
             customClass: {
                 confirmButton: "btn btn-danger",
