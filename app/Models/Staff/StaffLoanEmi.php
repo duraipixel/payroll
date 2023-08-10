@@ -17,9 +17,9 @@ class StaffLoanEmi extends Model
         'emi_date',
         'emi_month',
         'amount',
-        'loan_mode',
-        'loan_type',
-        'status'
+        'loan_mode', //fixed, variable
+        'loan_type', //school, bank loan
+        'status'   //'active','inactive', 'paid'
     ];
 
 }

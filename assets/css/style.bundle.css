@@ -55056,3 +55056,7 @@ body {
 .form-control:focus {
   border: 1px solid #173478 !important;
 }
+
+.blur-loading {
+  filter: blur(2px);
+}

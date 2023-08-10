@@ -57,7 +57,7 @@
                             <td>{{ $item->bank_name }}</td>
                             <td>{{ $item->ifsc_code }}</td>
                             <td>{{ $item->loan_ac_no }}</td>
-                            <td>{{ $item->every_month_amount }}</td>
+                            <td>{{ $item->loan_amount }}</td>
                             <td>{{ $item->loan_due }}</td>
                             <td>{{ $item->period_of_loans }}</td>
                             <td>

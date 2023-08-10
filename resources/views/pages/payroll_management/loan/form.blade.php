@@ -52,10 +52,20 @@
                 <div class="col-sm-4 mt-5">
                     <div class="form-group">
                         <label for="" class="required">
-                            Amount
+                            Loan Amount
                         </label>
                         <input type="text" name="amount" onkeyup="getEmiDetails()" id="amount"
-                            value="{{ $loan_info->every_month_amount ?? '' }}" class="form-control price">
+                            value="{{ $loan_info->loan_amount ?? '' }}" class="form-control price">
+                    </div>
+                </div>
+                <div class="col-sm-4 mt-5">
+                    <div class="form-group">
+                        <label for="" class="required">
+                            Every Month Pay Amount
+                        </label>
+                        <input type="text" name="every_month_amount" onkeyup="getEmiDetails()"
+                            id="every_month_amount" value="{{ $loan_info->every_month_amount ?? '' }}"
+                            class="form-control price">
                     </div>
                 </div>
                 <div class="col-sm-4 mt-5">
@@ -127,7 +137,11 @@
                     <div id="panelsStayOpen-collapseEmi" class="accordion-collapse collapse show"
                         aria-labelledby="panelsStayOpen-headingOne">
                         <div class="accordion-body" id="emi_loan_content">
-
+                            @if (isset($loan_info->loan_due) && $loan_info->loan_due == 'fixed')
+                                @include('pages.payroll_management.loan._emi')
+                            @else
+                                @include('pages.payroll_management.loan._emi_variable')
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -192,7 +206,7 @@
             var form_in = document.getElementById('staff_bank_loan_form');
             if (form_in instanceof HTMLFormElement) {
                 var formData = new FormData(form_in);
-    
+
                 $.ajax({
                     url: "{{ route('save.loan') }}",
                     type: "POST",
@@ -203,7 +217,7 @@
                     success: function(res) {
                         // Disable submit button whilst loading
                         submitButton.disabled = false;
-    
+
                         if (res.error == 1) {
                             if (res.message) {
                                 res.message.forEach(element => {
@@ -218,7 +232,7 @@
                             if (res.staff_id) {
                                 getSalaryBankLoans(res.staff_id);
                             }
-    
+
                         }
                     }
                 })
@@ -234,8 +248,14 @@
     $('#loan_start_date').change(function() {
 
         var period_of_loan = $('#period_of_loan').val();
+        var loan_type = $('#loan_type').val();
         if (period_of_loan == '' || period_of_loan == 'undefined') {
             toastr.error('Error', 'Please select Period of loan first');
+            $('#loan_start_date').val('');
+            return false;
+        }
+        if (loan_type == '' || loan_type == 'undefined') {
+            toastr.error('Error', 'Please select Loan type');
             $('#loan_start_date').val('');
             return false;
         }
@@ -247,7 +267,8 @@
     function getEmiDetails() {
         var period_of_loan = $('#period_of_loan').val();
         var loan_start_date = $('#loan_start_date').val();
-        var amount = $('#amount').val();
+        var amount = $('#every_month_amount').val();
+        var loan_type = $('#loan_type').val();
 
         if (period_of_loan != '' && loan_start_date != '' && amount != '') {
 
@@ -262,9 +283,14 @@
                 data: {
                     period_of_loan: period_of_loan,
                     loan_start_date: loan_start_date,
-                    amount: amount
+                    amount: amount,
+                    loan_type: loan_type
+                },
+                beforeSend: function(){
+                    $('#emi_loan_content').addClass('blur-loading');
                 },
                 success: function(res) {
+                    $('#emi_loan_content').removeClass('blur-loading');
                     $('#emi_loan_content').html(res);
                 }
             })

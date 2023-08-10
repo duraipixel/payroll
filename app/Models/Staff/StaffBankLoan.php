@@ -18,11 +18,16 @@ class StaffBankLoan extends Model
         'loan_type_id',	
         'loan_due',	
         'every_month_amount',
+        'loan_amount',
         'period_of_loans',
         'status',
         'file',
         'loan_start_date',
         'loan_end_date'
     ];
+
+    public function emi() {
+        return $this->hasMany(StaffLoanEmi::class, 'staff_loan_id', 'id')->where('status', '!=', 'inactive')->orderBy('emi_date');
+    }
 
 }

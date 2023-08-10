@@ -69,7 +69,8 @@ class BankLoanController extends Controller
             $ins['loan_ac_no'] = $request->account_no;
             // $ins['loan_type_id'] = $request->staff_id;
             $ins['loan_due'] = $request->loan_type;
-            $ins['every_month_amount'] = $request->amount;
+            $ins['every_month_amount'] = $request->every_month_amount;
+            $ins['loan_amount'] = $request->amount;
             $ins['period_of_loans'] = $request->period_of_loan;
             $ins['status'] = 'active';
             if ($request->hasFile('document')) {
@@ -111,7 +112,7 @@ class BankLoanController extends Controller
                     $ins['loan_type'] = 'Bank Loan';
                     $ins['status'] = 'active';
 
-                    StaffLoanEmi::updateOrCreate(['staff_loan_id' => $loan_info->id, 'emi_date' => $check_date], $ins);
+                    StaffLoanEmi::updateOrCreate(['staff_loan_id' => $loan_info->id, 'emi_month' => $check_date], $ins);
                 }
             }
 
@@ -245,6 +246,7 @@ class BankLoanController extends Controller
         $period_of_loan = $request->period_of_loan;
         $loan_start_date = $request->loan_start_date;
         $amount = $request->amount;
+        $loan_type = $request->loan_type;
 
         $emi_details = [];
 
@@ -257,6 +259,12 @@ class BankLoanController extends Controller
                                 );
             }
         }
-        return view('pages.payroll_management.loan._emi', compact('emi_details'));
+        if( $loan_type == 'fixed' ) {
+            return view('pages.payroll_management.loan._emi', compact('emi_details'));
+
+        } else {
+
+            return view('pages.payroll_management.loan._emi_variable', compact('emi_details'));
+        }
     }
 }
