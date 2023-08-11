@@ -13,6 +13,10 @@
                 <td> Deduction </td>
                 <td> {{ $info->salaryStaff->sum('total_deductions') }} </td>
             </tr>
+            <tr>
+                <td> Net Pay </td>
+                <td> {{ $info->salaryStaff->sum('net_salary') }} </td>
+            </tr>
             
         </table>
 

@@ -293,13 +293,15 @@ class OverviewController extends Controller
         $payout_id = $request->payout_id;
         $date = $request->date;
 
+        $month = date('F', strtotime($date));
+        $month_length = date('t', strtotime($date));
+
         $payroll_date = date('Y-m-d', strtotime($date . '-1 month'));
         $month_start = date('Y-m-01', strtotime($payroll_date));
         $month_end = date('Y-m-t', strtotime($payroll_date));
         $working_day = date('t', strtotime($payroll_date));
         $payroll_info = Payroll::find($payout_id);
         $payout_data = $this->checklistRepository->getToPayEmployee($date);
-
         $error = '1';
         $message = 'Error occurred while generating payroll';
         /** 
@@ -308,7 +310,14 @@ class OverviewController extends Controller
         $salary_month = date('F', strtotime($payroll_date));
         $salary_year = date('Y', strtotime($payroll_date));
 
-        $month_length = date('t', strtotime($payroll_date));
+        $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
+        $deductions_field = SalaryField::where('salary_head_id', 2)
+            ->where(function ($query) {
+                $query->where('is_static', 'yes');
+                $query->orWhere('nature_id', 3);
+            })->get();
+
+        // $month_length = date('t', strtotime($payroll_date));
         if (isset($payout_data) && count($payout_data)) {
 
             StaffSalary::where('payroll_id', $payout_id)->update(['status' => 'inactive']);
@@ -316,15 +325,15 @@ class OverviewController extends Controller
             foreach ($payout_data as $key => $value) {
                 $staff_info = User::find($value->id);
                 $other_description = '';
-                if ($value->appointment->employment_nature->id) {
+                // if ($value->appointment->employment_nature->id) {
 
-                    $nature_id = $value->appointment->employment_nature->id;
-                    $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', $nature_id)->get();
-                    $deductions_field = SalaryField::where('salary_head_id', 2)
-                        ->where(function ($query) use ($nature_id) {
-                            $query->where('is_static', 'yes');
-                            $query->orWhere('nature_id', $nature_id);
-                        })->get();
+                    // $nature_id = $value->appointment->employment_nature->id;
+                    // $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', $nature_id)->get();
+                    // $deductions_field = SalaryField::where('salary_head_id', 2)
+                    //     ->where(function ($query) use ($nature_id) {
+                    //         $query->where('is_static', 'yes');
+                    //         $query->orWhere('nature_id', $nature_id);
+                    //     })->get();
 
                     $gross = $value->currentSalaryPattern->gross_salary;
                     $deduction = 0;
@@ -333,8 +342,8 @@ class OverviewController extends Controller
                     if (isset($earings_field) && !empty($earings_field)) {
                         foreach ($earings_field as $eitem) {
                             $tmp = [];
-                            $tmp = ['field_id' => $eitem->id, 'field_name' => $eitem->name, 'reference_type' => 'EARNINGS', 'reference_id' => 1];
-                            $amounts = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $eitem->name);
+                            $tmp = ['field_id' => $eitem->id, 'field_name' => $eitem->name, 'reference_type' => 'EARNINGS', 'reference_id' => 1, 'short_name' => $eitem->short_name];
+                            $amounts = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '',$eitem->name, 'EARNINGS', $eitem->short_name);
                             if ($amounts > 0) {
                                 $tmp['amount'] = $amounts;
                                 $used_fields[] = $tmp;
@@ -348,16 +357,19 @@ class OverviewController extends Controller
                         foreach ($deductions_field as $sitem) {
                             $tmp = [];
                             $deduct_amount = 0;
-                            $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2];
+                            $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
                             if ($sitem->short_name == 'IT') {
-                                $deduct_amount = staffMonthTax($value->id, strtolower($salary_month));
+
+                                $deduct_amount = staffMonthTax($value->id, strtolower($month));
+
                                 if ($deduct_amount > 0) {
                                     $tmp['amount'] = $deduct_amount;
                                     $used_fields[] = $tmp;
                                 }
 
                                 $deduction += $deduct_amount;
-                            } else if( trim( strtolower($sitem->short_name)) == 'other') {
+
+                            } else if( trim( strtolower( $sitem->short_name ) ) == 'other' ) {
 
                                 $other_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
                                 /**
@@ -375,7 +387,7 @@ class OverviewController extends Controller
 
                                 if( $other_amount > 0 ) {
                                     $tmp = [];
-                                    $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2];
+                                    $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
                                     $tmp['amount'] = $other_amount;
                                     $used_fields[] = $tmp;
                                 }
@@ -394,7 +406,7 @@ class OverviewController extends Controller
                                 }
                                 if( $bank_loan_amount > 0 ) {
                                     $tmp = [];
-                                    $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2];
+                                    $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
                                     $tmp['amount'] = $bank_loan_amount;
                                     $used_fields[] = $tmp;
                                 }
@@ -413,10 +425,9 @@ class OverviewController extends Controller
                     }
 
                     $net_pay = $gross - $deduction;
-                }
+                // }
 
                 if ($earnings == $gross && !empty($used_fields)) {
-
 
                     $staff_id = $value->id;
 
@@ -442,6 +453,7 @@ class OverviewController extends Controller
                         $field['staff_salary_id'] = $salary_info->id;
                         $field['field_id'] = $pay_items['field_id'];
                         $field['field_name'] = $pay_items['field_name'];
+                        $field['short_name'] = $pay_items['short_name'] ?? '';
                         $field['amount'] = $pay_items['amount'];
                         $field['reference_type'] = $pay_items['reference_type'];
                         $field['reference_id'] = $pay_items['reference_id'];
@@ -490,7 +502,6 @@ class OverviewController extends Controller
                     /**
                      * generate document for staff salary
                      */
-                    
                     $salary_info->save();
                     // dump( $salary_info );
                     $salary_info->document = $this->payrollRepository->generateSalarySlip($salary_info);

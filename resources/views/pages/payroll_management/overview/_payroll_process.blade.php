@@ -137,11 +137,15 @@
                                             @php
                                                 $gross = $item->currentSalaryPattern->gross_salary;
                                                 $deduction = 0;
+                                                $earnings = 0;
                                             @endphp
                                             @if (isset($earings_field) && !empty($earings_field))
                                                 @foreach ($earings_field as $eitem)
                                                     <td class="px-3">
-                                                        {{ getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $eitem->name) }}
+                                                        {{ getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $eitem->name, 'EARNINGS', $eitem->short_name) }}
+                                                        @php
+                                                            $earnings += getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $eitem->name, 'EARNINGS', $eitem->short_name);
+                                                        @endphp
                                                     </td>
                                                 @endforeach
                                                 <td class="px-3">

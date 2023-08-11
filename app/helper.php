@@ -911,15 +911,19 @@ function generateIncomeTaxStatementPdfByStaff($statement_id)
     $info->save();
 }
 
-function getStaffPatterFieldAmount($staff_id, $salary_pattern_id, $field_id = '', $field_name = '', $reference_type = '')
+function getStaffPatterFieldAmount($staff_id, $salary_pattern_id, $field_id = '', $field_name = '', $reference_type = '', $short_name = '')
 {
 
     $info = StaffSalaryPatternField::where('staff_id', $staff_id)->where('staff_salary_pattern_id', $salary_pattern_id)
         ->when(!empty($field_id), function ($query) use ($field_id) {
             $query->where('field_id', $field_id)->first();
         })
-        ->when(!empty($field_name), function ($query) use ($field_name) {
-            $query->where('field_name', $field_name);
+        ->where( function($query) use( $short_name, $field_name ) {
+            $query->when(!empty($field_name), function ($query) use ($field_name) {
+                $query->where('field_name', $field_name);
+            })->when(!empty($short_name), function ($query) use ($short_name) {
+                $query->orWhere('field_name', $short_name);
+            });
         })
         ->when(!empty($reference_type), function ($query) use ($reference_type) {
             $query->where('reference_type', $reference_type);
