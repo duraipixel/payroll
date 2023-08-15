@@ -358,6 +358,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('salary/get/form/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'getFormAndListInsurance'])->name('ajax-view.lic');
     Route::post('salary/edit/form/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'editLicForm'])->name('edit.lic');
     Route::post('salary/delete/lic',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'deleteLic'])->name('delete.lic');
+    Route::post('salary/lic/emi/details',[App\Http\Controllers\PayrollManagement\BankLoanController::class,'getInsuranceEmiDetails'])->name('emi.lic');
 
     Route::get('professional/tax',[App\Http\Controllers\PayrollManagement\ProfessionTaxController::class,'index'])->name('professional-tax');
     Route::post('professional/tax/save',[App\Http\Controllers\PayrollManagement\ProfessionTaxController::class,'save'])->name('save.professional-tax');

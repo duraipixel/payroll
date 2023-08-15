@@ -16,9 +16,14 @@
             width: 400px !important;
             text-align: center;
         }
+
+        #emi_loan_content {
+            max-height: 500px;
+            overflow: scroll;
+        }
     </style>
     <div class="card">
-        {{-- @if( auth()->user()->is_super_admin ) --}}
+        {{-- @if (auth()->user()->is_super_admin) --}}
         <div class="card-header border-0 pt-6">
             <div class="card-title">
                 <div class="d-flex align-items-center position-relative my-1 salary-selection">
@@ -39,7 +44,6 @@
             </div>
         </div>
         {{-- @endif --}}
-
         <div class="card-body py-4" id="lic_form_details">
         </div>
     </div>
@@ -47,12 +51,12 @@
 
 @section('add_on_script')
     <script>
-       
         $('#staff_id').select2({
             theme: 'bootstrap-5'
         });
 
         function getSalaryInsurance(staff_id) {
+            loading();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -67,6 +71,7 @@
                 },
                 success: function(res) {
                     $('#lic_form_details').html(res);
+                    unloading();
                 }
             })
 

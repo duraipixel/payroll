@@ -17,7 +17,20 @@ class StaffInsurance extends Model
         'maturity_date',	
         'completed_date',	
         'file',	
-        'status'
+        'status', //'active', 'inactive', 'completed'
+        'start_date',
+        'end_date',
+        'period_of_loans',
+        'insurance_due_type',
+        'every_month_amount'
     ];
+
+    public function emi() {
+        return $this->hasMany(StaffInsuranceEmi::class, 'staff_insurance_id', 'id')->where('status', '!=', 'inactive')->orderBy('emi_date');
+    }
+
+    public function paid_emi() {
+        return $this->hasMany(StaffInsuranceEmi::class, 'staff_insurance_id', 'id')->where('status', '=', 'paid')->orderBy('emi_date');
+    }
 
 }

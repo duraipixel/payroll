@@ -14,6 +14,8 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
 use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\Staff\StaffBankLoan;
+use App\Models\Staff\StaffInsurance;
+use App\Models\Staff\StaffInsuranceEmi;
 use App\Models\Staff\StaffLoanEmi;
 use App\Models\User;
 use App\Repositories\PayrollChecklistRepository;
@@ -322,6 +324,7 @@ class OverviewController extends Controller
 
             StaffSalary::where('payroll_id', $payout_id)->update(['status' => 'inactive']);
             $used_loans = [];
+            $used_insurance = [];
             foreach ($payout_data as $key => $value) {
                 $staff_info = User::find($value->id);
                 $other_description = '';
@@ -412,6 +415,26 @@ class OverviewController extends Controller
                                 }
 
                                 $deduction += $bank_loan_amount;
+                            }  else if(trim(strtolower($sitem->short_name)) == 'lic') {
+                                
+                                $insurance_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                                /**
+                                 * get leave deduction amount
+                                 */
+                                $other_insurance_amount = getInsuranceAmount($value->id, $date);
+                                
+                                $insurance_amount += $other_insurance_amount['total_amount'] ?? 0;
+                                if( !empty( $other_insurance_amount['emi']) ) {
+                                    $used_insurance[] = $other_insurance_amount['emi'];
+                                }
+                                if( $insurance_amount > 0 ) {
+                                    $tmp = [];
+                                    $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
+                                    $tmp['amount'] = $insurance_amount;
+                                    $used_fields[] = $tmp;
+                                }
+
+                                $deduction += $insurance_amount;
                             } else {
                                 $deduct_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
                                 $deduction += $deduct_amount;
@@ -483,6 +506,36 @@ class OverviewController extends Controller
                             $staff_loan_id = array_unique($staff_loan_id);
                             foreach($staff_loan_id as $loan_ids ) {
                                 $loan_info = StaffBankLoan::with('paid_emi')->find( $loan_ids );
+                                if( $loan_info && $loan_info->period_of_loans == $loan_info->paid_emi()->count() ) {
+                                    $loan_info->status = 'completed';
+                                    $loan_info->save();
+                                }
+                            }
+                        }
+                    }
+                    /**
+                     * update in insurances
+                     */
+                    if( !empty( $used_insurance ) ) {
+                        $staff_ins_id = [];
+                        foreach($used_insurance as $loan_items ) {
+                            if( isset( $loan_items['details'] ) && !empty( $loan_items['details'] ) ) {
+
+                                $info = StaffInsuranceEmi::find( $loan_items['details']->id );
+                                $info->status = 'paid';
+                                $info->save();
+
+                                $staff_ins_id[]  = $loan_items['details']->staff_ins_id;
+                            }
+                        }
+                        /**
+                         * 1. For case 1 loan paid by all month
+                         * 2. If loan close by half duration - need to do 
+                         */
+                        if( !empty( $staff_ins_id ) ) {
+                            $staff_ins_id = array_unique($staff_ins_id);
+                            foreach($staff_ins_id as $loan_ids ) {
+                                $loan_info = StaffInsurance::with('paid_emi')->find( $loan_ids );
                                 if( $loan_info && $loan_info->period_of_loans == $loan_info->paid_emi()->count() ) {
                                     $loan_info->status = 'completed';
                                     $loan_info->save();

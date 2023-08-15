@@ -197,6 +197,22 @@
                                                                 $deduction += $bank_loan_amount;
                                                             @endphp
                                                         </td>
+                                                    @elseif(trim(strtolower($sitem->short_name)) == 'lic')
+                                                        <td class="px-3">
+                                                            @php
+                                                                $insurance_amount = getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                                                                /**
+                                                                 * get leave deduction amount
+                                                                 */
+                                                                $other_insurance_amount = getInsuranceAmount($item->id, $date);
+                                                                
+                                                                $insurance_amount += $other_insurance_amount['total_amount'] ?? 0;
+                                                            @endphp
+                                                            {{ $insurance_amount }}
+                                                            @php
+                                                                $deduction += $insurance_amount;
+                                                            @endphp
+                                                        </td>
                                                     @else
                                                         <td class="px-3">
                                                             {{ getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS') }}

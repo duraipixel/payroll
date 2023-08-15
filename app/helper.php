@@ -37,6 +37,7 @@ use App\Models\PayrollManagement\StaffSalaryPatternField;
 use App\Models\Staff\StaffBankLoan;
 use App\Models\Staff\StaffDeduction;
 use App\Models\Staff\StaffHandlingSubject;
+use App\Models\Staff\StaffInsurance;
 use App\Models\Staff\StaffOtherIncome;
 use App\Models\Staff\StaffTaxSeperation;
 use App\Models\Tax\TaxScheme;
@@ -1191,6 +1192,34 @@ function getBankLoansAmount( $staff_id, $date ) {
     $arr = [];
     $total_amount = 0;
     $loan_details = StaffBankLoan::where(['status' => 'active', 'staff_id' => $staff_id])->get();
+    if( isset( $loan_details ) && !empty( $loan_details ) ) {
+        foreach ($loan_details as $item ) {
+            if( isset($item->emi) && count( $item->emi ) > 0 ) {
+                foreach ($item->emi as $emi_item ) {
+                    $tmp = [];
+                    if( $emi_item->emi_month == $date && $emi_item->status == 'active' ) {
+                        
+                        $tmp['amount'] = $emi_item->amount;
+                        $tmp['details'] = $emi_item;
+                        $total_amount += $emi_item->amount ?? 0;
+
+                        $arr[] = $tmp;
+                    }
+                }
+            }
+        }
+    }
+
+    return ['total_amount' => $total_amount, 'emi' => $arr ];
+
+}
+
+
+function getInsuranceAmount( $staff_id, $date ) {
+   
+    $arr = [];
+    $total_amount = 0;
+    $loan_details = StaffInsurance::where(['status' => 'active', 'staff_id' => $staff_id])->get();
     if( isset( $loan_details ) && !empty( $loan_details ) ) {
         foreach ($loan_details as $item ) {
             if( isset($item->emi) && count( $item->emi ) > 0 ) {
