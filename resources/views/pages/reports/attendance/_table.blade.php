@@ -20,9 +20,9 @@
                     @for ($i = 0; $i < $month_days; $i++)
                         @if (isset($item->Attendance[$i]))
                             @if ($item->Attendance[$i]['attendance_status'] === 'Present')
-                                <td><i style="font-size: 10px" class="text-primary fa fa-check"></i></td>
+                                <td> ✔</td>
                             @else
-                                <td><i style="font-size: 10px" class="text-danger fa fa-times"></i></td>
+                                <td>❌</td>
                             @endif
                         @else
                             <td class="text-center">-</td>
