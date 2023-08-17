@@ -16,7 +16,6 @@
             <td>{{ isset($item->personal->dob) && !empty( $item->personal->dob) ? commonDateFormat($item->personal->dob) : '-'  }}</td>
             <td>{{ ucfirst($item->personal->gender ?? '') }}</td>
             <td>{{ $item->position->designation->name ?? '-' }}</td>
-            {{-- <td>Place Of Work</td> --}}
             <td>{{ $item->personal->motherTongue->name ?? '-' }}</td>
             <td>{{ $item->personal->mobile_no1 ?? '' }}</td>
             <td>{{ $item->personal->whatsapp_no ?? '' }}</td>
@@ -30,10 +29,6 @@
             <td>{{ $item->personal->permanent_address ?? '' }}</td>
             <td>{{ $item->personal->marital_status ?? '' }}</td>
             <td>{{ isset($item->personal->marriage_date) && !empty($item->personal->marriage_date ) ? commonDateFormat($item->personal->marriage_date) : '' }}</td>
-            {{-- <td>Adhaar</td>
-            <td> Pan Card </td>
-            <td> Ration Card </td>
-            <td> Voter ID </td> --}}
         </tr>
     @endforeach
 @else
