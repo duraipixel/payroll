@@ -188,14 +188,14 @@
                                 </div>
                             @endif
 
-                            {{-- <div class="menu-item">
-                                <a class="menu-link" href="javascript:void(0)">
+                            <div class="menu-item">
+                                <a class="menu-link" href="{{ route('staff.transfer') }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
                                     <span class="menu-title">Staff Transfer</span>
                                 </a>
-                            </div> --}}
+                            </div>
 
                             @if (access()->hasAccess('staff.bulk', 'view'))
                                 <div class="menu-item">

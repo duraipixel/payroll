@@ -232,6 +232,13 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('appointment-order/view', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'appointmentOrderView'])->name('appointment.orders.view');
     
     Route::get('scheme/add/{id?}', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'add_edit'])->name('attendance.scheme.add');
+    //staff transfer
+    Route::get('/staff/transfer', [App\Http\Controllers\Staff\StaffTransferController::class, 'index'])->name('staff.transfer')->middleware(['checkAccess:view']); 
+    Route::get('/staff/transfer/add', [App\Http\Controllers\Staff\StaffTransferController::class, 'add'])->name('staff.transfer.add')->middleware(['checkAccess:view']); 
+    Route::any('/staff/get/institution', [App\Http\Controllers\Staff\StaffTransferController::class, 'getInstitutionStaff'])->name('get.institute.staff')->middleware(['checkAccess:view']); 
+    Route::post('/staff/transfer/do', [App\Http\Controllers\Staff\StaffTransferController::class, 'doTransferStaff'])->name('staff.transfer.do')->middleware(['checkAccess:view']); 
+    Route::post('/staff/transfer/modal', [App\Http\Controllers\Staff\StaffTransferController::class, 'openTransferStatusModal'])->name('staff.transfer.modal')->middleware(['checkAccess:view']); 
+    Route::post('/staff/transfer/status/change', [App\Http\Controllers\Staff\StaffTransferController::class, 'changeStatus'])->name('staff.transfer.status')->middleware(['checkAccess:view']); 
 
     //permission routes start
     Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission')->middleware(['checkAccess:view']); 
