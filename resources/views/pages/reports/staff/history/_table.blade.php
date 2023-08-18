@@ -3,7 +3,7 @@
         <tr>
             <th width="30">S.No</th>
             <th>Staff Name</th>
-            <th>Departemnt</th>
+            <th>Department</th>
         </tr>
     </thead>
     <tbody>

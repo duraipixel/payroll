@@ -22,7 +22,7 @@ class StaffReportController extends Controller
             if (!empty($request->department)) $q->where('id', '=', $request->department);
         })->select('*');
     }
-    function staff_index(Request $request)
+    function staff_history(Request $request)
     {
         $users = $this->collection($request)->paginate(15);
         return view('pages.reports.staff.history.index', ['users' =>  $users]);
@@ -86,6 +86,6 @@ class StaffReportController extends Controller
         foreach($users as $user) {
             $temp .= $this->export_collection($user);
         }
-        return  Pdf::loadHTML($temp)->setPaper('a4')->stream();
+        return  Pdf::loadHTML($temp)->setPaper('a4')->download(); //stream
     }
 }

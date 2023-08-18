@@ -13,6 +13,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports'],  function () {
 Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],  function () {
     Route::get('/profile', [ReportController::class, 'profileReports'])->name('reports.profile');
     Route::get('/attendance', [ReportController::class, 'attendance_index'])->name('reports.attendance');
-    Route::get('/staff', [StaffReportController::class, 'staff_index'])->name('staff.index');
     Route::get('/service/history', [ReportController::class, 'serviceHistoryIndex'])->name('reports.service.history');
+    Route::get('/staff', [StaffReportController::class, 'staff_history'])->name('staff.history');
 });
