@@ -5,7 +5,7 @@
             <div class="bg-light border-bottom p-2 d-flex align-items-center justify-content-between">
                 <b>Staff History Report</b>
                 <div class="d-flex">
-                    <form action="{{ route('staff.history') }}" class="input-group w-auto d-inline" method="GET">
+                    <form action="{{ route('reports.staff.history') }}" class="input-group w-auto d-inline" method="GET">
                         <button onclick="this.form.action = '{{ route('reports.staff.export') }}'" type="submit" class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
                         <input type="text" name="name" value="{{ request()->name }}" class="form-control form-control-sm  w-auto d-inline" placeholder="Search Staff Name.." />
                         <select name="department" class="form-select form-select-sm w-auto d-inline">
@@ -14,8 +14,8 @@
                                 <option {{ request()->department == $department->id ? 'selected' : '' }} value="{{ $department->id }}"> {{ $department->name }}</option>
                             @endforeach
                         </select>
-                        <button onclick="this.form.action = '{{ route('staff.history') }}';" type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Find</button>
-                        <a href="{{ route('staff.history') }}" class="btn btn-sm btn-warning">
+                        <button onclick="this.form.action = '{{ route('reports.staff.history') }}';" type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Find</button>
+                        <a href="{{ route('reports.staff.history') }}" class="btn btn-sm btn-warning">
                             <i class="fa fa-repeat"></i> 
                         </a>
                     </form>

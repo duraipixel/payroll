@@ -235,10 +235,13 @@
         <td border="dotted">&nbsp;</td> 
     </tr>
 </table>
-
 <br>
-<p>I hereby confirm that all the information furnished above are true to the best of my knowledge and belief and in acceptance to the same
-    I affix my signature below</p>
+<p>
+    I hereby confirm that all the information furnished above are true to the best of my knowledge and belief and in acceptance to the same
+    I affix my signature below
+</p>
+<br>
+<br>
 <br>
 <table border="0">
     <tr>
