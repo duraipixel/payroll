@@ -3,7 +3,7 @@
     <section style="min-height: 93vh" class="p-3">
         <div class="card shadow border border-secondary rounded">
             <div class="bg-light border-bottom p-2 d-flex align-items-center justify-content-between">
-                <b>Attendance Report</b>
+                <b>Service Book History Report</b>
 
                 <form action="{{ route('reports.service.history') }}" class="input-group w-auto d-inline" method="GET">
                     <div class="d-flex">
