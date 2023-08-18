@@ -45,7 +45,7 @@ use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
-
+use App\Models\Master\Department;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -1095,6 +1095,9 @@ function placeOfWork(){
     return PlaceOfWork::latest()->get();
 }
 
+function Department(){
+    return Department::select(['id','name'])->latest()->get();
+}
 
 function getAprilToMarch( $payout_month )
 {

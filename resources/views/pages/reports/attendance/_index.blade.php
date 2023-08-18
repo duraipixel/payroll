@@ -6,8 +6,7 @@
                 <b>Attendance Report</b>
                 <div class="d-flex">
                     <form action="{{ route('reports.attendance') }}" class="input-group w-auto d-inline" method="GET">
-                        <a href="{{ route('reports.attendance') }}" class="btn btn-sm btn-warning"><i
-                                class="fa fa-repeat"></i> Reset</a>
+                        <button onclick="this.form.action = '{{ route('reports.attendance.export') }}'" type="submit" class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
                         <select name="place_of_work" class="form-select form-select-sm w-auto d-inline">
                             <option value="">-- Place of work --</option>
                             @foreach (placeOfWork() as $place)
@@ -21,8 +20,9 @@
                                     {{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
                             @endfor
                         </select>
-                        <button onclick="this.form.action = '{{ route('reports.attendance') }}';" type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>
-                        <button onclick="this.form.action = '{{ route('reports.attendance.export') }}'" type="submit" class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+                        <button onclick="this.form.action = '{{ route('reports.attendance') }}';" type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Find</button>
+                        <a href="{{ route('reports.attendance') }}" class="btn btn-sm btn-warning"><i
+                            class="fa fa-repeat"></i></a>
                     </form>
                 </div>
             </div>

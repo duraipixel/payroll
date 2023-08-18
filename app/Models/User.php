@@ -194,6 +194,14 @@ class User extends Authenticatable implements Auditable
         return $this->hasOne(StaffProfessionalData::class, 'staff_id', 'id');
     }
 
+    public function adhar() {
+        return $this->hasOne(StaffDocument::class, 'staff_id', 'id')->where('status', 'active')->where('document_type_id', 1);
+    }
+    public function pancard() {
+        return $this->hasOne(StaffDocument::class, 'staff_id', 'id')->where('status', 'active')->where('document_type_id', 2);
+    }
+    
+
     public function studiedSubject()
     {
         return $this->hasMany(StaffStudiedSubject::class, 'staff_id', 'id');
