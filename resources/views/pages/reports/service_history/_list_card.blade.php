@@ -2,9 +2,9 @@
     @php
     @endphp
     @foreach ($history as $hitem)
-        <div style="border:1px solid #ddd; margin-top:5px;">
+        <div style="border:1px solid #ddd; margin-top:15px;box-shadow: 2px 1px 2px 1px #ddd">
 
-            <h3 style="text-align: center;"> {{ $academic_title }} </h3>
+            <h3 style="text-align: center;margin-top: 5px:padding:5px;"> {{ $academic_title }} </h3>
             <table style="width: 100%">
                 <thead style="background: aliceblue;color:black;">
                     <tr>
@@ -21,7 +21,8 @@
                                 @php
                                     $profile_image = Storage::url($hitem['staff_details']->image);
                                 @endphp
-                                    <img src="{{ asset('public' . $profile_image) }}" alt="" width="100" style="border-radius:10%">
+                                <img src="{{ asset('public' . $profile_image) }}" alt="" width="100"
+                                    style="border-radius:10%">
                             @else
                                 <img src="{{ asset('assets/images/no_image.jpg') }}" width="100"
                                     style="border-radius:10%">
@@ -59,12 +60,14 @@
                 <tbody>
                     <tr>
                         <td class="" style="padding:3px 10px;width:30%">7. Order No</td>
-                        <td style="width: 50%;text-align:left;"> {{ $hitem['staff_details']->appointment->appointment_order_no ?? '-' }} </td>
+                        <td style="width: 50%;text-align:left;">
+                            {{ $hitem['staff_details']->appointment->appointment_order_no ?? '-' }} </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td style="padding:3px 10px;">8. Order Date </td>
-                        <td> {{ isset( $hitem['staff_details']->appointment->joining_date ) && !empty( $hitem['staff_details']->appointment->joining_date ) ? commonDateFormat($hitem['staff_details']->appointment->joining_date) : '-'}}</td>
+                        <td> {{ isset($hitem['staff_details']->appointment->joining_date) && !empty($hitem['staff_details']->appointment->joining_date) ? commonDateFormat($hitem['staff_details']->appointment->joining_date) : '-' }}
+                        </td>
                         <td></td>
                     </tr>
                     <tr>
@@ -74,82 +77,13 @@
                     </tr>
                 </tbody>
             </table>
-            <table style="width: 100%;border:1px solid #ddd">
-                <thead style="background: aliceblue;color:black;">
-                    <tr>
-                        <th colspan="5" style="text-align: center;padding:3px"> CASUAL LEAVE DETAILS </th>
-                    </tr>
-                    <tr style="background: aquamarine">
-                        <th style="padding: 3px ">S.No</th>
-                        <th style="padding: 3px ">Reason</th>
-                        <th style="padding: 3px ">From</th>
-                        <th style="padding: 3px ">To</th>
-                        <th style="padding: 3px;text-align:center ">No. of Days</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="5" style="text-align: center"> - NIL - </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table style="width: 100%;border:1px solid #ddd">
-                <thead style="background: aliceblue;color:black;">
-                    <tr>
-                        <th colspan="5" style="text-align: center;padding:3px"> MATERNITY LEAVE DETAILS </th>
-                    </tr>
-                    <tr style="background: aquamarine">
-                        <th style="padding: 3px ">S.No</th>
-                        <th style="padding: 3px ">Reason</th>
-                        <th style="padding: 3px ">From</th>
-                        <th style="padding: 3px ">To</th>
-                        <th style="padding: 3px;text-align:center ">No. of Days</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="5" style="text-align: center"> - NIL - </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table style="width: 100%;border:1px solid #ddd">
-                <thead style="background: aliceblue;color:black;">
-                    <tr>
-                        <th colspan="5" style="text-align: center;padding:3px"> EOL DETAILS </th>
-                    </tr>
-                    <tr style="background: aquamarine">
-                        <th style="padding: 3px ">S.No</th>
-                        <th style="padding: 3px ">Reason</th>
-                        <th style="padding: 3px ">From</th>
-                        <th style="padding: 3px ">To</th>
-                        <th style="padding: 3px;text-align:center ">No. of Days</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="5" style="text-align: center"> - NIL - </td>
-                    </tr>
-                </tbody>
-            </table>
-            <table style="width: 100%;border:1px solid #ddd">
-                <thead style="background: aliceblue;color:black;">
-                    <tr>
-                        <th colspan="5" style="text-align: center;padding:3px"> EARNED LEAVE DETAILS </th>
-                    </tr>
-                    <tr style="background: aquamarine">
-                        <th style="padding: 3px ">S.No</th>
-                        <th style="padding: 3px ">Reason</th>
-                        <th style="padding: 3px ">From</th>
-                        <th style="padding: 3px ">To</th>
-                        <th style="padding: 3px;text-align:center ">No. of Days</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="5" style="text-align: center"> - NIL - </td>
-                    </tr>
-                </tbody>
-            </table>
+            @include('pages.reports.service_history._cl')
+            @include('pages.reports.service_history._ml')
+            @include('pages.reports.service_history._eol')
+            @include('pages.reports.service_history._el')
+            
+            
+            
             <table style="width: 100%;border:1px solid #ddd">
                 <thead style="background: aliceblue;color:black;">
                     <tr>

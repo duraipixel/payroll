@@ -364,6 +364,22 @@ class User extends Authenticatable implements Auditable
         return $this->hasMany(StaffLeave::class, 'staff_id', 'id')->where('status','pending');
     }
 
+    public function casualLeaves()
+    {
+        return $this->hasMany(StaffLeave::class, 'staff_id', 'id')
+                    ->where('status','approved')
+                    ->where('leave_category', 'Casual Leave')
+                    ->where('academic_id', academicYearId());;
+    }
+
+    public function earnedLeaves()
+    {
+        return $this->hasMany(StaffLeave::class, 'staff_id', 'id')
+                    ->where('status','approved')
+                    ->where('leave_category', 'Casual Leave')
+                    ->where('academic_id', academicYearId());
+    }
+
     public function talents()
     {
         return $this->hasMany(StaffTalent::class, 'staff_id', 'id')->where('status', 'active');

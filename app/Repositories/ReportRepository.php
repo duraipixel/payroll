@@ -18,7 +18,7 @@ class ReportRepository
     {
 
         $chunkSize = 2;
-        $employees = User::with(['appointment', 'position', 'position.designation', 'personal'])->where('verification_status', 'approved')->whereNull('is_super_admin')->get();
+        $employees = User::with(['appointment', 'position', 'position.designation', 'personal', 'casualLeaves'])->where('verification_status', 'approved')->whereNull('is_super_admin')->get();
         $academic_data = AcademicYear::find(academicYearId());
 
         $employeeChunks = $employees->chunk($chunkSize);
