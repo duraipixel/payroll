@@ -11,7 +11,8 @@
                 <option value="">--select--</option>
                 @isset($society)
                     @foreach ($society as $item)
-                        <option value="{{ $item->id }}"  @if( isset( $info->society_id ) && $info->society_id == $item->id) selected @endif>{{ $item->name }}</option>
+                        <option value="{{ $item->id }}" @if (isset($info->society_id) && $info->society_id == $item->id) selected @endif>
+                            {{ $item->name }}</option>
                     @endforeach
                 @endisset
             </select>
@@ -24,7 +25,8 @@
             Institute Name
         </label>
         <div>
-            <input type="text" class="form-control" name="institute_name" id="institute_name" value="{{ $info->name ?? '' }}" required>
+            <input type="text" class="form-control" name="institute_name" id="institute_name"
+                value="{{ $info->name ?? '' }}" required>
         </div>
     </div>
     <div class="fv-row form-group mb-10">
@@ -32,7 +34,8 @@
             Institute Code
         </label>
         <div>
-            <input type="text" class="form-control" name="institute_code" id="institute_code" value="{{ $info->code ?? '' }}" required>
+            <input type="text" class="form-control" name="institute_code" id="institute_code"
+                value="{{ $info->code ?? '' }}" required>
         </div>
     </div>
     <div class="form-group mb-10">
@@ -50,21 +53,32 @@
                 Institute Logo
             </label>
             <div>
-                <input type="file" name="logo" id="logo" >
+                <input type="file" name="logo" id="logo">
+                @if (isset($info->logo) && !empty($info->logo))
+                    @php
+                        $profile_image = Storage::url($info->logo);
+                    @endphp
+                    <div class="mt-3">
+                        <img src="{{ asset('public' . $profile_image) }}" alt="" width="100"
+                            style="border-radius:10%">
+                    </div>
+                @endif
             </div>
         </div>
-        @if(isset($from) && !empty($from))
-        <div class="fv-row form-group mb-10">
-            <label class="form-label" for="">
-                Status
-            </label>
-            <div >
-                <input type="radio" id="active" class="form-check-input" value="active" name="status" @if(isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif >
-                <label class="pe-3" for="active">Active</label>
-                <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status" @if(isset($info->status) && $info->status != 'active') checked  @endif >
-                <label for="inactive">Inactive</label>
+        @if (isset($from) && !empty($from))
+            <div class="fv-row form-group mb-10">
+                <label class="form-label" for="">
+                    Status
+                </label>
+                <div>
+                    <input type="radio" id="active" class="form-check-input" value="active" name="status"
+                        @if (isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif>
+                    <label class="pe-3" for="active">Active</label>
+                    <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status"
+                        @if (isset($info->status) && $info->status != 'active') checked @endif>
+                    <label for="inactive">Inactive</label>
+                </div>
             </div>
-        </div>
         @endif
     </div>
     <div class="form-group mb-10 text-end">
@@ -81,7 +95,7 @@
 </form>
 
 <script>
-var from = '{{ $from ?? '' }}';
+    var from = '{{ $from ?? '' }}';
 
     var KTAppEcommerceSaveInstitute = function() {
 
@@ -131,7 +145,7 @@ var from = '{{ $from ?? '' }}';
             // Handle submit button
             submitButton.addEventListener('click', e => {
                 e.preventDefault();
-                
+
 
                 // Validate form before submit
                 if (validator) {
@@ -143,39 +157,46 @@ var from = '{{ $from ?? '' }}';
                             var forms = $('#dynamic_form')[0];
                             var formData = new FormData(forms);
                             $.ajax({
-                                url:"{{ route('save.institutions') }}",
-                                type:"POST",
+                                url: "{{ route('save.institutions') }}",
+                                type: "POST",
                                 data: formData,
                                 processData: false,
                                 contentType: false,
                                 success: function(res) {
                                     // Disable submit button whilst loading
-                                    
+
                                     submitButton.disabled = false;
-                                    submitButton.removeAttribute('data-kt-indicator');
-                                    if( res.error == 1 ) {
-                                        if( res.message ) {
+                                    submitButton.removeAttribute(
+                                        'data-kt-indicator');
+                                    if (res.error == 1) {
+                                        if (res.message) {
                                             res.message.forEach(element => {
-                                                toastr.error("Error", element);
+                                                toastr.error("Error",
+                                                    element);
                                             });
                                         }
-                                    } else{
-                                        toastr.success("Institution added successfully");
+                                    } else {
+                                        toastr.success(
+                                            "Institution added successfully");
                                         $('#kt_dynamic_app').modal('hide');
 
                                         if (from) {
                                             dtTable.draw();
                                         } else {
-                                        if( res.inserted_data ) {
-                                            
-                                            $('#institute_name').append(`<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`)
-                                            $('#institute_name').val(res.inserted_data.id)
+                                            if (res.inserted_data) {
 
-                                            if( res.code ) {
-                                                $('#institute_code').val(res.code);
+                                                $('#institute_name').append(
+                                                    `<option value="${res.inserted_data.id}">${res.inserted_data.name}</option>`
+                                                    )
+                                                $('#institute_name').val(res
+                                                    .inserted_data.id)
+
+                                                if (res.code) {
+                                                    $('#institute_code').val(res
+                                                        .code);
+                                                }
                                             }
                                         }
-                                    }
                                     }
                                 }
                             })

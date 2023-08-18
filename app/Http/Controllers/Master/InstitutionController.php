@@ -12,7 +12,9 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use DataTables;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\File;
 
 class InstitutionController extends Controller
 {
@@ -49,6 +51,18 @@ class InstitutionController extends Controller
                 }
             })
             ->addIndexColumn()
+            ->editColumn('name', function($row) {
+                $img = '';
+                if (isset($row->logo) && !empty($row->logo)) {
+
+                    $profile_image = Storage::url($row->logo);
+                    $img = '
+                        <img src="'.asset('public' . $profile_image) .'" alt="" width="100"
+                            style="border-radius:10%">
+                    ';
+                }
+                return $img. $row->name;
+            })
             ->addColumn('last_updated', function ($row) {
                 $society_emp_code = $row->lastUpdatedBy->society_emp_code ?? ''; 
                 $updated_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['updated_at'])->format('d/M/Y H:i A');
@@ -94,7 +108,7 @@ class InstitutionController extends Controller
 
                     return $edit_btn . $del_btn;
                 })
-                ->rawColumns(['action', 'status','society', 'last_updated']);
+                ->rawColumns(['action', 'status','society', 'last_updated', 'name']);
             return $datatables->make(true);
 
         }
@@ -126,6 +140,20 @@ class InstitutionController extends Controller
             }
             
             $data = Institution::updateOrCreate(['id' => $id], $ins);
+
+            if ($request->hasFile('logo')) {
+
+                $files = $request->file('logo');
+                $imageName = uniqid() . Str::replace([' ', '  '], "-", $files->getClientOriginalName());
+
+                $directory              = 'institute/' . $data->code ;
+                $filename               = $directory . '/' . $imageName;
+
+                Storage::disk('public')->put($filename, File::get($files));
+                // $ins['image'] = $filename;
+                $data->logo = $filename;
+                $data->save();
+            }
 
             if( !$id ) {
                 $id = $data->id;
