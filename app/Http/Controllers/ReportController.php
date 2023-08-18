@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Repositories\ReportRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 
 class ReportController extends Controller
 {
@@ -71,13 +72,35 @@ class ReportController extends Controller
 
     public function serviceHistoryIndex(Request $request) {
 
-        $history = $this->repository->getServiceHistory();
-        $employees = User::whereNull('is_super_admin')->get();
+        $employee_id = $request->employee ?? '';
+        $department_id = $request->department ?? '';
+
+        $history = $this->repository->getServiceHistory($employee_id, $department_id );
+        $employees = User::whereNull('is_super_admin')->where('verification_status', 'approved')->get();
         $departments = Department::all();
         $academic_info = AcademicYear::find(academicYearId());
         $academic_title = 'HISTORY OF SERVICE ( '.$academic_info->from_year.' - '.$academic_info->to_year.' )';
         
-        return view('pages.reports.service_history.index', compact('history', 'employees','departments', 'academic_title' ));
+        return view('pages.reports.service_history.index', compact('employee_id', 'department_id','history', 'employees','departments', 'academic_title' ));
+
+    }
+
+    public function serviceHistoryExport(Request $request) {
+
+        $employee_id = $request->employee ?? '';
+        $department_id = $request->department ?? '';
+
+        $history = $this->repository->getServiceHistory($employee_id, $department_id );
+        $academic_info = AcademicYear::find(academicYearId());
+        $academic_title = 'HISTORY OF SERVICE ( '.$academic_info->from_year.' - '.$academic_info->to_year.' )';
+
+        $data = [
+            'history' => $history,
+            'academic_title' => $academic_title
+        ];
+        $pdf = PDF::loadView('pages.reports.service_history._pdf_view',$data)->setPaper('a4', 'portrait');
+
+        return $pdf->stream('service_history.pdf');
 
     }
 }

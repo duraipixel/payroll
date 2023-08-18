@@ -8,6 +8,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports'],  function () {
     Route::get('/export', [ReportController::class, 'commonExport'])->name('reports.export');
     Route::get('/attendance/export', [ReportController::class, 'attendance_export'])->name('reports.attendance.export');
     Route::get('/staff/export', [StaffReportController::class, 'staff_export'])->name('reports.staff.export');
+    Route::get('/service/history/export', [ReportController::class, 'serviceHistoryExport'])->name('reports.service.history.export');
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],  function () {

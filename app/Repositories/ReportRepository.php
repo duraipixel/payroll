@@ -14,11 +14,15 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class ReportRepository
 {
 
-    public function getServiceHistory()
+    public function getServiceHistory($employee_id, $department)
     {
 
         $chunkSize = 2;
-        $employees = User::with(['appointment', 'position', 'position.designation', 'personal', 'casualLeaves'])->where('verification_status', 'approved')->whereNull('is_super_admin')->get();
+        $employees = User::with(['appointment', 'position', 'position.designation', 'personal', 'casualLeaves'])->where('verification_status', 'approved')->whereNull('is_super_admin')
+                    ->when( !empty( $employee_id), function($query) use( $employee_id) {
+                        $query->where('users.id', $employee_id);
+                    })
+                    ->get();
         $academic_data = AcademicYear::find(academicYearId());
 
         $employeeChunks = $employees->chunk($chunkSize);

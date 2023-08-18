@@ -1,4 +1,4 @@
-<table style="width: 100%;border:1px solid #ddd">
+<table style="width: 100%;border:1px solid #ddd" class="common_table">
 
     <thead style="background: aliceblue;color:black;">
         <tr>

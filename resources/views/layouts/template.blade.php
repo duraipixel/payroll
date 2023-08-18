@@ -364,6 +364,22 @@
                 }
             })
         }
+
+        function printServiceArea(print_id) {
+                     
+            // Get the content of the div
+            var content = document.getElementById(print_id).innerHTML;
+            // Open a new window for printing
+            var printWindow = window.open('', '_blank');
+            // Add the content to the new window
+            printWindow.document.write('<html><head><title>Print</title></head><body>');
+            printWindow.document.write(content);
+            printWindow.document.write('</body></html>');
+            // Print the new window
+            printWindow.print();
+            // Close the new window
+            printWindow.close();
+        }
     </script>
 </body>
 
