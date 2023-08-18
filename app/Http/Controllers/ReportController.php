@@ -4,12 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Exports\Reports\AttendanceReport;
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
+use App\Models\Master\Department;
 use App\Models\User;
+use App\Repositories\ReportRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
+    public $repository;
+
+    public function __construct(ReportRepository $repository) {
+        $this->repository = $repository;
+    }
+
     function index()
     {
         return view('pages.reports.index');
@@ -58,5 +67,17 @@ class ReportController extends Controller
         $month_days    = monthDays($month);
         $attendance    = $this->attendance_collection($request,$date)->get();
         return Excel::download(new AttendanceReport($attendance, $month_days),'attendance.xlsx');
+    }
+
+    public function serviceHistoryIndex(Request $request) {
+
+        $history = $this->repository->getServiceHistory();
+        $employees = User::whereNull('is_super_admin')->get();
+        $departments = Department::all();
+        $academic_info = AcademicYear::find(academicYearId());
+        $academic_title = 'HISTORY OF SERVICE ( '.$academic_info->from_year.' - '.$academic_info->to_year.' )';
+        
+        return view('pages.reports.service_history.index', compact('history', 'employees','departments', 'academic_title' ));
+
     }
 }

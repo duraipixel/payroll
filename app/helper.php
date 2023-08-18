@@ -44,6 +44,7 @@ use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Models\Master\Department;
 
@@ -220,7 +221,7 @@ if (!function_exists('getStaffProfileCompilationData')) {
     function getStaffProfileCompilationData($info, $type = '')
     {
         $response = false;
-        if( $type == 'object') {
+        if ($type == 'object') {
             $info = User::find($info->id);
         }
         $percentage = 0;
@@ -488,7 +489,7 @@ if (!function_exists('generateLeaveForm')) {
     function commonAmountFormat($amount)
     {
 
-        return 'Rs.'.$amount ?? 0;
+        return 'Rs.' . $amount ?? 0;
     }
 
     function getTotalLeaveCount($staff_id)
@@ -579,7 +580,7 @@ if (!function_exists('getStaffVerificationStatus')) {
                 // $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
                 $return = false;
 
-                if ($personalInfo && $professional_data && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0 ) {
+                if ($personalInfo && $professional_data && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0) {
                     $return = true;
                 }
                 return $return;
@@ -654,7 +655,7 @@ function canGenerateEmpCode($staff_id)
     // $studienSubject = StaffStudiedSubject::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     // $staffbank = StaffBankDetail::where(['staff_id' => $staff_id, 'status' => 'active'])->get();
     $personal_return = false;
-    if ($personalInfo && $professional_data && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0 ) {
+    if ($personalInfo && $professional_data && count($family_members) > 0 && count($nominee) > 0 && $health_details && count($knownLanguages) > 0) {
         $personal_return = true;
     }
 
@@ -914,22 +915,36 @@ function generateIncomeTaxStatementPdfByStaff($statement_id)
 
 function getStaffPatterFieldAmount($staff_id, $salary_pattern_id, $field_id = '', $field_name = '', $reference_type = '', $short_name = '')
 {
+    // DB::beginTransaction();
 
-    $info = StaffSalaryPatternField::where('staff_id', $staff_id)->where('staff_salary_pattern_id', $salary_pattern_id)
-        ->when(!empty($field_id), function ($query) use ($field_id) {
-            $query->where('field_id', $field_id)->first();
-        })
-        ->where( function($query) use( $short_name, $field_name ) {
-            $query->when(!empty($field_name), function ($query) use ($field_name) {
-                $query->where('field_name', $field_name);
-            })->when(!empty($short_name), function ($query) use ($short_name) {
-                $query->orWhere('field_name', $short_name);
-            });
-        })
-        ->when(!empty($reference_type), function ($query) use ($reference_type) {
-            $query->where('reference_type', $reference_type);
-        })
-        ->first();
+    // try {
+        $info = StaffSalaryPatternField::select('amount')->where('staff_id', $staff_id)->where('staff_salary_pattern_id', $salary_pattern_id)
+            ->when(!empty($field_id), function ($query) use ($field_id) {
+                $query->where('field_id', $field_id)->first();
+            })
+            ->where(function ($query) use ($short_name, $field_name) {
+                $query->when(!empty($field_name), function ($query) use ($field_name) {
+                    $query->where('field_name', $field_name);
+                })->when(!empty($short_name), function ($query) use ($short_name) {
+                    $query->orWhere('field_name', $short_name);
+                });
+            })
+            ->when(!empty($reference_type), function ($query) use ($reference_type) {
+                $query->where('reference_type', $reference_type);
+            })
+            ->first();
+
+        // Commit the transaction
+        // DB::commit();
+    // } catch (\Exception $e) {
+        // Something went wrong, rollback the transaction
+        // DB::rollback();
+
+        // Handle the exception (e.g., log it or throw a custom exception)
+        // You might also want to continue the loop or stop entirely based on your use case
+    // }
+
+
     return $info->amount ?? 0;
 }
 
@@ -1091,7 +1106,8 @@ function getStartAndEndDateOfMonth($month)
         'end_date' => $endDate->format('Y-m-d')
     ];
 }
-function placeOfWork(){
+function placeOfWork()
+{
     return PlaceOfWork::latest()->get();
 }
 
@@ -1099,12 +1115,12 @@ function Department(){
     return Department::select(['id','name'])->latest()->get();
 }
 
-function getAprilToMarch( $payout_month )
+function getAprilToMarch($payout_month)
 {
     // $payout_month = date('Y-m-d', strtotime($payout_month.' - 1 month'));
     // dd( $payout_month );
     $startMonth = 'April';
-    $startMonth = date('F', strtotime( $payout_month ));
+    $startMonth = date('F', strtotime($payout_month));
     $endMonth = 'March';
     // Create DateTime objects for the start and end months
     $startDate = new DateTime($startMonth);
@@ -1117,7 +1133,7 @@ function getAprilToMarch( $payout_month )
     }
 
     // Adjust the start month to the 1st of April of the current year
-    $startDate->modify('first day of '.$startMonth.' this year');
+    $startDate->modify('first day of ' . $startMonth . ' this year');
 
     // Initialize an array to store the months
     $months = [];
@@ -1174,34 +1190,36 @@ function getDaySalaryAmount($gross, $month_length)
 }
 
 
-function taxPaidPayroll( $staff_id, $salary_pattern_id ) {
+function taxPaidPayroll($staff_id, $salary_pattern_id)
+{
     /**
      *  get tax id 
      */
     $income_tax = SalaryField::where('short_name', 'IT')->first();
     $income_tax_id = $income_tax->id;
 
-    $info = StaffSalary::select('staff_salary_fields.amount as incometax_amount')->join('staff_salary_fields', function($join) use($income_tax_id){
-                $join->on('staff_salary_fields.staff_salary_id', '=', 'staff_salaries.id')->where('field_id', $income_tax_id);
-            })
-            ->where('staff_salaries.staff_id', $staff_id)
-            ->where('staff_salaries.salary_pattern_id', $salary_pattern_id)->get()->sum('incometax_amount');
-    
+    $info = StaffSalary::select('staff_salary_fields.amount as incometax_amount')->join('staff_salary_fields', function ($join) use ($income_tax_id) {
+        $join->on('staff_salary_fields.staff_salary_id', '=', 'staff_salaries.id')->where('field_id', $income_tax_id);
+    })
+        ->where('staff_salaries.staff_id', $staff_id)
+        ->where('staff_salaries.salary_pattern_id', $salary_pattern_id)->get()->sum('incometax_amount');
+
     return $info ?? 0;
 }
 
-function getBankLoansAmount( $staff_id, $date ) {
-   
+function getBankLoansAmount($staff_id, $date)
+{
+
     $arr = [];
     $total_amount = 0;
     $loan_details = StaffBankLoan::where(['status' => 'active', 'staff_id' => $staff_id])->get();
-    if( isset( $loan_details ) && !empty( $loan_details ) ) {
-        foreach ($loan_details as $item ) {
-            if( isset($item->emi) && count( $item->emi ) > 0 ) {
-                foreach ($item->emi as $emi_item ) {
+    if (isset($loan_details) && !empty($loan_details)) {
+        foreach ($loan_details as $item) {
+            if (isset($item->emi) && count($item->emi) > 0) {
+                foreach ($item->emi as $emi_item) {
                     $tmp = [];
-                    if( $emi_item->emi_month == $date && $emi_item->status == 'active' ) {
-                        
+                    if ($emi_item->emi_month == $date && $emi_item->status == 'active') {
+
                         $tmp['amount'] = $emi_item->amount;
                         $tmp['details'] = $emi_item;
                         $total_amount += $emi_item->amount ?? 0;
@@ -1213,23 +1231,23 @@ function getBankLoansAmount( $staff_id, $date ) {
         }
     }
 
-    return ['total_amount' => $total_amount, 'emi' => $arr ];
-
+    return ['total_amount' => $total_amount, 'emi' => $arr];
 }
 
 
-function getInsuranceAmount( $staff_id, $date ) {
-   
+function getInsuranceAmount($staff_id, $date)
+{
+
     $arr = [];
     $total_amount = 0;
     $loan_details = StaffInsurance::where(['status' => 'active', 'staff_id' => $staff_id])->get();
-    if( isset( $loan_details ) && !empty( $loan_details ) ) {
-        foreach ($loan_details as $item ) {
-            if( isset($item->emi) && count( $item->emi ) > 0 ) {
-                foreach ($item->emi as $emi_item ) {
+    if (isset($loan_details) && !empty($loan_details)) {
+        foreach ($loan_details as $item) {
+            if (isset($item->emi) && count($item->emi) > 0) {
+                foreach ($item->emi as $emi_item) {
                     $tmp = [];
-                    if( $emi_item->emi_month == $date && $emi_item->status == 'active' ) {
-                        
+                    if ($emi_item->emi_month == $date && $emi_item->status == 'active') {
+
                         $tmp['amount'] = $emi_item->amount;
                         $tmp['details'] = $emi_item;
                         $total_amount += $emi_item->amount ?? 0;
@@ -1241,6 +1259,5 @@ function getInsuranceAmount( $staff_id, $date ) {
         }
     }
 
-    return ['total_amount' => $total_amount, 'emi' => $arr ];
-
+    return ['total_amount' => $total_amount, 'emi' => $arr];
 }

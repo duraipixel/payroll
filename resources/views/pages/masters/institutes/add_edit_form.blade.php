@@ -43,19 +43,30 @@
             <textarea class="form-control" name="address" id="address">{{ $info->address ?? '' }}</textarea>
         </div>
     </div>
-    @if(isset($from) && !empty($from))
-    <div class="fv-row form-group mb-10">
-        <label class="form-label" for="">
-            Status
-        </label>
-        <div >
-            <input type="radio" id="active" class="form-check-input" value="active" name="status" @if(isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif >
-            <label class="pe-3" for="active">Active</label>
-            <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status" @if(isset($info->status) && $info->status != 'active') checked  @endif >
-            <label for="inactive">Inactive</label>
+    <div class="d-flex">
+
+        <div class="form-group mb-10 w-50 ">
+            <label class="form-label" for="">
+                Institute Logo
+            </label>
+            <div>
+                <input type="file" name="logo" id="logo" >
+            </div>
         </div>
+        @if(isset($from) && !empty($from))
+        <div class="fv-row form-group mb-10">
+            <label class="form-label" for="">
+                Status
+            </label>
+            <div >
+                <input type="radio" id="active" class="form-check-input" value="active" name="status" @if(isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif >
+                <label class="pe-3" for="active">Active</label>
+                <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status" @if(isset($info->status) && $info->status != 'active') checked  @endif >
+                <label for="inactive">Inactive</label>
+            </div>
+        </div>
+        @endif
     </div>
-    @endif
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn">
