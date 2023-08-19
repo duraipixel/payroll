@@ -11,22 +11,40 @@
                 </tr>
             </thead>
             <tbody>
-                @for ($i = 0; $i < 10; $i++)
-                    <tr>
-                        <td>
-                            <div class="d-flex text-start align-items-left">
-                                <div class="symbol symbol-45px me-5">
-                                    <img src="{{ url('/') }}/assets/media/avatars/300-19.jpg" alt="">
+                @if (isset($top_ten_leave_taker) && !empty($top_ten_leave_taker))
+                    @foreach ($top_ten_leave_taker as $item)
+                        <tr>
+                            <td>
+                                <div class="d-flex text-start align-items-left">
+                                    <div class="symbol symbol-45px me-5">
+                                        @if (isset($item->user->image) && !empty($item->user->image))
+                                            @php
+                                                $profile_image = Storage::url($item->user->image);
+                                            @endphp
+                                            @if (file_exists($profile_image))
+                                                <img src="{{ asset('public' . $profile_image) }}" alt=""
+                                                    width="100" style="border-radius:10%">
+                                            @else
+                                                <img src="{{ url('/') }}/assets/media/avatars/300-19.jpg"
+                                                    alt="">
+                                            @endif
+                                        @else
+                                            <img src="{{ url('/') }}/assets/media/avatars/300-19.jpg"
+                                                alt="">
+                                        @endif
+                                    </div>
+                                    <div class="d-flex justify-content-middle flex-column">
+                                        <a href="#"
+                                            class="text-dark fw-bolder text-hover-primary fs-6">{{ $item->user->name }}</a>
+                                        <span
+                                            class="text-muted fw-bold text-muted d-block fs-7">{{ $item->user->institute_emp_code }}</span>
+                                    </div>
                                 </div>
-                                <div class="d-flex justify-content-middle flex-column">
-                                    <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">John</a>
-                                    <span class="text-muted fw-bold text-muted d-block fs-7">Teaching Staff</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="ps-0 text-center">50</td>
-                    </tr>
-                @endfor
+                            </td>
+                            <td class="ps-0 text-center">{{ $item->total ?? 0 }}</td>
+                        </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>

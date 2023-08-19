@@ -10,6 +10,7 @@ use App\Models\Master\NatureOfEmployment;
 use App\Models\Staff\StaffDocument;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\User;
+use App\Repositories\DashboardRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -21,11 +22,12 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public $dashboardRepository;
+    public function __construct(DashboardRepository $dashboardRepository)
     {
         $this->middleware('auth');
+        $this->dashboardRepository = $dashboardRepository;
     }
-
     /**
      * Show the application dashboard.
      *
@@ -106,7 +108,6 @@ class HomeController extends Controller
         $nature_of_works = NatureOfEmployment::with('appointments')->where('status', 'active')->get();
 
         $designations = Designation::with('staffEnrollments')->where('status', 'active')->get();
-
         $params = array(
             'user_count' => $user_count,
             'last_user_added' => $last_user_added,
@@ -118,7 +119,8 @@ class HomeController extends Controller
             'document_approval' => $document_approval,
             'nature_of_works' => $nature_of_works,
             'designations' => $designations,
-            'gender_calculation' => $gender_calculation
+            'gender_calculation' => $gender_calculation,
+            'top_ten_leave_taker' => $this->dashboardRepository->getTopTenLeaveTaker()
         );
 
         return view('pages.dashboard.home', $params);
