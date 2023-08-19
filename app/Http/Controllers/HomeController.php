@@ -224,6 +224,7 @@ class HomeController extends Controller
         $designations = Designation::with('staffEnrollments')->where('status', 'active')->get();
 
         $params = array(
+            
             'user_count' => $user_count,
             'last_user_added' => $last_user_added,
             'dob' => $dob,
@@ -234,7 +235,11 @@ class HomeController extends Controller
             'document_approval' => $document_approval,
             'nature_of_works' => $nature_of_works,
             'designations' => $designations,
-            'gender_calculation' => $gender_calculation
+            'gender_calculation' => $gender_calculation,
+            'top_ten_leave_taker' => $this->dashboardRepository->getTopTenLeaveTaker(),
+            'age_json_data' => $this->dashboardRepository->getInstituteAgeWiseData(),
+            'total_institution_staff' => $this->dashboardRepository->getTotalStaffCountByInstitutions()
+
         );
 
         return view('pages.dashboard.dynamic_view', $params);
