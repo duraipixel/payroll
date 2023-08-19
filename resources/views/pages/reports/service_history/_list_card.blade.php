@@ -48,6 +48,7 @@
 </style>
 @if (isset($history) && !empty($history))
     @php
+    // dd( $history );
     @endphp
     @foreach ($history as $hitem)
         <div class="main-div">
@@ -189,7 +190,7 @@
                                 @foreach ($hitem['salary_field'] as $item)
                                     <td class="p-2" style="text-align: right">
                                         @php
-                                            $item_amount = getStaffPatterFieldAmount($hitem['staff_details']->id, $hitem['salary_pattern']->id, $item->id);
+                                            $item_amount = getStaffPatterFieldAmount($hitem['staff_details']->id, $hitem['salary_pattern']->id ?? '', $item->id);
                                         @endphp
                                         {{ $item_amount }}
                                     </td>
@@ -200,8 +201,8 @@
                             @endif
                             <td class="p-2" style="text-align: right">{{ $gross }}</td>
                             @php
-                                $epf = getStaffPatterFieldAmount($hitem['staff_details']->id, $hitem['salary_pattern']->id, '', 'Employee Provident Fund');
-                                $lic = getStaffPatterFieldAmount($hitem['staff_details']->id, $hitem['salary_pattern']->id, '', 'Life Insurance Corporation');
+                                $epf = getStaffPatterFieldAmount($hitem['staff_details']->id, $hitem['salary_pattern']->id ?? '', '', 'Employee Provident Fund');
+                                $lic = getStaffPatterFieldAmount($hitem['staff_details']->id, $hitem['salary_pattern']->id ?? '', '', 'Life Insurance Corporation');
                                 $it_tax = staffMonthTax($hitem['staff_details']->id, date('F', strtotime($hitem['start_list_date'] . ' + ' . ($i + 1) . ' month')));
                             @endphp
                             <td class="p-2" style="text-align: right">{{ $epf }}</td>
@@ -223,7 +224,7 @@
                         @if (isset($hitem['salary_field']) && !empty($hitem['salary_field']))
                             @foreach ($hitem['salary_field'] as $item)
                                 <th class="p-2" style="text-align: right">
-                                    {{ getStaffPatterFieldAmount($hitem['staff_details']->id, $hitem['salary_pattern']->id, $item->id) * 12 }}
+                                    {{ getStaffPatterFieldAmount($hitem['staff_details']->id, $hitem['salary_pattern']->id ?? '', $item->id) * 12 }}
                                 </th>
                             @endforeach
                         @endif

@@ -74,14 +74,15 @@ class ReportController extends Controller
 
         $employee_id = $request->employee ?? '';
         $department_id = $request->department ?? '';
-
-        $history = $this->repository->getServiceHistory($employee_id, $department_id );
+        $history_Data = $this->repository->getServiceHistory($employee_id, $department_id );
+        $history = current( $history_Data );
+        $paginate_link = end( $history_Data );
         $employees = User::whereNull('is_super_admin')->where('verification_status', 'approved')->get();
         $departments = Department::all();
         $academic_info = AcademicYear::find(academicYearId());
         $academic_title = 'HISTORY OF SERVICE ( '.$academic_info->from_year.' - '.$academic_info->to_year.' )';
         
-        return view('pages.reports.service_history.index', compact('employee_id', 'department_id','history', 'employees','departments', 'academic_title' ));
+        return view('pages.reports.service_history.index', compact('employee_id', 'department_id','history', 'paginate_link', 'employees','departments', 'academic_title' ));
 
     }
 

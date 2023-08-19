@@ -60,7 +60,7 @@ class StaffAppointmentDetailController extends Controller
             $ins['appointment_order_model_id'] = $request->appointment_order_model_id;
             $ins['has_probation'] = $request->probation;
             $ins['probation_period'] = $request->probation == 'yes' ? $request->probation_period : null;
-
+           
             if ($request->hasFile('appointment_order_doc')) {
 
                 $files = $request->file('appointment_order_doc');
@@ -76,8 +76,12 @@ class StaffAppointmentDetailController extends Controller
 
             $ins['status'] = 'active';
 
-            StaffAppointmentDetail::updateOrCreate(['staff_id' => $staff_id, 'academic_id' => $academic_id], $ins);
+            $appointment_info = StaffAppointmentDetail::updateOrCreate(['staff_id' => $staff_id, 'academic_id' => $academic_id], $ins);
 
+            if( !$appointment_info->appointment_order_no ) {
+                $appointment_info->appointment_order_no = appointmentOrderNo($staff_id);
+                $appointment_info->save();
+            }
             if (canGenerateEmpCode($staff_id)) {
                 /**
                  * generate emp code   // society_emp_code, institute_emp_code
