@@ -14,7 +14,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class ReportRepository
 {
 
-    public function getServiceHistory($employee_id, $department)
+    public function getServiceHistory($employee_id, $department, $is_export = '')
     {
 
         $perPage = 1;
@@ -27,12 +27,18 @@ class ReportRepository
             })
             ->when(!empty($department), function ($query) use ($department) {
                 $query->where('staff_professional_datas.department_id', $department);
-            })
-            ->paginate(2);
+            });
+        if ($is_export) {
+           $employees = $employees->get();
+        } else {
+            $employees = $employees->paginate(2);
+            $paginate = $employees->links();
+        }
+
 
         $academic_data = AcademicYear::find(academicYearId());
 
-        $paginate = $employees->links();
+       
         $all_datas = [];
         if (isset($employees) && !empty($employees)) {
             foreach ($employees as $emp) {
@@ -61,6 +67,6 @@ class ReportRepository
                 $all_datas[] = $params;
             }
         }
-        return [$all_datas, $paginate];
+        return [$all_datas, $paginate ?? ''];
     }
 }

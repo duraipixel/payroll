@@ -91,7 +91,11 @@ class ReportController extends Controller
         $employee_id = $request->employee ?? '';
         $department_id = $request->department ?? '';
 
-        $history = $this->repository->getServiceHistory($employee_id, $department_id );
+        $history_Data = $this->repository->getServiceHistory($employee_id, $department_id, 'export' );
+
+        $history = current( $history_Data );
+        $paginate_link = end( $history_Data );
+
         $academic_info = AcademicYear::find(academicYearId());
         $academic_title = 'HISTORY OF SERVICE ( '.$academic_info->from_year.' - '.$academic_info->to_year.' )';
 
