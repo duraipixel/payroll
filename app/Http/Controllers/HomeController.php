@@ -108,6 +108,7 @@ class HomeController extends Controller
         $nature_of_works = NatureOfEmployment::with('appointments')->where('status', 'active')->get();
 
         $designations = Designation::with('staffEnrollments')->where('status', 'active')->get();
+        
         $params = array(
             'user_count' => $user_count,
             'last_user_added' => $last_user_added,
@@ -120,7 +121,9 @@ class HomeController extends Controller
             'nature_of_works' => $nature_of_works,
             'designations' => $designations,
             'gender_calculation' => $gender_calculation,
-            'top_ten_leave_taker' => $this->dashboardRepository->getTopTenLeaveTaker()
+            'top_ten_leave_taker' => $this->dashboardRepository->getTopTenLeaveTaker(),
+            'age_json_data' => $this->dashboardRepository->getInstituteAgeWiseData(),
+            'total_institution_staff' => $this->dashboardRepository->getTotalStaffCountByInstitutions()
         );
 
         return view('pages.dashboard.home', $params);
