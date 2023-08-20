@@ -169,7 +169,7 @@ class HomeController extends Controller
             })->Academic()
             // ->orderByRaw("CONVERT(VARCHAR(5), dob, 110)  > '".date('m')."-".date('d')."' desc")
             ->orderByRaw("CASE
-                WHEN CONVERT(VARCHAR(5), dob, 110) > '" . date('m') . "-" . date('d') . "' THEN 1
+                WHEN CONVERT(VARCHAR(5), dob, 110) > '" . $month . "-" . $start_day . "' THEN 1
                 ELSE 0
             END DESC;")->get();
 
@@ -224,7 +224,7 @@ class HomeController extends Controller
         $designations = Designation::with('staffEnrollments')->where('status', 'active')->get();
 
         $params = array(
-            
+
             'user_count' => $user_count,
             'last_user_added' => $last_user_added,
             'dob' => $dob,
@@ -236,9 +236,9 @@ class HomeController extends Controller
             'nature_of_works' => $nature_of_works,
             'designations' => $designations,
             'gender_calculation' => $gender_calculation,
-            'top_ten_leave_taker' => $this->dashboardRepository->getTopTenLeaveTaker(),
-            'age_json_data' => $this->dashboardRepository->getInstituteAgeWiseData(),
-            'total_institution_staff' => $this->dashboardRepository->getTotalStaffCountByInstitutions()
+            'top_ten_leave_taker' => $this->dashboardRepository->getTopTenLeaveTaker($s_date, $e_date),
+            'age_json_data' => $this->dashboardRepository->getInstituteAgeWiseData($s_date, $e_date),
+            'total_institution_staff' => $this->dashboardRepository->getTotalStaffCountByInstitutions($s_date, $e_date)
 
         );
 

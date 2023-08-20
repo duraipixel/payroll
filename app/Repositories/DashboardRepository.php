@@ -12,13 +12,16 @@ use Illuminate\Support\Facades\DB;
 class DashboardRepository extends Controller
 {
 
-    public function getTopTenLeaveTaker()
+    public function getTopTenLeaveTaker($start_date = '', $end_date = '')
     {
 
         $academic_id = academicYearId();
         $absenceEntries = AttendanceManualEntry::with('user')->selectRaw('COUNT(*) as total, employment_id')
             ->where('attendance_status', '=', 'Absence')
             ->where('academic_id', $academic_id)
+            ->when(!empty( $start_date ) && !empty( $end_date ), function($query) use($start_date, $end_date) {
+                return $query->whereRaw("attendance_date BETWEEN '" . $start_date . "' and '" . $end_date . "'");
+            })
             ->groupBy('employment_id')
             ->orderByDesc('total')
             ->limit(10)
@@ -27,7 +30,7 @@ class DashboardRepository extends Controller
         return $absenceEntries;
     }
 
-    public function getInstituteAgeWiseData()
+    public function getInstituteAgeWiseData($start_date = '', $end_date = '')
     {
         $result = DB::table('users as u')
             ->join('staff_personal_info as p', 'u.id', '=', 'p.staff_id')
@@ -60,7 +63,7 @@ class DashboardRepository extends Controller
         return $javascriptDataJson;
     }
 
-    public function getTotalStaffCountByInstitutions()
+    public function getTotalStaffCountByInstitutions( $start_date = '', $end_date = '' )
     {
         $results = User::join('institutions', 'institutions.id', '=', 'users.institute_id')
             ->whereNull('is_super_admin')
@@ -70,4 +73,5 @@ class DashboardRepository extends Controller
 
         return $results;
     }
+    
 }

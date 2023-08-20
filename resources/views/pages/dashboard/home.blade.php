@@ -3,7 +3,7 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
-    <div class="p-3">
+    <div class="p-3" id="dashboard_view">
         @include('pages.dashboard.dynamic_view')
     </div>
 @endsection
