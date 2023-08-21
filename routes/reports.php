@@ -12,7 +12,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports'],  function () {
     Route::get('/service/history/export', [ReportController::class, 'serviceHistoryExport'])->name('reports.service.history.export');
 
     // Route::get('/salary-register', [SalaryReportController::class, 'staff_register'])->name('reports.salary.history');
-    Route::get('/salary-register/export', [SalaryReportController::class, 'staff_register_export'])->name('reports.salary.export');
+    Route::get('/salary-register/export', [SalaryReportController::class, 'salary_register_export'])->name('reports.salary.export');
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],  function () {
@@ -20,5 +20,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
     Route::get('/attendance', [ReportController::class, 'attendance_index'])->name('reports.attendance');
     Route::get('/service/history', [ReportController::class, 'serviceHistoryIndex'])->name('reports.service.history');
     Route::get('/staff', [StaffReportController::class, 'staff_history'])->name('reports.staff.history');
-    Route::get('/salary-register', [SalaryReportController::class, 'staff_register'])->name('reports.salary.register'); 
+    Route::get('/salary-register', [SalaryReportController::class, 'salary_register'])->name('reports.salary.register'); 
 });

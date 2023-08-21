@@ -14,6 +14,13 @@
                                 <option {{ request()->department == $department->id ? 'selected' : '' }} value="{{ $department->id }}"> {{ $department->name }}</option>
                             @endforeach
                         </select>
+                        <select name="month" class="form-select form-select-sm w-auto d-inline">
+                            <option value="">-- select month -- </option>
+                            @for ($m = 1; $m <= 12; $m++)
+                                <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
+                                    {{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
+                            @endfor
+                        </select>
                         <button onclick="this.form.action = '{{ route('reports.salary.register') }}';" type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Find</button>
                         <a href="{{ route('reports.salary.register') }}" class="btn btn-sm btn-warning">
                             <i class="fa fa-repeat"></i> 
@@ -23,7 +30,7 @@
             </div>
             <div class="card-body p-2">
                 <div class="table-responsive">
-                    @include('pages.reports.staff.register._table')
+                    @include('pages.reports.staff.salary-register._table')
                 </div>
             </div>
             <div class="card-footer p-2 bg-light">
