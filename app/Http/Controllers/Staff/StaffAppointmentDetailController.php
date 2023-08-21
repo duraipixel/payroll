@@ -128,7 +128,7 @@ class StaffAppointmentDetailController extends Controller
             $staff_name = $user_info->personal->gender == 'male' ? 'Mr.' : ($user_info->personal->marital_status == 'married' ? 'Mrs.' : 'Ms.');
             $appointment_variables = array(
                 'date' => date('d-m-Y'),
-                'appointment_order_no' => appointmentOrderNo($user_info->id),
+                'appointment_order_no' => appointmentOrderNo($user_info->id, $model_info->academic_id),
                 'appointment_date' => commonDateFormat($request->from_appointment),
                 'designation' => $user_info->position->designation->name ?? null,
                 'staff_name' => $staff_name . $user_info->name,

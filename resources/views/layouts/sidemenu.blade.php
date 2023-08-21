@@ -591,7 +591,7 @@
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                                        <span class="menu-title">LIC</span>
+                                        <span class="menu-title">Insurance</span>
                                     </a>
                                 </div>
                             </div>
