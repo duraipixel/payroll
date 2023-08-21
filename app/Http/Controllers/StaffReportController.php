@@ -4,24 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Master\Classes;
-use App\Models\Master\DocumentType;
 use App\Models\Master\Subject;
 use App\Models\Staff\StaffAppointmentDetail;
-use App\Models\User;
+use App\ReportHelper;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class StaffReportController extends Controller
 {
-    function collection($request)
-    {
-        return User::when(!empty($request->name), function ($q) use ($request) {
-            $q->where('name', 'LIKE', '%' . $request->name . '%');
-        })->whereHas('position.department', function ($q) use ($request) {
-            if (!empty($request->department)) $q->where('id', '=', $request->department);
-        })->select('*');
-    }
+    use ReportHelper;
     function staff_history(Request $request)
     {
         $users = $this->collection($request)->paginate(15);
