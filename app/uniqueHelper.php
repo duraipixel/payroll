@@ -112,8 +112,9 @@ if (!function_exists('appointmentOrderNo')) {
         // dd( $academy_year );
         $year = $academy_year->from_year . '-' . $academy_year->to_year;
 
-        $staff_info = User::find($staff_id);
+        $staff_info = User::with('institute')->find($staff_id);
         $institute_code = $staff_info->institute->code ?? '';
+        dump( $staff_info );
         if( $institute_code ) {
 
             $appoint = StaffAppointmentDetail::whereNotNull('appointment_order_no')->orderBy('id', 'desc')->first();
