@@ -90,6 +90,7 @@ class TestOneController extends Controller
         if( isset( $orders ) && !empty( $orders ) ) {
             foreach ($orders as $items ) {
                 // appointmentOrderNo($user_info->id)
+                dd( $items );
                 $order_no = appointmentOrderNo($items->staff_id);
                 $items->appointment_order_no = $order_no;
                 $items->save();
