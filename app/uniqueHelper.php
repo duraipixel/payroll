@@ -106,9 +106,9 @@ if (!function_exists('leaveApplicationNo')) {
 }
 
 if (!function_exists('appointmentOrderNo')) {
-    function appointmentOrderNo($staff_id)
+    function appointmentOrderNo($staff_id, $academic_id )
     {
-        $academy_year = AcademicYear::find(session()->get('academic_id'));
+        $academy_year = AcademicYear::find($academic_id);
         // dd( $academy_year );
         $year = $academy_year->from_year . '-' . $academy_year->to_year;
 
@@ -117,7 +117,11 @@ if (!function_exists('appointmentOrderNo')) {
         // dump( $staff_info );
         if( $institute_code ) {
 
-            $appoint = StaffAppointmentDetail::whereNotNull('appointment_order_no')->orderBy('id', 'desc')->first();
+            $appoint = StaffAppointmentDetail::select('appointment_order_no')->whereNotNull('appointment_order_no')
+                        ->where('academic_id', $academic_id)
+                        ->where('appointment_order_no','like',"%{$institute_code}%")
+                        ->orderBy('appointment_order_no', 'desc')
+                        ->first();
             // $year = date('Y');
             $countNo = '00001';
             $appointment_order_no = $countNo . '/AEWS/' . $institute_code . '/' . $year;
