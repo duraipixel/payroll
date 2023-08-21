@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Imports\OldStaffEntryImport;
 use App\Models\Master\AppointmentOrderModel;
 use App\Models\PayrollManagement\StaffSalary;
+use App\Models\Staff\StaffAppointmentDetail;
 use Illuminate\Http\Request;
 use App\Models\Test;
 use Illuminate\Support\Facades\Validator;
@@ -80,5 +81,21 @@ class TestOneController extends Controller
         // return view('pages.payroll_management.overview.statement._auto_gen_pdf', $params);
         $pdf = PDF::loadView('pages.payroll_management.overview.statement._auto_gen_pdf', $params)->setPaper('a4', 'portrait');
         return $pdf->stream('salaryslip.pdf');
+    }
+
+    public function assignAppointmentOrder() {
+
+        $orders = StaffAppointmentDetail::whereNull('appointment_order_no')->get();
+
+        if( isset( $orders ) && !empty( $orders ) ) {
+            foreach ($orders as $items ) {
+                // appointmentOrderNo($user_info->id)
+                $order_no = appointmentOrderNo($items->staff_id);
+                $items->appointment_order_no = $order_no;
+                $items->save();
+                dump( $order_no );
+            }
+        }
+
     }
 }

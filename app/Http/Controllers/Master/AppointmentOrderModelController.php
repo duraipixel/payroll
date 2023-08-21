@@ -27,24 +27,29 @@ class AppointmentOrderModelController extends Controller
         );
         if($request->ajax())
         {
-            $query = AppointmentOrderModel::select('*');
-            // Sort the data in descending order based on the 'id' column
-            $data = $query->get()->sortByDesc('id')->values();
-
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
+
+
+            $query = AppointmentOrderModel::select('*')
+                        ->when( !empty( $keywords ), function($query) use($keywords) {
+                            $date = date('Y-m-d',strtotime($keywords));
+                            return $query->where(function($q) use($keywords,$date){
+                                $q->where('appointment_order_models.name','like',"%{$keywords}%")
+                                ->orWhereDate('appointment_order_models.created_at',$date);
+                            });
+                        });
+            // Sort the data in descending order based on the 'id' column
+            $data = $query->get()->sortByDesc('id')->values();
+
 
             
             $datatables =  Datatables::of($data)
             ->filter(function($query) use($status,$keywords) {
                 if($keywords)
                 {
-                    $date = date('Y-m-d',strtotime($keywords));
-                    return $query->where(function($q) use($keywords,$date){
-                        $q->where('appointment_order_models.name','like',"%{$keywords}%")
-                        ->orWhereDate('appointment_order_models.created_at',$date);
-                    });
+                   
                 }
             })
             ->addIndexColumn()
