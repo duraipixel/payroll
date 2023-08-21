@@ -279,6 +279,7 @@
         var place_of_work_id_update = $('#place_of_work_id_update').val();
         var joining_date_update = $('#joining_date_update').val();
         var salary_scale_update = $('#salary_scale_update').val();
+        var order_id = $('#order_id').val();
 
         if (staff_category_id_update == '' || nature_of_employment_id == '' || teaching_type_id_update == '' ||
             place_of_work_id_update == '' || salary_scale_update == '' || joining_date_update == '') {
@@ -299,6 +300,10 @@
             name: 'staff_id',
             value: staff_id
         });
+        forms.push({
+            name:'order_id',
+            value: order_id
+        })
        
 
         $.ajax({

@@ -6,6 +6,7 @@
             <tr class="fw-bolder text-muted">
                 <th class="w-30px">No</th>
                 <th class="w-120px">Joining Date</th>
+                <th class="">Order No</th>
                 <th class="w-140px">From</th>
                 <th class="w-120px">To</th>
                 <th class="w-120px">Appointment</th>
@@ -23,6 +24,7 @@
                     <tr>
                         <td class="p-3"> {{ $loop->iteration }} </td>
                         <td class="p-3">{{ commonDateFormat($item->joining_date) }}</td>
+                        <td class="p-3"> {{ $item->appointment_order_no ?? 'n/a' }} </td>
                         <td class="p-3">{{ commonDateFormat($item->from_appointment) }}</td>
                         <td class="p-3">{{ commonDateFormat($item->to_appointment) }}</td>
                         <td class="p-3">{{ $item->appointmentOrderModel->name ?? '' }}</td>

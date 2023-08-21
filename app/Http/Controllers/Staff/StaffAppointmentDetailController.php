@@ -77,9 +77,9 @@ class StaffAppointmentDetailController extends Controller
             $ins['status'] = 'active';
 
             $appointment_info = StaffAppointmentDetail::updateOrCreate(['staff_id' => $staff_id, 'academic_id' => $academic_id], $ins);
-
+          
             if( !$appointment_info->appointment_order_no ) {
-                $appointment_info->appointment_order_no = appointmentOrderNo($staff_id);
+                $appointment_info->appointment_order_no = appointmentOrderNo($staff_id, $academic_id);
                 $appointment_info->save();
             }
             if (canGenerateEmpCode($staff_id)) {
@@ -111,7 +111,11 @@ class StaffAppointmentDetailController extends Controller
     {
 
         $appointment_order_model_id = $request->appointment_order_model_id;
+        $id = $request->id ?? '';
 
+        if( $id ) {
+            $order_details = StaffAppointmentDetail::find($id);
+        }
         /**
          * Get Appointment order details
          */
@@ -119,7 +123,7 @@ class StaffAppointmentDetailController extends Controller
         $model_info = AppointmentOrderModel::find($appointment_order_model_id);
         
         if (isset($model_info->document) && !empty($model_info->document)) {
-            
+            $academic_id = $request->academic_id ?? academicYearId();
             $document = $model_info->document;
             $user_info = User::find($request->staff_id);
             $society_info = Society::find(1);
@@ -128,7 +132,7 @@ class StaffAppointmentDetailController extends Controller
             $staff_name = $user_info->personal->gender == 'male' ? 'Mr.' : ($user_info->personal->marital_status == 'married' ? 'Mrs.' : 'Ms.');
             $appointment_variables = array(
                 'date' => date('d-m-Y'),
-                'appointment_order_no' => appointmentOrderNo($user_info->id, $model_info->academic_id),
+                'appointment_order_no' => $order_details->appointment_order_no ?? appointmentOrderNo($user_info->id, $academic_id),
                 'appointment_date' => commonDateFormat($request->from_appointment),
                 'designation' => $user_info->position->designation->name ?? null,
                 'staff_name' => $staff_name . $user_info->name,
@@ -147,13 +151,15 @@ class StaffAppointmentDetailController extends Controller
             }
 
             $pdf = PDF::loadView('pages.masters.appointment_order_model.dynamic_pdf', ['data' => $document])->setPaper('a4', 'portrait');
-            $path = 'public/order_preview';
-
+            $path = 'public/order_preview/'.$user_info->id;
+            if (File::exists($path)) {
+                File::deleteDirectory($path);
+            }
             if (!File::exists($path)) {
                 File::makeDirectory($path, $mode = 0777, true, true);
             }
             $fileName =  time() . '.' . 'pdf';
-            $pdf_path = 'public/order_preview/' . $fileName;
+            $pdf_path = 'public/order_preview/'.$user_info->id.'/' . $fileName;
             $pdf->save($pdf_path);
 
             return asset($pdf_path);
@@ -264,6 +270,9 @@ class StaffAppointmentDetailController extends Controller
                     $info->appointment_doc = $filename;
                 }
                 $staff_id = $info->staff_id;
+                if( !$info->appointment_order_no ) {
+                    $info->appointment_order_no = appointmentOrderNo($staff_id, $info->academic_id);
+                }
                 
                 $info->save();
             } else {
@@ -306,7 +315,12 @@ class StaffAppointmentDetailController extends Controller
 
                 $ins['status'] = 'active';
 
-                StaffAppointmentDetail::create($ins);
+                $order_details = StaffAppointmentDetail::create($ins);
+
+                if( !$order_details->appointment_order_no ) {
+                    $order_details->appointment_order_no = appointmentOrderNo($staff_id, $academic_id);
+                    $order_details->save();
+                }
 
                 if (canGenerateEmpCode($staff_id)) {
                     /**

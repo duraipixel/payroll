@@ -31,7 +31,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <input type="hidden" name="id" value="{{ $details->id ?? '' }}">
+                                    <input type="hidden" name="id" id="order_id" value="{{ $details->id ?? '' }}">
                                     <div class="col-lg-4 mb-5">
                                         <label class="form-label required"> Category of Staff </label>
                                         <div class="d-flex">
