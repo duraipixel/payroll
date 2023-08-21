@@ -114,7 +114,7 @@ if (!function_exists('appointmentOrderNo')) {
 
         $staff_info = User::with('institute')->find($staff_id);
         $institute_code = $staff_info->institute->code ?? '';
-        dump( $staff_info );
+        // dump( $staff_info );
         if( $institute_code ) {
 
             $appoint = StaffAppointmentDetail::whereNotNull('appointment_order_no')->orderBy('id', 'desc')->first();

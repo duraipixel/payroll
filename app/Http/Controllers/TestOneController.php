@@ -85,7 +85,7 @@ class TestOneController extends Controller
 
     public function assignAppointmentOrder() {
 
-        $orders = StaffAppointmentDetail::whereNull('appointment_order_no')->get();
+        $orders = StaffAppointmentDetail::whereNull('appointment_order_no')->whereNull('deleted_at')->get();
 
         if( isset( $orders ) && !empty( $orders ) ) {
             foreach ($orders as $items ) {
