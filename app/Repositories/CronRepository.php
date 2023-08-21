@@ -13,7 +13,7 @@ class CronRepository
             'Content-Type' => 'application/json',
             'Authorization' => 'Basic YWRtaW46YWRtaW4=',
             'Cookie' => 'csrftoken=Ijp1jBEPQYcqWyautHJOgWJexx3UTPMSPC3vJegzRJLeAakrmi2eL68hOzJAelEG',
-        ])->get('http://52.172.153.207/att/api/dailyAttendanceReport');
+        ])->get('http://192.168.1.46:8085/att/api/dailyAttendanceReport');
         
         // Check if the request was successful
         if ($response->successful()) {
