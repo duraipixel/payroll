@@ -62,8 +62,7 @@ class CronRepository
                     $ins['api_response'] = serialize($items);
                     
                     $check_array = ['attendance_date' => $current_date, 'employment_id' => $user_info->id];
-                    dump( $check_array );
-                    dd( $ins );
+                  
                     $entry_info = AttendanceManualEntry::updateOrCreate(['attendance_date' => $current_date, 'employment_id' => $user_info->id], $ins);
                     dd( $entry_info );
                 }
