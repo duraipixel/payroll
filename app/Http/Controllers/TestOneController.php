@@ -8,6 +8,7 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\Staff\StaffAppointmentDetail;
 use Illuminate\Http\Request;
 use App\Models\Test;
+use App\Repositories\CronRepository;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
 use Carbon\Carbon;
@@ -18,6 +19,9 @@ use PDF;
 
 class TestOneController extends Controller
 {
+    public function cron(CronRepository $cronRepository) {
+        return $cronRepository->getData();
+    }
 
     public function testAppointmentPdf()
     {
