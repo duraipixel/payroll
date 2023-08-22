@@ -25,8 +25,10 @@ class CronRepository
         if ($response->successful()) {
             $responseData = $response->json(); // Assuming the response is in JSON format
             
-            dump( gettype( $responseData ) );
-            if( isset( $responseData ) && !empty( $responseData )) {
+            if( isset( $responseData['data'] ) && !empty( $responseData['data'] )) {
+                foreach ($responseData['data'] as $items ) {
+                    dd( $items );
+                }
                 dd( $responseData );
             }
             return $responseData;
