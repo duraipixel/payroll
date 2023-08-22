@@ -463,7 +463,7 @@
                 @endif
 
                 @php
-                    $payroll_menu = ['salary-head', 'salary-field', 'salary.creation', 'salary.loan', 'salary.lic', 'professional-tax', 'payroll.overview', 'payroll.list', 'holdsalary', 'salary.revision', 'it.tabulation', 'taxscheme', 'taxsection', 'taxsection-item', 'it', 'other-income', 'it-calculation'];
+                    $payroll_menu = ['salary-head', 'salary-field', 'salary.creation', 'salary.loan', 'salary.lic', 'professional-tax', 'payroll.overview', 'payroll.list', 'holdsalary', 'salary.revision', 'it.tabulation', 'taxscheme', 'taxsection', 'taxsection-item', 'it', 'other-income', 'it-calculation', 'earnings.index'];
                 @endphp
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion @if (request()->routeIs($payroll_menu)) hover show @endif">
@@ -678,7 +678,7 @@
                             </div>
                         </div>
                         @php
-                            $earn_menu = ['salary.loan', 'salary.lic'];
+                            $earn_menu = ['earnings.index'];
                         @endphp
                         <div data-kt-menu-trigger="click"
                             class="menu-item menu-accordion @if (request()->routeIs($earn_menu)) hover show @endif">
@@ -686,18 +686,18 @@
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Earnings</span>
+                                <span class="menu-title">Earnings </span>
                                 <span class="menu-arrow"></span>
                             </span>
                             <div class="menu-sub menu-sub-accordion">
-                                @if (access()->hasAccess('salary.loan', 'view'))
+                                @if (access()->hasAccess('earnings.index', 'view'))
                                     <div class="menu-item">
-                                        <a class="menu-link @if (request()->routeIs(['salary.loan'])) active @endif"
-                                            href="{{ route('salary.loan') }}">
+                                        <a class="menu-link @if (request()->routeIs('earnings.index') && request()->route('type') === 'bonus') active @endif"
+                                            href="{{ route('earnings.index', ['type' => 'bonus']) }}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
-                                            <span class="menu-title">Bonus</span>
+                                            <span class="menu-title"> Bonus </span>
                                         </a>
                                     </div>
                                 @endif

@@ -12,8 +12,8 @@ class CronRepository
         $date = date('Y-m-d');
         $end_date = $date;
 
-        $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport';
-        $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/?start_date='.$date.'&end_date='.$end_date;
+        $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/?page_size=100000';
+        $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/?start_date='.$date.'&end_date='.$end_date.'&page_size=1000000';
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
@@ -24,6 +24,7 @@ class CronRepository
         // Check if the request was successful
         if ($response->successful()) {
             $responseData = $response->json(); // Assuming the response is in JSON format
+            
             return $responseData;
             // Do something with $responseData here
         } else {

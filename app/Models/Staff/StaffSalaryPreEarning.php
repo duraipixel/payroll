@@ -2,6 +2,7 @@
 
 namespace App\Models\Staff;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,5 +21,9 @@ class StaffSalaryPreEarning extends Model
         'added_by',
         'is_verified'
     ];
+
+    public function staff() {
+        return $this->hasOne(User::class, 'id', 'staff_id');
+    }
 
 }

@@ -379,6 +379,15 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::any('holdsalary/view',[App\Http\Controllers\PayrollManagement\HoldSalaryController::class,'view'])->name('holdsalary.view');
     Route::post('holdsalary/delete',[App\Http\Controllers\PayrollManagement\HoldSalaryController::class,'delete'])->name('holdsalary.delete');
     /**
+     * Staff other Earnings 
+     */
+    Route::get('earnings/{type}', [App\Http\Controllers\PayrollManagement\PreEarningsController::class, 'index'])->name('earnings.index');
+    Route::get('earnings/{type}/add', [App\Http\Controllers\PayrollManagement\PreEarningsController::class, 'add'])->name('earnings.add');
+    Route::any('earnings/table/view',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'tableView'])->name('earnings.table.view');
+    Route::any('earnings/get/table',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'getTableView'])->name('earnings.get.table.view');
+    Route::any('earnings/save',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'save'])->name('earnings.save');
+
+    /**
      *  Set working day calendar 
      */
     Route::post('/calendar/event/add', [App\Http\Controllers\AttendanceManagement\CalendarController::class, 'setEvent'])->name('calender.event.add'); 
