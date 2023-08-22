@@ -63,7 +63,7 @@ class CronRepository
                     
                     $check_array = ['attendance_date' => $current_date, 'employment_id' => $user_info->id];
                   
-                    $entry_info = AttendanceManualEntry::updateOrCreate(['attendance_date' => $current_date, 'employment_id' => $user_info->id], $ins);
+                    $entry_info = AttendanceManualEntry::updateOrCreate($check_array, $ins);
                     dd( $entry_info );
                 }
                 dd($responseData);
