@@ -16,7 +16,7 @@ class CronRepository
         $date = '2023-08-21';
         $end_date = $date;
 
-        // $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/?page_size=100000';
+        // $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/';
         $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/?start_date=' . $date . '&end_date=' . $end_date . '&page_size=1000000';
 
         $response = Http::withHeaders([
@@ -28,15 +28,17 @@ class CronRepository
         // Check if the request was successful
         if ($response->successful()) {
             $responseData = $response->json(); // Assuming the response is in JSON format
-            dd( $responseData['data'] );
             if (isset($responseData['data']) && !empty($responseData['data'])) {
                 foreach ($responseData['data'] as $items) {
-                    dd($items);
                     $ins = [];
                     $institute_code = $items['emp_code'];
                     $user_info = User::where('institute_emp_code', $institute_code)->first();
                     $from_time = $items['check_in'];
                     $to_time = $items['check_out'];
+                    $total_time = $items['duration'] ?? '00:00';
+                    $clock_in = $items['clock_in'] ?? '00:00';
+                    $clock_out = $items['clock_out'] ?? '00:00';
+                    $total_clocked_time = $items['total_time'] ?? '00:00';
                     
                     $current_date = date('Y-m-d', strtotime($items['att_date']));
                     $attendance_status = $items['attendance_status'];
@@ -52,8 +54,14 @@ class CronRepository
 
                     $ins['from_time'] = new \Illuminate\Database\Query\Expression("CAST('$from_time' AS TIME)");
                     $ins['to_time'] = new \Illuminate\Database\Query\Expression("CAST('$to_time' AS TIME)");
-                    $ins['total_time'] = $items['duration'] ?? 0;
-                    AttendanceManualEntry::updateOrCreate(['attendance_date' => $current_date, 'employment_id' => $item->id], $ins);
+                    $ins['total_time'] = new \Illuminate\Database\Query\Expression("CAST('$total_time' AS TIME)");
+
+                    $ins['clock_in'] = new \Illuminate\Database\Query\Expression("CAST('$clock_in' AS TIME)");
+                    $ins['clock_out'] = new \Illuminate\Database\Query\Expression("CAST('$clock_out' AS TIME)");
+                    $ins['total_clocked_time'] = new \Illuminate\Database\Query\Expression("CAST('$total_clocked_time' AS TIME)");
+                    $ins['api_response'] = $items;
+                    dd( $ins );
+                    AttendanceManualEntry::updateOrCreate(['attendance_date' => $current_date, 'employment_id' => $user_info->id], $ins);
                 }
                 dd($responseData);
             }

@@ -32,7 +32,12 @@ class AttendanceManualEntry extends Model
         'actual_break',
         'mode',
         'attendance_status_id',
-        'other_status'
+        'other_status',
+        'clock_in',
+        'clock_out',
+        'total_clocked_time',
+        'unscheduled',
+        'api_response'
     ];
 
     public function reportingManager() {
