@@ -13,10 +13,11 @@ class CronRepository
     {
 
         $date = date('Y-m-d');
+        $date = '2023-08-21';
         $end_date = $date;
 
-        $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/?page_size=100000';
-        // $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/?start_date=' . $date . '&end_date=' . $end_date . '&page_size=1000000';
+        // $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/?page_size=100000';
+        $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/?start_date=' . $date . '&end_date=' . $end_date . '&page_size=1000000';
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
