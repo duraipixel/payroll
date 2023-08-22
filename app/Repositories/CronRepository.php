@@ -49,7 +49,7 @@ class CronRepository
                     $ins['employment_id'] = $user_info->id;
                     $ins['attendance_date'] = $current_date;
                     $ins['reporting_manager'] = $user_info->reporting_manager_id ?? null;
-                    if( current($attendance_status) != 'Absence' &&  current($attendance_status) == 'Present') {
+                    if( current($attendance_status) != 'Absence' &&  current($attendance_status) != 'Present') {
                         $a_status = 'Present';
                         $ins['other_status'] = current($attendance_status);
                     } else {
