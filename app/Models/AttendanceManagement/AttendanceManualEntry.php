@@ -31,7 +31,8 @@ class AttendanceManualEntry extends Model
         'break_duration',
         'actual_break',
         'mode',
-        'attendance_status_id'
+        'attendance_status_id',
+        'other_status'
     ];
 
     public function reportingManager() {
