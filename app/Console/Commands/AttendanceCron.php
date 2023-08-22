@@ -30,10 +30,10 @@ class AttendanceCron extends Command
     public function handle(CronRepository $cron)
     {
         \Log::info("Cron is working fine!");
-        dd( $cron->getData() );
+        // dd( $cron->getData() );
         $values = array('name' => 'Durairaj', 'created_at' => date('Y-m-d H:i:s'));
         DB::table('cron_tests')->insert($values);
 
-        \Log::info($cron->getData());
+        // \Log::info($cron->getData());
     }
 }
