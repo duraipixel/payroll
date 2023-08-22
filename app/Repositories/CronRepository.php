@@ -13,8 +13,8 @@ class CronRepository
     {
 
         $date = date('Y-m-d');
-        $date = '2023-08-21';
-        $end_date = $date;
+        $date = '2023-06-01';
+        $end_date = '2023-06-30';
 
         // $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/';
         $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/?start_date=' . $date . '&end_date=' . $end_date . '&page_size=1000000';
