@@ -60,8 +60,9 @@ class CronRepository
                     $ins['clock_out'] = new \Illuminate\Database\Query\Expression("CAST('$clock_out' AS TIME)");
                     $ins['total_clocked_time'] = new \Illuminate\Database\Query\Expression("CAST('$total_clocked_time' AS TIME)");
                     $ins['api_response'] = $items;
-                    dd( $ins );
-                    AttendanceManualEntry::updateOrCreate(['attendance_date' => $current_date, 'employment_id' => $user_info->id], $ins);
+                    
+                    $entry_info = AttendanceManualEntry::updateOrCreate(['attendance_date' => $current_date, 'employment_id' => $user_info->id], $ins);
+                    dd( $entry_info );
                 }
                 dd($responseData);
             }
