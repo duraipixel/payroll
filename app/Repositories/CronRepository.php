@@ -59,7 +59,7 @@ class CronRepository
                     $ins['clock_in'] = new \Illuminate\Database\Query\Expression("CAST('$clock_in' AS TIME)");
                     $ins['clock_out'] = new \Illuminate\Database\Query\Expression("CAST('$clock_out' AS TIME)");
                     $ins['total_clocked_time'] = new \Illuminate\Database\Query\Expression("CAST('$total_clocked_time' AS TIME)");
-                    $ins['api_response'] = $items;
+                    $ins['api_response'] = serialize($items);
                     
                     $check_array = ['attendance_date' => $current_date, 'employment_id' => $user_info->id];
                     dump( $check_array );
