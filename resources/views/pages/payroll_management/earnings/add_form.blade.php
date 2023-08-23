@@ -39,7 +39,8 @@
                                 <option value="all">All</option>
                                 @if (isset($employees) && !empty($employees))
                                     @foreach ($employees as $items)
-                                        <option value="{{ $items->id }}">{{ $items->name }} -
+
+                                        <option value="{{ $items->id }}" @if( isset( $earning_ids ) && in_array( $items->id, $earning_ids )) selected="selected" @endif>{{ $items->name }} -
                                             {{ $items->institute_emp_code }}</option>
                                     @endforeach
                                 @endif
@@ -88,7 +89,9 @@
                 url: "{{ route('earnings.get.table.view') }}",
                 type: 'POST',
                 data: {
-                    employee_id: employee_id
+                    employee_id: employee_id,
+                    salary_date: '{{ $salary_date }}',
+                    page_type: '{{$page_type}}'
                 },
                 beforeSend: function() {
                     loading();

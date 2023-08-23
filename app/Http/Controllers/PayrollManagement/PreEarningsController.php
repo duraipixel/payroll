@@ -49,13 +49,20 @@ class PreEarningsController extends Controller
             ->where('earnings_type', $page_type)->count();
 
         if ($request->ajax() && $request->from == '') {
+
             $hold_date = $request->hold_date;
             $start_date = date('Y-m-1', strtotime($hold_date));
             $end_date = date('Y-m-t', strtotime($hold_date));
+            $datatable_search = $request->datatable_search ?? '';
 
             $data = StaffSalaryPreEarning::select('staff_salary_pre_earnings.*')->with(['staff'])
                 ->when(!empty($hold_date), function ($query) use ($start_date, $end_date) {
                     $query->whereBetween('salary_month', [$start_date, $end_date]);
+                })
+                ->when( !empty( $datatable_search ), function($query) use( $datatable_search ) {
+                    $query->whereHas('staff', function ($q) use ($datatable_search) {
+                        $q->where('name', 'like', '%' . $datatable_search . '%');
+                    });
                 })
                 ->where('earnings_type', $page_type);
 
@@ -65,16 +72,6 @@ class PreEarningsController extends Controller
             $keywords = $datatable_search;
 
             $datatables =  Datatables::of($data)
-                ->filter(function ($query) use ($status, $keywords) {
-                    if ($keywords) {
-                        $date = date('Y-m-d', strtotime($keywords));
-                        return $query->where(function ($q) use ($keywords, $date) {
-
-                            $q->where('staff.name', 'like', "%{$keywords}%")
-                                ->orWhereDate('hold_salaries.created_at', $date);
-                        });
-                    }
-                })
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $del_btn = '<a href="javascript:void(0);" onclick="deleteEarnings(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
@@ -93,20 +90,23 @@ class PreEarningsController extends Controller
 
         $page_type = $request->type;
         $date = $request->date;
-        $salary_date = date('Y-m-1', strtotime( $date ) );
+        $salary_date = date('Y-m-01', strtotime( $date ) );
         $title = 'Add ' . ucwords(str_replace('_', ' ', $page_type));
         $employees = User::whereNull('is_super_admin')
             ->where('verification_status', 'approved')->get();
         $nature_of_employees = NatureOfEmployment::where('status', 'active')->get();
 
         $earnings_details = StaffSalaryPreEarning::where('salary_month', $salary_date)->get();
+        $earning_ids = $earnings_details->pluck('staff_id')->toArray();
 
         $params = [
             'page_type' => $page_type,
             'title' => $title,
             'employees' => $employees,
             'nature_of_employees' => $nature_of_employees,
-            'earnings_details' => $earnings_details
+            'earnings_details' => $earnings_details,
+            'earning_ids' => $earning_ids,
+            'salary_date' => $salary_date
         ];
         return view('pages.payroll_management.earnings.add_form', $params);
     }
@@ -115,13 +115,15 @@ class PreEarningsController extends Controller
     {
 
         $employee_id = $request->employee_id ?? ['all'];
-        $employees  = User::whereNull('is_super_admin')
+        $salary_date = $request->salary_date;
+        $page_type = $request->page_type;
+        $employees = User::whereNull('is_super_admin')
             ->where('verification_status', 'approved')
             ->when(current($employee_id) != 'all', function ($query) use ($employee_id) {
                 $query->whereIn('users.id', $employee_id);
             })
             ->get();
-        $params     = ['employees' => $employees];
+        $params = ['employees' => $employees, 'salary_date' => $salary_date, 'page_type' => $page_type ];
         return view('pages.payroll_management.earnings._form_table', $params);
     }
 

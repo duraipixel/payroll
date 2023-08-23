@@ -22,11 +22,35 @@
     </thead>
 
     <tbody class="text-gray-600 fw-bold">
-        @if (isset($employees) && !empty($employees))
+        @if( isset( $earnings_details ) && !empty( $earnings_details ) ) 
+            @foreach ($earnings_details as $item)
+            <tr>
+                <td class="p-3">
+                    <input type="checkbox" checked role="button" name="bonus[]" class="bonus_check" value="{{$item->staff->id}}">
+                </td>
+                <td>
+                    {{ $item->staff->institute_emp_code }}
+                </td>
+                <td>
+                    {{ $item->staff->name }}
+                </td>
+                <td>
+                    <input type="text" name="amount_{{$item->staff->id}}" class="price form-control form-control-sm text-end"
+                        placeholder="Bonus amount" value="{{$item->amount}}">
+                </td>
+                <td>
+                    <textarea name="remarks_{{$item->staff->id}}" cols="30" rows="1" class="form-control form-control-sm h-30px">{{$item->remarks}}</textarea>
+                </td>
+            </tr>
+            @endforeach
+        @elseif (isset($employees) && !empty($employees))
             @foreach ($employees as $item)
+            @php
+                $earning_info = getEarningInfo($item->id, $page_type, $salary_date );
+            @endphp
                 <tr>
                     <td class="p-3">
-                        <input type="checkbox" role="button" name="bonus[]" class="bonus_check" value="{{$item->id}}">
+                        <input type="checkbox" @if( getEarningInfo($item->id, $page_type, $salary_date )) checked @endif role="button" name="bonus[]" class="bonus_check" value="{{$item->id}}">
                     </td>
                     <td>
                         {{ $item->institute_emp_code }}
@@ -36,10 +60,10 @@
                     </td>
                     <td>
                         <input type="text" name="amount_{{$item->id}}" class="price form-control form-control-sm text-end"
-                            placeholder="Bonus amount">
+                            placeholder="Bonus amount" value="{{ $earning_info->amount ?? ''}}">
                     </td>
                     <td>
-                        <textarea name="remarks_{{$item->id}}" cols="30" rows="1" class="form-control form-control-sm h-30px"></textarea>
+                        <textarea name="remarks_{{$item->id}}" cols="30" rows="1" class="form-control form-control-sm h-30px">{{ $earning_info->remarks ?? ''}}</textarea>
                     </td>
                 </tr>
             @endforeach

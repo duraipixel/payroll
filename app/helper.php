@@ -47,6 +47,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Models\Master\Department;
+use App\Models\Staff\StaffSalaryPreEarning;
 
 if (!function_exists('academicYearId')) {
     function academicYearId()
@@ -1260,4 +1261,13 @@ function getInsuranceAmount($staff_id, $date)
     }
 
     return ['total_amount' => $total_amount, 'emi' => $arr];
+}
+
+function getEarningInfo( $staff_id, $earning_type, $date ) {
+
+    $info = StaffSalaryPreEarning::where('salary_month', $date)
+            ->where('earnings_type', $earning_type)
+            ->where('staff_id', $staff_id)
+            ->first();
+    return $info ?? '';
 }

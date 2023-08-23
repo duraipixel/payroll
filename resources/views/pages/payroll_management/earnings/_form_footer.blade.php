@@ -9,7 +9,6 @@
         <div class="form-group">
             <label for=""> Salary Month </label>
             <div>
-
                 @php
                     $months = 4;
                     $dates = date('Y-03-01');
@@ -19,10 +18,9 @@
                         @php
                             $dates = date('Y-m-d', strtotime($dates . '+1 months'));
                         @endphp
-                        <option value="{{ $dates }}" @if (date('m') == $months) @selected(true) @endif>
-                            {{ date('M Y', strtotime($dates)) }}
+                        <option value="{{ $dates }}" @if ($salary_date == $dates) selected="selected" @endif>
+                            {{ date('M Y', strtotime($dates)) }} 
                         </option>
-                        
                         @php
                             if ($months == 12) {
                                 $months = 1;
@@ -37,13 +35,12 @@
     </div>
     <div class="col-sm-4 text-end mt-3 position-relative">
         <div class="position-absolute" style="right: 0px;bottom:0px;">
-
             <a href="{{ route('earnings.index', ['type' => $page_type ]) }}" class="btn btn-dark btn-sm"> 
                 Cancel 
             </a>
             <button class="btn btn-success btn-sm" type="button" id="earning_btn" onclick="submitEarningsStaff()">Save</button>
         </div>
     </div>
- 
+    
 </div>
 
