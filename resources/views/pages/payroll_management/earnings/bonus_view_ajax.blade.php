@@ -1,4 +1,10 @@
 <div class="card-header border-0 pt-6">
+    <style>
+        #earings_table td {
+            padding: 5px;
+        }
+    </style>
+
     <div class="card-title">
         <div class="d-flex align-items-center position-relative my-1">
             {!! searchSvg() !!}
@@ -16,7 +22,7 @@
 
             @if (access()->buttonAccess($route_name, 'add_edit'))
                 <a href="{{ route('earnings.add', ['type' => $page_type])}}"  class="btn btn-primary btn-sm">
-                    {!! plusSvg() !!} {{ $title }}
+                    {!! plusSvg() !!} {{ isset($has_data) && $has_data > 0 ? 'Update ' : '' }} {{ $title }}
                 </a>
             @endif
 
@@ -89,16 +95,12 @@
                 name: 'staff.name'
             },
             {
-                data: 'current_salary_pattern',
-                render: function(data) {
-                    // console.log(data, 'data');
-                    return data.net_salary || '';
-                },
-                name: 'current_salary_pattern'
+                data: 'salary_month',
+                name: 'salary_month'
             },
             {
-                data: 'hold_month',
-                name: 'hold_month'
+                data: 'amount',
+                name: 'amount'
             },
             {
                 data: 'remarks',

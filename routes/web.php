@@ -387,6 +387,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::any('earnings/table/view',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'tableView'])->name('earnings.table.view');
     Route::any('earnings/get/table',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'getTableView'])->name('earnings.get.table.view');
     Route::any('earnings/save',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'save'])->name('earnings.save');
+    Route::post('earnings/delete',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'delete'])->name('earnings.delete');
 
     /**
      *  Set working day calendar 

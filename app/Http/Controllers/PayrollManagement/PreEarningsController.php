@@ -13,37 +13,47 @@ use Illuminate\Validation\Rule;
 
 class PreEarningsController extends Controller
 {
-    public function index( Request $request) {
-        
+    public function index(Request $request)
+    {
+
         $page_type = $request->type;
-        $title = ucwords( str_replace('_', ' ', $page_type)); 
+        $title = ucwords(str_replace('_', ' ', $page_type));
         $breadcrums = array(
-            'title' => ucwords( str_replace('_', ' ', $page_type)),
+            'title' => ucwords(str_replace('_', ' ', $page_type)),
             'breadcrums' => array(
                 array(
-                    'link' => '', 'title' => ucwords( str_replace('_', ' ', $page_type))
+                    'link' => '', 'title' => ucwords(str_replace('_', ' ', $page_type))
                 ),
             )
         );
         $search_date = date('Y-m-d');
-   
-        return view('pages.payroll_management.earnings.index', compact('breadcrums', 'title', 'page_type', 'search_date'));
 
+        return view('pages.payroll_management.earnings.index', compact('breadcrums', 'title', 'page_type', 'search_date'));
     }
 
-    public function tableView( Request $request ) {
+    public function tableView(Request $request)
+    {
 
         $search_date = $request->dates;
         $month_no = $request->month_no;
         $page_type = $request->page_type;
-        $title = ucwords( str_replace('_', ' ', $page_type)); 
-       
+        $title = ucwords(str_replace('_', ' ', $page_type));
+
+        $start_date = date('Y-m-1', strtotime($search_date));
+        $end_date = date('Y-m-t', strtotime($search_date));
+
+        $has_data = StaffSalaryPreEarning::with(['staff'])
+            ->when(!empty($search_date), function ($query) use ($start_date, $end_date) {
+                $query->whereBetween('salary_month', [$start_date, $end_date]);
+            })
+            ->where('earnings_type', $page_type)->count();
+
         if ($request->ajax() && $request->from == '') {
             $hold_date = $request->hold_date;
             $start_date = date('Y-m-1', strtotime($hold_date));
-            $end_date = date('Y-m-1', strtotime($hold_date));
+            $end_date = date('Y-m-t', strtotime($hold_date));
 
-            $data = StaffSalaryPreEarning::with(['staff'])
+            $data = StaffSalaryPreEarning::select('staff_salary_pre_earnings.*')->with(['staff'])
                 ->when(!empty($hold_date), function ($query) use ($start_date, $end_date) {
                     $query->whereBetween('salary_month', [$start_date, $end_date]);
                 })
@@ -67,7 +77,7 @@ class PreEarningsController extends Controller
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $del_btn = '<a href="javascript:void(0);" onclick="deleteHold(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                    $del_btn = '<a href="javascript:void(0);" onclick="deleteEarnings(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                     <i class="fa fa-trash"></i></a>';
                     return $del_btn;
                 })
@@ -75,16 +85,16 @@ class PreEarningsController extends Controller
             return $datatables->make(true);
         }
 
-        return view('pages.payroll_management.earnings.'.$page_type.'_view_ajax', compact('search_date', 'month_no', 'title', 'page_type'));
-
+        return view('pages.payroll_management.earnings.' . $page_type . '_view_ajax', compact('search_date', 'month_no', 'title', 'page_type', 'has_data'));
     }
 
-    public function add(Request $request) {
+    public function add(Request $request)
+    {
 
         $page_type = $request->type;
-        $title = 'Add '.ucwords( str_replace('_', ' ', $page_type)); 
+        $title = 'Add ' . ucwords(str_replace('_', ' ', $page_type));
         $employees = User::whereNull('is_super_admin')
-                    ->where('verification_status','approved')->get();
+            ->where('verification_status', 'approved')->get();
         $nature_of_employees = NatureOfEmployment::where('status', 'active')->get();
 
         $params = [
@@ -94,31 +104,32 @@ class PreEarningsController extends Controller
             'nature_of_employees' => $nature_of_employees
         ];
         return view('pages.payroll_management.earnings.add_form', $params);
-
     }
 
-    public function getTableView( Request $request ) {
+    public function getTableView(Request $request)
+    {
 
         $employee_id = $request->employee_id ?? ['all'];
         $employees  = User::whereNull('is_super_admin')
-                        ->where('verification_status','approved')
-                        ->when( current($employee_id) != 'all', function($query) use($employee_id){
-                            $query->whereIn('users.id', $employee_id);
-                        })
-                        ->get();
-        $params     = [ 'employees' => $employees ];
+            ->where('verification_status', 'approved')
+            ->when(current($employee_id) != 'all', function ($query) use ($employee_id) {
+                $query->whereIn('users.id', $employee_id);
+            })
+            ->get();
+        $params     = ['employees' => $employees];
         return view('pages.payroll_management.earnings._form_table', $params);
     }
 
-    public function save( Request $request) {
+    public function save(Request $request)
+    {
 
         $bonus = $request->bonus;
         $has_error = false;
         $error = 0;
 
-        if( isset( $bonus ) && count( $bonus ) > 0 ) {
+        if (isset($bonus) && count($bonus) > 0) {
             foreach ($bonus as $staff_id) {
-                if( !$_POST['amount_'.$staff_id ] ) {
+                if (!$_POST['amount_' . $staff_id]) {
                     $has_error = true;
                     $error = 1;
                     $message = 'Please enter amount for selected staff';
@@ -126,21 +137,21 @@ class PreEarningsController extends Controller
             }
         }
 
-        if( !$has_error ) {
-            
+        if (!$has_error) {
+
             $page_type = $request->page_type;
             $salary_month = $request->salary_month;
             $common_remarks = $request->common_remarks;
 
-            if( isset( $bonus ) && count( $bonus ) > 0 ) {
+            if (isset($bonus) && count($bonus) > 0) {
                 foreach ($bonus as $staff_id) {
-                  
+
                     $ins = [];
                     $ins['staff_id'] = $staff_id;
                     $ins['salary_month'] = $salary_month;
                     $ins['academic_id'] = academicYearId();
-                    $ins['amount'] = $_POST['amount_'.$staff_id ] ?? 0;
-                    $ins['remarks'] = $common_remarks ?? $_POST['remarks_'.$staff_id] ?? null;
+                    $ins['amount'] = $_POST['amount_' . $staff_id] ?? 0;
+                    $ins['remarks'] = $common_remarks ?? $_POST['remarks_' . $staff_id] ?? null;
                     $ins['earnings_type'] = $page_type;
                     $ins['status'] = 'active';
                     $ins['added_by'] = auth()->user()->id;
@@ -148,12 +159,19 @@ class PreEarningsController extends Controller
                     StaffSalaryPreEarning::updateOrCreate(['staff_id' => $staff_id, 'salary_month' => $salary_month], $ins);
                 }
                 $error = 0;
-                $message = ucwords( str_replace('_', ' ', $page_type)).' added successfully';
+                $message = ucwords(str_replace('_', ' ', $page_type)) . ' added successfully';
                 $return_url = route('earnings.index', ['type' => $page_type]);
             }
         }
 
-        return ['error' => $error, 'message' => $message, 'return_url' => $return_url ?? '' ];
+        return ['error' => $error, 'message' => $message, 'return_url' => $return_url ?? ''];
+    }
+
+    public function delete(Request $request) {
+
+        $id = $request->id;
+        StaffSalaryPreEarning::where('id', $id)->delete();
+        return ['error' => 0, 'message' => 'Deleted successfully'];
 
     }
 }

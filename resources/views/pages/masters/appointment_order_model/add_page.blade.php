@@ -146,8 +146,8 @@
 
             var document_model = CKEDITOR.replace('document_model', {
                 // Make the editing area bigger than default.
-                height: 1000,
-                width: 760,
+                height: 1680,
+                width: 1020,
                 // Allow pasting any content.
                 allowedContent: true,
                 // Fit toolbar buttons inside 3 rows.

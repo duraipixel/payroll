@@ -74,7 +74,7 @@
 
         }
 
-        function deleteHold(id) {
+        function deleteEarnings(id) {
             Swal.fire({
                 text: "Are you sure you would like to delete record?",
                 icon: "warning",
@@ -95,7 +95,7 @@
                     });
 
                     $.ajax({
-                        url: "{{ route('holdsalary.delete') }}",
+                        url: "{{ route('earnings.delete') }}",
                         type: 'POST',
                         data: {
                             id: id,
