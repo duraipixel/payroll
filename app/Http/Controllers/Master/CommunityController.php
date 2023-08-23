@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use DataTables;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class CommunityController extends Controller
@@ -25,91 +26,88 @@ class CommunityController extends Controller
                 ),
             )
         );
-        if($request->ajax())
-        {
-            $data = Community::select('*');
-            $status = $request->get('status');
+        if ($request->ajax()) {
+            $perPage = $request->length ?? 10;
+            $page = 1; // Change this to the desired page number
+            $offset = $request->start ?? 0;
             $datatable_search = $request->datatable_search ?? '';
-            $keywords = $datatable_search;
-            
-            $datatables =  Datatables::of($data)
-            ->filter(function($query) use($status,$keywords) {
-                if($keywords)
-                {
-                    $date = date('Y-m-d',strtotime($keywords));
-                    return $query->where(function($q) use($keywords,$date){
 
-                        $q->where('communities.name','like',"%{$keywords}%")
-                        ->orWhereDate('communities.created_at',$date);
-                    });
-                }
-            })
-            ->addIndexColumn()
-            ->editColumn('status', function ($row) {
-                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return communityChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
-                return $status;
-            })
-            ->editColumn('created_at', function ($row) {
-                $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
-                return $created_at;
-            })
-              ->addColumn('action', function ($row) {
-                $route_name = request()->route()->getName(); 
-                if( access()->buttonAccess($route_name,'add_edit') )
-                {
-                    $edit_btn = '<a href="javascript:void(0);" onclick="getCommunityModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
-                    <i class="fa fa-edit"></i>
-                    </a>';
-                }
-                else
-                {
+            $baseQuery = Community::select('communities.*')
+                ->whereNull('communities.deleted_at')
+                ->when( !empty( $datatable_search ), function($query) use($datatable_search){
+                    return $query->where('name', 'like', "%{$datatable_search}%");
+                })
+                ->orderBy('id', 'desc');
+
+            $totalFilteredRecord = clone $baseQuery;
+            $totalFilteredRecord = $totalFilteredRecord
+                ->selectRaw('ROW_NUMBER() OVER (ORDER BY id DESC) AS row_num')
+                ->offset($offset)
+                ->limit($perPage)
+                ->get();
+
+            $recordsFiltered = $totalDataRecordCount = $baseQuery->count();
+            
+            $data_val = [];
+            foreach ($totalFilteredRecord as $items) {
+                $tmp = [];
+                $tmp['name'] = $items->name;
+                $tmp['status'] = '<a href="javascript:void(0);" class="badge badge-light-' . (($items->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($items->status) . '" onclick="return communityChangeStatus(' . $items->id . ',\'' . ($items->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($items->status) . '</a>';
+
+                $route_name = request()->route()->getName();
+                if (access()->buttonAccess($route_name, 'add_edit')) {
+                    $edit_btn = '<a href="javascript:void(0);" onclick="getCommunityModal(' . $items->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                <i class="fa fa-edit"></i>
+                </a>';
+                } else {
                     $edit_btn = '';
                 }
-                if( access()->buttonAccess($route_name,'delete') )
-                {
-                    $del_btn = '<a href="javascript:void(0);" onclick="deleteCommunity(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
-                    <i class="fa fa-trash"></i></a>';
-                }
-                else
-                {
+                if (access()->buttonAccess($route_name, 'delete')) {
+                    $del_btn = '<a href="javascript:void(0);" onclick="deleteCommunity(' . $items->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                <i class="fa fa-trash"></i></a>';
+                } else {
                     $del_btn = '';
                 }
-                    return $edit_btn . $del_btn;
-                })
-                ->rawColumns(['action', 'status']);
-            return $datatables->make(true);
+                $tmp['action'] = $edit_btn . $del_btn;
+                $data_val[] = $tmp;
+            }
+
+            $draw_val = $request->input('draw');
+            $get_json_data = [
+                "draw"            => intval($draw_val),
+                "recordsTotal"    => intval($totalDataRecordCount),
+                "recordsFiltered" => intval($recordsFiltered),
+                "data"            => $data_val,
+            ];
+
+            return response()->json($get_json_data);
         }
-        return view('pages.masters.community.index',compact('breadcrums'));
+        return view('pages.masters.community.index', compact('breadcrums'));
     }
     public function save(Request $request)
     {
         $id = $request->id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-                                'community' => 'required|string|unique:communities,name,' . $id .',id,deleted_at,NULL',
-                            ]);
-        
+            'community' => 'required|string|unique:communities,name,' . $id . ',id,deleted_at,NULL',
+        ]);
+
         if ($validator->passes()) {
 
             $ins['academic_id'] = academicYearId();
             $ins['name'] = $request->community;
-            if(isset($request->form_type))
-            {
-                if($request->status)
-                {
+            if (isset($request->form_type)) {
+                if ($request->status) {
                     $ins['status'] = 'active';
-                }
-                else{
+                } else {
                     $ins['status'] = 'inactive';
                 }
-            }
-            else{
+            } else {
                 $ins['status'] = 'active';
             }
             $data = Community::updateOrCreate(['id' => $id], $ins);
             $error = 0;
             $message = 'Added successfully';
-
         } else {
             $error = 1;
             $message = $validator->errors()->all();
@@ -122,14 +120,13 @@ class CommunityController extends Controller
         $info = [];
         $title = 'Add Community';
         $from = 'master';
-        if(isset($id) && !empty($id))
-        {
+        if (isset($id) && !empty($id)) {
             $info = Community::find($id);
             $title = 'Update Community';
         }
 
-         $content = view('pages.masters.community.add_edit_form',compact('info','title', 'from'));
-         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+        $content = view('pages.masters.community.add_edit_form', compact('info', 'title', 'from'));
+        return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
     public function changeStatus(Request $request)
     {
@@ -146,11 +143,11 @@ class CommunityController extends Controller
         $id         = $request->id;
         $info       = Community::find($id);
         $info->delete();
-        
-        return response()->json(['message'=>"Successfully deleted state!",'status'=>1]);
+
+        return response()->json(['message' => "Successfully deleted state!", 'status' => 1]);
     }
     public function export()
     {
-        return Excel::download(new CommunityExport,'community.xlsx');
+        return Excel::download(new CommunityExport, 'community.xlsx');
     }
 }
