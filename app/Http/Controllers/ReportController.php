@@ -34,8 +34,7 @@ class ReportController extends Controller
             return view('pages.reports.profile._table_content', $params);
         }
         return view('pages.reports.profile._index');
-    }
-
+    } 
     public function commonExport(Request $request)
     {
     }
@@ -63,27 +62,25 @@ class ReportController extends Controller
     }
 
     function attendance_export(Request $request) {
-        $month         = $request->month ?? date('m');
-        $date          = getStartAndEndDateOfMonth($month);
-        $month_days    = monthDays($month);
-        $attendance    = $this->attendance_collection($request,$date)->get();
+        $month       = $request->month ?? date('m');
+        $date        = getStartAndEndDateOfMonth($month);
+        $month_days  = monthDays($month);
+        $attendance  = $this->attendance_collection($request,$date)->get();
         return Excel::download(new AttendanceReport($attendance, $month_days),'attendance.xlsx');
     }
 
     public function serviceHistoryIndex(Request $request) {
-
-        $employee_id = $request->employee ?? '';
-        $department_id = $request->department ?? '';
-        $history_Data = $this->repository->getServiceHistory($employee_id, $department_id );
-        $history = current( $history_Data );
-        $paginate_link = end( $history_Data );
-        $employees = User::whereNull('is_super_admin')->where('verification_status', 'approved')->get();
-        $departments = Department::all();
-        $academic_info = AcademicYear::find(academicYearId());
+        $employee_id    = $request->employee ?? '';
+        $department_id  = $request->department ?? '';
+        $history_Data   = $this->repository->getServiceHistory($employee_id, $department_id );
+        $history        = current( $history_Data );
+        $paginate_link  = end( $history_Data );
+        $employees      = User::whereNull('is_super_admin')->where('verification_status', 'approved')->get();
+        $departments    = Department::all();
+        $academic_info  = AcademicYear::find(academicYearId());
         $academic_title = 'HISTORY OF SERVICE ( '.$academic_info->from_year.' - '.$academic_info->to_year.' )';
         
         return view('pages.reports.service_history.index', compact('employee_id', 'department_id','history', 'paginate_link', 'employees','departments', 'academic_title' ));
-
     }
 
     public function serviceHistoryExport(Request $request) {
@@ -104,7 +101,7 @@ class ReportController extends Controller
             'academic_title' => $academic_title
         ];
         $pdf = PDF::loadView('pages.reports.service_history._pdf_view',$data)->setPaper('a4', 'portrait');
-
+        
         return $pdf->stream('service_history.pdf');
 
     }
