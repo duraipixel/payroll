@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Master\AppointmentOrderModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Str;
 use DataTables;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
@@ -179,7 +177,5 @@ class AppointmentOrderModelController extends Controller
         $title='Appointment Order';
         $content = view('pages.masters.appointment_order_model.view',compact('info','title'));
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
-    }
-
-    
+    } 
 }
