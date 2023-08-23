@@ -92,16 +92,21 @@ class PreEarningsController extends Controller
     {
 
         $page_type = $request->type;
+        $date = $request->date;
+        $salary_date = date('Y-m-1', strtotime( $date ) );
         $title = 'Add ' . ucwords(str_replace('_', ' ', $page_type));
         $employees = User::whereNull('is_super_admin')
             ->where('verification_status', 'approved')->get();
         $nature_of_employees = NatureOfEmployment::where('status', 'active')->get();
 
+        $earnings_details = StaffSalaryPreEarning::where('salary_month', $salary_date)->get();
+
         $params = [
             'page_type' => $page_type,
             'title' => $title,
             'employees' => $employees,
-            'nature_of_employees' => $nature_of_employees
+            'nature_of_employees' => $nature_of_employees,
+            'earnings_details' => $earnings_details
         ];
         return view('pages.payroll_management.earnings.add_form', $params);
     }

@@ -21,7 +21,7 @@
             @endphp
 
             @if (access()->buttonAccess($route_name, 'add_edit'))
-                <a href="{{ route('earnings.add', ['type' => $page_type])}}"  class="btn btn-primary btn-sm">
+                <a href="{{ route('earnings.add', ['type' => $page_type, 'date' => $search_date ])}}"  class="btn btn-primary btn-sm">
                     {!! plusSvg() !!} {{ isset($has_data) && $has_data > 0 ? 'Update ' : '' }} {{ $title }}
                 </a>
             @endif

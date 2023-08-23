@@ -148,70 +148,16 @@
                 // Make the editing area bigger than default.
                 height: 1680,
                 width: 1020,
-                // Allow pasting any content.
+                toolbar: 'Full',
+                language: 'en',
+                extraPlugins: 'lineheight',
                 allowedContent: true,
                 // Fit toolbar buttons inside 3 rows.
-                toolbarGroups: [{
-                        name: 'document',
-                        groups: ['mode', 'document', 'doctools']
-                    },
-                    {
-                        name: 'clipboard',
-                        groups: ['clipboard', 'undo']
-                    },
-                    {
-                        name: 'editing',
-                        groups: ['find', 'selection', 'spellchecker', 'editing']
-                    },
-                    {
-                        name: 'forms',
-                        groups: ['forms']
-                    },
-                    '/',
-                    {
-                        name: 'paragraph',
-                        groups: ['list', 'indent', 'blocks', 'align', 'bidi', 'paragraph']
-                    },
-                    {
-                        name: 'links',
-                        groups: ['links']
-                    },
-                    {
-                        name: 'insert',
-                        groups: ['insert']
-                    },
-                    '/',
-                    {
-                        name: 'styles',
-                        groups: ['styles']
-                    },
-                    {
-                        name: 'basicstyles',
-                        groups: ['basicstyles', 'cleanup']
-                    },
-                    {
-                        name: 'colors',
-                        groups: ['colors']
-                    },
-                    {
-                        name: 'tools',
-                        groups: ['tools']
-                    },
-                    {
-                        name: 'others',
-                        groups: ['others']
-                    },
-                    {
-                        name: 'about',
-                        groups: ['about']
-                    }
-                ],
-
                 removeButtons: 'ExportPdf,Form,Checkbox,Radio,TextField,Select,Textarea,Button,ImageButton,HiddenField,NewPage,CreateDiv,Flash,Iframe,About,ShowBlocks,Maximize',
 
                 contentsCss: [
                     'http://cdn.ckeditor.com/4.21.0/full-all/contents.css',
-                    'https://ckeditor.com/docs/ckeditor4/4.21.0/examples/https://ckeditor.com/docs/ckeditor4/4.21.0/examples/assets/css/pastefromword.css'
+                    'https://ckeditor.com/docs/ckeditor4/4.21.0/examples/assets/css/pastefromword.css'
                 ],
 
                 bodyClass: 'document-editor'

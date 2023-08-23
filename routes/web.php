@@ -383,7 +383,7 @@ Route::group(['middleware' => 'auth'],  function () {
      * Staff other Earnings 
      */
     Route::get('earnings/{type}', [App\Http\Controllers\PayrollManagement\PreEarningsController::class, 'index'])->name('earnings.index');
-    Route::get('earnings/{type}/add', [App\Http\Controllers\PayrollManagement\PreEarningsController::class, 'add'])->name('earnings.add');
+    Route::get('earnings/{type}/add/{date}', [App\Http\Controllers\PayrollManagement\PreEarningsController::class, 'add'])->name('earnings.add');
     Route::any('earnings/table/view',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'tableView'])->name('earnings.table.view');
     Route::any('earnings/get/table',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'getTableView'])->name('earnings.get.table.view');
     Route::any('earnings/save',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'save'])->name('earnings.save');
