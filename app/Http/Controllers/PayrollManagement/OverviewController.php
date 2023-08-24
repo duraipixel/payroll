@@ -22,6 +22,7 @@ use App\Repositories\PayrollChecklistRepository;
 use App\Repositories\PayrollRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 
 class OverviewController extends Controller
@@ -262,9 +263,13 @@ class OverviewController extends Controller
         $deductions_field = SalaryField::where('salary_head_id', 2)
             ->where(function ($query) {
                 $query->where('is_static', 'yes');
-                $query->orWhere('nature_id', 3);
+                $query->orWhere( function($q) {
+                    $q->where('nature_id', 3);
+                    $q->where('short_name', '!=', 'CONTRI');
+                    $q->where('short_name', '!=', 'OTHER');
+                });
             })->get();
-
+           
         // dd( $payout_data[0]->workedDays->count() );
         $params = array(
             'date' => $date,
@@ -276,8 +281,6 @@ class OverviewController extends Controller
             'deductions_field' => $deductions_field,
             'working_day' => date('d', strtotime($month_end))
         );
-
-        // dd( $params );
 
         return view('pages.payroll_management.overview._payroll_process', $params);
     }

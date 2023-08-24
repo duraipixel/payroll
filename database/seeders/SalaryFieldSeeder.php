@@ -122,6 +122,20 @@ class SalaryFieldSeeder extends Seeder
 
         SalaryField::updateOrcreate(['short_name' => 'Contributions'], $ins);
 
+        $ins = [];
+        $ins['academic_id'] = academicYearId();
+        $ins['name'] = 'Others';
+        $ins['short_name'] = 'Others';
+        $ins['description'] = 'Others';
+        $ins['status'] = 'active';
+        $ins['salary_head_id'] = 2;
+        $ins['order_in_salary_slip'] = 9;
+        $ins['entry_type'] = 'inbuilt_calculation';
+        $ins['is_static'] = 'yes';
+        $ins['added_by'] = 1;
+
+        SalaryField::updateOrcreate(['short_name' => 'Others'], $ins);
+
 
     }
 }

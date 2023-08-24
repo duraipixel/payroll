@@ -1269,15 +1269,18 @@ function getEarningInfo( $staff_id, $earning_type, $date ) {
     $info = StaffSalaryPreEarning::where('salary_month', $date)
             ->where('earnings_type', $earning_type)
             ->where('staff_id', $staff_id)
+            ->where('status', 'active')
             ->first();
     return $info ?? '';
 }
 
 function getDeductionInfo( $staff_id, $deduction_type, $date ) {
-
+    
     $info = StaffSalaryPreDeduction::where('salary_month', $date)
             ->where('deduction_type', $deduction_type)
             ->where('staff_id', $staff_id)
+            ->where('status', 'active')
             ->first();
     return $info ?? '';
 }
+

@@ -8,6 +8,7 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\Staff\StaffAppointmentDetail;
 use Illuminate\Http\Request;
 use App\Models\Test;
+use App\Models\User;
 use App\Repositories\CronRepository;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
@@ -103,4 +104,12 @@ class TestOneController extends Controller
         }
 
     }
+
+    public function checkCode() {
+        $code = 'aews/20230701';
+        $user_info = User::where('society_emp_code', $code)->first();
+
+        $new_code = getStaffInstitutionCode($user_info->institute_id);
+        dd( $new_code );
+    }   
 }

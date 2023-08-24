@@ -215,10 +215,16 @@
                                                         </td>
                                                     @else
                                                         <td class="px-3">
-                                                            {{ getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS') }}
+
                                                             @php
-                                                                $deduction += getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                                                                $old_deduct_amount = getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                                                                $deduction += $old_deduct_amount;
+                                                                $other_deductions = getDeductionInfo($item->id, strtolower(Str::singular($sitem->short_name)), $date);
+                                                                $deduction += $other_deductions->amount ?? 0;
+
+                                                                $show_amount = ($old_deduct_amount ?? 0) + ($other_deductions->amount ?? 0);
                                                             @endphp
+                                                            {{ $show_amount }}
                                                         </td>
                                                     @endif
                                                 @endforeach
