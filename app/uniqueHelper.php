@@ -47,7 +47,7 @@ if (!function_exists('getStaffInstitutionCode')) {
     {
         $institute_code = Institution::find($institute_id);
         $year = date('Y');
-        $countNo = '0000';
+        $countNo = '00001';
         $new_emp_code = $institute_code->code . $countNo;
         $codes = DB::table('users')->where('institute_id', $institute_id)->orderBy('institute_emp_code', 'desc')->whereNotNull('institute_emp_code')->first();
         
