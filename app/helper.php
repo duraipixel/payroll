@@ -1173,6 +1173,7 @@ function getStaffLeaveDeductionAmount($staff_id, $date)
         })->get();
 
     $deduction_day = 0;
+  
     if (isset($data) && !empty($data)) {
         foreach ($data as $row) {
             $status = getStaffLeaveRequestStatus($row->employment_id, $row->attendance_date);

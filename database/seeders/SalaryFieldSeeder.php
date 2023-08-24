@@ -36,7 +36,7 @@ class SalaryFieldSeeder extends Seeder
         $ins['is_static'] = 'yes';
         $ins['added_by'] = 1;
 
-        SalaryField::updateOrcreate(['short_name' => 'ESI'], $ins);
+        SalaryField::updateOrcreate(['short_name' => 'ESI', 'salary_head_id' => 2], $ins);
 
         $ins = [];
         $ins['academic_id'] = academicYearId();
@@ -50,7 +50,7 @@ class SalaryFieldSeeder extends Seeder
         $ins['is_static'] = 'yes';
         $ins['added_by'] = 1;
 
-        SalaryField::updateOrcreate(['short_name' => 'Bank Loan'], $ins);
+        SalaryField::updateOrcreate(['short_name' => 'Bank Loan', 'salary_head_id' => 2], $ins);
 
         $ins = [];
         $ins['academic_id'] = academicYearId();
@@ -64,7 +64,7 @@ class SalaryFieldSeeder extends Seeder
         $ins['is_static'] = 'yes';
         $ins['added_by'] = 1;
 
-        SalaryField::updateOrcreate(['short_name' => 'LIC'], $ins);
+        SalaryField::updateOrcreate(['short_name' => 'LIC', 'salary_head_id' => 2], $ins);
 
         $ins = [];
         $ins['academic_id'] = academicYearId();
@@ -78,7 +78,7 @@ class SalaryFieldSeeder extends Seeder
         $ins['is_static'] = 'yes';
         $ins['added_by'] = 1;
 
-        SalaryField::updateOrcreate(['short_name' => 'PT'], $ins);
+        SalaryField::updateOrcreate(['short_name' => 'PT', 'salary_head_id' => 2], $ins);
 
         $ins = [];
         $ins['academic_id'] = academicYearId();
@@ -92,7 +92,7 @@ class SalaryFieldSeeder extends Seeder
         $ins['is_static'] = 'yes';
         $ins['added_by'] = 1;
 
-        SalaryField::updateOrcreate(['short_name' => 'IT'], $ins);
+        SalaryField::updateOrcreate(['short_name' => 'IT', 'salary_head_id' => 2], $ins);
 
         $ins = [];
         $ins['academic_id'] = academicYearId();
@@ -106,7 +106,7 @@ class SalaryFieldSeeder extends Seeder
         $ins['is_static'] = 'yes';
         $ins['added_by'] = 1;
 
-        SalaryField::updateOrcreate(['short_name' => 'Arrears'], $ins);
+        SalaryField::updateOrcreate(['short_name' => 'Arrears', 'salary_head_id' => 2], $ins);
 
         $ins = [];
         $ins['academic_id'] = academicYearId();
@@ -120,7 +120,7 @@ class SalaryFieldSeeder extends Seeder
         $ins['is_static'] = 'yes';
         $ins['added_by'] = 1;
 
-        SalaryField::updateOrcreate(['short_name' => 'Contributions'], $ins);
+        SalaryField::updateOrcreate(['short_name' => 'Contributions', 'salary_head_id' => 2], $ins);
 
         $ins = [];
         $ins['academic_id'] = academicYearId();
@@ -134,7 +134,50 @@ class SalaryFieldSeeder extends Seeder
         $ins['is_static'] = 'yes';
         $ins['added_by'] = 1;
 
-        SalaryField::updateOrcreate(['short_name' => 'Others'], $ins);
+        SalaryField::updateOrcreate(['short_name' => 'Others', 'salary_head_id' => 2], $ins);
+
+        $ins = [];
+        $ins['academic_id'] = academicYearId();
+        $ins['name'] = 'Bonus';
+        $ins['short_name'] = 'Bonus';
+        $ins['description'] = 'Bonus';
+        $ins['status'] = 'active';
+        $ins['salary_head_id'] = 1;
+        $ins['order_in_salary_slip'] = 10;
+        $ins['entry_type'] = 'inbuilt_calculation';
+        $ins['is_static'] = 'yes';
+        $ins['added_by'] = 1;
+
+        SalaryField::updateOrcreate(['short_name' => 'Bonus', 'salary_head_id' => 1], $ins);
+
+        $ins = [];
+        $ins['academic_id'] = academicYearId();
+        $ins['name'] = 'Others';
+        $ins['short_name'] = 'Others';
+        $ins['description'] = 'Others';
+        $ins['status'] = 'active';
+        $ins['salary_head_id'] = 1;
+        $ins['order_in_salary_slip'] = 11;
+        $ins['entry_type'] = 'inbuilt_calculation';
+        $ins['is_static'] = 'yes';
+        $ins['added_by'] = 1;
+
+        SalaryField::updateOrcreate(['short_name' => 'Others', 'salary_head_id' => 1], $ins);
+
+        $ins = [];
+        $ins['academic_id'] = academicYearId();
+        $ins['name'] = 'Arrears';
+        $ins['short_name'] = 'Arrears';
+        $ins['description'] = 'Arrears';
+        $ins['status'] = 'active';
+        $ins['salary_head_id'] = 1;
+        $ins['order_in_salary_slip'] = 12;
+        $ins['entry_type'] = 'inbuilt_calculation';
+        $ins['is_static'] = 'yes';
+        $ins['added_by'] = 1;
+
+        SalaryField::updateOrcreate(['short_name' => 'Arrears', 'salary_head_id' => 1], $ins);
+
 
 
     }

@@ -11,7 +11,6 @@
                 <th class="px-3 text-white">
                     Join Date
                 </th>
-
                 <th class="px-3 text-white">
                     Workdays
                 </th>
@@ -61,7 +60,6 @@
                         <td class="px-3">
                             {{ $item->staff->firstAppointment->joining_date ?? '' }}
                         </td>
-
                         <td class="px-3">
                             {{ $item->working_days ?? 0 }}
                         </td>
@@ -92,7 +90,6 @@
                 @endforeach
             @endif
         </tbody>
-
     </table>
 </div>
 <div class="p3">

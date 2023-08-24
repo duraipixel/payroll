@@ -36,7 +36,7 @@
             <h3> Payroll Processing for Month {{ date('d/M/Y', strtotime($date)) }} </h3>
             @php
                 $month = date('F', strtotime($date));
-                $month_length = date('t', strtotime($date));
+                $month_length = date('t', strtotime($payroll_date));
             @endphp
         </div>
         <div class="card-body py-4" id="dynamic_content_test">
@@ -142,14 +142,23 @@
                                             @if (isset($earings_field) && !empty($earings_field))
                                                 @foreach ($earings_field as $eitem)
                                                     <td class="px-3">
-                                                        {{ getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $eitem->name, 'EARNINGS', $eitem->short_name) }}
+
                                                         @php
-                                                            $earnings += getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $eitem->name, 'EARNINGS', $eitem->short_name);
+                                                            $show_earning_total = 0;
+                                                            $earn_total = getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $eitem->name, 'EARNINGS', $eitem->short_name) ?? 0;
+                                                            $show_earning_total += $earn_total;
+                                                            // echo strtolower(Str::singular($eitem->short_name));
+                                                            $e_name = $eitem->short_name == 'Bonus' ? 'bonus': strtolower(Str::singular($eitem->short_name));
+                                                            $other_earnings = getEarningInfo($item->id, $e_name, $date);
+                                                            $show_earning_total += $other_earnings->amount ?? 0;
+                                                            $earnings += $show_earning_total;
                                                         @endphp
+                                                        {{ $show_earning_total }}
                                                     </td>
                                                 @endforeach
                                                 <td class="px-3">
-                                                    {{ $item->currentSalaryPattern->gross_salary }}
+                                                    {{-- {{ $item->currentSalaryPattern->gross_salary }} --}}
+                                                    {{ $earnings }}
                                                 </td>
                                             @endif
                                             @if (isset($deductions_field) && !empty($deductions_field))
@@ -163,6 +172,7 @@
                                                         </td>
                                                     @elseif(trim(strtolower($sitem->short_name)) == 'other')
                                                         <td class="px-3">
+                                                           
                                                             @php
                                                                 $other_amount = getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
                                                                 /**
@@ -218,10 +228,29 @@
 
                                                             @php
                                                                 $old_deduct_amount = getStaffPatterFieldAmount($item->id, $item->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                                                            
+                                                                if( strtolower(Str::singular($sitem->short_name)) == 'other') {
+                                                                    /**
+                                                                     * get leave deduction amount
+                                                                     */
+                                                                    $leave_amount_day = getStaffLeaveDeductionAmount($item->id, $date) ?? 0;
+                                                                    
+                                                                    $leave_amount = 0;
+                                                                    if ($leave_amount_day) {
+                                                                    
+                                                                        $leave_amount = getDaySalaryAmount($gross, $month_length);
+                                                                        // echo $leave_amount;
+                                                                        $leave_amount = $leave_amount * $leave_amount_day;
+                                                                    }
+                                                                    $old_deduct_amount += $leave_amount;
+                                                                }
+
                                                                 $deduction += $old_deduct_amount;
+
+
                                                                 $other_deductions = getDeductionInfo($item->id, strtolower(Str::singular($sitem->short_name)), $date);
                                                                 $deduction += $other_deductions->amount ?? 0;
-
+                                                                
                                                                 $show_amount = ($old_deduct_amount ?? 0) + ($other_deductions->amount ?? 0);
                                                             @endphp
                                                             {{ $show_amount }}
@@ -236,7 +265,7 @@
                                             @endif
                                             <td class="px-3">
                                                 @php
-                                                    $net_pay = $gross - $deduction;
+                                                    $net_pay = $earnings - $deduction;
                                                     $total_net_pay = $total_net_pay + $net_pay;
                                                 @endphp
                                                 {{ $net_pay }}

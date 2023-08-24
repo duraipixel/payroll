@@ -17,6 +17,8 @@ use App\Models\Staff\StaffBankLoan;
 use App\Models\Staff\StaffInsurance;
 use App\Models\Staff\StaffInsuranceEmi;
 use App\Models\Staff\StaffLoanEmi;
+use App\Models\Staff\StaffSalaryPreDeduction;
+use App\Models\Staff\StaffSalaryPreEarning;
 use App\Models\User;
 use App\Repositories\PayrollChecklistRepository;
 use App\Repositories\PayrollRepository;
@@ -228,7 +230,7 @@ class OverviewController extends Controller
         $employee_data = $this->checklistRepository->getEmployeePendingPayroll();
         $income_tax_data = $this->checklistRepository->getPendingITEntry();
         $hold_salary_employee = $this->checklistRepository->getHoldSalaryEmployee($date);
-        
+
         $is_entried_min_attendance = $leave_data['total_present'] ?? 0;
 
         $title = 'Payroll Process Confirmation';
@@ -259,17 +261,26 @@ class OverviewController extends Controller
 
         $payout_data = $this->checklistRepository->getToPayEmployee($date);
         // dd( $payout_data );
-        $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
+        $earings_field = SalaryField::where('salary_head_id', 1)
+            ->where(function ($query) {
+                $query->where('is_static', 'yes');
+                $query->orWhere(function ($q) {
+                    $q->where('nature_id', 3);
+                    $q->where('short_name', '!=', 'ARR');
+                });
+            })
+            ->orderBy('order_in_salary_slip')
+            ->get();
         $deductions_field = SalaryField::where('salary_head_id', 2)
             ->where(function ($query) {
                 $query->where('is_static', 'yes');
-                $query->orWhere( function($q) {
+                $query->orWhere(function ($q) {
                     $q->where('nature_id', 3);
                     $q->where('short_name', '!=', 'CONTRI');
                     $q->where('short_name', '!=', 'OTHER');
                 });
             })->get();
-           
+
         // dd( $payout_data[0]->workedDays->count() );
         $params = array(
             'date' => $date,
@@ -279,7 +290,8 @@ class OverviewController extends Controller
             'payout_data' => $payout_data,
             'earings_field' => $earings_field,
             'deductions_field' => $deductions_field,
-            'working_day' => date('d', strtotime($month_end))
+            'working_day' => date('d', strtotime($month_end)),
+            'payroll_date' => $payroll_date
         );
 
         return view('pages.payroll_management.overview._payroll_process', $params);
@@ -287,7 +299,6 @@ class OverviewController extends Controller
 
     public function continuePayrollProcessing(Request $request)
     {
-
         /**
          * 1. Need to generate salary pdf for every staff
          * 2. Make entries in database         
@@ -298,13 +309,16 @@ class OverviewController extends Controller
         $payout_id = $request->payout_id;
         $date = $request->date;
 
-        $month = date('F', strtotime($date));
-        $month_length = date('t', strtotime($date));
+     
 
         $payroll_date = date('Y-m-d', strtotime($date . '-1 month'));
         $month_start = date('Y-m-01', strtotime($payroll_date));
         $month_end = date('Y-m-t', strtotime($payroll_date));
         $working_day = date('t', strtotime($payroll_date));
+
+        $month = date('F', strtotime($date));
+        $month_length = date('t', strtotime($payroll_date));
+
         $payroll_info = Payroll::find($payout_id);
         $payout_data = $this->checklistRepository->getToPayEmployee($date);
         $error = '1';
@@ -315,11 +329,25 @@ class OverviewController extends Controller
         $salary_month = date('F', strtotime($payroll_date));
         $salary_year = date('Y', strtotime($payroll_date));
 
-        $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
+        $earings_field = SalaryField::where('salary_head_id', 1)
+            ->where(function ($query) {
+                $query->where('is_static', 'yes');
+                $query->orWhere(function ($q) {
+                    $q->where('nature_id', 3);
+                    $q->where('short_name', '!=', 'ARR');
+                });
+            })
+            ->orderBy('order_in_salary_slip')
+            ->get();
+
         $deductions_field = SalaryField::where('salary_head_id', 2)
             ->where(function ($query) {
                 $query->where('is_static', 'yes');
-                $query->orWhere('nature_id', 3);
+                $query->orWhere(function ($q) {
+                    $q->where('nature_id', 3);
+                    $q->where('short_name', '!=', 'CONTRI');
+                    $q->where('short_name', '!=', 'OTHER');
+                });
             })->get();
 
         // $month_length = date('t', strtotime($payroll_date));
@@ -327,133 +355,169 @@ class OverviewController extends Controller
 
             StaffSalary::where('payroll_id', $payout_id)->update(['status' => 'inactive']);
             $used_loans = [];
+            $used_earnings = [];
+            $used_deductions = [];
             $used_insurance = [];
             foreach ($payout_data as $key => $value) {
+
                 $staff_info = User::find($value->id);
                 $other_description = '';
-                // if ($value->appointment->employment_nature->id) {
 
-                    // $nature_id = $value->appointment->employment_nature->id;
-                    // $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', $nature_id)->get();
-                    // $deductions_field = SalaryField::where('salary_head_id', 2)
-                    //     ->where(function ($query) use ($nature_id) {
-                    //         $query->where('is_static', 'yes');
-                    //         $query->orWhere('nature_id', $nature_id);
-                    //     })->get();
+                $gross = $value->currentSalaryPattern->gross_salary;
+                $deduction = 0;
+                $earnings = 0;
+                $used_fields = [];
+                if (isset($earings_field) && !empty($earings_field)) {
+                    foreach ($earings_field as $eitem) {
 
-                    $gross = $value->currentSalaryPattern->gross_salary;
-                    $deduction = 0;
-                    $earnings = 0;
-                    $used_fields = [];
-                    if (isset($earings_field) && !empty($earings_field)) {
-                        foreach ($earings_field as $eitem) {
-                            $tmp = [];
-                            $tmp = ['field_id' => $eitem->id, 'field_name' => $eitem->name, 'reference_type' => 'EARNINGS', 'reference_id' => 1, 'short_name' => $eitem->short_name];
-                            $amounts = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '',$eitem->name, 'EARNINGS', $eitem->short_name);
-                            if ($amounts > 0) {
-                                $tmp['amount'] = $amounts;
-                                $used_fields[] = $tmp;
-                                $earnings += $amounts;
-                            }
+                        $tmp = [];
+                        $tmp = ['field_id' => $eitem->id, 'field_name' => $eitem->name, 'reference_type' => 'EARNINGS', 'reference_id' => 1, 'short_name' => $eitem->short_name];
+                        $amounts = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $eitem->name, 'EARNINGS', $eitem->short_name);
+
+                        $e_name = $eitem->short_name == 'Bonus' ? 'bonus' : strtolower(Str::singular($eitem->short_name));
+                        $other_earnings = getEarningInfo($value->id, $e_name, $date);
+                       
+                        $amounts += $other_earnings->amount ?? 0;
+
+                        if ($amounts > 0) {
+                            $tmp['amount'] = $amounts;
+                            $used_fields[] = $tmp;
+                            $earnings += $amounts;
                         }
+
+                        if( isset($other_earnings->amount) && $other_earnings->amount > 0 ) {
+                            $tmp['earnings_type'] = $e_name;
+                            $tmp['staff_id'] = $value->id;
+                            $used_earnings[] = $tmp;
+                        }
+
                     }
+                }
 
-                    if (isset($deductions_field) && !empty($deductions_field)) {
+                if (isset($deductions_field) && !empty($deductions_field)) {
 
-                        foreach ($deductions_field as $sitem) {
-                            $tmp = [];
-                            $deduct_amount = 0;
-                            $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
-                            if ($sitem->short_name == 'IT') {
+                    foreach ($deductions_field as $sitem) {
 
-                                $deduct_amount = staffMonthTax($value->id, strtolower($month));
+                        $tmp = [];
+                        $deduct_amount = 0;
+                        $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
+                        if ($sitem->short_name == 'IT') {
 
-                                if ($deduct_amount > 0) {
-                                    $tmp['amount'] = $deduct_amount;
-                                    $used_fields[] = $tmp;
-                                }
+                            $deduct_amount = staffMonthTax($value->id, strtolower($month));
 
-                                $deduction += $deduct_amount;
+                            if ($deduct_amount > 0) {
+                                $tmp['amount'] = $deduct_amount;
+                                $used_fields[] = $tmp;
+                            }
 
-                            } else if( trim( strtolower( $sitem->short_name ) ) == 'other' ) {
+                            $deduction += $deduct_amount;
+                        } else if (trim(strtolower($sitem->short_name)) == 'other') {
 
-                                $other_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                            $other_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                            /**
+                             * get leave deduction amount
+                             */
+                            $leave_amount_day = getStaffLeaveDeductionAmount($value->id, $date) ?? 0;
+                            $leave_amount = 0;
+                            if ($leave_amount_day) {
+                                $leave_amount = getDaySalaryAmount($gross, $month_length);
+                                $leave_amount = $leave_amount * $leave_amount_day;
+                                $other_description = $leave_amount_day > 1 ? $leave_amount_day . ' days' : $leave_amount_day . 'day';
+                                $other_description .= ' leave amount deducted';
+                            }
+                            $other_amount += $leave_amount;
+
+                            if ($other_amount > 0) {
+                                $tmp = [];
+                                $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
+                                $tmp['amount'] = $other_amount;
+                                $used_fields[] = $tmp;
+                            }
+
+                            $deduction += $other_amount;
+                        } else if (trim(strtolower($sitem->short_name)) == 'bank loan') {
+
+                            $bank_loan_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                            /**
+                             * get leave deduction amount
+                             */
+                            $other_bank_loan_amount = getBankLoansAmount($value->id, $date);
+
+                            $bank_loan_amount += $other_bank_loan_amount['total_amount'] ?? 0;
+                            if (!empty($other_bank_loan_amount['emi'])) {
+                                $used_loans[] = $other_bank_loan_amount['emi'];
+                            }
+                            if ($bank_loan_amount > 0) {
+                                $tmp = [];
+                                $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
+                                $tmp['amount'] = $bank_loan_amount;
+                                $used_fields[] = $tmp;
+                            }
+
+                            $deduction += $bank_loan_amount;
+
+                        } else if (trim(strtolower($sitem->short_name)) == 'lic') {
+
+                            $insurance_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+                            /**
+                             * get leave deduction amount
+                             */
+                            $other_insurance_amount = getInsuranceAmount($value->id, $date);
+
+                            $insurance_amount += $other_insurance_amount['total_amount'] ?? 0;
+                            if (!empty($other_insurance_amount['emi'])) {
+                                $used_insurance[] = $other_insurance_amount['emi'];
+                            }
+                            if ($insurance_amount > 0) {
+                                $tmp = [];
+                                $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
+                                $tmp['amount'] = $insurance_amount;
+                                $used_fields[] = $tmp;
+                            }
+
+                            $deduction += $insurance_amount;
+                        } else {
+
+                            $deduct_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
+
+                            if( strtolower(Str::singular($sitem->short_name)) == 'other') {
                                 /**
                                  * get leave deduction amount
                                  */
-                                $leave_amount_day = getStaffLeaveDeductionAmount( $value->id, $date ) ?? 0;
+                                $leave_amount_day = getStaffLeaveDeductionAmount($value->id, $date) ?? 0;
+                               
                                 $leave_amount = 0;
-                                if( $leave_amount_day ) {
+                                if ($leave_amount_day) {
                                     $leave_amount = getDaySalaryAmount($gross, $month_length);
                                     $leave_amount = $leave_amount * $leave_amount_day;
-                                    $other_description = $leave_amount_day > 1 ? $leave_amount_day.' days' : $leave_amount_day.'day';
-                                    $other_description .= ' leave amount deducted';
                                 }
-                                $other_amount += $leave_amount;
+                                $deduct_amount += $leave_amount;
+                            }
 
-                                if( $other_amount > 0 ) {
-                                    $tmp = [];
-                                    $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
-                                    $tmp['amount'] = $other_amount;
-                                    $used_fields[] = $tmp;
-                                }
+                            $deduction += $deduct_amount;
 
-                                $deduction += $other_amount;
-                            } else if(trim(strtolower($sitem->short_name)) == 'bank loan'){
-                                $bank_loan_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
-                                /**
-                                 * get leave deduction amount
-                                 */
-                                $other_bank_loan_amount = getBankLoansAmount($value->id, $date);
-                                
-                                $bank_loan_amount += $other_bank_loan_amount['total_amount'] ?? 0;
-                                if( !empty( $other_bank_loan_amount['emi']) ) {
-                                    $used_loans[] = $other_bank_loan_amount['emi'];
-                                }
-                                if( $bank_loan_amount > 0 ) {
-                                    $tmp = [];
-                                    $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
-                                    $tmp['amount'] = $bank_loan_amount;
-                                    $used_fields[] = $tmp;
-                                }
+                            $other_deductions = getDeductionInfo($value->id, strtolower(Str::singular($sitem->short_name)), $date);
+                            $deduct_amount += $other_deductions->amount ?? 0;
+                            $deduction += $other_deductions->amount ?? 0;
 
-                                $deduction += $bank_loan_amount;
-                            }  else if(trim(strtolower($sitem->short_name)) == 'lic') {
-                                
-                                $insurance_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
-                                /**
-                                 * get leave deduction amount
-                                 */
-                                $other_insurance_amount = getInsuranceAmount($value->id, $date);
-                                
-                                $insurance_amount += $other_insurance_amount['total_amount'] ?? 0;
-                                if( !empty( $other_insurance_amount['emi']) ) {
-                                    $used_insurance[] = $other_insurance_amount['emi'];
-                                }
-                                if( $insurance_amount > 0 ) {
-                                    $tmp = [];
-                                    $tmp = ['field_id' => $sitem->id, 'field_name' => $sitem->name, 'reference_type' => 'DEDUCTIONS', 'reference_id' => 2, 'short_name' => $sitem->short_name];
-                                    $tmp['amount'] = $insurance_amount;
-                                    $used_fields[] = $tmp;
-                                }
+                            if ($deduct_amount > 0) {
+                                $tmp['amount'] = $deduct_amount;
+                                $used_fields[] = $tmp;
+                            }
 
-                                $deduction += $insurance_amount;
-                            } else {
-                                $deduct_amount = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS');
-                                $deduction += $deduct_amount;
-
-                                if ($deduct_amount > 0) {
-                                    $tmp['amount'] = $deduct_amount;
-                                    $used_fields[] = $tmp;
-                                }
+                            if( isset( $other_deductions->amount ) && $other_deductions->amount > 0 ) {
+                                $tmp['staff_id'] = $value->id;
+                                $tmp['deduction_type'] = strtolower(Str::singular($sitem->short_name));
+                                $used_deductions[] = $tmp;
                             }
                         }
                     }
+                }
+            
+                // $net_pay = $gross - $deduction;
+                $net_pay = $earnings - $deduction;
 
-                    $net_pay = $gross - $deduction;
-                // }
-
-                if ($earnings == $gross && !empty($used_fields)) {
+                if (!empty($used_fields)) {
 
                     $staff_id = $value->id;
 
@@ -489,15 +553,14 @@ class OverviewController extends Controller
                     /**
                      * update in bank loans
                      */
-                    if( !empty( $used_loans ) ) {
+                    if (!empty($used_loans)) {
                         $staff_loan_id = [];
-                        foreach($used_loans as $loan_items ) {
-                            if( isset( $loan_items['details'] ) && !empty( $loan_items['details'] ) ) {
+                        foreach ($used_loans as $loan_items) {
+                            if (isset($loan_items['details']) && !empty($loan_items['details'])) {
 
-                                $info = StaffLoanEmi::find( $loan_items['details']->id );
+                                $info = StaffLoanEmi::find($loan_items['details']->id);
                                 $info->status = 'paid';
                                 $info->save();
-
                                 $staff_loan_id[]  = $loan_items['details']->staff_loan_id;
                             }
                         }
@@ -505,11 +568,11 @@ class OverviewController extends Controller
                          * 1. For case 1 loan paid by all month
                          * 2. If loan close by half duration - need to do 
                          */
-                        if( !empty( $staff_loan_id ) ) {
+                        if (!empty($staff_loan_id)) {
                             $staff_loan_id = array_unique($staff_loan_id);
-                            foreach($staff_loan_id as $loan_ids ) {
-                                $loan_info = StaffBankLoan::with('paid_emi')->find( $loan_ids );
-                                if( $loan_info && $loan_info->period_of_loans == $loan_info->paid_emi()->count() ) {
+                            foreach ($staff_loan_id as $loan_ids) {
+                                $loan_info = StaffBankLoan::with('paid_emi')->find($loan_ids);
+                                if ($loan_info && $loan_info->period_of_loans == $loan_info->paid_emi()->count()) {
                                     $loan_info->status = 'completed';
                                     $loan_info->save();
                                 }
@@ -519,12 +582,12 @@ class OverviewController extends Controller
                     /**
                      * update in insurances
                      */
-                    if( !empty( $used_insurance ) ) {
+                    if (!empty($used_insurance)) {
                         $staff_ins_id = [];
-                        foreach($used_insurance as $loan_items ) {
-                            if( isset( $loan_items['details'] ) && !empty( $loan_items['details'] ) ) {
+                        foreach ($used_insurance as $loan_items) {
+                            if (isset($loan_items['details']) && !empty($loan_items['details'])) {
 
-                                $info = StaffInsuranceEmi::find( $loan_items['details']->id );
+                                $info = StaffInsuranceEmi::find($loan_items['details']->id);
                                 $info->status = 'paid';
                                 $info->save();
 
@@ -535,11 +598,11 @@ class OverviewController extends Controller
                          * 1. For case 1 loan paid by all month
                          * 2. If loan close by half duration - need to do 
                          */
-                        if( !empty( $staff_ins_id ) ) {
+                        if (!empty($staff_ins_id)) {
                             $staff_ins_id = array_unique($staff_ins_id);
-                            foreach($staff_ins_id as $loan_ids ) {
-                                $loan_info = StaffInsurance::with('paid_emi')->find( $loan_ids );
-                                if( $loan_info && $loan_info->period_of_loans == $loan_info->paid_emi()->count() ) {
+                            foreach ($staff_ins_id as $loan_ids) {
+                                $loan_info = StaffInsurance::with('paid_emi')->find($loan_ids);
+                                if ($loan_info && $loan_info->period_of_loans == $loan_info->paid_emi()->count()) {
                                     $loan_info->status = 'completed';
                                     $loan_info->save();
                                 }
@@ -547,14 +610,51 @@ class OverviewController extends Controller
                         }
                     }
 
+                    /**
+                     *  update earnings other amount
+                     */
+                    if( !empty( $used_earnings ) ) {
+                        foreach( $used_earnings as $earn ) {
+
+                            $earn_info = StaffSalaryPreEarning::where('salary_month', $date)
+                                    ->where('earnings_type', $earn['earnings_type'])
+                                    ->where('academic_id', academicYearId())
+                                    ->where('staff_id', $earn['staff_id'])
+                                    ->first();
+
+                            if( $earn_info ) {
+                                $earn_info->status = 'paid';
+                                $earn_info->save();
+                            }
+                            
+                        }   
+                    }
+
+                    //$used_deductions
+                    if( !empty( $used_deductions ) ) {
+                        foreach( $used_deductions as $earn ) {
+
+                            $deduct_info = StaffSalaryPreDeduction::where('salary_month', $date)
+                                    ->where('deduction_type', $earn['deduction_type'])
+                                    ->where('academic_id', academicYearId())
+                                    ->where('staff_id', $earn['staff_id'])
+                                    ->first();
+
+                            if( $deduct_info ) {
+                                $deduct_info->status = 'paid';
+                                $deduct_info->save();
+                            }
+                            
+                        }   
+                    }
+
                     $salary_info->salary_no = salaryNo();
-                    $salary_info->total_earnings = $gross;
+                    $salary_info->total_earnings = $earnings;
                     $salary_info->total_deductions = $deduction;
-                    $salary_info->gross_salary = $gross;
+                    $salary_info->gross_salary = $earnings;
                     $salary_info->net_salary = $net_pay ?? 0;
                     $salary_info->is_salary_processed = 'yes';
                     $salary_info->salary_processed_on = date('Y-m-d H:i:s');
-
                     /**
                      * generate document for staff salary
                      */
@@ -577,7 +677,6 @@ class OverviewController extends Controller
         }
 
         return ['error' => $error, 'message' => $message, 'html' => "$html" ?? ''];
-        
     }
 
     public function payrollStatement(Request $request)
@@ -601,24 +700,38 @@ class OverviewController extends Controller
     public function payrollStatementList(Request $request)
     {
 
-        $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
+        $earings_field = SalaryField::where('salary_head_id', 1)
+            ->where(function ($query) {
+                $query->where('is_static', 'yes');
+                $query->orWhere(function ($q) {
+                    $q->where('nature_id', 3);
+                    $q->where('short_name', '!=', 'ARR');
+                });
+            })
+            ->orderBy('order_in_salary_slip')
+            ->get();
+
         $deductions_field = SalaryField::where('salary_head_id', 2)
             ->where(function ($query) {
                 $query->where('is_static', 'yes');
-                $query->orWhere('nature_id', 3);
+                $query->orWhere(function ($q) {
+                    $q->where('nature_id', 3);
+                    $q->where('short_name', '!=', 'CONTRI');
+                    $q->where('short_name', '!=', 'OTHER');
+                });
             })->get();
-        
+ 
+
         $payroll_id = $request->payroll_id;
         $staff_id = $request->staff_id;
         // $nature_id = $request->nature_id;
 
-        $salary_info = StaffSalary::
-                        where('payroll_id', $payroll_id)
-                        ->when( !empty( $staff_id ), function( $query ) use($staff_id) {
-                            $query->where('staff_id', $staff_id);
-                        } )
-                        ->where('status', 'active')
-                        ->get();
+        $salary_info = StaffSalary::where('payroll_id', $payroll_id)
+            ->when(!empty($staff_id), function ($query) use ($staff_id) {
+                $query->where('staff_id', $staff_id);
+            })
+            ->where('status', 'active')
+            ->get();
 
         $params = [
             'earings_field' => $earings_field,
@@ -629,12 +742,12 @@ class OverviewController extends Controller
         return view('pages.payroll_management.overview.statement._list', $params);
     }
 
-    public function exportStatement(Request $request) {
+    public function exportStatement(Request $request)
+    {
 
         $payroll_id = $request->payroll_id;
         $staff_id = $request->staff_id;
 
         return Excel::download(new PayrollStatementExport($payroll_id, $staff_id), 'payroll_statement.xlsx');
-
     }
 }
