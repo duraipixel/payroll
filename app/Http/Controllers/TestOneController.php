@@ -110,6 +110,8 @@ class TestOneController extends Controller
         $user_info = User::where('society_emp_code', $code)->first();
 
         $new_code = getStaffInstitutionCode($user_info->institute_id);
+        $user_info->institute_emp_code = $new_code;
+        $user_info->save();
         dd( $new_code );
     }   
 }
