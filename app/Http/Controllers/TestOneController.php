@@ -106,7 +106,7 @@ class TestOneController extends Controller
     }
 
     public function checkCode() {
-        $code = 'aews/20230703';
+        $code = 'aews/20230704';
         $user_info = User::where('society_emp_code', $code)->first();
 
         $new_code = getStaffInstitutionCode($user_info->institute_id);
