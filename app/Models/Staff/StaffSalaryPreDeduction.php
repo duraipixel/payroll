@@ -2,6 +2,7 @@
 
 namespace App\Models\Staff;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,10 +16,14 @@ class StaffSalaryPreDeduction extends Model
         'salary_month',
         'amount',
         'remarks',
-        'deduction_type',
-        'status',
+        'deduction_type', //'loan', 'insurance', 'contribution', 'arrear', 'other'
+        'status', //'active', 'inactive', 'paid'
         'added_by',
-        'is_verified'
+        'is_verified' //'yes', 'no'
     ];
+
+    public function staff() {
+        return $this->hasOne(User::class, 'id', 'staff_id');
+    }
 
 }

@@ -51,12 +51,12 @@
             </div>
             <div class="row">
                 <div class="col-sm-12" id="earning_ajax_emp_table">
-                    @include('pages.payroll_management.earnings._form_table')
+                    @include('pages.payroll_management.deductions._form_table')
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    @include('pages.payroll_management.earnings._form_footer')
+                    @include('pages.payroll_management.deductions._form_footer')
                 </div>
             </div>
         </form>
@@ -68,7 +68,7 @@
         $('#employee_id').select2({
             theme: 'bootstrap-5'
         });
-      
+       
 
         function getEmployees() {
 
@@ -80,7 +80,7 @@
                 }
             });
             $.ajax({
-                url: "{{ route('earnings.get.table.view') }}",
+                url: "{{ route('deductions.get.table.view') }}",
                 type: 'POST',
                 data: {
                     employee_id: employee_id,
@@ -127,7 +127,7 @@
 
             var formData = $('#earnings_form').serialize();
             $.ajax({
-                url: "{{ route('earnings.save') }}",
+                url: "{{ route('deductions.save') }}",
                 type: 'POST',
                 data: formData,
                 beforeSend: function() {

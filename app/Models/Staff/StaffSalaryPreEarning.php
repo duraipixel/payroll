@@ -20,8 +20,8 @@ class StaffSalaryPreEarning extends Model implements Auditable
         'salary_month',
         'amount',
         'remarks',
-        'earnings_type',
-        'status',
+        'earnings_type', //'bonus', 'allowance', 'arrear', 'other'
+        'status', //'active', 'inactive', 'paid'
         'added_by',
         'is_verified'
     ];

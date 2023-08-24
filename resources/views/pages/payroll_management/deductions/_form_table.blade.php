@@ -49,11 +49,11 @@
         @elseif (isset($employees) && !empty($employees))
             @foreach ($employees as $item)
                 @php
-                    $earning_info = getEarningInfo($item->id, $page_type, $salary_date);
+                    $earning_info = getDeductionInfo($item->id, $page_type, $salary_date);
                 @endphp
                 <tr>
                     <td class="p-3">
-                        <input type="checkbox" @if (getEarningInfo($item->id, $page_type, $salary_date)) checked @endif role="button"
+                        <input type="checkbox" @if (getDeductionInfo($item->id, $page_type, $salary_date)) checked @endif role="button"
                             name="bonus[]" class="bonus_check" value="{{ $item->id }}">
                     </td>
                     <td>

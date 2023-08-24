@@ -463,7 +463,29 @@
                 @endif
 
                 @php
-                    $payroll_menu = ['salary-head', 'salary-field', 'salary.creation', 'salary.loan', 'salary.lic', 'professional-tax', 'payroll.overview', 'payroll.list', 'holdsalary', 'salary.revision', 'it.tabulation', 'taxscheme', 'taxsection', 'taxsection-item', 'it', 'other-income', 'it-calculation', 'earnings.index'];
+                    $payroll_menu = [
+                                        'salary-head', 
+                                        'salary-field', 
+                                        'salary.creation', 
+                                        'salary.loan', 
+                                        'salary.lic', 
+                                        'professional-tax', 
+                                        'payroll.overview', 
+                                        'payroll.list', 
+                                        'holdsalary', 
+                                        'salary.revision', 
+                                        'it.tabulation', 
+                                        'taxscheme', 
+                                        'taxsection', 
+                                        'taxsection-item', 
+                                        'it', 
+                                        'other-income', 
+                                        'it-calculation', 
+                                        'earnings.index', 
+                                        'earnings.add',
+                                        'deductions.index', 
+                                        'deductions.add'
+                                    ];
                 @endphp
                 <div data-kt-menu-trigger="click"
                     class="menu-item menu-accordion @if (request()->routeIs($payroll_menu)) hover show @endif">
@@ -608,7 +630,7 @@
                             </div>
                         </div>
                         @php
-                            $deduct_menu = ['salary.loan', 'salary.lic'];
+                            $deduct_menu = ['deductions.index', 'deductions.add', 'salary.loan', 'salary.lic'];
                         @endphp
                         <div data-kt-menu-trigger="click"
                             class="menu-item menu-accordion @if (request()->routeIs($deduct_menu)) hover show @endif">
@@ -642,10 +664,10 @@
                                         </a>
                                     </div>
                                 @endif
-                                @if (access()->hasAccess('taxsection-item', 'view'))
+                                @if (access()->hasAccess('deductions.index', 'view'))
                                     <div class="menu-item">
-                                        <a class="menu-link @if (request()->routeIs(['taxsection-item'])) active @endif"
-                                            href="{{ route('taxsection-item') }}">
+                                        <a class="menu-link @if (request()->routeIs('deductions.index') && request()->route('type') === 'arrear') active @endif"
+                                            href="{{ route('deductions.index', ['type' => 'arrear']) }}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
@@ -653,10 +675,10 @@
                                         </a>
                                     </div>
                                 @endif
-                                @if (access()->hasAccess('taxsection-item', 'view'))
+                                @if (access()->hasAccess('deductions.index', 'view'))
                                     <div class="menu-item">
-                                        <a class="menu-link @if (request()->routeIs(['taxsection-item'])) active @endif"
-                                            href="{{ route('taxsection-item') }}">
+                                        <a class="menu-link @if (request()->routeIs('deductions.index') && request()->route('type') === 'contribution') active @endif"
+                                            href="{{ route('deductions.index', ['type' => 'contribution']) }}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
@@ -664,10 +686,10 @@
                                         </a>
                                     </div>
                                 @endif
-                                @if (access()->hasAccess('taxsection-item', 'view'))
+                                @if (access()->hasAccess('deductions.index', 'view'))
                                     <div class="menu-item">
-                                        <a class="menu-link @if (request()->routeIs(['taxsection-item'])) active @endif"
-                                            href="{{ route('taxsection-item') }}">
+                                        <a class="menu-link @if (request()->routeIs('deductions.index') && request()->route('type') === 'other') active @endif"
+                                            href="{{ route('deductions.index', ['type' => 'other']) }}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
@@ -678,7 +700,7 @@
                             </div>
                         </div>
                         @php
-                            $earn_menu = ['earnings.index'];
+                            $earn_menu = ['earnings.index', 'earnings.add'];
                         @endphp
                         <div data-kt-menu-trigger="click"
                             class="menu-item menu-accordion @if (request()->routeIs($earn_menu)) hover show @endif">
@@ -701,10 +723,10 @@
                                         </a>
                                     </div>
                                 @endif
-                                @if (access()->hasAccess('taxsection-item', 'view'))
+                                @if (access()->hasAccess('earnings.index', 'view'))
                                     <div class="menu-item">
-                                        <a class="menu-link @if (request()->routeIs(['taxsection-item'])) active @endif"
-                                            href="{{ route('taxsection-item') }}">
+                                        <a class="menu-link @if (request()->routeIs('earnings.index') && request()->route('type') === 'arrear') active @endif"
+                                            href="{{ route('earnings.index', ['type' => 'arrear']) }}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
@@ -713,10 +735,10 @@
                                     </div>
                                 @endif
 
-                                @if (access()->hasAccess('taxsection-item', 'view'))
+                                @if (access()->hasAccess('earnings.index', 'view'))
                                     <div class="menu-item">
-                                        <a class="menu-link @if (request()->routeIs(['taxsection-item'])) active @endif"
-                                            href="{{ route('taxsection-item') }}">
+                                        <a class="menu-link @if (request()->routeIs('earnings.index') && request()->route('type') === 'other') active @endif"
+                                            href="{{ route('earnings.index', ['type' => 'other']) }}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>

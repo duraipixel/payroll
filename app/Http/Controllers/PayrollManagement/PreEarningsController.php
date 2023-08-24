@@ -46,6 +46,7 @@ class PreEarningsController extends Controller
             ->when(!empty($search_date), function ($query) use ($start_date, $end_date) {
                 $query->whereBetween('salary_month', [$start_date, $end_date]);
             })
+            ->where('staff_salary_pre_earnings.status', 'active')
             ->where('earnings_type', $page_type)->count();
 
         if ($request->ajax() && $request->from == '') {
@@ -64,6 +65,7 @@ class PreEarningsController extends Controller
                         $q->where('name', 'like', '%' . $datatable_search . '%');
                     });
                 })
+                ->where('staff_salary_pre_earnings.status', 'active')
                 ->where('earnings_type', $page_type);
 
             // dd( $data[0]->staff->currentSalaryPattern );
@@ -96,7 +98,9 @@ class PreEarningsController extends Controller
             ->where('verification_status', 'approved')->get();
         $nature_of_employees = NatureOfEmployment::where('status', 'active')->get();
 
-        $earnings_details = StaffSalaryPreEarning::where('salary_month', $salary_date)->get();
+        $earnings_details = StaffSalaryPreEarning::where('salary_month', $salary_date)
+                            ->where('earnings_type', $page_type)
+                            ->where('status', 'active')->get();
         $earning_ids = $earnings_details->pluck('staff_id')->toArray();
 
         $params = [
@@ -151,6 +155,8 @@ class PreEarningsController extends Controller
             $common_remarks = $request->common_remarks;
 
             if (isset($bonus) && count($bonus) > 0) {
+                StaffSalaryPreEarning::where(['salary_month' => $salary_month, 'earnings_type' => $page_type])
+                                    ->update(['status' => 'inactive']);
                 foreach ($bonus as $staff_id) {
 
                     $ins = [];
@@ -163,7 +169,7 @@ class PreEarningsController extends Controller
                     $ins['status'] = 'active';
                     $ins['added_by'] = auth()->user()->id;
 
-                    StaffSalaryPreEarning::updateOrCreate(['staff_id' => $staff_id, 'salary_month' => $salary_month], $ins);
+                    StaffSalaryPreEarning::updateOrCreate(['staff_id' => $staff_id, 'salary_month' => $salary_month, 'earnings_type' => $page_type], $ins);
                 }
                 $error = 0;
                 $message = ucwords(str_replace('_', ' ', $page_type)) . ' added successfully';

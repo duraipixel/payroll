@@ -388,7 +388,15 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::any('earnings/get/table',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'getTableView'])->name('earnings.get.table.view');
     Route::any('earnings/save',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'save'])->name('earnings.save');
     Route::post('earnings/delete',[App\Http\Controllers\PayrollManagement\PreEarningsController::class,'delete'])->name('earnings.delete');
-
+    /**
+     * Staff other Deductions 
+     */
+    Route::get('deductions/{type}', [App\Http\Controllers\PayrollManagement\PreDeductionController::class, 'index'])->name('deductions.index');
+    Route::get('deductions/{type}/add/{date}', [App\Http\Controllers\PayrollManagement\PreDeductionController::class, 'add'])->name('deductions.add');
+    Route::any('deductions/table/view',[App\Http\Controllers\PayrollManagement\PreDeductionController::class,'tableView'])->name('deductions.table.view');
+    Route::any('deductions/get/table',[App\Http\Controllers\PayrollManagement\PreDeductionController::class,'getTableView'])->name('deductions.get.table.view');
+    Route::any('deductions/save',[App\Http\Controllers\PayrollManagement\PreDeductionController::class,'save'])->name('deductions.save');
+    Route::post('deductions/delete',[App\Http\Controllers\PayrollManagement\PreDeductionController::class,'delete'])->name('deductions.delete');
     /**
      *  Set working day calendar 
      */

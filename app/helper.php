@@ -13,6 +13,7 @@ use App\Models\Staff\StaffKnownLanguage;
 use App\Models\Staff\StaffNominee;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffProfessionalData;
+use App\Models\Staff\StaffSalaryPreDeduction;
 use App\Models\Staff\StaffStudiedSubject;
 use App\Models\Staff\StaffTalent;
 use App\Models\Staff\StaffWorkExperience;
@@ -1267,6 +1268,15 @@ function getEarningInfo( $staff_id, $earning_type, $date ) {
 
     $info = StaffSalaryPreEarning::where('salary_month', $date)
             ->where('earnings_type', $earning_type)
+            ->where('staff_id', $staff_id)
+            ->first();
+    return $info ?? '';
+}
+
+function getDeductionInfo( $staff_id, $deduction_type, $date ) {
+
+    $info = StaffSalaryPreDeduction::where('salary_month', $date)
+            ->where('deduction_type', $deduction_type)
             ->where('staff_id', $staff_id)
             ->first();
     return $info ?? '';
