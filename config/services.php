@@ -72,6 +72,8 @@ return [
         'salary.revision' => 'Salary Revision',
         'salary.loan' => 'Loan',
         'salary.lic' => 'Insurance',
+        'earnings' => 'Earnings',
+        'deductions' => 'Deductions',
         'taxscheme' => 'Tax Scheme',
         'taxsection' => 'Tax Section',
         'taxsection-item' => 'Tax Section Item',

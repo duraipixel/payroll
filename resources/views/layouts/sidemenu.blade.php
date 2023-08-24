@@ -664,7 +664,7 @@
                                         </a>
                                     </div>
                                 @endif
-                                @if (access()->hasAccess('deductions.index', 'view'))
+                                @if (access()->hasAccess('deductions', 'view'))
                                     <div class="menu-item">
                                         <a class="menu-link @if (request()->routeIs('deductions.index') && request()->route('type') === 'arrear') active @endif"
                                             href="{{ route('deductions.index', ['type' => 'arrear']) }}">
@@ -675,7 +675,7 @@
                                         </a>
                                     </div>
                                 @endif
-                                @if (access()->hasAccess('deductions.index', 'view'))
+                                @if (access()->hasAccess('deductions', 'view'))
                                     <div class="menu-item">
                                         <a class="menu-link @if (request()->routeIs('deductions.index') && request()->route('type') === 'contribution') active @endif"
                                             href="{{ route('deductions.index', ['type' => 'contribution']) }}">
@@ -686,7 +686,7 @@
                                         </a>
                                     </div>
                                 @endif
-                                @if (access()->hasAccess('deductions.index', 'view'))
+                                @if (access()->hasAccess('deductions', 'view'))
                                     <div class="menu-item">
                                         <a class="menu-link @if (request()->routeIs('deductions.index') && request()->route('type') === 'other') active @endif"
                                             href="{{ route('deductions.index', ['type' => 'other']) }}">
@@ -712,7 +712,7 @@
                                 <span class="menu-arrow"></span>
                             </span>
                             <div class="menu-sub menu-sub-accordion">
-                                @if (access()->hasAccess('earnings.index', 'view'))
+                                @if (access()->hasAccess('earnings', 'view'))
                                     <div class="menu-item">
                                         <a class="menu-link @if (request()->routeIs('earnings.index') && request()->route('type') === 'bonus') active @endif"
                                             href="{{ route('earnings.index', ['type' => 'bonus']) }}">
@@ -723,7 +723,7 @@
                                         </a>
                                     </div>
                                 @endif
-                                @if (access()->hasAccess('earnings.index', 'view'))
+                                @if (access()->hasAccess('earnings', 'view'))
                                     <div class="menu-item">
                                         <a class="menu-link @if (request()->routeIs('earnings.index') && request()->route('type') === 'arrear') active @endif"
                                             href="{{ route('earnings.index', ['type' => 'arrear']) }}">
@@ -735,7 +735,7 @@
                                     </div>
                                 @endif
 
-                                @if (access()->hasAccess('earnings.index', 'view'))
+                                @if (access()->hasAccess('earnings', 'view'))
                                     <div class="menu-item">
                                         <a class="menu-link @if (request()->routeIs('earnings.index') && request()->route('type') === 'other') active @endif"
                                             href="{{ route('earnings.index', ['type' => 'other']) }}">
