@@ -75,9 +75,9 @@
                 <td> OTHER1 </td>
                 <td> DED </td>
                 <td>@if(count($user->salary)){{ $user?->salary[0]->net_salary }} @endif </td>
-                <td> {{ $user->bank->status == 'active' ? 'Yes' : 'No' }}</td>
+                <td> {{ $user->bank?->status == 'active' ? 'Yes' : 'No' }}</td>
                 <td> {{ $user->bank?->bankDetails?->name }} </td>
-                <td> {{ $user->bank->account_number }} </td>
+                <td> {{ $user->bank?->account_number }} </td>
                 <td> {{ $user->bank?->bankBranch?->name }} </td>
                 <td> Remarks</td>
             </tr>

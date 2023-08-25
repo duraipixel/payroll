@@ -61,25 +61,53 @@ class PayrollChecklistRepository extends Controller
     public function getEmployeePendingPayroll()
     {
 
-        $response['pending_approval'] = User::where('verification_status', 'pending')
-            ->whereNull('is_super_admin')->count();
+        $response['pending_approval'] = User::with('appointment')->where('verification_status', 'pending')
+            ->whereNull('is_super_admin')
+            ->whereHas('appointment', function ($query) {
+                $query->where(function($query1) {
+                    $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+                    $query1->orWhere('is_till_active', 'yes');
+                });
+            })
+            ->count();
 
-        $response['approved'] = User::where('verification_status', 'approved')
-            ->whereNull('is_super_admin')->count();
+        $response['approved'] = User::with('appointment')->where('verification_status', 'approved')
+            ->whereNull('is_super_admin')
+            ->whereHas('appointment', function ($query) {
+                $query->where(function($query1) {
+                    $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+                    $query1->orWhere('is_till_active', 'yes');
+                });
+            })
+            ->count();
         return $response;
     }
 
     public function getPendingITEntry()
     {
 
-        $response['verified_user'] = User::where('verification_status', 'approved')
-            ->whereNull('is_super_admin')->count();
-        $response['pending_it'] = User::join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
+        $response['verified_user'] = User::with('appointment')->where('verification_status', 'approved')
+            ->whereNull('is_super_admin')
+            ->whereHas('appointment', function ($query) {
+                $query->where(function($query1) {
+                    $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+                    $query1->orWhere('is_till_active', 'yes');
+                });
+            })->count();
+
+        $response['pending_it'] = User::with('appointment')->join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
             ->where('verification_status', 'approved')
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
             ->where('it_staff_statements.status', 'active')
             ->where('it_staff_statements.lock_calculation', 'yes')
-            ->whereNull('is_super_admin')->count();
+            ->whereNull('is_super_admin')
+            ->whereHas('appointment', function ($query) {
+                $query->where(function($query1) {
+                    $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+                    $query1->orWhere('is_till_active', 'yes');
+                });
+            })->count();
+
         $process = false;
         if ($response['verified_user'] == $response['pending_it']) {
             $process = true;
@@ -117,6 +145,12 @@ class PayrollChecklistRepository extends Controller
             ->where('it_staff_statements.status', 'active')
             ->whereNull('is_super_admin')
             ->whereNull('hold_salaries.hold_month')
+            ->whereHas('appointment', function ($query) {
+                $query->where(function($query1) {
+                    $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+                    $query1->orWhere('is_till_active', 'yes');
+                });
+            })
             ->get();
 
         return $users;
