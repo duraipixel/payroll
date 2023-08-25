@@ -405,6 +405,13 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::any('/calendar/event/get', [App\Http\Controllers\AttendanceManagement\CalendarController::class, 'getEvent'])->name('calender.event.get'); 
     Route::post('/calendar/get/days', [App\Http\Controllers\AttendanceManagement\CalendarController::class, 'getDaysCount'])->name('calender.get.count'); 
 
+    Route::get('/career/{type}', [App\Http\Controllers\CareerTransitionController::class, 'index'])->name('career'); 
+    Route::post('/career/add_edit', [App\Http\Controllers\CareerTransitionController::class, 'addEdit'])->name('career.add_edit'); 
+    Route::post('/career/save', [App\Http\Controllers\CareerTransitionController::class, 'save'])->name('career.save'); 
+    Route::post('/career/change/status', [App\Http\Controllers\CareerTransitionController::class, 'changeStatus'])->name('career.change.status'); 
+    Route::post('/career/delete', [App\Http\Controllers\CareerTransitionController::class, 'delete'])->name('career.delete'); 
+    Route::get('/career/export/{type}', [App\Http\Controllers\CareerTransitionController::class, 'export'])->name('career.export'); 
+
     include 'crud.php';
     
 });

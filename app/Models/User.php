@@ -71,7 +71,8 @@ class User extends Authenticatable implements Auditable
         'addedBy',
         'is_top_level',
         'image',
-        'updatedBy'
+        'updatedBy',
+        'transfer_status' //'active', 'retired', 'resigned', 'death'
     ];
 
     protected $hidden = [

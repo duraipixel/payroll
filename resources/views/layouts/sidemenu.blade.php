@@ -881,34 +881,38 @@
                         </div>
                     </div>
                 @endif
-                {{-- Block Mapping Start --}}
-                {{-- @if (access()->hasAccess(['blocks']))
-                    <div data-kt-menu-trigger="click"
-                        class="menu-item menu-accordion @if (request()->routeIs(['blocks'])) hover show @endif">
+                @if (access()->hasAccess(['career', 'career']))
+                    <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                         <span class="menu-link">
                             <span class="menu-icon">
-                                <i class="fab fa-playstation"></i>
+                                <i class="fa fa-handshake"></i>
                             </span>
-                            <span class="menu-title">Block Mapping</span>
+                            <span class="menu-title">Career Transition Module</span>
                             <span class="menu-arrow"></span>
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
-                            @if (access()->hasAccess('blocks', 'view'))
-                                <div class="menu-item">
-                                    <a class="menu-link @if (request()->routeIs(['blocks'])) active @endif"
-                                        href="{{ route('blocks') }}">
-                                        <span class="menu-bullet">
-                                            <span class="bullet bullet-dot"></span>
-                                        </span>
-                                        <span class="menu-title">Blocks</span>
-                                    </a>
-                                </div>
-                            @endif
+                            <div class="menu-item">
+                                <a class="menu-link" href="{{ route('career', ['type' => 'resigned']) }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Resigned Staff</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link" href="{{ route('career', ['type' => 'retired']) }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Retired Staff</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                @endif --}}
-
-                {{-- Block Mappting End --}}
+                @endif
+                
                 @if (access()->hasAccess([
                         'bank',
                         'bank-branch',
