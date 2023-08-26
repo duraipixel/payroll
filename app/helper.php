@@ -423,8 +423,8 @@ if (!function_exists('generateLeaveForm')) {
             foreach ($info as $item_value) {
 
 
-                $profile_image = Storage::url($item_value->manager->image);
-                if (file_exists($profile_image)) {
+                if ( isset($item_value->manager->image) && !empty($item_value->manager->image)) {
+                    $profile_image = Storage::url($item_value->manager->image);
                     $path = asset('public' . $profile_image);
                 } else {
                     $path = asset('assets/images/no_Image.jpg');
@@ -462,8 +462,9 @@ if (!function_exists('generateLeaveForm')) {
             $list = '<ul class="active">';
             foreach ($info as $item_value) {
 
-                $profile_image = Storage::url($item_value->manager->image);
-                if (file_exists($profile_image)) {
+                
+                if ( isset($item_value->manager->image) && !empty($item_value->manager->image)) {
+                    $profile_image = Storage::url($item_value->manager->image);
                     $path = asset('public' . $profile_image);
                 } else {
                     $path = asset('assets/images/no_Image.jpg');

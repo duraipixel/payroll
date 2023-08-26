@@ -8,10 +8,11 @@
                         <a href="javascript:void(0);">
                             <div class="member-view-box">
                                 <div class="member-image">
-                                    @php
-                                        $profile_image = Storage::url($reporting_data->manager->image);
-                                    @endphp
-                                    @if (file_exists($profile_image))
+
+                                    @if (isset($reporting_data->manager->image) && !empty($reporting_data->manager->image))
+                                        @php
+                                            $profile_image = Storage::url($reporting_data->manager->image);
+                                        @endphp
                                         <img src="{{ asset('public' . $profile_image) }}" alt="" width="100"
                                             style="border-radius:10%">
                                     @else
