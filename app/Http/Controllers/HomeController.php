@@ -126,7 +126,8 @@ class HomeController extends Controller
             'total_institution_staff' => $this->dashboardRepository->getTotalStaffCountByInstitutions(),
             'month_chart' => $this->dashboardRepository->monthlyGraphUser(),
             'retired' => $this->dashboardRepository->getStaffResingedRetiredList('retired'),
-            'resigned' => $this->dashboardRepository->getStaffResingedRetiredList('resigned')
+            'resigned' => $this->dashboardRepository->getStaffResingedRetiredList('resigned'),
+            'leave_chart' => $this->dashboardRepository->leaveChartCount()
         );
 
         return view('pages.dashboard.home', $params);
@@ -245,6 +246,7 @@ class HomeController extends Controller
             'month_chart' => $this->dashboardRepository->monthlyGraphUser($s_date, $e_date),
             'retired' => $this->dashboardRepository->getStaffResingedRetiredList('retired', $s_date, $e_date),
             'resigned' => $this->dashboardRepository->getStaffResingedRetiredList('resigned', $s_date, $e_date),
+            'leave_chart' => $this->dashboardRepository->leaveChartCount($s_date, $e_date)
         );
 
         return view('pages.dashboard.dynamic_view', $params);

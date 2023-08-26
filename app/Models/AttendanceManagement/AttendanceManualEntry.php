@@ -47,6 +47,5 @@ class AttendanceManualEntry extends Model
     public function user() {
         return $this->belongsTo( User::class, 'employment_id', 'id' );
     }
-
    
 }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
+use App\Models\Leave\StaffLeave;
 use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\User;
 use Carbon\Carbon;
@@ -109,6 +110,79 @@ class DashboardRepository extends Controller
                         ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")->get();
 
         return $details;
+    }
+
+    public function leaveChartCount($start_date = '', $end_date = '' ) {
+
+        if( empty( $start_date ) && empty( $end_date ) ) {
+            $start_date = date('Y-m-d', strtotime('-1 month'));
+            $end_date = date('Y-m-d');
+        }
+
+        // $start_date = '2023-03-01';
+        // $end_date = '2023-03-01';
+
+        $present = DB::table(function ($subquery) use ($start_date, $end_date) {
+                        $subquery->from('attendance_manual_entries')
+                            ->selectRaw('COUNT(*) AS cnt')
+                            ->whereBetween('attendance_date', [$start_date, $end_date])
+                            ->where('attendance_status', 'present')
+                            ->groupBy('attendance_date');
+                    }, 'counts')
+                    ->selectRaw('AVG(cnt) AS average_count')
+                    ->first();
+
+        $absence = DB::table(function ($subquery) use ($start_date, $end_date) {
+                        $subquery->from('attendance_manual_entries')
+                            ->selectRaw('COUNT(*) AS cnt')
+                            ->whereBetween('attendance_date', [$start_date, $end_date])
+                            ->where('attendance_status', 'absence')
+                            ->groupBy('attendance_date');
+                    }, 'counts')
+                    ->selectRaw('AVG(cnt) AS average_count')
+                    ->first();
+       
+        $el_count = StaffLeave::select('staff_leaves.*')                   
+                    ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
+                    ->where('leave_heads.code', 'el')
+                    ->where('staff_leaves.status', 'approved')
+                    ->where('staff_leaves.from_date', '>=', $start_date )
+                    ->where('staff_leaves.to_date', '<=', $end_date )
+                    ->sum('no_of_days');
+
+        $cl_count = StaffLeave::select('staff_leaves.*')                   
+                    ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
+                    ->where('leave_heads.code', 'cl')
+                    ->where('staff_leaves.status', 'approved')
+                    ->where('staff_leaves.from_date', '>=', $start_date )
+                    ->where('staff_leaves.to_date', '<=', $end_date )
+                    ->sum('no_of_days');
+
+        $ml_count = StaffLeave::select('staff_leaves.*')                   
+                    ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
+                    ->where('leave_heads.code', 'ml')
+                    ->where('staff_leaves.status', 'approved')
+                    ->where('staff_leaves.from_date', '>=', $start_date )
+                    ->where('staff_leaves.to_date', '<=', $end_date )
+                    ->sum('no_of_days');
+
+        $eol_count = StaffLeave::select('staff_leaves.*')                   
+                    ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
+                    ->where('leave_heads.code', 'eol')
+                    ->where('staff_leaves.status', 'approved')
+                    ->where('staff_leaves.from_date', '>=', $start_date )
+                    ->where('staff_leaves.to_date', '<=', $end_date )
+                    ->sum('no_of_days');
+    
+        return [
+            $present->average_count ?? 0,
+            $absence->average_count ?? 0,
+            $el_count,
+            $cl_count,
+            $ml_count,
+            $eol_count
+        ];
+
     }
     
 }
