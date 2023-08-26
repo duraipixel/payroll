@@ -119,27 +119,29 @@ var KTChartsWidget22023 = function () {
         var chart = new ApexCharts(element, options);
 
         var init = false;
+        if( tabSelector ) {
 
-        var tab = document.querySelector(tabSelector);
+            var tab = document.querySelector(tabSelector);
+        }
         
         if (initByDefault === true) {
             chart.render();
             init = true;
         }        
-
-        tab.addEventListener('shown.bs.tab', function (event) {
-            if (init == false) {
-                chart.render();
-                init = true;
-            }
-        })
+        if( tabSelector ) {
+            tab.addEventListener('shown.bs.tab', function (event) {
+                if (init == false) {
+                    chart.render();
+                    init = true;
+                }
+            })
+        }
     }
 
     // Public methods
     return {
         init: function () {           
-            initChart('#kt_chart_widgets_22_tab_100', '#kt_chart_widgets_22_chart_100', [total_female, total_male, total_other], true);
-            // initChart('#kt_chart_widgets_22_tab_2', '#kt_chart_widgets_22_chart_2', [70, 13, 11, 2], false);              
+            initChart('', '#kt_chart_widgets_22_chart_100', [total_female, total_male, total_other], true);
         }   
     }
 

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
+use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\User;
 use Carbon\Carbon;
 use DataTables;
@@ -72,6 +73,42 @@ class DashboardRepository extends Controller
             ->get();
 
         return $results;
+    }
+
+    public function monthlyGraphUser( $start_date = '', $end_date = '' ) {
+
+        if( empty( $start_date ) && empty( $end_date ) ) {
+            $start_date = date('Y-m-d', strtotime('-1 month'));
+            $end_date = date('Y-m-d');
+        }
+
+        $new_addition = User::whereRaw("CAST(created_at AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")->count();
+
+        $resigned = StaffRetiredResignedDetail::where('types', 'resigned')
+                ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")->count();
+
+        $retired = StaffRetiredResignedDetail::where('types', 'retired')
+                ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")->count();
+
+        $response = [
+                        'addition' => $new_addition,
+                        'resigned' => $resigned,
+                        'retired' => $retired
+        ];
+        return $response;
+    }
+
+    public function getStaffResingedRetiredList($type, $start_date = '', $end_date = '' ) {
+
+        if( empty( $start_date ) && empty( $end_date ) ) {
+            $start_date = date('Y-m-d', strtotime('-1 month'));
+            $end_date = date('Y-m-d');
+        }
+
+        $details = StaffRetiredResignedDetail::with('staff')->where('types', $type)
+                        ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")->get();
+
+        return $details;
     }
     
 }

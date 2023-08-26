@@ -1,6 +1,6 @@
 <div class="card shadow border card-table">
     <div class="p-3 bg-light sticky-top">
-        <b>Retired Staff List</b>
+        <b>Resigned Staff List</b>
     </div>
     <div class="p-2 px-3">
         <table class="table table-bordered m-0 ">
@@ -12,8 +12,8 @@
                 </tr>
             </thead>
             <tbody>
-                @if (isset($retired) && !empty($retired))
-                    @foreach ($retired as $item)
+                @if (isset($resigned) && !empty($resigned))
+                    @foreach ($resigned as $item)
                         <tr>
                             <td>
                                 <div class="d-flex text-start align-items-left">

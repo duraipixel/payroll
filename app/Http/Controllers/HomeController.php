@@ -123,7 +123,10 @@ class HomeController extends Controller
             'gender_calculation' => $gender_calculation,
             'top_ten_leave_taker' => $this->dashboardRepository->getTopTenLeaveTaker(),
             'age_json_data' => $this->dashboardRepository->getInstituteAgeWiseData(),
-            'total_institution_staff' => $this->dashboardRepository->getTotalStaffCountByInstitutions()
+            'total_institution_staff' => $this->dashboardRepository->getTotalStaffCountByInstitutions(),
+            'month_chart' => $this->dashboardRepository->monthlyGraphUser(),
+            'retired' => $this->dashboardRepository->getStaffResingedRetiredList('retired'),
+            'resigned' => $this->dashboardRepository->getStaffResingedRetiredList('resigned')
         );
 
         return view('pages.dashboard.home', $params);
@@ -238,8 +241,10 @@ class HomeController extends Controller
             'gender_calculation' => $gender_calculation,
             'top_ten_leave_taker' => $this->dashboardRepository->getTopTenLeaveTaker($s_date, $e_date),
             'age_json_data' => $this->dashboardRepository->getInstituteAgeWiseData($s_date, $e_date),
-            'total_institution_staff' => $this->dashboardRepository->getTotalStaffCountByInstitutions($s_date, $e_date)
-
+            'total_institution_staff' => $this->dashboardRepository->getTotalStaffCountByInstitutions($s_date, $e_date),
+            'month_chart' => $this->dashboardRepository->monthlyGraphUser($s_date, $e_date),
+            'retired' => $this->dashboardRepository->getStaffResingedRetiredList('retired', $s_date, $e_date),
+            'resigned' => $this->dashboardRepository->getStaffResingedRetiredList('resigned', $s_date, $e_date),
         );
 
         return view('pages.dashboard.dynamic_view', $params);

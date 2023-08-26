@@ -20,7 +20,9 @@ class StaffRetiredResignedDetail extends Model
         'subject',	
         'document',	
         'reason',	
-        'status'
+        'status', //active, inactive
+        'is_completed' //yes, no
+
     ];
 
     public function staff() {

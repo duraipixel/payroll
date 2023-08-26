@@ -1,10 +1,8 @@
 <div class="card h-100 cstmzed">
-    <!--begin::Card body-->
     <div class="card-body p-9">
-        <!--begin::Heading-->
         <span class="fw-bolder text-gray-800 d-block mb-5 fs-3">Monthly Graphical Report</span>
         @php
-            $month_graph_data = [15, 10, 3];
+            $month_graph_data = [$month_chart['addition'] ?? 0, $month_chart['retired'] ?? 0, $month_chart['resigned'] ?? 0];
             $month_graph_label = ['Additions', 'Retirement', 'Resignations'];
         @endphp
         <div class="d-flex flex-center me-9 mt-9 mb-5">
@@ -13,41 +11,28 @@
                 height="200"></canvas>
         </div>
         <div class="d-flex flex-wrap">
-
-            <!--end::Chart-->
-            <!--begin::Labels-->
             <div class="d-flex flex-column justify-content-center flex-row-fluid pe-11 mb-5">
-                <!--begin::Label-->
                 <div class="d-flex fs-6 fw-bold align-items-center mb-3">
                     <div class="bullet bg-primary me-3"></div>
                     <div class="text-gray-400">Additions</div>
-                    <div class="ms-auto fw-bolder text-gray-700">50</div>
+                    <div class="ms-auto fw-bolder text-gray-700">{{$month_chart['addition'] ?? 0}}</div>
                 </div>
-                <!--end::Label-->
-                <!--begin::Label-->
                 <div class="d-flex fs-6 fw-bold align-items-center mb-3">
                     <div class="bullet bg-success me-3"></div>
                     <div class="text-gray-400">Retirement</div>
-                    <div class="ms-auto fw-bolder text-gray-700">10</div>
+                    <div class="ms-auto fw-bolder text-gray-700">{{$month_chart['retired'] ?? 0}}</div>
                 </div>
-                <!--end::Label-->
-                <!--begin::Label-->
                 <div class="d-flex fs-6 fw-bold align-items-center">
                     <div class="bullet bg-gray-300 me-3"></div>
                     <div class="text-gray-400">Resignations</div>
-                    <div class="ms-auto fw-bolder text-gray-700">8</div>
+                    <div class="ms-auto fw-bolder text-gray-700">{{$month_chart['resigned'] ?? 0}}</div>
                 </div>
-                <!--end::Label-->
             </div>
-            <!--end::Labels-->
         </div>
-        <!--end::Wrapper-->
     </div>
-    <!--end::Card body-->
 </div>
-<!--end::Card-->
 <script>
-    $(document).ready(function() {
+        console.log(' chart is running');
         var canvas = document.getElementById('monthly_graph');
         var context = canvas.getContext('2d');
 
@@ -99,5 +84,4 @@
         };
         var myDoughnut = new Chart(canvas, config);
 
-    })
 </script>

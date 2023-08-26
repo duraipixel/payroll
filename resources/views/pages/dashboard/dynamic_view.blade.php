@@ -34,6 +34,12 @@
     <div class="col-6 pb-4">
         @include('pages.dashboard._top_leave_taker')
     </div>
+    <div class="col-6 pb-4">
+        @include('pages.dashboard._retirement_card')
+    </div>
+    <div class="col-6 pb-4">
+        @include('pages.dashboard._resigned_list')
+    </div>
 </div>
 <div class="row pt-4">
     <div class="col-md-12 pb-4">
