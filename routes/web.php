@@ -150,12 +150,18 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/get/staff/leaveinfo', [App\Http\Controllers\CommonController::class, 'getStaffLeaveInfo'])->name('get.staff.leave.info'); 
     Route::post('/get/leave/form', [App\Http\Controllers\CommonController::class, 'getLeaveForm'])->name('get.leave.form'); 
 
-    Route::get('/reporting', [App\Http\Controllers\ReportingController::class, 'index'])->name('reporting.list'); 
+    Route::get('/reporting/{type?}', [App\Http\Controllers\ReportingController::class, 'index'])->name('reporting.list'); 
     Route::post('/reporting/assign/toplevel', [App\Http\Controllers\ReportingController::class, 'openTopLevelManagerModal'])->name('reporting.assign.form'); 
     Route::post('/reporting/assign', [App\Http\Controllers\ReportingController::class, 'assignTopLevelManager'])->name('reporting.toplevel.assign'); 
     Route::post('/reporting/manager/modal', [App\Http\Controllers\ReportingController::class, 'openManagerModal'])->name('reporting.manager.modal'); 
     Route::post('/reporting/manager/assign', [App\Http\Controllers\ReportingController::class, 'assignManager'])->name('reporting.manager.assign'); 
     Route::post('/reporting/manager/change/modal', [App\Http\Controllers\ReportingController::class, 'openChangeManagerModal'])->name('reporting.manager.change.modal'); 
+    Route::post('/reporting/manager/change', [App\Http\Controllers\ReportingController::class, 'changeManager'])->name('reporting.manager.change'); 
+
+    Route::get('/reporting/staff/list', [App\Http\Controllers\ReportingController::class, 'reportingList'])->name('reporting.staff.list'); 
+    Route::post('/reporting/delete', [App\Http\Controllers\ReportingController::class, 'deleteManager'])->name('reporting.delete'); 
+
+
     
     //Document Locker Start    
     Route::get('/user/document-locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker')->middleware(['checkAccess:view']); 

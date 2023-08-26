@@ -1,6 +1,6 @@
-<div class="modal-dialog modal-dialog-centered ">
+<div class="modal-dialog modal-dialog-centered modal-lg">
     <style>
-        .reportee-pane ~ .select2-option {
+        .reportee-pane~.select2-option {
             z-index: 2085 !important;
         }
     </style>
@@ -16,14 +16,16 @@
             <form action="" class="p-3" id="manager_form" autocomplete="off" enctype="multipart/form-data">
                 <div class="fv-row form-group mb-3 row">
                     <div class="col-sm-5">
-                        <label class="form-label required mt-1" for=""> Select Reportee </label>
+                        <label class="form-label required mt-1" for=""> Select Manager to change or replace
+                        </label>
                     </div>
                     <div class="col-sm-7">
-                        <select name="reportee_id" id="reportee_id" class="form-control reportee-pane select2-option">
+                        <select name="from_id" id="from_id" class="form-control reportee-pane form-control-sm w-100">
                             <option value=""> --select --</option>
                             @isset($reportee)
                                 @foreach ($reportee as $ritem)
-                                    <option value="{{ $ritem->manager_id }}">{{ $ritem->manager->name . ' - ' . $ritem->manager->emp_code }}</option>
+                                    <option value="{{ $ritem->manager_id }}">
+                                        {{ $ritem->manager->name . ' - ' . $ritem->manager->emp_code }}</option>
                                 @endforeach
                             @endisset
                         </select>
@@ -31,14 +33,15 @@
                 </div>
                 <div class="fv-row form-group mb-3 row">
                     <div class="col-sm-5">
-                        <label class="form-label required mt-1" for=""> Select Manager </label>
+                        <label class="form-label required mt-1" for=""> Select Manager to Take over </label>
                     </div>
                     <div class="col-sm-7">
-                        <select name="manager_id" id="manager_id" class="form-control select2-option">
+                        <select name="to_id" id="to_id" class="form-control form-control-sm w-100">
                             <option value=""> --select --</option>
-                            @isset($managers)
-                                @foreach ($managers as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name . ' - ' . $item->emp_code }}</option>
+                            @isset($reportee)
+                                @foreach ($reportee as $ritem)
+                                    <option value="{{ $ritem->manager_id }}">
+                                        {{ $ritem->manager->name . ' - ' . $ritem->manager->emp_code }}</option>
                                 @endforeach
                             @endisset
                         </select>
@@ -64,7 +67,9 @@
 
 <script>
     $(document).ready(function() {
-        $('.select2-option').select2({ theme: 'bootstrap-5'});
+        $('.select2-option').select2({
+            theme: 'bootstrap-5'
+        });
     })
 
     var KTAppEcommerceSaveBranch = function() {
@@ -79,17 +84,17 @@
             validator = FormValidation.formValidation(
                 form, {
                     fields: {
-                        'reportee_id':{
+                        'from_id': {
                             validators: {
                                 notEmpty: {
-                                    message: 'Reportee is required'
+                                    message: 'Change Manager is required'
                                 },
                             }
                         },
-                        'manager_id': {
+                        'to_id': {
                             validators: {
                                 notEmpty: {
-                                    message: 'Manager is required'
+                                    message: 'Take over Manager is required'
                                 },
                             }
                         },
@@ -116,7 +121,7 @@
                             var forms = $('#manager_form')[0];
                             var formData = new FormData(forms);
                             $.ajax({
-                                url: "{{ route('reporting.manager.assign') }}",
+                                url: "{{ route('reporting.manager.change') }}",
                                 type: "POST",
                                 data: formData,
                                 processData: false,
@@ -127,17 +132,12 @@
                                     submitButton.removeAttribute(
                                         'data-kt-indicator');
                                     if (res.error == 1) {
-                                        if (res.message) {
-                                            res.message.forEach(element => {
-                                                toastr.error("Error",
-                                                    element);
-                                            });
-                                        }
+                                        toastr.error('Error', res.message);
                                     } else {
-                                        toastr.success(
-                                            "Top Level Assigned successfully");
+                                        toastr.success('success', res.message);
                                         $('#kt_dynamic_app').modal('hide');
-                                        
+                                        location.reload();
+
                                     }
                                 }
                             })
@@ -161,6 +161,6 @@
     $('.form-select-option').select2({
         dropdownParent: $('#kt_dynamic_app'),
         theme: 'bootstrap-5',
-        width:'100%'
-    }); 
+        width: '100%'
+    });
 </script>

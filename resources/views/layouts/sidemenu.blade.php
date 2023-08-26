@@ -242,9 +242,9 @@
                     </div>
                 @endif
                 {{-- Reporting Structure --}}
-                @if (access()->hasAccess(['reporting.list']))
+                @if (access()->hasAccess(['reporting.list', 'reporting.staff.list']))
                     <div data-kt-menu-trigger="click"
-                        class="menu-item menu-accordion @if (request()->routeIs(['reporting.list'])) hover show @endif">
+                        class="menu-item menu-accordion @if (request()->routeIs(['reporting.list', 'reporting.staff.list'])) hover show @endif">
                         <span class="menu-link">
                             <span class="menu-icon">
                                 <i class="fa fa-folder-tree"></i>
@@ -260,6 +260,17 @@
                                         <span class="bullet bullet-dot"></span>
                                     </span>
                                     <span class="menu-title">Overview</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link  @if (request()->routeIs(['reporting.staff.list'])) active @endif"
+                                    href="{{ route('reporting.staff.list') }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title">Staff List</span>
                                 </a>
                             </div>
                         </div>
