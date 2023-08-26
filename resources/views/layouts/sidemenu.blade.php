@@ -881,8 +881,8 @@
                         </div>
                     </div>
                 @endif
-                @if (access()->hasAccess(['career', 'career']))
-                    <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                @if (access()->hasAccess(['career']))
+                    <div data-kt-menu-trigger="click" class="menu-item menu-accordion @if (request()->routeIs(['career'])) hover show @endif">
                         <span class="menu-link">
                             <span class="menu-icon">
                                 <i class="fa fa-handshake"></i>
@@ -892,7 +892,7 @@
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link" href="{{ route('career', ['type' => 'resigned']) }}">
+                                <a class="menu-link @if (request()->routeIs(['career']) && request()->route('type') === 'resigned') active @endif" href="{{ route('career', ['type' => 'resigned']) }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
@@ -902,7 +902,7 @@
                         </div>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link" href="{{ route('career', ['type' => 'retired']) }}">
+                                <a class="menu-link @if (request()->routeIs(['career']) && request()->route('type') === 'retired' ) active @endif" href="{{ route('career', ['type' => 'retired']) }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>

@@ -51,7 +51,7 @@
                         <thead class="bg-primary">
                             <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="text-center text-white">
-                                    Date
+                                    Last Working Date
                                 </th>
                                 <th class="text-center text-white">
                                     Emp Name
@@ -92,7 +92,7 @@
             ],
             type: 'POST',
             ajax: {
-                "url": "{{ route('bank') }}",
+                "url": "{{ route('career', ['type' => $page_type ]) }}",
                 "data": function(d) {
                     d.datatable_search = $('#bank_dataTable_search').val();
                     d.page_type = '{{ $page_type }}';
