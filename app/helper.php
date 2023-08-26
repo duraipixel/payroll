@@ -422,11 +422,19 @@ if (!function_exists('generateLeaveForm')) {
             $tree_view = '<ul class="active">';
             foreach ($info as $item_value) {
 
+
+                $profile_image = Storage::url($item_value->manager->image);
+                if (file_exists($profile_image)) {
+                    $path = asset('public' . $profile_image);
+                } else {
+                    $path = asset('assets/images/no_Image.jpg');
+                }
+
                 $tree_view .= ' <li>
                                     <a href="javascript:void(0);">
                                         <div class="member-view-box">
                                             <div class="member-image">
-                                                <img src="http://localhost/amalpayroll/assets/images/no_Image.jpg"
+                                                <img src="'.$path.'"
                                                     alt="Member">
                                                 <div class="member-details">
                                                     <h3>' . $item_value->manager->name . '</h3>
@@ -454,11 +462,18 @@ if (!function_exists('generateLeaveForm')) {
             $list = '<ul class="active">';
             foreach ($info as $item_value) {
 
+                $profile_image = Storage::url($item_value->manager->image);
+                if (file_exists($profile_image)) {
+                    $path = asset('public' . $profile_image);
+                } else {
+                    $path = asset('assets/images/no_Image.jpg');
+                }
+
                 $list .= ' <li>
                                     <a href="javascript:void(0);">
                                         <div class="member-view-box">
                                             <div class="member-image">
-                                                <img src="http://localhost/amalpayroll/assets/images/no_Image.jpg"
+                                                <img src="'.$path.'"
                                                     alt="Member">
                                                 <div class="member-details">
                                                     <h3>' . $item_value->manager->name . '</h3>
