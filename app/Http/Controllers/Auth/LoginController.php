@@ -50,6 +50,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
+       
         session(['staff_institute_id' => auth()->user()->is_super_admin ? 1 : auth()->user()->institute_id ]);
     }
 
@@ -68,7 +69,9 @@ class LoginController extends Controller
             ];
         }
      
-        if (Auth::attempt($credentials)) {  
+        if (Auth::attempt($credentials)) { 
+            session(['staff_institute_id' => auth()->user()->is_super_admin ? 1 : auth()->user()->institute_id ]);
+
             return redirect()->route('home');
         }
     
