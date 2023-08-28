@@ -43,6 +43,9 @@ class StaffTransferController extends Controller
                     $status = '<input type="checkbox" role="button" name="transfer[]" class="transfer_check" value="' . $row->id . '">';
                     return $status;
                 })
+                ->editColumn('effective_from', function($row){
+                    return commonDateFormat($row->effective_from);  
+                })
                 ->editColumn('status', function ($row) {
                     $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" ">' . ucfirst($row->status) . '</a>';
                     return $status;

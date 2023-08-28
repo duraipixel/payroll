@@ -78,7 +78,7 @@
                                         </div>
                                     </th>
                                     <th class="px-3 text-white">
-                                        Date
+                                        Effective From Date
                                     </th>
                                     <th class="px-3 text-white">
                                         Emp Name
@@ -145,8 +145,8 @@
                 },
 
                 {
-                    data: 'staff.name',
-                    name: 'name'
+                    data: 'effective_from',
+                    name: 'effective_from'
                 },
                 {
                     data: 'staff.name',
