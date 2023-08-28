@@ -3,11 +3,11 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
-<style>
-    #cke_document_model {
-        width: 100% !important;
-    }
-</style>
+    <style>
+        #cke_document_model {
+            width: 100% !important;
+        }
+    </style>
     <div class="card">
 
         <div class="card-header border-0 pt-6">
@@ -52,7 +52,8 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
-                                            <table class="table table-bordered table-hover" style="caret-color: transparent;">
+                                            <table class="table table-bordered table-hover"
+                                                style="caret-color: transparent;">
                                                 <tr>
                                                     <td>
                                                         <h3>
@@ -71,11 +72,12 @@
                                                                         class="fw-code-copy-button btn btn-sm btn-success">Copy</button>
                                                                 </span> --}}
                                                                 <div class="d-flex">
-                                                                    <label class="w-75 variable">${{ $item }}</label>
-                                                                    
-                                                                        <button type="button"
-                                                                            class="w-25 fw-code-copy-button btn btn-sm btn-success">Copy</button>
-                                                                    
+                                                                    <label
+                                                                        class="w-75 variable">${{ $item }}</label>
+
+                                                                    <button type="button"
+                                                                        class="w-25 fw-code-copy-button btn btn-sm btn-success">Copy</button>
+
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -134,36 +136,33 @@
     <script>
         new Clipboard(".fw-code-copy-button", {
             text: function(trigger) {
-                let copytext  = $(trigger).parent().find('.variable').text().trim();
-                if( copytext != '' ) {
+                let copytext = $(trigger).parent().find('.variable').text().trim();
+                if (copytext != '') {
                     toastr.success("Copied success");
                 }
                 return copytext;
             }
         });
 
-        $(document).ready(function() {
+        var document_model = CKEDITOR.replace('document_model', {
+            // Make the editing area bigger than default.
+            height: 1680,
+            width: 1020,
+            toolbar: 'Full',
+            language: 'en',
+            extraPlugins: 'font,spacingsliders,panelbutton,justify,copyformatting',
+            allowedContent: true,
+          
+            // Fit toolbar buttons inside 3 rows.
+            removeButtons: 'ExportPdf,Form,Checkbox,Radio,TextField,Select,Textarea,Button,ImageButton,HiddenField,NewPage,CreateDiv,Flash,Iframe,About,ShowBlocks,Maximize',
 
-            var document_model = CKEDITOR.replace('document_model', {
-                // Make the editing area bigger than default.
-                height: 1680,
-                width: 1020,
-                toolbar: 'Full',
-                language: 'en',
-                extraPlugins: 'lineheight',
-                allowedContent: true,
-                // Fit toolbar buttons inside 3 rows.
-                removeButtons: 'ExportPdf,Form,Checkbox,Radio,TextField,Select,Textarea,Button,ImageButton,HiddenField,NewPage,CreateDiv,Flash,Iframe,About,ShowBlocks,Maximize',
+            contentsCss: [
+                'http://cdn.ckeditor.com/4.21.0/full-all/contents.css',
+                'https://ckeditor.com/docs/ckeditor4/4.21.0/examples/assets/css/pastefromword.css'
+            ],
 
-                contentsCss: [
-                    'http://cdn.ckeditor.com/4.21.0/full-all/contents.css',
-                    'https://ckeditor.com/docs/ckeditor4/4.21.0/examples/assets/css/pastefromword.css'
-                ],
-
-                bodyClass: 'document-editor'
-            });
-
-        })
+            bodyClass: 'document-editor'
+        });
 
 
         var KTAppEcommerceSavePlace = function() {
