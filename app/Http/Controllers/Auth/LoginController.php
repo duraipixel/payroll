@@ -50,7 +50,7 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        session(['staff_institute_id' => auth()->user()->institute_id ]);
+        session(['staff_institute_id' => auth()->user()->institute_id ?? 1 ]);
     }
 
     public function login(Request $request)

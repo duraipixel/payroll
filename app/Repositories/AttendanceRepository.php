@@ -28,7 +28,7 @@ class AttendanceRepository extends Controller
             })
             ->where('users.institute_id', session()->get('staff_institute_id'));
 
-        // dd( $data );
+     
         $datatable_search = $request['datatable_search'] ?? '';
         $keywords = $datatable_search;
 

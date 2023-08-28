@@ -253,10 +253,7 @@ class LeaveController extends Controller
         );
 
         $user = User::where('status', 'active')
-            // ->where('verification_status', 'approved')
-            ->when(!empty(session()->get('staff_institute_id')), function ($q) {
-                $q->where('institute_id', session()->get('staff_institute_id'));
-            })
+            ->InstituteBased()
             ->get();
 
         return view('pages.leave.overview', compact('breadcrums', 'user'));

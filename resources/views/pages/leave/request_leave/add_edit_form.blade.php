@@ -239,7 +239,7 @@
                             </div>
                             <div class="col-sm-7">
                                 <input type="text" name="staff_code"
-                                    value="{{ $info->staff_info->emp_code ?? '' }}" readonly id="staff_code"
+                                    value="{{ $info->staff_info->institute_emp_code ?? '' }}" readonly id="staff_code"
                                     class="form-control">
                             </div>
                         </div>
@@ -396,7 +396,7 @@
                     let panel = '';
                     res.map((item) => {
                         panel +=
-                            `<li class="typeahead-pane-li" onclick="return getStaffLeaveInfo(${item.id})">${item.name} - ${item.emp_code}</li>`;
+                            `<li class="typeahead-pane-li" onclick="return getStaffLeaveInfo(${item.id})">${item.name} - ${item.institute_emp_code}</li>`;
                     })
                     $('#typeahead-list').html(panel);
 

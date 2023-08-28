@@ -88,6 +88,7 @@ class CareerTransitionController extends Controller
         $title = 'Add ' . ucfirst($page_type) . ' Staff';
         $users = User::where('status', 'active')
             ->where('verification_status', 'approved')
+            ->InstituteBased()
             ->whereNull('is_super_admin')->get();
 
         if (isset($id) && !empty($id)) {

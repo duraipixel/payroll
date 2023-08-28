@@ -24,6 +24,9 @@ class DashboardRepository extends Controller
             ->when(!empty( $start_date ) && !empty( $end_date ), function($query) use($start_date, $end_date) {
                 return $query->whereRaw("attendance_date BETWEEN '" . $start_date . "' and '" . $end_date . "'");
             })
+            ->whereHas('user', function ($query) {
+                $query->where('institute_id', session()->get('staff_institute_id'));
+            })
             ->groupBy('employment_id')
             ->orderByDesc('total')
             ->limit(10)
@@ -83,13 +86,23 @@ class DashboardRepository extends Controller
             $end_date = date('Y-m-d');
         }
 
-        $new_addition = User::whereRaw("CAST(created_at AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")->count();
+        $new_addition = User::whereRaw("CAST(created_at AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
+        ->InstituteBased()
+        ->count();
 
-        $resigned = StaffRetiredResignedDetail::where('types', 'resigned')
-                ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")->count();
+        $resigned = StaffRetiredResignedDetail::with('staff')->where('types', 'resigned')
+                ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
+                ->whereHas('staff', function ($query) {
+                    $query->where('institute_id', session()->get('staff_institute_id'));
+                })
+                ->count();
 
-        $retired = StaffRetiredResignedDetail::where('types', 'retired')
-                ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")->count();
+        $retired = StaffRetiredResignedDetail::with('staff')->where('types', 'retired')
+                ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
+                ->whereHas('staff', function ($query) {
+                    $query->where('institute_id', session()->get('staff_institute_id'));
+                })
+                ->count();
 
         $response = [
                         'addition' => $new_addition,
@@ -107,7 +120,11 @@ class DashboardRepository extends Controller
         }
 
         $details = StaffRetiredResignedDetail::with('staff')->where('types', $type)
-                        ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")->get();
+                        ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
+                        ->whereHas('staff', function ($query) {
+                            $query->where('institute_id', session()->get('staff_institute_id'));
+                        })
+                        ->get();
 
         return $details;
     }

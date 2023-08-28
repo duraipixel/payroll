@@ -92,10 +92,10 @@ class HomeController extends Controller
             ->get();
 
         $gender_calculation = StaffPersonalInfo::select(
-                DB::raw("SUM(CASE WHEN gender = 'Female' THEN 1 ELSE 0 END) AS total_female"),
-                DB::raw("SUM(CASE WHEN gender = 'Male' THEN 1 ELSE 0 END) AS total_male"),
-                DB::raw("SUM(CASE WHEN gender NOT IN ('Female', 'Male') THEN 1 ELSE 0 END) AS total_other")
-            )
+            DB::raw("SUM(CASE WHEN gender = 'Female' THEN 1 ELSE 0 END) AS total_female"),
+            DB::raw("SUM(CASE WHEN gender = 'Male' THEN 1 ELSE 0 END) AS total_male"),
+            DB::raw("SUM(CASE WHEN gender NOT IN ('Female', 'Male') THEN 1 ELSE 0 END) AS total_other")
+        )
             ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
             ->when(session()->get('staff_institute_id'), function ($q) {
                 $q->where('users.institute_id', session()->get('staff_institute_id'));
@@ -105,10 +105,15 @@ class HomeController extends Controller
 
 
 
-        $nature_of_works = NatureOfEmployment::with('appointments')->where('status', 'active')->get();
+        $nature_of_works = NatureOfEmployment::with(['appointments', 'appointments.staff_det'])
+            ->whereHas('appointments.staff_det', function ($query) {
+                $query->where('institute_id', session()->get('staff_institute_id'));
+            })
+            ->where('status', 'active')
+            ->get();
 
         $designations = Designation::with('staffEnrollments')->where('status', 'active')->get();
-        
+
         $params = array(
             'user_count' => $user_count,
             'last_user_added' => $last_user_added,
@@ -212,10 +217,10 @@ class HomeController extends Controller
             ->get();
 
         $gender_calculation = StaffPersonalInfo::select(
-                DB::raw("SUM(CASE WHEN gender = 'Female' THEN 1 ELSE 0 END) AS total_female"),
-                DB::raw("SUM(CASE WHEN gender = 'Male' THEN 1 ELSE 0 END) AS total_male"),
-                DB::raw("SUM(CASE WHEN gender NOT IN ('Female', 'Male') THEN 1 ELSE 0 END) AS total_other")
-            )
+            DB::raw("SUM(CASE WHEN gender = 'Female' THEN 1 ELSE 0 END) AS total_female"),
+            DB::raw("SUM(CASE WHEN gender = 'Male' THEN 1 ELSE 0 END) AS total_male"),
+            DB::raw("SUM(CASE WHEN gender NOT IN ('Female', 'Male') THEN 1 ELSE 0 END) AS total_other")
+        )
             ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
             ->when(session()->get('staff_institute_id'), function ($q) {
                 $q->where('users.institute_id', session()->get('staff_institute_id'));

@@ -43,7 +43,7 @@
                         <option value="">-select-</option>
                         @isset($user)
                             @foreach ($user as $item)
-                                <option value="{{ $item->id }}">{{ $item->name }} - {{ $item->emp_code }}</option>
+                                <option value="{{ $item->id }}">{{ $item->name }} - {{ $item->institute_emp_code }}</option>
                             @endforeach
                         @endisset
                     </select>

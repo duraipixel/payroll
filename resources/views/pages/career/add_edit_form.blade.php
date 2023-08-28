@@ -11,7 +11,7 @@
                 <option value="">--select--</option>
                 @if (isset($users) && !empty($users))
                     @foreach ($users as $item)
-                        <option value="{{ $item->id }}"> {{ $item->name }} {{ $item->society_emp_code }} </option>
+                        <option value="{{ $item->id }}"> {{ $item->name }} - {{ $item->institute_emp_code }} </option>
                     @endforeach
                 @endif
             </select>
