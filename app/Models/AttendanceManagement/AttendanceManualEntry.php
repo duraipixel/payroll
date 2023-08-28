@@ -37,7 +37,9 @@ class AttendanceManualEntry extends Model
         'clock_out',
         'total_clocked_time',
         'unscheduled',
-        'api_response'
+        'api_response',
+        'institute_id',
+        'institute_emp_code'
     ];
 
     public function reportingManager() {

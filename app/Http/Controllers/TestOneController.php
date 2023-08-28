@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\OldStaffEntryImport;
+use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\Master\AppointmentOrderModel;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\Staff\StaffAppointmentDetail;
@@ -114,4 +115,22 @@ class TestOneController extends Controller
         // $user_info->save();
         dd( $new_code );
     }   
+
+    public function updateEntry() {
+
+        $details = AttendanceManualEntry::whereNull('institute_id')->get();
+
+        if( isset( $details ) && !empty( $details ) ) {
+            foreach ($details as $items) {
+                
+                $user_info = User::find($items->employment_id);
+                if( isset( $user_info ) && !empty( $user_info ) ) {
+
+                    $items->institute_id = $user_info->institute_id;
+                    $items->institute_emp_code = $user_info->institute_emp_code;
+                    $items->save();
+                }
+            }
+        }
+    }
 }

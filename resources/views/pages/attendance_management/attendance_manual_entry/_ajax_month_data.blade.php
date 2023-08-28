@@ -59,6 +59,9 @@
                                 Staff Name
                             </th>
                             <th class=" text-white px-2">
+                                Staff Code
+                            </th>
+                            <th class=" text-white px-2">
                                 From Time
                             </th>
                             <th class=" text-white px-2">
@@ -121,6 +124,10 @@
             {
                 data: 'staff_name',
                 name: 'staff_name'
+            },
+            {
+                data: 'institute_emp_code',
+                name: 'institute_emp_code'
             },
             {
                 data: 'from_time',

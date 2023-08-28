@@ -12,7 +12,7 @@
                         @isset($employee_details)
                             @foreach ($employee_details as $item)
                                 <option value="{{ $item->id }}" @if (isset($info->employment_id) && $info->employment_id == $item->id) selected @endif>
-                                    {{ $item->name }}
+                                    {{ $item->name }} - {{ $item->institute_emp_code ?? '' }}
                                 </option>
                             @endforeach
                         @endisset

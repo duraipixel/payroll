@@ -37,6 +37,7 @@ class RoleMappingController extends Controller
             $data = RoleMapping::leftJoin('users as staff', 'staff.id', '=', 'role_mappings.staff_id')
                 ->leftJoin('users as created', 'created.id', '=', 'role_mappings.role_created_id')
                 ->leftJoin('roles', 'roles.id', '=', 'role_mappings.role_id')
+                ->where('users.status', 'active')
                 ->select('staff.name as staff_name', 'staff.society_emp_code', 'created.name as created_by_name', 'roles.name as role_name', 'role_mappings.*');
             $status = $request->get('role_mappings.status');
             $datatable_search = $request->datatable_search ?? '';
@@ -125,7 +126,7 @@ class RoleMappingController extends Controller
         $info = [];
         $title = 'Add Role Mapping';
         $from = 'role_mapping';
-        $staff_details = User::where('is_super_admin', '=', null)->orderBy('name', 'asc')->get();
+        $staff_details = User::where('is_super_admin', '=', null)->where('users.status', 'active')->orderBy('name', 'asc')->get();
         $role = Role::where('status', 'active')->get();
         if (isset($id) && !empty($id)) {
             $info = RoleMapping::find($id);
@@ -134,6 +135,7 @@ class RoleMappingController extends Controller
         $content = view('pages.role.role_mapping.add_edit_form', compact('info', 'title', 'role', 'from', 'staff_details'));
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
+    
     public function changeStatus(Request $request)
     {
         $id             = $request->id;

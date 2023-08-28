@@ -220,12 +220,12 @@ if (!function_exists('getStaffProfileCompilation')) {
 }
 
 if (!function_exists('getStaffProfileCompilationData')) {
-    function getStaffProfileCompilationData($info, $type = '')
+    function getStaffProfileCompilationData($user_id, $type = '')
     {
         $response = false;
-        if ($type == 'object') {
-            $info = User::find($info->id);
-        }
+        $info = User::find($user_id);
+        // with(['personal', 'position', 'StaffDocument', 'familyMembers', 'nominees', 'healthDetails', 'StaffWorkExperience', 'knownLanguages', 'studiedSubject', 'bank', 'appointment'])
+                    
         $percentage = 0;
         if ($info) {
             $percentage = 10;
@@ -235,6 +235,7 @@ if (!function_exists('getStaffProfileCompilationData')) {
             if ($info->position) {
                 $percentage += 10;
             }
+           
             if (count($info->StaffDocument) > 0) {
                 $percentage += 10;
             }
@@ -251,6 +252,7 @@ if (!function_exists('getStaffProfileCompilationData')) {
             if ($info->healthDetails) {
                 $percentage += 5;
             }
+
             //65%
             if (count($info->StaffWorkExperience) > 0) {
                 $percentage += 5;
@@ -1059,7 +1061,7 @@ if (!function_exists('isFemale')) {
     {
         $info = User::find($id);
 
-        if ($info->personal->gender == 'female') {
+        if (isset($info->personal->gender) && $info->personal->gender == 'female') {
             return true;
         }
         return false;

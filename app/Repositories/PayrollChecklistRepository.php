@@ -63,6 +63,7 @@ class PayrollChecklistRepository extends Controller
 
         $response['pending_approval'] = User::with('appointment')->where('verification_status', 'pending')
             ->whereNull('is_super_admin')
+            ->where('status', 'active')
             ->whereHas('appointment', function ($query) {
                 $query->where(function($query1) {
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
@@ -73,6 +74,7 @@ class PayrollChecklistRepository extends Controller
 
         $response['approved'] = User::with('appointment')->where('verification_status', 'approved')
             ->whereNull('is_super_admin')
+            ->where('status', 'active')
             ->whereHas('appointment', function ($query) {
                 $query->where(function($query1) {
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
@@ -88,6 +90,7 @@ class PayrollChecklistRepository extends Controller
 
         $response['verified_user'] = User::with('appointment')->where('verification_status', 'approved')
             ->whereNull('is_super_admin')
+            ->where('status', 'active')
             ->whereHas('appointment', function ($query) {
                 $query->where(function($query1) {
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
@@ -97,6 +100,7 @@ class PayrollChecklistRepository extends Controller
 
         $response['pending_it'] = User::with('appointment')->join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
             ->where('verification_status', 'approved')
+            ->where('users.status', 'active')
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
             ->where('it_staff_statements.status', 'active')
             ->where('it_staff_statements.lock_calculation', 'yes')
@@ -144,6 +148,7 @@ class PayrollChecklistRepository extends Controller
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
             ->where('it_staff_statements.status', 'active')
             ->whereNull('is_super_admin')
+            ->where('users.status', 'active')
             ->whereNull('hold_salaries.hold_month')
             ->whereHas('appointment', function ($query) {
                 $query->where(function($query1) {

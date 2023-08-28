@@ -21,6 +21,7 @@ class RoleMappingExport implements FromCollection,WithHeadings
         'role_mappings.status','role_mappings.created_at')
         ->get();
     }
+    
     public function headings(): array
     {
         return [

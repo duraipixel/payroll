@@ -74,13 +74,14 @@ class AttendanceManualEntryController extends Controller
         ]);
 
         if ($validator->passes()) {
-
+            $user_info = User::find($request->employee_id);
             $ins['academic_id'] = academicYearId();
             $ins['employment_id'] = $request->employee_id;
+            $ins['institute_emp_code'] = $user_info->institute_emp_code;
             $ins['attendance_date'] = $request->attendance_date;
             $ins['from_time'] = $request->from_time;
             $ins['to_time'] = $request->to_time;
-            // $ins['reporting_manager'] = $request->reporting_id;
+            $ins['institute_id'] = session()->get('staff_institute_id');
             $ins['attendance_status_id'] = $request->leave_status_id;
             $leave_status = LeaveStatus::find($request->leave_status_id);
             $ins['attendance_status'] = $leave_status->name;
@@ -106,7 +107,8 @@ class AttendanceManualEntryController extends Controller
         $id = $request->id;
         $info = [];
         $title = 'Add Attendance Manual Entry';
-        $employee_details = User::where('is_super_admin', '=', null)->get();
+        $employee_details = User::where('is_super_admin', '=', null)
+                            ->InstituteBased()->get();
         $leave_status = LeaveStatus::where('status', 'active')->get();
         $leave_heads = LeaveHead::where('status', 'active')->get();
 

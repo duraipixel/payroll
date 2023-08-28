@@ -73,7 +73,9 @@ class StaffTransferController extends Controller
         if ($from_institution_id && !empty($from_institution_id)) {
             if ($request->ajax()) {
                 $search = $request->search ?? '';
-                $data = User::with('personal')->where('institute_id', $from_institution_id)
+                $data = User::with('personal')
+                    ->where('institute_id', $from_institution_id)
+                    ->where('users.status', 'active')
                     ->when(!empty($search), function ($query) use ($search) {
                         $query->where('users.name', 'like', "%{$search}%")
                             ->orWhere('users.emp_code', 'like', "%{$search}%")

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/test-appointment-pdf', [App\Http\Controllers\TestOneController::class, 'testAppointmentPdf']);
 Route::get('/test-code', [App\Http\Controllers\TestOneController::class, 'checkCode']);
 Route::get('/test-cron', [App\Http\Controllers\TestOneController::class, 'cron']);
+Route::get('/test-entry', [App\Http\Controllers\TestOneController::class, 'updateEntry']);
 Route::get('/test-salary-pdf', [App\Http\Controllers\TestOneController::class, 'testSalaryPdf']);
 Route::get('/test-assign-orderno', [App\Http\Controllers\TestOneController::class, 'assignAppointmentOrder']);
 Route::get('/sample-it-statement', [App\Http\Controllers\TestOneController::class, 'sampleITStatement']);

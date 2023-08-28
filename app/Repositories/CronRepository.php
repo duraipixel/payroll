@@ -47,6 +47,8 @@ class CronRepository
                     $attendance_status = explode('(', $attendance_status);
                     $ins['academic_id'] = academicYearId();
                     $ins['employment_id'] = $user_info->id;
+                    $ins['institute_id'] = $user_info->institute_id ?? '';
+                    $ins['institute_emp_code'] = $institute_code ?? '';
                     $ins['attendance_date'] = $current_date;
                     $ins['reporting_manager'] = $user_info->reporting_manager_id ?? null;
                     if( current($attendance_status) != 'Absence' &&  current($attendance_status) != 'Present') {

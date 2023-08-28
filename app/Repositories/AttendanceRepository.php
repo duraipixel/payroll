@@ -25,7 +25,8 @@ class AttendanceRepository extends Controller
             ->where('attendance_date', '<=', $ends_date )
             ->when(!empty( $attendance_status), function($q) use($attendance_status) {
                 $q->where('attendance_status', $attendance_status);
-            });
+            })
+            ->where('users.institute_id', session()->get('staff_institute_id'));
 
         // dd( $data );
         $datatable_search = $request['datatable_search'] ?? '';

@@ -1025,6 +1025,7 @@ class StaffController extends Controller
                 ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
                     $q->where('users.institute_id', $datatable_institute_id);
                 })
+                ->InstituteBased()
                 ->orderBy('society_emp_code', 'asc');
 
             if ($limit_val > 0) {
@@ -1067,6 +1068,7 @@ class StaffController extends Controller
                     ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
                         $q->where('users.institute_id', $datatable_institute_id);
                     })
+                    ->InstituteBased()
                     ->count();
             }
 
@@ -1077,7 +1079,8 @@ class StaffController extends Controller
 
                     $edit_btn = $view_btn = $print_btn = $del_btn = '';
 
-                    $completed_percentage = getStaffProfileCompilationData($post_val);
+                    $completed_percentage = getStaffProfileCompilationData($post_val->id, 'object');
+                    // dump( $completed_percentage );
                     $profile_status = '
                             <div class="d-flex align-items-center w-100px w-sm-200px flex-column mt-3">
                                 <div class="d-flex justify-content-between w-100 mt-auto">
@@ -1090,12 +1093,12 @@ class StaffController extends Controller
                             </div>';
 
                     $route_name = request()->route()->getName();
-                    if (access()->buttonAccess($route_name, 'add_edit')) {
+                    if (access()->buttonAccess($route_name, 'add_edit') && $post_val->status != 'transferred') {
                         $edit_btn = '<a href="' . route('staff.register', ['id' => $post_val->id]) . '"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                         <i class="fa fa-edit"></i>
                         </a>';
                     }
-                    if (access()->buttonAccess($route_name, 'delete')) {
+                    if (access()->buttonAccess($route_name, 'delete') && $post_val->status != 'transferred') {
                         $del_btn = '<a href="javascript:void(0);" onclick="deleteStaff(' . $post_val->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                         <i class="fa fa-trash"></i></a>';
                     }
@@ -1280,15 +1283,17 @@ class StaffController extends Controller
             )
         );
 
-        $personal_doc    = StaffDocument::where('staff_id', $user->id)->get();
-        $education_doc   = StaffEducationDetail::where('staff_id', $user->id)->get();
-        $experince_doc   = StaffWorkExperience::where('staff_id', $user->id)->get();
+        $staff_id = $user->status == 'transferred' ? $user->refer_user_id : $user->id;
+        $personal_doc    = StaffDocument::where('staff_id', $staff_id)->get();
+        $education_doc   = StaffEducationDetail::where('staff_id', $staff_id)->get();
+        $experince_doc   = StaffWorkExperience::where('staff_id', $staff_id)->get();
         $acadamic_id     = academicYearId();
-        $leave_doc       = StaffLeave::where('staff_id', $user->id)->where('academic_id', $acadamic_id)->get();
-        $appointment_doc = StaffAppointmentDetail::where('staff_id', $user->id)->get();
-        $salary_doc      = StaffSalary::where('staff_id', $user->id)->get();
+        $leave_doc       = StaffLeave::where('staff_id', $staff_id)->where('academic_id', $acadamic_id)->get();
+        $appointment_doc = StaffAppointmentDetail::where('staff_id', $staff_id)->get();
+        $salary_doc      = StaffSalary::where('staff_id', $staff_id)->get();
         $from_view = 'user';
-        $info = $user;
+        $info = User::find( $user->id);
+        // dd($info->personal);
         return view('pages.overview.index', compact('info', 'breadcrums', 'user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc', 'from_view'));
 
     }
