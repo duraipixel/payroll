@@ -44,6 +44,7 @@ return [
         'staff.list' => 'Staff List',
         'staff.bulk' => 'Bulk Upload',
         'reporting' => 'Reporting Manager',
+        'staff.transfer' => 'Staff Transfer'
     ],
     'document_locker' => [
         'user.document_locker' => 'List',
