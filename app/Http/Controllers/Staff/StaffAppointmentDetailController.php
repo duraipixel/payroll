@@ -150,7 +150,14 @@ class StaffAppointmentDetailController extends Controller
                 $document = str_replace('$' . $key, $value, $document);
             }
 
-            $pdf = PDF::loadView('pages.masters.appointment_order_model.dynamic_pdf', ['data' => $document])->setPaper('legal', 'portrait');
+            $pdfConfig = [
+                'margin_top' => 100, 
+                
+            ];
+
+            $pdf = PDF::loadView('pages.masters.appointment_order_model.dynamic_pdf', ['data' => $document])
+                    ->setPaper('legal', 'portrait') ->setOptions($pdfConfig);
+
             $path = 'public/order_preview/'.$user_info->id;
             if (File::exists($path)) {
                 File::deleteDirectory($path);
