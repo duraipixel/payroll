@@ -8,6 +8,8 @@ use App\Models\Staff\StaffTransfer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class StaffTransferController extends Controller
 {
@@ -43,8 +45,8 @@ class StaffTransferController extends Controller
                     $status = '<input type="checkbox" role="button" name="transfer[]" class="transfer_check" value="' . $row->id . '">';
                     return $status;
                 })
-                ->editColumn('effective_from', function($row){
-                    return commonDateFormat($row->effective_from);  
+                ->editColumn('effective_from', function ($row) {
+                    return commonDateFormat($row->effective_from);
                 })
                 ->editColumn('status', function ($row) {
                     $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" ">' . ucfirst($row->status) . '</a>';
@@ -127,14 +129,15 @@ class StaffTransferController extends Controller
                 $ins['old_institution_code'] = $staff_info->institute_emp_code;
                 $ins['status'] = 'pending';
 
-                StaffTransfer::updateOrCreate(['staff_id' => $staff_info->id ], $ins);
+                StaffTransfer::updateOrCreate(['staff_id' => $staff_info->id], $ins);
             }
         }
 
         return ['error' => 0, 'message' => 'Transfer added successfully. Pending approval'];
     }
 
-    public function openTransferStatusModal( Request $request ) {
+    public function openTransferStatusModal(Request $request)
+    {
 
         $transfer = $request->transfer;
         $status = $request->status;
@@ -149,10 +152,10 @@ class StaffTransferController extends Controller
 
         $content = view('pages.transfer.remarks_form', $params);
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
-
     }
 
-    public function changeStatus(Request $request) {
+    public function changeStatus(Request $request)
+    {
 
         $status = $request->status;
         $remarks = $request->remarks;
@@ -160,39 +163,44 @@ class StaffTransferController extends Controller
         $transfer = $request->transfer;
         $transfer = explode(',', $transfer);
 
-        if( isset( $transfer ) && !empty( $transfer ) ) {
-            foreach ( $transfer as $transfer_id ) {
+        if (isset($transfer) && !empty($transfer)) {
+            foreach ($transfer as $transfer_id) {
 
                 $ins = [];
-                if( $status == 'approved' ) {
-                    $transfer_info = StaffTransfer::find( $transfer_id );
+                if ($status == 'approved') {
+                    $transfer_info = StaffTransfer::find($transfer_id);
                     $transfer_info->status = 'approved';
                     $transfer_info->reason = $remarks;
                     $transfer_info->save();
                     /** 
                      * change ins id to user
                      */
+
                     $user_info = User::find($transfer_info->staff_id);
+                    $clonedUser = $user_info->replicate();
+
+                   
+                    $clonedUser->refer_user_id = $user_info->id;
+                    $clonedUser->status = 'transferred';
+                    $clonedUser->save();
+
+                 
                     $user_info->institute_id = $transfer_info->to_institution_id;
                     $user_info->institute_emp_code = $transfer_info->new_institution_code;
                     $user_info->save();
 
-                } else if( $status == 'rejected' ) {
-                    $transfer_info = StaffTransfer::find( $transfer_id );
+                } else if ($status == 'rejected') {
+                    $transfer_info = StaffTransfer::find($transfer_id);
                     $transfer_info->status = 'rejected';
                     $transfer_info->reason = $remarks;
                     $transfer_info->save();
                 }
-               
             }
             $message = 'Successfully changed';
-
         } else {
 
             $message = 'Error occured while changing status';
         }
         return array('error' => 0, 'message' => $message);
-
     }
-
 }

@@ -66,13 +66,14 @@ class User extends Authenticatable implements Auditable
         'joining_date',
         'profile_status',
         'verification_status',
-        'status',
+        'status', //active,inactive,transferred,retired,resigned,death
         'is_super_admin',
         'addedBy',
         'is_top_level',
         'image',
         'updatedBy',
-        'transfer_status' //'active', 'retired', 'resigned', 'death'
+        'transfer_status', //'active', 'retired', 'resigned', 'death'
+        'refer_user_id'        
     ];
 
     protected $hidden = [

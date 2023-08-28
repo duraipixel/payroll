@@ -979,6 +979,7 @@ class StaffController extends Controller
                 ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
                     $q->where('users.institute_id', $datatable_institute_id);
                 })
+                ->InstituteBased()
                 ->where('users.status', 'active')
                 ->whereNull('is_super_admin')->count();
 
