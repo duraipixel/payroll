@@ -8,7 +8,7 @@
         <label for="" class="required"> Last Post held </label>
     </div>
     <div class="col-sm-6">
-        <input type="text" name="last_post_held" id="last_post_held" class="form-control form-control-sm" required>
+        <input type="text" readony name="last_post_held" id="last_post_held" value="{{  $staff_info->appointment?->designation?->name ?? '' }}" class="form-control form-control-sm" required>
     </div>
 </div>
 <div class="row  mt-3">
@@ -16,7 +16,7 @@
         <label for=""> Date of Regularization on </label>
     </div>
     <div class="col-sm-6">
-        <input type="date" name="date_of_regularizion" id="date_of_regularizion"
+        <input type="date" value="{{ $staff_info->appointment?->from_appointment ?? '' }}" readonly name="date_of_regularizion" id="date_of_regularizion"
             class="form-control form-control-sm">
     </div>
 </div>
@@ -25,7 +25,7 @@
         <label for=""> Date of Ending Service </label>
     </div>
     <div class="col-sm-6">
-        <input type="date" name="date_of_ending_service" id="date_of_ending_service" required
+        <input type="date" value="{{ $staff_info->appointment?->to_appointment ?? '' }}" readonly name="date_of_ending_service" id="date_of_ending_service" required
             class="form-control form-control-sm">
     </div>
 </div>
@@ -34,7 +34,7 @@
         <label for="" class="required"> Cause of Ending Service </label>
     </div>
     <div class="col-sm-6">
-        <select name="cause_of_ending_service" required id="cause_of_ending_service" class="form-control">
+        <select name="cause_of_ending_service" required id="cause_of_ending_service" class="form-control form-control-sm">
             <option value=""> --select-- </option>
             <option value="superannuation">Superannuation</option>
             <option value="due_to_medical_ground">Due to medical ground</option>

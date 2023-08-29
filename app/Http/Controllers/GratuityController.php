@@ -26,10 +26,11 @@ class GratuityController extends Controller
         $this->gratuityRepository = $gratuityRepository;
     }
 
-    public function index( Request $request ) {
+    public function index(Request $request)
+    {
         $page_type = $request->type;
         $title = ucwords(str_replace('_', ' ', $page_type));
-        $page_title = 'Assessing of Gratuity For '.$title.' Staff';
+        $page_title = 'Assessing of Gratuity For ' . $title . ' Staff';
         $breadcrums = array(
             'title' => ucwords(str_replace('_', ' ', $page_type)),
             'breadcrums' => array(
@@ -48,10 +49,10 @@ class GratuityController extends Controller
                     $date = date('Y-m-d', strtotime($datatable_search));
                     return $query->where(function ($q) use ($datatable_search, $date) {
 
-                        $q->whereHas('staff', function($jq) use($datatable_search){
-                                $jq->where('name', 'like', "%{$datatable_search}%")
+                        $q->whereHas('staff', function ($jq) use ($datatable_search) {
+                            $jq->where('name', 'like', "%{$datatable_search}%")
                                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
-                            })
+                        })
                             ->orWhere('reason', 'like', "%{$datatable_search}%")
                             ->orWhereDate('last_working_date', $date);
                     });
@@ -86,39 +87,55 @@ class GratuityController extends Controller
         }
 
         return view('pages.gratuity.index', compact('breadcrums', 'title', 'page_type', 'page_title'));
-
     }
 
-    public function addEdit(Request $request) {
+    public function addEdit(Request $request)
+    {
         $page_type = $request->type;
 
         $title = ucwords(str_replace('_', ' ', $page_type));
-        $page_title = 'Form for Assessing of Gratuity For '.$title.' Staff';
-        $user = User::where(['status' => 'active', 'verification_status' => 'approved'])->whereNull('is_super_admin')->get();
+        $page_title = 'Form for Assessing of Gratuity For ' . $title . ' Staff';
+        $user = User::where(['status' => 'active', 'verification_status' => 'approved'])
+            ->whereHas('appointment.employment_nature', function ($q) {
+                $q->where('name', 'REGULAR STAFF');
+            })
+            ->whereNull('is_super_admin')->InstituteBased()->get();
 
         $params['page_title'] = $page_title;
         $params['page_type'] = $page_type;
         $params['user'] = $user;
 
-        return view('pages.gratuity.add_edit', $params );
+        return view('pages.gratuity.add_edit', $params);
+    }
+
+    public function ajaxForm(Request $request) {
+
+        $staff_id = $request->staff_id;
+        $page_type = $request->page_type;
+        $staff_info = User::find($staff_id);
+        $params = [
+            'staff_id' => $staff_id,
+            'page_type' => $page_type,
+            'staff_info' => $staff_info
+        ];
+        return view('pages.gratuity._ajax_form', $params);
 
     }
 
-    public function preview( Request $request ) {
+    public function preview(Request $request)
+    {
 
         $staff_id = $request->staff_id;
         //REGULAR STAFF
         $staff_info = User::with('appointment.employment_nature')
-                        ->whereHas('appointment.employment_nature', function($q){
-                            $q->where('name', 'REGULAR STAFF');
-                        })->find($staff_id);
-                        
+            ->whereHas('appointment.employment_nature', function ($q) {
+                $q->where('name', 'REGULAR STAFF');
+            })->find($staff_id);
+
         $params = [
-                        'staff_info' => $staff_info
-                    ];
+            'staff_info' => $staff_info
+        ];
         $pdf = PDF::loadView('pages.gratuity._preview', $params)->setPaper('a4', 'portrait');
         return $pdf->stream('gratuity_preview.pdf');
-
     }
-
 }

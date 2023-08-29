@@ -1,57 +1,79 @@
 @extends('layouts.template')
 @section('breadcrum')
-    @include('layouts.parts.breadcrum')
+    {{-- @include('layouts.parts.breadcrum') --}}
 @endsection
 @section('content')
     <style>
         #cke_document_model {
             width: 100% !important;
         }
+
     </style>
     <div class="card">
-
-        <div class="card-header border-0 pt-6">
-            <div class="card-title w-100">
-                <div class="row w-100">
-                    <div class="col-sm-8 offset-md-2">
-                        <h3> Appointment Order Model</h3>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
         <div class="card-body">
 
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                <form action="" class="w-100" id="dynamic_form">
+                <form action="{{ route('appointment.orders.preview') }}"  method="POST" target="_blank" class="w-100" id="dynamic_form" >
                     @csrf
                     <div class="row w-100">
                         <div class="col-sm-12">
                             <div class="row">
-
-                                <div class="col-sm-8">
-                                    <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
-
-                                    <div class="fv-row form-group mb-10">
-                                        <label class="form-label required" for="">
-                                            Order Model Name
-                                        </label>
-                                        <div>
-                                            <input type="text" class="form-control" name="order_model" id="order_model"
-                                                value="{{ $info->name ?? '' }}" required>
-                                        </div>
-                                    </div>
-                                </div>
+                              
                                 <div class="col-sm-12">
                                     <div class="row">
                                         <div class="col-sm-8">
 
-                                            <div class="fv-row form-group mb-10">
+                                            <div class="fv-row form-group mb-10 editor-container ">
                                                 <textarea name="document_model" id="document_model" class="form-control document_model" cols="30" rows="10">{{ $info->document ?? '' }}</textarea>
+                                            </div>
+                                            <div class="fv-row form-group mb-1">
+                                                <label class="form-label" for="">
+                                                    Status
+                                                </label>
+                                                <div>
+                                                    <input type="radio" id="active" class="form-check-input" value="1"
+                                                        name="status"
+                                                        @if (isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif>
+                                                    <label class="pe-3" for="active">Active</label>
+                                                    <input type="radio" id="inactive" class="form-check-input" value="0"
+                                                        name="status" @if (isset($info->status) && $info->status != 'active') checked @endif>
+                                                    <label for="inactive">Inactive</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
+                                            <div class="col-sm-12 text-start">
+                                                <h3>
+                                                    Appointment Order Models
+                                                </h3>
+                                            </div>
+                                            <div class="form-group mb-1 text-end">
+                                                <a href="{{ route('appointment.orders') }}" class="btn btn-light-primary btn-sm"> Cancel
+                                                </a>
+                                                
+                                                <button type="submit" class="btn btn-info btn-sm ms-2"> Preview </button>
+                                                &emsp;
+                                                <button type="button" class="btn btn-primary btn-sm" id="form-submit-btn">
+                                                    <span class="indicator-label">
+                                                        Submit
+                                                    </span>
+                                                    <span class="indicator-progress">
+                                                        Please wait... <span
+                                                            class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                            <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
+
+                                            <div class="fv-row form-group mb-2">
+                                                <label class="form-label required" for="">
+                                                    Order Model Name
+                                                </label>
+                                                <div>
+                                                    <input type="text" class="form-control" name="order_model" id="order_model"
+                                                        value="{{ $info->name ?? '' }}" required>
+                                                </div>
+                                            </div>
                                             <table class="table table-bordered table-hover"
                                                 style="caret-color: transparent;">
                                                 <tr>
@@ -89,37 +111,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="fv-row form-group mb-10">
-                                        <label class="form-label" for="">
-                                            Status
-                                        </label>
-                                        <div>
-                                            <input type="radio" id="active" class="form-check-input" value="1"
-                                                name="status"
-                                                @if (isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif>
-                                            <label class="pe-3" for="active">Active</label>
-                                            <input type="radio" id="inactive" class="form-check-input" value="0"
-                                                name="status" @if (isset($info->status) && $info->status != 'active') checked @endif>
-                                            <label for="inactive">Inactive</label>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </div>
-                            <div class="form-group mb-10 text-center">
-                                <a href="{{ route('appointment.orders') }}" class="btn btn-light-primary"> Cancel
-                                </a>
-                                &emsp;
-                                <button type="button" class="btn btn-primary" id="form-submit-btn">
-                                    <span class="indicator-label">
-                                        Submit
-                                    </span>
-                                    <span class="indicator-progress">
-                                        Please wait... <span
-                                            class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                                    </span>
-                                </button>
-                            </div>
+                            
                         </div>
 
                     </div>
@@ -146,13 +140,13 @@
 
         var document_model = CKEDITOR.replace('document_model', {
             // Make the editing area bigger than default.
-            height: 1680,
+            height: 500,
             width: 1020,
             toolbar: 'Full',
             language: 'en',
-            extraPlugins: 'font,spacingsliders,panelbutton,justify,copyformatting',
+            extraPlugins: 'font,spacingsliders,panelbutton,justify,copyformatting,pagebreak',
             allowedContent: true,
-          
+
             // Fit toolbar buttons inside 3 rows.
             removeButtons: 'ExportPdf,Form,Checkbox,Radio,TextField,Select,Textarea,Button,ImageButton,HiddenField,NewPage,CreateDiv,Flash,Iframe,About,ShowBlocks,Maximize',
 

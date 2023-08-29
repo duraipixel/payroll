@@ -1,3 +1,4 @@
+@if ( !request()->routeIs(['appointment.orders.add']))
 <div id="kt_header" class="d-flex justify-content-center border-bottom py-3 shadow">
     <div class="col-lg-8">
         <div class="input-group">
@@ -30,3 +31,4 @@
         </div>
     </div>
 </div>
+@endif

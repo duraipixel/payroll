@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use DataTables;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
+use PDF;
 
 class AppointmentOrderModelController extends Controller
 {
@@ -178,4 +179,12 @@ class AppointmentOrderModelController extends Controller
         $content = view('pages.masters.appointment_order_model.view',compact('info','title'));
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     } 
+
+    public function appointmentOrderPreview(Request $request) {
+        
+        $params = ['content' => $request->document_model ];
+        $pdf = PDF::loadView('pages.masters.appointment_order_model._preview', $params)->setPaper('a4', 'portrait');
+        return $pdf->stream('preview.pdf');
+
+    }
 }

@@ -27,7 +27,7 @@
                                 <label for="" class="required">Select Staff</label>
                             </div>
                             <div class="col-sm-6">
-                                <select name="staff_id" id="staff_id" class="form-control form-control-sm" required>
+                                <select name="staff_id" id="staff_id" onchange="getStaffGratuityFormDetails(this.value)" class="form-control form-control-sm" required>
                                     <option value="">--select--</option>
                                     @if (isset($user) && !empty($user))
                                         @foreach ($user as $item)
@@ -38,7 +38,10 @@
                                 </select>
                             </div>
                         </div>
-                        @include('pages.gratuity._ajax_form')
+                        <div class="row" id="ajax_gratuity_pane">
+
+                            @include('pages.gratuity._ajax_form')
+                        </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-3">
@@ -111,98 +114,24 @@
 
 @section('add_on_script')
     <script>
-        var dtTable = $('#career_table').DataTable({
+       
 
-            processing: true,
-            serverSide: true,
-            order: [
-                [0, "DESC"]
-            ],
-            type: 'POST',
-            ajax: {
-                "url": "{{ route('career', ['type' => $page_type]) }}",
-                "data": function(d) {
-                    d.datatable_search = $('#bank_dataTable_search').val();
-                    d.page_type = '{{ $page_type }}';
-                }
-            },
-
-            columns: [{
-                    data: 'last_working_date',
-                    name: 'last_working_date',
-                },
-                {
-                    data: 'staff.name',
-                    name: 'staff.name'
-                },
-                {
-                    data: 'staff.society_emp_code',
-                    name: 'staff.society_emp_code'
-                },
-                {
-                    data: 'reason',
-                    name: 'reason'
-                },
-                {
-                    data: 'status',
-                    name: 'status'
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                },
-            ],
-            language: {
-                paginate: {
-                    next: '<i class="fa fa-angle-right"></i>', // or '→'
-                    previous: '<i class="fa fa-angle-left"></i>' // or '←' 
-                }
-            },
-            "aaSorting": [],
-            "pageLength": 25
-        });
-
-        $('.dataTables_wrapper').addClass('position-relative');
-        $('.dataTables_info').addClass('position-absolute');
-        $('.dataTables_filter label input').addClass('form-control form-control-solid w-250px ps-14');
-        $('.dataTables_filter').addClass('position-absolute end-0 top-0');
-        $('.dataTables_length label select').addClass('form-control form-control-solid');
-
-        document.querySelector('#bank_dataTable_search').addEventListener("keyup", function(e) {
-                dtTable.draw();
-            }),
-
-            $('#search-form').on('submit', function(e) {
-                dtTable.draw();
-                e.preventDefault();
-            });
-        $('#search-form').on('reset', function(e) {
-            $('select[name=filter_status]').val(0).change();
-
-            dtTable.draw();
-            e.preventDefault();
-        });
-
-        function getAddModal(id = '') {
+        function getStaffGratuityFormDetails(staff_id) {
 
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var formMethod = "addEdit";
             $.ajax({
-                url: "{{ route('career.add_edit') }}",
+                url: "{{ route('gratuity.ajax.form') }}",
                 type: 'POST',
                 data: {
-                    id: id,
+                    staff_id: staff_id,
                     page_type: '{{ $page_type }}'
                 },
                 success: function(res) {
-                    $('#kt_dynamic_app').modal('show');
-                    $('#kt_dynamic_app').html(res);
+                    $('#ajax_gratuity_pane').html(res);
                 }
             })
 

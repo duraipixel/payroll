@@ -241,6 +241,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('appointment-order/add/{id?}', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'add_edit'])->name('appointment.orders.add');
     Route::post('appointment-order/save', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'save'])->name('appointment.orders.save');
     Route::post('appointment-order/view', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'appointmentOrderView'])->name('appointment.orders.view');
+    Route::post('appointment-order/preview', [App\Http\Controllers\Master\AppointmentOrderModelController::class, 'appointmentOrderPreview'])->name('appointment.orders.preview');
     
     Route::get('scheme/add/{id?}', [App\Http\Controllers\Master\AttendanceSchemeController::class, 'add_edit'])->name('attendance.scheme.add');
     //staff transfer
@@ -423,6 +424,7 @@ Route::group(['middleware' => 'auth'],  function () {
     #gratuity routes
     Route::get('/gratuity/{type}', [App\Http\Controllers\GratuityController::class, 'index'])->name('gratuity'); 
     Route::get('/gratuity/add_edit/{type}', [App\Http\Controllers\GratuityController::class, 'addEdit'])->name('gratuity.add_edit'); 
+    Route::post('/gratuity/add_edit/form', [App\Http\Controllers\GratuityController::class, 'ajaxForm'])->name('gratuity.ajax.form'); 
     Route::post('/gratuity/save', [App\Http\Controllers\GratuityController::class, 'save'])->name('gratuity.save'); 
     Route::post('/gratuity/preview', [App\Http\Controllers\GratuityController::class, 'preview'])->name('gratuity.preview'); 
     Route::post('/gratuity/change/status', [App\Http\Controllers\GratuityController::class, 'changeStatus'])->name('gratuity.change.status'); 
