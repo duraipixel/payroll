@@ -65,7 +65,7 @@ class ReportController extends Controller
         $place_of_work = $request->place_of_work ?? null;
         $date          = getStartAndEndDateOfMonth($month);
         $month_days    = monthDays($month);
-        $attendance    = $this->attendance_collection($request,$date)->paginate(10);
+        $attendance    = $this->attendance_collection($request,$date)->paginate(50);
         return view('pages.reports.attendance._index', compact('attendance', 'month_days','month','place_of_work', 'start_date', 'no_of_days'));
     }
 
