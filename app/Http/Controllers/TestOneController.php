@@ -155,6 +155,7 @@ class TestOneController extends Controller
         if ($response->successful()) {
             $responseData = $response->json(); // Assuming the response is in JSON format
             if (isset($responseData['data']) && !empty($responseData['data'])) {
+                $i = 0;
                 foreach ($responseData['data'] as $items) {
                     $ins = [];
                     $institute_code = $items['emp_code'];
@@ -198,7 +199,8 @@ class TestOneController extends Controller
                     $check_array = ['attendance_date' => $current_date, 'employment_id' => $user_info->id];
                   
                     $entry_info = AttendanceManualEntry::updateOrCreate($check_array, $ins);
-                    dump( $loop->iteration );
+                    $i++;
+                    dump( $i );
                 }
                 
             }
