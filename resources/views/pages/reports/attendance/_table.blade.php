@@ -26,6 +26,8 @@
 
                     @if ($status === 'Present')
                         <td>✔</td>
+                    @elseif(empty( $status))
+                    <td class="text-center">-</td>
                     @else
                         <td>❌</td>
                     @endif
