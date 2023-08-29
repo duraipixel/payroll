@@ -874,7 +874,7 @@ class User extends Authenticatable implements Auditable
         if ($this->status == 'transferred') {
             return $this->hasMany(AttendanceManualEntry::class, 'employment_id', 'refer_user_id');
         } else {
-            return $this->hasMany(AttendanceManualEntry::class, 'employment_id', 'id');
+            return $this->hasMany(AttendanceManualEntry::class, 'employment_id', 'id')->dd();
         }
     }
 
