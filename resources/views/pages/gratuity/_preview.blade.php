@@ -55,7 +55,7 @@
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Name of the Husband </td>
-            <td style="text-align: left;width:50%;padding-left:10px"> {{ $staff_info->familyMembers?->husband?->first_name ?? '-' }} </td>
+            <td style="text-align: left;width:50%;padding-left:10px"> {{ isset($staff_info->familyMembers->husband) ? $staff_info->familyMembers->husband->first_name : '-' }} </td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Employee Code </td>
@@ -72,19 +72,19 @@
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> a) Last Post held </th>
-            <td style="text-align: left;width:50%;padding-left:10px"> {{  $staff_info->appointment?->designation?->name ?? '' }} </td>
+            <td style="text-align: left;width:50%;padding-left:10px"> {{  $last_post_held ?? '' }} </td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> b) Date of Regularization on </th>
-            <td style="text-align: left;width:50%;padding-left:10px"> {{ commonDateFormat( $staff_info->appointment?->from_appointment ?? '' ) }} </td>
+            <td style="text-align: left;width:50%;padding-left:10px"> {{ commonDateFormat( $date_of_regularizion ?? '' ) }} </td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Date of ending of Service </th>
-            <td style="text-align: left;width:50%;padding-left:10px"> {{ commonDateFormat( $staff_info->appointment?->to_appointment ?? '' ) }}  </td>
+            <td style="text-align: left;width:50%;padding-left:10px"> {{ commonDateFormat( $date_of_ending_service ?? '' ) }}  </td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Cause of ending Service </th>
-            <td style="text-align: left;width:50%;padding-left:10px"> Superannuation </td>
+            <td style="text-align: left;width:50%;padding-left:10px"> {{ $cause_of_ending_service }} </td>
         </tr>
     </table>
     <table class="border">
@@ -113,13 +113,13 @@
                     {{ $staff_info->institute->name ?? '' }}
                 </td>
                 <td style="width: 20%;text-align:center;">
-                    {{  $staff_info->appointment?->designation?->name ?? '' }}
+                    {{  $last_post_held }}
                 </td>
                 <td style="width: 20%;text-align:center;">
-                    {{ commonDateFormat( $staff_info->appointment?->from_appointment ?? '' ) }} 
+                    {{ commonDateFormat( $date_of_regularizion ?? '' ) }} 
                 </td>
                 <td style="width: 20%;text-align:center;">
-                    {{ commonDateFormat( $staff_info->appointment?->to_appointment ?? '' ) }}
+                    {{ commonDateFormat( $date_of_ending_service ?? '' ) }}
                 </td>
             </tr>
         </tbody>
@@ -128,13 +128,14 @@
        
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Gross service </th>
-            <td style="text-align: left;width:50%;padding-left:10px"> 3 Years and 8 Months </td>
+            <td style="text-align: right;width:50%;padding-left:10px"> {{ $gross_service_year }} Years and {{ $gross_service_month }} Months </td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Extraordinary Leave not counting as qualifying
                 service. 
             </th>
-            <td style="text-align: left;width:50%;padding-left:10px">
+            <td style="text-align: right;width:50%;padding-left:10px">
+                {{  $extraordinary_leave ?? '' }}
             </td>
         </tr>
 
@@ -142,12 +143,14 @@
             <th style="text-align: left;width:50%;padding-left:5px"> Periods of suspension not treated as qualifying
                 service 
             </th>
-            <td style="text-align: left;width:50%;padding-left:10px">
+            <td style="text-align: right;width:50%;padding-left:10px">
+                {{ $suspension_qualifying_service ?? '' }}
             </td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Net qualifying service </th>
-            <td style="text-align: left;width:50%;padding-left:10px">
+            <td style="text-align: right;width:50%;padding-left:10px">
+                {{ $net_qualifying_service ?? '' }}
             </td>
         </tr>
         <tr>
@@ -155,27 +158,40 @@
                 Qualifying service expressed in terms of completed
                 six monthly periods (period of three months and over is treated as completed six monthly period)
             </th>
-            <td style="text-align: left;width:50%;padding-left:10px">
+            <td style="text-align: right;width:50%;padding-left:10px">
+                {{ $qualify_service_expressed ?? '' }}
             </td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px" colspan="2">Emoluments last drawn</th>
         </tr>
         <tr>
-            <td style="text-align: left;width:50%;padding-left:5px"> Basic </td>
-            <td style="text-align: left;width:50%;padding-left:10px"> Rs.23556 </td>
+            <td style="text-align: left;width:50%;padding-left:5px"> Basic Pay </td>
+            <td style="text-align: right;width:50%;padding-left:10px"> Rs.{{ amountFormat($basic) }} </td>
         </tr>
         <tr>
-            <td style="text-align: left;width:50%;padding-left:5px"> Basic </td>
-            <td style="text-align: left;width:50%;padding-left:10px"> Rs.23556 </td>
+            <td style="text-align: left;width:50%;padding-left:5px"> Basic DA </td>
+            <td style="text-align: right;width:50%;padding-left:10px"> Rs.{{ amountFormat($basic_da) }} </td>
         </tr>
+        @if( $basic_pba )
+        <tr>
+            <td style="text-align: left;width:50%;padding-left:5px"> PBA </td>
+            <td style="text-align: right;width:50%;padding-left:10px"> Rs.{{ amountFormat($basic_pba) }} </td>
+        </tr>
+        @endif
+        @if( $basic_pba )
+        <tr>
+            <td style="text-align: left;width:50%;padding-left:5px"> PBADA </td>
+            <td style="text-align: right;width:50%;padding-left:10px"> Rs.{{ amountFormat($basic_pbada) }} </td>
+        </tr>
+        @endif
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Total Emoluments </th>
-            <td style="text-align: left;width:50%;padding-left:10px"> Rs.42474.00 </td>
+            <td style="text-align: right;width:50%;padding-left:10px"> Rs.{{ amountFormat($total_emuluments) ?? 0 }} </td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px">Gratuity Calculation</th>
-            <td style="text-align: left;width:50%;padding-left:10px"> Rs.42474.00 </td>
+            <td style="text-align: right;width:50%;padding-left:10px"> Rs.{{ amountFormat($gratuity_calculation) ?? 0 }} </td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px">
@@ -185,7 +201,7 @@
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Total Payable of retirement Gratuity </th>
-            <td style="text-align: left;width:50%;padding-left:10px"> Rs.42474.00 </td>
+            <td style="text-align: right;width:50%;padding-left:10px"> Rs.{{ amountFormat($total_payable_gratuity) ?? 0 }} </td>
         </tr>
     </table>
     <table style="padding-top:10px;margin-top:70px;font-size:12px;">

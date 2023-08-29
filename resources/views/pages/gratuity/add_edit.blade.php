@@ -27,7 +27,8 @@
                                 <label for="" class="required">Select Staff</label>
                             </div>
                             <div class="col-sm-6">
-                                <select name="staff_id" id="staff_id" onchange="getStaffGratuityFormDetails(this.value)" class="form-control form-control-sm" required>
+                                <select name="staff_id" id="staff_id" onchange="getStaffGratuityFormDetails(this.value)"
+                                    class="form-control form-control-sm" required>
                                     <option value="">--select--</option>
                                     @if (isset($user) && !empty($user))
                                         @foreach ($user as $item)
@@ -98,7 +99,7 @@
                         <div class="col-sm-12">
                             <button type="button" class="btn btn-dark btn-sm"> Cancel </button>
                             <button type="submit" class="btn btn-info btn-sm"> Generate Preview </button>
-                            <button type="submit" class="btn btn-primary btn-sm"> Save Gratuity </button>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="submitGratuityCalculation()"> Save Gratuity </button>
                         </div>
                     </div>
                 </div>
@@ -114,8 +115,6 @@
 
 @section('add_on_script')
     <script>
-       
-
         function getStaffGratuityFormDetails(staff_id) {
 
             $.ajaxSetup({
@@ -137,57 +136,50 @@
 
         }
 
-        function carreerChangeStatus(id, status) {
+        function qulifyingServiceAmountCalculation() {
 
-            Swal.fire({
-                text: "Are you sure you would like to change status?",
-                icon: "warning",
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: "Yes, Change it!",
-                cancelButtonText: "No, return",
-                customClass: {
-                    confirmButton: "btn btn-danger",
-                    cancelButton: "btn btn-active-light"
+            var gross_service_year = $('#gross_service_year').val();
+            var gross_service_month = $('#gross_service_month').val();
+            var extraordinary_leave = $('#extraordinary_leave').val();
+            var suspension_qualifying_service = $('#suspension_qualifying_service').val();
+            // var net_qualifying_service = $('#net_qualifying_service').val();
+
+            var grat_amount = tot_emul_amount = gs_year = ts_month = gs_month = ex_leave = s_server = net_service = qlify_service = 0;
+            if (gross_service_year != '' && gross_service_year != undefined && gross_service_year != 'undefined') {
+                gs_year = parseInt(gross_service_year);
+            }
+            if (gross_service_month != '' && gross_service_month != undefined && gross_service_month != 'undefined') {
+                gs_month = parseInt(gross_service_month);
+            }
+            if (extraordinary_leave != '' && extraordinary_leave != undefined && extraordinary_leave != 'undefined') {
+                ex_leave = parseInt(extraordinary_leave);
+            }
+            if (suspension_qualifying_service != '' && suspension_qualifying_service != undefined &&
+                suspension_qualifying_service != 'undefined') {
+                s_server = parseInt(suspension_qualifying_service);
+            }
+            if (gs_year > 0) {
+                ts_month = (gs_year * 12) + gs_month;
+                net_service = ts_month - (ex_leave + s_server);
+                $('#net_qualifying_service').val(net_service);
+                qlify_service = net_service * 2;
+                $('#qualify_service_expressed').val(qlify_service);
+            }
+
+            setTimeout(() => {
+                var total_emuluments = $('#total_emuluments').val();
+                
+                if (total_emuluments != '' && total_emuluments != undefined && total_emuluments != 'undefined') {
+                    tot_emul_amount = parseInt(total_emuluments);
                 }
-            }).then(function(result) {
-                if (result.value) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
+                grat_amount = (1 / 4) * qlify_service * tot_emul_amount;
+    
+                $('#gratuity_calculation').val(grat_amount.toFixed(2));
+                $('#total_payable_gratuity').val(grat_amount.toFixed(2));
+            }, 300);
 
-                    $.ajax({
-                        url: "{{ route('career.change.status') }}",
-                        type: 'POST',
-                        data: {
-                            id: id,
-                            status: status
-                        },
-                        success: function(res) {
-                            dtTable.ajax.reload();
-                            Swal.fire({
-                                title: "Updated!",
-                                text: res.message,
-                                icon: "success",
-                                confirmButtonText: "Ok, got it!",
-                                customClass: {
-                                    confirmButton: "btn btn-success"
-                                },
-                                timer: 3000
-                            });
-
-                        },
-                        error: function(xhr, err) {
-                            if (xhr.status == 403) {
-                                toastr.error(xhr.statusText, 'UnAuthorized Access');
-                            }
-                        }
-                    });
-                }
-            });
         }
+       
 
         function deleteCareer(id) {
             Swal.fire({

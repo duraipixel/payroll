@@ -437,7 +437,7 @@ class User extends Authenticatable implements Auditable
                         $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
                         $query1->orWhere('is_till_active', 'yes');
                     });
-                });
+                })->orderBy('to_appointment', 'desc');
         } else {
 
             return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'id')
@@ -447,7 +447,7 @@ class User extends Authenticatable implements Auditable
                         $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
                         $query1->orWhere('is_till_active', 'yes');
                     });
-                });
+                })->orderBy('to_appointment', 'desc');
         }
     }
 

@@ -239,7 +239,8 @@ class StaffAppointmentDetailController extends Controller
             'to_appointment' => 'required',
             'appointment_order_model_id' => 'required',
             'appointment_order_model_id' => 'required',
-            'designation_id' => 'required_if:probation, ==,yes',
+            // 'designation_id' => 'required_if:probation, ==,yes',
+            'designation_id' => 'required'
 
         ]);
 
@@ -266,6 +267,7 @@ class StaffAppointmentDetailController extends Controller
                 $info->is_till_active = $request->is_till_active;
                 $info->designation_id = $request->designation_id;
                 $info->institution_id = session()->get('staff_institute_id') ?? null;
+
                 if ($request->is_till_active == 'yes') {
 
                     StaffAppointmentDetail::where('staff_id', $info->staff_id)->update(['is_till_active' => 'no']);

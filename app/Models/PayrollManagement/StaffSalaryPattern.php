@@ -58,6 +58,17 @@ class StaffSalaryPattern extends Model implements Auditable
         return $this->hasOne(StaffSalaryPatternField::class, 'staff_salary_pattern_id', 'id')->where('field_name', 'basic');
     }
 
+    public function pba() {
+        return $this->hasOne(StaffSalaryPatternField::class, 'staff_salary_pattern_id', 'id')->where('field_name', 'Performance based Allowance')
+                    ->orWhere('field_name', 'pba');
+    }
+
+    public function pbada() {
+        return $this->hasOne(StaffSalaryPatternField::class, 'staff_salary_pattern_id', 'id')
+                        ->where('field_name', 'PBADA');
+                    
+    }
+
     public function da() {
         return $this->hasOne(StaffSalaryPatternField::class, 'staff_salary_pattern_id', 'id')->where('field_name', 'Dearance Allowance');
     }

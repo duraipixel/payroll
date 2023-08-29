@@ -41,8 +41,6 @@ class AppointmentOrderModelController extends Controller
                         });
             // Sort the data in descending order based on the 'id' column
             $data = $query->get()->sortByDesc('id')->values();
-
-
             
             $datatables =  Datatables::of($data)
             ->filter(function($query) use($status,$keywords) {

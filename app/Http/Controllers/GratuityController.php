@@ -118,6 +118,7 @@ class GratuityController extends Controller
             'page_type' => $page_type,
             'staff_info' => $staff_info
         ];
+        // dd( $staff_info->appointment );
         return view('pages.gratuity._ajax_form', $params);
 
     }
@@ -127,13 +128,34 @@ class GratuityController extends Controller
 
         $staff_id = $request->staff_id;
         //REGULAR STAFF
-        $staff_info = User::with('appointment.employment_nature')
-            ->whereHas('appointment.employment_nature', function ($q) {
-                $q->where('name', 'REGULAR STAFF');
-            })->find($staff_id);
-
+        $staff_info = User::with('appointment.employment_nature')->find($staff_id);
+        // dd( $request->all() );
         $params = [
-            'staff_info' => $staff_info
+            'staff_info' => $staff_info,
+            'last_post_held' => $request->last_post_held,
+            'date_of_regularizion' => $request->date_of_regularizion,
+            'date_of_ending_service' => $request->date_of_ending_service,
+            'cause_of_ending_service' => $request->cause_of_ending_service,
+            'gross_service_year' => $request->gross_service_year,
+            'gross_service_month' => $request->gross_service_month,
+            'extraordinary_leave' => $request->extraordinary_leave,
+            'suspension_qualifying_service' => $request->suspension_qualifying_service,
+            'net_qualifying_service' => $request->net_qualifying_service,
+            'qualify_service_expressed' => $request->qualify_service_expressed,
+            'total_emuluments' => $request->total_emuluments,
+            'gratuity_calculation' => $request->gratuity_calculation,
+            'nomination' => $request->nomination,
+            'gratuity_nomination_name' => $request->gratuity_nomination_name,
+            'total_payable_gratuity' => $request->total_payable_gratuity,
+            'date_of_issue' => $request->date_of_issue,
+            'issue_remarks' => $request->issue_remarks,
+            'mode_of_payment' => $request->mode_of_payment,
+            'payment_remarks' => $request->payment_remarks,
+            'verification_status' => $request->verification_status,
+            'basic' => $request->basic,
+            'basic_da' => $request->basic_da,
+            'basic_pba' => $request->basic_pba ?? 0,
+            'basic_pbada' => $request->basic_pbada ?? 0,
         ];
         $pdf = PDF::loadView('pages.gratuity._preview', $params)->setPaper('a4', 'portrait');
         return $pdf->stream('gratuity_preview.pdf');
