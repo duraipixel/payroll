@@ -38,6 +38,7 @@ class ReportController extends Controller
     public function commonExport(Request $request)
     {
     }
+
     function attendance_collection($request, $date) {
         return User::with(['AttendancePresent', 'Attendance' => function ($query) use ($date) {
             $query->whereBetween('attendance_date', [$date['start_date'], $date['end_date']]);
@@ -51,14 +52,21 @@ class ReportController extends Controller
             $q->where('place_of_work_id', $request->place_of_work);
         });
     }
+
     function attendance_index(Request $request)
     {
         $month         = $request->month ?? date('m');
+        $academic_info = AcademicYear::find( academicYearId());
+        if( $academic_info ) {
+            $from_year = $academic_info->from_year.'-'.$month.'-01';
+            $start_date = date('Y-m-d', strtotime($from_year) );
+            $no_of_days = date('t', strtotime($start_date) );
+        }
         $place_of_work = $request->place_of_work ?? null;
         $date          = getStartAndEndDateOfMonth($month);
         $month_days    = monthDays($month);
-        $attendance    = $this->attendance_collection($request,$date)->paginate(50);
-        return view('pages.reports.attendance._index', compact('attendance', 'month_days','month','place_of_work'));
+        $attendance    = $this->attendance_collection($request,$date)->paginate(10);
+        return view('pages.reports.attendance._index', compact('attendance', 'month_days','month','place_of_work', 'start_date', 'no_of_days'));
     }
 
     function attendance_export(Request $request) {
