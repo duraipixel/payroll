@@ -82,6 +82,26 @@
                                             @endif --}}
                                         </div>
                                     </div>
+                                    <div class="col-lg-4 mb-5">
+
+                                        <label class="form-label required">Designation</label>
+
+                                        <div class="d-flex">
+                                            <select name="designation_id"
+                                                id="designation_id_update" class="form-control select2-option"
+                                                required>
+                                                <option value="">-- Select Designation --</option>
+                                                @isset($designation)
+                                                    @foreach ($designation as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            @if (isset($details->designation_id) && $details->designation_id == $item->id) selected @endif>
+                                                            {{ $item->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endisset
+                                            </select>
+                                        </div>
+                                    </div>
 
                                     <div class="col-lg-4 mb-5">
                                         <label class="form-label required"> Teaching Type </label>

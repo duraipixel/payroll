@@ -488,7 +488,7 @@ class OverviewController extends Controller
                                
                                 $leave_amount = 0;
                                 if ($leave_amount_day) {
-                                    $leave_amount = getDaySalaryAmount($gross, $month_length);
+                                    $leave_amount = getDaySalaryAmount($earnings, $month_length);
                                     $leave_amount = $leave_amount * $leave_amount_day;
                                 }
                                 $deduct_amount += $leave_amount;

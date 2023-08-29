@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/test-appointment-pdf', [App\Http\Controllers\TestOneController::class, 'testAppointmentPdf']);
 Route::get('/test-code', [App\Http\Controllers\TestOneController::class, 'checkCode']);
 Route::get('/test-cron', [App\Http\Controllers\TestOneController::class, 'cron']);
+Route::get('/testCronData', [App\Http\Controllers\TestOneController::class, 'getCronData']);
 Route::get('/test-entry', [App\Http\Controllers\TestOneController::class, 'updateEntry']);
 Route::get('/test-salary-pdf', [App\Http\Controllers\TestOneController::class, 'testSalaryPdf']);
 Route::get('/test-assign-orderno', [App\Http\Controllers\TestOneController::class, 'assignAppointmentOrder']);
@@ -419,6 +420,14 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/career/delete', [App\Http\Controllers\CareerTransitionController::class, 'delete'])->name('career.delete'); 
     Route::get('/career/export/{type}', [App\Http\Controllers\CareerTransitionController::class, 'export'])->name('career.export'); 
 
+    #gratuity routes
+    Route::get('/gratuity/{type}', [App\Http\Controllers\GratuityController::class, 'index'])->name('gratuity'); 
+    Route::get('/gratuity/add_edit/{type}', [App\Http\Controllers\GratuityController::class, 'addEdit'])->name('gratuity.add_edit'); 
+    Route::post('/gratuity/save', [App\Http\Controllers\GratuityController::class, 'save'])->name('gratuity.save'); 
+    Route::post('/gratuity/preview', [App\Http\Controllers\GratuityController::class, 'preview'])->name('gratuity.preview'); 
+    Route::post('/gratuity/change/status', [App\Http\Controllers\GratuityController::class, 'changeStatus'])->name('gratuity.change.status'); 
+    Route::post('/gratuity/delete', [App\Http\Controllers\GratuityController::class, 'delete'])->name('gratuity.delete'); 
+    Route::get('/gratuity/export/{type}', [App\Http\Controllers\GratuityController::class, 'export'])->name('gratuity.export'); 
     include 'crud.php';
     
 });

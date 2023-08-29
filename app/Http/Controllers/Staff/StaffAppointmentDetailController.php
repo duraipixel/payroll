@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Staff;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
 use App\Models\Master\AppointmentOrderModel;
+use App\Models\Master\Designation;
 use App\Models\Master\NatureOfEmployment;
 use App\Models\Master\PlaceOfWork;
 use App\Models\Master\Society;
 use App\Models\Master\StaffCategory;
 use App\Models\Master\TeachingType;
 use App\Models\Staff\StaffAppointmentDetail;
+use App\Models\Staff\StaffProfessionalData;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -60,7 +62,7 @@ class StaffAppointmentDetailController extends Controller
             $ins['appointment_order_model_id'] = $request->appointment_order_model_id;
             $ins['has_probation'] = $request->probation;
             $ins['probation_period'] = $request->probation == 'yes' ? $request->probation_period : null;
-           
+
             if ($request->hasFile('appointment_order_doc')) {
 
                 $files = $request->file('appointment_order_doc');
@@ -77,8 +79,8 @@ class StaffAppointmentDetailController extends Controller
             $ins['status'] = 'active';
 
             $appointment_info = StaffAppointmentDetail::updateOrCreate(['staff_id' => $staff_id, 'academic_id' => $academic_id], $ins);
-          
-            if( !$appointment_info->appointment_order_no ) {
+
+            if (!$appointment_info->appointment_order_no) {
                 $appointment_info->appointment_order_no = appointmentOrderNo($staff_id, $academic_id);
                 $appointment_info->save();
             }
@@ -113,7 +115,7 @@ class StaffAppointmentDetailController extends Controller
         $appointment_order_model_id = $request->appointment_order_model_id;
         $id = $request->id ?? '';
 
-        if( $id ) {
+        if ($id) {
             $order_details = StaffAppointmentDetail::find($id);
         }
         /**
@@ -121,7 +123,7 @@ class StaffAppointmentDetailController extends Controller
          */
 
         $model_info = AppointmentOrderModel::find($appointment_order_model_id);
-        
+
         if (isset($model_info->document) && !empty($model_info->document)) {
             $academic_id = $request->academic_id ?? academicYearId();
             $document = $model_info->document;
@@ -151,14 +153,14 @@ class StaffAppointmentDetailController extends Controller
             }
 
             $pdfConfig = [
-                'margin_top' => 100, 
-                
+                'margin_top' => 100,
+
             ];
 
             $pdf = PDF::loadView('pages.masters.appointment_order_model.dynamic_pdf', ['data' => $document])
-                    ->setPaper('legal', 'portrait') ->setOptions($pdfConfig);
+                ->setPaper('legal', 'portrait')->setOptions($pdfConfig);
 
-            $path = 'public/order_preview/'.$user_info->id;
+            $path = 'public/order_preview/' . $user_info->id;
             if (File::exists($path)) {
                 File::deleteDirectory($path);
             }
@@ -166,7 +168,7 @@ class StaffAppointmentDetailController extends Controller
                 File::makeDirectory($path, $mode = 0777, true, true);
             }
             $fileName =  time() . '.' . 'pdf';
-            $pdf_path = 'public/order_preview/'.$user_info->id.'/' . $fileName;
+            $pdf_path = 'public/order_preview/' . $user_info->id . '/' . $fileName;
             $pdf->save($pdf_path);
 
             return asset($pdf_path);
@@ -207,6 +209,7 @@ class StaffAppointmentDetailController extends Controller
         $employments = NatureOfEmployment::where('status', 'active')->get();
         $teaching_types = TeachingType::where('status', 'active')->get();
         $place_of_works = PlaceOfWork::where('status', 'active')->get();
+        $designation = Designation::where('status', 'active')->get();
         $order_models = AppointmentOrderModel::where('status', 'active')->get();
 
         $params = array(
@@ -216,8 +219,8 @@ class StaffAppointmentDetailController extends Controller
             'employments' => $employments,
             'teaching_types' => $teaching_types,
             'place_of_works' => $place_of_works,
-            'order_models' => $order_models
-
+            'order_models' => $order_models,
+            'designation' => $designation
         );
         return view('pages.staff.registration.appointment.add_edit', $params);
     }
@@ -235,7 +238,8 @@ class StaffAppointmentDetailController extends Controller
             'from_appointment' => 'required',
             'to_appointment' => 'required',
             'appointment_order_model_id' => 'required',
-            'probation_period' => 'required_if:probation, ==,yes',
+            'appointment_order_model_id' => 'required',
+            'designation_id' => 'required_if:probation, ==,yes',
 
         ]);
 
@@ -243,9 +247,10 @@ class StaffAppointmentDetailController extends Controller
 
             $id = $request->id;
             if ($id) {
-
+                
                 $info = StaffAppointmentDetail::find($id);
                 $staff_info = User::find($info->staff_id);
+                $professional_data = StaffProfessionalData::where('staff_id', $info->staff_id)->first();
                 // dd( $request->all());
                 $info->category_id = $request->staff_category_id;
                 $info->nature_of_employment_id = $request->nature_of_employment_id;
@@ -259,10 +264,13 @@ class StaffAppointmentDetailController extends Controller
                 $info->has_probation = $request->probation_update;
                 $info->probation_period = $request->probation_update == 'yes' ? $request->probation_period : null;
                 $info->is_till_active = $request->is_till_active;
-                if( $request->is_till_active == 'yes' ) {
+                $info->designation_id = $request->designation_id;
+                $info->institution_id = session()->get('staff_institute_id') ?? null;
+                if ($request->is_till_active == 'yes') {
 
-                    StaffAppointmentDetail::where('staff_id', $info->staff_id)->update(['is_till_active' => 'no' ]);
-
+                    StaffAppointmentDetail::where('staff_id', $info->staff_id)->update(['is_till_active' => 'no']);
+                    $professional_data->designation_id = $request->designation_id;
+                    $professional_data->save();
                 }
                 if ($request->hasFile('appointment_order_doc')) {
 
@@ -277,19 +285,19 @@ class StaffAppointmentDetailController extends Controller
                     $info->appointment_doc = $filename;
                 }
                 $staff_id = $info->staff_id;
-                if( !$info->appointment_order_no ) {
+                if (!$info->appointment_order_no) {
                     $info->appointment_order_no = appointmentOrderNo($staff_id, $info->academic_id);
                 }
-                
+
                 $info->save();
             } else {
-                
+
                 $academic_id = $request->academic_id ?? academicYearId();
 
                 $staff_id = $request->staff_id;
                 $staff_info = User::find($staff_id);
 
-                StaffAppointmentDetail::where('staff_id', $staff_id)->update(['is_till_active' => 'no' ]);
+                StaffAppointmentDetail::where('staff_id', $staff_id)->update(['is_till_active' => 'no']);
 
                 $ins['academic_id'] = $academic_id;
                 $ins['staff_id'] = $staff_id;
@@ -306,6 +314,7 @@ class StaffAppointmentDetailController extends Controller
                 $ins['has_probation'] = $request->probation_update;
                 $ins['probation_period'] = $request->probation_update == 'yes' ? $request->probation_period : null;
                 $ins['is_till_active'] = $request->is_till_active;
+                $ins['designation_id'] = $request->designation_id;
 
                 if ($request->hasFile('appointment_order_doc')) {
 
@@ -324,7 +333,11 @@ class StaffAppointmentDetailController extends Controller
 
                 $order_details = StaffAppointmentDetail::create($ins);
 
-                if( !$order_details->appointment_order_no ) {
+                $professional_data = StaffProfessionalData::where('staff_id', $staff_id)->first();
+                $professional_data->designation_id = $request->designation_id;
+                $professional_data->save();
+
+                if (!$order_details->appointment_order_no) {
                     $order_details->appointment_order_no = appointmentOrderNo($staff_id, $academic_id);
                     $order_details->save();
                 }
@@ -335,12 +348,12 @@ class StaffAppointmentDetailController extends Controller
                      */
                     $staff_info = User::find($staff_id);
                     if (!$staff_info->society_emp_code) {
-    
+
                         $staff_info->society_emp_code = getStaffEmployeeCode();
                         $staff_info->save();
                     }
                     if (!$staff_info->institute_emp_code) {
-    
+
                         $staff_info->institute_emp_code = getStaffInstitutionCode($staff_info->institute_id);
                         $staff_info->save();
                     }
@@ -353,7 +366,6 @@ class StaffAppointmentDetailController extends Controller
             $message    = $validator->errors()->all();
         }
         return response()->json(['error' => $error, 'message' => $message, 'staff_id' => $staff_id ?? '']);
-        
     }
 
     public function list(Request $request)
@@ -364,30 +376,31 @@ class StaffAppointmentDetailController extends Controller
         return view('pages.staff.registration.appointment.list', compact('staff_details'));
     }
 
-    public function verifyStaff(Request $request) {
-        
+    public function verifyStaff(Request $request)
+    {
+
         $staff_id = $request->id;
         $is_verified = true;
-        if( !getStaffVerificationStatus( $staff_id, 'doc_verified' ) ) {
+        if (!getStaffVerificationStatus($staff_id, 'doc_verified')) {
             $is_verified = false;
         }
-        if( !getStaffVerificationStatus( $staff_id, 'data_entry' ) ) {
+        if (!getStaffVerificationStatus($staff_id, 'data_entry')) {
             $is_verified = false;
         }
-        if( !getStaffVerificationStatus( $staff_id, 'doc_uploaded' ) ) {
+        if (!getStaffVerificationStatus($staff_id, 'doc_uploaded')) {
             $is_verified = false;
         }
-        if( !getStaffVerificationStatus( $staff_id, 'salary_entry' ) ) {
+        if (!getStaffVerificationStatus($staff_id, 'salary_entry')) {
             $is_verified = false;
         }
 
-        if( $is_verified ) {
+        if ($is_verified) {
             //user can verify
             $error = 0;
             $message = 'Employee Verified Successfully';
             $staff_info = User::find($staff_id);
             $staff_info->verification_status = 'approved';
-            if( empty( $staff_info->password ) ) {
+            if (empty($staff_info->password)) {
                 $staff_info->password = Hash::make('12345678');
             }
             $staff_info->save();
@@ -397,8 +410,6 @@ class StaffAppointmentDetailController extends Controller
             $message = 'Cannot Verify employee, Please complete all verification';
         }
 
-        return array('error' => $error, 'message' => $message );
-
+        return array('error' => $error, 'message' => $message);
     }
-
 }

@@ -4,6 +4,7 @@ namespace App\Models\Staff;
 
 use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\Master\AppointmentOrderModel;
+use App\Models\Master\Designation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -37,12 +38,21 @@ class StaffAppointmentDetail extends Model implements Auditable
         'appointment_order_no',
         'status',
         'is_till_active',
-        'institution_id'
+        'institution_id',
+        'designation_id',
+        'department_id',
+        'attendance_scheme_id',
     ];
+
+    public function designation() {
+        return $this->hasOne(Designation::class, 'id','designation_id');
+    }
+
     public function employment_nature()
     {
         return $this->hasOne(NatureOfEmployment::class, 'id','nature_of_employment_id');
     }
+
     public function staff_det()
     {
         return $this->hasOne(User::class, 'id', 'staff_id');

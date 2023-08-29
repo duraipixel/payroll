@@ -872,7 +872,7 @@
                         </span>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link" href="javascript:void(0)">
+                                <a class="menu-link" href="{{ route('gratuity', ['type' => 'resigned']) }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>
@@ -882,7 +882,7 @@
                         </div>
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
-                                <a class="menu-link" href="javascript:void(0)">
+                                <a class="menu-link" href="{{ route('gratuity', ['type' => 'retired']) }}">
                                     <span class="menu-bullet">
                                         <span class="bullet bullet-dot"></span>
                                     </span>

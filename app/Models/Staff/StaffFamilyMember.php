@@ -60,4 +60,8 @@ class StaffFamilyMember extends Model implements Auditable
     {
         return $this->hasOne(Nationality::class, 'id', 'nationality_id');
     }
+
+    public function husband() {
+        return $this->hasOne(RelationshipType::class, 'id', 'relation_type_id')->where('name', 'husband');
+    }
 }

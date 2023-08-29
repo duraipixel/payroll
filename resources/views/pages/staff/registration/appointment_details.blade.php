@@ -356,7 +356,8 @@
             'salary_scale_update',
             'from_appointment_update',
             'to_appointment_update',
-            'appointment_order_model_id_update'
+            'appointment_order_model_id_update',
+            'designation_id_update'
         ];
 
         $('.form-control,.form-select').removeClass('border-danger');
