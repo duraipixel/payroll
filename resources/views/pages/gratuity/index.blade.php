@@ -9,7 +9,7 @@
             <h3>{{ $page_title }}</h3>
         </div>
         <div class="card-header border-0 pt-6">
-          
+
             <div class="card-title">
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! searchSvg() !!}
@@ -25,13 +25,15 @@
                             ->getName();
                     @endphp
                     @if (access()->buttonAccess($route_name, 'export'))
-                        <a type="button" class="btn btn-light-primary me-3 btn-sm" href="{{ route('career.export', ['type' => $page_type]) }}">
+                        <a type="button" class="btn btn-light-primary me-3 btn-sm"
+                            href="{{ route('career.export', ['type' => $page_type]) }}">
                             {!! exportSvg() !!}
                             Export
                         </a>
                     @endif
                     @if (access()->buttonAccess($route_name, 'add_edit'))
-                        <a href="{{ route('gratuity.add_edit', ['type' => $page_type ]) }}" class="btn btn-primary btn-sm">   {!! plusSvg() !!} Add {{$title}} </a>
+                        <a href="{{ route('gratuity.add_edit', ['type' => $page_type]) }}" class="btn btn-primary btn-sm">
+                            {!! plusSvg() !!} Add {{ $title }} </a>
                     @endif
                 </div>
 
@@ -50,7 +52,7 @@
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="table-responsive">
                     <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
-                        id="career_table">
+                        id="gratuity_table">
                         <thead class="bg-primary">
                             <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="text-center text-white">
@@ -69,7 +71,7 @@
                                     Gross Service
                                 </th>
                                 <th class="text-white">
-                                    Total  Emoluments
+                                    Total Emoluments
                                 </th>
                                 <th class="text-white">
                                     Total Payable of Gratuity
@@ -95,26 +97,22 @@
 
 @section('add_on_script')
     <script>
-        var dtTable = $('#career_table').DataTable({
+        var dtTable = $('#gratuity_table').DataTable({
 
             processing: true,
             serverSide: true,
-            order: [
-                [0, "DESC"]
-            ],
             type: 'POST',
             ajax: {
-                "url": "{{ route('career', ['type' => $page_type ]) }}",
+                "url": "{{ route('gratuity', ['type' => $page_type]) }}",
                 "data": function(d) {
                     d.datatable_search = $('#bank_dataTable_search').val();
                     d.page_type = '{{ $page_type }}';
                 }
             },
 
-            columns: [
-                {
-                    data: 'last_working_date',
-                    name: 'last_working_date',
+            columns: [{
+                    data: 'date_of_issue',
+                    name: 'date_of_issue',
                 },
                 {
                     data: 'staff.name',
@@ -125,12 +123,24 @@
                     name: 'staff.society_emp_code'
                 },
                 {
-                    data: 'reason',
-                    name: 'reason'
+                    data: 'cause_of_ending_service',
+                    name: 'cause_of_ending_service'
                 },
                 {
-                    data: 'status',
-                    name: 'status'
+                    data: 'gross_service',
+                    name: 'gross_service'
+                },
+                {
+                    data: 'total_emuluments',
+                    name: 'total_emuluments'
+                },
+                {
+                    data: 'total_payable_gratuity',
+                    name: 'total_payable_gratuity'
+                },
+                {
+                    data: 'verification_status',
+                    name: 'verification_status'
                 },
                 {
                     data: 'action',
@@ -163,12 +173,6 @@
                 dtTable.draw();
                 e.preventDefault();
             });
-        $('#search-form').on('reset', function(e) {
-            $('select[name=filter_status]').val(0).change();
-
-            dtTable.draw();
-            e.preventDefault();
-        });
 
 
         function carreerChangeStatus(id, status) {

@@ -423,7 +423,7 @@ Route::group(['middleware' => 'auth'],  function () {
 
     #gratuity routes
     Route::get('/gratuity/{type}', [App\Http\Controllers\GratuityController::class, 'index'])->name('gratuity'); 
-    Route::get('/gratuity/add_edit/{type}', [App\Http\Controllers\GratuityController::class, 'addEdit'])->name('gratuity.add_edit'); 
+    Route::get('/gratuity/add_edit/{type}/{id?}', [App\Http\Controllers\GratuityController::class, 'addEdit'])->name('gratuity.add_edit'); 
     Route::post('/gratuity/add_edit/form', [App\Http\Controllers\GratuityController::class, 'ajaxForm'])->name('gratuity.ajax.form'); 
     Route::post('/gratuity/save', [App\Http\Controllers\GratuityController::class, 'save'])->name('gratuity.save'); 
     Route::post('/gratuity/preview', [App\Http\Controllers\GratuityController::class, 'preview'])->name('gratuity.preview'); 

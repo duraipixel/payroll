@@ -86,6 +86,7 @@
                         <div class="col-sm-6">
                             <label for="" class="required"> Verification Status </label>
                         </div>
+                        <input type="hidden" name="page_type" value="{{ $page_type }}">
                         <div class="col-sm-6">
                             <input type="radio" name="verification_status" value="pending" checked id="pending">
                             <label for="pending"> Pending </label>
@@ -99,7 +100,8 @@
                         <div class="col-sm-12">
                             <button type="button" class="btn btn-dark btn-sm"> Cancel </button>
                             <button type="submit" class="btn btn-info btn-sm"> Generate Preview </button>
-                            <button type="button" class="btn btn-primary btn-sm" onclick="submitGratuityCalculation()"> Save Gratuity </button>
+                            <button type="button" id="form-submit-btn" class="btn btn-primary btn-sm" onclick="submitGratuityCalculation()">
+                                Save Gratuity </button>
                         </div>
                     </div>
                 </div>
@@ -144,7 +146,8 @@
             var suspension_qualifying_service = $('#suspension_qualifying_service').val();
             // var net_qualifying_service = $('#net_qualifying_service').val();
 
-            var grat_amount = tot_emul_amount = gs_year = ts_month = gs_month = ex_leave = s_server = net_service = qlify_service = 0;
+            var grat_amount = tot_emul_amount = gs_year = ts_month = gs_month = ex_leave = s_server = net_service =
+                qlify_service = 0;
             if (gross_service_year != '' && gross_service_year != undefined && gross_service_year != 'undefined') {
                 gs_year = parseInt(gross_service_year);
             }
@@ -168,18 +171,91 @@
 
             setTimeout(() => {
                 var total_emuluments = $('#total_emuluments').val();
-                
+
                 if (total_emuluments != '' && total_emuluments != undefined && total_emuluments != 'undefined') {
                     tot_emul_amount = parseInt(total_emuluments);
                 }
                 grat_amount = (1 / 4) * qlify_service * tot_emul_amount;
-    
+
                 $('#gratuity_calculation').val(grat_amount.toFixed(2));
                 $('#total_payable_gratuity').val(grat_amount.toFixed(2));
             }, 300);
 
         }
-       
+
+        function submitGratuityCalculation() {
+
+            var gratutitie_form_error = false;
+
+            var key_name = [
+                'staff_id',
+                'last_post_held',
+                'date_of_regularizion',
+                'date_of_ending_service',
+                'cause_of_ending_service',
+                'gross_service_year',
+                'net_qualifying_service',
+                'qualify_service_expressed',
+                'total_emuluments',
+                'gratuity_calculation',
+                'total_payable_gratuity'
+
+            ];
+
+            $('.form-control,.form-select').removeClass('border-danger');
+
+            const pattern = /_/gi;
+            const replacement = " ";
+
+            key_name.forEach(element => {
+                var name_input = document.getElementById(element).value;
+
+                if (name_input == '' || name_input == undefined) {
+                    gratutitie_form_error = true;
+                    var elementValues = element.replace(pattern, replacement);
+                
+                    $('#' + element).addClass('border-danger')
+                    $('#' + element + ' + .select2.select2-container').addClass('border-danger')
+                    // $('#' + element).focus();
+                } else {
+                    $('#' + element).removeClass('border-danger')
+                    $('#' + element + ' + .select2.select2-container').removeClass('border-danger')
+                }
+            });
+
+
+        if (!gratutitie_form_error) {
+            var forms = $('#gratuity_form')[0];
+            var formData = new FormData(forms);
+            $.ajax({
+                url: "{{ route('gratuity.save') }}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function() {
+                    $('#form-submit-btn').attr('disabled', true);
+                },
+                success: function(res) {
+                    // Disable submit button whilst loading
+                    $('#form-submit-btn').attr('disabled', false);
+                    if (res.error == 1) {
+                        if (res.message) {
+                            res.message.forEach(element => {
+                                toastr.error("Error",
+                                    element);
+                            });
+                        }
+                    } else {
+                        toastr.success("Added successfully");
+                        setTimeout(() => {
+                            window.location.href = res.url;
+                        }, 200);
+                    }
+                }
+            })
+        }
+        }
 
         function deleteCareer(id) {
             Swal.fire({
