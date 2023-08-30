@@ -1,3 +1,4 @@
+@if( isset( $user_info->transfer_status ) && $user_info->transfer_status == 'active' )
 <div class="accordion" id="accordionPanelsStayOpenExample">
     <div class="accordion-item">
         <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -16,6 +17,7 @@
     </div>
 
 </div>
+@endif
 <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer mt-5">
     <div class="table-responsive">
         <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
@@ -40,9 +42,11 @@
                     <th class="text-center text-white">
                         Status
                     </th>
+                    @if( isset( $user_info->transfer_status ) && $user_info->transfer_status == 'active' )
                     <th class="text-center text-white">
                         Actions
                     </th>
+                    @endif
                 </tr>
             </thead>
 
@@ -52,6 +56,7 @@
                         <tr>
                             <td> {{ $item->insurance_name }} </td>
                             <td> {{ $item->policy_no }} </td>
+                            <td> {{ commonDateFormat($item->maturity_date) }} </td>
                             <td>{{ $item->amount }}</td>
                             <td>
                                 @if (isset($item->file) && !empty($item->file))
@@ -63,6 +68,7 @@
                                 @endif
                             </td>
                             <td>{{ ucfirst($item->status) }}</td>
+                            @if( isset( $user_info->transfer_status ) && $user_info->transfer_status == 'active' )
                             <td>
                                 <button class="btn btn-sm btn-primary" onclick="return editLic('{{ $item->id }}')">
                                     <i class="fa fa-edit"></i>
@@ -71,6 +77,7 @@
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>
+                            @endif
                         </tr>
                     @endforeach
                 @endisset

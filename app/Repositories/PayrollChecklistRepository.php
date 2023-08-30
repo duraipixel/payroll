@@ -7,6 +7,7 @@ use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\PayrollManagement\HoldSalary;
 use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\PayrollManagement\SalaryField;
+use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\User;
 
 class PayrollChecklistRepository extends Controller
@@ -64,6 +65,7 @@ class PayrollChecklistRepository extends Controller
         $response['pending_approval'] = User::with('appointment')->where('verification_status', 'pending')
             ->whereNull('is_super_admin')
             ->where('status', 'active')
+            ->where('transfer_status', 'active')
             ->whereHas('appointment', function ($query) {
                 $query->where(function($query1) {
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
@@ -75,6 +77,7 @@ class PayrollChecklistRepository extends Controller
         $response['approved'] = User::with('appointment')->where('verification_status', 'approved')
             ->whereNull('is_super_admin')
             ->where('status', 'active')
+            ->where('transfer_status', 'active')
             ->whereHas('appointment', function ($query) {
                 $query->where(function($query1) {
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
@@ -91,6 +94,7 @@ class PayrollChecklistRepository extends Controller
         $response['verified_user'] = User::with('appointment')->where('verification_status', 'approved')
             ->whereNull('is_super_admin')
             ->where('status', 'active')
+            ->where('transfer_status', 'active')
             ->whereHas('appointment', function ($query) {
                 $query->where(function($query1) {
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
@@ -101,6 +105,7 @@ class PayrollChecklistRepository extends Controller
         $response['pending_it'] = User::with('appointment')->join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
             ->where('verification_status', 'approved')
             ->where('users.status', 'active')
+            ->where('users.transfer_status', 'active')
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
             ->where('it_staff_statements.status', 'active')
             ->where('it_staff_statements.lock_calculation', 'yes')
@@ -120,7 +125,7 @@ class PayrollChecklistRepository extends Controller
         return $response;
     }
 
-    public function getToPayEmployee($date)
+    public function getToPayEmployee($date, $show_resigned = true )
     {
         $hold_month =  date('Y-m-01', strtotime($date));
         $date = date('Y-m-d', strtotime($date . '-1 month'));
@@ -149,6 +154,18 @@ class PayrollChecklistRepository extends Controller
             ->where('it_staff_statements.status', 'active')
             ->whereNull('is_super_admin')
             ->where('users.status', 'active')
+            ->when($show_resigned === true, function($wquery) use($month_start, $month_end){
+
+                $wquery->when(('users.transfer_status' != 'active'),  function($qr) use($month_start, $month_end){
+                    $qr->leftJoin('staff_retired_resigned_details', function ($join1) use( $month_start, $month_end){
+                        $join1->on('staff_retired_resigned_details.staff_id', '=', 'users.id')
+                        ->whereBetween('last_working_date', [$month_start, $month_end]);
+                    });
+                });
+            })
+            ->when($show_resigned == false, function($query) {
+                $query->where('users.transfer_status', 'active');
+            })
             ->whereNull('hold_salaries.hold_month')
             ->whereHas('appointment', function ($query) {
                 $query->where(function($query1) {
@@ -168,5 +185,17 @@ class PayrollChecklistRepository extends Controller
         $start_date = date('Y-m-01', strtotime($date));
         $details = HoldSalary::whereDate('hold_month', $start_date)->get();
         return $details;
+    }
+
+    public function getResignedRetired( $date ) {
+
+        $start_date = date('Y-m-d', strtotime($date . ' -1 month'));
+        $end_date = date('Y-m-t', strtotime($date . ' -1 month'));
+
+        $info = StaffRetiredResignedDetail::where('is_completed', 'yes')
+                ->whereBetween('last_working_date', [$start_date, $end_date])
+                ->get();
+
+        return $info;
     }
 }

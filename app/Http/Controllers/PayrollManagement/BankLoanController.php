@@ -133,7 +133,8 @@ class BankLoanController extends Controller
         $id = $request->id;
         $loan_info = StaffBankLoan::find($id);
         $bank = Bank::where('status', 'active')->get();
-        return view('pages.payroll_management.loan.form', compact('loan_info', 'bank'));
+        $user_info = User::find($loan_info->staff_id);
+        return view('pages.payroll_management.loan.form', compact('loan_info', 'bank', 'user_info'));
     }
 
     function deleteLoan(Request $request)
@@ -170,7 +171,8 @@ class BankLoanController extends Controller
             $bank = Bank::where('status', 'active')->get();
             $details = StaffInsurance::where('staff_id', $id)->get();
             $staff_id = $id;
-            return view('pages.payroll_management.lic.staff_lic_details', compact('bank', 'details', 'staff_id'));
+            $user_info = User::find($id);
+            return view('pages.payroll_management.lic.staff_lic_details', compact('bank', 'details', 'staff_id', 'user_info'));
         } else {
             return '';
         }
@@ -256,7 +258,9 @@ class BankLoanController extends Controller
         $id = $request->id;
         $info = StaffInsurance::find($id);
 
-        return view('pages.payroll_management.lic.form', compact('info'));
+        $user_info = User::find($info->staff_id);
+
+        return view('pages.payroll_management.lic.form', compact('info', 'user_info'));
     }
 
     function deleteLic(Request $request)

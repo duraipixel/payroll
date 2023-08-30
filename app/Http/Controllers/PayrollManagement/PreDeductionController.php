@@ -93,7 +93,9 @@ class PreDeductionController extends Controller
         $salary_date = date('Y-m-01', strtotime( $date ) );
         $title = 'Add ' . ucwords(str_replace('_', ' ', $page_type));
         $employees = User::whereNull('is_super_admin')
-            ->where('verification_status', 'approved')->get();
+            ->where(['status' => 'active', 'transfer_status' => 'active'])
+            ->where('verification_status', 'approved')
+            ->get();
         $nature_of_employees = NatureOfEmployment::where('status', 'active')->get();
 
         $earnings_details = StaffSalaryPreDeduction::where('salary_month', $salary_date)

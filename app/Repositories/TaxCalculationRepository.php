@@ -40,7 +40,7 @@ class TaxCalculationRepository
                 ->orderBy('payout_month', 'desc')
                 ->where('is_current', 'yes')
                 ->first();
-
+            $gross_salary_annum = 0;
             if (isset($salary_pattern) && !empty($salary_pattern)) {
 
                 $salary_calculated_month = getTaxOtherSalaryCalulatedMonth($salary_pattern);
@@ -79,124 +79,130 @@ class TaxCalculationRepository
             }
 
             $other_income = OtherIncome::where('status', 'active')->get();
+
+
+            $deduction_80c = TaxSectionItem::select('tax_section_items.*')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
+                ->where('tax_sections.slug', '80c')
+                ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->get();
+            $deduction_80c_info = TaxSection::where('slug', '80c')->where('tax_scheme_id', $current_tax_schemes->id)->first();
+            $medical_insurance = TaxSectionItem::select('tax_section_items.*', 'tax_sections.maximum_limit')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
+                ->where('tax_sections.slug', 'medical-insurance')
+                ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->first();
+            $bank_interest_80tta = TaxSectionItem::select('tax_section_items.*', 'tax_sections.maximum_limit')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
+                ->where('tax_sections.slug', '80tta')
+                ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->first();
+    
+            $national_pension_80cc1b = TaxSectionItem::select('tax_section_items.*', 'tax_sections.maximum_limit')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
+                ->where('tax_sections.slug', '80-ccd-1b')
+                ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->first();
+    
+            $hra_amount = getHRAAmount($current_tax_schemes->id, $staff_id, $salary_pattern);
         }
-        $deduction_80c = TaxSectionItem::select('tax_section_items.*')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
-            ->where('tax_sections.slug', '80c')
-            ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->get();
-        $deduction_80c_info = TaxSection::where('slug', '80c')->where('tax_scheme_id', $current_tax_schemes->id)->first();
-        $medical_insurance = TaxSectionItem::select('tax_section_items.*', 'tax_sections.maximum_limit')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
-            ->where('tax_sections.slug', 'medical-insurance')
-            ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->first();
-        $bank_interest_80tta = TaxSectionItem::select('tax_section_items.*', 'tax_sections.maximum_limit')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
-            ->where('tax_sections.slug', '80tta')
-            ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->first();
-
-        $national_pension_80cc1b = TaxSectionItem::select('tax_section_items.*', 'tax_sections.maximum_limit')->join('tax_sections', 'tax_sections.id', '=', 'tax_section_items.tax_section_id')
-            ->where('tax_sections.slug', '80-ccd-1b')
-            ->where('tax_section_items.tax_scheme_id', $current_tax_schemes->id)->first();
-
-        $hra_amount = getHRAAmount($current_tax_schemes->id, $staff_id, $salary_pattern);
         // $professional_tax_amount = getProfessionTaxAmount($salary_pattern);
 
         /**
          * Calculation start for new tax calculation for staff
          */
-        $total = ($gross_salary_annum) - 50000;
-        $total1 = $total - $hra_amount;
-        $total2 = $total1 - getStaffDeductionAmount($staff_details->id, 'self-occupied-house') ?? 0;
-        /**
-         * other income
-         */
-        $other_income_amount = 0;
-        if (isset($other_income) && !empty($other_income)) {
-
-            foreach ($other_income as $oitem) {
-                $amount = 0;
-                $amount = getStaffOtherIncomeAmount($staff_details->id, $oitem->id);
-                $other_income_amount += $amount;
-            }
-            $total3 = $total2 + $other_income_amount;
-        }
-        $total_deduction_amount = 0;
-        if (isset($deduction_80c) && !empty($deduction_80c)) {
-            $total_deduction_80c = 0;
-            foreach ($deduction_80c as $deitem) {
-                $total_deduction_80c += getStaffDeduction80CAmount($staff_details->id, $deitem->id);
-            }
-            $deduction_80c_amount = $total_deduction_80c;
-            if ($deduction_80c_info->maximum_limit < $total_deduction_80c) {
-                $deduction_80c_amount = $deduction_80c_info->maximum_limit;
-            }
-            $total_deduction_amount += $deduction_80c_amount;
-        }
-        #national_pension_amount
-        $national_pension_amount = $staff_details->staffNationalPestion->amount ?? 0;
-        if ($national_pension_80cc1b->maximum_limit < $national_pension_amount) {
-            $national_pension_amount = $national_pension_80cc1b->maximum_limit;
-        }
-        $total_deduction_amount += $national_pension_amount;
-        #medical_policy_amount
-        $medical_policy_amount = $staff_details->staffMedicalPolicyDeduction->amount ?? 0;
-        if ($medical_insurance->maximum_limit < $medical_policy_amount) {
-            $medical_policy_amount = $medical_insurance->maximum_limit;
-        }
-        $total_deduction_amount += $medical_policy_amount;
-        #bank_interest_deduction_amount
-        $bank_interest_deduction_amount = $staff_details->staffBankInterest80TTADedcution->amount ?? 0;
-        if ($bank_interest_80tta->maximum_limit < $bank_interest_deduction_amount) {
-            $bank_interest_deduction_amount = $bank_interest_80tta->maximum_limit;
-        }
-        $total_deduction_amount += $bank_interest_deduction_amount;
-
-        $total4 = $total3 - $total_deduction_amount;
-
-        if (roundOff($total4) < 500000) {
-            $tax_after_rebate_amount = 0;
-        } else {
-            $tax_after_rebate_amount = getTaxablePayAmountUsingSlabs($total4);
-        }
-
-        $total_income_tax_payable = $tax_after_rebate_amount + round(getPercentageAmount(4, $tax_after_rebate_amount));
-
-        $ins = array(
-            'academic_id' => academicYearId(),
-            'staff_id' => $staff_id,
-            'pan_no' => $staff_details->pan->doc_number ?? '',
-            'designation_id' => $staff_details->position->designation_id ?? '',
-            'gross_salary_anum' => $gross_salary_annum,
-            'standard_deduction' => 50000,
-            'gross_extract_from_standard_deduction' => $gross_salary_annum - 50000,
-            'hra' => $hra_amount,
-            'total_year_salary_income' => $total1,
-            'housing_loan_interest' => getStaffDeductionAmount($staff_details->id, 'self-occupied-house'),
-            'total_extract_from_housing_loan_interest' => $total2,
-            'professional_tax' => 0,
-            'total_extract_from_professional_tax' => $total2,
-            'other_income' => $other_income_amount,
-            'gross_income' => $total3,
-            'deduction_80c_amount' => $deduction_80c_amount,
-            'national_pension_amount' => $national_pension_amount,
-            'medical_policy_amount' => $medical_policy_amount,
-            'bank_interest_deduction_amount' => $bank_interest_deduction_amount,
-            'total_deduction_amount' => $total_deduction_amount,
-            'taxable_gross_income' => $total4,
-            'round_off_taxable_gross_income' => roundOff($total4),
-            'tax_on_taxable_gross_income' => getTaxablePayAmountUsingSlabs($total4),
-            'tax_after_rebate_amount' => $tax_after_rebate_amount,
-            'educational_cess_tax_payable' => round(getPercentageAmount(4, $tax_after_rebate_amount)),
-            'total_income_tax_payable' => $total_income_tax_payable,
-            'salary_pattern_id' => $salary_pattern->id ?? null,
-            'added_by' => auth()->id()
-        );
-        if( $total_income_tax_payable == 0 ) {
-            $ins['lock_calculation'] = 'yes';
-        }
-        // dd( $ins );
-        $check_exist = ItStaffStatement::where(['academic_id' => academicYearId(), 'staff_id' => $staff_id, 'salary_pattern_id' => $salary_pattern->id, 'status' => 'active' ])->first();
         $statement_id = '';
-        if( !$check_exist ) {
-
-            $statement_id = ItStaffStatement::create($ins)->id;
+        if( $gross_salary_annum > 0 ) {
+            
+            $total = ($gross_salary_annum) - 50000;
+            $total1 = $total - $hra_amount;
+            $total2 = $total1 - getStaffDeductionAmount($staff_details->id, 'self-occupied-house') ?? 0;
+            /**
+             * other income
+             */
+            $other_income_amount = 0;
+            if (isset($other_income) && !empty($other_income)) {
+    
+                foreach ($other_income as $oitem) {
+                    $amount = 0;
+                    $amount = getStaffOtherIncomeAmount($staff_details->id, $oitem->id);
+                    $other_income_amount += $amount;
+                }
+                $total3 = $total2 + $other_income_amount;
+            }
+            $total_deduction_amount = 0;
+            if (isset($deduction_80c) && !empty($deduction_80c)) {
+                $total_deduction_80c = 0;
+                foreach ($deduction_80c as $deitem) {
+                    $total_deduction_80c += getStaffDeduction80CAmount($staff_details->id, $deitem->id);
+                }
+                $deduction_80c_amount = $total_deduction_80c;
+                if ($deduction_80c_info->maximum_limit < $total_deduction_80c) {
+                    $deduction_80c_amount = $deduction_80c_info->maximum_limit;
+                }
+                $total_deduction_amount += $deduction_80c_amount;
+            }
+            #national_pension_amount
+            $national_pension_amount = $staff_details->staffNationalPestion->amount ?? 0;
+            if ($national_pension_80cc1b->maximum_limit < $national_pension_amount) {
+                $national_pension_amount = $national_pension_80cc1b->maximum_limit;
+            }
+            $total_deduction_amount += $national_pension_amount;
+            #medical_policy_amount
+            $medical_policy_amount = $staff_details->staffMedicalPolicyDeduction->amount ?? 0;
+            if ($medical_insurance->maximum_limit < $medical_policy_amount) {
+                $medical_policy_amount = $medical_insurance->maximum_limit;
+            }
+            $total_deduction_amount += $medical_policy_amount;
+            #bank_interest_deduction_amount
+            $bank_interest_deduction_amount = $staff_details->staffBankInterest80TTADedcution->amount ?? 0;
+            if ($bank_interest_80tta->maximum_limit < $bank_interest_deduction_amount) {
+                $bank_interest_deduction_amount = $bank_interest_80tta->maximum_limit;
+            }
+            $total_deduction_amount += $bank_interest_deduction_amount;
+    
+            $total4 = $total3 - $total_deduction_amount;
+    
+            if (roundOff($total4) < 500000) {
+                $tax_after_rebate_amount = 0;
+            } else {
+                $tax_after_rebate_amount = getTaxablePayAmountUsingSlabs($total4);
+            }
+    
+            $total_income_tax_payable = $tax_after_rebate_amount + round(getPercentageAmount(4, $tax_after_rebate_amount));
+    
+            $ins = array(
+                'academic_id' => academicYearId(),
+                'staff_id' => $staff_id,
+                'pan_no' => $staff_details->pan->doc_number ?? '',
+                'designation_id' => $staff_details->position->designation_id ?? '',
+                'gross_salary_anum' => $gross_salary_annum,
+                'standard_deduction' => 50000,
+                'gross_extract_from_standard_deduction' => $gross_salary_annum - 50000,
+                'hra' => $hra_amount,
+                'total_year_salary_income' => $total1,
+                'housing_loan_interest' => getStaffDeductionAmount($staff_details->id, 'self-occupied-house'),
+                'total_extract_from_housing_loan_interest' => $total2,
+                'professional_tax' => 0,
+                'total_extract_from_professional_tax' => $total2,
+                'other_income' => $other_income_amount,
+                'gross_income' => $total3,
+                'deduction_80c_amount' => $deduction_80c_amount,
+                'national_pension_amount' => $national_pension_amount,
+                'medical_policy_amount' => $medical_policy_amount,
+                'bank_interest_deduction_amount' => $bank_interest_deduction_amount,
+                'total_deduction_amount' => $total_deduction_amount,
+                'taxable_gross_income' => $total4,
+                'round_off_taxable_gross_income' => roundOff($total4),
+                'tax_on_taxable_gross_income' => getTaxablePayAmountUsingSlabs($total4),
+                'tax_after_rebate_amount' => $tax_after_rebate_amount,
+                'educational_cess_tax_payable' => round(getPercentageAmount(4, $tax_after_rebate_amount)),
+                'total_income_tax_payable' => $total_income_tax_payable,
+                'salary_pattern_id' => $salary_pattern->id ?? null,
+                'added_by' => auth()->id()
+            );
+            if( $total_income_tax_payable == 0 ) {
+                $ins['lock_calculation'] = 'yes';
+            }
+            // dd( $ins );
+            $check_exist = ItStaffStatement::where(['academic_id' => academicYearId(), 'staff_id' => $staff_id, 'status' => 'active' ])->first();
+           
+            if( !$check_exist ) {
+    
+                $statement_id = ItStaffStatement::create($ins)->id;
+            }
         }
         if( $statement_id ) {
             generateIncomeTaxStatementPdfByStaff($statement_id);
@@ -209,7 +215,7 @@ class TaxCalculationRepository
 
     public function generateIncomeTaxStatemenForAll() {
 
-        $staff_details = User::where('verification_status', 'approved')->get();
+        $staff_details = User::where('verification_status', 'approved')->where('status', 'active')->where('transfer_status', 'active')->get();
         $generated = [];
         $not_generated = [];
         if( isset( $staff_details ) && !empty( $staff_details ) ) {

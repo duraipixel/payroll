@@ -230,6 +230,7 @@ class OverviewController extends Controller
         $employee_data = $this->checklistRepository->getEmployeePendingPayroll();
         $income_tax_data = $this->checklistRepository->getPendingITEntry();
         $hold_salary_employee = $this->checklistRepository->getHoldSalaryEmployee($date);
+        $resigned_or_retired = $this->checklistRepository->getResignedRetired($date);
 
         $is_entried_min_attendance = $leave_data['total_present'] ?? 0;
 
@@ -242,7 +243,8 @@ class OverviewController extends Controller
             'employee_data' => $employee_data,
             'income_tax_data' => $income_tax_data,
             'hold_salary_employee' => $hold_salary_employee,
-            'is_entried_min_attendance' => $is_entried_min_attendance
+            'is_entried_min_attendance' => $is_entried_min_attendance,
+            'resigned_or_retired' => $resigned_or_retired
         );
 
         return view('pages.payroll_management.overview._payroll_form', $params);
@@ -250,7 +252,7 @@ class OverviewController extends Controller
 
     public function setPayrollProcessing(Request $request)
     {
-
+        
         $date = $request->date;
         $payout_id = $request->payout_id;
         $payroll_points = $request->payroll_points;
@@ -276,7 +278,7 @@ class OverviewController extends Controller
                 $query->where('is_static', 'yes');
                 $query->orWhere(function ($q) {
                     $q->where('nature_id', 3);
-                    $q->where('short_name', '!=', 'CONTRI');
+                    $q->where('short_name', '!=', 'CONTRIBUTION');
                     $q->where('short_name', '!=', 'OTHER');
                 });
             })->get();
@@ -345,7 +347,7 @@ class OverviewController extends Controller
                 $query->where('is_static', 'yes');
                 $query->orWhere(function ($q) {
                     $q->where('nature_id', 3);
-                    $q->where('short_name', '!=', 'CONTRI');
+                    $q->where('short_name', '!=', 'CONTRIBUTION');
                     $q->where('short_name', '!=', 'OTHER');
                 });
             })->get();

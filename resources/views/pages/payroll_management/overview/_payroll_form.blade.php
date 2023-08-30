@@ -182,7 +182,7 @@
                                 class="w-30 d-flex justify-content-center align-items-center">
                                 <div>
                                     <a class="btn btn-light-primary btn-sm small"
-                                        href="{{ route('it-calculation') }}">
+                                        href="{{ route('holdsalary') }}">
                                         Go to Hold Salary
                                     </a>
                                 </div>
@@ -195,9 +195,35 @@
                             </div>
                         </div>
                       
-                        {{-- <div class="form-group p-2">
-                            <input type="checkbox" id="resigned" name="payroll_points[]" value="resigned">
-                            <label for="resigned" class="mx-3"> Resigned </label>
+                        {{-- <div class="d-flex border-bottom mb-3 p-3">
+                            <div class="form-group p-2 w-30">
+                                <input type="checkbox" id="resigned_retired" onchange="setCompleted(this)"
+                                    name="resigned_retired" value="resigned_retired">
+                                <label for="resigned_retired" class="mx-3"> Resigned / Retired </label>
+                                <input type="hidden" name="resigned_retired" id="resigned_retired" value="">
+                            </div>
+                            <div class="w-50 d-flex" id="resigned_retired_pane">
+                                <div class="px-2 border border-2">
+                                    <div class="small">
+                                        Resigned / Retired Staffs
+                                    </div>
+                                    <div class="text-muted">    
+                                        {{ $resigned_or_retired->count() }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="resigned_retired_approved"
+                                class="w-30 d-flex justify-content-center align-items-center">
+                                <div>
+                                    
+                                </div>
+                            </div>
+                            <div id="resigned_retired_message"
+                                class="w-30 d-none p-1 d-flex justify-content-center text-danger small align-items-center">
+                                <div>
+                                    If Selecting of this it will include salary process other wise resigned / retired will not include
+                                </div>
+                            </div>
                         </div> --}}
 
                     </div>
