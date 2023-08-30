@@ -5,7 +5,7 @@
 </div>
 <div class="row  mt-3">
     <div class="col-sm-6">
-        <label for="" class="required"> Last Post held {{ $staff_info->appointment?->designation?->name }}</label>
+        <label for="" class="required"> Last Post held </label>
     </div>
     <div class="col-sm-6">
         <input type="text" readony name="last_post_held" id="last_post_held"
@@ -52,7 +52,7 @@
     </div>
     <div class="col-sm-6 d-flex align-items-center">
         <input type="text" name="gross_service_year" value="{{ $info->gross_service_year ?? '' }}" id="gross_service_year" onkeyup="qulifyingServiceAmountCalculation()" class="form-control form-control-sm w-100px me-1 price" required> years and
-        <input type="text" name="gross_service_month" value="{{ $info->gross_service_month ?? '' }}" id="gross_service_month" onkeyup="qulifyingServiceAmountCalculation()" class="form-control form-control-sm w-100px ms-3 me-1 price" required> months
+        <input type="text" name="gross_service_month" value="{{ $info->gross_service_month ?? '' }}" id="gross_service_month" onkeyup="qulifyingServiceAmountCalculation()" class="form-control form-control-sm w-100px ms-3 me-1 price" > months
     </div>
 </div>
 <div class="row  mt-3">
@@ -100,34 +100,36 @@
             <tr>
                 <th> Basic pay </th>
                 <td class="text-end"> 
-                    <input type="hidden" name="basic" value="{{ $staff_info->currentSalaryPattern->basic->amount ?? 0 }}">
-                    Rs.{{ $staff_info->currentSalaryPattern->basic->amount ?? 0 }} 
+                    <input type="hidden" name="basic" value="{{ $info->basic->amount ?? $staff_info->currentSalaryPattern->basic->amount ?? 0 }}">
+                    Rs.{{ $info->basic->amount ?? $staff_info->currentSalaryPattern->basic->amount ?? 0 }} 
                 </td>
             </tr>
             <tr>
                 <th> Basic DA   </th>
                 <td class="text-end"> 
-                    Rs.{{ $staff_info->currentSalaryPattern->da->amount ?? 0 }} 
-                    <input type="hidden" name="basic_da" value="{{ $staff_info->currentSalaryPattern->da->amount ?? 0 }}">
+                    Rs.{{ $info->basicDa->amount ?? $staff_info->currentSalaryPattern->da->amount ?? 0 }} 
+                    <input type="hidden" name="basic_da" value="{{ $info->basicDa->amount ?? $staff_info->currentSalaryPattern->da->amount ?? 0 }}">
 
                 </td>
             </tr>
+            @if( $page_type == 'retired')
             <tr>
                 <th> PBA </th>
                 <td class="text-end"> 
-                    Rs.{{ $staff_info->currentSalaryPattern->pba->amount ?? 0 }}
-                    <input type="hidden" name="basic_pba" value="{{ $staff_info->currentSalaryPattern->pba->amount ?? 0 }}">
+                    Rs.{{ $info->pba->amount ?? $staff_info->currentSalaryPattern->pba->amount ?? 0 }}
+                    <input type="hidden" name="basic_pba" value="{{ $info->pba->amount ?? $staff_info->currentSalaryPattern->pba->amount ?? 0 }}">
 
                 </td>
             </tr>
             <tr>
                 <th> PBADA </th>
                 <td class="text-end"> 
-                    Rs.{{ $staff_info->currentSalaryPattern->pbada->amount ?? 0 }}
-                    <input type="hidden" name="basic_pbada" value="{{ $staff_info->currentSalaryPattern->pbada->amount ?? 0 }}">
+                    Rs.{{ $info->pbada->amount ?? $staff_info->currentSalaryPattern->pbada->amount ?? 0 }}
+                    <input type="hidden" name="basic_pbada" value="{{ $info->pbada->amount ?? $staff_info->currentSalaryPattern->pbada->amount ?? 0 }}">
 
                 </td>
             </tr>
+            @endif
         </table>
     </div>
 
@@ -137,7 +139,11 @@
         <label for="" class="required"> Total Emoluments </label>
     </div>
     @php
-        $total_emul = ($staff_info->currentSalaryPattern->basic->amount ?? 0) + ($staff_info->currentSalaryPattern->da->amount ?? 0) + ($staff_info->currentSalaryPattern->pba->amount ?? 0) + ($staff_info->currentSalaryPattern->pbada->amount ?? 0);
+        $resigned_amount = ($staff_info->currentSalaryPattern->basic->amount ?? 0) + ($staff_info->currentSalaryPattern->da->amount ?? 0);
+        if( $page_type == 'retired') {
+            $retired_amount = ($staff_info->currentSalaryPattern->pba->amount ?? 0) + ($staff_info->currentSalaryPattern->pbada->amount ?? 0);
+        }
+        $total_emul =  $resigned_amount + ($retired_amount ?? 0);
     @endphp
     <div class="col-sm-6">
         <input type="text" name="total_emuluments" requried id="total_emuluments"
@@ -155,13 +161,17 @@
 </div>
 <div class="row  mt-3">
     <div class="col-sm-6">
-        <label for=""> Whether nomination made for gratuity </label>
+        <label for="" class="required"> Whether nomination made for gratuity </label>
     </div>
     <div class="col-sm-6">
-        <input type="radio" name="nomination" value="yes" id="nomination_yes">
-        <label for="nomination_yes">Yes</label>
-        <input type="radio" name="nomination" value="no" id="nomination_no">
-        <label for="nomination_no">No</label>
+        <select name="gratuity_type" id="gratuity_type" class="form-control form-control-sm" required>
+            <option value="">--select--</option>
+            <option value="resigned_gratuity" @if( isset( $info->gratuity_type ) && $info->gratuity_type == 'resigned_gratuity') selected="selected" @endif>Resigned Gratuity</option>
+            @if( $page_type == 'retired')
+            <option value="retirement_gratuity" @if( isset( $info->gratuity_type ) && $info->gratuity_type == 'retirement_gratuity') selected="selected" @endif> Retirement gratuity </option>
+            <option value="death_gratuity" @if( isset( $info->gratuity_type ) && $info->gratuity_type == 'death_gratuity') selected="selected" @endif> Death Gratuity  </option>
+            @endif
+        </select>
     </div>
 </div>
 <div class="row  mt-3" id="nominee_pane ">

@@ -33,7 +33,8 @@
                                     <option value="">--select--</option>
                                     @if (isset($user) && !empty($user))
                                         @foreach ($user as $item)
-                                            <option value="{{ $item->id }}" @if( isset( $info->staff_id ) && $info->staff_id == $item->id ) selected="selected" @endif>
+                                            <option value="{{ $item->id }}"
+                                                @if (isset($info->staff_id) && $info->staff_id == $item->id) selected="selected" @endif>
                                                 {{ $item->name }} -
                                                 {{ $item->institute_emp_code }}
                                             </option>
@@ -53,14 +54,22 @@
                         </div>
                         <div class="col-sm-3">
                             <input type="date" name="date_of_issue" id="date_of_issue"
-                                class="form-control form-control-sm">
+                                value="{{ $info->date_of_issue ?? '' }}" class="form-control form-control-sm">
                         </div>
                         <div class="col-sm-3">
-                            <textarea name="issue_remarks" id="issue_remarks" cols="30" rows="1" class="form-control form-control-sm"></textarea>
+                            <textarea name="issue_remarks" id="issue_remarks" cols="30" rows="1" class="form-control form-control-sm">{{ $info->issue_remarks ?? '' }}</textarea>
                         </div>
                         <div class="col-sm-3">
                             <input type="file" name="issue_attachment" id="issue_attachment"
                                 class="form-control form-contro-sm">
+                            @if (isset($info->issue_attachment) && !empty($info->issue_attachment))
+                                @php
+                                    $url = Storage::url($info->issue_attachment);
+                                @endphp
+                                <div class="mt-3">
+                                    <a href="{{ asset('public' . $url) }}" target="_blank"> View File </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -70,19 +79,28 @@
                         <div class="col-sm-3">
                             <select name="mode_of_payment" id="mode_of_payment" class="form-control form-control-sm">
                                 <option value="">--select--</option>
-                                <option value="cash">Cash</option>
-                                <option value="cheque">Cheque</option>
-                                <option value="net_banking">Net Banking</option>
-                                <option value="upi">UPI</option>
+                                <option value="cash" @if (isset($info->mode_of_payment) && $info->mode_of_payment == 'cash') selected @endif>Cash</option>
+                                <option value="cheque" @if (isset($info->mode_of_payment) && $info->mode_of_payment == 'cheque') selected @endif>Cheque</option>
+                                <option value="net_banking" @if (isset($info->mode_of_payment) && $info->mode_of_payment == 'net_banking') selected @endif>Net Banking
+                                </option>
+                                <option value="upi" @if (isset($info->mode_of_payment) && $info->mode_of_payment == 'upi') selected @endif>UPI</option>
                             </select>
                         </div>
                         <div class="col-sm-3">
                             <textarea name="payment_remarks" id="payment_remarks" cols="30" rows="1"
-                                class="form-control form-control-sm"></textarea>
+                                class="form-control form-control-sm">{{ $info->payment_remarks ?? '' }}</textarea>
                         </div>
                         <div class="col-sm-3">
                             <input type="file" name="payment_attachment" id="payment_attachment"
                                 class="form-control form-contro-sm">
+                            @if (isset($info->payment_attachment) && !empty($info->payment_attachment))
+                                @php
+                                    $url = Storage::url($info->payment_attachment);
+                                @endphp
+                                <div class="mt-3">
+                                    <a href="{{ asset('public' . $url) }}" target="_blank"> View File </a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="row  mt-3">
@@ -91,19 +109,24 @@
                         </div>
                         <input type="hidden" name="page_type" value="{{ $page_type }}">
                         <div class="col-sm-6">
-                            <input type="radio" name="verification_status" value="pending" checked id="pending">
+                            <input type="radio" name="verification_status" value="pending"
+                                @if (!isset($info)) checked @endif
+                                @if (isset($info->verification_status) && $info->verification_status == 'pending') checked @endif id="pending">
                             <label for="pending"> Pending </label>
-                            <input type="radio" name="verification_status" value="verified" id="verified">
+                            <input type="radio" name="verification_status"
+                                @if (isset($info->verification_status) && $info->verification_status == 'verified') checked @endif value="verified" id="verified">
                             <label for="verified"> Verified </label>
-                            <input type="radio" name="verification_status" value="failed" id="failed">
+                            <input type="radio" name="verification_status" value="failed"
+                                @if (isset($info->verification_status) && $info->verification_status == 'failed') checked @endif id="failed">
                             <label for="failed"> Failed </label>
                         </div>
                     </div>
                     <div class="row text-end my-5">
                         <div class="col-sm-12">
-                            <button type="button" class="btn btn-dark btn-sm"> Cancel </button>
+                            <a href="{{ route('gratuity', ['type' => $page_type]) }}" class="btn btn-dark btn-sm"> Cancel </a>
                             <button type="submit" class="btn btn-info btn-sm"> Generate Preview </button>
-                            <button type="button" id="form-submit-btn" class="btn btn-primary btn-sm" onclick="submitGratuityCalculation()">
+                            <button type="button" id="form-submit-btn" class="btn btn-primary btn-sm"
+                                onclick="submitGratuityCalculation()">
                                 Save Gratuity </button>
                         </div>
                     </div>
@@ -201,7 +224,8 @@
                 'qualify_service_expressed',
                 'total_emuluments',
                 'gratuity_calculation',
-                'total_payable_gratuity'
+                'total_payable_gratuity',
+                'gratuity_type'
 
             ];
 
@@ -216,7 +240,7 @@
                 if (name_input == '' || name_input == undefined) {
                     gratutitie_form_error = true;
                     var elementValues = element.replace(pattern, replacement);
-                
+
                     $('#' + element).addClass('border-danger')
                     $('#' + element + ' + .select2.select2-container').addClass('border-danger')
                     // $('#' + element).focus();
@@ -227,86 +251,39 @@
             });
 
 
-        if (!gratutitie_form_error) {
-            var forms = $('#gratuity_form')[0];
-            var formData = new FormData(forms);
-            $.ajax({
-                url: "{{ route('gratuity.save') }}",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                beforeSend: function() {
-                    $('#form-submit-btn').attr('disabled', true);
-                },
-                success: function(res) {
-                    // Disable submit button whilst loading
-                    $('#form-submit-btn').attr('disabled', false);
-                    if (res.error == 1) {
-                        if (res.message) {
-                            res.message.forEach(element => {
-                                toastr.error("Error",
-                                    element);
-                            });
-                        }
-                    } else {
-                        toastr.success("Added successfully");
-                        setTimeout(() => {
-                            window.location.href = res.url;
-                        }, 200);
-                    }
-                }
-            })
-        }
-        }
-
-        function deleteCareer(id) {
-            Swal.fire({
-                text: "Are you sure you would like to delete record?",
-                icon: "warning",
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: "Yes, Delete it!",
-                cancelButtonText: "No, return",
-                customClass: {
-                    confirmButton: "btn btn-danger",
-                    cancelButton: "btn btn-active-light"
-                }
-            }).then(function(result) {
-                if (result.value) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        url: "{{ route('career.delete') }}",
-                        type: 'POST',
-                        data: {
-                            id: id,
-                        },
-                        success: function(res) {
-                            dtTable.ajax.reload();
-                            Swal.fire({
-                                title: "Updated!",
-                                text: res.message,
-                                icon: "success",
-                                confirmButtonText: "Ok, got it!",
-                                customClass: {
-                                    confirmButton: "btn btn-success"
-                                },
-                                timer: 3000
-                            });
-
-                        },
-                        error: function(xhr, err) {
-                            if (xhr.status == 403) {
-                                toastr.error(xhr.statusText, 'UnAuthorized Access');
+            if (!gratutitie_form_error) {
+                var forms = $('#gratuity_form')[0];
+                var formData = new FormData(forms);
+                $.ajax({
+                    url: "{{ route('gratuity.save') }}",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function() {
+                        $('#form-submit-btn').attr('disabled', true);
+                    },
+                    success: function(res) {
+                        // Disable submit button whilst loading
+                        $('#form-submit-btn').attr('disabled', false);
+                        if (res.error == 1) {
+                            if (res.message) {
+                                res.message.forEach(element => {
+                                    toastr.error("Error",
+                                        element);
+                                });
                             }
+                        } else {
+                            toastr.success("Added successfully");
+                            setTimeout(() => {
+                                window.location.href = res.url;
+                            }, 200);
                         }
-                    });
-                }
-            });
+                    }
+                })
+            }
         }
+
+        
     </script>
 @endsection

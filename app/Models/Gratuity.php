@@ -56,4 +56,20 @@ class Gratuity extends Model implements Auditable
         return $this->hasOne(User::class, 'id', 'staff_id');
     }
 
+    public function basic() {
+        return $this->hasOne(GratuityEmulument::class, 'gratuity_id', 'id')->where('field', 'Basic');
+    }
+
+    public function basicDa() {
+        return $this->hasOne(GratuityEmulument::class, 'gratuity_id', 'id')->where('field', 'Basic DA');
+    }
+
+    public function pba() {
+        return $this->hasOne(GratuityEmulument::class, 'gratuity_id', 'id')->where('field', 'PBA');
+    }
+
+    public function pbada() {
+        return $this->hasOne(GratuityEmulument::class, 'gratuity_id', 'id')->where('field', 'PBADa');
+    }
+
 }

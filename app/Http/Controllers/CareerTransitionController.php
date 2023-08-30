@@ -162,6 +162,7 @@ class CareerTransitionController extends Controller
 
         return response()->json(['message' => "Successfully deleted!", 'status' => 1]);
     }
+    
     public function export(Request $request)
     {
         return Excel::download(new CareerExport( $request->type), date('ymdhis').'_list.xlsx');

@@ -197,7 +197,7 @@
             <th style="text-align: left;width:50%;padding-left:5px">
                 Whether nomination made for death gratuity / retirement gratuity
             </th>
-            <td style="text-align: left;width:50%;padding-left:10px"> Retired Gratuity. </td>
+            <td style="text-align: right;width:50%;padding-left:10px"> {{ ucwords( str_replace('_', ' ', $gratuity_type) ) }}. </td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Total Payable of retirement Gratuity </th>

@@ -89,7 +89,7 @@ class GratuityController extends Controller
                         $edit_btn = '';
                     }
                     if (access()->buttonAccess($route_name, 'delete')) {
-                        $del_btn = '<a href="javascript:void(0);" onclick="deleteBoard(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                        $del_btn = '<a href="javascript:void(0);" onclick="deleteGratuity(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                     <i class="fa fa-trash"></i></a>';
                     } else {
                         $del_btn = '';
@@ -114,11 +114,14 @@ class GratuityController extends Controller
 
         $title = ucwords(str_replace('_', ' ', $page_type));
         $page_title = 'Form for Assessing of Gratuity For ' . $title . ' Staff';
-        $user = User::where(['status' => 'active', 'verification_status' => 'approved'])
+        $user = User::where(['users.status' => 'active', 'users.verification_status' => 'approved'])
             ->whereHas('appointment.employment_nature', function ($q) {
                 $q->where('name', 'REGULAR STAFF');
             })
-            ->whereNull('is_super_admin')->InstituteBased()->get();
+            ->whereNull('users.is_super_admin')->InstituteBased()
+            ->join('staff_retired_resigned_details', 'staff_retired_resigned_details.staff_id', '=', 'users.id')
+            ->where('staff_retired_resigned_details.types', $page_type)
+            ->get();
 
         $params['page_title'] = $page_title;
         $params['page_type'] = $page_type;
@@ -176,6 +179,7 @@ class GratuityController extends Controller
             'basic_da' => $request->basic_da,
             'basic_pba' => $request->basic_pba ?? 0,
             'basic_pbada' => $request->basic_pbada ?? 0,
+            'gratuity_type' => $request->gratuity_type
         ];
         $pdf = PDF::loadView('pages.gratuity._preview', $params)->setPaper('a4', 'portrait');
         return $pdf->stream('gratuity_preview.pdf');
@@ -198,6 +202,7 @@ class GratuityController extends Controller
             'total_emuluments' => 'required',
             'gratuity_calculation' => 'required',
             'total_payable_gratuity' => 'required',
+            'gratuity_type' => 'required'
         ]);
 
         if ($validator->passes()) {
@@ -236,6 +241,7 @@ class GratuityController extends Controller
             $ins['date_of_issue'] = isset($request->date_of_issue) && !empty($request->date_of_issue) ? date('Y-m-d', strtotime($request->date_of_issue)) : null;
             $ins['issue_remarks'] = $request->issue_remarks ?? null;
             $ins['page_type'] = $page_type;
+            $ins['gratuity_type'] = $request->gratuity_type;
 
             if ($request->hasFile('issue_attachment')) {
 
@@ -269,7 +275,7 @@ class GratuityController extends Controller
                 $e_ins['gratuity_id'] = $g_info->id;
                 $e_ins['field'] = 'Basic';
                 $e_ins['amount'] = $request->basic;
-                GratuityEmulument::updateOrCreate([], $e_ins);
+                GratuityEmulument::updateOrCreate(['gratuity_id' => $g_info->id, 'field' => 'Basic'], $e_ins);
             }
             if ($request->basic_da) {
                 $e_ins = [];
@@ -277,7 +283,7 @@ class GratuityController extends Controller
                 $e_ins['gratuity_id'] = $g_info->id;
                 $e_ins['field'] = 'Basic DA';
                 $e_ins['amount'] = $request->basic_da;
-                GratuityEmulument::updateOrCreate([], $e_ins);
+                GratuityEmulument::updateOrCreate(['gratuity_id' => $g_info->id, 'field' => 'Basic DA'], $e_ins);
             }
             if ($request->basic_pba) {
                 $e_ins = [];
@@ -285,7 +291,7 @@ class GratuityController extends Controller
                 $e_ins['gratuity_id'] = $g_info->id;
                 $e_ins['field'] = 'PBA';
                 $e_ins['amount'] = $request->basic_pba;
-                GratuityEmulument::updateOrCreate([], $e_ins);
+                GratuityEmulument::updateOrCreate(['gratuity_id' => $g_info->id, 'field' => 'PBA'], $e_ins);
             }
             if ($request->basic_pbada) {
                 $e_ins = [];
@@ -293,7 +299,7 @@ class GratuityController extends Controller
                 $e_ins['gratuity_id'] = $g_info->id;
                 $e_ins['field'] = 'PBADA';
                 $e_ins['amount'] = $request->basic_pbada;
-                GratuityEmulument::updateOrCreate([], $e_ins);
+                GratuityEmulument::updateOrCreate(['gratuity_id' => $g_info->id, 'field' => 'PBADA'], $e_ins);
             }
             $error = 0;
             $message = 'Added successfully';
@@ -304,5 +310,13 @@ class GratuityController extends Controller
         }
 
         return response()->json(['error' => $error, 'message' => $message, 'url' => $url ?? '']);
+    }
+
+    public function delete(Request $request) {
+        
+        Gratuity::where('id', $request->id)->delete();
+        GratuityEmulument::where('gratuity_id', $request->id)->delete();
+        return response()->json(['message'=>"Successfully deleted state!",'status'=>1]);
+
     }
 }
