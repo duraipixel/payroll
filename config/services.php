@@ -89,7 +89,8 @@ return [
     
     'gratuity_calculations' =>
     [
-
+        'gratuity' => 'Gratuity',
+        'career' => 'Career Transition Module'
     ],
 
     'master_menu' => [

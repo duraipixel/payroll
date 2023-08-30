@@ -795,7 +795,97 @@
                 </div>
                 <br>
                 <!-- Payroll Management Menu Checkbox End -->
+                {{-- report menu --}}
+                <div class="col-12 pb-3">
+                    <h4> <strong>Gratuity </strong>
+                        <input type="checkbox" name="gratuity_select_all"
+                            @if ($gratuity_select_all == 1) checked @endif id="gratuity_select_all"
+                            onclick="gratuity_select_all_func();">
+                    </h4>
+                </div>
+                <div class="row justify-content-start">
+                    <div class="row mb-6">
+                        <div class="col-1">
+                            <b>Sl.No</b>
+                        </div>
+                        <div class="col-1"></div>
+                        <div class="col-5">
+                            <strong>Menu</strong>
+                        </div>
+                        <div class="col-1">
+                            <strong>Add & Edit</strong>
+                        </div>
+                        <div class="col-1">
+                            <strong>View</strong>
+                        </div>
+                        <div class="col-1">
+                            <strong>Delete</strong>
+                        </div>
+                        <div class="col-1">
+                            <strong>Export</strong>
+                        </div>
+                    </div>
+                    @php
+                        $i = 1;
+                        $gratuity_row = 0;
+                    @endphp
+                    @foreach ($gratuity_menu as $key => $gratuity_menus)
+                        <div class="row mb-6">
+                            <div class="col-1">
+                                {{ $i }}
+                            </div>
+                           
+                            @php
+                                $add_val = permissionCheck($role_id, $key, 'add_edit');
+                                $view_val = permissionCheck($role_id, $key, 'view');
+                                $delete_val = permissionCheck($role_id, $key, 'delete');
+                                $export_val = permissionCheck($role_id, $key, 'export');
+                                $key_value = dotReplaceUnderscore($key);
+                            @endphp
+                            <div class="col-1">
+                                <input type="checkbox" class="gratuity_checkox"
+                                    name="gratuity_select_all_row_wise_{{ $i }}"
+                                    @if ($add_val == 1 && $view_val == 1 && $delete_val == 1 && $export_val == 1) checked @endif
+                                    id="gratuity_select_all_row_wise_{{ $i }}"
+                                    onclick="gratuity_row({{ $i }});">
+                            </div>
+                            <div class="col-5">
+                                <span class="pl-3"> {{ $gratuity_menus }}</span>
+                                <input type="hidden" name="menu_name[]" id="menu_name"
+                                    value="{{ $key }}">
+                            </div>
+                            <div class="col-1">
+                                <input type="checkbox" class="gratuity_checkox" name="{{ $key_value }}_add"
+                                    @if ($add_val == 1) checked @endif value="1"
+                                    id="gratuity_add_{{ $i }}">
+                            </div>
+                           
+                            <div class="col-1">
+                                <input type="checkbox" class="gratuity_checkox" name="{{ $key_value }}_view"
+                                    @if ($view_val == 1) checked @endif value="1"
+                                    id="gratuity_view_{{ $i }}">
+                            </div>
+                            <div class="col-1">
+                                <input type="checkbox" class="gratuity_checkox" name="{{ $key_value }}_delete"
+                                    @if ($delete_val == 1) checked @endif value="1"
+                                    id="gratuity_delete_{{ $i }}">
+                            </div>
+                            
+                            <div class="col-1">
+                                <input type="checkbox" class="gratuity_checkox" name="{{ $key_value }}_export"
+                                    value="1" @if ($export_val == 1) checked @endif
+                                    id="gratuity_export_{{ $i }}">
+                            </div>
+                        </div>
+                        @php
+                            $i++;
+                            $gratuity_row++;
+                        @endphp
+                    @endforeach
 
+                    <input type="hidden" name="gratuity_row_count" id="gratuity_row_count"
+                        value="{{ $gratuity_row }}">
+                </div>
                 <!-- Master Menu Checkbox Start -->
                 <div class="col-12 pb-3">
                     <h4> <strong>Master Menu</strong>
@@ -1388,6 +1478,46 @@
                 document.getElementById("report_select_all_row_wise_" + j).checked = false;
                 document.getElementById("report_view_" + j).checked = false;
                 document.getElementById("report_export_" + j).checked = false;
+            }
+        }
+    }
+
+    function gratuity_row(i) {
+        var select_all_row_wise = document.getElementById("gratuity_select_all_row_wise_" + i);
+        if (select_all_row_wise.checked == true) {
+            document.getElementById("gratuity_add_" + i).checked = true;
+            document.getElementById("gratuity_view_" + i).checked = true;
+            document.getElementById("gratuity_delete_" + i).checked = true;
+            document.getElementById("gratuity_export_" + i).checked = true;
+        } else {
+            console.log('row wise uncheck');
+            document.getElementById("gratuity_add_" + i).checked = false;
+            document.getElementById("gratuity_view_" + i).checked = false;
+            document.getElementById("gratuity_delete_" + i).checked = false;
+            document.getElementById("gratuity_export_" + i).checked = false;
+            $("#gratuity_select_all").prop("checked", false);
+        }
+       
+    }
+
+    function gratuity_select_all_func() {
+        var gratuity_selectall = document.getElementById("gratuity_select_all");
+        var row_count = $("#gratuity_row_count").val();
+        if (gratuity_selectall.checked == true) {
+            for (let i = 1; i <= row_count; i++) {
+                document.getElementById("select_all_row_wise_" + i).checked = true;
+                document.getElementById("gratuity_add_" + i).checked = true;
+                document.getElementById("gratuity_view_" + i).checked = true;
+                document.getElementById("gratuity_delete_" + i).checked = true;
+                document.getElementById("gratuity_export_" + i).checked = true;
+            }
+        } else {
+            for (let j = 1; j <= row_count; j++) {
+                document.getElementById("select_all_row_wise_" + j).checked = false;
+                document.getElementById("gratuity_add_" + j).checked = false;
+                document.getElementById("gratuity_view_" + j).checked = false;
+                document.getElementById("gratuity_delete_" + j).checked = false;
+                document.getElementById("gratuity_export_" + j).checked = false;
             }
         }
     }

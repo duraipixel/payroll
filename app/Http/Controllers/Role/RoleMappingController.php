@@ -34,19 +34,18 @@ class RoleMappingController extends Controller
             )
         );
         if ($request->ajax()) {
-            $data = RoleMapping::leftJoin('users as staff', 'staff.id', '=', 'role_mappings.staff_id')
-                ->leftJoin('users as created', 'created.id', '=', 'role_mappings.role_created_id')
-                ->leftJoin('roles', 'roles.id', '=', 'role_mappings.role_id')
-                ->where('users.status', 'active')
-                ->select('staff.name as staff_name', 'staff.society_emp_code', 'created.name as created_by_name', 'roles.name as role_name', 'role_mappings.*');
+
             $status = $request->get('role_mappings.status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
 
-            $datatables =  DataTables::of($data)
-                ->filter(function ($query) use ($status, $keywords) {
-                    if ($keywords) {
-                        $date = date('Y-m-d', strtotime($keywords));
+            $data = RoleMapping::leftJoin('users as staff', 'staff.id', '=', 'role_mappings.staff_id')
+                ->leftJoin('users as created', 'created.id', '=', 'role_mappings.role_created_id')
+                ->leftJoin('roles', 'roles.id', '=', 'role_mappings.role_id')
+                ->where('staff.status', 'active')
+                ->select('staff.name as staff_name', 'staff.society_emp_code', 'created.name as created_by_name', 'roles.name as role_name', 'role_mappings.*')
+                ->when(!empty( $keywords ), function($query) use($keywords) {
+                    $date = date('Y-m-d', strtotime($keywords));
                         return $query->where(function ($q) use ($keywords, $date) {
 
                             $q->where('staff.name', 'like', "%{$keywords}%")
@@ -54,9 +53,13 @@ class RoleMappingController extends Controller
                                 ->orWhere('roles.name', 'like', "%{$keywords}%")
                                 ->orWhere('staff.society_emp_code', 'like', "%{$keywords}%")
                                 ->orWhereDate('role_mappings.created_at', $date);
+
                         });
-                    }
-                })
+                });
+            
+
+            $datatables =  DataTables::of($data)
+                
                 ->addIndexColumn()
                 ->editColumn('staff_name', function ($row) {
                     return $row->staff_name . ' - ' . $row->society_emp_code;
