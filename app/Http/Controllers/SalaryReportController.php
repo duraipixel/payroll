@@ -19,6 +19,5 @@ class SalaryReportController extends Controller
     function salary_register_export(Request $request) {
         $users = $this->collection($request)->get();
         return Excel::download(new SalaryRegisterExport($users),'salary_register_export.xlsx');
-        return view('pages.reports.staff.salary-register.export', ['users' =>  $users]);
     }
 }

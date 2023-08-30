@@ -12,8 +12,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports'],  function () {
     Route::get('/staff/export', [StaffReportController::class, 'staff_export'])->name('reports.staff.export');
     Route::get('/service/history/export', [ReportController::class, 'serviceHistoryExport'])->name('reports.service.history.export');
 
-    // Route::get('/salary-register', [SalaryReportController::class, 'staff_register'])->name('reports.salary.history');
     Route::get('/salary-register/export', [SalaryReportController::class, 'salary_register_export'])->name('reports.salary.export');
+    Route::get('/reports/retirement/export', [RetirementController::class, 'export'])->name('reports.retirement.export');
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],  function () {

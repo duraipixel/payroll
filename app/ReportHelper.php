@@ -16,14 +16,12 @@ trait ReportHelper
             $q->where('name', 'LIKE', '%' . $request->name . '%');
         })->whereHas('position.department', function ($q) use ($request) {
             if (!empty($request->department)) $q->where('id', '=', $request->department);
-        })->when(request()->route()->getName() === 'reports.retirement', function ($q) use ($request) {
+        })->when(in_array(request()->route()->getName(),['reports.retirement','reports.retirement.export']), function ($q) use ($request) {
             $q->whereIn('users.id', function ($query) {
-                if (request()->route()->getName() === 'reports.retirement') {
-                    $query->select('staff_id')
+                $query->select('staff_id')
                         ->from('staff_retired_resigned_details')
                         ->groupBy('staff_id')
                         ->havingRaw('COUNT(*) = 1');
-                }
             });
         })->select('*');
     }

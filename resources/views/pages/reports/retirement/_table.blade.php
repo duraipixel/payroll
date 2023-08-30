@@ -1,7 +1,7 @@
 <table class="table m-0 table-striped table-bordered table-hover table-centered border rounded">
     <thead class="text-light border bg-primary">
         <tr>
-            <th width="30">S.No</th>
+            <th>S.No</th>
             <th>Staff Name</th>
             <th>Emp Code</th>
             <th>Designation</th>
