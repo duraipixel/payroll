@@ -39,6 +39,7 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryPattern;
 use App\Models\Staff\StaffDeduction;
 use App\Models\Staff\StaffRentDetail;
+use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\Staff\StaffTaxSeperation;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -885,5 +886,9 @@ class User extends Authenticatable implements Auditable
         } else {
             return $this->hasMany(AttendanceManualEntry::class, 'employment_id', 'id')->where('attendance_status', 'Present');
         }
+    }
+
+    public function retirement() {
+        return $this->belongsTo(StaffRetiredResignedDetail::class, 'id', 'staff_id');
     }
 }
