@@ -365,6 +365,26 @@
             })
         }
 
+        function updateQueryStringParameter(uri, key, value) {
+            var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+            var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+            if (uri.match(re)) {
+                return uri.replace(re, '$1' + key + "=" + value + '$2');
+            } else {
+                return uri + separator + key + "=" + value;
+            }
+        }
+
+        function setTableLimit(e) {
+            // Get the current URL
+            var currentUrl = window.location.href;
+            // Define the new value for the 'page' parameter
+            var newPageValue = e.value;
+            // Update the 'page' parameter in the URL
+            var updatedUrl = updateQueryStringParameter(currentUrl, 'limit', newPageValue);
+            // Navigate to the updated URL
+            window.location.href = updatedUrl;
+        }
     </script>
 </body>
 

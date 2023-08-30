@@ -19,8 +19,7 @@
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
-<body id="kt_body" class="app-blank app-blank">
-    
+<body id="kt_body" class="app-blank app-blank"> 
     <div class="d-flex flex-column flex-root" style="min-height: 100%;" id="kt_app_root">
         <!--begin::Authentication - Sign-in -->
         <div class="d-flex flex-column flex-lg-row flex-column-fluid">
@@ -45,7 +44,7 @@
                 @yield('content')
             </div>
         </div>
-    </div>
+    </div> 
 </body>
 
 </html>

@@ -14,13 +14,15 @@ class RetirementController extends Controller
 
     function index(Request $request)
     {
-        $users = $this->collection($request)->paginate($request->limit ?? 15);
+        $perPage = (!empty($request->limit) && $request->limit === 'all') ? 100000000000000000000 : $request->limit;
+        $users = $this->collection($request)->paginate($perPage);
         $month = $request->month ?? date('m');
         return view('pages.reports.retirement.index', ['users' =>  $users, "month" => $month]);
     }
 
-    function export(Request $request) {
+    function export(Request $request)
+    {
         $users = $this->collection($request)->get();
-        return Excel::download(new RetirementExport($users),'retirement-report.xlsx');
+        return Excel::download(new RetirementExport($users), 'retirement-report.xlsx');
     }
 }

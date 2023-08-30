@@ -12,7 +12,8 @@ class SalaryReportController extends Controller
 {
     use ReportHelper;
     function salary_register(Request $request) {
-        $users = $this->collection($request)->paginate(15);
+        $perPage = (!empty($request->limit) && $request->limit === 'all') ? 100000000000000000000 : $request->limit;
+        $users = $this->collection($request)->paginate($perPage);
         $month = $request->month ?? date('m');
         return view('pages.reports.staff.salary-register.index', ['users' =>  $users, "month" => $month]);
     }

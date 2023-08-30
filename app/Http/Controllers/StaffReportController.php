@@ -16,7 +16,8 @@ class StaffReportController extends Controller
     use ReportHelper;
     function staff_history(Request $request)
     {
-        $users = $this->collection($request)->paginate(15);
+        $perPage = (!empty($request->limit) && $request->limit === 'all') ? 100000000000000000000 : $request->limit;
+        $users = $this->collection($request)->paginate($perPage);
         return view('pages.reports.staff.history.index', ['users' =>  $users]);
     }
     function export_collection($user)
