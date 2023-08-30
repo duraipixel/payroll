@@ -36,4 +36,8 @@ class StaffBankLoan extends Model
         return $this->hasMany(StaffLoanEmi::class, 'staff_loan_id', 'id')->where('status', '=', 'paid')->orderBy('emi_date');
     }
 
+    public function staff() {
+        return $this->hasOne(User::class, 'id', 'staff_id');
+    }
+
 }

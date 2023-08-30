@@ -16,7 +16,7 @@ class CareerExport implements FromCollection, WithHeadings
     {
         
         return StaffRetiredResignedDetail::select('last_working_date','users.name',
-        'users.institute_emp_code','reason','types','staff_retired_resigned_details.created_at')
+        'users.institute_emp_code','reason','is_completed','types','staff_retired_resigned_details.created_at')
         ->leftJoin('users','users.id','=','staff_retired_resigned_details.staff_id')
         ->where('types', $this->types)
         ->get();
@@ -24,10 +24,11 @@ class CareerExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'Last Working Day',
+            'Added',
             'Employee Name',
             'Employee Code',
             'Reason',
+            'Is Completed Period',
             'Leaving Type',
             'Created At'
         ]; 

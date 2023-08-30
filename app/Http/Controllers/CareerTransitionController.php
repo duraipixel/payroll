@@ -110,14 +110,21 @@ class CareerTransitionController extends Controller
         ]);
 
         if ($validator->passes()) {
-
+            
+            $last_working_date = date('Y-m-d', strtotime($request->last_working_date));
+            if( isset( $request->is_completed ) ) {
+                if( $last_working_date > date('Y-m-d') ) {
+                    return response()->json(['error' => 1, 'message' => ['Can not Completed, Last working date does not satisfied'] ]);
+                }
+            }
             $staff_id = $request->staff_id;
             $ins['academic_id'] = academicYearId();
             $ins['staff_id'] = $staff_id;
-            $ins['last_working_date'] = date('Y-m-d', strtotime($request->last_working_date));
+            $ins['last_working_date'] = $last_working_date;
             $ins['types'] = $request->page_type;
             $ins['reason'] = $request->reason;
             $ins['status'] = $request->status;
+            $ins['is_completed'] = $request->is_completed ?? 'no';
 
             if ($request->hasFile('document')) {
                 $staff_info = User::find($staff_id);
@@ -131,8 +138,19 @@ class CareerTransitionController extends Controller
                 $ins['document'] = $filename;
             }
 
-
             $data = StaffRetiredResignedDetail::updateOrCreate(['id' => $id], $ins);
+
+            $user_info = User::find( $staff_id);
+            if( isset( $request->is_completed ) ) {
+                $user_info->transfer_status = $request->page_type;
+                $user_info->save();
+            } else {
+                if( $user_info->transfer_status != 'active' ) {
+                    $user_info->transfer_status = 'active';
+                    $user_info->save();
+                }
+            }
+
             $error = 0;
             $message = 'Added successfully';
         } else {

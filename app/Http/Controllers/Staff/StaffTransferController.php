@@ -76,6 +76,7 @@ class StaffTransferController extends Controller
                 $data = User::with('personal')
                     ->where('institute_id', $from_institution_id)
                     ->where('users.status', 'active')
+                    ->where('users.transfer_status', 'active')
                     ->when(!empty($search), function ($query) use ($search) {
                         $query->where('users.name', 'like', "%{$search}%")
                             ->orWhere('users.emp_code', 'like', "%{$search}%")

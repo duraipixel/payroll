@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\GratuityExport;
 use App\Http\Controllers\Controller;
 use App\Models\Gratuity;
 use App\Models\GratuityEmulument;
@@ -318,5 +319,10 @@ class GratuityController extends Controller
         GratuityEmulument::where('gratuity_id', $request->id)->delete();
         return response()->json(['message'=>"Successfully deleted state!",'status'=>1]);
 
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new GratuityExport( $request->type), date('ymdhis').'_list.xlsx');
     }
 }

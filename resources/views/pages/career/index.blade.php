@@ -66,6 +66,9 @@
                                     Status
                                 </th>
                                 <th class="text-center text-white">
+                                    Is Completed
+                                </th>
+                                <th class="text-center text-white">
                                     Actions
                                 </th>
                             </tr>
@@ -119,6 +122,10 @@
                 {
                     data: 'status',
                     name: 'status'
+                },
+                {
+                    data: 'is_completed',
+                    name: 'is_completed'
                 },
                 {
                     data: 'action',

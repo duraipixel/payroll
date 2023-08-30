@@ -73,7 +73,7 @@ class User extends Authenticatable implements Auditable
         'is_top_level',
         'image',
         'updatedBy',
-        'transfer_status', //'active', 'retired', 'resigned', 'death'
+        'transfer_status', //'active', 'retired', 'resigned', 'death' //this field is used for retired and resigned identification
         'refer_user_id'
     ];
 

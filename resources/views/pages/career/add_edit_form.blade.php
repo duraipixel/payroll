@@ -11,7 +11,7 @@
                 <option value="">--select--</option>
                 @if (isset($users) && !empty($users))
                     @foreach ($users as $item)
-                        <option value="{{ $item->id }}"> {{ $item->name }} - {{ $item->institute_emp_code }} </option>
+                        <option value="{{ $item->id }}" @if( isset( $info->staff_id ) && $info->staff_id == $item->id ) selected @endif> {{ $item->name }} - {{ $item->institute_emp_code }} </option>
                     @endforeach
                 @endif
             </select>
@@ -47,21 +47,34 @@
             Reason
         </label>
         <div>
-            <textarea name="reason" id="reason" cols="30" class="form-control" rows="3"></textarea>
+            <textarea name="reason" id="reason" cols="30" class="form-control" rows="3">{{ $info->reason ?? '' }}</textarea>
         </div>
     </div>
     <div class="fv-row form-group mb-10">
-        <label class="form-label" for="">
-            Status
-        </label>
-        <div>
-            <input type="radio" id="active" class="form-check-input" value="active" name="status"
-                @if (isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif>
-            <label class="pe-3" for="active">Active</label>
-            <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status"
-                @if (isset($info->status) && $info->status == 'inactive') checked @endif>
-            <label for="inactive">Inactive</label>
+        <div class="d-flex">
+            <div class="w-50">
+                <label class="form-label" for="">
+                    Status
+                </label>
+                <div>
+                    <input type="radio" id="active" class="form-check-input" value="active" name="status"
+                        @if (isset($info->status) && $info->status == 'active') checked @elseif(!isset($info->status)) checked @endif>
+                    <label class="pe-3" for="active">Active</label>
+                    <input type="radio" id="inactive" class="form-check-input" value="inactive" name="status"
+                        @if (isset($info->status) && $info->status == 'inactive') checked @endif>
+                    <label for="inactive">Inactive</label>
+                </div>
+            </div>
+            <div class="w-50">
+                <label class="form-label" for="is_completed">
+                    Is Completed
+                </label>
+                <div>
+                    <input type="checkbox" name="is_completed" id="is_completed" @if( isset( $info->is_completed) && $info->is_completed == 'yes') checked @endif value="yes">
+                </div>
+            </div>
         </div>
+        
     </div>
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>

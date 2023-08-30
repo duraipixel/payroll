@@ -26,7 +26,7 @@
                     @endphp
                     @if (access()->buttonAccess($route_name, 'export'))
                         <a type="button" class="btn btn-light-primary me-3 btn-sm"
-                            href="{{ route('career.export', ['type' => $page_type]) }}">
+                            href="{{ route('gratuity.export', ['type' => $page_type]) }}">
                             {!! exportSvg() !!}
                             Export
                         </a>

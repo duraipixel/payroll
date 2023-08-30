@@ -39,7 +39,7 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <select name="datatable_institute_id" id="datatable_institute_id" class="form-control">
                             <option value=""> All Institution </option>
                             @if (isset($institutions) && !empty($institutions))
@@ -48,7 +48,7 @@
                                 @endforeach
                             @endif
                         </select>
-                    </div>
+                    </div> --}}
                 </div>
 
             </div>

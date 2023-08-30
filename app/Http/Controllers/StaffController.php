@@ -1110,14 +1110,22 @@ class StaffController extends Controller
                     $print_btn = '<a target="_blank" href="' . route('staff.print', ['user' => $post_val->id]) . '"  class="btn btn-icon btn-active-info btn-light-dark mx-1 w-30px h-30px" > 
                                     <i class="fa fa-print"></i>
                                 </a>';
+                    if( $post_val->transfer_status == 'active' ){
 
+                        $status_btn = '<a href="javascript:void(0);" class="badge badge-light-' . (($post_val->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($post_val->status) . '" onclick="return staffChangeStatus(' . $post_val->id . ',\'' . ($post_val->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($post_val->status) . '</a>';
+                    } else {
+                        $edit_btn = '';
+                        $del_btn = '';
+                        $status_btn = '<a href="javascript:void(0);" class="badge badge-light-success" ">' . ucfirst($post_val->transfer_status) . '</a>';
+
+                    }
                                 
                     $postnestedData['checkbox'] = '<input type="checkbox" role="button" name="staff_ids_action[]" class="revision_check" value="' . $post_val->id . '">';
                     $postnestedData['name'] = $post_val->name;
                     $postnestedData['society_code'] = $post_val->society_emp_code;
                     $postnestedData['institute_code'] = $post_val->institute_emp_code;
                     $postnestedData['profile'] = $profile_status;
-                    $postnestedData['status'] = '<a href="javascript:void(0);" class="badge badge-light-' . (($post_val->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($post_val->status) . '" onclick="return staffChangeStatus(' . $post_val->id . ',\'' . ($post_val->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($post_val->status) . '</a>';
+                    $postnestedData['status'] = $status_btn;
                     $postnestedData['actions'] = '<div class="w-100 text-end">' . $edit_btn . $view_btn . $print_btn . $del_btn . '</div>';
                     $data_val[] = $postnestedData;
                 }

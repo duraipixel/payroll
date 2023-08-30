@@ -30,9 +30,11 @@ class HoldSalaryController extends Controller
 
     public function addEdit(Request $request)
     {
+
         $title = 'Hold Salary';
         $staff = User::select('users.*')->join('staff_salary_patterns', 'staff_salary_patterns.staff_id', '=', 'users.id')
             ->where('users.status', 'active')
+            ->where('users.transfer_status', 'active')
             ->where('staff_salary_patterns.status', 'active')
             ->get();
         $payroll_hold_month = $request->payroll_hold_month;
@@ -43,6 +45,7 @@ class HoldSalaryController extends Controller
             'payroll_hold_month' => $payroll_hold_month
         );
         return view('pages.payroll_management.hold.add_edit', $params);
+
     }
 
     public function save(Request $request)

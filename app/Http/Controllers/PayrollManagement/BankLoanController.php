@@ -38,8 +38,9 @@ class BankLoanController extends Controller
 
             $bank = Bank::where('status', 'active')->get();
             $load_details = StaffBankLoan::where('staff_id', $id)->get();
+            $user_info = User::find($id);
 
-            return view('pages.payroll_management.loan.staff_loan_details', compact('bank', 'id', 'load_details'));
+            return view('pages.payroll_management.loan.staff_loan_details', compact('bank', 'id', 'load_details', 'user_info'));
         } else {
             return '';
         }
