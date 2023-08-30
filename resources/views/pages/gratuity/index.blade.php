@@ -52,11 +52,11 @@
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="table-responsive">
                     <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
-                        id="gratuity_table">
+                        id="board_table">
                         <thead class="bg-primary">
                             <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="text-center text-white">
-                                    Issued Date
+                                    Added At
                                 </th>
                                 <th class="text-center text-white">
                                     Emp Name
@@ -76,7 +76,7 @@
                                 <th class="text-white">
                                     Total Payable of Gratuity
                                 </th>
-                                <th class="text-white">
+                                <th class="text-center text-white">
                                     Verification Status
                                 </th>
                                 <th class="text-center text-white">
@@ -97,10 +97,13 @@
 
 @section('add_on_script')
     <script>
-        var dtTable = $('#gratuity_table').DataTable({
+        var dtTable_o = $('#board_table').DataTable({
 
             processing: true,
             serverSide: true,
+            order: [
+                [0, "DESC"]
+            ],
             type: 'POST',
             ajax: {
                 "url": "{{ route('gratuity', ['type' => $page_type]) }}",
@@ -111,16 +114,16 @@
             },
 
             columns: [{
-                    data: 'date_of_issue',
-                    name: 'date_of_issue',
+                    data: 'created_at',
+                    name: 'created_at',
                 },
                 {
                     data: 'staff.name',
-                    name: 'staff.name'
+                    name: 'name'
                 },
                 {
-                    data: 'staff.society_emp_code',
-                    name: 'staff.society_emp_code'
+                    data: 'staff.institute_emp_code',
+                    name: 'emp_code'
                 },
                 {
                     data: 'cause_of_ending_service',
@@ -166,11 +169,11 @@
         $('.dataTables_length label select').addClass('form-control form-control-solid');
 
         document.querySelector('#bank_dataTable_search').addEventListener("keyup", function(e) {
-                dtTable.draw();
+                dtTable_o.draw();
             }),
 
             $('#search-form').on('submit', function(e) {
-                dtTable.draw();
+                dtTable_o.draw();
                 e.preventDefault();
             });
 
@@ -204,7 +207,7 @@
                             status: status
                         },
                         success: function(res) {
-                            dtTable.ajax.reload();
+                            dtTable_o.ajax.reload();
                             Swal.fire({
                                 title: "Updated!",
                                 text: res.message,
@@ -253,7 +256,7 @@
                             id: id,
                         },
                         success: function(res) {
-                            dtTable.ajax.reload();
+                            dtTable_o.ajax.reload();
                             Swal.fire({
                                 title: "Updated!",
                                 text: res.message,

@@ -122,7 +122,7 @@
         },
         "aaSorting": [],
         "pageLength": 25
-        });
+    });
 
         $('.dataTables_wrapper').addClass('position-relative');
         $('.dataTables_info').addClass('position-absolute');

@@ -42,44 +42,61 @@ class GratuityController extends Controller
         );
 
         if ($request->ajax()) {
+            $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
-            $page_type = $request->page_type;
+            $data = Gratuity::with(['staff'])->select('*')
+            ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+                $date = date('Y-m-d', strtotime($datatable_search));
+                return $query->where(function ($q) use ($datatable_search, $date) {
 
-            $data = Gratuity::when(!empty($datatable_search), function ($query) use ($datatable_search) {
-                    $date = date('Y-m-d', strtotime($datatable_search));
-                    return $query->where(function ($q) use ($datatable_search, $date) {
-
-                        $q->whereHas('staff', function ($jq) use ($datatable_search) {
+                    $q->whereHas('staff', function($jq) use($datatable_search){
                             $jq->where('name', 'like', "%{$datatable_search}%")
-                                ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                            ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                         })
-                            ->orWhere('gross_service', 'like', "%{$datatable_search}%");
-                    });
-                })->where('page_type', $page_type);
+                        ->orWhere('gross_service', 'like', "%{$datatable_search}%")
+                        ->orWhere('mode_of_payment', 'like', "%{$datatable_search}%")
+                        ->orWhere('mode_of_payment', 'like', "%{$datatable_search}%")
+                        ->orWhere('total_payable_gratuity', 'like', "%{$datatable_search}%")
+                        ->orWhere('gratuity_nomination_name', 'like', "%{$datatable_search}%")
+                        ->orWhereDate('date_of_ending_service', $date)
+                        ->orWhereDate('date_of_regularizion', $date);
+                });
+            })->where('page_type', $page_type);
 
             $datatables =  Datatables::of($data)
-                ->addIndexColumn()
                 
-                ->editColumn('date_of_issue', function ($row) {
-                    $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['date_of_issue'])->format('d-m-Y');
+                ->addIndexColumn()
+                ->editColumn('verification_status', function ($row) {
+                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->verification_status == 'verified') ? 'success' : (($row->verification_status == 'pending') ? 'warning' : 'danger') ). '" tooltip="Click to ' . ucwords($row->verification_status) . '" ">' . ucfirst($row->verification_status) . '</a>';
+                    return $status;
+                })
+                ->editColumn('created_at', function ($row) {
+                    $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
                     return $created_at;
                 })
-                ->addColumn('action', function ($row) use ($page_type) {
+                ->editColumn('cause_of_ending_service', function ($row) {
+                    $created_at = ucwords(str_replace('_', ' ', $row['cause_of_ending_service']));
+                    return $created_at;
+                })
+                ->addColumn('action', function ($row) use($page_type) {
                     $route_name = request()->route()->getName();
-                    $edit_btn = $del_btn = '';
                     if (access()->buttonAccess($route_name, 'add_edit')) {
-                        $edit_btn = '<a href="' . route('gratuity.add_edit', ['type' => $page_type, 'id' => $row['id']]) . '" class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                        $edit_btn = '<a href="'.route('gratuity.add_edit', ['type' => $page_type, 'id' => $row->id]).'" class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                     <i class="fa fa-edit"></i>
                     </a>';
+                    } else {
+                        $edit_btn = '';
                     }
                     if (access()->buttonAccess($route_name, 'delete')) {
-                        $del_btn = '<a href="javascript:void(0);" onclick="deleteGratuity(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                        $del_btn = '<a href="javascript:void(0);" onclick="deleteBoard(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                     <i class="fa fa-trash"></i></a>';
+                    } else {
+                        $del_btn = '';
                     }
                     return $edit_btn . $del_btn;
                 })
-                ->rawColumns(['action']);
+                ->rawColumns(['action', 'verification_status']);
             return $datatables->make(true);
         }
 
@@ -89,6 +106,11 @@ class GratuityController extends Controller
     public function addEdit(Request $request)
     {
         $page_type = $request->type;
+        $id = $request->id ?? '';
+
+        if( !empty( $id ) ) {
+            $info = Gratuity::find( $id );
+        }
 
         $title = ucwords(str_replace('_', ' ', $page_type));
         $page_title = 'Form for Assessing of Gratuity For ' . $title . ' Staff';
@@ -101,7 +123,8 @@ class GratuityController extends Controller
         $params['page_title'] = $page_title;
         $params['page_type'] = $page_type;
         $params['user'] = $user;
-
+        $params['info'] = $info ?? [];
+            
         return view('pages.gratuity.add_edit', $params);
     }
 

@@ -48,7 +48,8 @@ class Gratuity extends Model implements Auditable
         'payment_remarks',	
         'payment_attachment',	
         'approved_by',
-        'page_type'
+        'page_type',
+        'gratuity_type'
     ];
 
     public function staff() {

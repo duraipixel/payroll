@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::table('gratuities', function (Blueprint $table) {
             $table->string('page_type')->nullable();
+            $table->string('gratuity_type')->nullable();
         });
     }
 
@@ -27,6 +28,7 @@ return new class extends Migration
     {
         Schema::table('gratuities', function (Blueprint $table) {
             $table->dropColumn('page_type');
+            $table->dropColumn('gratuity_type');
         });
     }
 };

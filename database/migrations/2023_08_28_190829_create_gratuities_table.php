@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('extraordinary_leave')->nullable();
             $table->string('net_qualifying_service')->nullable();
             $table->string('suspension_qualifying_service')->nullable();
-            $table->string('qualify_service_expressed ')->nullable();
+            $table->string('qualify_service_expressed')->nullable();
             $table->decimal('total_emuluments', 12,2);
             $table->decimal('gratuity_calculation', 12,2);
             $table->string('gratuity_nomination_name')->nullable();

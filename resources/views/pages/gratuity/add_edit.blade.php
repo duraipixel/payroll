@@ -21,6 +21,7 @@
             <form id="gratuity_form" action="{{ route('gratuity.preview') }}" class="card " method="POST" target="_blank">
                 @csrf
                 <div class="col-sm-8">
+                    <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
                     <div class="row border border-1 p-4">
                         <div class="row  mt-3">
                             <div class="col-sm-6">
@@ -32,8 +33,10 @@
                                     <option value="">--select--</option>
                                     @if (isset($user) && !empty($user))
                                         @foreach ($user as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }} -
-                                                {{ $item->institute_emp_code }}</option>
+                                            <option value="{{ $item->id }}" @if( isset( $info->staff_id ) && $info->staff_id == $item->id ) selected="selected" @endif>
+                                                {{ $item->name }} -
+                                                {{ $item->institute_emp_code }}
+                                            </option>
                                         @endforeach
                                     @endif
                                 </select>
