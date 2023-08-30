@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RetirementController;
 use App\Http\Controllers\SalaryReportController;
 use App\Http\Controllers\StaffReportController;
 use Illuminate\Support\Facades\Route;
@@ -21,4 +22,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
     Route::get('/service/history', [ReportController::class, 'serviceHistoryIndex'])->name('reports.service.history');
     Route::get('/staff', [StaffReportController::class, 'staff_history'])->name('reports.staff.history');
     Route::get('/salary-register', [SalaryReportController::class, 'salary_register'])->name('reports.salary.register'); 
+    Route::get('/retirement-report', [RetirementController::class, 'index'])->name('reports.retirement'); 
 });
