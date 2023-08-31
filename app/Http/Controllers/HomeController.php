@@ -252,7 +252,8 @@ class HomeController extends Controller
             'month_chart' => $this->dashboardRepository->monthlyGraphUser($s_date, $e_date),
             'retired' => $this->dashboardRepository->getStaffResingedRetiredList('retired', $s_date, $e_date),
             'resigned' => $this->dashboardRepository->getStaffResingedRetiredList('resigned', $s_date, $e_date),
-            'leave_chart' => $this->dashboardRepository->leaveChartCount($s_date, $e_date)
+            'leave_chart' => $this->dashboardRepository->leaveChartCount($s_date, $e_date),
+            'financial_chart' => $this->dashboardRepository->financialChart()
         );
 
         return view('pages.dashboard.dynamic_view', $params);
