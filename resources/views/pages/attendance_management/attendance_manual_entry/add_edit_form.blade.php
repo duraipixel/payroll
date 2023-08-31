@@ -132,6 +132,11 @@
 </form>
 
 <script>
+    $('#employee_id').select2({ 
+        dropdownParent: $('#kt_dynamic_app'),
+        theme: 'bootstrap-5',
+        width: '100%'
+    });
     var KTAppEcommerceSaveLeaveMapping = function() {
         const handleSubmit = () => {
             // Define variables
