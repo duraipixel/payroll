@@ -203,7 +203,7 @@ class TestOneController extends Controller
                         // $entry_info = AttendanceManualEntry::updateOrCreate($check_array, $ins);
                     }
                     $i++;
-                    dump( $i );
+                    // dump( $i );
                 }
                 
             }
