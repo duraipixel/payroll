@@ -216,12 +216,21 @@ class DashboardRepository extends Controller
         $to = date('Y-m-d', strtotime($academic_info->to_year . '-02-28'));
 
         $expenses = DB::table('staff_salaries')
-                ->select(DB::raw('SUM(net_salary) as expense'), 'salary_date')
-                ->selectRaw("CONCAT(DATENAME(MONTH, salary_date), ' ', DATEPART(YEAR, salary_date)) as formatted_date")
-                ->where('salary_date', '>=', $from)
-                ->where('salary_date', '<=', $to)
-                ->groupByRaw('DATENAME(MONTH, salary_date), DATEPART(YEAR, salary_date), salary_date')
-                ->get();
+            ->select(DB::raw('SUM(net_salary) as expense'), 'salary_date')
+            ->selectRaw("CONCAT(DATENAME(MONTH, salary_date), ' ', DATEPART(YEAR, salary_date)) as formatted_date")
+            ->where('salary_date', '>=', $from)
+            ->where('salary_date', '<=', $to)
+            ->groupByRaw('DATENAME(MONTH, salary_date), DATEPART(YEAR, salary_date), salary_date')
+            ->get();
+
+        $expenses = DB::table('staff_salaries')
+            ->select(DB::raw('SUM(net_salary) as expense'), 'salary_date')
+            ->selectRaw("DATENAME(MONTH, salary_date) + ' ' + CAST(DATEPART(YEAR, salary_date) AS VARCHAR(4)) as formatted_date")
+            ->where('salary_date', '>=', '2023-03-01')
+            ->where('salary_date', '<=', '2024-02-28')
+            ->groupByRaw('DATENAME(MONTH, salary_date), DATEPART(YEAR, salary_date), salary_date')
+            ->get();
+
         return $expenses;
     }
 }
