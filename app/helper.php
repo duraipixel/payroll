@@ -1303,3 +1303,15 @@ function getDeductionInfo( $staff_id, $deduction_type, $date ) {
     return $info ?? '';
 }
 
+function findMonthBetweenDates($start_date, $end_date) {
+
+    $date1 = $start_date;
+    $date2 = $end_date;
+    $d1 = new DateTime($date2); 
+    $d2 = new DateTime($date1);                                  
+    $Months = $d2->diff($d1); 
+    $howeverManyMonths = (($Months->y) * 12) + ($Months->m);
+    return $howeverManyMonths;
+
+}
+

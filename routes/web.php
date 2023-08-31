@@ -430,6 +430,17 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/gratuity/change/status', [App\Http\Controllers\GratuityController::class, 'changeStatus'])->name('gratuity.change.status'); 
     Route::post('/gratuity/delete', [App\Http\Controllers\GratuityController::class, 'delete'])->name('gratuity.delete'); 
     Route::get('/gratuity/export/{type}', [App\Http\Controllers\GratuityController::class, 'export'])->name('gratuity.export'); 
+
+    #El Gratuity routes
+    Route::get('/gratuity-el/{type}', [App\Http\Controllers\GratuityElController::class, 'index'])->name('gratuity-el'); 
+    Route::get('/gratuity-el/add_edit/{type}/{id?}', [App\Http\Controllers\GratuityElController::class, 'addEdit'])->name('gratuity-el.add_edit'); 
+    Route::post('/gratuity-el/add_edit/form', [App\Http\Controllers\GratuityElController::class, 'ajaxForm'])->name('gratuity-el.ajax.form'); 
+    Route::post('/gratuity-el/save', [App\Http\Controllers\GratuityElController::class, 'save'])->name('gratuity-el.save'); 
+    Route::post('/gratuity-el/preview', [App\Http\Controllers\GratuityElController::class, 'preview'])->name('gratuity-el.preview'); 
+    Route::post('/gratuity-el/change/status', [App\Http\Controllers\GratuityElController::class, 'changeStatus'])->name('gratuity-el.change.status'); 
+    Route::post('/gratuity-el/delete', [App\Http\Controllers\GratuityElController::class, 'delete'])->name('gratuity-el.delete'); 
+    Route::get('/gratuity-el/export/{type}', [App\Http\Controllers\GratuityElController::class, 'export'])->name('gratuity-el.export'); 
+
     include 'crud.php';
     
 });

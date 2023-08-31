@@ -316,7 +316,7 @@
                             <span class="menu-title">Attendance Management</span>
                             <span class="menu-arrow"></span>
                         </span>
-                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        {{-- <div class="menu-sub menu-sub-accordion menu-active-bg">
                             <div class="menu-item">
                                 <a class="menu-link @if (request()->routeIs(['att-manual-entry'])) active @endif"
                                     href="{{ route('attendance.overview') }}">
@@ -326,7 +326,7 @@
                                     <span class="menu-title">Overview</span>
                                 </a>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="menu-sub menu-sub-accordion menu-active-bg">
                             @if (access()->hasAccess('att-manual-entry', 'view'))
                                 <div class="menu-item">
@@ -887,6 +887,26 @@
                                         <span class="bullet bullet-dot"></span>
                                     </span>
                                     <span class="menu-title">Retired Staff</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link @if (request()->routeIs(['gratuity-el', 'gratuity-el.add_edit']) && request()->route('type') === 'retired') active @endif" href="{{ route('gratuity-el', ['type' => 'retired']) }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title"> Retired Earned Leave </span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg">
+                            <div class="menu-item">
+                                <a class="menu-link @if (request()->routeIs(['gratuity-el', 'gratuity-el.add_edit']) && request()->route('type') === 'retired') active @endif" href="{{ route('gratuity-el', ['type' => 'retired']) }}">
+                                    <span class="menu-bullet">
+                                        <span class="bullet bullet-dot"></span>
+                                    </span>
+                                    <span class="menu-title"> Resigned Earned Leave </span>
                                 </a>
                             </div>
                         </div>
