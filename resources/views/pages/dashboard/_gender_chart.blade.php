@@ -26,14 +26,14 @@
                                     <div class="d-flex fs-6 fw-bold align-items-center mb-3">
                                         <div class="bullet bg-success me-3"></div>
                                         <div class="text-gray-400">Male</div>
-                                        <div class="ms-auto fw-bolder text-gray-700">{{ $gender_calculation->total_female }}</div>
+                                        <div class="ms-auto fw-bolder text-gray-700">{{ $gender_calculation->total_male }}</div>
                                     </div>
                                     <!--end::Label-->
                                     <!--begin::Label-->
                                     <div class="d-flex fs-6 fw-bold align-items-center mb-3">
                                         <div class="bullet bg-primary me-3"></div>
                                         <div class="text-gray-400">Female</div>
-                                        <div class="ms-auto fw-bolder text-gray-700">{{ $gender_calculation->total_male }}</div>
+                                        <div class="ms-auto fw-bolder text-gray-700">{{ $gender_calculation->total_female }}</div>
                                     </div>
                                     <!--end::Label-->
                                     <!--begin::Label-->
