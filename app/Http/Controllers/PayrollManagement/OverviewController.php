@@ -101,6 +101,7 @@ class OverviewController extends Controller
         /** 
          * check previous month payroll created
          */
+        
         $params = array(
             'date' => $dates,
             'lock_info' => $lock_info,
@@ -148,8 +149,14 @@ class OverviewController extends Controller
             $ins['it_statement_view'] = $status;
         }
         if ($mode == 'payroll') {
+            if( $status == 'lock' ) {
+                $ins['payroll'] = $status;
+                $ins['payroll_lock'] = date('Y-m-d H:i:d');
+            } else {
+                $ins['payroll'] = $status;
+                $ins['payroll_lock'] = null;
+            }
             $message = 'Payroll process ' . $status . ' Successfully';
-            $ins['payroll'] = $status;
         }
         PayrollPermission::updateOrCreate(['payout_month' => $payout_date, 'academic_id' => academicYearId()], $ins);
         $error = 0;
@@ -533,6 +540,7 @@ class OverviewController extends Controller
                     $sal['working_days'] = $working_day;
                     $sal['worked_days'] = $value->workedDays->count();
                     $sal['other_description'] = $other_description;
+                    $sal['salary_date'] = $payroll_date;
                     $salary_info = StaffSalary::updateOrCreate(['staff_id' => $staff_id, 'payroll_id' => $payout_id], $sal);
 
                     /**

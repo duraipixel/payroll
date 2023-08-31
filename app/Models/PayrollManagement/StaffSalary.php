@@ -32,7 +32,8 @@ class StaffSalary extends Model
         'worked_days',
         'leave_days',
         'other_description',
-        'employee_description'
+        'employee_description',
+        'salary_date'
     ];
 
     public function fields()

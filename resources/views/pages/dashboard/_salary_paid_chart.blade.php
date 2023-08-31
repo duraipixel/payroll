@@ -4,7 +4,7 @@
             <h3 class="card-title align-items-start flex-column">
                 <span class="card-label fw-bolder text-dark">Salary paid for the financial year</span>
             </h3>
-            <div class="card-toolbar">
+            {{-- <div class="card-toolbar">
                 <button class="btn btn-icon btn-color-gray-400 btn-active-color-primary justify-content-end"
                     data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-overflow="true">
                     <span class="svg-icon svg-icon-1">
@@ -36,7 +36,7 @@
                         <a href="#" class="menu-link px-3">DA</a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
         <div class="card-body pt-4">
             <div id="kt_charts_widget_123" class="h-400px w-100"></div>
@@ -44,6 +44,9 @@
     </div>
 </div>
 <script>
+    var financial_chart = @json($financial_chart);
+    console.log('financial_chart', financial_chart);
+
     // Class definition
     var KTChartsWidget_Salary = (function() {
         // Private methods
@@ -78,75 +81,25 @@
                     })
                 );
 
-                var data = [{
-                        year: "2016",
-                        income: 23.5,
-                        expenses: 21.1,
-                        columnSettings: {
-                            fill: am5.color(KTUtil.getCssVariableValue("--bs-primary")),
-                        },
-                    },
-                    {
-                        year: "2017",
-                        income: 26.2,
-                        expenses: 30.5,
-                        columnSettings: {
-                            fill: am5.color(KTUtil.getCssVariableValue("--bs-primary")),
-                        },
-                    },
-                    {
-                        year: "2018",
-                        income: 30.1,
-                        expenses: 34.9,
-                        columnSettings: {
-                            fill: am5.color(KTUtil.getCssVariableValue("--bs-primary")),
-                        },
-                    },
-                    {
-                        year: "2019",
-                        income: 29.5,
-                        expenses: 31.1,
-                        columnSettings: {
-                            fill: am5.color(KTUtil.getCssVariableValue("--bs-primary")),
-                        },
-                    },
-                    {
-                        year: "2020",
-                        income: 30.6,
-                        expenses: 28.2,
-                        strokeSettings: {
-                            strokeWidth: 3,
-                            strokeDasharray: [5, 5],
-                        },
-                        columnSettings: {
-                            fill: am5.color(KTUtil.getCssVariableValue("--bs-primary")),
-                        },
-                    },
-                    {
-                        year: "2021",
-                        income: 40.6,
-                        expenses: 28.2,
-                        strokeSettings: {
-                            strokeWidth: 3,
-                            strokeDasharray: [5, 5],
-                        },
-                        columnSettings: {
-                            fill: am5.color(KTUtil.getCssVariableValue("--bs-primary")),
-                        },
-                    },
-                    {
-                        year: "2022",
-                        income: 34.1,
-                        expenses: 32.9,
-                        strokeSettings: {
-                            strokeWidth: 3,
-                            strokeDasharray: [5, 5],
-                        },
-                        columnSettings: {
-                            fill: am5.color(KTUtil.getCssVariableValue("--bs-primary")),
-                        },
-                    },
-                ];
+                var chart_arr = [];
+                if (financial_chart) {
+
+                    financial_chart.map((item) => {
+                        var letValues = {
+                            year: item.formatted_date,
+                            expense: item.expense,
+                            income: parseFloat(item.expense),
+                            columnSettings: {
+                                fill: am5.color(KTUtil.getCssVariableValue(
+                                    "--bs-primary")),
+                            },
+                        };
+                        chart_arr.push(letValues);
+                    });
+                }
+                console.log(chart_arr, 'chart_arr');
+
+                var data = chart_arr;
 
                 // Create axes
                 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
@@ -199,10 +152,10 @@
 
                 var series1 = chart.series.push(
                     am5xy.ColumnSeries.new(root, {
-                        name: "Income",
+                        name: "Expenses",
                         xAxis: xAxis,
                         yAxis: yAxis,
-                        valueYField: "income",
+                        valueYField: "expense",
                         categoryXField: "year",
                         tooltip: am5.Tooltip.new(root, {
                             pointerOrientation: "horizontal",
@@ -212,7 +165,7 @@
                 );
 
                 series1.columns.template.setAll({
-                    tooltipY: am5.percent(10),
+                    tooltipY: am5.percent(50),
                     templateField: "columnSettings",
                 });
 
@@ -220,17 +173,17 @@
 
                 var series2 = chart.series.push(
                     am5xy.LineSeries.new(root, {
-                        name: "Expenses",
+                        name: "Income",
                         xAxis: xAxis,
                         yAxis: yAxis,
-                        valueYField: "expenses",
+                        valueYField: "income",
                         categoryXField: "year",
                         fill: am5.color(KTUtil.getCssVariableValue("--bs-success")),
                         stroke: am5.color(KTUtil.getCssVariableValue("--bs-success")),
-                        tooltip: am5.Tooltip.new(root, {
-                            pointerOrientation: "horizontal",
-                            labelText: "{name} in {categoryX}: {valueY} {info}",
-                        }),
+                        // tooltip: am5.Tooltip.new(root, {
+                        //     pointerOrientation: "horizontal",
+                        //     labelText: "{name} in {categoryX}: {valueY} {info}",
+                        // }),
                     })
                 );
 

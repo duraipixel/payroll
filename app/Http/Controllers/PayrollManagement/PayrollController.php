@@ -75,6 +75,7 @@ class PayrollController extends Controller
 
         $month_no = $request->month_no;
         $dates = $request->dates;
+        $staff_id = $request->staff_id;
         
         $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
         $deductions_field = SalaryField::where('salary_head_id', 2)
@@ -84,7 +85,7 @@ class PayrollController extends Controller
             })->get();
         
         $payroll_id = $request->payroll_id;
-        $staff_id = $request->staff_id;
+        
         // $nature_id = $request->nature_id;
         
         

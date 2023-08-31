@@ -132,7 +132,8 @@ class HomeController extends Controller
             'month_chart' => $this->dashboardRepository->monthlyGraphUser(),
             'retired' => $this->dashboardRepository->getStaffResingedRetiredList('retired'),
             'resigned' => $this->dashboardRepository->getStaffResingedRetiredList('resigned'),
-            'leave_chart' => $this->dashboardRepository->leaveChartCount()
+            'leave_chart' => $this->dashboardRepository->leaveChartCount(),
+            'financial_chart' => $this->dashboardRepository->financialChart()
         );
 
         return view('pages.dashboard.home', $params);

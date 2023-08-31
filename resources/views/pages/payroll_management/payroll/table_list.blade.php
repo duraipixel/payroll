@@ -94,6 +94,8 @@
 
         function getTableDataPayrollList() {
 
+            var staff_id = $('#staff_id').val();
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -105,7 +107,8 @@
                 type: 'POST',
                 data: {
                     month_no: month_no,
-                    dates: dates
+                    dates: dates,
+                    staff_id:staff_id
                 },
                 success: function(res) {
                     $('#dataTagForPayroll').html(res);

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\Leave\StaffLeave;
 use App\Models\Staff\StaffRetiredResignedDetail;
@@ -21,7 +22,7 @@ class DashboardRepository extends Controller
         $absenceEntries = AttendanceManualEntry::with('user')->selectRaw('COUNT(*) as total, employment_id')
             ->where('attendance_status', '=', 'Absence')
             ->where('academic_id', $academic_id)
-            ->when(!empty( $start_date ) && !empty( $end_date ), function($query) use($start_date, $end_date) {
+            ->when(!empty($start_date) && !empty($end_date), function ($query) use ($start_date, $end_date) {
                 return $query->whereRaw("attendance_date BETWEEN '" . $start_date . "' and '" . $end_date . "'");
             })
             ->whereHas('user', function ($query) {
@@ -68,7 +69,7 @@ class DashboardRepository extends Controller
         return $javascriptDataJson;
     }
 
-    public function getTotalStaffCountByInstitutions( $start_date = '', $end_date = '' )
+    public function getTotalStaffCountByInstitutions($start_date = '', $end_date = '')
     {
         $results = User::join('institutions', 'institutions.id', '=', 'users.institute_id')
             ->whereNull('is_super_admin')
@@ -79,59 +80,62 @@ class DashboardRepository extends Controller
         return $results;
     }
 
-    public function monthlyGraphUser( $start_date = '', $end_date = '' ) {
+    public function monthlyGraphUser($start_date = '', $end_date = '')
+    {
 
-        if( empty( $start_date ) && empty( $end_date ) ) {
+        if (empty($start_date) && empty($end_date)) {
             $start_date = date('Y-m-d', strtotime('-1 month'));
             $end_date = date('Y-m-d');
         }
 
         $new_addition = User::whereRaw("CAST(created_at AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
-        ->InstituteBased()
-        ->count();
+            ->InstituteBased()
+            ->count();
 
         $resigned = StaffRetiredResignedDetail::with('staff')->where('types', 'resigned')
-                ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
-                ->whereHas('staff', function ($query) {
-                    $query->where('institute_id', session()->get('staff_institute_id'));
-                })
-                ->count();
+            ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
+            ->whereHas('staff', function ($query) {
+                $query->where('institute_id', session()->get('staff_institute_id'));
+            })
+            ->count();
 
         $retired = StaffRetiredResignedDetail::with('staff')->where('types', 'retired')
-                ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
-                ->whereHas('staff', function ($query) {
-                    $query->where('institute_id', session()->get('staff_institute_id'));
-                })
-                ->count();
+            ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
+            ->whereHas('staff', function ($query) {
+                $query->where('institute_id', session()->get('staff_institute_id'));
+            })
+            ->count();
 
         $response = [
-                        'addition' => $new_addition,
-                        'resigned' => $resigned,
-                        'retired' => $retired
+            'addition' => $new_addition,
+            'resigned' => $resigned,
+            'retired' => $retired
         ];
         return $response;
     }
 
-    public function getStaffResingedRetiredList($type, $start_date = '', $end_date = '' ) {
+    public function getStaffResingedRetiredList($type, $start_date = '', $end_date = '')
+    {
 
-        if( empty( $start_date ) && empty( $end_date ) ) {
+        if (empty($start_date) && empty($end_date)) {
             $start_date = date('Y-m-d', strtotime('-1 month'));
             $end_date = date('Y-m-d');
         }
 
         $details = StaffRetiredResignedDetail::with('staff')->where('types', $type)
-                        ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
-                        ->whereHas('staff', function ($query) {
-                            $query->where('institute_id', session()->get('staff_institute_id'));
-                        })
-                        ->get();
+            ->whereRaw("CAST(last_working_date AS DATE) BETWEEN '" . $start_date . "' and '" . $end_date . "'")
+            ->whereHas('staff', function ($query) {
+                $query->where('institute_id', session()->get('staff_institute_id'));
+            })
+            ->get();
 
         return $details;
     }
 
-    public function leaveChartCount($start_date = '', $end_date = '' ) {
+    public function leaveChartCount($start_date = '', $end_date = '')
+    {
 
-        if( empty( $start_date ) && empty( $end_date ) ) {
+        if (empty($start_date) && empty($end_date)) {
             $start_date = date('Y-m-d', strtotime('-1 month'));
             $end_date = date('Y-m-d');
         }
@@ -140,57 +144,57 @@ class DashboardRepository extends Controller
         // $end_date = '2023-03-01';
 
         $present = DB::table(function ($subquery) use ($start_date, $end_date) {
-                        $subquery->from('attendance_manual_entries')
-                            ->selectRaw('COUNT(*) AS cnt')
-                            ->whereBetween('attendance_date', [$start_date, $end_date])
-                            ->where('attendance_status', 'present')
-                            ->groupBy('attendance_date');
-                    }, 'counts')
-                    ->selectRaw('AVG(cnt) AS average_count')
-                    ->first();
+            $subquery->from('attendance_manual_entries')
+                ->selectRaw('COUNT(*) AS cnt')
+                ->whereBetween('attendance_date', [$start_date, $end_date])
+                ->where('attendance_status', 'present')
+                ->groupBy('attendance_date');
+        }, 'counts')
+            ->selectRaw('AVG(cnt) AS average_count')
+            ->first();
 
         $absence = DB::table(function ($subquery) use ($start_date, $end_date) {
-                        $subquery->from('attendance_manual_entries')
-                            ->selectRaw('COUNT(*) AS cnt')
-                            ->whereBetween('attendance_date', [$start_date, $end_date])
-                            ->where('attendance_status', 'absence')
-                            ->groupBy('attendance_date');
-                    }, 'counts')
-                    ->selectRaw('AVG(cnt) AS average_count')
-                    ->first();
-       
-        $el_count = StaffLeave::select('staff_leaves.*')                   
-                    ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
-                    ->where('leave_heads.code', 'el')
-                    ->where('staff_leaves.status', 'approved')
-                    ->where('staff_leaves.from_date', '>=', $start_date )
-                    ->where('staff_leaves.to_date', '<=', $end_date )
-                    ->sum('no_of_days');
+            $subquery->from('attendance_manual_entries')
+                ->selectRaw('COUNT(*) AS cnt')
+                ->whereBetween('attendance_date', [$start_date, $end_date])
+                ->where('attendance_status', 'absence')
+                ->groupBy('attendance_date');
+        }, 'counts')
+            ->selectRaw('AVG(cnt) AS average_count')
+            ->first();
 
-        $cl_count = StaffLeave::select('staff_leaves.*')                   
-                    ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
-                    ->where('leave_heads.code', 'cl')
-                    ->where('staff_leaves.status', 'approved')
-                    ->where('staff_leaves.from_date', '>=', $start_date )
-                    ->where('staff_leaves.to_date', '<=', $end_date )
-                    ->sum('no_of_days');
+        $el_count = StaffLeave::select('staff_leaves.*')
+            ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
+            ->where('leave_heads.code', 'el')
+            ->where('staff_leaves.status', 'approved')
+            ->where('staff_leaves.from_date', '>=', $start_date)
+            ->where('staff_leaves.to_date', '<=', $end_date)
+            ->sum('no_of_days');
 
-        $ml_count = StaffLeave::select('staff_leaves.*')                   
-                    ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
-                    ->where('leave_heads.code', 'ml')
-                    ->where('staff_leaves.status', 'approved')
-                    ->where('staff_leaves.from_date', '>=', $start_date )
-                    ->where('staff_leaves.to_date', '<=', $end_date )
-                    ->sum('no_of_days');
+        $cl_count = StaffLeave::select('staff_leaves.*')
+            ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
+            ->where('leave_heads.code', 'cl')
+            ->where('staff_leaves.status', 'approved')
+            ->where('staff_leaves.from_date', '>=', $start_date)
+            ->where('staff_leaves.to_date', '<=', $end_date)
+            ->sum('no_of_days');
 
-        $eol_count = StaffLeave::select('staff_leaves.*')                   
-                    ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
-                    ->where('leave_heads.code', 'eol')
-                    ->where('staff_leaves.status', 'approved')
-                    ->where('staff_leaves.from_date', '>=', $start_date )
-                    ->where('staff_leaves.to_date', '<=', $end_date )
-                    ->sum('no_of_days');
-    
+        $ml_count = StaffLeave::select('staff_leaves.*')
+            ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
+            ->where('leave_heads.code', 'ml')
+            ->where('staff_leaves.status', 'approved')
+            ->where('staff_leaves.from_date', '>=', $start_date)
+            ->where('staff_leaves.to_date', '<=', $end_date)
+            ->sum('no_of_days');
+
+        $eol_count = StaffLeave::select('staff_leaves.*')
+            ->join('leave_heads', 'leave_heads.id', '=', 'staff_leaves.leave_category_id')
+            ->where('leave_heads.code', 'eol')
+            ->where('staff_leaves.status', 'approved')
+            ->where('staff_leaves.from_date', '>=', $start_date)
+            ->where('staff_leaves.to_date', '<=', $end_date)
+            ->sum('no_of_days');
+
         return [
             $present->average_count ?? 0,
             $absence->average_count ?? 0,
@@ -199,7 +203,25 @@ class DashboardRepository extends Controller
             $ml_count,
             $eol_count
         ];
-
     }
-    
+
+    public function financialChart()
+    {
+
+        $academic_id = academicYearId();
+
+        $academic_info = AcademicYear::find($academic_id);
+
+        $from = date('Y-m-d', strtotime($academic_info->from_year . '-03-01'));
+        $to = date('Y-m-d', strtotime($academic_info->to_year . '-02-28'));
+
+        $expenses = DB::table('staff_salaries')
+                ->select(DB::raw('SUM(net_salary) as expense'), 'salary_date')
+                ->selectRaw("CONCAT(DATENAME(MONTH, salary_date), ' ', DATEPART(YEAR, salary_date)) as formatted_date")
+                ->where('salary_date', '>=', $from)
+                ->where('salary_date', '<=', $to)
+                ->groupByRaw('DATENAME(MONTH, salary_date), DATEPART(YEAR, salary_date), salary_date')
+                ->get();
+        return $expenses;
+    }
 }

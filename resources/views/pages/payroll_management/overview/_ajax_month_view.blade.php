@@ -61,8 +61,11 @@
                     </div>
                 </div>
                 <div>
-                    @if( isset( $lock_info->lock ) && $lock_info->lock == 'lock' ) 
-                    <label class="badge badge-light-danger">Payroll Locked on {{ date('d/M/Y H:i A', strtotime($lock_info->payroll_lock)) }}</label>
+                    @if( isset( $lock_info->payroll ) && $lock_info->payroll == 'lock' ) 
+                    <label class="badge badge-light-danger">
+                        Payroll Locked 
+                        on {{ date('d/M/Y H:i A', strtotime($lock_info->payroll_lock)) }}
+                    </label>
                     @else
                     <button class="btn btn-light-success" id="process_payroll_btn" onclick="processPayroll('{{ $date }}')">
                         Process Payroll
