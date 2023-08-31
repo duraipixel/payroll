@@ -139,6 +139,7 @@ class TestOneController extends Controller
     {
 
         $date = $request->cron_date;
+        $type = $request->type;
         $date = date('Y-m-d', strtotime($date));
         $end_date = $date;
 
@@ -199,8 +200,9 @@ class TestOneController extends Controller
                         $ins['api_response'] = serialize($items);
                         
                         $check_array = ['attendance_date' => $current_date, 'employment_id' => $user_info->id];
-                      
-                        // $entry_info = AttendanceManualEntry::updateOrCreate($check_array, $ins);
+                        if( isset( $type ) && $type == 'update') {
+                            $entry_info = AttendanceManualEntry::updateOrCreate($check_array, $ins);
+                        }
                     }
                     $i++;
                     // dump( $i );
