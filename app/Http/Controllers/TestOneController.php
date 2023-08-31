@@ -138,7 +138,7 @@ class TestOneController extends Controller
     public function getCronData(Request $request)
     {
 
-        $date = $request->date;
+        $date = $request->cron_date;
         $date = date('Y-m-d', strtotime($date));
         $end_date = $date;
 
