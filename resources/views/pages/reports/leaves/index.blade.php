@@ -7,11 +7,12 @@
                     <select name="limit" onchange="setTableLimit(this)" class="border shadow-sm">
                         @for ($i = 0; $i < 10; $i++)
                             @php
-                                $limit = ($i + 1) * 10
+                                $limit = ($i + 1) * 10;
                             @endphp
-                            <option {{ request()->limit == $limit ? 'selected' : ''  }} value="{{ $limit }}">{{ $limit }}</option>
+                            <option {{ request()->limit == $limit ? 'selected' : '' }} value="{{ $limit }}">
+                                {{ $limit }}</option>
                         @endfor
-                        <option  {{ request()->limit === 'all' ? 'selected' : ''  }} value="all">All</option>
+                        <option {{ request()->limit === 'all' ? 'selected' : '' }} value="all">All</option>
                     </select>
                     <b>Leave Report</b>
                 </div>
@@ -21,6 +22,13 @@
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
                         <input type="text" name="name" value="{{ request()->name }}"
                             class="form-control form-control-sm  w-auto d-inline" placeholder="Search Staff Name.." />
+                        <select name="department" class="form-select form-select-sm w-auto d-inline">
+                            <option value="">-- Department --</option>
+                            @foreach (Department() as $department)
+                                <option {{ request()->department == $department->id ? 'selected' : '' }}
+                                    value="{{ $department->id }}"> {{ $department->name }}</option>
+                            @endforeach
+                        </select>
                         <button onclick="this.form.action = '{{ route('reports.leaves') }}';" type="submit"
                             class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Find</button>
                         <a href="{{ route('reports.leaves') }}" class="btn btn-sm btn-warning">
