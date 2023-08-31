@@ -126,6 +126,14 @@ return [
         'board' => 'University/Boards',        
      ],    
     'reports' => [
-        'reports.profile' => 'Staff Profile Reports'
+
+        'reports.profile' => 'Staff Profile Reports',
+        'reports.attendance' => 'Staff Attendance Reports',
+        'reports.service.history' => 'Staff Service History Book Reports',
+        'reports.staff.history' => 'Staff History Reports',
+        'reports.salary.register' => 'Staff Salary Register Reports',
+        'reports.retirement' => 'Staff Retirement Reports',
+        'reports.leaves' => 'Staff Leave Reports',
+
     ]
 ];

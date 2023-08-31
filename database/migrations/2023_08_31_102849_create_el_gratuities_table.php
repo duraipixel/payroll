@@ -30,7 +30,6 @@ return new class extends Migration
             $table->string('pba_da_percentage')->nullable();
             $table->string('basic_da_percentage')->nullable();
             $table->decimal('total_emoluments', 12,2);
-            $table->decimal('total_emoluments', 12,2);
             $table->decimal('total_el_gratuity', 12, 2)->nullable();
             $table->string('el_type')->nullable()->comment('retired, resigned');
             $table->string('mode_of_payment')->nullable();
