@@ -424,7 +424,7 @@
             success: function(res) {
 
                 if (res.data) {
-                    $('#staff_code').val(res.data.emp_code);
+                    $('#staff_code').val(res.data.institute_emp_code);
                     $('#designation').val(res.data?.position?.designation?.name);
                     $('#staff_id').val(res.data.id);
                     $('#staff_name').val(res.data.name);
