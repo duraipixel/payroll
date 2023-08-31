@@ -135,11 +135,11 @@ class TestOneController extends Controller
         }
     }
 
-    public function getCronData()
+    public function getCronData(Request $request)
     {
 
-        $date = '2023-08-28';
-        
+        $date = $request->date;
+        $date = date('Y-m-d', strtotime($date));
         $end_date = $date;
 
         // $url = 'http://192.168.1.46:8085/att/api/dailyAttendanceReport/';
@@ -200,7 +200,7 @@ class TestOneController extends Controller
                         
                         $check_array = ['attendance_date' => $current_date, 'employment_id' => $user_info->id];
                       
-                        $entry_info = AttendanceManualEntry::updateOrCreate($check_array, $ins);
+                        // $entry_info = AttendanceManualEntry::updateOrCreate($check_array, $ins);
                     }
                     $i++;
                     dump( $i );
