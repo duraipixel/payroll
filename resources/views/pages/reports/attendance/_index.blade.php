@@ -5,7 +5,7 @@
             <div class="bg-light border-bottom p-2 d-flex align-items-center justify-content-between">
                 <div>
                     <select name="limit" onchange="setTableLimit(this)" class="border shadow-sm">
-                        @for ($i = 0; $i < 4; $i++)
+                        @for ($i = 0; $i < 10; $i++)
                             @php
                                 $limit = ($i + 1) * 10;
                             @endphp

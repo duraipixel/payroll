@@ -13,17 +13,17 @@
                         @endfor
                         <option  {{ request()->limit === 'all' ? 'selected' : ''  }} value="all">All</option>
                     </select>
-                    <b>Retirement Report</b>
+                    <b>Leave Report</b>
                 </div>
                 <div class="d-flex">
-                    <form action="{{ route('reports.retirement') }}" class="input-group w-auto d-inline" method="GET">
-                        <button onclick="this.form.action = '{{ route('reports.retirement.export') }}'" type="submit"
+                    <form action="{{ route('reports.leaves') }}" class="input-group w-auto d-inline" method="GET">
+                        <button onclick="this.form.action = '{{ route('reports.leaves.export') }}'" type="submit"
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
                         <input type="text" name="name" value="{{ request()->name }}"
                             class="form-control form-control-sm  w-auto d-inline" placeholder="Search Staff Name.." />
-                        <button onclick="this.form.action = '{{ route('reports.retirement') }}';" type="submit"
+                        <button onclick="this.form.action = '{{ route('reports.leaves') }}';" type="submit"
                             class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Find</button>
-                        <a href="{{ route('reports.retirement') }}" class="btn btn-sm btn-warning">
+                        <a href="{{ route('reports.leaves') }}" class="btn btn-sm btn-warning">
                             <i class="fa fa-repeat"></i>
                         </a>
                     </form>
@@ -31,11 +31,11 @@
             </div>
             <div class="card-body p-2">
                 <div class="table-responsive">
-                    @include('pages.reports.retirement._table')
+                    @include('pages.reports.leaves._table')
                 </div>
             </div>
             <div class="card-footer p-2 bg-light">
-                {!! $users->links('vendor.pagination.bootstrap-5') !!}
+                {!! $leaves->links('vendor.pagination.bootstrap-5') !!}
             </div>
         </div>
     </section>

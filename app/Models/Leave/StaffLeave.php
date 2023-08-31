@@ -56,6 +56,10 @@ class StaffLeave extends Model
         }
     }
 
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'staff_id');
+    }
     public function staff_info()
     {
         return $this->hasOne(User::class, 'id', 'staff_id');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RetirementController;
 use App\Http\Controllers\SalaryReportController;
@@ -14,6 +15,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports'],  function () {
 
     Route::get('/salary-register/export', [SalaryReportController::class, 'salary_register_export'])->name('reports.salary.export');
     Route::get('/reports/retirement/export', [RetirementController::class, 'export'])->name('reports.retirement.export');
+    Route::get('/reports/leaves/export', [LeaveController::class, 'export'])->name('reports.leaves.export');
+    
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],  function () {
@@ -23,4 +26,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
     Route::get('/staff', [StaffReportController::class, 'staff_history'])->name('reports.staff.history');
     Route::get('/salary-register', [SalaryReportController::class, 'salary_register'])->name('reports.salary.register'); 
     Route::get('/retirement-report', [RetirementController::class, 'index'])->name('reports.retirement'); 
+    Route::get('/leaves-report', [LeaveController::class, 'index'])->name('reports.leaves'); 
 });
