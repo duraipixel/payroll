@@ -139,6 +139,10 @@
                 "targets": [0], //first column / numbering column
                 "orderable": false, //set not orderable
             }, ],
+            "aLengthMenu": [
+                    [25, 50, 100, 200, 500, -1],
+                    [25, 50, 100, 200, 500, "All"]
+                ]
         });
 
         $('.dataTables_wrapper').addClass('position-relative');

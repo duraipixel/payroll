@@ -56,7 +56,7 @@
                 $route_name = request()
                     ->route()
                     ->getName();
-                    
+                
             @endphp
 
             @if (access()->buttonAccess($route_name, 'add_edit'))
@@ -113,51 +113,55 @@
 
 @section('add_on_script')
     <script>
-            var staff_Table = $('#staff_table').DataTable({
-                "serverSide": true,
-                "processing": true,
-                "ajax": {
-                    "url": "{{ route('staff.list') }}",
-                    "dataType": "json",
-                    "type": "GET",
-                    "data": function(d) {
-                        d._token = "{{ csrf_token() }}",
+        var staff_Table = $('#staff_table').DataTable({
+            "serverSide": true,
+            "processing": true,
+            "ajax": {
+                "url": "{{ route('staff.list') }}",
+                "dataType": "json",
+                "type": "GET",
+                "data": function(d) {
+                    d._token = "{{ csrf_token() }}",
                         d.staff_datable_search = $('#staff_datable_search').val(),
                         d.verification_status = $('#verification_status').val(),
                         d.datatable_institute_id = $('#datatable_institute_id').val()
-                    }
+                }
+            },
+            "columns": [{
+                    "data": "name"
                 },
-                "columns": [{
-                        "data": "name"
-                    },
-                    {
-                        "data": "society_code"
-                    },
-                    {
-                        "data": "institute_code"
-                    },
-                    {
-                        "data": "profile"
-                    },
-                    {
-                        "data": "status"
-                    },
-                    {
-                        "data": "actions"
-                    }
-                ]
+                {
+                    "data": "society_code"
+                },
+                {
+                    "data": "institute_code"
+                },
+                {
+                    "data": "profile"
+                },
+                {
+                    "data": "status"
+                },
+                {
+                    "data": "actions"
+                }
+            ],
+            "aLengthMenu": [
+                [25, 50, 100, 200, 500, -1],
+                [25, 50, 100, 200, 500, "All"]
+            ]
 
-            });
+        });
 
-            document.querySelector('#staff_datable_search').addEventListener("keyup", function(e) {
-                staff_Table.ajax.reload();
-            });
-            document.querySelector('#verification_status').addEventListener("change", function(e) {
-                staff_Table.ajax.reload();
-            });
-            document.querySelector('#datatable_institute_id').addEventListener("change", function(e) {
-                staff_Table.ajax.reload();
-            });
+        document.querySelector('#staff_datable_search').addEventListener("keyup", function(e) {
+            staff_Table.ajax.reload();
+        });
+        document.querySelector('#verification_status').addEventListener("change", function(e) {
+            staff_Table.ajax.reload();
+        });
+        document.querySelector('#datatable_institute_id').addEventListener("change", function(e) {
+            staff_Table.ajax.reload();
+        });
 
         function staffChangeStatus(id, status) {
             Swal.fire({

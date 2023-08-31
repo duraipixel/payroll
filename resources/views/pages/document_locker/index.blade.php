@@ -4,14 +4,15 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
-<style>
-    #document_locker td {
-        padding: 5px;
-    }
-    #document_locker th {
-        padding: 5px;
-    }
-</style>
+    <style>
+        #document_locker td {
+            padding: 5px;
+        }
+
+        #document_locker th {
+            padding: 5px;
+        }
+    </style>
     <div class="row container">
         <div class="col-md-4">
             <div class="alert alert-primary fade show" role="alert">
@@ -54,7 +55,8 @@
                     <select id="staff_id" name="staff_id" class="form-input">
                         <option value="">Select Staff</option>
                         @foreach ($user as $users)
-                            <option value="{{ $users->id }}">{{ $users->name }} - {{ $users->society_emp_code }}</option>
+                            <option value="{{ $users->id }}">{{ $users->name }} - {{ $users->society_emp_code }}
+                            </option>
                         @endforeach
                     </select>
                     {{-- <select id="emp_nature_id" name="emp_nature_id" class="form-input">
@@ -113,7 +115,7 @@
     <script>
         $(document).ready(function() {
             var doc_table = $('#document_locker').DataTable({
-                
+
                 "serverSide": true,
                 "processing": true,
                 "ajax": {
@@ -122,7 +124,7 @@
                     "type": "GET",
                     "data": function(d) {
                         d._token = "{{ csrf_token() }}",
-                        d.staff_id = $('#staff_id').val()
+                            d.staff_id = $('#staff_id').val()
                         // d.emp_nature_id = $('#emp_nature_id').val(),
                         // d.work_place_id = $('#work_place_id').val()
                     }
@@ -147,17 +149,21 @@
                         data: 'total_document',
                         data: 'total_document'
                     },
-                    
+
                     {
                         data: 'action',
                         name: 'action',
                         sortable: false,
                         searchable: false,
                     },
+                ],
+                "aLengthMenu": [
+                    [25, 50, 100, 200, 500, -1],
+                    [25, 50, 100, 200, 500, "All"]
                 ]
             });
 
-            document.getElementById('search_doc_form').addEventListener('click', function(){
+            document.getElementById('search_doc_form').addEventListener('click', function() {
                 console.log('button clickced');
                 doc_table.ajax.reload();
             })
@@ -227,7 +233,7 @@
 
         // Search Staff details Start
 
-       
+
         //Search Staff details End 
     </script>
 @endsection

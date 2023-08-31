@@ -184,7 +184,11 @@
                 }
             },
             "aaSorting": [],
-            "pageLength": 25
+            "pageLength": 25,
+            "aLengthMenu": [
+                    [25, 50, 100, 200, 500, -1],
+                    [25, 50, 100, 200, 500, "All"]
+                ]
         });
 
         $('.dataTables_wrapper').addClass('position-relative');
