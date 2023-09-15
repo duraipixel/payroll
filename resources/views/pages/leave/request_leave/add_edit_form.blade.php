@@ -359,7 +359,6 @@
                 }
             }
         })
-
     })
     window.addEventListener('click', function(e) {
         if (document.getElementById('typeahed-click').contains(e.target)) {
@@ -408,8 +407,7 @@
         })
     })
 
-    function getStaffLeaveInfo(staff_id) {
-
+    function getStaffLeaveInfo(staff_id) {   
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -429,7 +427,7 @@
                     $('#staff_id').val(res.data.id);
                     $('#staff_name').val(res.data.name);
                     $('#typeadd-panel').addClass('d-none');
-                    $('#staff_name').attr('disabled', true);
+                    //$('#staff_name').attr('disabled', true);
                     $('#input-close').removeClass('d-none');
                     $('#reporting_id').val(res.data?.reporting?.name);
                 }
@@ -457,6 +455,29 @@
         return new Date(dmy[2], dmy[1] - 1, dmy[0]);
     }
 
+    var staff_id_alt = 356;
+
+    function getStaffLeaveDays(staff_id_alt, start_date, end_date) {  
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('get.staff.leave.available') }}",
+            type: 'POST',
+            data: {
+                staff_id: staff_id_alt,
+                leave_start: start_date,
+                leave_end: end_date
+            },
+            success: function(days) {
+                $('#no_of_days').val(days);
+                console.log('response', days)
+            }
+        })
+    }
+
     $(function() {
 
         $('input[name="requested_date"]').daterangepicker({
@@ -474,8 +495,9 @@
             let end_date = picker.endDate.format('DD/MM/YYYY');
 
             let requested_days = datediff(parseDate(start_date), parseDate(end_date));
-            $('#no_of_days').val(requested_days + 1);
+            //$('#no_of_days').val(requested_days + 1);
 
+            getStaffLeaveDays(staff_id_alt, picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
         });
 
         $('input[name="requested_date"]').on('cancel.daterangepicker', function(ev, picker) {

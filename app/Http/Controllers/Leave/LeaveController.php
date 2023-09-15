@@ -13,12 +13,42 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class LeaveController extends Controller
 {
+    public function leaveAvailableDays(Request $request){
+
+        if ($request->ajax()) {
+            $staff_id = $request->staff_id;
+            $period = CarbonPeriod::create($request->leave_start, $request->leave_end);
+            $period->toArray();
+
+            $holidays = CalendarDays::whereBetween('calendar_date', [$request->leave_start, $request->leave_end])->where('days_type', 'holiday')->count();
+            $week_off = CalendarDays::whereBetween('calendar_date', [$request->leave_start, $request->leave_end])->where('days_type', 'week_off')->count();
+
+            $leaves = StaffLeave::where('staff_id', $staff_id)
+            ->where('from_date', '>=', $request->leave_start)
+            ->where('to_date', '<=', $request->leave_end)
+            ->where('status', 'approved')
+            ->get();
+
+            $days = [];
+            foreach ($period as $date) {
+                $days[]=$date->format('Y-m-d');
+            }
+               
+            $all_days =  sizeof($days);
+            return $leave_days = sizeof($days) - ($holidays + $week_off);
+
+            //return sizeof($days);
+            // $age = array("dates"=>$days, "leaves"=>$leaves, "holidays"=>$holidays, "week_off"=>$week_off);
+            // return json_encode($age);
+        }
+    }
     public function index(Request $request)
     {
         $breadcrums = array(
@@ -107,6 +137,7 @@ class LeaveController extends Controller
             $taken_leave = StaffLeave::where('staff_id', $info->staff_id)->where('from_date', '<', $info->from_date)->get();
         }
         $leave_category = LeaveHead::where('status', 'active')->get();
+
         return view('pages.leave.request_leave.add_edit_form', compact('title', 'leave_category', 'info', 'taken_leave'));
     }
 
@@ -227,6 +258,7 @@ class LeaveController extends Controller
                 } else {
                     $ins['status'] = 'pending';
                 }
+
                 /** generate leave form and send */
                 $leave_info = StaffLeave::updateOrCreate(['id' => $id], $ins);
                 generateLeaveForm($leave_info->id);
