@@ -42,6 +42,9 @@ class StaffAppointmentDetail extends Model implements Auditable
         'designation_id',
         'department_id',
         'attendance_scheme_id',
+        'previous_appointment_number',
+        'previous_appointment_date',
+        'previous_designation'
     ];
 
     public function designation() {

@@ -167,7 +167,7 @@
                     <i class="icon-xl la la-briefcase-medical"></i>
                 </div>
                 <div class="media-body text-center">
-                    <div class="bd-wizard-step-title"> Appointment Information </div>
+                    <div class="bd-wizard-step-title"> Appointment Information</div>
                 </div>
             </div>
         </h3>

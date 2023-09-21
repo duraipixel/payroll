@@ -273,16 +273,20 @@
 
     function generateAppointmentModel() {
 
+        var order_id = $('#order_id').val();
         var staff_category_id_update = $('#staff_category_id_update').val();
         var nature_of_employment_id = $('#nature_of_employment_id_update').val();
         var teaching_type_id_update = $('#teaching_type_id_update').val();
         var place_of_work_id_update = $('#place_of_work_id_update').val();
         var joining_date_update = $('#joining_date_update').val();
         var salary_scale_update = $('#salary_scale_update').val();
-        var order_id = $('#order_id').val();
 
+        // var previous_appointment_number = $('#previous_appointment_number').val();
+        // var previous_appointment_date = $('#previous_appointment_date').val();
+        // var previous_designation = $('#previous_designation').val();
+        
         if (staff_category_id_update == '' || nature_of_employment_id == '' || teaching_type_id_update == '' ||
-            place_of_work_id_update == '' || salary_scale_update == '' || joining_date_update == '') {
+            place_of_work_id_update == '' || salary_scale_update == '' || joining_date_update == '' ) {
             toastr.error('Please fill all mandatory fields');
             return false;
         }
@@ -357,7 +361,10 @@
             'from_appointment_update',
             'to_appointment_update',
             'appointment_order_model_id_update',
-            'designation_id_update'
+            'designation_id_update',
+            'previous_appointment_number',
+            'previous_appointment_date',
+            'previous_designation'
         ];
 
         $('.form-control,.form-select').removeClass('border-danger');

@@ -63,6 +63,10 @@ class StaffAppointmentDetailController extends Controller
             $ins['has_probation'] = $request->probation;
             $ins['probation_period'] = $request->probation == 'yes' ? $request->probation_period : null;
 
+            $ins['previous_appointment_number'] = $request->previous_appointment_number;
+            $ins['previous_appointment_date'] = $request->previous_appointment_date;
+            $ins['previous_designation'] = $request->previous_designation;
+
             if ($request->hasFile('appointment_order_doc')) {
 
                 $files = $request->file('appointment_order_doc');
@@ -145,7 +149,11 @@ class StaffAppointmentDetailController extends Controller
                 'date_of_completion' => '',
                 'probation_completed_date' => '',
                 'probation_order_date' => '',
-                'society_name' => $society_info->name ?? null
+                'society_name' => $society_info->name ?? null,
+
+                'previous_appointment_number' => $order_details->previous_appointment_number ?? null,
+                'previous_appointment_date' => $order_details->previous_appointment_date ? commonDateFormatAlt($order_details->previous_appointment_date) : null,
+                'previous_designation' => $order_details->previous_designation ?? null
             );
 
             foreach ($appointment_variables as $key => $value) {
@@ -222,13 +230,14 @@ class StaffAppointmentDetailController extends Controller
             'order_models' => $order_models,
             'designation' => $designation
         );
-        return view('pages.staff.registration.appointment.add_edit', $params);
+
+       return view('pages.staff.registration.appointment.add_edit', $params);
     }
 
     public function doUpdateAppointmentModal(Request $request)
     {
 
-        $validator      = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'staff_category_id' => 'required',
             'nature_of_employment_id' => 'required',
             'teaching_type_id' => 'required',
@@ -241,7 +250,6 @@ class StaffAppointmentDetailController extends Controller
             'appointment_order_model_id' => 'required',
             // 'designation_id' => 'required_if:probation, ==,yes',
             'designation_id' => 'required'
-
         ]);
 
         if ($validator->passes()) {
@@ -267,6 +275,11 @@ class StaffAppointmentDetailController extends Controller
                 $info->is_till_active = $request->is_till_active;
                 $info->designation_id = $request->designation_id;
                 $info->institution_id = session()->get('staff_institute_id') ?? null;
+
+                // Previous Appointment Info
+                $info->previous_appointment_number = $request->previous_appointment_number;
+                $info->previous_appointment_date = $request->previous_appointment_date;
+                $info->previous_designation = $request->previous_designation;
 
                 if ($request->is_till_active == 'yes') {
 
@@ -317,6 +330,10 @@ class StaffAppointmentDetailController extends Controller
                 $ins['probation_period'] = $request->probation_update == 'yes' ? $request->probation_period : null;
                 $ins['is_till_active'] = $request->is_till_active;
                 $ins['designation_id'] = $request->designation_id;
+
+                $ins['previous_appointment_number'] = $request->previous_appointment_number;
+                $ins['previous_appointment_date'] = $request->previous_appointment_date;
+                $ins['previous_designation'] = $request->previous_designation;
 
                 if ($request->hasFile('appointment_order_doc')) {
 

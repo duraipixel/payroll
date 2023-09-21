@@ -14,7 +14,11 @@ return [
         'date_of_completion',
         'probation_completed_date',
         'probation_order_date',
-        'society_name'
+        'society_name',
+
+        'previous_appointment_number',
+        'previous_appointment_date',
+        'previous_designation'
     ),
     'staff_studied_subjects' => array(    
         'Tamil', 'English', 'Maths', 'Science', 'Social_Science', 'Hindi', 'French'

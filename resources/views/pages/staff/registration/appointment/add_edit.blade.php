@@ -229,7 +229,6 @@
                                     <hr>
                                     <div class="row my-3">
 
-
                                         <div class="col-lg-6 mb-5">
                                             <label class="form-label required">Period of Appointment
                                                 (From)</label>
@@ -252,9 +251,6 @@
                                                     value="{{ $details->to_appointment ?? '' }}" />
                                             </div>
                                         </div>
-
-
-
 
                                         <div class="col-lg-6 mb-5">
                                             <label class="form-label required">
@@ -282,6 +278,39 @@
                                                             </button> --}}
                                             </div>
                                         </div>
+
+                                        <br>
+
+                                        <div class="col-lg-6 mb-5">
+                                            <label class="form-label required">Previous Appointment Number</label>
+                                            <div class="position-relative d-flex align-items-center">
+                                                <input class="form-control  ps-12" placeholder="Previous Appointment Number"
+                                                    name="previous_appointment_number" id="previous_appointment_number"
+                                                    type="text" value="{{ $details->previous_appointment_number ?? '' }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 mb-5">
+                                            <label class="form-label required">Previous Appointment Date</label>
+                                            <div class="position-relative d-flex align-items-center">
+                                                <input class="form-control ps-12" placeholder="Select a date"
+                                                    name="previous_appointment_date" id="previous_appointment_date" type="date"
+                                                    value="{{ $details->previous_appointment_date ?? '' }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6 mb-5">
+                                            <label class="form-label required">
+                                                Previous Designation
+                                            </label>
+                                            <div class="position-relative d-flex align-items-center">
+                                                <input class="form-control  ps-12" placeholder="Previous Designation"
+                                                    name="previous_designation" id="previous_designation"
+                                                    type="text" value="{{ $details->previous_designation ?? '' }}" />
+                                            </div>
+                                            
+                                        </div>
+                                        
                                         <div class="col-lg-6">
                                             <button type="button" class="btn btn-success mt-8" id="generate_order"
                                                 onclick="return generateAppointmentModel()"> Generate
@@ -289,7 +318,6 @@
                                                 Order
                                             </button>
                                         </div>
-
 
                                         <div class="col-md-6 fv-row">
                                             <label class=" fs-6 fw-bold form-label mb-2">

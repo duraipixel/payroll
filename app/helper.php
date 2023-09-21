@@ -506,6 +506,14 @@ if (!function_exists('generateLeaveForm')) {
         }
     }
 
+    function commonDateFormatAlt($date)
+    {
+
+        if ($date) {
+            return date('d-m-Y', strtotime($date));
+        }
+    }
+
     function commonAmountFormat($amount)
     {
 
