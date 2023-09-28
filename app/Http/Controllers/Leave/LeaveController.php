@@ -20,6 +20,48 @@ use Illuminate\Support\Facades\Storage;
 
 class LeaveController extends Controller
 {
+    public function leaveCountDays(Request $request){
+       
+       if($request->type=='grid'){
+        $value=0;
+       
+        foreach($request->leave['radio'] as $data){
+       
+            if($data=='afternoon'){
+                $value+=0.5;
+            }elseif($data=='forenoon'){
+                $value+=0.5;
+            }else{
+                $value+=1;
+    
+            }
+       
+       } 
+      
+       return number_format($value,1);
+    }else{
+        $value=0;
+        
+        foreach($request->leave['radio'] as $key=>$data){
+            if($data=='afternoon' && isset($request->leave['check'][$key]) && $request->leave['check'][$key]==1){
+                $value+=0.5;
+            }elseif($data=='forenoon'  && isset($request->leave['check'][$key]) && $request->leave['check'][$key]==1){
+                $value+=0.5;
+            }elseif($data=='both' && isset($request->leave['check'][$key]) && $request->leave['check'][$key]==1){
+                $value+=1;
+    
+            }
+           
+       }
+  
+       return number_format($value,1);
+    }
+        
+      
+
+       
+      
+    }
     public function leaveAvailableDays(Request $request){
 
         if ($request->ajax()) {
@@ -27,8 +69,8 @@ class LeaveController extends Controller
             $period = CarbonPeriod::create($request->leave_start, $request->leave_end);
             $period->toArray();
 
-            $holidays = CalendarDays::whereBetween('calendar_date', [$request->leave_start, $request->leave_end])->where('days_type', 'holiday')->count();
-            $week_off = CalendarDays::whereBetween('calendar_date', [$request->leave_start, $request->leave_end])->where('days_type', 'week_off')->count();
+            $holidays = CalendarDays::whereBetween('calendar_date', [$request->leave_start, $request->leave_end])->whereIn('days_type',['holiday','week_off'])->select('calendar_date')->get();
+            //$week_off = CalendarDays::whereBetween('calendar_date', [$request->leave_start, $request->leave_end])->where('days_type', 'week_off')->get();
 
             $leaves = StaffLeave::where('staff_id', $staff_id)
             ->where('from_date', '>=', $request->leave_start)
@@ -38,12 +80,16 @@ class LeaveController extends Controller
 
             $days = [];
             foreach ($period as $date) {
-                $days[]=$date->format('Y-m-d');
+            $days[]=$date->format('Y-m-d');       
             }
-               
+            $leave = [];
+            foreach ($holidays as $holiday) {
+            $leave[]=$holiday->calendar_date;       
+            }
+            $total_days=array_diff($days,$leave);
             $all_days =  sizeof($days);
-            return $leave_days = sizeof($days) - ($holidays + $week_off);
-
+            $leave_days = sizeof($days) - ($holidays->count());
+            return response()->json(['leave_days' => $leave_days, 'total_days' => $total_days]);
             //return sizeof($days);
             // $age = array("dates"=>$days, "leaves"=>$leaves, "holidays"=>$holidays, "week_off"=>$week_off);
             // return json_encode($age);
@@ -87,6 +133,12 @@ class LeaveController extends Controller
                     $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
                     return $created_at;
                 })
+                ->editColumn('no_of_days',function ($row) {
+                    return number_format($row['no_of_days'],1);
+                })
+                ->editColumn('granted_days',function ($row) {
+                    return number_format($row['granted_days'],1);
+                })
                 ->addColumn('action', function ($row) {
                     $url = Storage::url($row->document);
                     $approve_btn = '';
@@ -126,7 +178,7 @@ class LeaveController extends Controller
     }
 
     public function addEditModal(Request $request)
-    {
+    {   
         $title = 'Add Leave Request';
         $id = $request->id;
         $info = '';
@@ -142,7 +194,8 @@ class LeaveController extends Controller
     }
 
     public function saveLeaveRequest(Request $request)
-    {
+    { 
+      
 
         $id = $request->id ?? '';
         $validate_array = [
@@ -160,13 +213,15 @@ class LeaveController extends Controller
                 'requested_date' => 'required',
                 'no_of_days' => 'required',
                 'reason' => 'required',
+                'no_of_days_granted' => 'required|numeric',
                 'application_file' => 'file|required',
-                'leave_granted' => 'required',
-                'no_of_days_granted' => 'required'
+                'leave_granted' => 'required'
+                
             ];
         }
 
         $validator      = Validator::make($request->all(), $validate_array);
+        
 
         if ($validator->passes()) {
 
@@ -187,7 +242,8 @@ class LeaveController extends Controller
 
             if ($check) {
                 $error = 1;
-                $message = 'Leave Request already submit for this date';
+                $message = ['Leave Request already submit for this date'];
+                return response()->json(['error' => $error, 'message' => $message]);
             } else {
 
                 $staff_info = User::with('appointment.work_place')->find($request->staff_id);
@@ -211,6 +267,12 @@ class LeaveController extends Controller
                         $message = ['Application document upload is required'];
                         return response()->json(['error' => $error, 'message' => $message]);
                     }
+                    if(empty($request->leave_granted)){
+                        $error = 1;
+                        $message = ['Leave Granted Field is required'];
+                        return response()->json(['error' => $error, 'message' => $message]);
+
+                    }
                     $ins['is_granted'] = $request->leave_granted;
                     if ($request->leave_granted == 'yes') {
                         $approved_date = Carbon::now();
@@ -219,13 +281,34 @@ class LeaveController extends Controller
                         $rejected_date = Carbon::now();
                         $ins['rejected_date'] = $rejected_date->toDateTimeString();
                     }
-                    $ins['granted_days'] = $request->no_of_days_granted;
+                    $ins['granted_days'] = $request->no_of_days_granted ?? "0";
                     $ins['remarks']  = $request->remarks;
                     $ins['granted_designation']  = '';
                     $ins['granted_by']  = auth()->user()->id;
                     $ins['granted_start_date']  = $leave_info->from_date;
                     $ins['granted_end_date']  = $leave_info->to_date;
+                    if(isset($request->leave)){
+                        $leave_day=[];
+                        foreach(json_decode($leave_info->leave_days) as $key=>$data){
+                           
+                            $leave_days['date']=$data->date;
+                            $leave_days['check']=$request->leave['check'][$key] ?? 0;
+                            $leave_days['type']=$data->type;
+                            $leave_day[]=$leave_days;
+
+                        }
+                       
+                     
+                        $ins['leave_days']=json_encode($leave_day);
+                    }
+                  
                 } else {
+                    if(empty($request->no_of_days) || $request->no_of_days==0 || $request->no_of_days==0.0){
+                        $error = 1;
+                        $message = ['No Of Days Field is required'];
+                        return response()->json(['error' => $error, 'message' => $message]);
+
+                    }
 
                     $ins['academic_id'] = academicYearId();
                     $ins['application_no'] = leaveApplicationNo($request->staff_id, $leave_category_info->code);
@@ -235,8 +318,22 @@ class LeaveController extends Controller
                     $ins['salary'] = $request->salary ?? null;
                     $ins['from_date'] = $from_date;
                     $ins['to_date'] = $end_date;
-                    $ins['no_of_days'] = $request->no_of_days ?? 0;
+                    $ins['no_of_days'] = $request->no_of_days ?? "0";
                     $ins['reason'] = $request->reason;
+                    if(isset($request->leave)){
+                        $leave_day=[];
+                        foreach($request->leave['radio'] as$key=>$data){
+                            $leave_days['date']=$request->leave['date'][$key];
+                            $leave_days['type']=$data;
+                            $leave_day[]=$leave_days;
+
+                        }
+                       
+                       
+                        $ins['leave_days']=json_encode($leave_day);
+
+                    }
+                 
                 }
                 $ins['leave_category'] = $leave_category_info->name;
                 $ins['leave_category_id'] = $leave_category_info->id;
@@ -258,7 +355,7 @@ class LeaveController extends Controller
                 } else {
                     $ins['status'] = 'pending';
                 }
-
+               
                 /** generate leave form and send */
                 $leave_info = StaffLeave::updateOrCreate(['id' => $id], $ins);
                 generateLeaveForm($leave_info->id);

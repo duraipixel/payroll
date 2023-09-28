@@ -45,7 +45,8 @@ class StaffLeave extends Model
         'document',
         'status',
         'addedBy',
-        'approved_document'
+        'approved_document',
+        'leave_days'
     ];
 
     public function scopeAcademic($query)

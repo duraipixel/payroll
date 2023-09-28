@@ -68,6 +68,9 @@
                                     Days Requested
                                 </th>
                                 <th class="text-center text-white">
+                                    Days Granted
+                                </th>
+                                <th class="text-center text-white">
                                     Status
                                 </th>
                                 <th class="text-center text-white">
@@ -144,6 +147,9 @@
                 {
                     data: 'no_of_days',
                     name: 'no_of_days'
+                },{
+                    data: 'granted_days',
+                    name: 'granted_days'
                 },
                 {
                     data: 'status',

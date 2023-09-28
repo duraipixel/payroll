@@ -148,7 +148,8 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/leaves/add', [App\Http\Controllers\Leave\LeaveController::class, 'addEditModal'])->name('leaves.add_edit'); 
     Route::post('/leaves/save', [App\Http\Controllers\Leave\LeaveController::class, 'saveLeaveRequest'])->name('save.leaves'); 
     Route::post('/leaves/delete', [App\Http\Controllers\Leave\LeaveController::class, 'deleteLeave'])->name('delete.leaves'); 
-    Route::post('/leave/available', [App\Http\Controllers\Leave\LeaveController::class, 'leaveAvailableDays'])->name('get.staff.leave.available');  
+    Route::post('/leave/available', [App\Http\Controllers\Leave\LeaveController::class, 'leaveAvailableDays'])->name('get.staff.leave.available'); 
+    Route::post('/leave/count', [App\Http\Controllers\Leave\LeaveController::class, 'leaveCountDays'])->name('get.staff.leave.count');   
     Route::post('/get/staff/info', [App\Http\Controllers\CommonController::class, 'getStaffInfo'])->name('get.staff'); 
     Route::post('/get/staff/leaveinfo', [App\Http\Controllers\CommonController::class, 'getStaffLeaveInfo'])->name('get.staff.leave.info'); 
     Route::post('/get/leave/form', [App\Http\Controllers\CommonController::class, 'getLeaveForm'])->name('get.leave.form');
@@ -252,7 +253,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/staff/transfer/do', [App\Http\Controllers\Staff\StaffTransferController::class, 'doTransferStaff'])->name('staff.transfer.do')->middleware(['checkAccess:view']); 
     Route::post('/staff/transfer/modal', [App\Http\Controllers\Staff\StaffTransferController::class, 'openTransferStatusModal'])->name('staff.transfer.modal')->middleware(['checkAccess:view']); 
     Route::post('/staff/transfer/status/change', [App\Http\Controllers\Staff\StaffTransferController::class, 'changeStatus'])->name('staff.transfer.status')->middleware(['checkAccess:view']); 
-
+    Route::post('/staff/remark/modal', [App\Http\Controllers\Staff\StaffTransferController::class, 'openRemark'])->name('staff.remark.modal'); 
     //permission routes start
     Route::get('/user/permission', [App\Http\Controllers\Permission\PermissionController::class, 'index'])->name('user.permission')->middleware(['checkAccess:view']); 
     Route::post('permission/save', [App\Http\Controllers\Permission\PermissionController::class, 'store'])->name('permission.save'); 

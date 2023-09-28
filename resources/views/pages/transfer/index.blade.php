@@ -98,6 +98,12 @@
                                     <th class="px-3 text-white">
                                         Transfer Status
                                     </th>
+                                    <th class="px-3 text-white">
+                                       Action
+                                    </th>
+                                    <th class="px-3 text-white">
+                                        Remark
+                                     </th>
                                 </tr>
                             </thead>
 
@@ -110,6 +116,8 @@
             </div>
         </div>
     </div>
+    
+
 @endsection
 
 @section('add_on_script')
@@ -169,11 +177,20 @@
                     name: 'new_institution_code'
                 },
                 {
+                    data: 'new_institution_code',
+                    name: 'new_institution_code'
+                },
+                {
                     data: 'status',
                     name: 'status',
+                   
+                },
+                {
+                    data: 'action',
+                    name: 'action',
                     orderable: false,
                     searchable: false
-                }
+                },
             ],
             language: {
                 paginate: {
@@ -226,6 +243,25 @@
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');
                     $('#kt_dynamic_app').html(res);
+                }
+            })
+
+        }
+        function viewremark(id){
+            var fromData = $('#revision_form').serialize();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('staff.remark.modal') }}",
+                type: 'POST',
+                data:fromData + '&id=' + id,
+                success: function(res) {
+                    $('#kt_dynamic_app').modal('show');
+                    $('#kt_dynamic_app').html(res);
+                   
                 }
             })
 

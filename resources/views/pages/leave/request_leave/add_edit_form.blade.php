@@ -1,5 +1,8 @@
 <div class="modal-dialog modal-xl modal-dialog-centered mw-1000px">
     <style>
+        #grid{
+display:none;
+        }
         .typeahead-pane {
             position: absolute;
             width: 100%;
@@ -49,6 +52,168 @@
         #nature_table_staff td {
             padding: 5px;
         }
+
+
+        @media only screen {
+  .toggleSwitch {
+    display: inline-block;
+    height: 18px;
+    position: relative;
+    overflow: visible;
+    padding: 0;
+    margin-left: 50px;
+    cursor: pointer;
+    width: 40px
+  }
+  .toggleSwitch * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .toggleSwitch label,
+  .toggleSwitch > span {
+    line-height: 20px;
+    height: 20px;
+    vertical-align: middle;
+  }
+  .toggleSwitch input:focus ~ a,
+  .toggleSwitch input:focus + label {
+    outline: none;
+  }
+  .toggleSwitch label {
+    position: relative;
+    z-index: 3;
+    display: block;
+    width: 100%;
+  }
+  .toggleSwitch input {
+    position: absolute;
+    opacity: 0;
+    z-index: 5;
+  }
+  .toggleSwitch > span {
+    position: absolute;
+    left: -50px;
+    width: 100%;
+    margin: 0;
+    padding-right: 50px;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .toggleSwitch > span span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    display: block;
+    width: 50%;
+    margin-left: 50px;
+    text-align: left;
+    font-size: 0.9em;
+    width: 100%;
+    left: 15%;
+    top: -1px;
+    opacity: 0;
+  }
+  .toggleSwitch a {
+    position: absolute;
+    right: 50%;
+    z-index: 4;
+    display: block;
+    height: 100%;
+    padding: 0;
+    left: 2px;
+    width: 18px;
+    background-color: #fff;
+    border: 1px solid #CCC;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  .toggleSwitch > span span:first-of-type {
+    color: #ccc;
+    opacity: 1;
+    left: 45%;
+  }
+  .toggleSwitch > span:before {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 50px;
+    top: -2px;
+    background-color: #fafafa;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+  }
+  .toggleSwitch input:checked ~ a {
+    border-color: #fff;
+    left: 100%;
+    margin-left: -8px;
+  }
+  .toggleSwitch input:checked ~ span:before {
+    border-color: #0097D1;
+    box-shadow: inset 0 0 0 30px #0097D1;
+  }
+  .toggleSwitch input:checked ~ span span:first-of-type {
+    opacity: 0;
+  }
+  .toggleSwitch input:checked ~ span span:last-of-type {
+    opacity: 1;
+    color: #fff;
+  }
+  /* Switch Sizes */
+  .toggleSwitch.large {
+    width: 60px;
+    height: 27px;
+  }
+  .toggleSwitch.large a {
+    width: 27px;
+  }
+  .toggleSwitch.large > span {
+    height: 29px;
+    line-height: 28px;
+  }
+  .toggleSwitch.large input:checked ~ a {
+    left: 41px;
+  }
+  .toggleSwitch.large > span span {
+    font-size: 1.1em;
+  }
+  .toggleSwitch.large > span span:first-of-type {
+    left: 50%;
+  }
+  .toggleSwitch.xlarge {
+    width: 80px;
+    height: 36px;
+  }
+  .toggleSwitch.xlarge a {
+    width: 36px;
+  }
+  .toggleSwitch.xlarge > span {
+    height: 38px;
+    line-height: 37px;
+  }
+  .toggleSwitch.xlarge input:checked ~ a {
+    left: 52px;
+  }
+  .toggleSwitch.xlarge > span span {
+    font-size: 1.4em;
+  }
+  .toggleSwitch.xlarge > span span:first-of-type {
+    left: 50%;
+  }
+}
+
+
+/*  End Toggle Switch  */
+
     </style>
     <div class="modal-content">
         <div class="modal-header">
@@ -104,14 +269,23 @@
                             </div>
                         </div>
                         <div class="fv-row form-group mb-3 row">
+                        </div>
+                       
+                        <div class="fv-row form-group mb-3 row">
                             <div class="col-sm-5">
                                 <label class="form-label required mt-3" for="">No.of.Days requested </label>
                             </div>
                             <div class="col-sm-7">
                                 <input type="text" readonly name="no_of_days" id="no_of_days"
-                                    value="{{ $info->no_of_days ?? '' }}" class="form-control">
-                            </div>
+                                    value="{{  number_format($info->no_of_days?? 0 ,1 ) }}" class="form-control">
+                            </div> 
                         </div>
+                        
+                     
+                          
+                       
+                       
+                   
                         <div class="fv-row form-group mb-3 row d-none" id="el_eol_form">
                             <div class="col-sm-5">
                                 <label class="form-label" for="">
@@ -176,8 +350,6 @@
                                         </table>
                                     </div>
                                     @endif
-                                </div>
-                                <div class="col-sm-4">
                                     <label class="mt-3 alert alert-info small"> Leave Allocated </label>
                                     <div class="table-wrap table-responsive " style="max-height: 400px;">
                                         <table id="nature_table_staff" class="table table-hover table-bordered">
@@ -205,10 +377,15 @@
                                         </table>
                                     </div>
                                 </div>
+                                <div class="col-sm-4">
+                                   
+                                </div>
                             </div>
                         @endif
 
                     </div>
+                    
+
                     <div class="col-sm-6">
                         <div class="fv-row form-group mb-3 row">
                             <div class="col-sm-5">
@@ -289,9 +466,10 @@
                                 <div class="col-sm-7">
                                     <input type="number" min="1" max="15" name="no_of_days_granted"
                                         id="no_of_days_granted" class="form-control"
-                                        value="{{ $info->no_of_days ?? '' }}" required>
+                                        value="0" readonly>
                                 </div>
                             </div>
+                           
                             <div class="fv-row form-group mb-3 row">
                                 <div class="col-sm-5">
                                     <label class="form-label required mt-3" for="">
@@ -314,6 +492,71 @@
                                 </div>
                             </div>
                         @endif
+                        
+ <div class="fv-row form-group mb-3 row"    
+ @if( isset( $info->leave_days ))id="new" @else id="grid"  @endif>
+                            @csrf
+                            
+                            <div class="col-sm-12 "  @if(isset( $info->leave_days )) @else style="padding-left:50px"; @endif>
+                                @if( isset( $info->leave_days ))    
+                                <table class="table table-bordered" >
+                                    <thead class="bg-dark text-white">
+                                        <tr>
+                                            <th scope="col"><b>Date</b></th>
+                                            <th scope="col">
+                                                <b>Forenoon</b>&nbsp;&nbsp; <b>Afternoon</b> &nbsp;&nbsp;&nbsp;<b>Both</b>
+                                            </th>
+                                            <th scope="col"><b>Approved/Reject</b></th>
+                                        </tr>
+                                    </thead>
+                                    
+                                   
+                                    <tbody>
+                                        <input type="hidden" value="new" name="type">
+                                        @foreach(json_decode($info->leave_days) as $key=>$day)
+                                       
+                                        <tr>
+                                            <td>{{ $day->date }}</td>
+                                       
+                                         <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="leave[radio][{{$key}}]" value="forenoon"  class="form-check-input" {{ ($day->type=="forenoon")? "checked" : "disabled" }}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio"  name="leave[radio][{{$key}}]"  value="afternoon"  class="form-check-input" {{ ($day->type=="afternoon")? "checked" : "disabled" }}>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio"  name="leave[radio][{{$key}}]"  value="both"  class="form-check-input" {{ ($day->type=="both")? "checked" :"disabled" }}> </td> &nbsp;</td>
+                                         <td><label class="toggleSwitch large" onclick="">
+                                            <input type="checkbox"  id="check" name="leave[check][{{$key}}]" value='1'>
+                                            <span>
+                                                <span>OFF</span>
+                                                <span>ON</span>
+                                              
+                                            </span>
+                                           
+                                        </label></td>
+                                        </tr>
+                                        @endforeach
+                                </tbody>
+                            </table>
+                            
+                           
+                            @else
+                            <table class="table table-bordered">
+                                <thead class="bg-dark text-white">
+                                    <tr>
+                                        <th scope="col"><b>Date</b></th>
+                                        <th scope="col">
+                                            <b>Forenoon</b>&nbsp;&nbsp; <b>Afternoon</b> &nbsp;&nbsp;&nbsp;<b>Both</b>
+                                        </th>
+                                       
+                                    </tr>
+                                </thead>
+                                <input type="hidden" value="grid" name="type">
+                               
+                                <tbody>
+                            </tbody>
+                        </table>
+                        
+                     
+                            @endif
+                            </div>
+                           
+                       
+                        </div>
 
                     </div>
                 </div>
@@ -336,6 +579,57 @@
 </div>
 
 <script>
+    
+$('input:checkbox').change(function() {
+    var formData = $('#new').find('input').serialize();
+   
+    $.ajax({
+            url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(day) {
+                
+                if(day==0){
+                    
+                    $('#leave_granted_no').prop('checked', true);
+                 
+                  
+                }else{
+                   
+                    $('#leave_granted_yes').prop('checked', true);
+                  
+                }
+                    
+                $('#no_of_days_granted').val(day);
+            },
+            error: function(error) {
+                // Handle any errors here
+                console.error('Error:', error);
+            }
+        });
+});
+   
+$('#grid,#radio').on('change',function() {
+    
+        var formData = $('#grid').find('input').serialize();
+       
+      
+        $.ajax({
+            url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(day) {
+                //console.log(response);
+                $('#no_of_days').val(day);
+            },
+            error: function(error) {
+                // Handle any errors here
+                console.error('Error:', error);
+            }
+        });
+    });
     $('#leave_category_id').change(function() {
         let leave_category_id = $(this).val();
 
@@ -446,6 +740,7 @@
         $('#reporting_id').val('');
     })
 
+   
     function datediff(first, second) {
         return Math.round((second - first) / (1000 * 60 * 60 * 24));
     }
@@ -463,6 +758,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        $("#grid tbody").empty();
         $.ajax({
             url: "{{ route('get.staff.leave.available') }}",
             type: 'POST',
@@ -471,9 +767,19 @@
                 leave_start: start_date,
                 leave_end: end_date
             },
-            success: function(days) {
-                $('#no_of_days').val(days);
-                console.log('response', days)
+            success: function(response) {
+              
+                $('#grid').show("slow");
+                var tableBody = $('#grid tbody');
+               
+                $.each(response.total_days, function(index, item) {
+                    var row = '<tr>' +
+                        '<td>' + item + '<input type="hidden" name="leave[date]['+ index +']" value="'+ item +'"> </td>' +
+                        '<td>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" id="radio" name="leave[radio]['+ index +']" value="forenoon"  class="form-check-input" > &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio"  name="leave[radio]['+ index +']"  value="afternoon"  class="form-check-input" id="radio">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio"  name="leave[radio]['+ index +']"  value="both"  class="form-check-input" id="radio"> </td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ' +
+                        '</tr>';
+                    tableBody.append(row);
+                });
+              
             }
         })
     }

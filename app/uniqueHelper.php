@@ -43,8 +43,63 @@ if (!function_exists('getStaffEmployeeCode')) {
 }
 
 if (!function_exists('getStaffInstitutionCode')) {
-    function getStaffInstitutionCode($institute_id)
-    {
+    function getStaffInstitutionCode($institute_id,$type='new')
+    {  
+        if($type=='old'){
+        
+            $institute_code = Institution::find($institute_id);
+            $year = date('Y');
+            $countNo = '00001';
+            $new_emp_code = $institute_code->code . $countNo;
+            $codes = DB::table('staff_transfers')->where('to_institution_id', $institute_id)->orderBy('new_institution_code', 'desc')->whereNotNull('new_institution_code')->where('status','pending')->first();
+            $code_no=$codes->new_institution_code ?? NUll;
+            if(!$codes){
+             $codes = DB::table('users')->where('institute_id', $institute_id)->orderBy('institute_emp_code', 'desc')->whereNotNull('institute_emp_code')->first();
+             $code_no=$codes->institute_emp_code;
+            }
+           
+            if ( isset($code_no) && !empty($code_no)) {
+                $emp_code = substr($code_no, -4);
+                $new_no = '0';
+                    for ($i = 0; $i < (4 - strlen($emp_code)); $i++) {
+                        $new_no .= '0';
+                    }
+                   
+                $code = $institute_code->code.($new_no.($emp_code + 1));
+                $data=DB::table('users')->where('institute_id',$institute_id)->where('institute_emp_code',$code)->first();
+                if($data){
+                $code= $institute_code->code.($new_no.($emp_code + 2));
+                
+                $data1=DB::table('users')->where('institute_id',$institute_id)->where('institute_emp_code',$code)->first();
+                if($data1){
+                    $code = $institute_code->code.($new_no.($emp_code + 3));
+                $data2=DB::table('users')->where('institute_id',$institute_id)->where('institute_emp_code',$code)->first();
+                if($data2){
+                    $code = $institute_code->code.($new_no.($emp_code + 4));
+                    $data3=DB::table('users')->where('institute_id',$institute_id)->where('institute_emp_code',$code)->first();
+                    if($data3){
+                        $code = $institute_code->code.($new_no.($emp_code + 5));
+                    }
+                }
+
+                }
+                }
+                // dd($code);
+                $emp_code=substr($code, -4);
+             
+                if ((4 - strlen($emp_code)) > 0) {
+                    $new_no = '';
+                    for ($i = 0; $i < (4 - strlen($emp_code)); $i++) {
+                        $new_no .= '0';
+                    }
+                    $order_no = $new_no . $emp_code;
+                    $new_emp_code = $institute_code->code . $order_no;
+                } else {
+                    $new_emp_code = $institute_code->code . $emp_code;
+                }
+            }
+
+        }else{
         $institute_code = Institution::find($institute_id);
         $year = date('Y');
         $countNo = '00001';
@@ -53,8 +108,11 @@ if (!function_exists('getStaffInstitutionCode')) {
         
         if ( isset($codes->institute_emp_code) && !empty($codes->institute_emp_code)) {
             $emp_code = substr($codes->institute_emp_code, -4);
+          
 
             $emp_code = $emp_code + 1;
+       
+
 
             if ((4 - strlen($emp_code)) > 0) {
                 $new_no = '';
@@ -67,6 +125,9 @@ if (!function_exists('getStaffInstitutionCode')) {
                 $new_emp_code = $institute_code->code . $emp_code;
             }
         }
+        }
+       
+        
         /**
          * check exist
          */
@@ -75,6 +136,7 @@ if (!function_exists('getStaffInstitutionCode')) {
         // if( $exists ) {
         //     getStaffInstitutionCode($institute_id);
         // }
+        // dd($new_emp_code);
         return $new_emp_code;
     }
 }

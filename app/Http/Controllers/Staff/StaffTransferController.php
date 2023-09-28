@@ -52,7 +52,11 @@ class StaffTransferController extends Controller
                     $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" ">' . ucfirst($row->status) . '</a>';
                     return $status;
                 })
-                ->rawColumns(['status', 'checkbox']);
+                ->editColumn('action', function ($row) {
+                    return $action = '<a href="javascript:void(0);"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px"  onclick="viewremark('.$row->id.')"><i class="fa fa-eye"></i></a>';
+                })
+                
+                ->rawColumns(['status','action','checkbox']);
             return $datatables->make(true);
         }
         return view('pages.transfer.index', compact('users'));
@@ -128,9 +132,10 @@ class StaffTransferController extends Controller
                 $ins['staff_id'] = $staff_info->id;
                 $ins['remarks'] = $remarks;
                 $ins['effective_from'] = date('Y-m-d', strtotime($effective_from));
-                $ins['new_institution_code'] = getStaffInstitutionCode($to_institution_id);
+                $ins['new_institution_code'] = getStaffInstitutionCode($to_institution_id,'old');
                 $ins['old_institution_code'] = $staff_info->institute_emp_code;
                 $ins['status'] = 'pending';
+              
 
                 StaffTransfer::updateOrCreate(['staff_id' => $staff_info->id], $ins);
             }
@@ -155,6 +160,19 @@ class StaffTransferController extends Controller
 
         $content = view('pages.transfer.remarks_form', $params);
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+    }
+    public function openRemark(Request $request)
+    {
+        
+        $data=StaffTransfer::find($request->id);
+        $title =( $data->status=='pending')? 'Remarks' : 'Reason';
+            $content=( $data->status=='pending')? $data->remarks : $data->reason;
+            $params = array(
+                'content' => $content,
+                'status' => $data->status
+            );
+            $content = view('pages.transfer.remarks_display', $params);
+            return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
 
     public function changeStatus(Request $request)
@@ -182,10 +200,14 @@ class StaffTransferController extends Controller
                     $user_info = User::find($transfer_info->staff_id);
                     $clonedUser = $user_info->replicate();
 
+
                    
                     $clonedUser->refer_user_id = $user_info->id;
-                    $clonedUser->status = 'transferred';
+                    $clonedUser->status='transferred';
                     $clonedUser->save();
+                    // $user_info->status='transferred';
+                    // $user_info->save();
+
 
                  
                     $user_info->institute_id = $transfer_info->to_institution_id;
