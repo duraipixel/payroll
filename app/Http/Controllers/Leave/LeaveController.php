@@ -125,7 +125,7 @@ class LeaveController extends Controller
                 })
                 ->addIndexColumn()
                 ->editColumn('status', function ($row) {
-                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" )">' . ucfirst($row->status) . '</a>';
+                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'approved') ? 'success' : (($row->status == 'rejected') ? 'danger' : 'primary')) . '" )">' . ucfirst($row->status) . '</a>';
                     return $status;
                 })
 
@@ -183,14 +183,20 @@ class LeaveController extends Controller
         $id = $request->id;
         $info = '';
         $taken_leave  = [];
+        $leave_count=0;
         if ($id) {
             $title = 'Approve Leave Request';
             $info = StaffLeave::find($id);
             $taken_leave = StaffLeave::where('staff_id', $info->staff_id)->where('from_date', '<', $info->from_date)->get();
+            foreach($taken_leave as $leave){
+                $leave_count+=$leave->granted_days;
+
+            }
+            
         }
         $leave_category = LeaveHead::where('status', 'active')->get();
 
-        return view('pages.leave.request_leave.add_edit_form', compact('title', 'leave_category', 'info', 'taken_leave'));
+        return view('pages.leave.request_leave.add_edit_form', compact('title', 'leave_category', 'info', 'taken_leave','leave_count'));
     }
 
     public function saveLeaveRequest(Request $request)
@@ -253,7 +259,7 @@ class LeaveController extends Controller
 
                     $leave_info = StaffLeave::find($id);
                     if ($request->hasFile('application_file')) {
-
+                                  
                         $files = $request->file('application_file');
                         $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
 
@@ -441,15 +447,15 @@ class LeaveController extends Controller
             ->whereDate('to_date', '>=', $info->from_date)
             ->whereNull('payroll_date')->first();
 
-        if ($payroll_check) {
+       // if ($payroll_check) {
 
             $error = 0;
             $message = 'Successfully deleted';
             $info->delete();
-        } else {
-            $error = 1;
-            $message = 'Payroll already processed. Cannot delete Please contact administrator';
-        }
+        //} else {
+            //$error = 1;
+            //$message = 'Payroll already processed. Cannot delete Please contact administrator';
+        //}
 
         return array('error' => $error, 'message' => $message);
     }

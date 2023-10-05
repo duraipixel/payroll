@@ -323,8 +323,14 @@ if (!function_exists('getTalents')) {
 
 if (!function_exists('generateLeaveForm')) {
     function generateLeaveForm($leave_id)
-    {
+    {  
         $leave_info = StaffLeave::find($leave_id);
+        $leave_count=0;
+        $taken_leave = StaffLeave::where('staff_id', $leave_info->staff_id)->where('from_date', '<', $leave_info->from_date)->get();
+        foreach($taken_leave as $leave){
+            $leave_count+=$leave->granted_days;
+
+        }
         $data['institute_name'] = $leave_info->staff_info->institute->name;
         $data['application_no'] = $leave_info->application_no;
         $data['application_date'] = date('d/M/Y', strtotime($leave_info->created_at));
@@ -334,10 +340,12 @@ if (!function_exists('generateLeaveForm')) {
         $data['date_requested'] = date('d/M/Y', strtotime($leave_info->from_date)) . ' - ' . date('d/M/Y', strtotime($leave_info->to_date));
         $data['no_of_days'] = $leave_info->no_of_days;
         $data['reason'] = $leave_info->reason ?? '';
+        $data['status'] = $leave_info->status ?? '';
+        $data['leave_days'] = $leave_info->leave_days ?? '';
         $data['address'] = $leave_info->address ?? '';
         $data['staff_name'] = $leave_info->staff_info->name;
         $data['staff_code'] = $leave_info->staff_info->institute_emp_code ?? $leave_info->staff_info->emp_code;
-        $data['taken_leave'] = $taken_leave = StaffLeave::where('staff_id', $leave_info->staff_id)->where('from_date', '<', $leave_info->from_date)->count();
+        $data['taken_leave'] =$leave_count;
         $data['holiday_date'] = $leave_info->holiday_date ? date('d/M/Y', strtotime($leave_info->holiday_date)) : '';
         $data['is_leave_granted'] = $leave_info->is_granted ? ucfirst($leave_info->is_granted) : '';
         $data['granted_days'] = $leave_info->granted_days ?? '';

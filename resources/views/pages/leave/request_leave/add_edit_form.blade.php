@@ -321,7 +321,7 @@ display:none;
                                     </label>
                                 </div>
                                 <div class="col-sm-8">
-                                    <h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - {{ count($taken_leave) }} </h6>
+                                    <h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - {{ $leave_count }} </h6>
                                     @if( isset( $taken_leave ) && count( $taken_leave ) > 0 )
                                     <div class="table-wrap table-responsive " style="max-height: 400px;">
                                         <table id="leave_table_staff" class="table table-hover table-bordered">
@@ -330,20 +330,41 @@ display:none;
                                                     <th>
                                                         Date
                                                     </th>
+                                                    @if(isset($taken_leave[0]->leave_days) && $taken_leave[0]->leave_days!='')
                                                     <th>
-                                                        Type
+                                                        Day
                                                     </th>
+                                                    @endif
+                                                    <th>
+                                                        Leave Type
+                                                    </th>
+                                                   
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($taken_leave as $item)
                                                 <tr>
+                                                    @if(isset($item->leave_days) && $item->leave_days!='')
+                                                    @foreach(json_decode($item->leave_days ?? []) as $key=>$day)
+                                                    @if($day->check==1)
+                                                    <tr>
+                      
+                                                        <td >{{date('d/M/Y', strtotime($day->date))}}</td>
+                                                        <td >{{($day->type=='both')? 1 :0.5 }}</td>
+                                                        <td style="text-transform:capitalize;">{{$day->type}}</td>
+                                                       
+                                                    <tr>
+                                                        @endif
+                                                    @endforeach
+                                                    @else
                                                     <td>
                                                         {{ commonDateFormat($item->from_date) .' - '. commonDateFormat($item->to_date) }}
                                                     </td>
                                                     <td>
                                                         {{ $item->leave_category }}
                                                     </td>
+                                                    @endif
+                                                   
                                                 </tr>
                                                 @endforeach
                                             </tbody>

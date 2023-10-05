@@ -95,6 +95,23 @@
             <td class="noborder-x" style="width:5%;text-align:center">:</td>
             <td class="noborder-s" style="width:45%;text-align:left"> {{ $address ?? '' }} </td>
         </tr>
+        @if(isset($leave_days))
+            <tr>
+                <td style="width:10%;"></td>
+                <td style="width:10%;">S.No</td>
+                <td style="width:30%;">Date</td>
+                <td style="width:50%;">Leave Type</td>
+            </tr>
+            @foreach(json_decode($leave_days ?? []) as $key=>$day)
+            <tr>
+                <td style="width:10%;"></td>
+                <td style="width:10%;">{{$key+1}}</td>
+                <td style="width:30%;">{{date('d/M/Y', strtotime($day->date))}}</td>
+                <td style="width:50%;text-transform:capitalize;">{{$day->type}}</td>
+            <tr>
+            @endforeach
+        </tr>
+        @endif
         <tr>
             <td class="noborder-e" style="width:5%;text-align:center;height:100px">09.</td>
             <td class="noborder-x" style="width:45%;text-align:left"> Signature of the Staff</td>

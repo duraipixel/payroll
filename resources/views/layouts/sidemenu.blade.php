@@ -348,7 +348,7 @@
                                         <span class="menu-bullet">
                                             <span class="bullet bullet-dot"></span>
                                         </span>
-                                        <span class="menu-title">Attence Schemes</span>
+                                        <span class="menu-title">Attendance Schemes</span>
                                     </a>
                                 </div>
                             @endif

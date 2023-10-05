@@ -200,6 +200,10 @@
                                             <input type="text" name="probation_period" placeholder="Probation Period"
                                                 value="{{ $details->probation_period ?? '' }}" id="probation_period"
                                                 class="form-control">
+                                                <br>
+                                                <input type="text" name="probation_order_no" placeholder="Probation Order No"
+                                                value="{{ $details->probation_order_no ?? '' }}" id="probation_order_no"
+                                                class="form-control">
                                         </div>
                                     </div>
                                     <div class="mb-5 col-lg-4 fv-row">

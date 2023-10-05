@@ -18,8 +18,18 @@
                 </div>
                 <div class="d-flex">
                     <form action="{{ route('reports.leaves') }}" class="input-group w-auto d-inline" method="GET">
+                        
                         <button onclick="this.form.action = '{{ route('reports.leaves.export') }}'" type="submit"
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+                            <input type="date" name="from_date"  class="form-control form-control-sm  w-auto d-inline" placeholder="From Date"value="{{ request()->from_date }}" >
+                            <input type="date" name="to_date"  class="form-control form-control-sm  w-auto d-inline" placeholder="To Date"value="{{ request()->to_date }}">
+                            <select name="place_work" class="form-select form-select-sm w-auto d-inline">
+                                <option value="">-- Place Of Work --</option>
+                                @foreach ($places as $place)
+                                    <option {{ request()->place_work == $place->name ? 'selected' : '' }}
+                                        value="{{ $place->name }}"> {{ $place->name }}</option>
+                                @endforeach
+                            </select>
                         <input type="text" name="name" value="{{ request()->name }}"
                             class="form-control form-control-sm  w-auto d-inline" placeholder="Search Staff Name.." />
                         <select name="department" class="form-select form-select-sm w-auto d-inline">

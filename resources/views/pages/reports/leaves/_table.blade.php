@@ -7,6 +7,7 @@
             <th>Designation</th>
             <th>Department</th>
             <th>Leave Type</th>
+            <th>Place Of Work</th>
             <th>Requested Date</th>
             <th>Leave From</th>
             <th>Leave To</th>
@@ -24,6 +25,7 @@
                 <td>{{ $leave?->user->position?->designation?->name ?? 'NA' }}</td>
                 <td>{{ $leave?->user->position?->department?->name ?? 'NA' }}</td>
                 <td>{{ $leave?->leave_category }}</td>
+                <td>{{ $leave?->place_of_work }}</td>
                 <td>{{ $leave->created_at->format('Y-m-d') }}</td>
                 <td>{{ $leave?->from_date }}</td>
                 <td>{{ $leave?->to_date }}</td>

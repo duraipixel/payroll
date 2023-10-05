@@ -39,6 +39,7 @@ class StaffAppointmentDetailController extends Controller
             'to_appointment' => 'required',
             'appointment_order_model_id' => 'required',
             'probation_period' => 'required_if:probation, ==,yes',
+            'probation_order_no'=>'required_if:probation, ==,yes',
 
         ]);
 
@@ -62,6 +63,7 @@ class StaffAppointmentDetailController extends Controller
             $ins['appointment_order_model_id'] = $request->appointment_order_model_id;
             $ins['has_probation'] = $request->probation;
             $ins['probation_period'] = $request->probation == 'yes' ? $request->probation_period : null;
+            $ins['probation_order_no'] = $request->probation_order_no ?? null;
 
             $ins['previous_appointment_number'] = $request->previous_appointment_number;
             $ins['previous_appointment_date'] = $request->previous_appointment_date;
@@ -248,7 +250,7 @@ class StaffAppointmentDetailController extends Controller
             'to_appointment' => 'required',
             'appointment_order_model_id' => 'required',
             'appointment_order_model_id' => 'required',
-            // 'designation_id' => 'required_if:probation, ==,yes',
+            'probation_order_no' => 'required_if:probation, ==,yes',
             'designation_id' => 'required'
         ]);
 
@@ -272,6 +274,7 @@ class StaffAppointmentDetailController extends Controller
                 $info->appointment_order_model_id = $request->appointment_order_model_id;
                 $info->has_probation = $request->probation_update;
                 $info->probation_period = $request->probation_update == 'yes' ? $request->probation_period : null;
+                $info->probation_order_no=$request->probation_order_no ?? NUll;
                 $info->is_till_active = $request->is_till_active;
                 $info->designation_id = $request->designation_id;
                 $info->institution_id = session()->get('staff_institute_id') ?? null;
@@ -330,6 +333,7 @@ class StaffAppointmentDetailController extends Controller
                 $ins['probation_period'] = $request->probation_update == 'yes' ? $request->probation_period : null;
                 $ins['is_till_active'] = $request->is_till_active;
                 $ins['designation_id'] = $request->designation_id;
+                $ins['probation_order_no']=$request->probation_order_no ?? NUll;
 
                 $ins['previous_appointment_number'] = $request->previous_appointment_number;
                 $ins['previous_appointment_date'] = $request->previous_appointment_date;
