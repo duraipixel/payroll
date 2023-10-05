@@ -14,6 +14,7 @@ return [
         'date_of_completion',
         'probation_completed_date',
         'probation_order_date',
+        'probation_order_no',
         'society_name',
 
         'previous_appointment_number',

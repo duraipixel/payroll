@@ -200,12 +200,19 @@
                                             <input type="text" name="probation_period" placeholder="Probation Period"
                                                 value="{{ $details->probation_period ?? '' }}" id="probation_period"
                                                 class="form-control">
-                                                <br>
-                                                <input type="text" name="probation_order_no" placeholder="Probation Order No"
-                                                value="{{ $details->probation_order_no ?? '' }}" id="probation_order_no"
-                                                class="form-control">
+                                                
+                                               
                                         </div>
                                     </div>
+<div class="col-md-4 fv-row">
+     <div id="probation_pane_update1"
+                                            @if (isset($details->has_probation) && $details->has_probation == 'yes') @else style="display:none" @endif>
+<label class="fs-6">Probation Order Number</label>
+ <input type="text" name="probation_order_no" placeholder="Probation Order No" value="{{ $details->probation_order_no ?? '' }}" id="probation_order_no" class="form-control">
+</div>
+</div>
+<div class="col-md-8 fv-row mb-5">
+</div>
                                     <div class="mb-5 col-lg-4 fv-row">
                                         <div class="d-inline-block flex-stack">
                                             <div class="fw-bold me-5">
@@ -382,8 +389,11 @@
 
         if ($(this).val() == 'yes') {
             $('#probation_pane_update').show();
+            $('#probation_pane_update1').show();
+            
         } else {
             $('#probation_pane_update').hide();
+            $('#probation_pane_update1').hide();
         }
 
     })

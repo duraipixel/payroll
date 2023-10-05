@@ -142,6 +142,7 @@ class StaffAppointmentDetailController extends Controller
                 $previous_appointment_number=$order_details->previous_appointment_number ?? null;
                 $previous_appointment_date=$order_details->previous_appointment_date ? commonDateFormatAlt($order_details->previous_appointment_date) : null;
                 $previous_designation=$order_details->previous_designation ?? null;
+                 $probation_order_no=$order_details->probation_order_no ?? null;
 
            }else{
             
@@ -149,6 +150,7 @@ class StaffAppointmentDetailController extends Controller
                 $previous_appointment_number = null;
                 $previous_appointment_date = null;
                 $previous_designation =null;
+                $probation_order_no=null;
 
        
                
@@ -169,6 +171,7 @@ class StaffAppointmentDetailController extends Controller
                 'date_of_completion' => '',
                 'probation_completed_date' => '',
                 'probation_order_date' => '',
+                'probation_order_no' => $probation_order_no,
                 'society_name' => $society_info->name ?? null,
 
                 'previous_appointment_number' => $previous_appointment_number,
