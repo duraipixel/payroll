@@ -123,24 +123,42 @@ class StaffAppointmentDetailController extends Controller
 
         if ($id) {
             $order_details = StaffAppointmentDetail::find($id);
+           
         }
         /**
          * Get Appointment order details
          */
 
         $model_info = AppointmentOrderModel::find($appointment_order_model_id);
+        //dd($model_info);
 
         if (isset($model_info->document) && !empty($model_info->document)) {
             $academic_id = $request->academic_id ?? academicYearId();
             $document = $model_info->document;
             $user_info = User::find($request->staff_id);
             $society_info = Society::find(1);
+            if($id){
+                $appointment_order_no=$order_details->appointment_order_no;
+                $previous_appointment_number=$order_details->previous_appointment_number ?? null;
+                $previous_appointment_date=$order_details->previous_appointment_date ? commonDateFormatAlt($order_details->previous_appointment_date) : null;
+                $previous_designation=$order_details->previous_designation ?? null;
+
+           }else{
+            
+                $appointment_order_no=appointmentOrderNo($user_info->id, $academic_id);
+                $previous_appointment_number = null;
+                $previous_appointment_date = null;
+                $previous_designation =null;
+
+       
+               
+           }
 
             $place_of_work = PlaceOfWork::find($request->place_of_work_id);
             $staff_name = $user_info->personal->gender == 'male' ? 'Mr.' : ($user_info->personal->marital_status == 'married' ? 'Mrs.' : 'Ms.');
             $appointment_variables = array(
                 'date' => date('d-m-Y'),
-                'appointment_order_no' => $order_details->appointment_order_no ?? appointmentOrderNo($user_info->id, $academic_id),
+                'appointment_order_no' =>$appointment_order_no ?? Null,
                 'appointment_date' => commonDateFormat($request->from_appointment),
                 'designation' => $user_info->position->designation->name ?? null,
                 'staff_name' => $staff_name . $user_info->name,
@@ -153,9 +171,9 @@ class StaffAppointmentDetailController extends Controller
                 'probation_order_date' => '',
                 'society_name' => $society_info->name ?? null,
 
-                'previous_appointment_number' => $order_details->previous_appointment_number ?? null,
-                'previous_appointment_date' => $order_details->previous_appointment_date ? commonDateFormatAlt($order_details->previous_appointment_date) : null,
-                'previous_designation' => $order_details->previous_designation ?? null
+                'previous_appointment_number' => $previous_appointment_number,
+                'previous_appointment_date' => $previous_appointment_date,
+                'previous_designation' => $previous_designation
             );
 
             foreach ($appointment_variables as $key => $value) {
