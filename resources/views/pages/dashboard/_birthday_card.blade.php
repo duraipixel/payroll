@@ -18,6 +18,7 @@
                                 <div class="d-flex text-start align-items-left">
                                     <div class="symbol symbol-45px me-5">
                                         @php
+                                         $profile_image='';
                                             if (isset($item->staffInfo->image) && !empty($item->staffInfo->image)) {
 
                                                  $profile_image=storage_path('app/public/' . $item->staffInfo->image);
