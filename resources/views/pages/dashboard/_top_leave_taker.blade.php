@@ -11,6 +11,7 @@
                 </tr>
             </thead>
             <tbody>
+               
                 @if (isset($top_ten_leave_taker) && !empty($top_ten_leave_taker))
                     @foreach ($top_ten_leave_taker as $item)
                         <tr>
@@ -19,10 +20,13 @@
                                     <div class="symbol symbol-45px me-5">
                                         @if (isset($item->user->image) && !empty($item->user->image))
                                             @php
-                                                $profile_image = Storage::url($item->user->image);
+
+                                $profile_image=storage_path('app/public/' . $item->user->image);
+                                             
                                             @endphp
                                             @if (file_exists($profile_image))
-                                                <img src="{{ asset('public' . $profile_image) }}" alt=""
+                                            
+                                                <img src="{{ asset('storage/app/public/' .$item->user->image) }}" alt=""
                                                     width="100" style="border-radius:10%">
                                             @else
                                                 <img src="{{ url('/') }}/assets/media/avatars/300-19.jpg"

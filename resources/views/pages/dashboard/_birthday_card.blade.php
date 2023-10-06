@@ -19,12 +19,18 @@
                                     <div class="symbol symbol-45px me-5">
                                         @php
                                             if (isset($item->staffInfo->image) && !empty($item->staffInfo->image)) {
-                                                $url = asset('public' . Storage::url($item->staffInfo->image));
-                                            } else {
-                                                $url = asset('assets/images/no_Image.jpg');
-                                            }
+
+                                                 $profile_image=storage_path('app/public/' . $item->staffInfo->image);
+
+                                    
+                                            } 
                                         @endphp
-                                        <img src="{{ $url }}" alt="{{ $item->staffInfo->name ?? '' }}">
+                                         @if (file_exists($profile_image))
+                                        <img src="{{ asset('storage/app/public/' .$item->staffInfo->image) }}" alt="{{ $item->staffInfo->name ?? '' }}">
+                                        @else
+                                        <img src="{{ url('/') }}/assets/images/no_Image.jpg"
+                                                    alt="{{ $item->staffInfo->name ?? '' }}">
+                                        @endif
                                     </div>
                                     <div class="d-flex justify-content-middle flex-column">
                                         <a href="#" class="text-dark fw-bolder text-hover-primary fs-6">

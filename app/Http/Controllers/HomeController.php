@@ -14,7 +14,7 @@ use App\Repositories\DashboardRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-
+use Carbon\Carbon;
 class HomeController extends Controller
 {
     /**
@@ -35,7 +35,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user_count = User::whereNull('is_super_admin')->InstituteBased()->Academic()->count();
+        $user_count = User::where('status','active')->whereNull('is_super_admin')->InstituteBased()->Academic()->count();
+        // ->Academic()
         $from_date = date('Y-m-1');
         $to_date = date('Y-m-t');
         $month = date('m');
@@ -78,10 +79,16 @@ class HomeController extends Controller
             })->Academic()
             ->get();
 
-        $announcement = Announcement::whereRaw("CAST(created_at AS DATE) BETWEEN '" . $from_date . "' and '" . $to_date . "'")
+        $full_time = Announcement::where('announcement_type','Full Time')
             ->Academic()
-            ->InstituteBased()
-            ->get();
+            ->InstituteBased()->where('status','active')
+            ->count();
+        $sort_time = Announcement::where('announcement_type','Short Period')->where('to_date','>=',Carbon::now()->format('Y-m-d'))
+            ->Academic()
+            ->InstituteBased()->where('status','active')
+            ->count();
+          
+            $announcement=$full_time+$sort_time;
 
         $document_approval = StaffDocument::where('staff_documents.verification_status', 'pending')
             ->join('users', 'users.id', '=', 'staff_documents.staff_id')
@@ -113,6 +120,12 @@ class HomeController extends Controller
             ->get();
 
         $designations = Designation::with('staffEnrollments')->where('status', 'active')->get();
+         $announcement_list= Announcement::
+            Academic()
+            ->InstituteBased()->where('status','active')
+            ->get();
+           
+
 
         $params = array(
             'user_count' => $user_count,
@@ -126,6 +139,7 @@ class HomeController extends Controller
             'nature_of_works' => $nature_of_works,
             'designations' => $designations,
             'gender_calculation' => $gender_calculation,
+            'announcement_list'=>$announcement_list,
             'top_ten_leave_taker' => $this->dashboardRepository->getTopTenLeaveTaker(),
             'age_json_data' => $this->dashboardRepository->getInstituteAgeWiseData(),
             'total_institution_staff' => $this->dashboardRepository->getTotalStaffCountByInstitutions(),
