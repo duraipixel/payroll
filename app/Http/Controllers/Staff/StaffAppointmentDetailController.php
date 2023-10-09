@@ -301,9 +301,9 @@ class StaffAppointmentDetailController extends Controller
                 $info->institution_id = session()->get('staff_institute_id') ?? null;
 
                 // Previous Appointment Info
-                $info->previous_appointment_number = $request->previous_appointment_number;
-                $info->previous_appointment_date = $request->previous_appointment_date;
-                $info->previous_designation = $request->previous_designation;
+                $info->previous_appointment_number = $request->previous_appointment_number ?? null;
+                $info->previous_appointment_date = $request->previous_appointment_date ?? null;
+                $info->previous_designation = $request->previous_designation ?? null;
 
                 if ($request->is_till_active == 'yes') {
 

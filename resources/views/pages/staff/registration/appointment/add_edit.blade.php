@@ -293,7 +293,7 @@
                                         <br>
 
                                         <div class="col-lg-6 mb-5">
-                                            <label class="form-label required">Previous Appointment Number</label>
+                                            <label class="form-label">Previous Appointment Number</label>
                                             <div class="position-relative d-flex align-items-center">
                                                 <input class="form-control  ps-12" placeholder="Previous Appointment Number"
                                                     name="previous_appointment_number" id="previous_appointment_number"
@@ -302,7 +302,7 @@
                                         </div>
 
                                         <div class="col-lg-6 mb-5">
-                                            <label class="form-label required">Previous Appointment Date</label>
+                                            <label class="form-label">Previous Appointment Date</label>
                                             <div class="position-relative d-flex align-items-center">
                                                 <input class="form-control ps-12" placeholder="Select a date"
                                                     name="previous_appointment_date" id="previous_appointment_date" type="date"
@@ -311,7 +311,7 @@
                                         </div>
 
                                         <div class="col-lg-6 mb-5">
-                                            <label class="form-label required">
+                                            <label class="form-label">
                                                 Previous Designation
                                             </label>
                                             <div class="position-relative d-flex align-items-center">

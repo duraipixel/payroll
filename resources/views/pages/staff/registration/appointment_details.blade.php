@@ -362,9 +362,6 @@
             'to_appointment_update',
             'appointment_order_model_id_update',
             'designation_id_update',
-            'previous_appointment_number',
-            'previous_appointment_date',
-            'previous_designation'
         ];
 
         $('.form-control,.form-select').removeClass('border-danger');
