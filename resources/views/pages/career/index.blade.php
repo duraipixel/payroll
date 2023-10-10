@@ -9,7 +9,7 @@
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! searchSvg() !!}
                     <input type="text" data-kt-user-table-filter="search" id="bank_dataTable_search"
-                        class="form-control form-control-solid w-250px ps-14" placeholder="Search here..">
+                        class="form-control  w-250px ps-14" placeholder="Search here..">
                 </div>
             </div>
             <div class="card-toolbar">

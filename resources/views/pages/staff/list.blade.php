@@ -28,7 +28,7 @@
                             {!! searchSvg() !!}
                         </span>
                         <input type="text" name="datatable_search" data-kt-user-table-filter="search"
-                            id="staff_datable_search" class="form-control form-control-solid w-250px ps-14"
+                            id="staff_datable_search" class="form-control  w-250px ps-14"
                             placeholder="Search user">
                     </div>
 
@@ -118,6 +118,7 @@
             "serverSide": true,
             "processing": true,
             "bProcessing": true,
+            order: [[1, "ASC"]],
             "ajax": {
                 "url": "{{ route('staff.list') }}",
                 "dataType": "json",
@@ -145,7 +146,9 @@
                     "data": "status"
                 },
                 {
-                    "data": "actions"
+                    "data": "actions",
+                    orderable: false,
+                    searchable: false
                 }
             ],
         language: {

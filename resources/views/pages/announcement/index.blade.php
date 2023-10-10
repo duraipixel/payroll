@@ -10,7 +10,7 @@
             <div class="d-flex align-items-center position-relative my-1">
                 {!! searchSvg() !!}
                 <input type="text" data-kt-user-table-filter="search" id="role_mapping_dataTable_search"
-                    class="form-control form-control-solid w-250px ps-14" placeholder="Search Announcement">
+                    class="form-control w-250px ps-14" placeholder="Search Announcement">
             </div>
         </div>
         <div class="card-toolbar">

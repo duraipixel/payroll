@@ -1025,8 +1025,8 @@ class StaffController extends Controller
                 ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
                     $q->where('users.institute_id', $datatable_institute_id);
                 })
-                ->InstituteBased();
-                // ->orderBy('society_emp_code', 'asc')
+                ->InstituteBased()
+                 ->orderBy($order_val,$dir_val);
                 // ->orderBy('institute_id', 'desc');
 
             if ($limit_val > 0) {
