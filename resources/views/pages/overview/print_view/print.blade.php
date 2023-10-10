@@ -40,6 +40,7 @@
 @media print {
   #print {
     display: none;
+     page-break-before: always !important;
   }
 }
     </style>
@@ -216,7 +217,7 @@
 </table>
 @endif
 
-<div style="page-break-before:always">&nbsp;</div>
+<div>&nbsp;</div><br>
 
 @include('pages.overview.print_view._education')
 
@@ -228,22 +229,23 @@ cellpadding="5">
 </tbody>
 </table>
 <!-- -------------------------------------------------------------- !-->
-<div style="page-break-before:always">&nbsp;</div>
+<div>&nbsp;</div><br>
 @include('pages.overview.print_view._family')
 {{-- @include('pages.overview.print_view._family_others') --}}
 {{-- @include('pages.overview.print_view._aews') --}}
 @include('pages.overview.print_view._nominee')
 @include('pages.overview.print_view._relation_working')
 
-{{-- <div style="page-break-before:always">&nbsp;</div> --}}
-
+{{-- <div >&nbsp;</div> --}}
+<br>
 @include('pages.overview.print_view._medical')
 
-{{-- <div style="page-break-before:always">&nbsp;</div> --}}
+{{-- <div >&nbsp;</div> --}}
+<br>
 
 @include('pages.overview.print_view._appointment')
 <!-- -------------------------------------------------------------- !-->
-{{-- <div style="page-break-before:always">&nbsp;</div> --}}
+{{-- <div >&nbsp;</div> --}}
 </body>
 <script src="{{url('assets/js/jquery.js')}}"></script>
 <script type="text/javascript">
