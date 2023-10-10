@@ -115,13 +115,13 @@
     <script>
         $(document).ready(function() {
             var doc_table = $('#document_locker').DataTable({
-
                 "serverSide": true,
                 "processing": true,
-                "ajax": {
+                ajax: {
                     "url": "{{ route('user.document_locker') }}",
                     "dataType": "json",
-                    "type": "GET",
+                     "type": "GET",
+                    "processing": true,
                     "data": function(d) {
                         d._token = "{{ csrf_token() }}",
                             d.staff_id = $('#staff_id').val()
@@ -157,12 +157,18 @@
                         searchable: false,
                     },
                 ],
-                "aLengthMenu": [
-                    [25, 50, 100, 200, 500, -1],
-                    [25, 50, 100, 200, 500, "All"]
-                ]
-            });
-
+        language: {
+            paginate: {
+                next: '<i class="fa fa-angle-right"></i>', // or '→'
+                previous: '<i class="fa fa-angle-left"></i>' // or '←' 
+            }
+        },
+        "pageLength": 25,
+        "aLengthMenu": [
+                [25, 50, 100, 200, 500, -1],
+                [25, 50, 100, 200, 500, "All"]
+            ]
+        });
             document.getElementById('search_doc_form').addEventListener('click', function() {
                 console.log('button clickced');
                 doc_table.ajax.reload();

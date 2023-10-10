@@ -358,8 +358,9 @@ class OverviewController extends Controller
                     $q->where('short_name', '!=', 'OTHER');
                 });
             })->get();
-
+        // dd($payout_data);
         // $month_length = date('t', strtotime($payroll_date));
+            $html="";
         if (isset($payout_data) && count($payout_data)) {
 
             StaffSalary::where('payroll_id', $payout_id)->update(['status' => 'inactive']);

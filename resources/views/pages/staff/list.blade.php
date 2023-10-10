@@ -11,6 +11,7 @@
         #staff_table_filter {
             display: none;
         }
+      
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css" />
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
@@ -116,6 +117,7 @@
         var staff_Table = $('#staff_table').DataTable({
             "serverSide": true,
             "processing": true,
+            "bProcessing": true,
             "ajax": {
                 "url": "{{ route('staff.list') }}",
                 "dataType": "json",
@@ -146,6 +148,12 @@
                     "data": "actions"
                 }
             ],
+        language: {
+            paginate: {
+                next: '<i class="fa fa-angle-right"></i>', // or '→'
+                previous: '<i class="fa fa-angle-left"></i>' // or '←' 
+            }
+        },
             "aLengthMenu": [
                 [25, 50, 100, 200, 500, -1],
                 [25, 50, 100, 200, 500, "All"]

@@ -52,7 +52,7 @@ class AnnouncementController extends Controller
                     $date = date('Y-m-d',strtotime($keywords));
                     return $query->where(function($q) use($keywords,$date){
 
-                        $q->where('institutions.name','like',"%{$keywords}%")
+                        $q->where('ins.name','like',"%{$keywords}%")
                         ->orWhere('announcement_type','like',"%{$keywords}%")
                         ->orWhere('from_date','like',"%{$keywords}%")
                         ->orWhere('to_date','like',"%{$keywords}%")

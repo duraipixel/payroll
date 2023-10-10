@@ -12,12 +12,27 @@
                 style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
                 Date of Joining
             </td>
+            <td
+                style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
+               Order No
+            </td>
+             <td  style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 20%;font-size: 12px;">
+                Period of Appointment (From - To)
+            </td>
+           
             <td  style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 20%;font-size: 12px;">
                 Appointment
             </td>
-            <td  style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 20%;font-size: 12px;">
-                Period of Appointment (From - To)
+             <td  style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
+               Category
             </td>
+            <td  style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
+               Nature Of Employment
+            </td>
+            <td  style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
+                Work Place
+            </td>
+           
             <td  style="border: 1px solid #c3c3c3;color:#333;font-weight:bold;height:0px;text-align:left;width: 10%;font-size: 12px;">
                 Salary Scale
             </td>
@@ -33,12 +48,24 @@
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
                         {{ commonDateFormat($item->joining_date) }}
                     </td>
+                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
+                        {{ $item->appointment_order_no ?? 'n/a'}}
+                    </td>
+                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
+                        {{ commonDateFormat($item->from_appointment) }} - {{ commonDateFormat($item->to_appointment) }}
+                    </td>
                     <td
                         style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
                         {{ $item->appointmentOrderModel->name ?? 'N/A' }}
                     </td>
-                    <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
-                        {{ commonDateFormat($item->from_appointment) }} - {{ commonDateFormat($item->to_appointment) }}
+                      <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
+                        {{ $item->staffCategory->name ?? ''}}
+                    </td>
+                       <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
+                        {{ $item->employment_nature->name ?? ''  }}
+                    </td>
+                       <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
+                        {{ $item->work_place->name ?? '' }}
                     </td>
                     <td style="border: 1px solid #c3c3c3;color:#5f5d5d;height:0px;text-align:left;width: 10%;font-size: 12px;">
                         {{ $item->salary_scale }}

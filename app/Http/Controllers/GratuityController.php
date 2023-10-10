@@ -115,7 +115,9 @@ class GratuityController extends Controller
 
         $title = ucwords(str_replace('_', ' ', $page_type));
         $page_title = 'Form for Assessing of Gratuity For ' . $title . ' Staff';
-        $user = User::where(['users.status' => 'active', 'users.verification_status' => 'approved'])
+        //$user = User::where(['users.status' => 'active', 'users.verification_status' => 'approved'])
+
+        $user = User::where(['users.status' => 'active'])
             ->whereHas('appointment.employment_nature', function ($q) {
                 $q->where('name', 'REGULAR STAFF');
             })

@@ -21,6 +21,27 @@
         .common-table td {
             text-transform: uppercase
         }
+        #print {
+          background-color: #4CAF50;
+          border: none;
+          color: white;
+          padding: 10px 10px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          cursor: pointer;
+        }
+        @media print {
+  .hide-from-print { 
+      display: none !important; 
+  }
+}
+@media print {
+  #print {
+    display: none;
+  }
+}
     </style>
 </head>
 
@@ -35,6 +56,7 @@
                     {{-- <img src="{{ asset('assets/media/logos/user-logo.png') }}" style="height:90px;"> --}}
                 </td>
                 <td style="width: 50%">
+                  <button type="button" class="btn btn-success" id="print">Print</button>
                     <div style="font-size: 20px;font-weight:bold;text-align:center;color:white">Amalorpavam Educational
                         Welfare
                         Soceity</div>
@@ -223,6 +245,12 @@ cellpadding="5">
 <!-- -------------------------------------------------------------- !-->
 {{-- <div style="page-break-before:always">&nbsp;</div> --}}
 </body>
+<script src="{{url('assets/js/jquery.js')}}"></script>
+<script type="text/javascript">
+    $('#print').click(function() {
+       
+    window.print();
+});
+</script>
 <grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
-
 </html>

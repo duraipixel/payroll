@@ -40,6 +40,7 @@ class TaxCalculationRepository
                 ->orderBy('payout_month', 'desc')
                 ->where('is_current', 'yes')
                 ->first();
+
             $gross_salary_annum = 0;
             if (isset($salary_pattern) && !empty($salary_pattern)) {
 
@@ -104,6 +105,7 @@ class TaxCalculationRepository
          * Calculation start for new tax calculation for staff
          */
         $statement_id = '';
+
         if( $gross_salary_annum > 0 ) {
             
             $total = ($gross_salary_annum) - 50000;
@@ -202,12 +204,19 @@ class TaxCalculationRepository
             if( !$check_exist ) {
     
                 $statement_id = ItStaffStatement::create($ins)->id;
+            }else{
+                #..ajith
+
+                $statement_id = $check_exist->id; 
+
             }
         }
         if( $statement_id ) {
+           
             generateIncomeTaxStatementPdfByStaff($statement_id);
             return true;
         } else {
+          
             return false;
         }
         

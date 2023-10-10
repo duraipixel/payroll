@@ -26,7 +26,7 @@ class OverViewController extends Controller
                 ),
             )
         );
-        $staff_id = auth()->user()->id;
+        $staff_id = Auth::id();
         $info = User::find($staff_id);
 
         $personal_doc=StaffDocument::where('staff_id',$staff_id)->get();

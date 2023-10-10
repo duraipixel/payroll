@@ -55060,3 +55060,9 @@ body {
 .blur-loading {
   filter: blur(2px);
 }
+ .dataTables_wrapper .dataTables_processing {
+  z-index: 99999;
+  background: white;
+  border: 1px solid black;
+  border-radius: 3px;
+}
