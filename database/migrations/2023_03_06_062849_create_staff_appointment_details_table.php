@@ -28,6 +28,10 @@ return new class extends Migration
             $table->unsignedBigInteger('appointment_order_model_id');
             $table->enum('has_probation', ['yes', 'no']);
             $table->text('appointment_doc')->nullable();
+            $table->string('previous_appointment_number')->nullable();
+            $table->date('previous_appointment_date')->nullable();
+            $table->string('previous_designation')->nullable();
+            $table->string('probation_order_no')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

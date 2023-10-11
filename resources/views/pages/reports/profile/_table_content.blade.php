@@ -29,6 +29,11 @@
             <td>{{ $item->personal->permanent_address ?? '' }}</td>
             <td>{{ $item->personal->marital_status ?? '' }}</td>
             <td>{{ isset($item->personal->marriage_date) && !empty($item->personal->marriage_date ) ? commonDateFormat($item->personal->marriage_date) : '' }}</td>
+             <td>{{ $item->joining_date ?? '' }}</td>
+              <td>{{ $item->short_name ?? '' }}</td>
+            <td>{{ $item->personal->pincode ?? '' }}</td>
+            <td>{{ $item->position->department->name ?? '' }}</td>
+            <td>{{ $item->position->division->name ?? '' }}</td>AS
         </tr>
     @endforeach
 @else

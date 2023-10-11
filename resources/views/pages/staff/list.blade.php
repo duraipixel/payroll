@@ -13,8 +13,6 @@
         }
       
     </style>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css" />
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
     <div class="card">
 
         <div class="card-header border-0 pt-6">
@@ -30,7 +28,7 @@
                         <input type="text" name="datatable_search" data-kt-user-table-filter="search"
                             id="staff_datable_search" class="form-control  w-250px ps-14"
                             placeholder="Search user">
-                    </div>
+                    </div>&nbsp;&nbsp; 
 
                     <div class="form-group">
                         <select name="verification_status" id="verification_status" class="form-control">
@@ -38,6 +36,11 @@
                             <option value="pending">Pending</option>
                             <option value="approved">Approved</option>
                         </select>
+                    </div>
+&nbsp;&nbsp;      <div class="form-group">
+            <input type="number" name="page_search"
+                            id="page_search" class="form-control  w-250px ps-14"
+                            placeholder="Go to Page" value="1">
                     </div>
 
                     {{-- <div class="form-group">
@@ -113,20 +116,20 @@
 @endsection
 
 @section('add_on_script')
-    <script>
+    <script> 
         var staff_Table = $('#staff_table').DataTable({
-            "serverSide": true,
-            "processing": true,
-            "bProcessing": true,
+            processing: true,
+            serverSide: true,
             order: [[1, "ASC"]],
+            type: 'POST',
             "ajax": {
                 "url": "{{ route('staff.list') }}",
                 "dataType": "json",
-                "type": "GET",
                 "data": function(d) {
                     d._token = "{{ csrf_token() }}",
                         d.staff_datable_search = $('#staff_datable_search').val(),
                         d.verification_status = $('#verification_status').val(),
+                        // d.start = (($('#page_search').val() * 25),
                         d.datatable_institute_id = $('#datatable_institute_id').val()
                 }
             },
@@ -163,11 +166,15 @@
             ]
 
         });
-
+        
         document.querySelector('#staff_datable_search').addEventListener("keyup", function(e) {
             staff_Table.ajax.reload();
         });
         document.querySelector('#verification_status').addEventListener("change", function(e) {
+            staff_Table.ajax.reload();
+        });
+         document.querySelector('#page_search').addEventListener("change", function(e) {
+            
             staff_Table.ajax.reload();
         });
         document.querySelector('#datatable_institute_id').addEventListener("change", function(e) {
