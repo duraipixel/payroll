@@ -60,6 +60,11 @@
                                     <th> Pan Card </th>
                                     <th> Ration Card </th>
                                     <th> Voter ID </th> --}}
+                                    <th>DOJ</th>
+                                    <th>Shortname</th>
+                                    <th>Pincode</th>
+                                    <th>Department</th>
+                                    <th>Division</th>
                                 </tr>
                             </thead>
 
