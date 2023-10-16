@@ -120,7 +120,7 @@
         var staff_Table = $('#staff_table').DataTable({
             processing: true,
             serverSide: true,
-            order: [[1, "DESC"]],
+            order: [[2, "DESC"]],
             type: 'POST',
             "ajax": {
                 "url": "{{ route('staff.list') }}",
