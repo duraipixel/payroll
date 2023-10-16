@@ -1,3 +1,4 @@
+
 <div class="table-responsive">
     <table class="table align-middle  table-hover table-bordered table-striped fs-7 no-footer" id="revision_table">
         <thead class="bg-primary">

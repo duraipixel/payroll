@@ -44,6 +44,7 @@ class PayrollController extends Controller
         $previous_month_end = date('Y-m-t', strtotime($date . ' - 1 month'));
 
         $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->first();
+        //dd($breadcrums);
 
         return view('pages.payroll_management.payroll.index', compact('breadcrums', 'date', 'payroll', 'working_days', 'previous_payroll', 'from_year', 'month'));
     }

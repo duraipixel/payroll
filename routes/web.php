@@ -142,7 +142,9 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/staff/generate/employee_code', [App\Http\Controllers\StaffController::class, 'generateEmployeeCode'])->name('staff.generate.code');
 
     Route::get('/leaves', [App\Http\Controllers\Leave\LeaveController::class, 'index'])->name('leaves.list')->middleware(['checkAccess:view']); 
-    Route::get('/leaves/overview', [App\Http\Controllers\Leave\LeaveController::class, 'overview'])->name('leaves.overview')->middleware(['checkAccess:view']); 
+    Route::get('/leaves/overview', [App\Http\Controllers\Leave\LeaveController::class, 'overview'])->name('leaves.overview')->middleware(['checkAccess:view']);
+    Route::get('/leaves/overview/list', [App\Http\Controllers\Leave\LeaveController::class, 'overviewList'])->name('leaves.overview.list')->middleware(['checkAccess:view']); 
+    Route::get('/leaves/overview/view/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'overviewView'])->name('leaves.overview.view'); 
     Route::post('/leaves/staff/info', [App\Http\Controllers\Leave\LeaveController::class, 'getStaffLeaveInfo'])->name('leaves.staff.info'); 
     Route::get('/working/days', [App\Http\Controllers\Leave\LeaveController::class, 'setWorkingDays'])->name('leaves.set.workingday'); 
     Route::post('/leaves/add', [App\Http\Controllers\Leave\LeaveController::class, 'addEditModal'])->name('leaves.add_edit'); 
@@ -293,6 +295,7 @@ Route::group(['middleware' => 'auth'],  function () {
 
     #salary revision approval
     Route::get('salary/revision',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'index'])->name('salary.revision');
+    Route::get('salary/revision/view/{id}',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'View'])->name('salary.view');
     Route::post('salary/revision/status/change/modal',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatusModal'])->name('salary.revision.status.modal');
     Route::post('salary/revision/status/change',[App\Http\Controllers\PayrollManagement\SalaryRevisionController::class,'changeStatus'])->name('salary.revision.status.change');
     #Other Income Section
