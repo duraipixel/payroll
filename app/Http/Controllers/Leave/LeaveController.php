@@ -17,7 +17,10 @@ use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-
+use App\Models\Master\StaffCategory;
+use App\Models\Master\Designation;
+use Illuminate\Support\Facades\Session;
+use App\Models\AcademicYear;
 class LeaveController extends Controller
 {
     public function leaveCountDays(Request $request){
@@ -154,12 +157,20 @@ class LeaveController extends Controller
 
                         $approve_btn = '<a href="javascript:void(0);" onclick="approveLeave(' . $row->id . ')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" > 
                                             <i class="fa fa-check"></i></a>';
+                         $edit = '<a href="javascript:void(0);" onclick="editLeave(' . $row->id.')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" >
+                        <i class="fa fa-edit"></i>
+                        </a>';
+                    }else{
+                        $edit='<a href="javascript:void(0);"class="btn btn-icon btn-active-secondary btn-light-secondary mx-1 w-30px h-30px">
+                        <i class="fa fa-edit"></i>
+                        </a>';
                     }
                     $route_name = request()->route()->getName();
                     if (access()->buttonAccess($route_name, 'add_edit')) {
                         $edit_btn = '<a href="' . asset('public' . $url) . '" target="_blank" tooltip="Leave form"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                                 <i class="fa fa-download"></i>
                             </a>';
+
                     } else {
                         $edit_btn = '';
                     }
@@ -169,7 +180,7 @@ class LeaveController extends Controller
                     } else {
                         $del_btn = '';
                     }
-                    return $edit_btn . $approve_btn . $del_btn;
+                    return $edit.$edit_btn .$approve_btn . $del_btn;
                 })
                 ->rawColumns(['action', 'status', 'created_at', 'name']);
             return $datatables->make(true);
@@ -184,9 +195,11 @@ class LeaveController extends Controller
         $info = '';
         $taken_leave  = [];
         $leave_count=0;
+        $type='';
         if ($id) {
             $title = 'Approve Leave Request';
             $info = StaffLeave::find($id);
+            $type = $request->type;
             $taken_leave = StaffLeave::where('staff_id', $info->staff_id)->where('from_date', '<', $info->from_date)->get();
             foreach($taken_leave as $leave){
                 $leave_count+=$leave->granted_days;
@@ -196,7 +209,7 @@ class LeaveController extends Controller
         }
         $leave_category = LeaveHead::where('status', 'active')->get();
 
-        return view('pages.leave.request_leave.add_edit_form', compact('title', 'leave_category', 'info', 'taken_leave','leave_count'));
+        return view('pages.leave.request_leave.add_edit_form', compact('title', 'leave_category', 'info', 'taken_leave','leave_count','type'));
     }
 
     public function saveLeaveRequest(Request $request)
@@ -204,6 +217,7 @@ class LeaveController extends Controller
       
 
         $id = $request->id ?? '';
+        $type = $request->type ?? '';
         $validate_array = [
             'leave_category_id' => 'required',
             'staff_id' => 'required',
@@ -212,7 +226,7 @@ class LeaveController extends Controller
             'reason' => 'required',
         ];
 
-        if (isset($id) && !empty($id)) {
+        if (isset($id) && !empty($id) && $type=='approved') {
             [
                 'leave_category_id' => 'required',
                 'staff_id' => 'required',
@@ -255,7 +269,7 @@ class LeaveController extends Controller
                 $staff_info = User::with('appointment.work_place')->find($request->staff_id);
                 $leave_category_info = LeaveHead::find($request->leave_category_id);
 
-                if (isset($id) && !empty($id)) {
+                if (isset($id) && !empty($id) && $type=='approved') {
 
                     $leave_info = StaffLeave::find($id);
                     if ($request->hasFile('application_file')) {
@@ -308,7 +322,57 @@ class LeaveController extends Controller
                         $ins['leave_days']=json_encode($leave_day);
                     }
                   
-                } else {
+                } elseif($type=='edit') {
+                     $leave_info = StaffLeave::find($id);
+                    if(empty($request->no_of_days) || $request->no_of_days==0 || $request->no_of_days==0.0){
+                        $error = 1;
+                        $message = ['No Of Days Field is required'];
+                        return response()->json(['error' => $error, 'message' => $message]);
+
+                    }
+
+                    $ins['academic_id'] = academicYearId();
+                    $ins['application_no'] = leaveApplicationNo($request->staff_id, $leave_category_info->code);
+                    $ins['staff_id'] = $request->staff_id;
+                    $ins['designation'] = $request->designation;
+                    $ins['place_of_work'] = $staff_info->appointment->work_place->name ?? null;
+                    $ins['salary'] = $request->salary ?? null;
+                    $ins['from_date'] = $from_date;
+                    $ins['to_date'] = $end_date;
+                    $ins['no_of_days'] = $request->no_of_days ?? "0";
+                    $ins['reason'] = $request->reason;
+
+                    if(isset($request->leave) && isset($request->leave['date'][0])){
+                        $leave_day=[];
+                        foreach($request->leave['radio'] as$key=>$data){
+                            $leave_days['date']=$request->leave['date'][$key];
+                            $leave_days['type']=$data;
+                            $leave_day[]=$leave_days;
+                        }
+
+                        }else{
+
+                    if(isset($request->leave)){
+                        $leave_day=[];
+                        foreach(json_decode($leave_info->leave_days) as $key=>$data){
+                           
+                            $leave_days['date']=$data->date;
+                            $leave_days['type']=$request->leave['radio'][$key];
+                            $leave_day[]=$leave_days;
+
+                        }
+                       
+                     
+                      
+                       }
+                        }
+                       
+                       
+                        $ins['leave_days']=json_encode($leave_day);
+
+                    
+                 
+                }else{
                     if(empty($request->no_of_days) || $request->no_of_days==0 || $request->no_of_days==0.0){
                         $error = 1;
                         $message = ['No Of Days Field is required'];
@@ -364,7 +428,9 @@ class LeaveController extends Controller
                
                 /** generate leave form and send */
                 $leave_info = StaffLeave::updateOrCreate(['id' => $id], $ins);
+              if (isset($id) && !empty($id) && $type=='approved') {
                 generateLeaveForm($leave_info->id);
+               }
 
                 $error = 0;
                 $message = 'Leave Request submit successfully';
@@ -393,7 +459,98 @@ class LeaveController extends Controller
 
         return view('pages.leave.overview', compact('breadcrums', 'user'));
     }
+    public function overviewList(Request $request)
+    {
+        $breadcrums = array(
+            'title' => 'Leave Management Overview',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => 'Overview'
+                ),
+            )
+        );
 
+        $user = User::where('status', 'active')
+            ->InstituteBased()
+            ->get();
+        $leavehead=LeaveHead::where('academic_id',academicYearId())->where('status', 'active')->get();
+       //dd($leavehead);
+        $staff_category = StaffCategory::where('status', 'active')->get();
+        $designation = Designation::where('status', 'active')->orderBy('name', 'asc')->get();
+      if($request->ajax())
+        {
+
+             $data = User::select('users.*', 'institutions.name as institute_name')
+                ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
+                ->with('appointment.staffCategory')
+                ->InstituteBased(); 
+
+            $keywords = $request->datatable_search ?? '';
+            $datatables =  DataTables::of($data)
+            ->filter(function($query) use($keywords) {
+                if($keywords)
+                {
+                    return $query->where(function($q) use($keywords,$date){
+
+                         $q->where('users.name', 'like', "%{$keywords}%")
+                            ->orWhere('users.emp_code', 'like', "%{$keywords}%")
+                            ->orWhere('users.society_emp_code', 'like', "%{$keywords}%");
+                    });
+                }
+            })
+  
+                ->editColumn('emp_code', function ($row) {
+                 
+                    $emp_code = $row['appointment']['staffCategory']['name'] ?? '';
+                    return $emp_code;
+
+                })
+               
+                // ->addColumn('casual_leave', function ($row) {
+                  
+                //     $total=$row['appointment']['leaveAllocated'][0]['leave_days'] ?? 0;
+                        
+                //     $casual_leave = '<span class="badge badge-info">'.$total.'</span> of <span class="badge badge-info">7</span>';
+
+                //     return $casual_leave;
+                // })
+                
+            
+                 ->editColumn('action', function ($row) {
+                    $emp_code ='<a href="' . route('leaves.overview.view', ['id' => $row->id]) . '"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px" > 
+                                    <i class="fa fa-eye"></i>
+                                </a>';
+                    return $emp_code;
+                })
+
+          ->rawColumns(['action']);
+         foreach($leavehead as $head){
+           
+            $datatables->addColumn($head->name, function ($row) use($head) {
+        $appointment=$row['appointment']['leaveAllocated']?? [];
+        foreach($appointment as $leave){
+                if($leave->leave_head_id==$head->id){
+                if($leave->leave_days!=null){
+                      return '<span class="badge badge-info">'.$leave->leave_days.'</span> of <span class="badge badge-info">7</span>';
+                 }
+         
+            }
+          
+        }
+            });
+              
+           $name[]=$head->name;
+         }
+         $name[]='action';
+            $datatables->rawColumns($name);
+            return $datatables->make(true);
+        }
+        return view('pages.leave.overview_list', compact('breadcrums', 'user','staff_category','designation','leavehead'));
+    }
+     public function overviewView(Request $request)
+    {
+        return view('pages.leave.view');
+    }
     public function setWorkingDays(Request $request)
     {
         $breadcrums = array(

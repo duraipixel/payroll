@@ -51,6 +51,9 @@
                 <div class="col-sm-6 d-none" id="leave_overview_clear_btn">
                     <button class="btn btn-danger btn-sm" type="button">Clear</button>
                 </div>
+                 <div class="col-sm-6">
+                    <a href="{{url('leaves/overview/list')}}" class="btn btn-danger" type="button">View</a>
+                </div>
             </div>
         </div>
     </div>

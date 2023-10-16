@@ -105,6 +105,26 @@
                 type: 'POST',
                 data: {
                     id: id,
+                    type: 'approved',
+                },
+                success: function(res) {
+                    $('#kt_dynamic_app').modal('show');
+                    $('#kt_dynamic_app').html(res);
+                }
+            })
+        }
+        function editLeave(id) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('leaves.add_edit') }}",
+                type: 'POST',
+                data: {
+                    id: id,
+                    type: 'edit',
                 },
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');

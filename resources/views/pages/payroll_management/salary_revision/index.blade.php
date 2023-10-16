@@ -92,6 +92,9 @@
                                         Revised Salary
                                     </th>
                                     <th class="px-3 text-white">
+                                       View
+                                    </th>
+                                    <th class="px-3 text-white">
                                         Status
                                     </th>
                                 </tr>
@@ -169,6 +172,11 @@
                 {
                     data: 'net_salary',
                     name: 'net_salary'
+                },
+                { 
+                    "data": "view_btn",
+                    "name": "view_btn"
+                
                 },
                 {
                     data: 'verification_status',
