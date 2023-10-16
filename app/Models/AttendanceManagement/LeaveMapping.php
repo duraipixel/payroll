@@ -18,7 +18,8 @@ class LeaveMapping extends Model
         'leave_days',
         'carry_forward',
         'sort_order',
-        'status'
+        'status',
+        'teaching_type'
     ];
 
     public function leave_head()

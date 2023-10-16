@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
 use DataTables;
 use Carbon\Carbon;
+use App\Models\Master\TeachingType;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LeaveMappingController extends Controller
@@ -27,23 +28,24 @@ class LeaveMappingController extends Controller
                 ),
             )
         );
+         $teaching_types=TeachingType::where('status','active')->get();
         if($request->ajax())
         {
-            //$data = LeaveMapping::select('*');
+           
             $data = LeaveMapping::select('leave_mappings.*','nature_of_employments.name as nature_emp_name','leave_heads.name as head_name')
             ->leftJoin('nature_of_employments','nature_of_employments.id','=','leave_mappings.nature_of_employment_id')
             ->leftJoin('leave_heads','leave_heads.id','=','leave_mappings.leave_head_id');
             $status = $request->get('status');
+            $teaching_type = $request->get('teaching_type');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
             
             $datatables =  Datatables::of($data)
-            ->filter(function($query) use($status,$keywords) {
+            ->filter(function($query) use($status,$keywords,$teaching_type) {
                 if($keywords)
                 {
                     $date = date('Y-m-d',strtotime($keywords));
                     return $query->where(function($q) use($keywords,$date){
-
                         $q->where('nature_of_employments.name','like',"%{$keywords}%")
                         ->orWhere('leave_heads.name','like',"%{$keywords}%")
                         ->orWhere('leave_days','like',"%{$keywords}%")
@@ -51,6 +53,12 @@ class LeaveMappingController extends Controller
                         ->orWhereDate('leave_mappings.created_at',$date);
                     });
                 }
+                if($teaching_type && $teaching_type!=''){
+                    return $query->where(function($q) use($teaching_type){
+                         $q->where('teaching_type',$teaching_type);
+                    });
+                }
+
             })
             ->addIndexColumn()
             ->editColumn('status', function ($row) {
@@ -87,7 +95,7 @@ class LeaveMappingController extends Controller
                 ->rawColumns(['action', 'status']);
             return $datatables->make(true);
         }
-        return view('pages.attendance_management.leave_mapping.index',compact('breadcrums'));
+        return view('pages.attendance_management.leave_mapping.index',compact('breadcrums','teaching_types'));
     }
     public function save(Request $request)
     {
@@ -97,6 +105,7 @@ class LeaveMappingController extends Controller
             'nature_of_employment_id' => 'required',
             'leave_head_id' => 'required',
             'leave_days' => 'required',
+            'teaching_type' => 'required',
             'carry_forward' => 'required',
         ]);
         
@@ -105,6 +114,7 @@ class LeaveMappingController extends Controller
             $ins['academic_id'] = academicYearId();
             $ins['nature_of_employment_id'] = $request->nature_of_employment_id;
             $ins['leave_head_id'] = $request->leave_head_id;
+            $ins['teaching_type'] = $request->teaching_type;
             $ins['leave_days'] = $request->leave_days;
             $ins['carry_forward'] = $request->carry_forward;
                 if($request->status)
@@ -132,6 +142,7 @@ class LeaveMappingController extends Controller
         $id = $request->id;
         $info = [];
         $title = 'Add Leave Mapping';
+        $teaching_types=TeachingType::where('status','active')->get();
         $employment_nature = NatureOfEmployment::where('status','active')->get();
         $leave_heads = LeaveHead::where('status','active')->get();
         if(isset($id) && !empty($id))
@@ -140,8 +151,8 @@ class LeaveMappingController extends Controller
             $title = 'Update Leave Mapping';
         }
 
-         $content = view('pages.attendance_management.leave_mapping.add_edit_form',compact('info','title','employment_nature','leave_heads'));
-         return view('layouts.modal.dynamic_modal', compact('content', 'title','employment_nature','leave_heads'));
+         $content = view('pages.attendance_management.leave_mapping.add_edit_form',compact('info','title','employment_nature','leave_heads','teaching_types'));
+         return view('layouts.modal.dynamic_modal', compact('content', 'title','employment_nature','leave_heads','teaching_types'));
     }
     public function changeStatus(Request $request)
     {

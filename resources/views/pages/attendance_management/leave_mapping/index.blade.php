@@ -13,6 +13,21 @@
                         class="form-control form-control-solid w-250px ps-14" placeholder="Search Leave Mapping">
                 </div>
             </div>
+              <div class="card-toolbar">
+                <div > 
+                 <select name="teaching_type" autofocus id="teaching_type" class="form-select form-select-lg select2-option">
+                    <option value="">--Select Teaching Type--</option>
+         <option value=""> All </option>
+                    @isset($teaching_types)
+        @foreach ($teaching_types as $type)
+        <option value="{{ $type->id }}" @if (isset(request()->teaching_type) && request()->teaching_typ == $type->id) selected @endif>
+                {{ $type->name }}
+        </option>
+        @endforeach
+        @endisset
+                </select>
+            </div>
+            </div>
             <div class="card-toolbar">
                 <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                     @php
@@ -46,6 +61,7 @@
             </div>
             <!--end::Card toolbar-->
         </div>
+
 
         <div class="card-body py-4">
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
@@ -100,6 +116,7 @@
                 "url": "{{ route('leave-mapping') }}",
                 "data": function(d) {
                     d.datatable_search = $('#leave_mapping_dataTable_search').val();
+                    d.teaching_type = $('#teaching_type').val();
                 }
             },
 
@@ -146,7 +163,9 @@
                 [25, 50, 100, 200, 500, "All"]
             ]
         });
-
+      document.querySelector('#teaching_type').addEventListener("change", function(e) {
+            dtTable.ajax.reload();
+        });
         $('.dataTables_wrapper').addClass('position-relative');
         $('.dataTables_info').addClass('position-absolute');
         $('.dataTables_filter label input').addClass('form-control form-control-solid w-250px ps-14');

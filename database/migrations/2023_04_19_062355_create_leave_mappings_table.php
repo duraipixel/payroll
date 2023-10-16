@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('academic_id')->nullable();
             $table->integer('nature_of_employment_id');
             $table->integer('leave_head_id');
+            $table->integer('teaching_type')->nullable();
             $table->string('leave_days');
             $table->enum('carry_forward', ['yes', 'no'])->default('no');
             $table->integer('sort_order')->nullable();

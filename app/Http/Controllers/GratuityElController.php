@@ -38,7 +38,7 @@ class GratuityElController extends Controller
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $keywords = $datatable_search;
-            $data = ElGratuity::with(['staff'])->select('*')
+            $data = ElGratuity::with(['staff'])->get('*')
             ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                 $date = date('Y-m-d', strtotime($datatable_search));
                 return $query->where(function ($q) use ($datatable_search, $date) {
@@ -55,7 +55,7 @@ class GratuityElController extends Controller
                         ->orWhereDate('date_of_ending_service', $date)
                         ->orWhereDate('date_of_regularizion', $date);
                 });
-            })->where('page_type', $page_type);
+            })->where('el_type', $page_type);
 
             $datatables =  Datatables::of($data)
                 

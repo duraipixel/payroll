@@ -18,6 +18,24 @@
             </div>
         </div>
     </div>
+    <div class="col-sm-12">
+        <div class="fv-row form-group mb-2">
+            <label class="form-label required">Teaching Type </label>
+            <div class="position-relative">
+              
+                <select name="teaching_type" autofocus id="teaching_type" class="form-select form-select-lg select2-option">
+                    <option value="">--Select Teaching Type--</option>
+                    @isset($teaching_types)
+        @foreach ($teaching_types as $type)
+        <option value="{{ $type->id }}" @if (isset($info->teaching_type) && $info->teaching_type == $type->id) selected @endif>
+                {{ $type->name }}
+        </option>
+        @endforeach
+        @endisset
+                </select>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-12 mt-7">
         <div class="fv-row form-group mb-2">
             <label class="form-label required">Leave Heads</label>
@@ -115,7 +133,13 @@ var KTAppEcommerceSaveLeaveMapping = function () {
 								message: 'Leave Head Name is required'
 							},
 						}
-					},
+					},                    'teaching_type': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Teaching Type is required'
+                            },
+                        }
+                    },
                     'leave_days': {
 						validators: {
 							notEmpty: {
