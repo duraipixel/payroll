@@ -281,7 +281,7 @@ left: 50%;
                             <label class="form-label required mt-3" for="">No.of.Days requested </label>
                         </div>
                         <div class="col-sm-7">
-                            <input type="text" readonly name="no_of_days" id="no_of_days"
+                            <input type="text" readonly name="no_of_days"
                                 value="{{  number_format($info->no_of_days?? 0 ,1 ) }}" class="form-control">
                         </div> 
                     </div>
@@ -492,7 +492,7 @@ left: 50%;
                             <div class="col-sm-7">
                                 <input type="number" min="1" max="15" name="no_of_days_granted"
                                     id="no_of_days_granted" class="form-control"
-                                    value="{{number_format($info->granted_days,1)}}" readonly>
+                                    value="0" readonly>
                             </div>
                         </div>
                        
@@ -517,27 +517,36 @@ left: 50%;
                                 <textarea name="remarks" id="remarks" cols="30" rows="2" class="form-control"></textarea>
                             </div>
                         </div>
-                    @endif
+                   
                     
-<div class="fv-row form-group mb-3 row"    
-@if( isset( $info->leave_days ))id="new" @else id="grid"  @endif>
+                    @endif
+                    <div class="fv-row form-group mb-3 row">
+                            <div class="col-sm-5">
+                                <label class="form-label required mt-3" for="">
+                                    No of Days Granted
+                                </label>
+                            </div>
+                            <div class="col-sm-7">
+                                <input type="number" min="1" max="15" name="no_of_days_granted"
+                                    id="no_of_days_granted" class="form-control"
+                                    value="{{number_format($info->granted_days,1)}}"  readonly>
+                            </div>
+                        </div>
+                   
+<div class="fv-row form-group mb-3 row" id="new">
                         @csrf
                         
-                        <div class="col-sm-12 "  @if(isset( $info->leave_days )&& $type=='approved')@else style="padding-left:50px"; @endif>
-                            @if( isset( $info->leave_days )&& $type=='approved') 
-                            @php
-                            $table=json_decode($info->leave_days);
-                            @endphp
-                             @if(isset($table[0]->cancell))
-                             <table class="table table-bordered" >
+                        <div class="col-sm-12 ">
+                            @if( isset( $info->leave_days))    
+                            <table class="table table-bordered" >
                                 <thead class="bg-dark text-white">
                                     <tr>
                                         <th scope="col"><b>Date</b></th>
                                         <th scope="col">
-                                           Type
+                                           <b> Type</b>
                                         </th>
                                         <th scope="col"><b>Approved/Reject</b></th>
-                                        <th scope="col"><b>Cancellation</b></th>
+                                          <th scope="col"><b>Cancellation</b></th>
                                     </tr>
                                 </thead>
                                 
@@ -545,18 +554,16 @@ left: 50%;
                                 <tbody>
                                     <input type="hidden" value="new" name="type">
                                     @foreach(json_decode($info->leave_days) as $key=>$day)
-                                  
+                                   
                                     <tr>
                                         <td>{{ $day->date }}</td>
                                    
                                      <td style="text-transform: capitalize;">{{$day->type}}</td>
                                      <td> {{($day->check==1)? 'Approved': 'Reject'}}</td>
                                      <td>
-                                         @if($day->cancell==1)
-                                         <label class="toggleSwitch large" onclick="">
-                                       
-                                        <input type="checkbox"  id="check" name="leave[cancell][{{$key}}]" value='1'>
-                                      
+                                     @if($day->check==1)
+                                      <label class="toggleSwitch large" onclick="">
+                                        <input type="checkbox"  id="cancell" name="leave[cancell][{{$key}}]" value='1'>
                                         <span>
                                             <span>OFF</span>
                                             <span>ON</span>
@@ -564,95 +571,14 @@ left: 50%;
                                         </span>
                                        
                                     </label>
-                                  @else
-                                   
-                                        -
-                                        @endif</td>
-                                    </tr>
-                                    @endforeach</tbody>
-                        <input type="hidden" name="leave_id" value="{{$info->id}}">
-                            </table>
-                             @else
-                              <table class="table table-bordered" >
-                                <thead class="bg-dark text-white">
-                                    <tr>
-                                        <th scope="col"><b>Date</b></th>
-                                        <th scope="col">
-                                            <b>Forenoon</b>&nbsp;&nbsp; <b>Afternoon</b> &nbsp;&nbsp;&nbsp;<b>Both</b>
-                                        </th>
-                                        <th scope="col"><b>Approved/Reject</b></th>
-                                    </tr>
-                                </thead>
-                                
-                               
-                                <tbody>
-                                    <input type="hidden" value="new" name="type">
-                                    @foreach(json_decode($info->leave_days) as $key=>$day)
-                                  
-                                    <tr>
-                                        <td>{{ $day->date }}</td>
-                                   
-                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" name="leave[radio][{{$key}}]" value="forenoon"  class="form-check-input" {{ ($day->type=="forenoon")? "checked" : "disabled" }}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio"  name="leave[radio][{{$key}}]"  value="afternoon"  class="form-check-input" {{ ($day->type=="afternoon")? "checked" : "disabled" }}>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio"  name="leave[radio][{{$key}}]"  value="both"  class="form-check-input" {{ ($day->type=="both")? "checked" :"disabled" }}> </td> &nbsp;</td>
-                                     <td><label class="toggleSwitch large" onclick="">
-                                        <input type="checkbox"  id="check" name="leave[check][{{$key}}]" value='1'>
-                                        <span>
-                                            <span>OFF</span>
-                                            <span>ON</span>
-                                          
-                                        </span>
-                                       
-                                    </label></td>
-                                    </tr>
-                                    @endforeach</tbody>
-                            </table>
-                             @endif   
-                           
-                        
-                       
-                        @elseif($type=='edit')
-                         <table class="table table-bordered" id="edittable">
-                                <thead class="bg-dark text-white">
-                                    <tr>
-                                        <th scope="col"><b>Date</b></th>
-                                        <th scope="col">
-                                            <b>Forenoon</b>&nbsp;&nbsp; <b>Afternoon</b> &nbsp;&nbsp;&nbsp;<b>Both</b>
-                                        </th>
-                                       
-                                    </tr>
-                                </thead>
-                                
-                               
-                                <tbody>
-                                    <input type="hidden" value="grid" name="type">
-                                    @foreach(json_decode($info->leave_days) as $key=>$day)
-                                   
-                                    <tr>
-                                        <td>{{ $day->date }}</td>
-                                   
-                                     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" id="radio1" name="leave[radio][{{$key}}]" value="forenoon"  class="form-check-input" {{ ($day->type=="forenoon")? "checked" : "" }}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="radio" id="radio1" name="leave[radio][{{$key}}]"  value="afternoon"  class="form-check-input" {{ ($day->type=="afternoon")? "checked" : "" }}>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" id="radio1" name="leave[radio][{{$key}}]"  value="both"  class="form-check-input" {{ ($day->type=="both")? "checked" :"" }}> </td> &nbsp;</td>
-                                     
+                                @else
+                                -
+                            @endif</td>
                                     </tr>
                                     @endforeach
+<input type="hidden" name="leave_id" value="{{$info->id}}">
                             </tbody>
                         </table>
-                        @else
-                        <table class="table table-bordered">
-                            <thead class="bg-dark text-white">
-                                <tr>
-                                    <th scope="col"><b>Date</b></th>
-                                    <th scope="col">
-                                        <b>Forenoon</b>&nbsp;&nbsp; <b>Afternoon</b> &nbsp;&nbsp;&nbsp;<b>Both</b>
-                                    </th>
-                                   
-                                </tr>
-                            </thead>
-                            <input type="hidden" value="grid" name="type">
-                           
-                            <tbody>
-                        </tbody>
-                    </table>
-                    
-                 
                         @endif
                         </div>
                        
@@ -680,76 +606,6 @@ left: 50%;
 </div>
 
 <script>
-
-$('input:checkbox').change(function() {
-var formData = $('#new').find('input').serialize();
-
-$.ajax({
-        url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
-        type: 'POST',
-        data: formData,
-        dataType: 'json',
-        success: function(day) {
-            
-            if(day==0){
-                
-                $('#leave_granted_no').prop('checked', true);
-             
-              
-            }else{
-               
-                $('#leave_granted_yes').prop('checked', true);
-              
-            }
-                
-            $('#no_of_days_granted').val(day);
-        },
-        error: function(error) {
-            // Handle any errors here
-            console.error('Error:', error);
-        }
-    });
-});
-$('#edittable,#radio1').on('change',function() {
-
-    var formData = $('#edittable').find('input').serialize();
-   
-  
-    $.ajax({
-        url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
-        type: 'POST',
-        data: formData,
-        dataType: 'json',
-        success: function(day) {
-            //console.log(response);
-            $('#no_of_days').val(day);
-        },
-        error: function(error) {
-            // Handle any errors here
-            console.error('Error:', error);
-        }
-    });
-});
-$('#grid,#radio').on('change',function() {
-
-    var formData = $('#grid').find('input').serialize();
-   
-  
-    $.ajax({
-        url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
-        type: 'POST',
-        data: formData,
-        dataType: 'json',
-        success: function(day) {
-            //console.log(response);
-            $('#no_of_days').val(day);
-        },
-        error: function(error) {
-            // Handle any errors here
-            console.error('Error:', error);
-        }
-    });
-});
 $('#leave_category_id').change(function() {
     let leave_category_id = $(this).val();
 
@@ -998,10 +854,10 @@ var KTAppEcommerceSaveBranch = function() {
                             },
                         }
                     },
-                    'reason': {
+                    'leave': {
                         validators: {
                             notEmpty: {
-                                message: 'Reason is required'
+                                message: 'cancellation toggle is required'
                             },
                         }
                     },
@@ -1029,7 +885,7 @@ var KTAppEcommerceSaveBranch = function() {
                         var forms = $('#leave_form')[0];
                         var formData = new FormData(forms);
                         $.ajax({
-                            url: "{{ route('save.leaves') }}",
+                            url: "{{ route('save.leave-cancellation') }}",
                             type: "POST",
                             data: formData,
                             processData: false,

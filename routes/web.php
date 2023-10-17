@@ -220,7 +220,7 @@ Route::group(['middleware' => 'auth'],  function () {
         'salary-head' => App\Http\Controllers\PayrollManagement\SalaryHeadController::class,
         'salary-field' => App\Http\Controllers\PayrollManagement\SalaryFieldController::class,
         'leave-mapping' => App\Http\Controllers\AttendanceManagement\LeaveMappingController::class,
-         // 'leave-cancellation' => App\Http\Controllers\AttendanceManagement\LeaveMappingController::class,
+         'leave-cancellation' => App\Http\Controllers\AttendanceManagement\LeaveCancellationcontroller::class,
         'att-manual-entry' => App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class,
         'announcement' => App\Http\Controllers\Announcement\AnnouncementController::class,        
     );
@@ -233,6 +233,7 @@ Route::group(['middleware' => 'auth'],  function () {
             Route::post('/change/delete', [$value, 'delete'])->name($key.'.delete')->middleware(['checkAccess:delete']);
             Route::get('/export', [$value, 'export'])->name($key.'.export')->middleware(['checkAccess:export']);
             Route::post('/save', [$value, 'save'])->name('save.'.$key);
+             Route::post('/count', [$value, 'leaveCountDays'])->name('count.'.$key);
         });
 
     }
