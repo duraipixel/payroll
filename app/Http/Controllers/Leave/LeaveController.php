@@ -43,7 +43,20 @@ class LeaveController extends Controller
       
        return number_format($value,1);
     }else{
-        $value=0;
+        if(isset($request->leave_id)){
+         $staff_leave=StaffLeave::find($request->leave_id);
+        $value=number_format($staff_leave->granted_days,1);
+        foreach(json_decode($staff_leave->leave_days) as $key=>$data){
+            if($data->type=='afternoon' && $data->check=="1" && isset($request->leave['cancell'][$key])){
+                $value-=0.5;
+            }elseif($data->type=='both' && $data->check=="1" && isset($request->leave['cancell'][$key])){
+                $value -=1;
+            }elseif($data->type=='forenoon'&& $data->check=="1" && isset($request->leave['cancell'][$key])){
+                $value -=0.5;
+            }
+           }
+        }else{
+           $value=0;
         
         foreach($request->leave['radio'] as $key=>$data){
             if($data=='afternoon' && isset($request->leave['check'][$key]) && $request->leave['check'][$key]==1){
@@ -53,7 +66,9 @@ class LeaveController extends Controller
             }elseif($data=='both' && isset($request->leave['check'][$key]) && $request->leave['check'][$key]==1){
                 $value+=1;
     
-            }
+            } 
+        }
+        
            
        }
   
@@ -307,14 +322,29 @@ class LeaveController extends Controller
                     $ins['granted_by']  = auth()->user()->id;
                     $ins['granted_start_date']  = $leave_info->from_date;
                     $ins['granted_end_date']  = $leave_info->to_date;
+                    //dd($request->leave);
                     if(isset($request->leave)){
                         $leave_day=[];
                         foreach(json_decode($leave_info->leave_days) as $key=>$data){
-                           
+                            if(isset($request->leave_id)){
+                            $leave_days['date']=$data->date;
+                            $leave_days['type']=$data->type;
+                            if(isset($request->leave['cancell'][$key])){
+                                $leave_days['check']=($request->leave['cancell'][$key]==1)?0:1;
+                            }else{
+                                $leave_days['check']=$data->check;
+                            }
+                            
+                            $leave_day[]=$leave_days;
+
+                            }else{
                             $leave_days['date']=$data->date;
                             $leave_days['check']=$request->leave['check'][$key] ?? 0;
                             $leave_days['type']=$data->type;
                             $leave_day[]=$leave_days;
+                            }
+                           
+                            
 
                         }
                        

@@ -372,7 +372,7 @@ class="menu-item menu-accordion  @if (request()->routeIs([
     'leaves.list',
     'holiday',
     'leaves.overview',
-    'leaves.set.workingday',
+    'leaves.set.workingday','leave-cancellation'
 ])) hover show @endif">
 <span class="menu-link">
 <span class="menu-icon">
@@ -447,8 +447,8 @@ class="menu-item menu-accordion  @if (request()->routeIs([
 @endif
 <div class="menu-sub menu-sub-accordion menu-active-bg">
     <div class="menu-item">
-        <a class="menu-link @if (request()->routeIs(['leave-mapping'])) active @endif"
-            href="{{ route('leave-mapping') }}">
+        <a class="menu-link @if (request()->routeIs(['leave-cancellation'])) active @endif"
+            href="{{ route('leave-cancellation') }}">
             <span class="menu-bullet">
                 <span class="bullet bullet-dot"></span>
             </span>
