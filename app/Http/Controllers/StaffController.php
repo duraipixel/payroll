@@ -1026,8 +1026,8 @@ class StaffController extends Controller
                     $q->where('users.institute_id', $datatable_institute_id);
                 })
                 ->InstituteBased()
-                 ->orderByRaw($order_val,$dir_val);
-                // ->orderBy('institute_id', 'desc');
+                 //->orderByRaw($order_val,$dir_val);
+                 ->orderBy('society_emp_code', 'desc');
 
             if ($limit_val > 0) {
                 $post_data = $post_data->offset($start_val)->limit($limit_val)->get();
