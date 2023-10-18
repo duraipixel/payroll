@@ -277,7 +277,7 @@ Route::group(['middleware' => 'auth'],  function () {
 
     Route::any('attendance/ajax/view', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'ajax_view'])->name('attendance.ajax.view');
     Route::any('attendance/ajax/datatable', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'ajaxDatatable'])->name('attendance.ajax.datatable');
-
+     Route::get('payroll/download/{id}',[App\Http\Controllers\CommonController::class,'payrollDownload'])->name('payroll.download');
     Route::get('payroll/overview',[App\Http\Controllers\PayrollManagement\OverviewController::class,'index'])->name('payroll.overview');
     Route::post('payroll/overview/month',[App\Http\Controllers\PayrollManagement\OverviewController::class,'getMonthData'])->name('payroll.get.month.chart');
     Route::post('payroll/set/permission',[App\Http\Controllers\PayrollManagement\OverviewController::class,'setPermission'])->name('payroll.set.permission');
