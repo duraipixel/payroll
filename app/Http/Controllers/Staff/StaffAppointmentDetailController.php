@@ -143,6 +143,9 @@ class StaffAppointmentDetailController extends Controller
                 $previous_appointment_date=$order_details->previous_appointment_date ? commonDateFormatAlt($order_details->previous_appointment_date) : null;
                 $previous_designation=$order_details->previous_designation ?? null;
                  $probation_order_no=$order_details->probation_order_no ?? null;
+                 $probation_order_date=$order_details->from_appointment ?? null;
+                 $probation_completed_date=$order_details->to_appointment ?? null;
+                 $date_of_completion=$order_details->to_appointment ?? null;
 
            }else{
             
@@ -151,6 +154,10 @@ class StaffAppointmentDetailController extends Controller
                 $previous_appointment_date = null;
                 $previous_designation =null;
                 $probation_order_no=null;
+
+                $probation_order_date=null;
+                $probation_completed_date=null;
+                $date_of_completion=null;
 
        
                
@@ -168,9 +175,9 @@ class StaffAppointmentDetailController extends Controller
                 'institution_address' => $user_info->institute->address,
                 'place' => $place_of_work->name ?? null,
                 'salary' => $request->salary_scale,
-                'date_of_completion' => '',
-                'probation_completed_date' => '',
-                'probation_order_date' => '',
+                'date_of_completion'=>$date_of_completion,
+                'probation_completed_date' => $probation_completed_date,
+                'probation_order_date' => $probation_order_date,
                 'probation_order_no' => $probation_order_no,
                 'society_name' => $society_info->name ?? null,
 
@@ -178,16 +185,18 @@ class StaffAppointmentDetailController extends Controller
                 'previous_appointment_date' => $previous_appointment_date,
                 'previous_designation' => $previous_designation
             );
-
+           
             foreach ($appointment_variables as $key => $value) {
-                $document = str_replace('$' . $key, $value, $document);
+
+                    $document = str_replace('$' . $key, $value, $document);
+                
             }
+
 
             $pdfConfig = [
                 'margin_top' => 100,
 
             ];
-
             $pdf = PDF::loadView('pages.masters.appointment_order_model.dynamic_pdf', ['data' => $document])
                 ->setPaper('legal', 'portrait')->setOptions($pdfConfig);
 
