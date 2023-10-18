@@ -351,7 +351,7 @@ left: 50%;
                                             <tr>
                                                 @if(isset($item->leave_days) && $item->leave_days!='')
                                                 @foreach(json_decode($item->leave_days ?? []) as $key=>$day)
-                                                @if($day->check==1)
+                                                @if(isset($day->check) && $day->check==1)
                                                 <tr>
                   
                                                     <td >{{date('d/M/Y', strtotime($day->date))}}</td>
