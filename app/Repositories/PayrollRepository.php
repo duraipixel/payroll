@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\PayrollManagement\StaffSalary;
+use App\Models\PayrollManagement\StaffSalaryField;
 
 class PayrollRepository
 {
