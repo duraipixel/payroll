@@ -8,9 +8,13 @@ use App\Models\Master\BankBranch;
 use App\Models\Master\Society;
 use App\Models\User;
 use Illuminate\Http\Request;
-
+use App\Models\PayrollManagement\StaffSalary;
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 class CommonController extends Controller
-{
+{    
+
+    
     public function openAddModal(Request $request)
     {
         $form_type = $request->form_type;
@@ -229,6 +233,30 @@ class CommonController extends Controller
             }
         }
         dd( $request->all() );
+    }
+    public function payrollDownload(Request $request,$id)
+    {
+        $info=StaffSalary::with('staff.familyMembers','staff.pancard','staff.pf','staff.esi','staff.position','staff.appointment')->find($id);
+       $date_string = $info->salary_year . '-' . $info->salary_month . '-01';
+        $date = date('d/M/Y', strtotime($date_string));
+
+        $params = [
+            'institution_name' => $info->staff->institute->name ?? '',
+            'institution_address' => $info->staff->institute->address ?? '',
+            'pay_month' => 'Pay Slip for the month of ' . $info->salary_month . '-' . $info->salary_year,
+            'info' => $info,
+            'date' => $date
+        ];
+
+        $file_name = time() .'_'. $info->staff->institute_emp_code . '.pdf';
+
+        $directory              = 'public/salary/' . $date_string;
+        $filename               = $directory . '/' . $file_name;
+
+        $pdf = Pdf::loadView('pages.payroll_management.overview.statement._auto_gen_pdf', $params)->setPaper('a4', 'portrait');
+      return $pdf->download('salaryslip.pdf');
+        
+        
     }
 
 }
