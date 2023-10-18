@@ -12,6 +12,7 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
+use \NumberFormatter;
 class CommonController extends Controller
 {    
 
@@ -322,6 +323,7 @@ class CommonController extends Controller
          }
 
         }
+        $params['word']=ucwords((new NumberFormatter('en_IN', NumberFormatter::SPELLOUT))->format($info->total_earnings));
        
 
         $file_name = time() .'_'. $info->staff->institute_emp_code . '.pdf';

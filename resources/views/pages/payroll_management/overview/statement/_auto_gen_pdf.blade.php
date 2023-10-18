@@ -198,10 +198,9 @@ th,td {
 <table  class="tabl-border-none" >
     <tr class="br-bot">
         <th style="text-align: left;">In words :
-            @php
-            $as=ucwords((new NumberFormatter('en_IN', NumberFormatter::SPELLOUT))->format($info->total_earnings));
-        @endphp
-    {{$as}}</th>
+           @if(isset($word))
+    {{$word}}
+@endif</th>
     </tr>
 </table>
 <table  class="tabl-border-none" >
