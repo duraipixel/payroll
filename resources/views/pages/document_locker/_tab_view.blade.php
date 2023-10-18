@@ -507,8 +507,9 @@
                                 <td>{{ RsFormat($salary_docs->total_deductions ?? 0) }}</td>
                                 <td>{{ RsFormat($salary_docs->net_salary ?? 0) }}</td>
                                 <td>
+                                      
                                     <a target="_blank"
-                                        href="{{ asset('public' . Storage::url($salary_docs->document)) }}"
+                                        href="{{ url('payroll/download',$salary_docs->id) }}"
                                         class="btn btn-sm btn-success">
                                         <i class="fa fa-file-pdf"></i> View File
                                     </a>
