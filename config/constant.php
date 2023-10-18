@@ -11,7 +11,7 @@ return [
         'institution_address',
         'place',
         'salary',
-        'date_of_completion',
+        'completion_date',
         'probation_completed_date',
         'probation_order_date',
         'probation_order_no',

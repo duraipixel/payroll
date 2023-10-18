@@ -216,6 +216,13 @@
                     <input name="emergency_no" autofocus id="emergency_no" class="form-input number_only"
                         maxlength="10" value="{{ $staff_details->personal->emergency_no ?? '' }}" />
                 </div>
+                   <div class="col-lg-4"> 
+  <label class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input h-20px w-20px" type="checkbox" name="is_super_admin"
+                                    value="1" @if (isset($staff_details->is_super_admin) && $staff_details->is_super_admin == 1) checked @endif />
+                                <span class="form-check-label fw-bold">Is Super Admin</span>
+                            </label>
+                        </div>
                 <div class="col-lg-4 mb-5">
                     <div>
 
@@ -234,6 +241,7 @@
                         @endif
                     </div>
                 </div>
+                
                 <div class="row">
 
                     <div class="col-lg-4 mb-5">

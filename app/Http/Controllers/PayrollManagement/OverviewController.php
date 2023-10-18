@@ -671,7 +671,8 @@ class OverviewController extends Controller
                      */
                     $salary_info->save();
                     // dump( $salary_info );
-                    $salary_info->document = $this->payrollRepository->generateSalarySlip($salary_info);
+                    // $this->payrollRepository->generateSalarySlip($salary_info);
+                    $salary_info->document = null;
                     $salary_info->save();
                 }
             }

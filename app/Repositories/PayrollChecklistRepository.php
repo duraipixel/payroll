@@ -34,6 +34,7 @@ class PayrollChecklistRepository extends Controller
         })
             ->where('attendance_status', 'Present')
             ->get();
+            
 
         if (isset($attendance) && !empty($attendance)) {
             $not_requested = $approval_pending = $approved_leave = 0;
