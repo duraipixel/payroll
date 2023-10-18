@@ -175,7 +175,7 @@ class StaffAppointmentDetailController extends Controller
                 'institution_address' => $user_info->institute->address,
                 'place' => $place_of_work->name ?? null,
                 'salary' => $request->salary_scale,
-                'date_of_completion'=>$date_of_completion,
+                'completion_date'=>$date_of_completion,
                 'probation_completed_date' => $probation_completed_date,
                 'probation_order_date' => $probation_order_date,
                 'probation_order_no' => $probation_order_no,

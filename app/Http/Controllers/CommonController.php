@@ -9,6 +9,7 @@ use App\Models\Master\Society;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\PayrollManagement\StaffSalary;
+use App\Models\PayrollManagement\StaffSalaryField;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 class CommonController extends Controller
@@ -236,7 +237,8 @@ class CommonController extends Controller
     }
     public function payrollDownload(Request $request,$id)
     {
-        $info=StaffSalary::with('staff.familyMembers','staff.pancard','staff.pf','staff.esi','staff.position','staff.appointment')->find($id);
+        $info=StaffSalary::with('staff.familyMembers','staff.pancard','staff.pf','staff.esi','staff.position','staff.appointment','fields','staff.leavesApproved')->find($id);
+        // dd($info->fields);
        $date_string = $info->salary_year . '-' . $info->salary_month . '-01';
         $date = date('d/M/Y', strtotime($date_string));
 
@@ -247,6 +249,80 @@ class CommonController extends Controller
             'info' => $info,
             'date' => $date
         ];
+        
+        foreach($info->fields as $field){
+          if($field->field_name=="Basic Pay"){
+            $params['basic_pay']=$field->amount;
+          }
+          if($field->field_name=="Dearness Allowance"){
+            $params['dearness']=$field->amount;
+          }
+          if($field->field_name=="House Rent Allowance"){
+            $params['house_rent']=$field->amount;
+          }
+          if($field->field_name=="Traveling Allowance"){
+            $params['traveling']=$field->amount;
+          }
+           if($field->field_name=="Performance Based Allowance Dearness Allowance"){
+            $params['performance']=$field->amount;
+          }
+           if($field->field_name=="Dedication & Sincerity Allowance"){
+            $params['dedication']=$field->amount;
+          }
+           if($field->field_name=="Medical & Nutrition Allowance"){
+            $params['medical']=$field->amount;
+          }
+          if($field->field_name=="Income Tax"){
+            $params['income_tax']=$field->amount;
+          }
+          if($field->field_name=="Employee Provident Fund"){
+            $params['pf']=$field->amount;
+          }
+          if($field->field_name=="Bank Loan"){
+            $params['bank_loan']=$field->amount;
+          }
+          if($field->field_name=="Life Insurance Corporation"){
+            $params['insurance']=$field->amount;
+          }
+        if($field->field_name=="OTHER LOAN"){
+            $params['loan']=$field->amount;
+          }
+           if($field->field_name=="Performance Based Allowance"){
+            $params['performance_allowance']=$field->amount;
+          }
+           if($field->field_name=="Professional Tax"){
+            $params['p_tax']=$field->amount;
+          }
+           if($field->field_name=="Contributions"){
+            $params['contributions']=$field->amount;
+          }
+          if($field->field_name=="Arrears"){
+            $params['arrears']=$field->amount;
+          }
+           if($field->field_name=="Others"){
+            $params['others']=$field->amount;
+          }
+        }
+        foreach($info->staff->leavesApproved as $leave){
+            $params['casual']=0;
+            $params['earned']=0;
+            $params['maternity']=0;
+            $params['granted']=0;
+        if($leave->leave_category=="Casual Leave"){
+          $params['casual'] +=$leave->granted_days;
+         }
+         if($leave->leave_category=="Earned Leave"){
+          $params['earned'] +=$leave->granted_days;
+         }
+         if($leave->leave_category=="Maternity Leave"){
+          $params['maternity'] +=$leave->granted_days;
+         }
+         if($leave->leave_category=="Granted Leave"){
+          $params['granted'] +=$leave->granted_days;
+         }
+
+        }
+       
 
         $file_name = time() .'_'. $info->staff->institute_emp_code . '.pdf';
 

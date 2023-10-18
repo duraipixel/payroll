@@ -85,13 +85,13 @@ th,td {
 <table  class="tabl-border-none" >
     <tr>
         <th width="15%">CASUAL LEAVE</th>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($casual)) {{$casual ?? 0 }} @else 0 @endif</td>
         <th width="15%">EARNED LEAVE</th>
-        <td width="15%">0.00</td>
-        <th width="18%">LOSS OF PAY</th>
-        <td width="15%">0.00</td> 
-        <th width="18%">MATERNITY LEAVE</th>
-        <td width="15%">0.00</td> 
+        <td width="15%">@if(isset($earned)) {{$earned ?? 0 }} @else 0 @endif</td>
+        <th width="18%">MATERNITY PAY</th>
+        <td width="15%">@if(isset($maternity)) {{$maternity ?? 0 }} @else 0 @endif</td> 
+        <th width="18%">GRANTED LEAVE</th>
+        <td width="15%">@if(isset($granted)) {{$granted ?? 0 }} @else 0 @endif</td> 
         </tr>
 </table>
 <table  class="tabl-border-none" >
@@ -111,56 +111,56 @@ th,td {
 <table  class="tabl-border-none"  style="text-align: center;">
     <tr class="br-bot">
         <td width="25%">BASIC PAY</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($basic_pay)) {{$basic_pay ?? 0.00 }} @else 0.00 @endif</td>
         <td width="25%">EMPLOYEE PROVIDENT FUND</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($pf)) {{$pf ?? 0.00 }} @else 0.00 @endif</td>
     </tr>
 </table>
 <table  class="tabl-border-none" style="text-align: center;">
     <tr class="br-bot">
         <td width="25%">DEARNESS ALLOWANCE (BASIC)</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($dearness)) {{$dearness ?? 0.00 }} @else 0.00 @endif</td>
         <td width="25%">BANK LOAN</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($bank_loan)) {{$bank_loan ?? 0.00 }} @else 0.00 @endif</td>
     </tr>
 </table>
 <table  class="tabl-border-none" style="text-align: center;">
     <tr class="br-bot">
         <td width="25%">HOUSE RENT ALLOWANCE</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($house_rent)) {{$house_rent ?? 0.00 }} @else 0.00 @endif</td>
         <td width="25%">EMPLOYEES’ STATE
             INSURANCE</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($insurance)) {{$insurance ?? 0.00 }} @else 0.00 @endif</td>
     </tr>
 </table>
 <table  class="tabl-border-none" style="text-align: center;">
     <tr class="br-bot">
         <td width="25%">TRANSPORT ALLOWANCE</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($traveling)) {{$traveling ?? 0.00 }} @else 0.00 @endif</td>
         <td width="25%">SCHOOL LOAN</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($loan)) {{$loan ?? 0.00 }} @else 0.00 @endif</td>
     </tr>
 </table>
 <table  class="tabl-border-none" style="text-align: center;">
     <tr class="br-bot">
         <td width="25%">PERFORMANCE BASED ALLOWANCE</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($performance)) {{$performance ?? 0.00 }} @else 0.00 @endif</td>
         <td width="25%">INCOME TAX</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($income_tax)) {{$income_tax ?? 0.00 }} @else 0.00 @endif</td>
     </tr>
 </table>
 <table  class="tabl-border-none" style="text-align: center;">
     <tr class="br-bot">
         <td width="25%">DEARNESS ALLOWANCE (PBA)</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($performance_allowance)) {{$performance_allowance ?? 0.00 }} @else 0.00 @endif</td>
         <td width="25%">PROFESSIONAL TAX</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($p_tax)) {{$p_tax ?? 0.00 }} @else 0.00 @endif</td>
     </tr>
 </table>
 <table  class="tabl-border-none" style="text-align: center;">
     <tr class="br-bot">
         <td width="25%">DEDICATION AND SINCERITY ALLOWANCE</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($dedication)) {{$dedication ?? 0.00 }} @else 0.00 @endif</td>
         <td width="25%">LIC / OTHER SAVINGS</td>
         <td width="15%">0.00</td>
     </tr>
@@ -168,17 +168,17 @@ th,td {
 <table  class="tabl-border-none" style="text-align: center;">
     <tr class="br-bot">
         <td width="25%">MEDICAL AND NUTRITION ALLOWANCE</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($medical)) {{$medical ?? 0.00 }} @else 0.00 @endif</td>
         <td width="25%">CONTRIBUTION</td>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($contributions)) {{$contributions ?? 0.00 }} @else 0.00 @endif</td>
     </tr>
 </table>
 <table  class="tabl-border-none" style="text-align: center;">
     <tr class="br-bot">
         <td width="25%">ARREARS</td>
-        <td width="15%"></td>
+        <td width="15%">@if(isset($arrears)) {{$arrears ?? 0.00 }} @else 0.00 @endif</td>
         <td width="25%">OTHERS</td>
-        <td width="15%"></td>
+        <td width="15%">@if(isset($others)) {{$others ?? 0.00 }} @else 0.00 @endif</td>
     </tr>
 </table>
 <table  class="tabl-border-none" style="text-align: center;">
@@ -186,7 +186,7 @@ th,td {
         <th width="25%">GROSS SALARY</th>
         <td width="15%">{{$info->gross_salary}}</td>
         <th width="25%">GROSS DEDUCTION</th>
-        <td width="15%">0.00</td>
+        <td width="15%">@if(isset($others)) {{$others ?? 0.00 }} @else 0.00 @endif</td>
     </tr>
 </table>
 <table  class="tabl-border-none" style="background:rgb(199, 196, 196);text-align: center;" >
@@ -197,7 +197,11 @@ th,td {
 </table>
 <table  class="tabl-border-none" >
     <tr class="br-bot">
-        <th style="text-align: left;">In words :</th>
+        <th style="text-align: left;">In words :
+            @php
+            $as=ucwords((new NumberFormatter('en_IN', NumberFormatter::SPELLOUT))->format($info->total_earnings));
+        @endphp
+    {{$as}}</th>
     </tr>
 </table>
 <table  class="tabl-border-none" >

@@ -29,10 +29,12 @@ class CronRepository
         if ($response->successful()) {
             $responseData = $response->json(); // Assuming the response is in JSON format
             if (isset($responseData['data']) && !empty($responseData['data'])) {
+                \Log::info($responseData['data']);
                 foreach ($responseData['data'] as $items) {
                     $ins = [];
                     $institute_code = $items['emp_code'];
                     $user_info = User::where('institute_emp_code', $institute_code)->first();
+                   if($user_info){
                     $from_time = $items['check_in'];
                     $to_time = $items['check_out'];
                     $total_time = $items['duration'] ?? '00:00';
@@ -46,7 +48,7 @@ class CronRepository
                     $attendance_status = strip_tags($attendance_status);
                     $attendance_status = explode('(', $attendance_status);
                     $ins['academic_id'] = academicYearId();
-                    $ins['employment_id'] = $user_info->id;
+                    $ins['employment_id'] = $user_info->id ?? '';
                     $ins['institute_id'] = $user_info->institute_id ?? '';
                     $ins['institute_emp_code'] = $institute_code ?? '';
                     $ins['attendance_date'] = $current_date;
@@ -68,10 +70,10 @@ class CronRepository
                     $ins['clock_out'] = new \Illuminate\Database\Query\Expression("CAST('$clock_out' AS TIME)");
                     $ins['total_clocked_time'] = new \Illuminate\Database\Query\Expression("CAST('$total_clocked_time' AS TIME)");
                     $ins['api_response'] = serialize($items);
-                    
                     $check_array = ['attendance_date' => $current_date, 'employment_id' => $user_info->id];
-                  
                     $entry_info = AttendanceManualEntry::updateOrCreate($check_array, $ins);
+                }
+                   
                     // dd( $entry_info );
                 }
                 
