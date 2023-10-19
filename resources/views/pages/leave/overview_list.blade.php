@@ -250,7 +250,7 @@ font-size: 15px;
 
                 <div class="menu-item position-relative">
 
-                    <input type="text" class="form-control ps-10 w-300px rounded-0" name="global_search"
+                    <input type="text" class="form-control ps-10 w-300px rounded-0 global_search" name="global_search"
                     id="global_search" value="{{request()->global_search}}" placeholder="Search for Staff By Name or Staff ID" />
                     <input type="hidden" name="search_staff_id" id="search_staff_id" value="">
                     <div class="typeahead-pane-search d-none" id="typeadd-search-panel1">
@@ -345,7 +345,7 @@ font-size: 15px;
 <div class="row card-single">
     <div class="col-lg-6">
         <span>Total Number of Leaves</span>
-        <h2>70</h2>
+        <h2>{{$total}}</h2>
     </div>
     <div class="col-lg-6">
         <img src="{{url('assets/logo/Group 1581.png')}}">
@@ -354,7 +354,7 @@ font-size: 15px;
 <div class="row card-single">
     <div class="col-lg-6">
         <span>Employee Leave Requests Pending </span>
-        <h2>15</h2>
+        <h2>{{$pending}}</h2>
     </div>
     <div class="col-lg-6">
         <img src="{{url('assets/logo/Group 1582.png')}}">
@@ -593,17 +593,6 @@ font-size: 15px;
         });
     </script>
     <script>
-        $(".DA_radio_holder .radio-btn").change(function() {
-            $(this).closest(".question").next().toggle(this.value === 'yes');
-        });
-
-        $(".number_only").keypress(function(e) {
-            if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
-        });
-
-        $(".price").keypress(function(e) {
-            if (String.fromCharCode(e.keyCode).match(/[^.0-9]/g)) return false;
-        });
 
         function setGlobalAcademicYear(id) {
 
@@ -659,7 +648,6 @@ font-size: 15px;
             }
         }
 
-        var global_search = document.getElementById('global_search');
 
         global_search.addEventListener('keyup', function() {
 
@@ -700,51 +688,7 @@ font-size: 15px;
             $('#global_search').val(name);
             $('#search_staff_id').val(id);
             $('#typeadd-search-panel1').addClass('d-none');
-        }
-
-        function getDashboardView(start_date, end_date) {
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "{{ route('get.dashboard.view') }}",
-                type: 'POST',
-                data: {
-                    start_date: start_date,
-                    end_date: end_date
-                },
-                beforeSend: function() {
-                    $('#dashboard_view').addClass('blur_loading_3px');
-                },
-                success: function(res) {
-                    $('#dashboard_view').removeClass('blur_loading_3px');
-                    $('#dashboard_view').html(res);
-                }
-            })
-        }
-
-        function updateQueryStringParameter(uri, key, value) {
-            var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-            var separator = uri.indexOf('?') !== -1 ? "&" : "?";
-            if (uri.match(re)) {
-                return uri.replace(re, '$1' + key + "=" + value + '$2');
-            } else {
-                return uri + separator + key + "=" + value;
-            }
-        }
-
-        function setTableLimit(e) {
-            // Get the current URL
-            var currentUrl = window.location.href;
-            // Define the new value for the 'page' parameter
-            var newPageValue = e.value;
-            // Update the 'page' parameter in the URL
-            var updatedUrl = updateQueryStringParameter(currentUrl, 'limit', newPageValue);
-            // Navigate to the updated URL
-            window.location.href = updatedUrl;
+         staff_Table.ajax.reload();
         }
          $('#staff_type').select2({
             selectOnClose: true,
@@ -758,6 +702,7 @@ font-size: 15px;
             selectOnClose: true,
             theme: 'bootstrap-5'
         });
+
      var staff_Table = $('#staff_table').DataTable({
             processing: true,
             serverSide: true,
@@ -768,7 +713,12 @@ font-size: 15px;
                 "dataType": "json",
                 "data": function(d) {
                     d._token = "{{ csrf_token() }}",
-                        d.datatable_institute_id = $('#datatable_institute_id').val()
+                        d.datatable_institute_id = $('#datatable_institute_id').val(),
+                    d.global_search = $('#search_staff_id').val(),
+                     d.staff_type = $('#staff_type').val(),
+                      d.designation = $('#designation').val(),
+                       d.gender = $('#gender').val()
+                    
                 }
             },
             "columns": [{
@@ -817,9 +767,17 @@ font-size: 15px;
             ]
 
         });
-        document.querySelector('#datatable_institute_id').addEventListener("change", function(e) {
-            staff_Table.ajax.reload();
-        });
+     $("#staff_type").change(function(){
+        staff_Table.ajax.reload();
+     }); 
+     $("#gender").change(function(){
+        staff_Table.ajax.reload();
+     }); 
+     $("#designation").change(function(){
+        staff_Table.ajax.reload();
+     }); 
+         
+       
     </script>
 </body>
 
