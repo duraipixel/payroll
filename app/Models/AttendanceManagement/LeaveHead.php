@@ -17,4 +17,8 @@ class LeaveHead extends Model
         'sort_order',
         'status'
     ];
+     public function leave_day()
+    {
+        return $this->hasOne(LeaveMapping::class, 'leave_head_id','id');
+    }
 }

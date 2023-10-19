@@ -512,19 +512,44 @@ class LeaveController extends Controller
 
              $data = User::select('users.*', 'institutions.name as institute_name')
                 ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
-                ->with('appointment.staffCategory')
-                ->InstituteBased(); 
+                ->with(['appointment.staffCategory','appointment','personal'])
+                ->InstituteBased();
 
-            $keywords = $request->datatable_search ?? '';
+            $search = $request->global_search;
+            $staff_type = $request->staff_type;
+            $gender = $request->gender;
+            $designation = $request->designation;
             $datatables =  DataTables::of($data)
-            ->filter(function($query) use($keywords) {
-                if($keywords)
+            ->filter(function($query) use($search,$staff_type,$gender,$designation,) {
+                if(isset($search))
                 {
-                    return $query->where(function($q) use($keywords,$date){
+                    return $query->where(function($q) use($search){
 
-                         $q->where('users.name', 'like', "%{$keywords}%")
-                            ->orWhere('users.emp_code', 'like', "%{$keywords}%")
-                            ->orWhere('users.society_emp_code', 'like', "%{$keywords}%");
+                         $q->where('users.id',$search);
+                           
+                    });
+                }
+                if(isset($gender))
+                {
+                    return $query->whereHas('personal', function($q) use($gender){
+                         $q->where('gender',$gender);
+                           
+                    });
+                }
+                if(isset($staff_type))
+                {
+                    return $query->whereHas('appointment',function($q) use($staff_type){
+
+                         $q->where('category_id',$staff_type);
+                           
+                    });
+                }
+                if(isset($designation))
+                {
+        return $query->whereHas('personal',function($q) use($designation){
+
+        $q->where('designation_id',$designation);
+                           
                     });
                 }
             })
@@ -555,18 +580,16 @@ class LeaveController extends Controller
 
           ->rawColumns(['action']);
          foreach($leavehead as $head){
-           
             $datatables->addColumn($head->name, function ($row) use($head) {
-        $appointment=$row['appointment']['leaveAllocated']?? [];
-        foreach($appointment as $leave){
-                if($leave->leave_head_id==$head->id){
-                if($leave->leave_days!=null){
-                      return '<span class="badge badge-info">'.$leave->leave_days.'</span> of <span class="badge badge-info">7</span>';
-                 }
-         
-            }
-          
+         $leave=StaffLeave::where('staff_id',$row['id'])->where('leave_category',$head->name)->where('academic_id',academicYearId())->where('status','approved')->get();
+        $as=0;
+        foreach($leave as $leave_count){
+            $as+=$leave_count->granted_days;
+     
         }
+           return '<span class="badge badge-info">'.($head->leave_day->leave_days ?? 0).'</span> of <span class="badge badge-info">'.($as ?? 0).'</span>';
+        
+            
             });
               
            $name[]=$head->name;
@@ -574,12 +597,29 @@ class LeaveController extends Controller
          $name[]='action';
             $datatables->rawColumns($name);
             return $datatables->make(true);
+
         }
-        return view('pages.leave.overview_list', compact('breadcrums', 'user','staff_category','designation','leavehead'));
+        $pending=StaffLeave::where('academic_id',academicYearId())->where('status','pending')->count();
+        $total=StaffLeave::where('academic_id',academicYearId())->count();
+        return view('pages.leave.overview_list', compact('breadcrums', 'user','staff_category','designation','leavehead','total','pending'));
     }
-     public function overviewView(Request $request)
-    {
-        return view('pages.leave.view');
+     public function overviewView(Request $request,$id)
+    {   
+        $staff=User::find($id);
+        $leavehead=LeaveHead::where('academic_id',academicYearId())->where('status', 'active')->get();
+        foreach($leavehead as $head){
+         $leave=StaffLeave::where('staff_id',$id)->where('leave_category',$head->name)->where('academic_id',academicYearId())->where('status','approved')->get();
+          $head['count']=0;
+        foreach($leave as $leave_count){
+           $head['count']+=$leave_count->granted_days;
+     
+         }
+
+         }
+
+        $total=StaffLeave::where('staff_id',$id)->where('academic_id',academicYearId())->where('status','approved')->paginate(5);
+       
+        return view('pages.leave.view', compact('staff','leavehead','total'));
     }
     public function setWorkingDays(Request $request)
     {

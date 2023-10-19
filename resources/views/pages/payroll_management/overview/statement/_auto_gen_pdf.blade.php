@@ -84,14 +84,11 @@ th,td {
 </table>
 <table  class="tabl-border-none" >
     <tr>
-        <th width="15%">CASUAL LEAVE</th>
-        <td width="15%">@if(isset($casual)) {{$casual ?? 0 }} @else 0 @endif</td>
-        <th width="15%">EARNED LEAVE</th>
-        <td width="15%">@if(isset($earned)) {{$earned ?? 0 }} @else 0 @endif</td>
-        <th width="18%">MATERNITY PAY</th>
-        <td width="15%">@if(isset($maternity)) {{$maternity ?? 0 }} @else 0 @endif</td> 
-        <th width="18%">GRANTED LEAVE</th>
-        <td width="15%">@if(isset($granted)) {{$granted ?? 0 }} @else 0 @endif</td> 
+        @foreach($leave_types as $type)
+        <th width="15%" style=" text-transform: uppercase;">{{$type->name}}</th>
+        <td width="15%">{{$type->count}}</td>
+        @endforeach
+        
         </tr>
 </table>
 <table  class="tabl-border-none" >

@@ -11,11 +11,12 @@ use Illuminate\Http\Request;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\StaffSalaryField;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Leave\StaffLeave;
 use Barryvdh\DomPDF\Facade\Pdf;
 use \NumberFormatter;
 class CommonController extends Controller
 {    
-      public function numberToWord($num = '')
+    public function numberToWord($num = '')
       {
         $num    = ( string ) ( ( int ) $num );
         if( ( int ) ( $num ) && ctype_digit( $num ) )
@@ -386,25 +387,22 @@ class CommonController extends Controller
             $params['others']=$field->amount;
           }
         }
-        foreach($info->staff->leavesApproved as $leave){
-            $params['casual']=0;
-            $params['earned']=0;
-            $params['maternity']=0;
-            $params['granted']=0;
-        if($leave->leave_category=="Casual Leave"){
-          $params['casual'] +=$leave->granted_days;
-         }
-         if($leave->leave_category=="Earned Leave"){
-          $params['earned'] +=$leave->granted_days;
-         }
-         if($leave->leave_category=="Maternity Leave"){
-          $params['maternity'] +=$leave->granted_days;
-         }
-         if($leave->leave_category=="Granted Leave"){
-          $params['granted'] +=$leave->granted_days;
-         }
-
+        $head_leave=LeaveHead::where('academic_id',academicYearId())->where('status','active')->get();
+         $start=date('Y-m-d', strtotime($date_string));
+         $end=date('Y-m-t', strtotime($start));
+        foreach($head_leave as $head){
+        if ($info->staff->status == 'transferred') {
+            $leave=StaffLeave::where('staff_id',$info->staff->refer_user_id)->where('leave_category',$head->name)->whereBetween('from_date',[$start,$end])->where('status','approved')->get();
+        } else {
+         $leave=StaffLeave::where('staff_id',$info->staff->id)->where('leave_category',$head->name)->whereBetween('from_date',[$start,$end])->where('status','approved')->get();
+          
         }
+        $head['count']=0;
+      foreach($leave as $leave_count){
+            $head['count']+=$leave_count->granted_days;
+        }
+        }
+        $params['leave_types']=$head_leave;
         $params['word']=$this->numberToWord($info->total_earnings) ?? '';
        
 

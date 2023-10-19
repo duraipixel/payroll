@@ -181,29 +181,36 @@ tr{
     <div class="modal-content">
       <div class="modal-header">
        
-       
+     
       </div>
       <div class="modal-body">
         <div class="sidebar">
-          <img src="{{url('assets/logo/profile.png')}}">
-          <h4>John Joe</h4>
-          <a href="#"><i class="fa fa-fw fa-user"></i>Male</a>
-          <a href="#"><i class="fas fa-user-circle"></i>Teacher</a>
-          <a href="#"><i class="fas fa-map-marker-alt"></i>Chennai</a>
-          <a href="#"><i class="fa fa-phone" aria-hidden="true"></i>1554555478</a>
-          <a href="#"><i class="fa fa-calendar" aria-hidden="true"></i> 18-02-2023</a>
-          <a href="#"><i class="fa fa-fw fa-envelope"></i> max@kt.com</a>
-          <a href="#"><span>Employe ID</span> AM156820</a>
-          <a href="#"><span>Reporting Person</span> Smith</a>
-          <a href="#"><span>Marital Status</span> AM156820</a>
-          <a href="#"><span>Employee Type</span> AM156820</a>
+           @php
+$profile_image=storage_path('app/public/' . $staff->image); @endphp
+@if (file_exists($profile_image))
+  <img src="{{ asset('storage/app/public/' .$item->user->image) }}" >
+@else
+  <img src="{{url('assets/logo/profile.png')}}">
+@endif
+        
+          <h4>{{$staff->name}}</h4>
+          <a href="#" style="text-transform: capitalize;"><i class="fa fa-fw fa-user"></i>{{$staff->personal->gender?? ''}}</a>
+          <a href="#" style="text-transform: capitalize;"><i class="fas fa-user-circle"></i>{{$staff->appointment->staffCategory->name?? ''}}</a>
+          <a href="#"><i class="fas fa-map-marker-alt"></i>{{$staff->personal->contact_address?? ''}}</a>
+          <a href="#"><i class="fa fa-phone" aria-hidden="true"></i>{{$staff->personal->phone_no?? ''}}</a>
+          <a href="#"><i class="fa fa-calendar" aria-hidden="true"></i> {{$staff->personal->dob?? ''}}</a>
+          <a href="#"><i class="fa fa-fw fa-envelope"></i> {{$staff->personal->email?? ''}}</a>
+          <a href="#"><span>Employe ID</span> {{$staff->institute_emp_code?? ''}}</a>
+          <a href="#"><span>Reporting Person</span>{{$staff->reporting->name ?? ''}}</a>
+          <a href="#"><span>Marital Status</span> {{$staff->reporting->marital_status ?? ''}}</a>
+          <a href="#"><span>Employee Type</span> {{$staff->appointment->employment_nature->name ?? ''}}</a>
           <a href="#"><span>Employee Since</span> 2010</a>
           {{-- <a href="#"><button class="btn-close">Close</button><button class="btn-save">Save</button></a> --}}
           
         </div>
         
         <div class="main">
-          <a href="#"><button class="btn-back">back</button></a>
+          <a href="{{url('leaves/overview/list')}}"><button class="btn-back">back</button></a>
           <h1 style=" padding-top:25px;
           padding-bottom: 25px;">Manage Leaves </h1> 
           <div class="main-sub">
@@ -215,21 +222,27 @@ tr{
                 <th>To Date</th>
                 <th style="text-align: center;">Remarks</th>
                 <th colspan="3">Leave Type</th>
-                <th  style=" padding-right:45px;">Action</th>   
+                <th >Action</th>   
               </tr>
+              @foreach($total as $data)
               <tr class="border-style-cs">
-                <td>Feb 02 2023</td>
-                <td>Feb 12 2023</td>
-                <td><button style="background: #f1f4f6 !important;border-radius: 3px;border: 0px;padding: 10px;margin: 10px;">Lorem ipsum dolor sit amet, consectetur</button></td>
-                <td>Casual Leave</td>
+                <td>{{$data->from_date}}</td>
+                <td>{{$data->to_date}}</td>
+                <td><button style="background: #f1f4f6 !important;border-radius: 3px;border: 0px;padding: 10px;margin: 10px;">{{$data->reason}}</button></td>
+                <td>{{$data->leave_category}}</td>
                 <td>
-                  <ul><li><img src="a"></li>
-                  <li><img src=""></li>
-                  <li><img src=""></li></ul>
+                  <ul><li><a href="{{asset('storage/app/public/'.$data->approved_document) }}" tooltip="Approved Document" target="_blank"  class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" > 
+                                <i class="fa fa-download"></i>
+                            </a></li>
+                  <li><a href="{{asset('storage/app/public/'.$data->document) }}" tooltip="Approved Document" target="_blank"  class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px"> <i class="fa fa-download"></i>
+                            </a> </li>
+                </ul>
                 </td>
               </tr>
+              @endforeach
             </table>
           </div>
+            {{ $total->links('pagination::bootstrap-4') }}
           </div>
           <div class="mange-alloance-section">
             
@@ -238,30 +251,12 @@ tr{
                 {{-- <th><h3>Manage Leave Allowance</h3></th>
                 <th><button class="lt-btn">Add a Leave Type</button></th> --}}
               </tr>
+              @foreach($leavehead as $total)
               <tr>
-                <td>Casual Leave</td> 
-                <td><input type="text" id="quantity" name="quantity" min="1" max="20">of <input type="text" id="quantity2" name="quantity" min="1" max="20"></td>    
-              </tr>
-              <tr>
-                <td>Earned Leave</td>
-                <td><input type="text" id="quantity" name="quantity" min="1" max="20">of <input type="text" id="quantity2" name="quantity" min="1" max="20"></td>    
-              </tr>
-              <tr>
-                <td>COVID Leave</td>
-                <td><input type="text" id="quantity" name="quantity" min="1" max="20">of <input type="text" id="quantity2" name="quantity" min="1" max="20"></td>    
-              </tr>
-              <tr>
-                <td>Maternity Leave</td>
-                <td><input type="text" id="quantity" name="quantity" min="1" max="20">of <input type="text" id="quantity" name="quantity" min="1" max="20"></td>    
-              </tr>
-              <tr>
-                <td>Loss of Pay</td>
-                <td><input type="text" id="quantity" name="quantity" min="1" max="20">of <input type="text" id="quantity2" name="quantity" min="1" max="20"></td>    
-              </tr>
-              <tr>
-                <td>Extended Leave</td>
-                <td><input type="text" id="quantity" name="quantity" min="1" max="20">of <input type="text" id="quantity2" name="quantity" min="1" max="20"></td>    
-              </tr>
+                <td style="text-transform: uppercase;">{{$total->name ?? ''}}</td> 
+                <td><input type="text" id="quantity" name="quantity"  value="{{$total->leave_day->leave_days?? 0}}" disabled>of <input type="text" id="quantity2" name="quantity" value="{{$total->count ?? 0}}" disabled></td>    
+            </tr>
+            @endforeach
             </table>
           </div>
         </div>
