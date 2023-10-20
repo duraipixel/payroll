@@ -1407,7 +1407,7 @@ class StaffController extends Controller
              * generate emp code   // society_emp_code, institute_emp_code
              */
             $staff_info = User::find($staff_id);
-            $staff_info->is_super_admin=$request->is_super_admin??0;
+            $staff_info->is_super_admin=$request->is_super_admin ?? Null;
             $staff_info->update();
             if (!$staff_info->society_emp_code) {
 
