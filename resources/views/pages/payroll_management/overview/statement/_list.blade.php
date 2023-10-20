@@ -50,18 +50,12 @@
                             {{ $item->staff->society_emp_code ?? '' }}
                         </td>
                         <td class="sticky-col second-col px-3">
-                           @php
-                                $url = storage_path('app/public/' . $item->document)
-                            @endphp
-                     @if(file_exists($url))
-                            <a href="{{ asset('public' . $url) }}" target="_blank">
-                                <i class="fa fa-file-pdf text-danger px-1"></i>
-                            </a>
-                    @else
+                       
+                           
                     <a href="{{ url('payroll/download',$item->id) }}" target="_blank">
                                 <i class="fa fa-file-pdf text-danger px-1"></i>
                             </a>
-                    @endif
+                 
                             {{ $item->staff->name ?? '' }}
                         </td>
                         <td class="px-3">
