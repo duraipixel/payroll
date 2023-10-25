@@ -624,6 +624,7 @@ left: 50%;
                                
                                 <tbody>
                                     <input type="hidden" value="grid" name="type">
+                                    @if(isset($info->leave_days))
                                     @foreach(json_decode($info->leave_days) as $key=>$day)
                                    
                                     <tr>
@@ -633,6 +634,7 @@ left: 50%;
                                      
                                     </tr>
                                     @endforeach
+                                    @endif
                             </tbody>
                         </table>
                         @else

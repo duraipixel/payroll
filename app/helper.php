@@ -1100,6 +1100,7 @@ function reportMenu()
     $customKey = 'is_menu';
     $customValue = true;
     $routes = Route::getRoutes();
+    
     $filteredRoutesInfo = [];
     foreach ($routes as $route) {
         $action = $route->getAction();
