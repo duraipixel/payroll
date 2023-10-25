@@ -29,17 +29,18 @@ class HoldSalaryController extends Controller
     }
 
     public function addEdit(Request $request)
-    {
-
-        $title = 'Hold Salary';
+    {   
+        $id = $request->id ?? '';
+        $title = $request->id ? 'Edit Hold Salary' : 'Add Hold Salary';
         $staff = User::select('users.*')->join('staff_salary_patterns', 'staff_salary_patterns.staff_id', '=', 'users.id')
             ->where('users.status', 'active')
             ->where('users.transfer_status', 'active')
             ->where('staff_salary_patterns.status', 'active')
             ->get();
         $payroll_hold_month = $request->payroll_hold_month;
-
+        $salary_detail=HoldSalary::find($id);
         $params = array(
+            'salary_detail'=>$salary_detail ?? '',
             'staff' => $staff,
             'title' => $title,
             'payroll_hold_month' => $payroll_hold_month
@@ -77,7 +78,7 @@ class HoldSalaryController extends Controller
                 $ins['hold_by'] = auth()->id();
                 $ins['status'] = 'active';
                 $ins['hold_month'] = date('Y-m-d', strtotime($request->hold_month));
-                $data = HoldSalary::create($ins);
+                $data = HoldSalary::updateOrCreate(['id' => $id],$ins);
                 $error = 0;
                 $message = 'success';
             } else {
@@ -129,9 +130,13 @@ class HoldSalaryController extends Controller
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $del_btn = '<a href="javascript:void(0);" onclick="deleteHold(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
+                    $edit_btn = '<a href="javascript:void(0);" onclick="addHoldSalary(' . $row->id.')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" >
+                        <i class="fa fa-edit"></i>
+                        </a>';
+                     $del_btn = '<a href="javascript:void(0);" onclick="deleteHold(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                     <i class="fa fa-trash"></i></a>';
-                    return $del_btn;
+                    $action= $edit_btn.$del_btn;
+                    return   $action;
                 })
                 ->rawColumns(['action']);
             return $datatables->make(true);

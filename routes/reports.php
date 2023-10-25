@@ -27,4 +27,31 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
     Route::get('/salary-register', [SalaryReportController::class, 'salary_register'])->name('reports.salary.register'); 
     Route::get('/retirement-report', [RetirementController::class, 'index'])->name('reports.retirement'); 
     Route::get('/leaves-report', [LeaveController::class, 'index'])->name('reports.leaves'); 
+#....Ajith
+    Route::get('/epf-report', [ReportController::class, 'index'])->name('reports.epf.report');
+    Route::get('/esi-report', [ReportController::class, 'index'])->name('reports.esi.report');
+    Route::get('/income-tax-report', [ReportController::class, 'index'])->name('reports.income.tax.report');
+    Route::get('/bonus-report', [ReportController::class, 'index'])->name('reports.bonus.report');
+
+
+    Route::get('/arrears-report', [ReportController::class, 'index'])->name('reports.arrears.report');
+    Route::get('/gratutity-report', [ReportController::class, 'index'])->name('reports.gratutity.report');
+    Route::get('/resignation-report', [ReportController::class, 'index'])->name('reports.resignation.report');
+    Route::get('/staff-leave-report', [ReportController::class, 'index'])->name('reports.staff.leave.report');
+
+    Route::get('/salary-acquitance-report', [ReportController::class, 'index'])->name('reports.salary.acquitance.report');
+
+    Route::get('/staff-acquitance-register-report', [ReportController::class, 'index'])->name('reports.staff.acquitance.register.report');
+
+    Route::get('/bank-disbursement-report', [ReportController::class, 'index'])->name('reports.bank.disbursement.report');
+
+    Route::get('/bank-loan-report', [ReportController::class, 'index'])->name('reports.bank.loan.report');
+    Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
+   Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
+   Route::get('/lic-report', [ReportController::class, 'index'])->name('reports.lic.report');
+   Route::get('/lop-report', [ReportController::class, 'index'])->name('reports.lop.report');
+    Route::get('/salary-hold-report', [ReportController::class, 'index'])->name('reports.salary.hold.report');
+  Route::get('/professional-tax-report', [ReportController::class, 'index'])->name('reports.professional.tax.report');
+    Route::get('/month-wise-variation-report', [ReportController::class, 'index'])->name('reports.month.wise.variation.report');
+
 });
