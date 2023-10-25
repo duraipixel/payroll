@@ -371,7 +371,7 @@ class LeaveController extends Controller
                     $ins['to_date'] = $end_date;
                     $ins['no_of_days'] = $request->no_of_days ?? "0";
                     $ins['reason'] = $request->reason;
-
+ $leave_day=[];
                     if(isset($request->leave) && isset($request->leave['date'][0])){
                         $leave_day=[];
                         foreach($request->leave['radio'] as$key=>$data){
@@ -381,7 +381,7 @@ class LeaveController extends Controller
                         }
 
                         }else{
-
+                   
                     if(isset($request->leave)){
                         $leave_day=[];
                         foreach(json_decode($leave_info->leave_days) as $key=>$data){
