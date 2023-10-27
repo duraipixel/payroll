@@ -4,7 +4,7 @@ namespace App\Models\Staff;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\User;
 class StaffInsurance extends Model
 {
     use HasFactory;
@@ -31,6 +31,9 @@ class StaffInsurance extends Model
 
     public function paid_emi() {
         return $this->hasMany(StaffInsuranceEmi::class, 'staff_insurance_id', 'id')->where('status', '=', 'paid')->orderBy('emi_date');
+    }
+     public function staff() {
+        return $this->hasOne(User::class, 'id', 'staff_id');
     }
 
 }

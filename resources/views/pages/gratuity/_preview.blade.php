@@ -63,7 +63,7 @@
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px"> Date of Birth </td>
-            <td style="text-align: left;width:50%;padding-left:10px">{{ commonDateFormat( $staff_info->personal->dob ) }}</td>
+            <td style="text-align: left;width:50%;padding-left:10px"> @if(isset($staff_info->personal->dob)){{ commonDateFormat( $staff_info->personal->dob ) }} @endif</td>
         </tr>
         <tr>
             <th style="text-align: left;width:50%;padding-left:5px;color:#959595" colspan="2"> 

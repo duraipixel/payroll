@@ -30,7 +30,7 @@
                                     value="{{ $department->id }}"> {{ $department->name }}</option>
                             @endforeach
                         </select>
-                        <select name="month" class="form-select form-select-sm w-auto d-inline">
+                        <select name="month" class="form-select form-select-sm w-auto d-inline" id="month">
                             <option value="">-- select month -- </option>
                             @for ($m = 1; $m <= 12; $m++)
                                 <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
