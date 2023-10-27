@@ -44,8 +44,11 @@
                 $total_net_pay = 0;
             @endphp
             @if (isset($salary_info) && !empty($salary_info))
-                @foreach ($salary_info as $item)
+                @foreach ($salary_info as $key=>$item)
                     <tr>
+                         <td class="sticky-col first-col px-3">
+                            {{ $key+1 }}
+                        </td>
                         <td class="sticky-col first-col px-3">
                             {{ $item->staff->society_emp_code ?? '' }}
                         </td>
