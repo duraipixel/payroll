@@ -81,7 +81,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/bulk/save/old', [App\Http\Controllers\Staff\BulkUploadController::class, 'oldEntry'])->name('staff.old.save'); 
      //Bulk upload for staff information End
     Route::prefix('staff')->group(function() {
-
+       Route::post('/document/remove', [App\Http\Controllers\StaffController::class, 'StaffDocumentDelete'])->name('staff.document.remove');
         Route::get('/register/{id?}', [App\Http\Controllers\StaffController::class, 'register'])->name('staff.register');
         Route::get('/view/{user}', [App\Http\Controllers\StaffController::class, 'view'])->name('staff.view');
         Route::get('/print/{user}', [App\Http\Controllers\StaffController::class, 'print'])->name('staff.print');

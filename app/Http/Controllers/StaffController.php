@@ -69,6 +69,14 @@ use PDF;
 
 class StaffController extends Controller
 {
+   public function StaffDocumentDelete(Request $request)
+    { 
+    $document=StaffDocument::find($request->id);
+    $document->multi_file=Null;
+    $document->update();
+        return response()->json(['message' => "Document Removed", 'status' => 1,'type'=>$request->type]);
+
+     }
     public function register(Request $request, $id = null)
     {
 

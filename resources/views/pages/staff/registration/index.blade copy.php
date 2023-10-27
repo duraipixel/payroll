@@ -1,6 +1,7 @@
  <!--begin::Navbar-->
  @extends('layouts.template')
  @section('content')
+
  <link rel="stylesheet" href="{{ asset('assets/css/registration.css') }}">
      <script src="{{ asset('assets/js/tamil-search.js') }}"></script>
      <script src="{{ asset('assets/js/tamil-keyboard.js') }} "></script>

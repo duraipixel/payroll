@@ -112,11 +112,16 @@ class="form-input" />
                         $url = Storage::url($item);
                     @endphp
 
-                    <div class="d-inline-block p-2 bg-light m-1">
+                    <div class="p-2 bg-light m-1 " id="aadhaar">
                         <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
-                            target="_blank">View File </a>
+                            target="_blank">View File </a>&nbsp;&nbsp;
+                        <a class="btn-sm btn-danger"
+                                    onclick="removeDocument('{{ $staff_details->aadhaar->id }}', 'aadhaar')">
+                                    Remove
+                                </a>
                     </div>
                 @endforeach
+
             @endisset
         @endisset
     </td>
@@ -140,16 +145,20 @@ class="form-input" />
             @endphp
 
             @isset($paths)
-                <div class="col-12">
-                    <div class="d-flex justiy-content-around flex-wrap">
+                <div class="col-12" id="pan">
+                    <div class="d-flex justiy-content-around flex-wrap ">
                         @foreach ($paths as $item)
                             @php
                                 $url = Storage::url($item);
                             @endphp
 
-                            <div class="d-inline-block p-2 bg-light m-1">
+                            <div class=" p-2 bg-light m-1">
                                 <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
-                                    target="_blank">View File </a>
+                                    target="_blank">View File </a>&nbsp;&nbsp;
+                                     <a class="btn-sm btn-danger"
+                                    onclick="removeDocument('{{ $staff_details->pan->id }}', 'pan')">
+                                    Remove
+                                </a>
                             </div>
                         @endforeach
                     </div>
@@ -178,18 +187,19 @@ class="form-input" />
             @endphp
 
             @isset($paths)
-                <div class="col-12">
-                    <div class="d-flex justiy-content-around flex-wrap">
+                <div class="col-12" id="ration">
+                    <div class="d-flex justiy-content-around flex-wrap ">
                         @foreach ($paths as $item)
                             @php
                                 $url = Storage::url($item);
                             @endphp
-
-                            <div class="d-inline-block p-2 bg-light m-1">
-                                <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
+<div class="p-2 bg-light m-1">
+                            <a class="btn-sm  btn-success p-2" href="{{ asset('public' . $url) }}"
                                     target="_blank">View File </a>
-                                <a class="btn-sm btn-outline-danger"
-                                    onclick="removeDocument('{{ $staff_details->ration->id }}'', '{{ $item }}')">
+                                    &nbsp;&nbsp;
+                               
+                                <a class="btn-sm btn-danger"
+                                    onclick="removeDocument('{{ $staff_details->ration->id }}', 'ration')">
                                     Remove
                                 </a>
                             </div>
@@ -220,8 +230,8 @@ class="form-input" />
             @endphp
 
             @isset($paths)
-                <div class="col-12">
-                    <div class="d-flex justiy-content-around flex-wrap">
+                <div class="col-12" id="licence">
+                    <div class="d-flex justiy-content-around flex-wrap ">
                         @foreach ($paths as $item)
                             @php
                                 $url = Storage::url($item);
@@ -229,9 +239,9 @@ class="form-input" />
 
                             <div class="d-inline-block p-2 bg-light m-1">
                                 <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
-                                    target="_blank">View File </a>
-                                <a class="btn-sm btn-outline-danger"
-                                    onclick="removeDocument('{{ $staff_details->driving_license->id }}'', '{{ $item }}')">
+                                    target="_blank">View File </a>&nbsp;&nbsp;
+                                <a class="btn-sm btn-danger"
+                                    onclick="removeDocument('{{ $staff_details->driving_license->id }}', 'licence')">
                                     Remove
                                 </a>
                             </div>
@@ -262,8 +272,8 @@ class="form-input" />
             @endphp
 
             @isset($paths)
-                <div class="col-12">
-                    <div class="d-flex justiy-content-around flex-wrap">
+                <div class="col-12" id="voter">
+                    <div class="d-flex justiy-content-around flex-wrap ">
                         @foreach ($paths as $item)
                             @php
                                 $url = Storage::url($item);
@@ -271,8 +281,9 @@ class="form-input" />
                             <div class="d-inline-block p-2 bg-light m-1">
                                 <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
                                     target="_blank">View File </a>
-                                <a class="btn-sm btn-outline-danger"
-                                    onclick="removeDocument('{{ $staff_details->voter->id }}'', '{{ $item }}')">
+                                    &nbsp;&nbsp;
+                                <a class="btn-sm btn-danger"
+                                    onclick="removeDocument('{{ $staff_details->voter->id }}', 'voter')">
                                     Remove
                                 </a>
                             </div>
@@ -304,17 +315,17 @@ class="form-input" />
             @endphp
 
             @isset($paths)
-                <div class="col-12">
-                    <div class="d-flex justiy-content-around flex-wrap">
+                <div class="col-12" id="passport">
+                    <div class="d-flex justiy-content-around flex-wrap passport">
                         @foreach ($paths as $item)
                             @php
                                 $url = Storage::url($item);
                             @endphp
                             <div class="d-inline-block p-2 bg-light m-1">
                                 <a class="btn-sm btn-success" href="{{ asset('public' . $url) }}"
-                                    target="_blank">View File </a>
-                                <a class="btn-sm btn-outline-danger"
-                                    onclick="removeDocument('{{ $staff_details->passport->id }}'', '{{ $item }}')">
+                                    target="_blank">View File </a> &nbsp;&nbsp;
+                                <a class="btn-sm btn-danger"
+                                    onclick="removeDocument('{{ $staff_details->passport->id }}', 'passport')">
                                     Remove
                                 </a>
                             </div>
@@ -424,6 +435,50 @@ success: function(res) {
 console.log(res);
 }
 })
+
+}
+function removeDocument(id,type) {
+   Swal.fire({
+                text: "Are you sure you would like to delete?",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "Yes, Delete it!",
+                cancelButtonText: "No, return",
+                customClass: {
+                    confirmButton: "btn btn-danger",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function(result) {
+$.ajaxSetup({
+headers: {
+'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+}
+});
+$.ajax({
+url: "{{ route('staff.document.remove') }}",
+type: 'POST',
+data: {
+id: id,
+type: type
+},
+success: function(res) {
+ Swal.fire({
+                                title: "Deleted!",
+                                text: res.message,
+                                icon: "success",
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-success"
+                                },
+                                timer: 3000
+                            });
+   $('#'+res.type).hide();
+    
+
+}
+})
+});
 
 }
 </script>
