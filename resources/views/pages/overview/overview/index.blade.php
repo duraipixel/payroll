@@ -10,12 +10,15 @@
                 @include('pages.overview.overview.total_leaves')
             </div>
         </div>
-        <div class="col-lg-6 col-xxl-4">
-            @include('pages.overview.overview.total_loan')
-        </div>
+      
         <div class="col-xl-6 mb-5 mb-xl-10">
             @include('pages.overview.overview.languages')
         </div>
+        @foreach($loans as $loan)
+          <div class="col-lg-6 col-xxl-4">
+            @include('pages.overview.overview.total_loan')
+        </div>
+         @endforeach
         <br>
     </div>
 </div>

@@ -539,6 +539,7 @@ if (!function_exists('generateLeaveForm')) {
 
                 $total_leaves = LeaveMapping::selectRaw('sum(CAST(leave_mappings.leave_days AS DECIMAL(10, 2))) as total')
                     ->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)
+                    ->where('academic_id',academicYearId())
                     ->where('status', 'active')
                     ->first();
             } else {
@@ -548,6 +549,7 @@ if (!function_exists('generateLeaveForm')) {
                         // $join->on('leave_heads.code', '!=', DB::raw('"ML"'));
                     })
                     ->where('nature_of_employment_id', $staff_info->appointment->nature_of_employment_id)
+                    ->where('leave_mappings.academic_id',academicYearId())
                     ->where('leave_mappings.status', 'active')
                     ->where('leave_heads.code', '!=', 'ML')
                     ->first();
@@ -557,8 +559,8 @@ if (!function_exists('generateLeaveForm')) {
                 $allocated_total_leave = $total_leaves->total;
             }
         }
-        $leaves = StaffLeave::selectRaw('SUM(no_of_days) as taken_leave')->where('staff_id', $staff_id)
-            // ->where('status', 'approved')
+        $leaves = StaffLeave::selectRaw('SUM(no_of_days) as taken_leave')->where('staff_id', $staff_id)->where('academic_id',academicYearId())
+            ->where('status', 'approved')
             ->first();
         if ($leaves) {
             $taken_leave = $leaves->taken_leave ?? 0;
