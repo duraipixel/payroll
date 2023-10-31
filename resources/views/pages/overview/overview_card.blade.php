@@ -7,11 +7,17 @@
                     @if ( (isset(auth()->user()->image) && !empty(auth()->user()->image)) || (isset($info->image) && !empty($info->image)) )
                     @php
                         $image_path = $info->image ?? ((auth()->user()->id == $info->id && isset(auth()->user()->image) && !empty(auth()->user()->image) ) ? auth()->user()->image : '' );
-                        $profile_image = Storage::url($image_path);
-                    @endphp
+                        
+
+                $profile_image=storage_path('app/public/' . $image_path);
+                @endphp
+                       
+                  
+                    @if(file_exists($profile_image))
                         <img alt="user" src="{{ asset('public' . $profile_image) }}" />
                     @else
                         <img alt="user" src="{{ asset('assets/images/no_Image.jpg') }}" />
+                        @endif
                     @endif
                     <div  class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px">
                     </div>

@@ -1,7 +1,9 @@
+
+
 <div class="card-body p-9">
                    
-    <div class="fs-2hx fw-bolder">150</div>
-    <div class="fs-4 fw-bold text-gray-400 mb-7">Total for the Months
+    <div class="fs-2hx fw-bolder">{{$total_year}}</div>
+    <div class="fs-4 fw-bold text-gray-400 mb-7">Total for the Year
     </div>
     
     <div class="d-flex flex-center me-9 mb-5">
@@ -17,21 +19,21 @@
             <div class="d-flex fs-6 fw-bold align-items-center mb-3">
                 <div class="bullet bg-primary me-3"></div>
                 <div class="text-gray-400">Working days</div>
-                <div class="ms-auto fw-bolder text-gray-700">120</div>
+                <div class="ms-auto fw-bolder text-gray-700">{{$working_days??0}}</div>
             </div>
             <!--end::Label-->
             <!--begin::Label-->
             <div class="d-flex fs-6 fw-bold align-items-center mb-3">
                 <div class="bullet bg-success me-3"></div>
                 <div class="text-gray-400">Present</div>
-                <div class="ms-auto fw-bolder text-gray-700">110</div>
+                <div class="ms-auto fw-bolder text-gray-700">{{$present??0}}</div>
             </div>
             <!--end::Label-->
             <!--begin::Label-->
             <div class="d-flex fs-6 fw-bold align-items-center">
                 <div class="bullet bg-gray-300 me-3"></div>
                 <div class="text-gray-400">Absent</div>
-                <div class="ms-auto fw-bolder text-gray-700">10</div>
+                <div class="ms-auto fw-bolder text-gray-700">{{$absence??0}}</div>
             </div>
             <!--end::Label-->
         </div>

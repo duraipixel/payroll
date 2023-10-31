@@ -1,6 +1,16 @@
+@php
+$balance=0;
+foreach($loan->emi as $emi){
+    if($emi->status=='active'){
+      $balance+=$emi->amount;
+    }
+
+}
+@endphp
 <div class="card h-100 cstmzed">
+    
     <div class="card-body p-9">
-        <div class="fs-2hx fw-bolder">₹3,50,000.00</div>
+        <div class="fs-2hx fw-bolder">₹{{$loan->loan_amount}}</div>
         <div class="fs-4 fw-bold text-gray-400 mb-7">Total Loan Taken</div>
         <div class="fs-6 d-flex justify-content-between mb-4">
             <div class="fw-bold">Paid</div>
@@ -16,7 +26,7 @@
                             fill="currentColor"></path>
                     </svg>
                 </span>
-                <!--end::Svg Icon-->₹2,20,000.00
+                <!--end::Svg Icon-->₹{{$loan->loan_amount}}
             </div>
         </div>
         <div class="separator separator-dashed"></div>
@@ -34,28 +44,29 @@
                             fill="currentColor"></path>
                     </svg>
                 </span>
-                ₹1,30,000.00
+                ₹{{$balance??0}}
             </div>
         </div>
         <div class="separator separator-dashed"></div>
         <div class="fs-6 d-flex justify-content-between my-4">
             <div class="fw-bold">Monthly EMI</div>
-            <div class="d-flex fw-bolder"> ₹20000 </div>
+            <div class="d-flex fw-bolder"> ₹{{$loan->every_month_amount??0}}</div>
         </div>
         <div class="separator separator-dashed"></div>
         <div class="fs-6 d-flex justify-content-between my-4">
             <div class="fw-bold">Loan Issued Date</div>
-            <div class="d-flex fw-bolder"> 20/01/2021 </div>
+            <div class="d-flex fw-bolder"> {{$loan->created_at->format('Y-m-d') }}</div>
         </div>
         <div class="separator separator-dashed"></div>
         <div class="fs-6 d-flex justify-content-between my-4">
             <div class="fw-bold">Loan Start Date</div>
-            <div class="d-flex fw-bolder"> 20/02/2021 </div>
+            <div class="d-flex fw-bolder"> {{$loan->loan_start_date ??''}} </div>
         </div>
         <div class="separator separator-dashed"></div>
         <div class="fs-6 d-flex justify-content-between my-4">
             <div class="fw-bold">Loan End Date</div>
-            <div class="d-flex fw-bolder"> 20/03/2022 </div>
+            <div class="d-flex fw-bolder"> {{$loan->loan_end_date ??''}} </div>
         </div>
     </div>
+
 </div>

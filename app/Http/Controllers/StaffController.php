@@ -64,9 +64,12 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use DataTables;
+use App\Models\AttendanceManagement\AttendanceManualEntry;
 use Carbon\Carbon;
 use PDF;
-
+use App\Models\CalendarDays;
+use App\Models\Staff\StaffBankLoan;
+use App\Models\AcademicYear;
 class StaffController extends Controller
 {
    public function StaffDocumentDelete(Request $request)
@@ -302,7 +305,7 @@ class StaffController extends Controller
                 $ins_aa['document_type_id'] = $aadhar_id->id;
                 $ins_aa['description'] = $request->aadhar_name;
                 $ins_aa['doc_number'] = $request->aadhar_no ?? null;
-                $ins_aa['verification_status'] = 'pending';
+               
 
                 /** 
                  *  check file is exists
@@ -328,6 +331,7 @@ class StaffController extends Controller
                     $file_name = $imageIns ? implode(',', $imageIns) : null;
 
                     $ins_aa['multi_file'] = $file_name;
+                    $ins_aa['verification_status'] = 'pending';
                 }
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $aadhar_id->id], $ins_aa);
             }
@@ -340,7 +344,7 @@ class StaffController extends Controller
                 $ins_aa['document_type_id'] = $pan_id->id;
                 $ins_aa['description'] = $request->pancard_name;
                 $ins_aa['doc_number'] = $request->pancard_no ?? null;
-                $ins_aa['verification_status'] = 'pending';
+              
                 $file_name = null;
                 /** 
                  *  check file is exists
@@ -365,6 +369,7 @@ class StaffController extends Controller
                     $file_name = $imageIns ? implode(',', $imageIns) : null;
 
                     $ins_aa['multi_file'] = $file_name;
+                  $ins_aa['verification_status'] = 'pending';
                 }
 
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $pan_id->id], $ins_aa);
@@ -378,7 +383,7 @@ class StaffController extends Controller
                 $ins_aa['document_type_id'] = $ration_id->id;
                 $ins_aa['description'] = $request->ration_card_name;
                 $ins_aa['doc_number'] = $request->ration_card_number ?? null;
-                $ins_aa['verification_status'] = 'pending';
+                
 
                 $file_name = null;
                 /** 
@@ -405,6 +410,7 @@ class StaffController extends Controller
                     $file_name = $imageIns ? implode(',', $imageIns) : null;
 
                     $ins_aa['multi_file'] = $file_name;
+                $ins_aa['verification_status'] = 'pending';
                 }
 
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $ration_id->id], $ins_aa);
@@ -418,7 +424,7 @@ class StaffController extends Controller
                 $ins_aa['document_type_id'] = $license_id->id;
                 $ins_aa['description'] = $request->license_name;
                 $ins_aa['doc_number'] = $request->license_number ?? null;
-                $ins_aa['verification_status'] = 'pending';
+               
 
                 $file_name = null;
                 /* 
@@ -445,6 +451,7 @@ class StaffController extends Controller
                     $file_name = $imageIns ? implode(',', $imageIns) : null;
 
                     $ins_aa['multi_file'] = $file_name;
+                 $ins_aa['verification_status'] = 'pending';
                 }
 
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $license_id->id], $ins_aa);
@@ -459,7 +466,7 @@ class StaffController extends Controller
                 $ins_aa['document_type_id'] = $voter_id->id;
                 $ins_aa['description'] = $request->voter_name;
                 $ins_aa['doc_number'] = $request->voter_number ?? null;
-                $ins_aa['verification_status'] = 'pending';
+                
                 $file_name = null;
                 /** 
                  *  check file is exists
@@ -485,6 +492,7 @@ class StaffController extends Controller
                     $file_name = $imageIns ? implode(',', $imageIns) : null;
 
                     $ins_aa['multi_file'] = $file_name;
+                $ins_aa['verification_status'] = 'pending';
                 }
 
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $voter_id->id], $ins_aa);
@@ -500,7 +508,7 @@ class StaffController extends Controller
                 $ins_aa['description'] = $request->passport_name;
                 $ins_aa['doc_number'] = $request->passport_number ?? null;
                 $ins_aa['doc_date'] = $request->passport_valid_upto ? date('Y-m-d', strtotime($request->passport_valid_upto)) : null;
-                $ins_aa['verification_status'] = 'pending';
+               
 
                 $file_name = null;
                 /** 
@@ -527,6 +535,7 @@ class StaffController extends Controller
                     $file_name = $imageIns ? implode(',', $imageIns) : null;
 
                     $ins_aa['multi_file'] = $file_name;
+                 $ins_aa['verification_status'] = 'pending';
                 }
 
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $passport_id->id], $ins_aa);
@@ -958,7 +967,7 @@ class StaffController extends Controller
                 0 => 'name',
                 1 => 'society_code',
                 2 => 'institute_code',
-                3 => 'profile',
+                3 => 'verification_status',
             );
 
             $verification_status = $request->verification_status ?? '';
@@ -1000,7 +1009,7 @@ class StaffController extends Controller
             $search_text = $staff_datable_search;
            
 
-            $post_data = User::select('users.*', 'institutions.name as institute_name','society_emp_code as society_code','institute_emp_code as institute_code','profile_status as profile')
+            $post_data = User::select('users.*', 'institutions.name as institute_name','society_emp_code as society_code','institute_emp_code as institute_code')
                 ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
                 ->with([
                     'personal',
@@ -1313,8 +1322,20 @@ class StaffController extends Controller
         $salary_doc      = StaffSalary::where('staff_id', $staff_id)->get();
         $from_view = 'user';
         $info = User::find( $user->id);
-        // dd($info->personal);
-        return view('pages.overview.index', compact('info', 'breadcrums', 'user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc', 'from_view'));
+
+        $from_year=AcademicYear::find(academicYearId());
+         academicYearId();
+        $year=$from_year->from_year;
+        $firstDayOfYear = date("$year-01-01"); 
+        $lastDayOfYear = date("$year-12-31");
+        $total_year = (strtotime($lastDayOfYear) - strtotime($firstDayOfYear)) / (60 * 60 * 24) + 1;
+        $loans=StaffBankLoan::with('emi','paid_emi')->where('staff_id',$user->id)->where('status','active')->get();
+        $working_days=CalendarDays::where('days_type','working_day')->where('academic_id', $acadamic_id)->count();
+        $present=AttendanceManualEntry::where('employment_id',$user->id)->where('academic_id', $acadamic_id)
+                ->where('attendance_status', 'Present')->where('status','active')->count();
+        $absence=AttendanceManualEntry::where('employment_id',$user->id)->where('academic_id', $acadamic_id)
+                ->where('attendance_status', 'Absence')->where('status','active')->count();
+        return view('pages.overview.index', compact('info', 'breadcrums', 'user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc', 'from_view','total_year','loans','working_days','present','absence'));
 
     }
 

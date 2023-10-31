@@ -211,12 +211,20 @@
 
                                 </td>
                             @endif
+                            @php
+
+                $document=storage_path('app/public/' . $personal_docs->multi_file);
+                            @endphp
+                            @if(file_exists($document))
                             <td>
                                 <a href="{{ url('storage/app/public' . '/' . $personal_docs->multi_file) }}"
                                     class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
                                     target="_blank">
                                     <i class="fa fa-eye"></i></a>
                             </td>
+                            @else
+                             <td></td>
+                            @endif
                         </tr>
                     @empty
                         <tr>

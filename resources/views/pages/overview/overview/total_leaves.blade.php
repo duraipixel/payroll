@@ -21,19 +21,19 @@
             <div class="d-flex fs-6 fw-bold align-items-center mb-3">
                 <div class="bullet bg-primary me-3"></div>
                 <div class="text-gray-400">Allocated</div>
-                <div class="ms-auto fw-bolder text-gray-700">{{ $leave_details['allocated_total_leave'] }}</div>
+                <div class="ms-auto fw-bolder text-gray-700">{{ $leave_details['allocated_total_leave'] ?? 0 }}</div>
             </div>
 
             <div class="d-flex fs-6 fw-bold align-items-center mb-3">
                 <div class="bullet bg-danger me-3"></div>
                 <div class="text-gray-400">Taken</div>
-                <div class="ms-auto fw-bolder text-gray-700">{{ $leave_details['taken_leave'] }}</div>
+                <div class="ms-auto fw-bolder text-gray-700">{{ $leave_details['taken_leave'] ?? 0 }}</div>
             </div>
 
             <div class="d-flex fs-6 fw-bold align-items-center">
                 <div class="bullet bg-success me-3"></div>
                 <div class="text-gray-400">Balance</div>
-                <div class="ms-auto fw-bolder text-gray-700">{{ $leave_details['balance_leave'] }}</div>
+                <div class="ms-auto fw-bolder text-gray-700">{{ $leave_details['balance_leave'] ?? 0 }}</div>
             </div>
         </div>
     </div>
