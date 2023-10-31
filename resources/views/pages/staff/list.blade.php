@@ -120,7 +120,7 @@
         var staff_Table = $('#staff_table').DataTable({
             processing: true,
             serverSide: true,
-            order: [[2, "DESC"]],
+            order: [[1, "DESC"]],
             type: 'POST',
             "ajax": {
                 "url": "{{ route('staff.list') }}",
@@ -180,7 +180,7 @@
         document.querySelector('#datatable_institute_id').addEventListener("change", function(e) {
             staff_Table.ajax.reload();
         });
-
+ staff_Table.ajax.reload();
         function staffChangeStatus(id, status) {
             Swal.fire({
                 text: "Are you sure you would like to change status?",

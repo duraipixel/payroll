@@ -955,11 +955,10 @@ class StaffController extends Controller
 
             $totalFilteredRecord = $totalDataRecord = $draw_val = "";
             $columns_list = array(
-                0 => 'id',
-                1 => 'name',
-                2 => 'emp_code',
-                3 => 'created_at',
-                4 => 'id',
+                0 => 'name',
+                1 => 'society_code',
+                2 => 'institute_code',
+                3 => 'profile',
             );
 
             $verification_status = $request->verification_status ?? '';
@@ -1001,7 +1000,7 @@ class StaffController extends Controller
             $search_text = $staff_datable_search;
            
 
-            $post_data = User::select('users.*', 'institutions.name as institute_name')
+            $post_data = User::select('users.*', 'institutions.name as institute_name','society_emp_code as society_code','institute_emp_code as institute_code','profile_status as profile')
                 ->leftJoin('institutions', 'institutions.id', 'users.institute_id')
                 ->with([
                     'personal',
@@ -1033,10 +1032,10 @@ class StaffController extends Controller
                 ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
                     $q->where('users.institute_id', $datatable_institute_id);
                 })
-                ->InstituteBased()
-                 //->orderByRaw($order_val,$dir_val);
-                 ->orderBy('society_emp_code', 'desc');
-
+            ->InstituteBased()
+                ->orderBy($order_val,$dir_val);
+            
+           
             if ($limit_val > 0) {
                 $post_data = $post_data->offset($start_val)->limit($limit_val)->get();
             } else {
@@ -1078,8 +1077,7 @@ class StaffController extends Controller
                     $q->where('users.institute_id', $datatable_institute_id);
                 })
                     ->InstituteBased()
-                    ->orderBy('society_emp_code', 'asc')
-                    ->orderBy('institute_id', 'desc')
+                    
                     ->count();
                     
 
