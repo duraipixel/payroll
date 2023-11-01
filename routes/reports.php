@@ -30,7 +30,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
 #....Ajith
     Route::get('/epf-report', [ReportController::class, 'index'])->name('reports.epf.report');
     Route::get('/esi-report', [ReportController::class, 'ESI'])->name('reports.esi.report');
-    Route::get('/income-tax-report', [ReportController::class, 'index'])->name('reports.income.tax.report');
+    Route::get('/income-tax-report', [ReportController::class, 'IncomeTax'])->name('reports.income.tax.report');
     Route::get('/bonus-report', [ReportController::class, 'Bonus'])->name('reports.bonus.report');
 
 
@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
    Route::get('/lic-report', [ReportController::class, 'InsuranceReport'])->name('reports.lic.report');
    Route::get('/lop-report', [ReportController::class, 'LOP'])->name('reports.lop.report');
     Route::get('/salary-hold-report', [ReportController::class, 'SalaryHold'])->name('reports.salary.hold.report');
-  Route::get('/professional-tax-report', [ReportController::class, 'index'])->name('reports.professional.tax.report');
+  Route::get('/professional-tax-report', [ReportController::class, 'ProfessionalTax'])->name('reports.professional.tax.report');
     Route::get('/month-wise-variation-report', [ReportController::class, 'index'])->name('reports.month.wise.variation.report');
 
 });

@@ -3,6 +3,9 @@
         <thead class="bg-primary">
             <tr class="text-start text-muted fw-bolder fs-7 text-uppercase align-middle gs-0">
                 <th class="px-3 text-primary sticky-col first-col">
+                  So No
+                </th>
+                <th class="px-3 text-primary sticky-col first-col">
                     Emp Code
                 </th>
                 <th class="px-3 text-primary sticky-col second-col">

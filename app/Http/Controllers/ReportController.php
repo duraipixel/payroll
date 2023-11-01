@@ -20,6 +20,7 @@ use App\Models\Staff\StaffInsurance;
 use App\Models\PayrollManagement\HoldSalary;
 use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\Staff\StaffSalaryPreEarning;
+use App\Models\PayrollManagement\ItStaffStatement;
 class ReportController extends Controller
 {
     public $repository;
@@ -465,6 +466,97 @@ class ReportController extends Controller
         return $datatables->make(true);
              }
         return view('pages.reports.arrers', compact('breadcrums','month'));
+    }
+    public function IncomeTax(Request $request)
+    {
+        $breadcrums = array(
+            'title' => 'IncomeTax Report',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => 'IncomeTax Report'
+                ),
+            )
+        );
+        $datatable_search=$request->datatable_search;
+        $month = $request->month ?? date('m');
+        $data=ItStaffStatement::with('staff')->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+                   
+            return $query->where(function ($q) use ($datatable_search) {
+                $q->whereHas('staff', function($jq) use($datatable_search){
+                $jq->where('name', 'like', "%{$datatable_search}%")
+                ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                    });
+            });
+        })->where('academic_id',academicYearId())->whereMonth('created_at',$month)->orderby('created_at','desc')->get();
+
+        if($request->ajax()){
+        $datatables =  Datatables::of($data)
+        ->addIndexColumn()
+        ->editColumn('name', function ($row) { 
+          
+                    return $row['staff']->name ?? '';
+        })->editColumn('emp_id', function ($row) {
+                    return $row['staff']->institute_emp_code ?? '';
+        })->editColumn('place', function ($row) {
+                    return $row['staff']->appointment->work_place->name ?? '';
+        })->editColumn('doj', function ($row) {
+                    return $row['staff']->appointment->joining_date ?? '';
+        })->editColumn('designation', function ($row) {
+                    return $row['staff']->appointment->designation->name?? '';
+        });
+        return $datatables->make(true);
+             }
+        return view('pages.reports.incometax', compact('breadcrums','month'));
+    }
+public function ProfessionalTax(Request $request)
+    {
+        $breadcrums = array(
+            'title' => 'ProfessionalTax Report',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => 'ProfessionalTax Report'
+                ),
+            )
+        );
+        $datatable_search=$request->datatable_search;
+    $month = $request->month ?? date('m');
+    $dates ='2023-08-01';
+    $data=[];
+    $from_date = date('Y-m-01', strtotime($dates));
+    $to_date = date('Y-m-t', strtotime($dates));
+    $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll_id = $payroll->id ?? '';
+        if($payroll){
+            $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
+                                $query->where('payroll_id', $payroll_id);
+                            })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+                   
+            return $query->where(function ($q) use ($datatable_search) {
+                $q->whereHas('staff', function($jq) use($datatable_search){
+                $jq->where('name', 'like', "%{$datatable_search}%")
+                ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                    });
+            });
+        })->orderby('created_at','desc')->get();
+        }         
+        if($request->ajax()){
+        $datatables =  Datatables::of($data)
+        ->addIndexColumn()
+        ->editColumn('name', function ($row) { 
+          
+                    return $row['staff']->name ?? '';
+        })->editColumn('emp_id', function ($row) {
+                    return $row['staff']->institute_emp_code ?? '';
+        })->editColumn('place', function ($row) {
+                    return $row['staff']->appointment->work_place->name ?? '';
+        })->editColumn('doj', function ($row) {
+                    return $row['staff']->appointment->joining_date ?? '';
+        })->editColumn('designation', function ($row) {
+                    return $row['staff']->appointment->designation->name?? '';
+        });
+        return $datatables->make(true);
+    }
+        return view('pages.reports.professionaltax', compact('breadcrums','month'));
     }
 
 }
