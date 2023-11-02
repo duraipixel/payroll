@@ -19,13 +19,11 @@
                             ->route()
                             ->getName();
                     @endphp
-                    <!-- @if (access()->buttonAccess($route_name, 'export'))
-                        <a type="button" class="btn btn-light-primary btn-sm me-3" href="{{ route('other-income.export') }}">
-                            {!! exportSvg() !!}
-                            Export
-                        </a>
-                    @endif -->
+                    
                 </div>
+                 <button onclick="this.form.action = '{{ route('reports.salary.export') }}'" type="submit"
+                            class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+                            &nbsp;&nbsp;
   <select name="month" class="form-select form-select-sm w-auto d-inline" id="month">
                             <option value="">-- select month -- </option>
                             @for ($m = 1; $m <= 12; $m++)

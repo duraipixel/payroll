@@ -41,14 +41,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
 
     Route::get('/salary-acquitance-report', [ReportController::class, 'SalaryAcquitance'])->name('reports.salary.acquitance.report');
 
-    Route::get('/staff-acquitance-register-report', [ReportController::class, 'SalaryAcquitanceRegister'])->name('reports.staff.acquitance.register.report');
-    Route::post('/staff-acquitance-register-report', [ReportController::class, 'SalaryAcquitanceRegister'])->name('reports.staff.acquitance.register.report');
+    Route::get('/salary-acquitance-register', [ReportController::class, 'SalaryAcquitanceRegister'])->name('reports.staff.acquitance.register');
+   
 
-    Route::get('/bank-disbursement-report', [ReportController::class, 'index'])->name('reports.bank.disbursement.report');
+    //Route::get('/bank-disbursement-report', [ReportController::class, 'index'])->name('reports.bank.disbursement.report');
 
     Route::get('/bank-loan-report', [ReportController::class, 'BankLoanReport'])->name('reports.bank.loan.report');
-    Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
-   Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
+    //Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
+   //Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
    Route::get('/lic-report', [ReportController::class, 'InsuranceReport'])->name('reports.lic.report');
    Route::get('/lop-report', [ReportController::class, 'LOP'])->name('reports.lop.report');
     Route::get('/salary-hold-report', [ReportController::class, 'SalaryHold'])->name('reports.salary.hold.report');

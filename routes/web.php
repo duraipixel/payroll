@@ -3,7 +3,8 @@ include('reports.php');
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\ReportController;
+ Route::post('/staff-acquitance-register-report', [ReportController::class, 'SalaryAcquitanceRegister'])->name('reports.staff.acquitance.register.report');
 Route::get('/test-appointment-pdf', [App\Http\Controllers\TestOneController::class, 'testAppointmentPdf']);
 Route::get('/test-code', [App\Http\Controllers\TestOneController::class, 'checkCode']);
 Route::get('/test-cron', [App\Http\Controllers\TestOneController::class, 'cron']);
