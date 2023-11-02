@@ -30,7 +30,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
 #....Ajith
     Route::get('/epf-report', [ReportController::class, 'index'])->name('reports.epf.report');
     Route::get('/esi-report', [ReportController::class, 'ESI'])->name('reports.esi.report');
-    Route::get('/income-tax-report', [ReportController::class, 'index'])->name('reports.income.tax.report');
+    Route::get('/income-tax-report', [ReportController::class, 'IncomeTax'])->name('reports.income.tax.report');
     Route::get('/bonus-report', [ReportController::class, 'Bonus'])->name('reports.bonus.report');
 
 
@@ -39,19 +39,20 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
     Route::get('/resignation-report', [ReportController::class, 'Resigned'])->name('reports.resignation.report');
     Route::get('/staff-leave-report', [ReportController::class, 'index'])->name('reports.staff.leave.report');
 
-    Route::get('/salary-acquitance-report', [ReportController::class, 'index'])->name('reports.salary.acquitance.report');
+    Route::get('/salary-acquitance-report', [ReportController::class, 'SalaryAcquitance'])->name('reports.salary.acquitance.report');
 
-    Route::get('/staff-acquitance-register-report', [ReportController::class, 'index'])->name('reports.staff.acquitance.register.report');
+    Route::get('/salary-acquitance-register', [ReportController::class, 'SalaryAcquitanceRegister'])->name('reports.staff.acquitance.register');
+   
 
-    Route::get('/bank-disbursement-report', [ReportController::class, 'index'])->name('reports.bank.disbursement.report');
+    //Route::get('/bank-disbursement-report', [ReportController::class, 'index'])->name('reports.bank.disbursement.report');
 
     Route::get('/bank-loan-report', [ReportController::class, 'BankLoanReport'])->name('reports.bank.loan.report');
-    Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
-   Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
+    //Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
+   //Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
    Route::get('/lic-report', [ReportController::class, 'InsuranceReport'])->name('reports.lic.report');
    Route::get('/lop-report', [ReportController::class, 'LOP'])->name('reports.lop.report');
     Route::get('/salary-hold-report', [ReportController::class, 'SalaryHold'])->name('reports.salary.hold.report');
-  Route::get('/professional-tax-report', [ReportController::class, 'index'])->name('reports.professional.tax.report');
+  Route::get('/professional-tax-report', [ReportController::class, 'ProfessionalTax'])->name('reports.professional.tax.report');
     Route::get('/month-wise-variation-report', [ReportController::class, 'index'])->name('reports.month.wise.variation.report');
 
 });
