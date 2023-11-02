@@ -559,6 +559,14 @@ class LeaveController extends Controller
                     $emp_code = $row['appointment']['staffCategory']['name'] ?? '';
                     return $emp_code;
 
+                })->editColumn('lop', function ($row) {
+                 
+                   return '<span class="badge">0</span>';
+
+                })->editColumn('extened_leave', function ($row) {
+                  return '<span class="badge">0</span>';
+
+
                 })
                
                 // ->addColumn('casual_leave', function ($row) {
@@ -572,7 +580,7 @@ class LeaveController extends Controller
                 
             
                  ->editColumn('action', function ($row) {
-                    $emp_code ='<a href="' . route('leaves.overview.view', ['id' => $row->id]) . '"  class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px" > 
+                    $emp_code ='<a href="' . route('leaves.overview.view', ['id' => $row->id]) . '"  class="btn btn-icon mx-1 w-30px h-30px" > 
                                     <i class="fa fa-eye"></i>
                                 </a>';
                     return $emp_code;
@@ -587,14 +595,16 @@ class LeaveController extends Controller
             $as+=$leave_count->granted_days;
      
         }
-           return '<span class="badge badge-info">'.($head->leave_day->leave_days ?? 0).'</span> of <span class="badge badge-info">'.($as ?? 0).'</span>';
+           return '<span class="badge">'.($head->leave_day->leave_days ?? 0).'</span> of <span class="badge">'.($as ?? 0).'</span>';
         
             
             });
               
            $name[]=$head->name;
          }
-         $name[]='action';
+          $name[]='action';
+          $name[]='lop';
+          $name[]='extened_leave';
             $datatables->rawColumns($name);
             return $datatables->make(true);
 

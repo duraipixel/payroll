@@ -176,6 +176,22 @@ tr{
   background: #e4f5ff;
   padding: 10px 25px;
 }
+.badge{
+   background: #2fb4ff26;
+margin: 16px;
+padding: 11px;
+color: #009ef7;
+font-weight: 600;
+border-radius: 5px; 
+}
+.badge1{
+   background: #ebebeb;
+margin: 16px;
+padding: 11px;
+color: #7C7C7C;
+font-weight: 600;
+border-radius: 5px; 
+}
 </style>
   <div class="card mb-2">
     <div class="modal-content">
@@ -254,7 +270,7 @@ $profile_image=storage_path('app/public/' . $staff->image); @endphp
               @foreach($leavehead as $total)
               <tr>
                 <td style="text-transform: uppercase;">{{$total->name ?? ''}}</td> 
-                <td><input type="text" id="quantity" name="quantity"  value="{{$total->leave_day->leave_days?? 0}}" disabled>of <input type="text" id="quantity2" name="quantity" value="{{$total->count ?? 0}}" disabled></td>    
+                <td><span class="badge1"> {{$total->leave_day->leave_days?? 0}}</span> of <span class="badge"> {{$total->count ?? 0}}</span></td>    
             </tr>
             @endforeach
             </table>
