@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
 use App\Models\Master\Department;
 use App\Models\User;
+use App\Models\PayrollManagement\SalaryField;
 use App\Repositories\ReportRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -508,55 +509,486 @@ class ReportController extends Controller
              }
         return view('pages.reports.incometax', compact('breadcrums','month'));
     }
-public function ProfessionalTax(Request $request)
+    public function ProfessionalTax(Request $request){
+            $breadcrums = array(
+                'title' => 'ProfessionalTax Report',
+                'breadcrums' => array(
+                    array(
+                        'link' => '', 'title' => 'ProfessionalTax Report'
+                    ),
+                )
+            );
+            $datatable_search=$request->datatable_search;
+        $month = $request->month ?? date('m');
+        $dates ='2023-08-01';
+        $data=[];
+        $from_date = date('Y-m-01', strtotime($dates));
+        $to_date = date('Y-m-t', strtotime($dates));
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+            $payroll_id = $payroll->id ?? '';
+            if($payroll){
+                $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
+                                    $query->where('payroll_id', $payroll_id);
+                                })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+                       
+                return $query->where(function ($q) use ($datatable_search) {
+                    $q->whereHas('staff', function($jq) use($datatable_search){
+                    $jq->where('name', 'like', "%{$datatable_search}%")
+                    ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                        });
+                });
+            })->orderby('created_at','desc')->get();
+            }         
+            if($request->ajax()){
+            $datatables =  Datatables::of($data)
+            ->addIndexColumn()
+            ->editColumn('name', function ($row) { 
+              
+                        return $row['staff']->name ?? '';
+            })->editColumn('emp_id', function ($row) {
+                        return $row['staff']->institute_emp_code ?? '';
+            })->editColumn('place', function ($row) {
+                        return $row['staff']->appointment->work_place->name ?? '';
+            })->editColumn('doj', function ($row) {
+                        return $row['staff']->appointment->joining_date ?? '';
+            })->editColumn('designation', function ($row) {
+                        return $row['staff']->appointment->designation->name?? '';
+            });
+            return $datatables->make(true);
+        }
+            return view('pages.reports.professionaltax', compact('breadcrums','month'));
+        }
+    
+
+    public function SalaryAcquitance(Request $request)
     {
         $breadcrums = array(
-            'title' => 'ProfessionalTax Report',
+            'title' => 'SalaryAcquitance Report',
             'breadcrums' => array(
                 array(
-                    'link' => '', 'title' => 'ProfessionalTax Report'
+                    'link' => '', 'title' => 'SalaryAcquitance Report'
                 ),
             )
         );
         $datatable_search=$request->datatable_search;
-    $month = $request->month ?? date('m');
-    $dates ='2023-08-01';
-    $data=[];
-    $from_date = date('Y-m-01', strtotime($dates));
-    $to_date = date('Y-m-t', strtotime($dates));
-    $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
+        $deductions_field = SalaryField::where('salary_head_id', 2)
+        ->where(function ($query) {
+            $query->where('is_static', 'yes');
+            $query->orWhere('nature_id', 3);
+        })->get();
+
+        $academic=AcademicYear::find(academicYearId());
+        $month = $request->month ?? date('m');
+        $year = $academic->from_year;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+        $data=[];
+        $from_date = date('Y-m-01', strtotime($dates));
+        $to_date = date('Y-m-t', strtotime($dates));
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
             $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
-                                $query->where('payroll_id', $payroll_id);
-                            })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
-                   
-            return $query->where(function ($q) use ($datatable_search) {
-                $q->whereHas('staff', function($jq) use($datatable_search){
-                $jq->where('name', 'like', "%{$datatable_search}%")
-                ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                $query->where('payroll_id', $payroll_id);
+            })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+
+                return $query->where(function ($q) use ($datatable_search) {
+                    $q->whereHas('staff', function($jq) use($datatable_search){
+                        $jq->where('name', 'like', "%{$datatable_search}%")
+                        ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
-            });
-        })->orderby('created_at','desc')->get();
+                });
+            })->orderby('created_at','desc')->get();
         }         
         if($request->ajax()){
-        $datatables =  Datatables::of($data)
-        ->addIndexColumn()
-        ->editColumn('name', function ($row) { 
-          
-                    return $row['staff']->name ?? '';
-        })->editColumn('emp_id', function ($row) {
-                    return $row['staff']->institute_emp_code ?? '';
-        })->editColumn('place', function ($row) {
-                    return $row['staff']->appointment->work_place->name ?? '';
-        })->editColumn('doj', function ($row) {
-                    return $row['staff']->appointment->joining_date ?? '';
-        })->editColumn('designation', function ($row) {
-                    return $row['staff']->appointment->designation->name?? '';
-        });
-        return $datatables->make(true);
-    }
-        return view('pages.reports.professionaltax', compact('breadcrums','month'));
-    }
+            $datatables =  Datatables::of($data)
+            ->addIndexColumn()
+            ->editColumn('name', function ($row) { 
+                $name=$row['staff']->name ?? '';
+                $designation=$row['staff']->appointment->designation->name ?? '';
+                $join= $name.'/'. $designation;
+                return $join;
+            })->editColumn('aews', function ($row) {
+                return $row['staff']->society_emp_code ?? '';
+            })->editColumn('GROSS', function ($row) {
+                return amountFormat($row->gross_salary);
+            })->editColumn('Deduction in Gross (LOP)', function ($row) {
+                return amountFormat($row->total_deductions);
+            })->editColumn('Net Gross', function ($row) {
+                return 0;
+            })->editColumn('NET SALARY', function ($row) {
+                return RsFormat($row->net_salary);
+            });
 
+            foreach($earings_field as $earing){
+                if($earing->name=='Basic Pay'){
+                    $datatables->addColumn('BASIC', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Dearness Allowance'){
+                    $datatables->addColumn('BASIC DA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='House Rent Allowance'){
+                    $datatables->addColumn('HRA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Traveling Allowance'){
+                    $datatables->addColumn('TA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Performance Based Allowance'){
+                    $datatables->addColumn('PBA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Performance Based Allowance Dearness Allowance'){
+                    $datatables->addColumn('PBA DA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Dedication & Sincerity Allowance'){
+                    $datatables->addColumn('DSA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Medical & Nutrition Allowance'){
+                    $datatables->addColumn('MNA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='ARREAR'){
+                    $datatables->addColumn('ARR', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Others'){
+                    $datatables->addColumn('OTHERS', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Bonus'){
+                    $datatables->addColumn('Bonus', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+
+            }
+            foreach($deductions_field as $deduction){
+                if($deduction->name=='Employee Provident Fund'){
+                    $datatables->addColumn('EPF', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=='Life Insurance Corporation'){
+                    $datatables->addColumn('LIC', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Employees' State Insurance"){
+                    $datatables->addColumn('ESI', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Bank Loan"){
+                    $datatables->addColumn('BANKLOAN', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Professional Tax"){
+                    $datatables->addColumn('ProfTax', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Income Tax"){
+                    $datatables->addColumn('Income Tax', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Others"){
+                    $datatables->addColumn('OTHERS1', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="OTHER LOAN"){
+                    $datatables->addColumn('LOAN', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Contributions"){
+                    $datatables->addColumn('DED', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+
+            }
+            return $datatables->make(true);
+        }
+
+
+
+        return view('pages.reports.salaryacquitance', compact('breadcrums','month','earings_field','deductions_field'));
+    }
+    public function SalaryAcquitanceRegister(Request $request)
+    {
+        $breadcrums = array(
+            'title' => 'SalaryAcquitance Report',
+            'breadcrums' => array(
+                array(
+                    'link' => '', 'title' => 'SalaryAcquitance Report'
+                ),
+            )
+        );
+        $datatable_search=$request->datatable_search;
+        $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
+        $deductions_field = SalaryField::where('salary_head_id', 2)
+        ->where(function ($query) {
+            $query->where('is_static', 'yes');
+            $query->orWhere('nature_id', 3);
+        })->get();
+
+        $academic=AcademicYear::find(academicYearId());
+        $month = $request->month ?? date('m');
+        $year = $academic->from_year;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+        $data=[];
+        $from_date = date('Y-m-01', strtotime($dates));
+        $to_date = date('Y-m-t', strtotime($dates));
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll_id = $payroll->id ?? '';
+        if($payroll){
+            $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
+                $query->where('payroll_id', $payroll_id);
+            })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+
+                return $query->where(function ($q) use ($datatable_search) {
+                    $q->whereHas('staff', function($jq) use($datatable_search){
+                        $jq->where('name', 'like', "%{$datatable_search}%")
+                        ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                    });
+                });
+            })->orderby('created_at','desc')->get();
+        }         
+        if($request->ajax()){
+            $datatables =  Datatables::of($data)
+            ->addIndexColumn()
+            ->editColumn('name', function ($row) { 
+                return $row['staff']->name ?? '';
+                
+            })->editColumn('designation', function ($row) {
+                return $row['staff']->appointment->designation->name ?? '';
+            })->editColumn('category', function ($row) {
+                
+                return $row['staff']->appointment->staffCategory->name ?? '';
+            })->editColumn('doj', function ($row) {
+                    return $row['staff']->appointment->joining_date ?? '';
+           })->editColumn('division', function ($row) {
+                    return $row['staff']->position->division->name ?? '';
+           })->editColumn('aews', function ($row) {
+                return $row['staff']->society_emp_code ?? '';
+            })->editColumn('Bank', function ($row) {
+                return $row['staff']->bank->bankBranch->name ?? '';
+            })->editColumn('UAN', function ($row) {
+                return $row['staff']->pf->ac_number?? '';
+            })->editColumn('UAN Name', function ($row) {
+               return $row['staff']->pf->name?? '';
+            })->editColumn('ESI No', function ($row) {
+                return $row['staff']->esi
+->ac_number?? '';
+            })->editColumn('ESI Name', function ($row) {
+               return $row['staff']->esi
+->name?? '';
+            })->editColumn('PAN', function ($row) {
+
+                return $row['staff']->pancard
+->doc_number?? '';
+            })->editColumn('PAN Name', function ($row) {
+               return $row['staff']->pancard
+->description?? '';
+            })->editColumn('Aadhaar Name', function ($row) {
+                
+                return $row['staff']->aadhaar
+->description?? '';
+            })->editColumn('Aadhaar No', function ($row) {
+               return $row['staff']->aadhaar
+->doc_number?? '';
+            })->editColumn('Mobile', function ($row) {
+               return $row['staff']->personal
+->mobile_no1?? '';
+            })->editColumn('Email', function ($row) {
+               return $row['staff']
+->email?? '';
+            })->editColumn('ifsc_code', function ($row) {
+                return $row['staff']->bank->bankBranch->ifsc_code ?? '';
+            })->editColumn('account_number', function ($row) {
+
+                return $row['staff']->bank->account_number ?? '';
+            })->editColumn('GROSS', function ($row) {
+                return amountFormat($row->gross_salary);
+            })->editColumn('Deduction in Gross (LOP)', function ($row) {
+                return amountFormat($row->total_deductions);
+            })->editColumn('Net Gross', function ($row) {
+                return 0;
+            })->editColumn('NET SALARY', function ($row) {
+                return RsFormat($row->net_salary);
+            });
+
+            foreach($earings_field as $earing){
+                if($earing->name=='Basic Pay'){
+                    $datatables->addColumn('BASIC', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Dearness Allowance'){
+                    $datatables->addColumn('BASIC DA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='House Rent Allowance'){
+                    $datatables->addColumn('HRA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Traveling Allowance'){
+                    $datatables->addColumn('TA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Performance Based Allowance'){
+                    $datatables->addColumn('PBA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Performance Based Allowance Dearness Allowance'){
+                    $datatables->addColumn('PBA DA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Dedication & Sincerity Allowance'){
+                    $datatables->addColumn('DSA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Medical & Nutrition Allowance'){
+                    $datatables->addColumn('MNA', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='ARREAR'){
+                    $datatables->addColumn('ARR', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Others'){
+                    $datatables->addColumn('OTHERS', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+                if($earing->name=='Bonus'){
+                    $datatables->addColumn('Bonus', function ($row) use($earing) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $earing->name));
+                    });
+                }
+
+            }
+            foreach($deductions_field as $deduction){
+                if($deduction->name=='Employee Provident Fund'){
+                    $datatables->addColumn('EPF', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=='Life Insurance Corporation'){
+                    $datatables->addColumn('LIC', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Employees' State Insurance"){
+                    $datatables->addColumn('ESI', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Bank Loan"){
+                    $datatables->addColumn('BANKLOAN', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Professional Tax"){
+                    $datatables->addColumn('ProfTax', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Income Tax"){
+                    $datatables->addColumn('Income Tax', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Others"){
+                    $datatables->addColumn('OTHERS1', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="OTHER LOAN"){
+                    $datatables->addColumn('LOAN', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+                if($deduction->name=="Contributions"){
+                    $datatables->addColumn('DED', function ($row) use($deduction) 
+                    {
+                        return amountFormat(getStaffSalaryFieldAmount($row['staff']->id, $row->id, '', $deduction->name,'DEDUCTIONS'));
+                    });
+                }
+
+            }
+            return $datatables->make(true);
+        }
+
+
+
+        return view('pages.reports.register', compact('breadcrums','month','earings_field','deductions_field'));
+    }
 }
+

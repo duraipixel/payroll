@@ -39,9 +39,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
     Route::get('/resignation-report', [ReportController::class, 'Resigned'])->name('reports.resignation.report');
     Route::get('/staff-leave-report', [ReportController::class, 'index'])->name('reports.staff.leave.report');
 
-    Route::get('/salary-acquitance-report', [ReportController::class, 'index'])->name('reports.salary.acquitance.report');
+    Route::get('/salary-acquitance-report', [ReportController::class, 'SalaryAcquitance'])->name('reports.salary.acquitance.report');
 
-    Route::get('/staff-acquitance-register-report', [ReportController::class, 'index'])->name('reports.staff.acquitance.register.report');
+    Route::get('/staff-acquitance-register-report', [ReportController::class, 'SalaryAcquitanceRegister'])->name('reports.staff.acquitance.register.report');
+    Route::post('/staff-acquitance-register-report', [ReportController::class, 'SalaryAcquitanceRegister'])->name('reports.staff.acquitance.register.report');
 
     Route::get('/bank-disbursement-report', [ReportController::class, 'index'])->name('reports.bank.disbursement.report');
 
