@@ -206,6 +206,14 @@ font-size: 15px;
     padding:0px !important;
     margin:0px !important;
 }
+.badge{
+   background: #2fb4ff26;
+margin: 16px;
+padding: 11px;
+color: #009ef7;
+font-weight: 600;
+border-radius: 5px; 
+}
 
   </style>
 </head>
@@ -387,6 +395,12 @@ font-size: 15px;
                                      Staff Type
                                 </th>
                                 <th class="text-white"colspan="5">Leave Taken</th>
+                                 <th class="text-white" rowspan="2">
+                                    LOP
+                                </th>
+                                 <th class="text-white" rowspan="2">
+                                    Extened Leave
+                                </th>
                                 <th class="text-white" rowspan="2">
                                     Actions
                                 </th>
@@ -748,6 +762,14 @@ font-size: 15px;
                 }
                 ,{ 
                     "data": "Granted Leave"
+                   
+                },{ 
+                    "data": "lop",
+                    "name":"LOP"
+                   
+                },{ 
+                    "data": "extened_leave",
+                    "name":"Extened Leave"
                    
                 },
                 {
