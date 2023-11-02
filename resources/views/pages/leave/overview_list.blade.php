@@ -207,8 +207,8 @@ font-size: 15px;
     margin:0px !important;
 }
 .badge{
-   background: #2fb4ff26;
-margin: 16px;
+background: #2fb4ff26;
+margin: 0px 4px 0px 6px;
 padding: 11px;
 color: #009ef7;
 font-weight: 600;
