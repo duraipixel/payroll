@@ -21,6 +21,7 @@ use App\Models\Master\StaffCategory;
 use App\Models\Master\Designation;
 use Illuminate\Support\Facades\Session;
 use App\Models\AcademicYear;
+use App\Helpers\NotificationHelper;
 class LeaveController extends Controller
 {
     public function leaveCountDays(Request $request){
@@ -123,14 +124,18 @@ class LeaveController extends Controller
                 ),
             )
         );
-        if ($request->ajax()) {
 
+        if ($request->ajax()) {
+            $institute_id=session()->get('staff_institute_id');
             $data = StaffLeave::select('staff_leaves.*', 'users.name as staff_name')->with(['staff_info'])
-                ->join('users', 'users.id', '=', 'staff_leaves.staff_id');
+                ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
+             ->when($institute_id, function ($q) use($institute_id) {
+            $q->Where('users.institute_id', $institute_id);
+                 });
             $status = $request->get('status');
             $keywords = $request->datatable_search ?? '';
-
             $datatables =  Datatables::of($data)
+           
                 ->filter(function ($query) use ($status, $keywords) {
                     if ($keywords) {
                         // $date = date('Y-m-d', strtotime($keywords));
@@ -269,6 +274,7 @@ class LeaveController extends Controller
             /**
              * Check already request to that date
              */
+             $user = User::find($request->staff_id);
             $check = StaffLeave::where('staff_id', $request->staff_id)
                 ->where('from_date', $from_date)
                 ->when($id != '', function ($query) use ($id) {
@@ -379,7 +385,8 @@ class LeaveController extends Controller
                             $leave_days['type']=$data;
                             $leave_day[]=$leave_days;
                         }
-
+ 
+  
                         }else{
                    
                     if(isset($request->leave)){
@@ -454,6 +461,18 @@ class LeaveController extends Controller
                     }
                 } else {
                     $ins['status'] = 'pending';
+
+                    $message=$user->name.' has applied the leave please approve';
+              if($leave_category_info->name=="Casual Leave"){
+            if(isset($user->reporting_manager_id) && !empty($user->reporting_manager_id)){
+                NotificationHelper::createNotification($user->reporting_manager_id,$user->id,'Leave',NULL,$message);
+                 }
+            }
+                $users=User::where('is_super_admin',1)->get();
+
+                foreach($users as $staff){
+                NotificationHelper::createNotification($staff->id,$user->id,'Leave',NULL,$message);
+                }
                 }
                
                 /** generate leave form and send */

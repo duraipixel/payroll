@@ -57,7 +57,6 @@ class StaffTrainingController extends Controller
             );
         
         return view('pages.staff.registration.emp_position.training_form_content', $params);
-
     }
 
     public function getStaffTrainingList(Request $request)

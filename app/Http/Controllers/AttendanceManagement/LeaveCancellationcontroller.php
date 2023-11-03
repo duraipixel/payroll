@@ -48,10 +48,12 @@ class LeaveCancellationcontroller extends Controller
             )
         );
         if ($request->ajax()) {
-
+            $institute_id=session()->get('staff_institute_id');
             $data = StaffLeave::select('staff_leaves.*', 'users.name as staff_name')->with(['staff_info'])
                 ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
-                ->where('staff_leaves.status','approved');
+                ->where('staff_leaves.status','approved')->when($institute_id, function ($q) use($institute_id) {
+            $q->Where('users.institute_id', $institute_id);
+                 });
             $status = $request->get('status');
             $keywords = $request->datatable_search ?? '';
 

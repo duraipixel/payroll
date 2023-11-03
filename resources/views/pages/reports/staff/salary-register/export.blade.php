@@ -43,6 +43,9 @@
                         <td class="sticky-col first-col px-3">
                             {{ $item->staff->society_emp_code ?? '' }}
                         </td>
+                         <td class="px-3">
+                            {{ $item->staff->firstAppointment->joining_date ?? '' }}
+                        </td>
                         <td class="sticky-col second-col px-3">
                          
                     <a href="{{ url('payroll/download',$item->id) }}" target="_blank">
@@ -51,9 +54,7 @@
                    
                             {{ $item->staff->name ?? '' }}
                         </td>
-                        <td class="px-3">
-                            {{ $item->staff->firstAppointment->joining_date ?? '' }}
-                        </td>
+                       
 
                         <td class="px-3">
                             {{ $item->working_days ?? 0 }}
