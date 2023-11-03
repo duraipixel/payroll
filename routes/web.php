@@ -4,6 +4,14 @@ include('reports.php');
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
+
+
+ Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'list'])->name('notification.list');
+
+
+  Route::get('/notification-redirect/{id}', [App\Http\Controllers\NotificationController::class, 'redirect'])->name('notification.redirect');
+
+
  Route::post('/staff-acquitance-register-report', [ReportController::class, 'SalaryAcquitanceRegister'])->name('reports.staff.acquitance.register.report');
 Route::get('/test-appointment-pdf', [App\Http\Controllers\TestOneController::class, 'testAppointmentPdf']);
 Route::get('/test-code', [App\Http\Controllers\TestOneController::class, 'checkCode']);

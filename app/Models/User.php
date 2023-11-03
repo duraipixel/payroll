@@ -42,7 +42,7 @@ use App\Models\Staff\StaffRentDetail;
 use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\Staff\StaffTaxSeperation;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Auth;
 class User extends Authenticatable implements Auditable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
@@ -99,6 +99,13 @@ class User extends Authenticatable implements Auditable
         if (session()->get('staff_institute_id') && !empty(session()->get('staff_institute_id'))) {
 
             return $query->where('users.institute_id', session()->get('staff_institute_id'));
+        }
+    }
+    public function scopeInstitute($query)
+    {
+        if (session()->get('staff_institute_id') && !empty(session()->get('staff_institute_id'))) {
+
+            return session()->get('staff_institute_id');
         }
     }
 
@@ -890,5 +897,23 @@ class User extends Authenticatable implements Auditable
 
     public function retirement() {
         return $this->belongsTo(StaffRetiredResignedDetail::class, 'id', 'staff_id');
+    }
+    public function getcountAttribute()
+    { 
+        $count=Notification::where('receiver_id',Auth::id())->where('is_read',0)->get()->count();
+        if($count){
+            return $count;
+        }
+
+        return 0;
+    }
+    public function getnotificationsAttribute()
+    { 
+        $notification=Notification::where('receiver_id',Auth::id())->where('is_read',0)->take(5)->orderBy('id','desc')->get();
+        if($notification){
+            return $notification;
+        }
+
+        return "";
     }
 }

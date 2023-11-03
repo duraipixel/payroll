@@ -86,7 +86,7 @@ class PayrollController extends Controller
             })->get();
         
         $payroll_id = $request->payroll_id;
-        
+        $institute_id=session()->get('staff_institute_id');
         // $nature_id = $request->nature_id;
         
         
@@ -105,7 +105,11 @@ class PayrollController extends Controller
                             ->when( !empty( $staff_id ), function( $query ) use($staff_id) {
                                 $query->where('staff_id', $staff_id);
                             } )
-                            ->get();
+                            ->when($institute_id, function ($q) use($institute_id) {
+             $q->whereHas('staff', function ($query) use ($institute_id) {
+            $query->Where('institute_id', $institute_id);
+                 });
+              })->get();
         }
 
         $params = [

@@ -4,7 +4,10 @@
 @endsection
 @section('content')
     <div class="card">
+        <form action="{{ route('reports.salary.register') }}" class="input-group w-auto d-inline"
+                        method="GET">
         <div class="card-header border-0 pt-6">
+             
             <div class="card-title">
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! searchSvg() !!}
@@ -40,7 +43,9 @@
                     </button>
                 </div>
             </div>
+       
         </div>
+         </form>
 
         <div class="card-body py-4">
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">

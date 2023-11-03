@@ -34,6 +34,7 @@
                     @endforeach
                 @endif
             </select>
+
             @if (request()->routeIs(['home']))
                 <input type="text" name="search_home_date" id="search_home_date"  class="border outline-0 px-3">
             @endif
@@ -98,6 +99,51 @@
                     </div>
                 </div>
             </div>
+        <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
+        data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
+        data-kt-menu-placement="bottom-end">
+
+        <a href="#"><span class="badge bg-danger"> {{ auth()->user()->count ?? 0}}</span>  
+        <i class="fas fa-bell" style="font-size: 40px;"></i>
+        </a>
+        </div>
+        <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-400px" data-kt-menu="true" style="padding-top: 15%;">
+        <div class="modal-header">
+        <h5 class="modal-title" style="margin-left:160px; color: blue;">Notification</h5>
+        </div>
+        <div class="card card-notification shadow-none">
+ @foreach(auth()->user()->notifications as $notification)
+           @if($notification->is_read == 0)
+        <div class="scrollbar-overlay" style="max-height:19rem" data-simplebar="init"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: auto; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
+        <div class="list-group list-group-flush fw-normal fs--1">
+        <div class="list-group-item">
+        <a class="notification notification-flush notification-unread"  href="{{url('notification-redirect',$notification->id)}}">
+        <div class="notification-avatar">
+        <div class="avatar avatar-2xl me-3">
+        <img class="rounded-circle" src="../../assets/img/team/1-thumb.png" alt="">
+        </div>
+        </div>
+         <div class="notification-body">
+                  <p class="mb-1"><strong>{{ $notification->module }}</strong>
+                    <br>{{ $notification->message }}
+                  <span class="notification-time"><span class="me-2" role="img" aria-label="Emoji">💬</span>{{$notification->created_at}}</span></p>
+                </div>
+        </a>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        @endif
+@endforeach
+<hr>
+<a style="text-align: center;" href="{{url('notification')}}">Read More</a>
+        </div>
+        </div>
+
         </div>
     </div>
 </div>

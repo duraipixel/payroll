@@ -366,6 +366,7 @@ class="menu-item menu-accordion @if (request()->routeIs(['att-manual-entry', 'sc
 ]))
 <div data-kt-menu-trigger="click"
 class="menu-item menu-accordion  @if (request()->routeIs([
+'leaves.overview.list',
     'leave-mapping',
     'leave-status',
     'leave-head',
@@ -383,7 +384,7 @@ class="menu-item menu-accordion  @if (request()->routeIs([
 </span>
 <div class="menu-sub menu-sub-accordion menu-active-bg">
 <div class="menu-item">
-    <a class="menu-link @if (request()->routeIs(['leaves.overview'])) active @endif"
+    <a class="menu-link @if (request()->routeIs(['leaves.overview','leaves.overview.list'])) active @endif"
         href="{{ route('leaves.overview') }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
