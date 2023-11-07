@@ -4,12 +4,14 @@
 @endsection
 @section('content')
     <div class="card">
+         <form action="{{ route('reports.arrears.report') }}" class="input-group w-auto d-inline"
+                        method="GET">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! searchSvg() !!}
-                    <input type="text" data-kt-user-table-filter="search" id="bank_loan_datatable_search"
-                        class="form-control form-control-solid w-250px ps-14" placeholder="Search User">
+                   <input type="text" data-kt-user-table-filter="search" id="data_search" name="data_search"
+                        class="form-control form-control-solid w-250px ps-14" placeholder="Search User" value="{{request()->data_search}}">
                 </div>
             </div>
             <div class="card-toolbar">
@@ -26,6 +28,9 @@
                         </a>
                     @endif -->
                 </div>
+                 <button onclick="this.form.action = '{{ route('reports.arrear.export') }}'" type="submit"
+                            class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+                            &nbsp;&nbsp;
   <select name="month" class="form-select form-select-sm w-auto d-inline" id="month">
                             <option value="">-- select month -- </option>
                             @for ($m = 1; $m <= 12; $m++)
@@ -43,7 +48,7 @@
                 </div>
             </div>
         </div>
-
+</form>
         <div class="card-body py-4">
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="table-responsive">
@@ -72,9 +77,7 @@
                              <th class="text-center text-white">
                                 ARREARS AMOUNT
                             </th>
-                             <th class="text-center text-white">
-                                Reason
-                            </th>
+                            
                              <th class="text-center text-white">
                                 Remarks
                             </th>
@@ -105,7 +108,7 @@
             ajax: {
                 "url": "{{ route('reports.arrears.report') }}",
                 "data": function(d) {
-                    d.datatable_search = $('#bank_loan_datatable_search').val();
+                    d.datatable_search = $('#data_search').val();
                      d.month = $('#month').val();
                 }
             },
@@ -142,10 +145,6 @@
                 {
                     data: 'amount',
                     name: 'ARREARS AMOUNT'
-                },
-                 {
-                    data: 'remarks',
-                    name: 'Reason'
                 }, 
                 {
                     data: 'remarks',
@@ -172,7 +171,7 @@
         $('.dataTables_filter').addClass('position-absolute end-0 top-0');
         $('.dataTables_length label select').addClass('form-control form-control-solid');
 
-        document.querySelector('#bank_loan_datatable_search').addEventListener("keyup", function(e) {
+        document.querySelector('#data_search').addEventListener("keyup", function(e) {
             dtTable.draw();
         });
          document.querySelector('#month').addEventListener("change", function(e) {

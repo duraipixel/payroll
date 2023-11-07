@@ -4,12 +4,14 @@
 @endsection
 @section('content')
     <div class="card">
+        <form action="{{ route('reports.lop.report') }}" class="input-group w-auto d-inline"
+                        method="GET">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! searchSvg() !!}
-                    <input type="text" data-kt-user-table-filter="search" id="data_search"
-                        class="form-control form-control-solid w-250px ps-14" placeholder="Search User">
+                    <input type="text" data-kt-user-table-filter="search" id="data_search" name="data_search"
+                        class="form-control form-control-solid w-250px ps-14" placeholder="Search User" value="{{request()->data_search}}">
                 </div>
             </div>
             <div class="card-toolbar">
@@ -26,6 +28,9 @@
                         </a> -->
                     @endif
                 </div>
+                  <button onclick="this.form.action = '{{ route('reports.lop.export') }}'" type="submit"
+                            class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+                            &nbsp;&nbsp;
                   <select name="month" class="form-select form-select-sm w-auto d-inline" id="month">
                             <option value="">-- select month -- </option>
                             @for ($m = 1; $m <= 12; $m++)
@@ -44,7 +49,7 @@
                 </div>
             </div>
         </div>
-
+</form>
         <div class="card-body py-4">
             <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                 <div class="table-responsive">
@@ -136,7 +141,7 @@
                     name: 'DESIGNATION'
                 },
                 {
-                    data: 'no_of_days',
+                    data: 'working_days',
                     name: 'No. of days'
                 },
                 {
@@ -148,7 +153,7 @@
                     name: 'LOP Deduction Amount'
                 },
                 {
-                    data: 'remarks',
+                    data: 'employee_description',
                     name: 'Remarks'
                 },
             ],

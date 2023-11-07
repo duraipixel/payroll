@@ -4,14 +4,14 @@
 @endsection
 @section('content')
     <div class="card">
-        <form action="{{ route('reports.staff.acquitance.register') }}" class="input-group w-auto d-inline"
+        <form action="{{ route('reports.month.wise.variation') }}" class="input-group w-auto d-inline"
                         method="GET">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! searchSvg() !!}
-                    <input type="text" data-kt-user-table-filter="search" id="data_search" name="data_search"
-                        class="form-control form-control-solid w-250px ps-14" placeholder="Search User" value="{{request()->data_search}}">
+                    <input type="text" data-kt-user-table-filter="search" id="bank_loan_datatable_search"
+                        class="form-control form-control-solid w-250px ps-14" placeholder="Search User">
                 </div>
             </div>
             <div class="card-toolbar">
@@ -28,7 +28,7 @@
                         </a>
                     @endif -->
                 </div>
-                <button onclick="this.form.action = '{{ route('reports.salary.acquitance.export') }}'" type="submit"
+                 <button onclick="this.form.action = '{{ route('reports.salary.export') }}'" type="submit"
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
                             &nbsp;&nbsp;
   <select name="month" class="form-select form-select-sm w-auto d-inline" id="month">
@@ -59,19 +59,8 @@
                             <th class="text-white text-start" >
                                 S.No
                             </th>
-                             <th class="text-white text-start" >
-                              Division
-                            </th>
-
-                             <th class="text-white text-start" >
-                              DOJ
-                            </th>
-                            <th class="text-white text-start" >
-                              Category
-                            </th>
-                             <th class="text-white text-start" >
-                             AEWS /INSTITUTION CODE
-                            </th>
+                           
+                            
                              <th class="text-white text-start" >
                                NAME
                             </th>
@@ -118,36 +107,15 @@
                               <th class="text-white">
                           IFSC
                             </th>
-                             <th class="text-white">
-                          UAN
-                            </th>
-                            <th class="text-white">
-                        UAN Name
-                            </th>
+                            
                              <th class="text-white">
                          ESI No
                             </th>
                             <th class="text-white">
                         ESI Name
                             </th>
-                             <th class="text-white">
-                          PAN
-                            </th>
-                            <th class="text-white">
-                        PAN Name
-                            </th>
-                             <th class="text-white">
-                          Aadhaar Name
-                            </th>
-                            <th class="text-white">
-                        Aadhaar No
-                            </th>
-                             <th class="text-white">
-                          Mobile
-                            </th>
-                            <th class="text-white">
-                      Email
-                            </th>
+                            
+                           
                               
                            
 
@@ -178,7 +146,7 @@
             ],
             
             ajax: {
-                "url": "{{ route('reports.staff.acquitance.register.report') }}",
+                "url": "{{ route('reports.month.wise.variation') }}",
                 "method":"POST",
                 headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
                 "data": function(d) {
@@ -195,23 +163,6 @@
                     orderable: false, 
                     searchable: false
                 },
-                
-                {
-                    data: 'division',
-                    name: 'Division'
-                },
-                {
-                    data: 'doj',
-                    name: 'DOJ'
-                },
-                {
-                    data: 'category',
-                    name: 'Category'
-                },{
-                    data: 'aews',
-                    name: 'AEWS /INSTITUTION CODE'
-                },
-                
                 {
                     data: 'name',
                     name: 'NAME'
@@ -323,12 +274,6 @@
                 },{
                 data: 'ifsc_code',
                 name: 'IFSC'
-                },{
-                data: 'UAN',
-                name: 'UAN'
-                },{
-                data: 'UAN Name',
-                name: 'UAN Name'
                 }
                 ,{
                 data: 'ESI No',
@@ -336,25 +281,6 @@
                 },{
                 data: 'ESI Name',
                 name: 'ESI Name'
-                }
-                ,{
-                data: 'PAN',
-                name: 'PAN'
-                },{
-                data: 'PAN Name',
-                name: 'PAN Name'
-                },{
-                data: 'Aadhaar Name',
-                name: 'Aadhaar Name'
-                },{
-                data: 'Aadhaar No',
-                name: 'Aadhaar No'
-                },{
-                data: 'Mobile',
-                name: 'Mobile'
-                },{
-                data: 'Email',
-                name: 'Email'
                 },
             ],
             language: {

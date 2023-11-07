@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <div class="card">
-         <form action="{{ route('reports.professional.tax.report') }}" class="input-group w-auto d-inline"
+         <form action="{{ route('reports.epf.report') }}" class="input-group w-auto d-inline"
                         method="GET">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
@@ -21,14 +21,9 @@
                             ->route()
                             ->getName();
                     @endphp
-                    <!-- @if (access()->buttonAccess($route_name, 'export'))
-                        <a type="button" class="btn btn-light-primary btn-sm me-3" href="{{ route('other-income.export') }}">
-                            {!! exportSvg() !!}
-                            Export
-                        </a>
-                    @endif -->
+                   
                 </div>
-                  <button onclick="this.form.action = '{{ route('reports.professional.tax.export') }}'" type="submit"
+                 <button onclick="this.form.action = '{{ route('reports.epf.export') }}'" type="submit"
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
                             &nbsp;&nbsp;
   <select name="month" class="form-select form-select-sm w-auto d-inline" id="month">
@@ -55,38 +50,54 @@
                     <table class="table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer"
                         id="data_table">
                         <thead class="bg-primary">
-
-                            <th class="text-center text-white">
-                                S.No
-                            </th>
-                            <th class="text-center text-white">
-                                Place
-                            </th>
-                             <th class="text-center text-white">
-                                DOJ
-                            </th>
-                             <th class="text-center text-white">
-                                Emp ID
-                            </th>
-                             <th class="text-center text-white">
-                                name
-                            </th>
-                             <th class="text-center text-white">
-                                DESIGNATION
-                            </th>
-                            <th class="text-center text-white">
-                                Salary from the Period
-                            </th>
-                             <th class="text-center text-white">
-                               Prof.Tax
-                            </th>
-                            </tr>
-                        </thead>
-
-                        <tbody class="text-gray-600 fw-bold">
-                        </tbody>
-                    </table>
-                </div>
+                        <th class="text-center text-white">
+                        S.No
+                        </th>
+                        <th class="text-center text-white">
+                        UAN
+                        </th>
+                        <th class="text-center text-white">
+                        MEMBER NAME
+                        </th>
+                        <th class="text-center text-white">
+                        GROSS WAGES
+                        </th>
+                        <th class="text-center text-white">
+                        EPF WAGES
+                        </th>
+                        <th class="text-center text-white">
+                        EPS WAGES
+                        </th>
+                        <th class="text-center text-white">
+                        EDLI WAGES
+                        </th>
+                        <th class="text-center text-white">
+                        EPF CONTRI REMITTED
+                        </th>
+                        <th class="text-center text-white">
+                        Total EPS Remitted
+                        </th>
+                        <th class="text-center text-white">
+                        EPS CONTRI REMITTED
+                        </th>
+                        <th class="text-center text-white">
+                        EPF EPS DIFF REMITTED
+                        </th>
+                        <th class="text-center text-white">
+                        NCP DAYS
+                        </th>
+                        <th class="text-center text-white">
+                        REFUND OF ADVANCES
+                        </th>
+                        <th class="text-center text-white">
+                        Remarks
+                        </th>
+                    </tr>
+                </thead>
+                    <tbody class="text-gray-600 fw-bold">
+                    </tbody>
+            </table>
+            </div>
 
             </div>
         </div>
@@ -104,10 +115,10 @@
             ],
             type: 'POST',
             ajax: {
-                "url": "{{ route('reports.professional.tax.report') }}",
+                "url": "{{ route('reports.epf.report') }}",
                 "data": function(d) {
                     d.datatable_search = $('#data_search').val();
-                     d.month = $('#month').val();
+                  d.month = $('#month').val();
                 }
             },
 
@@ -120,34 +131,57 @@
                     searchable: false
                 },
                 {
-                    data: 'place',
-                    name: 'Place'
-                },
-                {
-                    data: 'doj',
-                    name: 'DOJ'
-                },
-                {
-                    data: 'emp_id',
-                    name: 'Emp ID'
+                    data: 'pf_no',
+                    name: 'UAN'
                 },
                 {
                     data: 'name',
-                    name: 'name'
+                    name: 'MEMBER NAME'
                 },
                 {
-                    data: 'designation',
-                    name: 'DESIGNATION'
+                    data: 'gross_wages',
+                    name: 'GROSS WAGES'
                 },
                 {
-                    data: 'salary_processed_on',
-                    name: 'Salary from the Period'
+                    data: 'employee_description',
+                    name: 'EPF WAGES'
                 },
                 {
-                    data: 'total_earnings',
-                    name: 'Prof. Tax'
+                    data: 'employee_description',
+                    name: 'EPS WAGES'
                 },
-                  
+                {
+                    data: 'employee_description',
+                    name: 'EDLI WAGES'
+                },
+                {
+                    data: 'employee_description',
+                    name: 'EPF CONTRI REMITTED'
+                },
+                {
+                    data: 'employee_description',
+                    name: 'Total EPS Remitted'
+                },
+                {
+                    data: 'employee_description',
+                    name: 'EPS CONTRI REMITTED'
+                },
+                {
+                    data: 'employee_description',
+                    name: 'EPF EPS DIFF REMITTED'
+                },
+                {
+                    data: 'employee_description',
+                    name: 'NCP DAYS'
+                },
+                {
+                    data: 'employee_description',
+                    name: 'REFUND OF ADVANCES'
+                },
+                {
+                    data: 'employee_description',
+                    name: 'Remarks'
+                },
             ],
             language: {
                 paginate: {
@@ -172,7 +206,7 @@
         document.querySelector('#data_search').addEventListener("keyup", function(e) {
             dtTable.draw();
         });
-         document.querySelector('#month').addEventListener("change", function(e) {
+     document.querySelector('#month').addEventListener("change", function(e) {
             dtTable.draw();
         });
     </script>

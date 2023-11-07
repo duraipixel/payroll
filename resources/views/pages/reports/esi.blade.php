@@ -4,7 +4,7 @@
 @endsection
 @section('content')
     <div class="card">
-         <form action="{{ route('reports.professional.tax.report') }}" class="input-group w-auto d-inline"
+         <form action="{{ route('reports.esi.report') }}" class="input-group w-auto d-inline"
                         method="GET">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
@@ -21,14 +21,14 @@
                             ->route()
                             ->getName();
                     @endphp
-                    <!-- @if (access()->buttonAccess($route_name, 'export'))
-                        <a type="button" class="btn btn-light-primary btn-sm me-3" href="{{ route('other-income.export') }}">
+                    @if (access()->buttonAccess($route_name, 'export'))
+                       <!--  <a type="button" class="btn btn-light-primary btn-sm me-3" href="{{ route('other-income.export') }}">
                             {!! exportSvg() !!}
                             Export
-                        </a>
-                    @endif -->
+                        </a> -->
+                    @endif
                 </div>
-                  <button onclick="this.form.action = '{{ route('reports.professional.tax.export') }}'" type="submit"
+                <button onclick="this.form.action = '{{ route('reports.esi.export') }}'" type="submit"
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
                             &nbsp;&nbsp;
   <select name="month" class="form-select form-select-sm w-auto d-inline" id="month">
@@ -59,27 +59,24 @@
                             <th class="text-center text-white">
                                 S.No
                             </th>
-                            <th class="text-center text-white">
-                                Place
+                             <th class="text-center text-white">
+                               ESI No
                             </th>
                              <th class="text-center text-white">
-                                DOJ
-                            </th>
-                             <th class="text-center text-white">
-                                Emp ID
-                            </th>
-                             <th class="text-center text-white">
-                                name
-                            </th>
-                             <th class="text-center text-white">
-                                DESIGNATION
+                                NAME
                             </th>
                             <th class="text-center text-white">
-                                Salary from the Period
+                              No. of days
                             </th>
                              <th class="text-center text-white">
-                               Prof.Tax
+                             Total Gross (limit upto 21000)
+
                             </th>
+                             <th class="text-center text-white">
+                            Remarks
+                            </th>
+                           
+                           
                             </tr>
                         </thead>
 
@@ -104,10 +101,10 @@
             ],
             type: 'POST',
             ajax: {
-                "url": "{{ route('reports.professional.tax.report') }}",
+                "url": "{{ route('reports.esi.report') }}",
                 "data": function(d) {
                     d.datatable_search = $('#data_search').val();
-                     d.month = $('#month').val();
+                  d.month = $('#month').val();
                 }
             },
 
@@ -120,34 +117,25 @@
                     searchable: false
                 },
                 {
-                    data: 'place',
-                    name: 'Place'
-                },
-                {
-                    data: 'doj',
-                    name: 'DOJ'
-                },
-                {
-                    data: 'emp_id',
-                    name: 'Emp ID'
+                    data: 'esi_no',
+                    name: 'ESI No'
                 },
                 {
                     data: 'name',
-                    name: 'name'
+                    name: 'NAME'
                 },
                 {
-                    data: 'designation',
-                    name: 'DESIGNATION'
+                    data: 'working_days',
+                    name: 'No. of days'
                 },
                 {
-                    data: 'salary_processed_on',
-                    name: 'Salary from the Period'
+                    data: 'gross_salary',
+                    name: 'Total Gross (limit upto 21000)'
                 },
                 {
-                    data: 'total_earnings',
-                    name: 'Prof. Tax'
+                    data: 'employee_description',
+                    name: 'Remarks'
                 },
-                  
             ],
             language: {
                 paginate: {
@@ -172,7 +160,7 @@
         document.querySelector('#data_search').addEventListener("keyup", function(e) {
             dtTable.draw();
         });
-         document.querySelector('#month').addEventListener("change", function(e) {
+     document.querySelector('#month').addEventListener("change", function(e) {
             dtTable.draw();
         });
     </script>
