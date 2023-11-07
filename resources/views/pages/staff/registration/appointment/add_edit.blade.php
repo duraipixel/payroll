@@ -204,13 +204,6 @@
            
     </div>
 </div>
-<div class="col-md-4 fv-row"id="probation_pane_update1" @if (isset($details->has_probation) && $details->has_probation == 'yes') @else style="display:none" @endif>
-<div 
-        >
-<label class="fs-6">Probation Order Number</label>
-<input type="text" name="probation_order_no" placeholder="Probation Order No" value="{{ $details->probation_order_no ?? '' }}" id="probation_order_no" class="form-control">
-</div>
-</div>
 <div class="col-md-8 fv-row mb-5">
 <div class="mb-5 col-lg-4 fv-row">
     <div class="d-inline-block flex-stack">
@@ -260,6 +253,19 @@
             <input class="form-control ps-12" placeholder="Select a date"
                 name="to_appointment" id="to_appointment_update" type="date"
                 value="{{ $details->to_appointment ?? '' }}" />
+        </div>
+    </div>
+     <div class="col-lg-6 mb-5">
+        <label class="form-label required">Probation Order Number</label>
+
+        <div class="position-relative d-flex align-items-center">
+        <input type="text" name="probation_order_no" placeholder="Probation Order No" value="{{ $details->probation_order_no ?? '' }}" id="probation_order_no" class="form-control">
+        </div>
+    </div>
+     <div class="col-lg-6 mb-5">
+        <label class="form-label required">Probation Date</label>
+        <div class="position-relative d-flex align-items-center">
+         <input type="date" name="probation_order_date" placeholder="Probation Date" value="{{ $details->probation_order_date ?? '' }}" id="probation_order_date" class="form-control">
         </div>
     </div>
 

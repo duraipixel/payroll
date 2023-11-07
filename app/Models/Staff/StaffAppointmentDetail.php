@@ -35,6 +35,7 @@ class StaffAppointmentDetail extends Model implements Auditable
         'has_probation',
         'probation_period',
         'probation_order_no',
+        'probation_order_date',
         'appointment_doc',
         'appointment_order_no',
         'status',

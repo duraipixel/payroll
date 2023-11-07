@@ -39,7 +39,8 @@ class StaffAppointmentDetailController extends Controller
             'to_appointment' => 'required',
             'appointment_order_model_id' => 'required',
             'probation_period' => 'required_if:probation, ==,yes',
-            'probation_order_no'=>'required_if:probation, ==,yes',
+            'probation_order_no'=>'nullable',
+            'probation_order_date'=>'nullable',
 
         ]);
 
@@ -64,6 +65,7 @@ class StaffAppointmentDetailController extends Controller
             $ins['has_probation'] = $request->probation;
             $ins['probation_period'] = $request->probation == 'yes' ? $request->probation_period : null;
             $ins['probation_order_no'] = $request->probation_order_no ?? null;
+             $ins['probation_order_date'] = $request->probation_order_date ?? null;
 
             $ins['previous_appointment_number'] = $request->previous_appointment_number;
             $ins['previous_appointment_date'] = $request->previous_appointment_date;
@@ -143,7 +145,7 @@ class StaffAppointmentDetailController extends Controller
                 $previous_appointment_date=$order_details->previous_appointment_date ? commonDateFormatAlt($order_details->previous_appointment_date) : null;
                 $previous_designation=$order_details->previous_designation ?? null;
                  $probation_order_no=$order_details->probation_order_no ?? null;
-                 $probation_order_date=$order_details->from_appointment ?? null;
+                 $probation_order_date=$order_details->probation_order_date ?? null;
                  $probation_completed_date=$order_details->to_appointment ?? null;
                  $date_of_completion=$order_details->to_appointment ?? null;
 
@@ -280,7 +282,8 @@ class StaffAppointmentDetailController extends Controller
             'to_appointment' => 'required',
             'appointment_order_model_id' => 'required',
             'appointment_order_model_id' => 'required',
-            'probation_order_no' => 'required_if:probation, ==,yes',
+            'probation_order_no' => 'nullable',
+            'probation_order_date'=>'nullable',
             'designation_id' => 'required'
         ]);
 
@@ -305,6 +308,8 @@ class StaffAppointmentDetailController extends Controller
                 $info->has_probation = $request->probation_update;
                 $info->probation_period = $request->probation_update == 'yes' ? $request->probation_period : null;
                 $info->probation_order_no=$request->probation_order_no ?? NUll;
+                 $info->probation_order_date=$request->probation_order_date ?? NUll;
+                
                 $info->is_till_active = $request->is_till_active;
                 $info->designation_id = $request->designation_id;
                 $info->institution_id = session()->get('staff_institute_id') ?? null;
