@@ -68,5 +68,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
     Route::get('/salary-hold-report', [ReportController::class, 'SalaryHold'])->name('reports.salary.hold.report');
   Route::get('/professional-tax-report', [ReportController::class, 'ProfessionalTax'])->name('reports.professional.tax.report');
     Route::get('/month-wise-variation-report', [ReportController::class, 'MonthWiseVariation'])->name('reports.month.wise.variation.report');
+     Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'list'])->name('reports.notification.list');
 
 });
