@@ -177,14 +177,14 @@ class StaffAppointmentDetailController extends Controller
                 'institution_address' => $user_info->institute->address,
                 'place' => $place_of_work->name ?? null,
                 'salary' => $request->salary_scale,
-                'completion_date'=>$date_of_completion,
-                'probation_completed_date' => $probation_completed_date,
-                'probation_order_date' => $probation_order_date,
+                'completion_date'=>commonDateFormat($date_of_completion) ?? null,
+                'probation_completed_date' => commonDateFormat($probation_completed_date)??null,
+                'probation_order_date' =>commonDateFormat($probation_order_date)??null,
                 'probation_order_no' => $probation_order_no,
                 'society_name' => $society_info->name ?? null,
 
                 'previous_appointment_number' => $previous_appointment_number,
-                'previous_appointment_date' => $previous_appointment_date,
+                'previous_appointment_date' => commonDateFormat($previous_appointment_date)??null,
                 'previous_designation' => $previous_designation
             );
            
