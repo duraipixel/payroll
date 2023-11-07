@@ -142,7 +142,7 @@ class StaffAppointmentDetailController extends Controller
             if($id){
                 $appointment_order_no=$order_details->appointment_order_no;
                 $previous_appointment_number=$order_details->previous_appointment_number ?? null;
-                $previous_appointment_date=$order_details->previous_appointment_date ? commonDateFormatAlt($order_details->previous_appointment_date) : null;
+                $previous_appointment_date=$order_details->previous_appointment_date ? commonDateFormat($order_details->previous_appointment_date) : null;
                 $previous_designation=$order_details->previous_designation ?? null;
                  $probation_order_no=$order_details->probation_order_no ?? null;
                  $probation_order_date=commonDateFormat($order_details->probation_order_date) ?? null;
@@ -168,7 +168,7 @@ class StaffAppointmentDetailController extends Controller
             $place_of_work = PlaceOfWork::find($request->place_of_work_id);
             $staff_name = $user_info->personal->gender == 'male' ? 'Mr.' : ($user_info->personal->marital_status == 'married' ? 'Mrs.' : 'Ms.');
             $appointment_variables = array(
-                'date' => date('d-m-Y'),
+                'date' => date('d/m/Y'),
                 'appointment_order_no' =>$appointment_order_no ?? Null,
                 'appointment_date' => commonDateFormat($request->from_appointment),
                 'designation' => $user_info->position->designation->name ?? null,
