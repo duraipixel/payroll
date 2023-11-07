@@ -59,10 +59,12 @@ return [
     ],
     
     'leave_management' => [
+        'leaves.overview'=>'Leaves Overview',
         'leaves.list' => 'Request Leave',
         'leave-status' => 'Leave Status',
         'leave-head' => 'Leave Head',
         'leave-mapping' => 'Leave Mapping', 
+        'leave-cancellation' => 'Leave Cancellation',
         'holiday' => 'Holidays', 
     ],
     'payroll_management' => [
@@ -134,6 +136,21 @@ return [
         'reports.salary.register' => 'Staff Salary Register Reports',
         'reports.retirement' => 'Staff Retirement Reports',
         'reports.leaves' => 'Staff Leave Reports',
+        'reports.epf.report' => 'EPF Reports',
+        'reports.esi.report' => 'ESI Reports',
+        'reports.income.tax.report' => 'IncomeTax  Reports',
+        'reports.bonus.report' => 'Bonus Reports',
+        'reports.arrears.report' => 'Arrears Reports',
+        'reports.resignation.report' => 'Resignation Reports',
+        'reports.salary.acquitance.report' => 'SalaryAcquitance Reports',
+        'reports.staff.acquitance.register' => 'SalaryAcquitance Register Reports',
+        'reports.bank.loan.report' => 'Bank Loan Reports',
+        'reports.lic.report' => 'LIC Reports',
+        'reports.lop.report' => 'LOP Reports',
+        'reports.salary.hold.repor' => 'SalaryHold Reports',
+        'reports.professional.tax.report' => 'ProfessionalTax Reports',
+        'reports.month.wise.variation.report' => 'MonthWiseVariation Reports',
+        'reports.notification.list' => 'Notification Reports',
 
     ]
 ];

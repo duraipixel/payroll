@@ -446,6 +446,7 @@ class="menu-item menu-accordion  @if (request()->routeIs([
     </div>
 </div>
 @endif
+@if (access()->hasAccess('leave-cancellation', 'view'))
 <div class="menu-sub menu-sub-accordion menu-active-bg">
     <div class="menu-item">
         <a class="menu-link @if (request()->routeIs(['leave-cancellation'])) active @endif"
@@ -457,7 +458,7 @@ class="menu-item menu-accordion  @if (request()->routeIs([
         </a>
     </div>
 </div>
-
+@endif
 <div class="menu-sub menu-sub-accordion menu-active-bg">
 <div class="menu-item">
     <a class="menu-link @if (request()->routeIs(['leaves.set.workingday'])) active @endif"
@@ -1369,6 +1370,7 @@ class="menu-item menu-accordion @if (request()->routeIs($in_routes)) hover show 
 <div class="menu-sub menu-sub-accordion menu-active-bg">
     @if (count($reports))
         @foreach ($reports as $report)
+        @if (access()->hasAccess($report['route'], 'view'))
             <div class="menu-item">
                 <a class="menu-link @if (request()->routeIs([$report['route']])) active @endif"
                     href="{{ route($report['route']) }}">
@@ -1378,6 +1380,7 @@ class="menu-item menu-accordion @if (request()->routeIs($in_routes)) hover show 
                     <span class="menu-title">{{ $report['name'] }}</span>
                 </a>
             </div>
+            @endif
         @endforeach
     @endif
 </div>

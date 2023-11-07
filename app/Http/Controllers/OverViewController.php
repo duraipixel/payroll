@@ -13,7 +13,11 @@ use App\Models\Staff\StaffWorkExperience;
 use App\Models\Leave\StaffLeave;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\PayrollManagement\StaffSalary;
-
+use App\Models\CalendarDays;
+use App\Models\Staff\StaffBankLoan;
+use App\Models\AcademicYear;
+use App\Models\AttendanceManagement\AttendanceManualEntry;
+use Carbon\Carbon;
 class OverViewController extends Controller
 {
     public function index()
@@ -36,8 +40,21 @@ class OverViewController extends Controller
         $leave_doc=StaffLeave::where('staff_id',$staff_id)->where('academic_id',$acadamic_id)->get();
         $appointment_doc=StaffAppointmentDetail::where('staff_id',$staff_id)->get();
         $salary_doc=StaffSalary::where('staff_id',$staff_id)->get();
+
+        $from_year=AcademicYear::find(academicYearId());
+         academicYearId();
+        $year=$from_year->from_year;
+        $firstDayOfYear = date("$year-01-01"); 
+        $lastDayOfYear = date("$year-12-31");
+        $total_year = (strtotime($lastDayOfYear) - strtotime($firstDayOfYear)) / (60 * 60 * 24) + 1;
+        $loans=StaffBankLoan::with('emi','paid_emi')->where('staff_id',$staff_id)->where('status','active')->get();
+        $working_days=CalendarDays::where('days_type','working_day')->where('academic_id', $acadamic_id)->count();
+        $present=AttendanceManualEntry::where('employment_id',$staff_id)->where('academic_id', $acadamic_id)
+                ->where('attendance_status', 'Present')->where('status','active')->count();
+        $absence=AttendanceManualEntry::where('employment_id',$staff_id)->where('academic_id', $acadamic_id)
+                ->where('attendance_status', 'Absence')->where('status','active')->count();
         return view('pages.overview.index',compact('breadcrums', 'info','personal_doc','education_doc','experince_doc',
-    'leave_doc','appointment_doc','salary_doc'));
+    'leave_doc','appointment_doc','salary_doc','total_year','loans','working_days','present','absence'));
     }
     public function saveForm(Request $request)
     {
