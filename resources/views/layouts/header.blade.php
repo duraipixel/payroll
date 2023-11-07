@@ -38,6 +38,16 @@
             @if (request()->routeIs(['home']))
                 <input type="text" name="search_home_date" id="search_home_date"  class="border outline-0 px-3">
             @endif
+            &nbsp; &nbsp;
+             <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
+        data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
+        data-kt-menu-placement="bottom-end">
+
+        <a href="#"> 
+        <i class="fas fa-bell" style="font-size: 40px;"></i>
+        <span class="badge bg-danger badgebell"> {{ auth()->user()->count ?? 0}}</span> 
+        </a>
+        </div>&nbsp; &nbsp;
             <div class="btn p-0 px-2 btn-light d-flex align-items-center justify-content-center">
                 <div>
                     <div class="cursor-pointer symbol symbol-30px symbol-md-30px" data-kt-menu-trigger="click"
@@ -99,14 +109,7 @@
                     </div>
                 </div>
             </div>
-        <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
-        data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent"
-        data-kt-menu-placement="bottom-end">
-
-        <a href="#"><span class="badge bg-danger"> {{ auth()->user()->count ?? 0}}</span>  
-        <i class="fas fa-bell" style="font-size: 40px;"></i>
-        </a>
-        </div>
+       
         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-400px" data-kt-menu="true" style="padding-top: 15%;">
         <div class="modal-header">
         <h5 class="modal-title" style="margin-left:160px; color: blue;">Notification</h5>
@@ -140,7 +143,7 @@
         @endif
 @endforeach
 <hr>
-<a style="text-align: center;" href="{{url('notification')}}">Read More</a>
+<a style="text-align: center;" href="{{route('reports.notification.list')}}">Read More</a>
         </div>
         </div>
 

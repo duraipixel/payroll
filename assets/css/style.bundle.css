@@ -55069,3 +55069,9 @@ body {
  .hide{
         display: none !important;
      }
+.badgebell{
+  position: absolute;
+  z-index: 9;
+  left: 23px;
+  border-radius: 50%;
+}

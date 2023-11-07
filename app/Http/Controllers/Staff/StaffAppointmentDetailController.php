@@ -142,12 +142,12 @@ class StaffAppointmentDetailController extends Controller
             if($id){
                 $appointment_order_no=$order_details->appointment_order_no;
                 $previous_appointment_number=$order_details->previous_appointment_number ?? null;
-                $previous_appointment_date=$order_details->previous_appointment_date ? commonDateFormatAlt($order_details->previous_appointment_date) : null;
+                $previous_appointment_date=$order_details->previous_appointment_date ? commonDateFormat($order_details->previous_appointment_date) : null;
                 $previous_designation=$order_details->previous_designation ?? null;
                  $probation_order_no=$order_details->probation_order_no ?? null;
-                 $probation_order_date=$order_details->probation_order_date ?? null;
-                 $probation_completed_date=$order_details->to_appointment ?? null;
-                 $date_of_completion=$order_details->to_appointment ?? null;
+                 $probation_order_date=commonDateFormat($order_details->probation_order_date) ?? null;
+                 $probation_completed_date=commonDateFormat($order_details->to_appointment) ?? null;
+                 $date_of_completion=commonDateFormat($order_details->to_appointment) ?? null;
 
            }else{
             
@@ -168,7 +168,7 @@ class StaffAppointmentDetailController extends Controller
             $place_of_work = PlaceOfWork::find($request->place_of_work_id);
             $staff_name = $user_info->personal->gender == 'male' ? 'Mr.' : ($user_info->personal->marital_status == 'married' ? 'Mrs.' : 'Ms.');
             $appointment_variables = array(
-                'date' => date('d-m-Y'),
+                'date' => date('d/m/Y'),
                 'appointment_order_no' =>$appointment_order_no ?? Null,
                 'appointment_date' => commonDateFormat($request->from_appointment),
                 'designation' => $user_info->position->designation->name ?? null,
@@ -177,14 +177,14 @@ class StaffAppointmentDetailController extends Controller
                 'institution_address' => $user_info->institute->address,
                 'place' => $place_of_work->name ?? null,
                 'salary' => $request->salary_scale,
-                'completion_date'=>$date_of_completion,
-                'probation_completed_date' => $probation_completed_date,
-                'probation_order_date' => $probation_order_date,
+                'completion_date'=>commonDateFormat($date_of_completion) ?? null,
+                'probation_completed_date' => commonDateFormat($probation_completed_date)??null,
+                'probation_order_date' =>commonDateFormat($probation_order_date)??null,
                 'probation_order_no' => $probation_order_no,
                 'society_name' => $society_info->name ?? null,
 
                 'previous_appointment_number' => $previous_appointment_number,
-                'previous_appointment_date' => $previous_appointment_date,
+                'previous_appointment_date' => commonDateFormat($previous_appointment_date)??null,
                 'previous_designation' => $previous_designation
             );
            

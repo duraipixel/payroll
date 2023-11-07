@@ -69,7 +69,7 @@
             ],
             type: 'POST',
             ajax: {
-                "url": "{{ route('notification.list') }}",
+                "url": "{{ route('reports.notification.list') }}",
                 "data": function(d) {
                    
                 }

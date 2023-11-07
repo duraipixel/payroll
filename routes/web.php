@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 
 
- Route::get('/notification', [App\Http\Controllers\NotificationController::class, 'list'])->name('notification.list');
+
 
  Route::post('/month-wise-variation', [ReportController::class, 'MonthWiseVariation'])->name('reports.month.wise.variation');
 
