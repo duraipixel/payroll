@@ -117,10 +117,12 @@
 
 @section('add_on_script')
     <script> 
+$('#page_search').val(1);
         var staff_Table = $('#staff_table').DataTable({
             processing: true,
             serverSide: true,
             order: [[1, "DESC"]],
+            
             type: 'POST',
             "ajax": {
                 "url": "{{ route('staff.list') }}",
@@ -131,6 +133,7 @@
                         d.verification_status = $('#verification_status').val(),
                         // d.start = (($('#page_search').val() * 25),
                         d.datatable_institute_id = $('#datatable_institute_id').val()
+
                 }
             },
             "columns": [{
@@ -174,13 +177,14 @@
             staff_Table.ajax.reload();
         });
          document.querySelector('#page_search').addEventListener("change", function(e) {
-            
-            staff_Table.ajax.reload();
+        var no=$("#page_search").val()-1;
+       staff_Table.page(no).draw( 'page' );
+            //staff_Table.ajax.reload();
         });
         document.querySelector('#datatable_institute_id').addEventListener("change", function(e) {
             staff_Table.ajax.reload();
         });
- staff_Table.ajax.reload();
+       staff_Table.ajax.reload();
         function staffChangeStatus(id, status) {
             Swal.fire({
                 text: "Are you sure you would like to change status?",
