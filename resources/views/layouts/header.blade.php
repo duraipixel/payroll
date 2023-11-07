@@ -53,10 +53,18 @@
                     <div class="cursor-pointer symbol symbol-30px symbol-md-30px" data-kt-menu-trigger="click"
                         data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                         @if (isset(auth()->user()->image) && !empty(auth()->user()->image))
-                            <img alt="user" src="{{ asset('/') . auth()->user()->image }}" />
+                    @php
+                    $profile_image = Storage::url(auth()->user()->image);
+                    @endphp
+                     @if (file_exists($profile_image))
+                            <img alt="user" src="{{ asset('public' . $profile_image) }}"/>
                         @else
                             <img alt="user" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
                         @endif
+                  @else
+                                        <img alt="Logo"
+                                            src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
+                                    @endif
                     </div>
                     <!--begin::User account menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-bold py-4 fs-6 w-275px"
@@ -68,8 +76,16 @@
                                 <div class="symbol symbol-50px me-5">
 
                                     @if (isset(auth()->user()->image) && !empty(auth()->user()->image))
-                                        <img alt="Logo" src="{{ asset('/') . auth()->user()->image }}" />
-                                    @else
+                                      @php
+                    $profile_image = Storage::url(auth()->user()->image);
+                    @endphp
+                     @if (file_exists($profile_image))
+                            <img alt="user" src="{{ asset('public' . $profile_image) }}"/>
+                        @else
+                                        <img alt="Logo"
+                                            src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
+                                    @endif
+                          @else
                                         <img alt="Logo"
                                             src="https://cdn-icons-png.flaticon.com/512/149/149071.png" />
                                     @endif

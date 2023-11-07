@@ -21,15 +21,12 @@
                             ->route()
                             ->getName();
                     @endphp
-                    @if (access()->buttonAccess($route_name, 'export'))
-                       <!--  <a type="button" class="btn btn-light-primary btn-sm me-3" href="{{ route('other-income.export') }}">
-                            {!! exportSvg() !!}
-                            Export
-                        </a> -->
-                    @endif
+                   
                 </div>
+          @if (access()->buttonAccess($route_name, 'export'))
               <button onclick="this.form.action = '{{ route('reports.lic.export') }}'" type="submit"
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+            @endif
                             &nbsp;&nbsp;
   <select name="month" class="form-select form-select-sm w-auto d-inline" id="month">
                             <option value="">-- select month -- </option>

@@ -28,8 +28,10 @@
                         </a>
                     @endif -->
                 </div>
+                @if (access()->buttonAccess($route_name, 'export'))
                  <button onclick="this.form.action = '{{ route('reports.arrear.export') }}'" type="submit"
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+                      @endif
                             &nbsp;&nbsp;
   <select name="month" class="form-select form-select-sm w-auto d-inline" id="month">
                             <option value="">-- select month -- </option>

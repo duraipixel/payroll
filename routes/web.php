@@ -153,7 +153,7 @@ Route::group(['middleware' => 'auth'],  function () {
 
     Route::get('/leaves', [App\Http\Controllers\Leave\LeaveController::class, 'index'])->name('leaves.list')->middleware(['checkAccess:view']); 
     Route::get('/leaves/overview', [App\Http\Controllers\Leave\LeaveController::class, 'overview'])->name('leaves.overview')->middleware(['checkAccess:view']);
-    Route::get('/leaves/overview/list', [App\Http\Controllers\Leave\LeaveController::class, 'overviewList'])->name('leaves.overview.list')->middleware(['checkAccess:view']); 
+    Route::get('/leaves/overview/list', [App\Http\Controllers\Leave\LeaveController::class, 'overviewList'])->name('leaves.overview.list'); 
     Route::get('/leaves/overview/view/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'overviewView'])->name('leaves.overview.view'); 
     Route::post('/leaves/staff/info', [App\Http\Controllers\Leave\LeaveController::class, 'getStaffLeaveInfo'])->name('leaves.staff.info'); 
     Route::get('/working/days', [App\Http\Controllers\Leave\LeaveController::class, 'setWorkingDays'])->name('leaves.set.workingday'); 
