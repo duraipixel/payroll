@@ -8,7 +8,7 @@ trait ReportHelper
 {
     function collection($request)
     {
-        return User::with(['salary' => function ($q) use ($request) {
+        return User::where('institute_id',session()->get('staff_institute_id'))->with(['salary' => function ($q) use ($request) {
             if (!empty($request->month)) {
                 $q->where('salary_month', date('F', mktime(0, 0, 0, $request->month, 1)));
             }

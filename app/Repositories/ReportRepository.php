@@ -25,6 +25,7 @@ class ReportRepository
             ->when(!empty($employee_id), function ($query) use ($employee_id) {
                 $query->where('users.id', $employee_id);
             })
+            ->where('institute_id',session()->get('staff_institute_id'))
             ->when(!empty($department), function ($query) use ($department) {
                 $query->where('staff_professional_datas.department_id', $department);
             });

@@ -25,7 +25,9 @@ class Payroll extends Model
         'employee_it_view_release_date',
         'locked',
         'added_by',
-        'payroll_lock'
+        'payroll_lock',
+        'academic_id',
+        'institute_id'
     ];
 
     public function salaryStaff() {

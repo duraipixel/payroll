@@ -17,6 +17,7 @@ class LeaveController extends Controller
         $to_date=$request->input('to_date');
         $perPage = (!empty($request->limit) && $request->limit === 'all') ? 100000000000000000000 : $request->limit;
         $leaves = StaffLeave::whereHas('user.position.department', function ($q) use ($request) {
+         $q->where('institute_id',session()->get('staff_institute_id'));
             if (!empty($request->department)) $q->where('id', '=', $request->department);
         })->when(isset($from_date), function ($q) use ($from_date,$to_date) {
             $q->whereBetween('from_date', [$from_date,$to_date]);

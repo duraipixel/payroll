@@ -39,11 +39,11 @@ class PayrollController extends Controller
         $to_date = date('Y-m-t', strtotime($date));
         $working_days = date('t', strtotime($date));
 
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $previous_month_start = date('Y-m-01', strtotime($date . ' - 1 month'));
         $previous_month_end = date('Y-m-t', strtotime($date . ' - 1 month'));
 
-        $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->first();
+        $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->where('institute_id',session()->get('staff_institute_id'))->first();
         //dd($breadcrums);
 
         return view('pages.payroll_management.payroll.index', compact('breadcrums', 'date', 'payroll', 'working_days', 'previous_payroll', 'from_year', 'month'));
@@ -58,10 +58,10 @@ class PayrollController extends Controller
         $working_days = date('t', strtotime($dates));
         // $payroll_date = date('Y-m-d', strtotime( $dates.'-1 month') );
         
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
 
-        $employees = User::where('status', 'active')->orderBy('name', 'asc')->whereNull('is_super_admin')->get();
+        $employees = User::where('status', 'active')->orderBy('name', 'asc')->whereNull('is_super_admin')->where('institute_id',session()->get('staff_institute_id'))->get();
         $param = [
             'employees' => $employees,
             'month_no' => $month_no,
@@ -95,7 +95,7 @@ class PayrollController extends Controller
         $working_days = date('t', strtotime($dates));
         // $payroll_date = date('Y-m-d', strtotime( $dates.'-1 month') );
         
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if( $payroll ) {
 

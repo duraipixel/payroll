@@ -21,7 +21,8 @@ class StaffRetiredResignedDetail extends Model
         'document',	
         'reason',	
         'status', //active, inactive
-        'is_completed' //yes, no
+        'is_completed', //yes, no
+        'institute_id'
 
     ];
 

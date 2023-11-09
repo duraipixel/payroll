@@ -39,7 +39,8 @@ class StaffSalaryPattern extends Model implements Auditable
         'rejected_on',
         'rejectedBy',
         'approved_remarks',
-        'removed_remarks'
+        'removed_remarks',
+        'institute_id'
     ];
 
     public function patternFields() {

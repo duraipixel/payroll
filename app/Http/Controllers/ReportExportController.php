@@ -48,7 +48,7 @@ class ReportExportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
             $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -77,7 +77,7 @@ class ReportExportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
             $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -140,7 +140,7 @@ class ReportExportController extends Controller
     function resignation(Request $request){
         $datatable_search=$request->data_search;
         $month = $request->month ?? date('m');
-        $data=StaffRetiredResignedDetail::where('types','resigned')->with('staff')->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+        $data=StaffRetiredResignedDetail::where('types','resigned')->with('staff')->where('institute_id',session()->get('staff_institute_id'))->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
                 $q->whereHas('staff', function($jq) use($datatable_search){
@@ -205,7 +205,7 @@ class ReportExportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
             $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -225,7 +225,7 @@ class ReportExportController extends Controller
     function holdsalary(Request $request) {
         $datatable_search=$request->data_search;
         $month = $request->month ?? date('m');
-        $data=HoldSalary::with('staff','staff.appointment')
+        $data=HoldSalary::with('staff','staff.appointment')->where('institute_id',session()->get('staff_institute_id'))
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
@@ -244,7 +244,7 @@ class ReportExportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
             $payroll_id = $payroll->id ?? '';
             if($payroll){
                 $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -285,7 +285,7 @@ class ReportExportController extends Controller
         $working_days = date('t', strtotime($dates));
         // $payroll_date = date('Y-m-d', strtotime( $dates.'-1 month') );
         
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if( $payroll ) {
 
