@@ -61,11 +61,11 @@ class OverviewController extends Controller
         $to_date = date('Y-m-t', strtotime($date));
         $working_days = date('t', strtotime($date));
 
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $previous_month_start = date('Y-m-01', strtotime($date . ' - 1 month'));
         $previous_month_end = date('Y-m-t', strtotime($date . ' - 1 month'));
 
-        $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->first();
+        $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->where('institute_id',session()->get('staff_institute_id'))->first();
 
         return view('pages.payroll_management.overview.index', compact('breadcrums', 'date', 'payroll', 'working_days', 'previous_payroll', 'from_year'));
     }
@@ -88,12 +88,12 @@ class OverviewController extends Controller
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
         $working_days = date('t', strtotime($to_date));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
 
         $previous_month_start = date('Y-m-01', strtotime($dates . ' - 1 month'));
         $previous_month_end = date('Y-m-t', strtotime($dates . ' - 1 month'));
 
-        $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->first();
+        $previous_payroll = Payroll::where('from_date', $previous_month_start)->where('to_date', $previous_month_end)->where('institute_id',session()->get('staff_institute_id'))->first();
         if ($start_year == $payout_date) {
             $previous_payroll = 'yes';
         }
@@ -195,9 +195,10 @@ class OverviewController extends Controller
         $ins['name'] = date('F Y', strtotime($from_date));
         $ins['locked'] = 'no';
         $ins['added_by'] = auth()->id();
-
+        $ins['academic_id'] = academicYearId();
+        $ins['institute_id'] = session()->get('staff_institute_id')??null;
         $id = Payroll::create($ins)->id;
-
+      
         $ins_roll['academic_id'] = academicYearId();
         $ins_roll['payout_month'] = $from_date;
         $ins_roll['payroll_id'] = $id;

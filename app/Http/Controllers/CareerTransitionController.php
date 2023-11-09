@@ -46,7 +46,7 @@ class CareerTransitionController extends Controller
                             ->orWhere('reason', 'like', "%{$datatable_search}%")
                             ->orWhereDate('last_working_date', $date);
                     });
-                })->where('types', $page_type);
+                })->where('institute_id',session()->get('staff_institute_id'))->where('types', $page_type);
 
             $datatables =  Datatables::of($data)
                 ->addIndexColumn()
@@ -119,6 +119,7 @@ class CareerTransitionController extends Controller
             }
             $staff_id = $request->staff_id;
             $ins['academic_id'] = academicYearId();
+            $ins['institute_id'] =session()->get('staff_institute_id')??null;
             $ins['staff_id'] = $staff_id;
             $ins['last_working_date'] = $last_working_date;
             $ins['types'] = $request->page_type;

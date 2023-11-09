@@ -222,6 +222,12 @@ class HomeController extends Controller
             ->Academic()
             ->InstituteBased()
             ->get();
+          $announcement_list= Announcement::
+          whereRaw("CAST(created_at AS DATE) BETWEEN '" . $from_date . "' and '" . $to_date . "'")
+             ->Academic()
+            ->InstituteBased()
+            ->where('status','active')
+            ->get();
 
         $document_approval = StaffDocument::where('staff_documents.verification_status', 'pending')
             ->join('users', 'users.id', '=', 'staff_documents.staff_id')
@@ -257,6 +263,7 @@ class HomeController extends Controller
             'leave_approval' => $leave_approval,
             'announcement' => $announcement,
             'document_approval' => $document_approval,
+            'announcement_list'=>$announcement_list,
             'nature_of_works' => $nature_of_works,
             'designations' => $designations,
             'gender_calculation' => $gender_calculation,

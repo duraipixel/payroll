@@ -40,7 +40,7 @@ class ReportController extends Controller
     {
 
         if ($request->ajax()) {
-            $details = User::with(['personal', 'position'])->whereNull('is_super_admin')->orderBy('society_emp_code', 'desc')->get();
+            $details = User::with(['personal', 'position'])->whereNull('is_super_admin')->orderBy('society_emp_code', 'desc')->where('institute_id',session()->get('staff_institute_id'))->get();
             $params = ['details' => $details];
             return view('pages.reports.profile._table_content', $params);
         }
@@ -51,7 +51,7 @@ class ReportController extends Controller
     }
 
     function attendance_collection($request, $date) {
-        return User::with(['AttendancePresent', 'Attendance' => function ($query) use ($date) {
+        return User::where('institute_id',session()->get('staff_institute_id'))->with(['AttendancePresent', 'Attendance' => function ($query) use ($date) {
             $query->whereBetween('attendance_date', [$date['start_date'], $date['end_date']]);
         }])
         ->leftJoin('staff_appointment_details', function($join){
@@ -96,7 +96,7 @@ class ReportController extends Controller
         $history_Data   = $this->repository->getServiceHistory($employee_id, $department_id );
         $history        = current( $history_Data );
         $paginate_link  = end( $history_Data );
-        $employees      = User::whereNull('is_super_admin')->where('verification_status', 'approved')->get();
+        $employees      = User::whereNull('is_super_admin')->where('verification_status', 'approved')->where('institute_id',session()->get('staff_institute_id'))->get();
         $departments    = Department::all();
         $academic_info  = AcademicYear::find(academicYearId());
         $academic_title = 'HISTORY OF SERVICE ( '.$academic_info->from_year.' - '.$academic_info->to_year.' )';
@@ -236,7 +236,7 @@ class ReportController extends Controller
         );
         $datatable_search=$request->datatable_search;
         $month = $request->month ?? date('m');
-        $data=HoldSalary::with('staff','staff.appointment')
+        $data=HoldSalary::with('staff','staff.appointment')->where('institute_id',session()->get('staff_institute_id'))
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
@@ -285,7 +285,7 @@ class ReportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
             $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -341,7 +341,7 @@ class ReportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
             $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -387,7 +387,7 @@ class ReportController extends Controller
         );
         $datatable_search=$request->datatable_search;
         $month = $request->month ?? date('m');
-        $data=StaffRetiredResignedDetail::where('types','resigned')->with('staff')->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+        $data=StaffRetiredResignedDetail::where('types','resigned')->with('staff')->where('institute_id',session()->get('staff_institute_id'))->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
                 $q->whereHas('staff', function($jq) use($datatable_search){
@@ -552,7 +552,7 @@ class ReportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
             $payroll_id = $payroll->id ?? '';
             if($payroll){
                 $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -613,7 +613,7 @@ class ReportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
             $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -806,7 +806,7 @@ class ReportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
             $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -1039,7 +1039,7 @@ class ReportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
             $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -1094,7 +1094,7 @@ class ReportController extends Controller
         $year = $academic->from_year;
         $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
         $from_date = date('Y-m-01', strtotime($dates));
-            $data = StaffSalaryPattern::with('staff')->where('payout_month', $from_date
+            $data = StaffSalaryPattern::with('staff')->where('institute_id',session()->get('staff_institute_id'))->where('payout_month', $from_date
         )->when(!empty($datatable_search), function ($query) use ($datatable_search) {
 
                 return $query->where(function ($q) use ($datatable_search) {

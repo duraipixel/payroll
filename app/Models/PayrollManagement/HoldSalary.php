@@ -23,7 +23,8 @@ class HoldSalary extends Model implements Auditable
         'status',
         'hold_by',
         'released_by',
-        'hold_month'
+        'hold_month',
+        'institute_id'
     ];
 
     public function staff() {

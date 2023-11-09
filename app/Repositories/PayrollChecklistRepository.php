@@ -24,14 +24,14 @@ class PayrollChecklistRepository extends Controller
         $attendance = AttendanceManualEntry::where(function ($query) use ($start_date, $end_date) {
             $query->whereDate('attendance_date', '>=', $start_date)
                 ->whereDate('attendance_date', '<=', $end_date);
-        })
+        })->where('institute_id',session()->get('staff_institute_id'))
             ->where('attendance_status', 'Absence')
             ->get();
 
         $present_attendance = AttendanceManualEntry::where(function ($query) use ($start_date, $end_date) {
             $query->whereDate('attendance_date', '>=', $start_date)
                 ->whereDate('attendance_date', '<=', $end_date);
-        })
+        })->where('institute_id',session()->get('staff_institute_id'))
             ->where('attendance_status', 'Present')
             ->get();
             
@@ -72,7 +72,7 @@ class PayrollChecklistRepository extends Controller
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
                     $query1->orWhere('is_till_active', 'yes');
                 });
-            })
+            })->where('institute_id',session()->get('staff_institute_id'))
             ->count();
 
         $response['approved'] = User::with('appointment')->where('verification_status', 'approved')
@@ -84,7 +84,7 @@ class PayrollChecklistRepository extends Controller
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
                     $query1->orWhere('is_till_active', 'yes');
                 });
-            })
+            })->where('institute_id',session()->get('staff_institute_id'))
             ->count();
         return $response;
     }
@@ -101,7 +101,7 @@ class PayrollChecklistRepository extends Controller
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
                     $query1->orWhere('is_till_active', 'yes');
                 });
-            })->count();
+            })->where('institute_id',session()->get('staff_institute_id'))->count();
 
         $response['pending_it'] = User::with('appointment')->join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
             ->where('verification_status', 'approved')
@@ -116,7 +116,7 @@ class PayrollChecklistRepository extends Controller
                     $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
                     $query1->orWhere('is_till_active', 'yes');
                 });
-            })->count();
+            })->where('institute_id',session()->get('staff_institute_id'))->count();
 
         $process = false;
         if ($response['verified_user'] == $response['pending_it']) {
@@ -149,7 +149,7 @@ class PayrollChecklistRepository extends Controller
             ->leftJoin('hold_salaries', function ($join) use ($hold_month) {
                 $join->on('hold_salaries.staff_id', '=', 'users.id')
                     ->where('hold_salaries.hold_month', '=', $hold_month);
-            })
+            })->where('users.institute_id',session()->get('staff_institute_id'))
             ->where('verification_status', 'approved')
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
             ->where('it_staff_statements.status', 'active')
@@ -184,7 +184,7 @@ class PayrollChecklistRepository extends Controller
 
         // $date = date('Y-m-d', strtotime($date . ' -1 month'));
         $start_date = date('Y-m-01', strtotime($date));
-        $details = HoldSalary::whereDate('hold_month', $start_date)->get();
+        $details = HoldSalary::whereDate('hold_month', $start_date)->where('institute_id',session()->get('staff_institute_id'))->get();
         return $details;
     }
 
@@ -193,7 +193,7 @@ class PayrollChecklistRepository extends Controller
         $start_date = date('Y-m-d', strtotime($date . ' -1 month'));
         $end_date = date('Y-m-t', strtotime($date . ' -1 month'));
 
-        $info = StaffRetiredResignedDetail::where('is_completed', 'yes')
+        $info = StaffRetiredResignedDetail::where('is_completed', 'yes')->where('institute_id',session()->get('staff_institute_id'))
                 ->whereBetween('last_working_date', [$start_date, $end_date])
                 ->get();
 

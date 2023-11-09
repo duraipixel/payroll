@@ -35,7 +35,7 @@ class HoldSalaryController extends Controller
         $staff = User::select('users.*')->join('staff_salary_patterns', 'staff_salary_patterns.staff_id', '=', 'users.id')
             ->where('users.status', 'active')
             ->where('users.transfer_status', 'active')
-            ->where('staff_salary_patterns.status', 'active')
+            ->where('staff_salary_patterns.status', 'active')->where('users.institute_id',session()->get('staff_institute_id'))
             ->get();
         $payroll_hold_month = $request->payroll_hold_month;
         $salary_detail=HoldSalary::find($id);
@@ -72,6 +72,7 @@ class HoldSalaryController extends Controller
             if (!payrollCheck($hold_check_date, 'payroll_inputs')) {
                 $ins['staff_id'] = $staff_id;
                 $ins['academic_id'] = academicYearId();
+                $ins['institute_id'] =session()->get('staff_institute_id')??null;
                 $ins['hold_reason'] = $request->hold_reason;
                 $ins['remarks'] = $request->remarks ?? '';
                 $ins['hold_at'] = date('Y-m-d H:i:s');
@@ -110,7 +111,7 @@ class HoldSalaryController extends Controller
                 ->map(function ($item) {
                     $item->current_salary_pattern = $item->staff->currentSalaryPattern ?? '-';
                     return $item;
-                });
+                })->where('institute_id',session()->get('staff_institute_id'));
 
             // dd( $data[0]->staff->currentSalaryPattern );
             $status = $request->get('status');

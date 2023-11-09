@@ -46,7 +46,7 @@ class SalaryCreationController extends Controller
             $salary_heads = '';
         }
 
-        $employees = User::where('status', 'active')->where('transfer_status', 'active')->orderBY('name', 'asc')->whereNull('is_super_admin')->get();
+        $employees = User::where('status', 'active')->where('transfer_status', 'active')->orderBY('name', 'asc')->whereNull('is_super_admin')->where('institute_id',session()->get('staff_institute_id'))->get();
         $salary_heads = SalaryHead::where('status', 'active')->get();
 
         $acYear = AcademicYear::find(academicYearId());
@@ -155,7 +155,7 @@ class SalaryCreationController extends Controller
                     $insert_data['payout_month'] = $payout_month;
                     $insert_data['verification_status'] = 'pending';
                     $insert_data['is_current'] = $is_current;
-
+                    $insert_data['institute_id'] =session()->get('staff_institute_id')??null;
                     if (!$exist) {
                         $insert_data['addedBy'] = auth()->id();
                     } else {

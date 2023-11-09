@@ -166,5 +166,54 @@
             })
 
         }
+          function deleteAppointmentOrder(id) {
+            Swal.fire({
+                text: "Are you sure you would like to delete record?",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "Yes, Delete it!",
+                cancelButtonText: "No, return",
+                customClass: {
+                    confirmButton: "btn btn-danger",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function(result) {
+                if (result.value) {
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ url('appointment-order/delete') }}",
+                        type: 'POST',
+                        data: {
+                            id: id,
+                        },
+                        success: function(res) {
+                            dtTable.ajax.reload();
+                            Swal.fire({
+                                title: "Updated!",
+                                text: res.message,
+                                icon: "success",
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-success"
+                                },
+                                timer: 3000
+                            });
+
+                        },
+                        error: function(xhr, err) {
+                            if (xhr.status == 403) {
+                                toastr.error(xhr.statusText, 'UnAuthorized Access');
+                            }
+                        }
+                    });
+                }
+            });
+        }
     </script>
 @endsection
