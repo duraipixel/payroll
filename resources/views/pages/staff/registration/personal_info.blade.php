@@ -355,6 +355,7 @@ var personsal_error = false;
 var key_name = [
 'institute_name',
 'name',
+'content',
 ];
 $('.personal-form-errors').remove();
 $('.form-control,.form-select').removeClass('border-danger');
