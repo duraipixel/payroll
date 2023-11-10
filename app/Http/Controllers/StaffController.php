@@ -694,8 +694,8 @@ class StaffController extends Controller
                 $insBank['staff_id'] = $id;
                 $insBank['bank_id'] = $request->bank_id;
                 $insBank['bank_branch_id'] = $request->branch_id;
-                $insBank['account_name'] = $request->account_name;
-                $insBank['account_number'] = $request->account_no;
+                $insBank['account_name'] = $request->account_name ??null;
+                $insBank['account_number'] = $request->account_no ??null;
                 /** 
                  *  check file is exists
                  */

@@ -156,6 +156,10 @@
                         },
                         'attendance_date': {
                             validators: {
+                                 date: {
+                                    format: 'YYYY-MM-DD',
+                                  message: 'The value is not a valid date',
+                                        },
                                 notEmpty: {
                                     message: 'Attendance Date is required'
                                 },
