@@ -427,7 +427,7 @@ left: 50%;
                             </span>
                             <input type="hidden" name="staff_id" id="staff_id"
                                 value="{{ $info->staff_id ?? '' }}">
-                            <div class="typeahead-pane d-none" id="typeadd-panel" style="height: 250px; overflow-y: scroll">
+                            <div class="typeahead-pane d-none" id="typeadd-panel" style="height: 240px; overflow-y: scroll">
                                 <ul type="none" class="typeahead-pane-ul" id="typeahead-list">
 
                                 </ul>
