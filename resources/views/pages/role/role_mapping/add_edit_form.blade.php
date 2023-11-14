@@ -165,6 +165,7 @@ var KTAppEcommerceSaveBranch = function () {
 KTUtil.onDOMContentLoaded(function () {
     KTAppEcommerceSaveBranch.init();
 });
-    
-    
+$('#staff_id').select2({
+  
+});
 </script>
