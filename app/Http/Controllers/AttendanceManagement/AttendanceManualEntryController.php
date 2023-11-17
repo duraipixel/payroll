@@ -85,8 +85,6 @@ class AttendanceManualEntryController extends Controller
             $period->toArray();
 
             $holidays = CalendarDays::where('institute_id',$institute_id)->whereBetween('calendar_date', [$start, $end])->whereIn('days_type',['holiday','week_off'])->select('calendar_date')->get();
-            //$week_off = CalendarDays::whereBetween('calendar_date', [$request->leave_start, $request->leave_end])->where('days_type', 'week_off')->get();
-
             $leaves = StaffLeave::where('staff_id', $staff_id)
             ->where('from_date', '>=', $start)
             ->where('to_date', '<=', $end)
@@ -121,7 +119,7 @@ class AttendanceManualEntryController extends Controller
             $ins['attendance_status'] = $leave_status->name;
             $ins['reason'] = 'automate entry';
             $ins['status'] ='active';
-            $data = AttendanceManualEntry::updateOrCreate(['id' => $id], $ins);
+            $data = AttendanceManualEntry::Create($ins);
             }
             }
         }
