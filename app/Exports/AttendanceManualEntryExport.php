@@ -16,6 +16,7 @@ class AttendanceManualEntryExport implements FromCollection,WithHeadings
     public function collection()
     {
         //return LeaveHead::select('name','status','created_at')->get();
+         ini_set('max_execution_time', '100000');
         return AttendanceManualEntry::select('users.name as staff_name','attendance_date','from_time','to_time','reporting_manager',
         'leave_statuses.name as leave_status_name','reason','attendance_manual_entries.status','attendance_manual_entries.created_at')
         ->leftJoin('users','users.id','=','attendance_manual_entries.employment_id')

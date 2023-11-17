@@ -77,7 +77,7 @@ class AttendanceManualEntryController extends Controller
         $users=User::where('status', 'active')
             ->where('is_super_admin', null)->where('institute_id',$institute_id)->get();
         foreach($users as $user){
-        $dates =  Carbon::now()->month($month)->year(2023)->day(1)->format("Y-m-d");
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
         $start = date('Y-m-01', strtotime($dates));
         $end = date('Y-m-t', strtotime($dates));
             $staff_id = $user->id;
