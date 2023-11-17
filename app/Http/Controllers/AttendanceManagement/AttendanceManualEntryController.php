@@ -65,6 +65,15 @@ class AttendanceManualEntryController extends Controller
     }
     public function leaveAvailableDays(Request $request,$month,$institute_id){
         ini_set('max_execution_time', '100000');
+        $academic=AcademicYear::find(academicYearId());
+        if($academic){
+        $start_array=array('4','5','6','7','8','9','10','11','12');
+        if(in_array($month,$start_array)){
+                $year=$academic->from_year;
+        }else{
+            $year=$academic->to_year;
+            }
+        }
         $users=User::where('status', 'active')
             ->where('is_super_admin', null)->where('institute_id',$institute_id)->get();
         foreach($users as $user){
@@ -110,7 +119,7 @@ class AttendanceManualEntryController extends Controller
             $ins['institute_id'] = session()->get('staff_institute_id');
              $leave_status = LeaveStatus::find(1);
             $ins['attendance_status'] = $leave_status->name;
-            $ins['reason'] = 'test';
+            $ins['reason'] = 'automate entry';
             $ins['status'] ='active';
             $data = AttendanceManualEntry::updateOrCreate(['id' => $id], $ins);
             }
@@ -136,7 +145,7 @@ class AttendanceManualEntryController extends Controller
         if ($validator->passes()) {
              $statement=AttendanceManualEntry::where('employment_id',$request->employee_id)->where('attendance_date',$request->attendance_date)->first();
             if($statement && !$id){
-                 return response()->json(['error' => 2, 'message' => 'already we have datas for the date', 'inserted_data' => null]);
+                 return response()->json(['error' => 2, 'message' => 'Already we have data for the date', 'inserted_data' => null]);
             }
 
             $user_info = User::find($request->employee_id);
