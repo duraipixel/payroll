@@ -76,12 +76,12 @@ class AttendanceRepository extends Controller
             ->addColumn('action', function ($row) {
                 $route_name = request()->route()->getName();
                 $edit_btn = $del_btn = '';
-                if (access()->buttonAccess($route_name, 'add_edit')) {
+                if (access()->buttonAccess('att-manual-entry', 'add_edit')) {
                     $edit_btn = '<a href="javascript:void(0);" onclick="getLeaveMappingModal(' . $row->id . ')"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                                 <i class="fa fa-edit"></i>
                             </a>';
                 }
-                if (access()->buttonAccess($route_name, 'delete')) {
+                if (access()->buttonAccess('att-manual-entry', 'delete')) {
                     $del_btn = '<a href="javascript:void(0);" onclick="deleteLeaveMappingStatus(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                                 <i class="fa fa-trash"></i></a>';
                 }
