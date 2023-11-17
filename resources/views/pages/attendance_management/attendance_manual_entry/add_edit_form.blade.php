@@ -224,7 +224,12 @@
                                                     element);
                                             });
                                         }
-                                    } else {
+                                       
+                                    } else if(res.error == 2){
+                                         if(res.message) {
+                               toastr.error("Error",res.message);
+                                        }
+                                    }else {
                                         toastr.success(
                                             "Leave Mapping added successfully");
                                         $('#kt_dynamic_app').modal('hide');

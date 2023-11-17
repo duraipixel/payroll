@@ -7,6 +7,7 @@ use App\Http\Controllers\ReportController;
 
 
 
+ Route::get('test/entry/{month}/{institute_id}', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'leaveAvailableDays'])->name('test.entry');
 
  Route::post('/month-wise-variation', [ReportController::class, 'MonthWiseVariation'])->name('reports.month.wise.variation');
 

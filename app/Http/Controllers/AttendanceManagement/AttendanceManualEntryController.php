@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Repositories\AttendanceRepository;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\CalendarDays;
+use App\Models\Leave\StaffLeave;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 class AttendanceManualEntryController extends Controller
 {
     private AttendanceRepository $repository;
@@ -60,6 +63,63 @@ class AttendanceManualEntryController extends Controller
            
         }
     }
+    public function leaveAvailableDays(Request $request,$month,$institute_id){
+        ini_set('max_execution_time', '100000');
+        $users=User::where('status', 'active')
+            ->where('is_super_admin', null)->where('institute_id',$institute_id)->get();
+        foreach($users as $user){
+        $dates =  Carbon::now()->month($month)->year(2023)->day(1)->format("Y-m-d");
+        $start = date('Y-m-01', strtotime($dates));
+        $end = date('Y-m-t', strtotime($dates));
+            $staff_id = $user->id;
+            $period = CarbonPeriod::create($start, $end);
+            $period->toArray();
+
+            $holidays = CalendarDays::where('institute_id',$institute_id)->whereBetween('calendar_date', [$start, $end])->whereIn('days_type',['holiday','week_off'])->select('calendar_date')->get();
+            //$week_off = CalendarDays::whereBetween('calendar_date', [$request->leave_start, $request->leave_end])->where('days_type', 'week_off')->get();
+
+            $leaves = StaffLeave::where('staff_id', $staff_id)
+            ->where('from_date', '>=', $start)
+            ->where('to_date', '<=', $end)
+            ->where('status', 'approved')
+            ->get();
+
+            $days = [];
+            foreach ($period as $date) {
+            $days[]=$date->format('Y-m-d');       
+            }
+            $leave = [];
+            foreach ($holidays as $holiday) {
+            $leave[]=$holiday->calendar_date;       
+            }
+            $total_days=array_diff($days,$leave);
+            $all_days =  sizeof($days);
+            $leave_days = sizeof($days) - ($holidays->count());
+            foreach($total_days as $day){
+                
+                $id=null;
+                $user_info = User::find($staff_id);
+            $statement=AttendanceManualEntry::where('employment_id',$user_info->id)->where('attendance_date',$day)->first();
+           if(!$statement){
+            $ins['academic_id'] = academicYearId();
+            $ins['employment_id'] = $user_info->id;
+            $ins['institute_emp_code'] = $user_info->institute_emp_code;
+            $ins['attendance_date'] =$day;
+            $ins['from_time'] =NUll;
+            $ins['to_time'] = NUll;
+            $ins['institute_id'] = session()->get('staff_institute_id');
+             $leave_status = LeaveStatus::find(1);
+            $ins['attendance_status'] = $leave_status->name;
+            $ins['reason'] = 'test';
+            $ins['status'] ='active';
+            $data = AttendanceManualEntry::updateOrCreate(['id' => $id], $ins);
+            }
+            }
+        }
+          dd('ok');
+            
+        
+    }
 
     public function save(Request $request)
     {
@@ -74,6 +134,11 @@ class AttendanceManualEntryController extends Controller
         ]);
 
         if ($validator->passes()) {
+             $statement=AttendanceManualEntry::where('employment_id',$request->employee_id)->where('attendance_date',$request->attendance_date)->first();
+            if($statement && !$id){
+                 return response()->json(['error' => 2, 'message' => 'already we have datas for the date', 'inserted_data' => null]);
+            }
+
             $user_info = User::find($request->employee_id);
             $ins['academic_id'] = academicYearId();
             $ins['employment_id'] = $request->employee_id;
