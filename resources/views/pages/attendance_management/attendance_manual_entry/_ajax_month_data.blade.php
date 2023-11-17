@@ -26,12 +26,12 @@
                         ->route()
                         ->getName();
                 @endphp
-                @if (access()->buttonAccess($route_name, 'export'))
+                @if (access()->buttonAccess('att-manual-entry', 'export'))
                     <a type="button" class="btn btn-light-primary me-3" href="{{ route('att-manual-entry.export') }}">
                         {!! exportSvg() !!}Export
                     </a>
                 @endif
-                @if (access()->buttonAccess($route_name, 'add_edit'))
+                @if (access()->buttonAccess('att-manual-entry', 'add_edit'))
                     <button type="button" class="btn btn-primary" id="add_modal" onclick="getLeaveMappingModal()">
                         {!! plusSvg() !!} Add Attendance Manual Entry
                     </button>
