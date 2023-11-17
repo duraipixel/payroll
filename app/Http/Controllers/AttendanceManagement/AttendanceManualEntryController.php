@@ -116,7 +116,7 @@ class AttendanceManualEntryController extends Controller
             $ins['attendance_date'] =$day;
             $ins['from_time'] =NUll;
             $ins['to_time'] = NUll;
-            $ins['institute_id'] = session()->get('staff_institute_id');
+            $ins['institute_id'] =$institute_id;
              $leave_status = LeaveStatus::find(1);
             $ins['attendance_status'] = $leave_status->name;
             $ins['reason'] = 'automate entry';

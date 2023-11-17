@@ -19,7 +19,7 @@ class AttendanceManualEntryExport implements FromCollection,WithHeadings
         return AttendanceManualEntry::select('users.name as staff_name','attendance_date','from_time','to_time','reporting_manager',
         'leave_statuses.name as leave_status_name','reason','attendance_manual_entries.status','attendance_manual_entries.created_at')
         ->leftJoin('users','users.id','=','attendance_manual_entries.employment_id')
-        ->leftJoin('leave_statuses','leave_statuses.id','=','attendance_manual_entries.attendance_status')->get();
+        ->leftJoin('leave_statuses','leave_statuses.name','=','attendance_manual_entries.attendance_status')->get();
     }
     public function headings(): array
     {
