@@ -43,11 +43,11 @@
                     <!--end::Password-->
                 </div>
 
-                @if (Route::has('password.request'))
+               <!--  @if (Route::has('password.request'))
                     <a class="btn btn-link text-end my-2 d-block" href="{{ route('password.request') }}">
                         {{ __('Forgot Your Password?') }}
                     </a>
-                @endif
+                @endif -->
 
                 <div class="d-grid mb-10">
                     <button type="submit" class="btn btn-success">
