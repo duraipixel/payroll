@@ -1,4 +1,4 @@
-<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+ <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
                            
     <div class="row">
        <div class="col-lg-6 m-auto">
@@ -8,13 +8,20 @@
           <div class="card-body cstmzed-witpad">
              <form id="dynamic_form">
                  @csrf
+
+                  @if( auth()->user()->id == $info->id )
                  <input type="hidden" name="id" value="{{ auth()->user()->id }}">
+
                  <div class="row mb-7 ">
                      <label class="col-lg-5 fw-semibold text-muted required">Old Password</label>
                      <div class="col-lg-7">
                          <input type="password" class="form-control" name="old_password" id="old_password" required >
                      </div>
                  </div>
+                 @else
+            <input type="hidden" name="id" value="{{ $info->id }}">
+        <input type="hidden" class="form-control" name="old_password" id="old_password" value='test'>
+                 @endif
                  <div class="row mb-7">
                      <label class="col-lg-5 fw-semibold text-muted required">Password</label>
                      <div class="col-lg-7">
@@ -27,6 +34,11 @@
                      <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required >
                      </div>
                  </div>
+                  @if( auth()->user()->id == $info->id )
+                  <input type="hidden" name="type" value="old">
+                  @else
+                  <input type="hidden" name="type" value="new">
+                  @endif
                  <div class="form-group mb-10 text-end">
                      <button type="button" class="btn btn-light-primary" id="form-cancel-btn"> Cancel </button>
                      <button type="button" class="btn btn-primary" id="form-submit-btn"> 

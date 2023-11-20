@@ -57,17 +57,17 @@ class OverViewController extends Controller
     'leave_doc','appointment_doc','salary_doc','total_year','loans','working_days','present','absence'));
     }
     public function saveForm(Request $request)
-    {
+    {   
         $id             = $request->id;
-            $validator = Validator::make($request->all(), [
-                'old_password' => 'required',
+        $validator = Validator::make($request->all(), [
+                'old_password' => 'required_if:type,old',
                 'password' => 'required|min:6|required_with:password_confirmation|same:password_confirmation',
                 'password_confirmation' => 'min:6'
                
-            ]);
-            if ($validator->passes()) {
-                
-                if ((Hash::check($request->get('old_password'), Auth::user()->password))) {
+        ]);
+        if ($validator->passes()) {
+            if($request->type=='old'){
+                    if ((Hash::check($request->get('old_password'), Auth::user()->password))) {
 
                     $ins['password']            = Hash::make($request->password);
                     $error = 0;
@@ -80,11 +80,21 @@ class OverViewController extends Controller
                     return response()->json(['error'=> $error, 'message' => $message]);
                 }
 
-            } else {
+            }else{
+
+             $ins['password']            = Hash::make($request->password);
+                    $error = 0;
+                    $info = User::updateOrCreate(['id' => $id],$ins);
+                    $message = (isset($id) && !empty($id)) ? 'Password updated successfully' :'Added successfully';
+                return response()->json(['error'=> $error, 'message' => $message]);
+            
+        }
+    }else {
                 $error = 1;
                 $message = $validator->errors()->all();
                 return response()->json(['error'=> $error, 'message' => $message]);
             }
+            
       
         return response()->json(['error'=> $error, 'message' => $message]);
     }
