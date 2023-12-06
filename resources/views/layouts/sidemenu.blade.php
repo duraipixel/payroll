@@ -154,7 +154,7 @@ class="menu-item menu-accordion
 
 @if (access()->hasAccess(['staff.register', 'staff.list', 'staff.bulk']))
 <div data-kt-menu-trigger="click"
-class="menu-item menu-accordion @if (request()->routeIs(['staff.register', 'staff.list', 'staff.bulk'])) hover show @endif">
+class="menu-item menu-accordion @if (request()->routeIs(['staff.register', 'staff.list', 'staff.bulk','staff.transfer'])) hover show @endif">
 <span class="menu-link">
 <span class="menu-icon">
     <i class="fa fa-users"></i>
@@ -165,7 +165,7 @@ class="menu-item menu-accordion @if (request()->routeIs(['staff.register', 'staf
 </span>
 
 <div class="menu-sub menu-sub-accordion menu-active-bg">
-@if (access()->hasAccess('staff.register', 'view'))
+@if (access()->hasAccess('staff.register', ['view','add_edit']))
     <div class="menu-item">
         <a class="menu-link  @if (request()->routeIs(['staff.register'])) active @endif"
             href="{{ route('staff.register') }}">
@@ -187,17 +187,17 @@ class="menu-item menu-accordion @if (request()->routeIs(['staff.register', 'staf
         </a>
     </div>
 @endif
-
+@if (access()->hasAccess('staff.transfer', 'view'))
 <div class="menu-item">
-    <a class="menu-link" href="{{ route('staff.transfer') }}">
+    <a class="menu-link  @if (request()->routeIs(['staff.transfer'])) active @endif " href="{{ route('staff.transfer') }}">
         <span class="menu-bullet">
             <span class="bullet bullet-dot"></span>
         </span>
         <span class="menu-title">Staff Transfer</span>
     </a>
 </div>
-
-@if (access()->hasAccess('staff.bulk', 'view'))
+@endif
+@if (access()->hasAccess('staff.bulk',['view','add_edit']))
     <div class="menu-item">
         <a class="menu-link @if (request()->routeIs(['staff.bulk'])) active @endif"
             href="{{ route('staff.bulk') }}">
@@ -459,6 +459,7 @@ class="menu-item menu-accordion  @if (request()->routeIs([
     </div>
 </div>
 @endif
+@if (access()->hasAccess('leaves.set.workingday', 'view'))
 <div class="menu-sub menu-sub-accordion menu-active-bg">
 <div class="menu-item">
     <a class="menu-link @if (request()->routeIs(['leaves.set.workingday'])) active @endif"
@@ -470,6 +471,7 @@ class="menu-item menu-accordion  @if (request()->routeIs([
     </a>
 </div>
 </div>
+@endif
 {{-- @if (access()->hasAccess('holiday', 'view'))
 <div class="menu-sub menu-sub-accordion menu-active-bg">
 <div class="menu-item">

@@ -67,10 +67,16 @@
    
     <!--end::Card-->
 @endsection
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
 @section('add_on_script')
-@endsection
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
 <script>
+     $('#role_id').select2({
+            selectOnClose: true,
+            theme: 'bootstrap-5'
+    });
     function permission_table_show()
     {
         var role_id=$("#role_id").val();
@@ -95,3 +101,4 @@
     }
 
 </script>
+@endsection

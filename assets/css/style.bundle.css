@@ -54954,7 +54954,7 @@ body {
 .select2 .selection {
   display: flex !important;
   width: 100% !important;
-  height: 100% !important;
+  height: 30% !important;
 }
 
 .input-group .select2-container--bootstrap-5 {

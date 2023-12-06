@@ -79,10 +79,19 @@ class LeaveCancellationcontroller extends Controller
                     return number_format($row['granted_days'],1);
                 })
                 ->addColumn('action', function ($row) {
+                      $route_name = request()->route()->getName(); 
+                if( access()->buttonAccess($route_name,'add_edit') )
+                {
                         $edit = '<a href="javascript:void(0);" onclick="editLeave(' . $row->id.')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" >
                         <i class="fa fa-edit"></i>
                         </a>';
                     return $edit;
+                }else{
+                     $edit = '<a href="javascript:void(0);" onclick="#" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" >
+                        <i class="fa fa-edit"></i>
+                        </a>';
+                    return $edit;
+                }
                 })
                 ->rawColumns(['action', 'created_at', 'name']);
             return $datatables->make(true);

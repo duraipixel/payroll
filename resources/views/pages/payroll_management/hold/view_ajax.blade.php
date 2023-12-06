@@ -14,7 +14,7 @@
                     ->getName();
             @endphp
 
-            @if (access()->buttonAccess($route_name, 'add_edit'))
+            @if (access()->buttonAccess('holdsalary', 'add_edit'))
                 <button type="button" class="btn btn-primary btn-sm" id="add_modal" onclick="addHoldSalary()">
                     {!! plusSvg() !!} Hold Salary
                 </button>

@@ -131,11 +131,18 @@ class HoldSalaryController extends Controller
                 })
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
+           $edit_btn='';
+             $del_btn='';
+            if(access()->buttonAccess('holdsalary', 'add_edit')){
+
                     $edit_btn = '<a href="javascript:void(0);" onclick="addHoldSalary(' . $row->id.')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" >
                         <i class="fa fa-edit"></i>
                         </a>';
+                }
+                if(access()->buttonAccess('holdsalary', 'delete')){
                      $del_btn = '<a href="javascript:void(0);" onclick="deleteHold(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                     <i class="fa fa-trash"></i></a>';
+                }
                     $action= $edit_btn.$del_btn;
                     return   $action;
                 })

@@ -61,7 +61,13 @@ class SalaryFieldController extends Controller
                 })
                 ->addIndexColumn()
                 ->editColumn('status', function ($row) {
+                       $route_name = request()->route()->getName(); 
+                if( access()->buttonAccess($route_name,'add_edit') )
+                {
                     $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return salaryFieldChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+                }else{
+                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" >' . ucfirst($row->status) . '</a>';
+                }
                     if( $row->is_static == 'yes') {
                         $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" >' . ucfirst($row->status) . '</a>';
                     }

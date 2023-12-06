@@ -66,6 +66,7 @@ return [
         'leave-mapping' => 'Leave Mapping', 
         'leave-cancellation' => 'Leave Cancellation',
         'holiday' => 'Holidays', 
+        'leaves.set.workingday'=>'Set Working day'
     ],
     'payroll_management' => [
         

@@ -1130,7 +1130,9 @@ class StaffController extends Controller
                     $print_btn = '<a target="_blank" href="' . route('staff.print', ['user' => $post_val->id]) . '"  class="btn btn-icon btn-active-info btn-light-dark mx-1 w-30px h-30px" > 
                                     <i class="fa fa-print"></i>
                                 </a>';
-                    if( $post_val->transfer_status == 'active' ){
+                 $route_name = request()->route()->getName();
+                   
+                    if( access()->buttonAccess($route_name, 'add_edit') &&  $post_val->transfer_status == 'active' ){
 
                         $status_btn = '<a href="javascript:void(0);" class="badge badge-light-' . (($post_val->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($post_val->status) . '" onclick="return staffChangeStatus(' . $post_val->id . ',\'' . ($post_val->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($post_val->status) . '</a>';
                     } else {

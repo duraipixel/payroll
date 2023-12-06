@@ -42,14 +42,19 @@
 <div class="row">
     <div class="col-sm-2">
     </div>
+  
     <div class="col-sm-10 text-start my-2 w-700px">
+        @if (access()->buttonAccess('salary.revision', 'add_edit'))
         <button class="btn btn-primary" type="button" onclick="return addNewRevision()">
             Add New Revision
         </button>
+        @endif
+        @if (access()->buttonAccess('salary.creation', 'add_edit'))
         <button class="btn btn-info" onclick="return updateCurrentSalary()">
             Update Salary
         </button>
     </div>
+    @endif
 </div>
 <div class="row">
 

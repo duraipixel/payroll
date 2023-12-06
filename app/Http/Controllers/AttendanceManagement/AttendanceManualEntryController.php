@@ -63,9 +63,9 @@ class AttendanceManualEntryController extends Controller
            
         }
     }
-    public function leaveAvailableDays(Request $request,$month,$institute_id){
+    public function leaveAvailableDays(Request $request,$month,$institute_id,$acadamic_id){
         ini_set('max_execution_time', '100000');
-        $academic=AcademicYear::find(academicYearId());
+        $academic=AcademicYear::find($acadamic_id);
         if($academic){
         $start_array=array('4','5','6','7','8','9','10','11','12');
         if(in_array($month,$start_array)){
@@ -108,7 +108,7 @@ class AttendanceManualEntryController extends Controller
                 $user_info = User::find($staff_id);
             $statement=AttendanceManualEntry::where('employment_id',$user_info->id)->where('attendance_date',$day)->first();
            if(!$statement){
-            $ins['academic_id'] = academicYearId();
+            $ins['academic_id'] = $acadamic_id;
             $ins['employment_id'] = $user_info->id;
             $ins['institute_emp_code'] = $user_info->institute_emp_code;
             $ins['attendance_date'] =$day;

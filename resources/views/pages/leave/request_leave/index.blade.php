@@ -58,12 +58,22 @@
                                 <th class="text-center text-white">
                                     Name
                                 </th>
+                                 <th class="text-center text-white">
+                                   Institute Code
+                                </th>
                                 <th class="text-center text-white">
                                     Designation
                                 </th>
-                                <th class="text-center text-white">
+                                 <th class="text-center text-white">
                                     Leave Category
                                 </th>
+                                <th class="text-center text-white">
+                                   From Date
+                                </th>
+                                <th class="text-center text-white">
+                                    To Date
+                                </th>
+                               
                                 <th class="text-center text-white">
                                     Days Requested
                                 </th>
@@ -157,12 +167,24 @@
                     name: 'staff_name'
                 },
                 {
+                    data: 'institute_code',
+                    name: 'Institute Code'
+                },
+                {
                     data: 'designation',
                     name: 'designation'
                 },
                 {
                     data: 'leave_category',
                     name: 'leave_category'
+                },
+                {
+                    data: 'from_date',
+                    name: 'From Date'
+                },
+                {
+                    data: 'to_date',
+                    name: 'To Date'
                 },
                 {
                     data: 'no_of_days',

@@ -1012,7 +1012,8 @@ function getStaffLeaveRequestStatus($staff_id, $date)
     $info = StaffLeave::where('staff_id', $staff_id)
         ->where('from_date', '>=', $date)->where('to_date', '<=', $date)
         ->first();
-    $status = 'Leave Request Pending';
+
+    $status = 'Leave Request No Raised';
     if ($info) {
         if ($info->status == 'pending') {
             $status = 'Leave Approval Pending';

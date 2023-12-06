@@ -72,10 +72,17 @@
             </div>
         </div>
     </div>
+    <input type="hidden" name="date" id="date">
 @endsection
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
 @section('add_on_script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
     <script>
+         $('#staff_id').select2({
+            selectOnClose: true,
+            theme: 'bootstrap-5'
+         });
         $(document).ready(function() {
 
             $('#staff_id').select2({ theme: 'bootstrap-5'});
@@ -190,7 +197,7 @@
         }
 
         function getStaffDaysCount(current_date, staff_id) {
-
+              $('#date').val(current_date);
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -227,7 +234,8 @@
                 url: "{{ route('leaves.staff.info') }}",
                 type: "POST",
                 data: {
-                    staff_id: staff_id
+                    staff_id: staff_id,
+                    date:$('#date').val(),
                 },
                 success: function(res) {
                     $('#days_count').html(res);

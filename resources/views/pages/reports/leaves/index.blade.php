@@ -18,9 +18,11 @@
                 </div>
                 <div class="d-flex">
                     <form action="{{ route('reports.leaves') }}" class="input-group w-auto d-inline" method="GET">
-                        
+                        @if (access()->buttonAccess('reports.leaves', 'export'))
                         <button onclick="this.form.action = '{{ route('reports.leaves.export') }}'" type="submit"
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+
+                            @endif
                             <input type="date" name="from_date"  class="form-control form-control-sm  w-auto d-inline" placeholder="From Date"value="{{ request()->from_date }}" >
                             <input type="date" name="to_date"  class="form-control form-control-sm  w-auto d-inline" placeholder="To Date"value="{{ request()->to_date }}">
                             <select name="place_work" class="form-select form-select-sm w-auto d-inline">

@@ -48,8 +48,15 @@ class BankController extends Controller
             })
             ->addIndexColumn()
             ->editColumn('status', function ($row) {
-                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return bankChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
-                return $status;
+                 $route_name = request()->route()->getName(); 
+                if( access()->buttonAccess($route_name,'add_edit') )
+                 {
+                $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="return bankChangeStatus(' . $row->id . ',\'' . ($row->status == 'active' ? '[inactive' : 'active') . '\')">' . ucfirst($row->status) . '</a>';
+            }else{
+         $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($row->status) . '" onclick="#">' . ucfirst($row->status) . '</a>';
+                
+            }
+            return $status;
             })
             ->editColumn('created_at', function ($row) {
                 $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');

@@ -127,7 +127,7 @@ class LeaveController extends Controller
 
         if ($request->ajax()) {
             $institute_id=session()->get('staff_institute_id');
-            $data = StaffLeave::select('staff_leaves.*', 'users.name as staff_name')->with(['staff_info'])
+            $data = StaffLeave::select('staff_leaves.*', 'users.name as staff_name','users.institute_emp_code as institute_code')->with(['staff_info'])
                 ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
              ->when($institute_id, function ($q) use($institute_id) {
             $q->Where('users.institute_id', $institute_id);
@@ -140,8 +140,7 @@ class LeaveController extends Controller
                     if ($keywords) {
                         // $date = date('Y-m-d', strtotime($keywords));
                         return $query->where(function ($q) use ($keywords) {
-                            $q->where('staff_leaves.application_no', 'like', "%{$keywords}%")
-                                ->orWhere('users.name', 'like', "%{$keywords}%");
+                          $q->where('users.name', 'like', "%{$keywords}%")->orWhere('users.institute_emp_code', 'like', "%{$keywords}%")->orWhere('staff_leaves.application_no', 'like', "%{$keywords}%");
                             // ->orWhereDate('staff_leaves.created_at', $date);
                         });
                     }
@@ -165,28 +164,37 @@ class LeaveController extends Controller
                 ->addColumn('action', function ($row) {
                     $url = Storage::url($row->document);
                     $approve_btn = '';
+                    $edit = '';
                     if (isset($row->approved_document) && !empty($row->approved_document)) {
-
+if(access()->buttonAccess('leaves.list', 'add_edit')){
                         $approved_doc = Storage::url($row->approved_document);
                         $approve_btn = '<a href="' . asset('public' . $approved_doc) . '" tooltip="Approved Document" target="_blank"  class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" > 
                                 <i class="fa fa-download"></i>
                             </a>';
+                        }
                     }
-
                     if ($row->status == 'pending') {
-
-                        $approve_btn = '<a href="javascript:void(0);" onclick="approveLeave(' . $row->id . ')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" > 
+                       if(access()->buttonAccess('leaves.list', 'add_edit')){
+                         $approve_btn = '<a href="javascript:void(0);" onclick="approveLeave(' . $row->id . ')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" > 
                                             <i class="fa fa-check"></i></a>';
                          $edit = '<a href="javascript:void(0);" onclick="editLeave(' . $row->id.')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" >
                         <i class="fa fa-edit"></i>
                         </a>';
                     }else{
+                         $approve_btn = '';
+                        $edit='';
+                         
+                    }
+                       
+                    }else{
+                        if(access()->buttonAccess('leaves.list', 'add_edit')){
                         $edit='<a href="javascript:void(0);"class="btn btn-icon btn-active-secondary btn-light-secondary mx-1 w-30px h-30px">
                         <i class="fa fa-edit"></i>
                         </a>';
                     }
-                    $route_name = request()->route()->getName();
-                    if (access()->buttonAccess($route_name, 'add_edit')) {
+
+                    }
+                    if (access()->buttonAccess('leaves.list', 'add_edit')) {
                         $edit_btn = '<a href="' . asset('public' . $url) . '" target="_blank" tooltip="Leave form"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                                 <i class="fa fa-download"></i>
                             </a>';
@@ -194,7 +202,7 @@ class LeaveController extends Controller
                     } else {
                         $edit_btn = '';
                     }
-                    if (access()->buttonAccess($route_name, 'delete')) {
+                    if (access()->buttonAccess('leaves.list', 'delete')) {
                         $del_btn = '<a href="javascript:void(0);" onclick="deleteLeave(' . $row->id . ')" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px" > 
                                 <i class="fa fa-trash"></i></a>';
                     } else {
@@ -668,9 +676,10 @@ class LeaveController extends Controller
     {
 
         $staff_id = $request->staff_id;
-        $month_start = date('Y-m-1');
-        $month_end = date('Y-m-t');
-        $month = date('F');
+        $date = $request->date;
+        $month_start = date('Y-m-01', strtotime($date));
+        $month_end = date('Y-m-t', strtotime($date));
+        $month =date('F', strtotime($date));
         /**
          * 1.get leave days
          * 2. get worked days
@@ -680,13 +689,12 @@ class LeaveController extends Controller
         $week_off = CalendarDays::whereBetween('calendar_date', [$month_start, $month_end])->where('days_type', 'week_off')->count();
 
         $user = User::find($staff_id);
-        $leaves = StaffLeave::selectRaw('sum(no_of_days) as leaves, staff_leaves.*')
-            ->where('staff_id', $staff_id)->where('from_date', '>=', $month_start)
+        $leaves = StaffLeave::where('staff_id', $staff_id)->where('from_date', '>=', $month_start)
             ->where('to_date', '<=', $month_end)
-            // ->where('status', 'approved')
-            ->groupBy('staff_leaves.leave_category')
-            ->get();
-
+            ->where('status', 'approved')
+            ->groupBy('leave_category')
+    ->select('leave_category',\DB::raw('SUM(granted_days) as leaves'))
+    ->get();
         return view('pages.leave._staff_leave_details', compact('user', 'leaves', 'month', 'working_days', 'holidays', 'week_off'));
     }
 
