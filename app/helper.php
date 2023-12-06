@@ -1013,7 +1013,7 @@ function getStaffLeaveRequestStatus($staff_id, $date)
         ->where('from_date', '>=', $date)->where('to_date', '<=', $date)
         ->first();
 
-    $status = 'Leave Request No Raised';
+    $status = 'No Leave Request Raised';
     if ($info) {
         if ($info->status == 'pending') {
             $status = 'Leave Approval Pending';
