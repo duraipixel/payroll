@@ -1288,6 +1288,7 @@ class ReportController extends Controller
     ->InstituteBased()->when(!empty($month), function ($query) use ($month) {
         $query->whereHas('leaves', function($q) use($month){
        $q->whereMonth('from_date', $month)->orwhereMonth('to_date', $month);
+        $q->where('status','approved');
         });  
         })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
 
