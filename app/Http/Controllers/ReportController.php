@@ -1361,8 +1361,12 @@ class ReportController extends Controller
                         $el +=$leave->granted_days;
                      }
                  }
-                 
-            return ($row->appointment->employment_nature->gl->leave_days  ?? 0 - $el) ??0;
+                 if(isset($row->appointment->employment_nature->gl->leave_days)){
+                     return ($row->appointment->employment_nature->gl->leave_days- $el) ??0;
+                 }else{
+                    return $el ??0;
+                 }
+           
         })->editColumn('ml_eligible', function ($row) {
                
                  
@@ -1385,8 +1389,12 @@ class ReportController extends Controller
                         $ml +=$leave->granted_days;
                      }
                  }
-                 
-            return ($row->appointment->employment_nature->ml->leave_days  ?? 0 - $ml) ??0;
+                 if(isset($row->appointment->employment_nature->ml->leave_days)){
+                     return ($row->appointment->employment_nature->ml->leave_days- $ml) ??0;
+                 }else{
+                    return $ml ??0;
+                 }
+           
         })->editColumn('eol_availed', function ($row) {
                 $eol=0;
                  foreach($row->leaves as $leave){

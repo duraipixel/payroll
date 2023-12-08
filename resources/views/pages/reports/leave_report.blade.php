@@ -183,13 +183,13 @@
                     data: 'gl_availed',
                     name: 'Availed'
                 },{
-                    data: 'gl_availed',
+                    data: 'eol_reason',
                     name: 'Accumalted'
                 },{
-                    data: 'gl_availed',
+                    data: 'eol_reason',
                     name: 'current yr'
                 },{
-                    data: 'gl_availed',
+                    data: 'eol_reason',
                     name: 'Total'
                 },{
                     data: 'el_availed',
