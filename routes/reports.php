@@ -61,6 +61,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
     //Route::get('/bank-disbursement-report', [ReportController::class, 'index'])->name('reports.bank.disbursement.report');
 
     Route::get('/bank-loan-report', [ReportController::class, 'BankLoanReport'])->name('reports.bank.loan.report');
+    #....
+ Route::get('/leave-report', [ReportController::class, 'index'])->name('leave.report');
+
+ Route::get('/bank-disbursement-report', [ReportController::class, 'index'])->name('bank.disbursement.report');
+
+    #...
     //Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
    //Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');
    Route::get('/lic-report', [ReportController::class, 'InsuranceReport'])->name('reports.lic.report');

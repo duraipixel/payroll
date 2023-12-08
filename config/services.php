@@ -152,6 +152,8 @@ return [
         'reports.professional.tax.report' => 'ProfessionalTax Reports',
         'reports.month.wise.variation.report' => 'MonthWiseVariation Reports',
         'reports.notification.list' => 'Notification Reports',
+        'leave.report'=>'Leave Report',
+        'bank.disbursement.report'=>'Bank Disbursement Report'
 
     ]
 ];
