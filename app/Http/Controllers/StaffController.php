@@ -594,6 +594,8 @@ class StaffController extends Controller
              * 2.insert in staff_bank_details
              * 3.insert in staff_pf_esi_details
              */
+            $staff_info->is_super_admin=$request->is_super_admin;
+            $staff_info->save();
             $ins['academic_id'] = $academic_id;
             $ins['staff_id'] = $id;
             $ins['dob'] = date('Y-m-d', strtotime($request->date_of_birth));
@@ -615,7 +617,7 @@ class StaffController extends Controller
             $ins['contact_address'] = $request->contact_address;
             $ins['permanent_address'] = $request->permanent_address;
             $ins['status'] = 'active';
-            $ins['is_super_admin'] = $request->is_super_admin;
+           
             if ($request->hasFile('profile_image')) {
 
                 $files = $request->file('profile_image');
