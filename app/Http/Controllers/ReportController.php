@@ -13,6 +13,7 @@ use App\Repositories\ReportRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use App\Models\Leave\StaffLeave;
 use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\Payroll;
 use DataTables;
@@ -548,7 +549,9 @@ class ReportController extends Controller
             );
         $datatable_search=$request->datatable_search;
         $month = $request->month ?? date('m');
-        $dates ='2023-08-01';
+        $academic_info = AcademicYear::find(academicYearId());
+       $year=$academic_info->from_year;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
@@ -565,7 +568,7 @@ class ReportController extends Controller
                     ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                         });
                 });
-            })->orderby('created_at','desc')->whereMonth('salary_processed_on',$month)->get();
+            })->orderby('created_at','desc')->get();
             }         
             if($request->ajax()){
             $datatables =  Datatables::of($data)
@@ -1268,5 +1271,208 @@ class ReportController extends Controller
         }
         return view('pages.reports.monthwisechanges', compact('breadcrums','month'));
     }
+    public function LeaveReport(Request $request){
+    $breadcrums = array(
+    'title' => 'Leave Report',
+    'breadcrums' => array(
+    array(
+    'link' => '', 'title' => 'Leave Report'
+    ),
+    )
+    );
+    $datatable_search=$request->datatable_search;
+    $month = $request->month ?? date('m');
+    $data=[];
+    $institute_id=session()->get('staff_institute_id');
+        $data = User::with('leaves')
+    ->InstituteBased()->when(!empty($month), function ($query) use ($month) {
+        $query->whereHas('leaves', function($q) use($month){
+       $q->whereMonth('from_date', $month)->orwhereMonth('to_date', $month);
+        });  
+        })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+
+                return $query->where(function ($q) use ($datatable_search) {
+                $q->where('name', 'like', "%{$datatable_search}%")
+            ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                    
+                });
+        });
+              
+    if($request->ajax()){
+        $datatables =  Datatables::of($data)
+        ->addIndexColumn()
+        ->editColumn('name', function ($row) { 
+
+            return $row->name ?? '';
+        })->editColumn('emp_id', function ($row) {
+            return $row->institute_emp_code ?? '';
+        })->editColumn('doj', function ($row) {
+            return $row['staff_info']->appointment->joining_date ?? '';
+        })->editColumn('designation', function ($row) {
+            return $row->appointment->designation->name?? '';
+        })->editColumn('cl_eligible', function ($row) {
+
+            return $row->appointment->employment_nature->cl->leave_days??0;
+        })->editColumn('cl_availed', function ($row) {
+            $cl=0;
+                 foreach($row->leaves as $leave){
+                     if($leave->leave_category=='Casual Leave'){
+
+                        $cl +=$leave->granted_days;
+                     }
+                 }
+            return $cl ?? 0;
+        })->editColumn('cl_balance', function ($row) {
+            $cl=0;
+                 foreach($row->leaves as $leave){
+                     if($leave->leave_category=='Casual Leave'){
+                       
+                        $cl +=$leave->granted_days;
+                     }
+                 }
+            return ($row->appointment->employment_nature->cl->leave_days-$cl) ?? 0;
+        })->editColumn('gl_sanctioned', function ($row) {
+                
+            return $row->appointment->employment_nature->gl->leave_days??0;
+        })->editColumn('gl_availed', function ($row) {
+                 $gl=0;
+                 foreach($row->leaves as $leave){
+                     if($leave->leave_category=='Maternity Leave'){
+                       
+                        $gl +=$leave->granted_days;
+                     }
+                 }
+            return $gl ??0;
+        })->editColumn('el_availed', function ($row) {
+                 $el=0;
+                 foreach($row->leaves as $leave){
+                     if($leave->leave_category=='Earned Leave'){
+                       
+                        $el +=$leave->granted_days;
+                     }
+                 }
+            return $el ??0;
+        })->editColumn('el_balance', function ($row) {
+                 $el=0;
+                 foreach($row->leaves as $leave){
+                     if($leave->leave_category=='Earned Leave'){
+                       
+                        $el +=$leave->granted_days;
+                     }
+                 }
+                 
+            return ($row->appointment->employment_nature->gl->leave_days  ?? 0 - $el) ??0;
+        })->editColumn('ml_eligible', function ($row) {
+               
+                 
+            return $row->appointment->employment_nature->ml->leave_days  ?? 0;
+        })->editColumn('ml_availed', function ($row) {
+                $ml=0;
+                 foreach($row->leaves as $leave){
+                     if($leave->leave_category=='Maternity Leave'){
+                       
+                        $ml +=$leave->granted_days;
+                     }
+                 }
+                 
+            return $ml  ?? 0;
+        })->editColumn('ml_balance', function ($row) {
+                $ml=0;
+                 foreach($row->leaves as $leave){
+                     if($leave->leave_category=='Maternity Leave'){
+                       
+                        $ml +=$leave->granted_days;
+                     }
+                 }
+                 
+            return ($row->appointment->employment_nature->ml->leave_days  ?? 0 - $ml) ??0;
+        })->editColumn('eol_availed', function ($row) {
+                $eol=0;
+                 foreach($row->leaves as $leave){
+                     if($leave->leave_category=='Extra Ordinary Leave'){
+                       
+                        $eol +=$leave->granted_days;
+                     }
+                 }
+                 
+            return $eol ??0;
+        })->editColumn('eol_amount', function ($row) {  
+            return '';
+        })->editColumn('eol_reason', function ($row) {   
+             return '';
+        });
+        return $datatables->make(true);
+    }
+    return view('pages.reports.leave_report', compact('breadcrums','month'));
+}
+    public function BankDisbursement(Request $request){
+        $breadcrums = array(
+        'title' => 'Bank Disbursement Report',
+        'breadcrums' => array(
+        array(
+        'link' => '', 'title' => 'Bank Disbursement Report'
+        ),
+        )
+        );
+        $datatable_search=$request->datatable_search;
+        $month = $request->month ?? date('m');
+        $academic_info = AcademicYear::find(academicYearId());
+        $year=$academic_info->from_year;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+        $data=[];
+        $from_date = date('Y-m-01', strtotime($dates));
+        $to_date = date('Y-m-t', strtotime($dates));
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
+        $payroll_id = $payroll->id ?? '';
+        if($payroll_id){
+            $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
+                $query->where('payroll_id', $payroll_id);
+            })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+
+                return $query->where(function ($q) use ($datatable_search) {
+                    $q->whereHas('staff', function($jq) use($datatable_search){
+                        $jq->where('name', 'like', "%{$datatable_search}%")
+                        ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                    });
+                });
+            })->orderby('created_at','desc')->get();
+           
+
+        }         
+        if($request->ajax()){
+            $datatables =  Datatables::of($data)
+            ->addIndexColumn()
+            ->editColumn('staff_name', function ($row) { 
+
+                return $row['staff']->name ?? '';
+            })->editColumn('bank_code', function ($row) { 
+          if(isset($row['staff']->bank->bankDetails)){
+            if($row['staff']->bank->bankDetails->name=="AXIS BANK"){
+                           return 'I';
+                       }else{
+                            return 'N';
+                       }
+                   }
+                 return '';
+            })->editColumn('account_number', function ($row) { 
+          return $row['staff']->bank->account_number ?? '';
+            })->editColumn('ifsc_code', function ($row) { 
+                 return $row['staff']->bank->bankBranch->ifsc_code ?? '';
+            })->editColumn('remarks', function ($row) { 
+
+                 return '';
+            })->editColumn('bulk_upload', function ($row) { 
+
+                 return '10';
+            })->editColumn('school_account_number', function ($row) { 
+
+                 return '';
+            });
+            return $datatables->make(true);
+        }
+        return view('pages.reports.bankdisbursement', compact('breadcrums','month'));
+    }
+
+
 }
 

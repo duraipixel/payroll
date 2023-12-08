@@ -22,6 +22,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports'],  function () {
     Route::get('/esi/export', [ReportExportController::class, 'esi'])->name('reports.esi.export');
     Route::get('/incometax/export', [ReportExportController::class, 'incometax'])->name('reports.incometax.export');
     Route::get('/bonus/export', [ReportExportController::class, 'bonus'])->name('reports.bonus.export');
+    
+    Route::get('/bank/disbursement/export', [ReportExportController::class, 'BankDisbursement '])->name('reports.bank.disbursement.export');
+
+
     Route::get('/arrear/export', [ReportExportController::class, 'arrear'])->name('reports.arrear.export');
     Route::get('/resignation/export', [ReportExportController::class, 'resignation'])->name('reports.resignation.export');
     Route::get('/bank-loan/export', [ReportExportController::class, 'bankloan'])->name('reports.bankloan.export');
@@ -62,9 +66,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports', 'is_menu' => true],
 
     Route::get('/bank-loan-report', [ReportController::class, 'BankLoanReport'])->name('reports.bank.loan.report');
     #....
- Route::get('/leave-report', [ReportController::class, 'index'])->name('leave.report');
+ Route::get('/leave-report', [ReportController::class, 'LeaveReport'])->name('leave.report');
 
- Route::get('/bank-disbursement-report', [ReportController::class, 'index'])->name('bank.disbursement.report');
+ Route::get('/bank-disbursement-report', [ReportController::class, 'BankDisbursement'])->name('bank.disbursement.report');
 
     #...
     //Route::get('/personal-loan-report', [ReportController::class, 'index'])->name('reports.personal.loan.report');

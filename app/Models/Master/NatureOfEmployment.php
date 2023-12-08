@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models\Master;
-
+use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\Staff\StaffAppointmentDetail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +24,22 @@ class NatureOfEmployment extends Model implements Auditable
     public function appointments()
     {
         return $this->hasMany(StaffAppointmentDetail::class, 'nature_of_employment_id', 'id');
+    }
+    public function cl()
+    {
+        return $this->hasOne(LeaveMapping::class, 'nature_of_employment_id', 'id')->where('leave_head_id',1);
+    }
+     public function gl()
+    {
+        return $this->hasOne(LeaveMapping::class, 'nature_of_employment_id', 'id')->where('leave_head_id',5);
+    }
+    public function el()
+    {
+        return $this->hasOne(LeaveMapping::class, 'nature_of_employment_id', 'id')->where('leave_head_id',2);
+    }
+     public function ml()
+    {
+        return $this->hasOne(LeaveMapping::class, 'nature_of_employment_id', 'id')->where('leave_head_id',3);
     }
     
 }

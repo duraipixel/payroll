@@ -37,6 +37,7 @@ use App\Exports\Reports\LopExport;
 use App\Exports\Reports\HoldsalaryExport;
 use App\Exports\Reports\ProfessionalTaxExport;
 use App\Exports\Reports\SalaryAcquitanceExport;
+use App\Exports\Reports\BankDisbursement;
 class ReportExportController extends Controller
 {
     function epf(Request $request) {
@@ -304,6 +305,36 @@ class ReportExportController extends Controller
         }
        
         return Excel::download(new SalaryAcquitanceExport($earings_field??'',$deductions_field??'',$salary_info?? [],$payroll??''),'salaryregister_export.xlsx');
+        
+    }
+    function BankDisbursement(Request $request) {
+        $datatable_search=$request->data_search;
+        $month = $request->month ?? date('m');
+        $academic_info = AcademicYear::find(academicYearId());
+        $year=$academic_info->from_year;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+        $data=[];
+        $from_date = date('Y-m-01', strtotime($dates));
+        $to_date = date('Y-m-t', strtotime($dates));
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
+        $payroll_id = $payroll->id ?? '';
+        if($payroll_id){
+            $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
+                $query->where('payroll_id', $payroll_id);
+            })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+
+                return $query->where(function ($q) use ($datatable_search) {
+                    $q->whereHas('staff', function($jq) use($datatable_search){
+                        $jq->where('name', 'like', "%{$datatable_search}%")
+                        ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                    });
+                });
+            })->orderby('created_at','desc')->get();
+           
+
+        }         
+       
+        return Excel::download(new BankDisbursement($data??[]),'bank_disbursement_export.xlsx');
         
     }
 
