@@ -582,7 +582,8 @@ class StaffController extends Controller
             'whatsapp_no' => 'nullable|numeric|digits:10',
             'contact_address' => 'required',
             'permanent_address' => 'required',
-            'outer_staff_id' => 'required'
+            'outer_staff_id' => 'required',
+
         ]);
 
         if ($validator->passes()) {
@@ -614,6 +615,7 @@ class StaffController extends Controller
             $ins['contact_address'] = $request->contact_address;
             $ins['permanent_address'] = $request->permanent_address;
             $ins['status'] = 'active';
+            $ins['is_super_admin'] = $request->is_super_admin;
             if ($request->hasFile('profile_image')) {
 
                 $files = $request->file('profile_image');
