@@ -218,7 +218,7 @@
                 </div>
                    <div class="col-lg-4"> 
   <label class="form-check form-check-custom form-check-solid">
-                                <input class="form-check-input h-20px w-20px" type="checkbox" name="is_super_admin"
+                                <input class="form-check-input h-20px w-20px" type="checkbox" name="is_super_admin" id="is_super_admin"
                                     value="1" @if (isset($staff_details->is_super_admin) && $staff_details->is_super_admin == 1) checked @endif />
                                 <span class="form-check-label fw-bold">Is Super Admin</span>
                             </label>
@@ -655,7 +655,8 @@
             'mobile_no_1',
             'emergency_no',
             'contact_address',
-            'permanent_address'
+            'permanent_address',
+            'is_super_admin'
         ];
 
         $('.kyc-form-errors').remove();
