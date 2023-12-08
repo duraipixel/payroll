@@ -1009,8 +1009,8 @@ function getStaffLeaveRequestStatus($staff_id, $date)
 {
     // dump( $date );
     // dump( $staff_id );
-    $info = StaffLeave::where('staff_id', $staff_id)
-        ->where('from_date', '>=', $date)->where('to_date', '<=', $date)
+   $info = StaffLeave::where('staff_id', $staff_id)
+        ->where('from_date', '<=', $date)->where('to_date', '>=', $date)
         ->first();
 
     $status = 'No Leave Request Raised';
