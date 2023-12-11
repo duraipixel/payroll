@@ -23,8 +23,8 @@ class StaffWorkExperienceController extends Controller
         $validator = Validator::make($request->all(), [
                                 'experience_institute_name' => 'required',
                                 'experience_designation' => 'required',
-                                'experience_from' => 'required',
-                                'experience_to' => 'required',
+                                'experience_from' => 'required|date_format:Y-m-d',
+                                'experience_to' => 'required|after_or_equal:experience_from|date_format:Y-m-d',
                                 'experince_institute_address' => 'required',
                                 'salary_drawn' => 'required',
                                 'experience_year' => 'required',

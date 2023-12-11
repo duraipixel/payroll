@@ -566,7 +566,7 @@ class StaffController extends Controller
         $id = $request->outer_staff_id ?? '';
         $data = '';
         $validator      = Validator::make($request->all(), [
-            'date_of_birth' => 'required',
+            'date_of_birth' => 'required|date_format:Y-m-d',
             'gender' => 'required',
             'marital_status' => 'required',
             'marriage_date' => 'required_if:marital_status,==,married',

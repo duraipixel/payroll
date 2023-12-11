@@ -23,12 +23,13 @@ class StaffEducationController extends Controller
         $data = '';
         $validator = Validator::make($request->all(), [
                                 'course_name' => 'required',
-                                'course_completed_year' => 'required',
+                                'course_completed_year' => 'required|date_format:Y-m-d',
                                 'main_subject_id' => 'required',
                                 'ancillary_subject_id' => 'required',
                                 'course_certificate_no' => 'required',
-                                'course_submitted_date' => 'required',
+                                'course_submitted_date' => 'required|date_format:Y-m-d',
                                 'staff_id' => 'required',
+                                'course_certificate_no' => 'required|integer',
                             ]);
 
         if ($validator->passes()) {

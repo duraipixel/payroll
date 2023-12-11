@@ -30,7 +30,7 @@ class StaffNomineeController extends Controller
         $id     = $request->staff_nominee_id ?? '';
         $validator = Validator::make($request->all(), [
                                 'nominee_id' => 'required|unique:staff_nominees,nominee_id,'.$id,
-                                'nominee_age' => 'required',
+                                'nominee_age' => 'required|integer',
                                 'share' => 'required',
                                 // 'minor_name' => 'required_if:nominee_age,<,18',
                                 // 'minor_contact' => 'required_if:nominee_age,<,18',

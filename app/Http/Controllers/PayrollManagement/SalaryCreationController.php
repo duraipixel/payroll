@@ -89,7 +89,7 @@ class SalaryCreationController extends Controller
             ],
             'staff_id' => 'required',
             'effective_from' => 'required',
-            'net_salary' => 'required'
+            'net_salary' => 'required|numeric|gt:0'
 
         ]);
 

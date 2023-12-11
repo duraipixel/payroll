@@ -394,7 +394,7 @@ border-radius: 5px;
                                 <th class="text-white text-start ps-3" rowspan="2">
                                      Staff Type
                                 </th>
-                                <th class="text-white"colspan="5">Leave Taken</th>
+                                <th class="text-white"colspan="{{ count($leavehead) }}">Leave Taken</th>
                                  <th class="text-white" rowspan="2">
                                     LOP
                                 </th>

@@ -15,8 +15,8 @@ class StaffTrainingController extends Controller
         $id = $request->training_id ?? '';
         $data = '';
         $validator = Validator::make($request->all(), [
-                                'from_training_date' => 'required',
-                                'to_training_date' => 'required',
+                                'from_training_date' => 'required|date|date_format:Y-m-d',
+                                'to_training_date' => 'required|date|after_or_equal:from_training_date|date_format:Y-m-d',
                                 'trainer_name' => 'required',
                                 'training_topic' => 'required',
                                 'training_remarks' => 'required'

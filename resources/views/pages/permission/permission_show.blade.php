@@ -1505,7 +1505,7 @@
         var row_count = $("#gratuity_row_count").val();
         if (gratuity_selectall.checked == true) {
             for (let i = 1; i <= row_count; i++) {
-                document.getElementById("select_all_row_wise_" + i).checked = true;
+                document.getElementById("gratuity_select_all_row_wise_" + i).checked = true;
                 document.getElementById("gratuity_add_" + i).checked = true;
                 document.getElementById("gratuity_view_" + i).checked = true;
                 document.getElementById("gratuity_delete_" + i).checked = true;
@@ -1513,7 +1513,7 @@
             }
         } else {
             for (let j = 1; j <= row_count; j++) {
-                document.getElementById("select_all_row_wise_" + j).checked = false;
+                document.getElementById("gratuity_select_all_row_wise_" + j).checked = false;
                 document.getElementById("gratuity_add_" + j).checked = false;
                 document.getElementById("gratuity_view_" + j).checked = false;
                 document.getElementById("gratuity_delete_" + j).checked = false;

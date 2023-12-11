@@ -32,14 +32,14 @@ class StaffFamilyMemberController extends Controller
         $validator = Validator::make($request->all(), [
                                 'staff_relationship_id' => 'required',
                                 'family_member_name' => 'required',
-                                'dob' => 'required',
+                                'dob' => 'required|date_format:Y-m-d',
                                 'gender' => 'required',
                                 'age' => 'required',
                                 'qualification_id' => 'required',
                                 'profession_type' => 'required',
                                 'premises' => 'required',
                                 'family_contact_no' => 'required', 
-                                'relation_register_no' => 'required_if:premises,==,amalarpavam',
+                                'relation_register_no' => 'required_if:premises,==,amalarpavam|integer|nullable',
                             ]);
 
         if ($validator->passes()) {
