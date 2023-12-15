@@ -311,7 +311,7 @@
                 <td>
                     <input type="text" name="tax_on_taxable_gross_income"
                         id="tax_on_taxable_gross_income" class="form-input text-end"
-                        value="{{ getTaxablePayAmountUsingSlabs($total) }}" readonly>
+                        value="{{ getTaxablePayAmountUsingSlabs($total,$staff_details->tax_scheme_id) }}" readonly>
                 </td>
             </tr>
             <tr>
@@ -322,7 +322,7 @@
                     if (roundOff($total) < 500000) {
                         $tax_after_rebate_amount = 0;
                     } else {
-                        $tax_after_rebate_amount = getTaxablePayAmountUsingSlabs($total);
+                        $tax_after_rebate_amount = getTaxablePayAmountUsingSlabs($total,$staff_details->tax_scheme_id);
                     }
                 @endphp
                 <td>

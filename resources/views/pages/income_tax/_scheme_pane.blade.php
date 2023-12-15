@@ -8,13 +8,15 @@
                         <option value="">--select--</option>
                         @if (isset($tax_scheme) && !empty($tax_scheme))
                             @foreach ($tax_scheme as $item)
-                                <option value="{{ $item->id }}" @if (isset($current_scheme) && $current_scheme->id == $item->id) selected @endif>
+                                <option value="{{ $item->id }}" @if (isset($staff_details->tax_scheme_id) && $staff_details->tax_scheme_id == $item->id) selected @endif>
                                     {{ $item->name }}</option>
                             @endforeach
                         @endif
                     </select>
                 </div>
             </div>
+            <input type="hidden" name="staff_id" id="staff_id" value="{{($staff_details->id ?? Auth::user()->id)}}">
+            
             <div class="form-group mt-5">
                 <button class="btn btn-primary btn-sm" type="button" id="regime_button" onclick="taxSchemeSetCurrent()"> Save </button>
             </div>
@@ -28,6 +30,7 @@
 
     function taxSchemeSetCurrent() {
         var id = $('#scheme_id').val();
+        var staff_id=$('#staff_id').val();
 
         Swal.fire({
             text: "Are you sure you would like to set Current Schemes?",
@@ -52,7 +55,8 @@
                     url: "{{ route('taxscheme.set.current') }}",
                     type: 'POST',
                     data: {
-                        id: id
+                        id: id,
+                        staff_id: staff_id
                     },
                     success: function(res) {
                         if( res.status == 0 ) {

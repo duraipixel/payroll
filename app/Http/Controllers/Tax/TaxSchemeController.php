@@ -9,9 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use DataTables;
 use Carbon\Carbon;
+use App\Models\PayrollManagement\ItStaffStatement;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
-
+use App\Models\User;
 class TaxSchemeController extends Controller
 {
     public function index(Request $request)
@@ -139,12 +140,16 @@ class TaxSchemeController extends Controller
     public function setCurrent(Request $request)
     {
         $id             = $request->id;
+        $staff_id             = $request->staff_id;
         if( $id ){
 
             TaxScheme::where('status', 'active')->update(['is_current' => 'no']);
             $info           = TaxScheme::find($id);
             $info->is_current   = 'yes';
             $info->update();
+            $staff=User::find($staff_id);
+            $staff->tax_scheme_id=$id;
+            $staff->update();
             return response()->json(['message' => "You set current Scheme!", 'status' => 0]);
         } else {
             return response()->json(['message' => "Scheme is required!", 'status' => 1]);

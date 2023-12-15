@@ -74,7 +74,8 @@ class User extends Authenticatable implements Auditable
         'image',
         'updatedBy',
         'transfer_status', //'active', 'retired', 'resigned', 'death' //this field is used for retired and resigned identification
-        'refer_user_id'
+        'refer_user_id',
+        'tax_scheme_id'
     ];
 
     protected $hidden = [

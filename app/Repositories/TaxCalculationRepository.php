@@ -160,7 +160,7 @@ class TaxCalculationRepository
             if (roundOff($total4) < 500000) {
                 $tax_after_rebate_amount = 0;
             } else {
-                $tax_after_rebate_amount = getTaxablePayAmountUsingSlabs($total4);
+                $tax_after_rebate_amount = getTaxablePayAmountUsingSlabs($total4,$staff_details->tax_scheme_id);
             }
     
             $total_income_tax_payable = $tax_after_rebate_amount + round(getPercentageAmount(4, $tax_after_rebate_amount));
@@ -188,12 +188,13 @@ class TaxCalculationRepository
                 'total_deduction_amount' => $total_deduction_amount,
                 'taxable_gross_income' => $total4,
                 'round_off_taxable_gross_income' => roundOff($total4),
-                'tax_on_taxable_gross_income' => getTaxablePayAmountUsingSlabs($total4),
+                'tax_on_taxable_gross_income' => getTaxablePayAmountUsingSlabs($total4,$staff_details->tax_scheme_id),
                 'tax_after_rebate_amount' => $tax_after_rebate_amount,
                 'educational_cess_tax_payable' => round(getPercentageAmount(4, $tax_after_rebate_amount)),
                 'total_income_tax_payable' => $total_income_tax_payable,
                 'salary_pattern_id' => $salary_pattern->id ?? null,
-                'added_by' => auth()->id()
+                'added_by' => auth()->id(),
+               'tax_scheme_id'=>$staff_details->tax_scheme_id??1,
             );
             if( $total_income_tax_payable == 0 ) {
                 $ins['lock_calculation'] = 'yes';
