@@ -793,14 +793,13 @@ function roundOff($amount)
     return $amount;
 }
 
-function getTaxablePayAmountUsingSlabs($amount)
+function getTaxablePayAmountUsingSlabs($amount,$id)
 {
 
     // $amount = '842500';
     $total_amount = $amount;
     $tax_amount = 0;
-    // $slab_details = ItTabulation::where('scheme_id',  getCurrentTaxSchemeId())->where('status', 'active')
-    $slab_details = ItTabulation::where('scheme_id',  1)->where('status', 'active')
+    $slab_details = ItTabulation::where('scheme_id',$id??1)->where('status', 'active')
         ->orderBy('from_amount')->get();
     $tax = [];
     if (isset($slab_details) && !empty($slab_details)) {
