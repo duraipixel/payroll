@@ -129,14 +129,15 @@ class IncomeTaxCalculationController extends Controller
     }
 
     public function ajaxTaxCalculation(Request $request)
-    {
-
+    {  
+        $user=User::find($request->staff_id);
+    
         $total_deduction_amount = $request->total_deduction_amount;
         $total_year_salary_income = $request->total_year_salary_income;
         $round_total = roundOff($total_year_salary_income);
         $tmp['round_total'] = $round_total;
 
-        $tmp['tax_amount'] = getTaxablePayAmountUsingSlabs($round_total);
+        $tmp['tax_amount'] = getTaxablePayAmountUsingSlabs($round_total,$user->tax_scheme_id);
 
         if ($round_total < 500000) {
             $tmp['tax_after_rebate_amount'] = 0;
