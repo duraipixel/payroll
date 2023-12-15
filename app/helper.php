@@ -793,7 +793,7 @@ function roundOff($amount)
     return $amount;
 }
 
-function getTaxablePayAmountUsingSlabs($amount,$id)
+function getTaxablePayAmountUsingSlabs($amount,$id=null)
 {
 
     // $amount = '842500';
