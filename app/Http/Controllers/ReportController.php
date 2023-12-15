@@ -66,9 +66,7 @@ class ReportController extends Controller
     }
 
     function attendance_index(Request $request)
-    {   
-         set_time_limit(0);
-        ini_set('memory_limit', '-1');
+    {
         $month         = $request->month ?? date('m');
         $academic_info = AcademicYear::find( academicYearId());
         if( $academic_info ) {
