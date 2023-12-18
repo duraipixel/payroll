@@ -1199,7 +1199,7 @@ class StaffController extends Controller
                     'studiedSubject',
                     'bank',
                     'appointment'
-                ])
+                ]);
                
 
             $data = $query->get()->sortByDesc('society_emp_code')->values();
