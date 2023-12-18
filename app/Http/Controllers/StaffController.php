@@ -156,7 +156,7 @@ class StaffController extends Controller
         }
 
         $other_staff = User::with('institute')->where('status', 'active')
-            ->where('is_super_admin', null)
+           
             ->when($id != null, function ($q) use ($id) {
                 $q->where('id', '!=', $id);
             })
@@ -1001,7 +1001,7 @@ class StaffController extends Controller
                 })
                 ->InstituteBased()
                 ->where('users.status', 'active')
-                ->whereNull('is_super_admin')->count();
+                ->count();
 
             $totalFilteredRecord = $totalDataRecord;
 
@@ -1029,7 +1029,7 @@ class StaffController extends Controller
                     'bank',
                     'appointment'
                 ])
-                ->whereNull('is_super_admin')
+               
                 ->when(!empty($staff_datable_search), function ($q) use ($search_text) {
                     $q->where('users.name', 'like', "%{$search_text}%")
                         ->orWhere('users.status', 'like', "%{$search_text}%")
@@ -1073,7 +1073,7 @@ class StaffController extends Controller
                         'bank',
                         'appointment'
                     ])
-                    ->whereNull('is_super_admin')
+                   
                     ->when(!empty($staff_datable_search), function ($q) use ($search_text) {
                     $q->where('users.name', 'like', "%{$search_text}%")
                         ->orWhere('users.status', 'like', "%{$search_text}%")
@@ -1200,7 +1200,7 @@ class StaffController extends Controller
                     'bank',
                     'appointment'
                 ])
-                ->whereNull('is_super_admin');
+               
 
             $data = $query->get()->sortByDesc('society_emp_code')->values();
 

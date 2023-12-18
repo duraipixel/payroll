@@ -699,7 +699,7 @@ class OverviewController extends Controller
         $payroll_info = Payroll::find($id);
 
         $employee_nature = NatureOfEmployment::where('status', 'active')->get();
-        $employees = User::where('status', 'active')->orderBy('name', 'asc')->whereNull('is_super_admin')->get();
+        $employees = User::where('status', 'active')->orderBy('name', 'asc')->get();
 
         $params = [
             'employees' => $employees,

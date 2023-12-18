@@ -75,7 +75,7 @@ class AttendanceManualEntryController extends Controller
             }
         }
         $users=User::where('status', 'active')
-            ->where('is_super_admin', null)->where('institute_id',$institute_id)->get();
+            ->where('institute_id',$institute_id)->get();
         foreach($users as $user){
         $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
       
@@ -180,8 +180,8 @@ class AttendanceManualEntryController extends Controller
         $id = $request->id;
         $info = [];
         $title = 'Add Attendance Manual Entry';
-        $employee_details = User::where('is_super_admin', '=', null)
-                            ->where(['status' => 'active', 'transfer_status' => 'active'])
+        $employee_details = User::
+                            where(['status' => 'active', 'transfer_status' => 'active'])
                             ->InstituteBased()->get();
         $leave_status = LeaveStatus::where('status', 'active')->get();
         $leave_heads = LeaveHead::where('status', 'active')->get();

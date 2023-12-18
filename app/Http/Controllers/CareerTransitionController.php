@@ -89,7 +89,7 @@ class CareerTransitionController extends Controller
         $users = User::where('status', 'active')
             ->where('verification_status', 'approved')
             ->InstituteBased()
-            ->whereNull('is_super_admin')->get();
+            ->get();
 
         if (isset($id) && !empty($id)) {
             $info = StaffRetiredResignedDetail::find($id);

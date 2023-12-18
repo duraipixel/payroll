@@ -134,8 +134,7 @@ class RoleMappingController extends Controller
         $info = [];
         $title = 'Add Role Mapping';
         $from = 'role_mapping';
-        $staff_details = User::where('is_super_admin', '=', null)
-                            ->where('users.status', 'active')
+        $staff_details = User::where('users.status', 'active')
                             ->where('users.transfer_status', 'active')
                             ->orderBy('name', 'asc')->get();
         $role = Role::where('status', 'active')->get();
