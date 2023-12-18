@@ -1315,7 +1315,7 @@ class ReportController extends Controller
             return $row->appointment->designation->name?? '';
         })->editColumn('cl_eligible', function ($row) {
 
-            return $row->appointment->employment_nature->cl->leave_days??0;
+            return $row->appointment->employment_nature->cl->leave_days ??0;
         })->editColumn('cl_availed', function ($row) {
             $cl=0;
                  foreach($row->leaves as $leave){
@@ -1333,7 +1333,11 @@ class ReportController extends Controller
                         $cl +=$leave->granted_days;
                      }
                  }
-            return ($row->appointment->employment_nature->cl->leave_days-$cl) ?? 0;
+               if(isset($row->appointment->employment_nature->cl->leave_days)){
+                     return ($row->appointment->employment_nature->cl->leave_days- $cl) ??0;
+                 }else{
+                    return $cl ??0;
+                 }
         })->editColumn('gl_sanctioned', function ($row) {
                 
             return $row->appointment->employment_nature->gl->leave_days??0;
