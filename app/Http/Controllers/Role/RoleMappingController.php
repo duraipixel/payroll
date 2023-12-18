@@ -114,6 +114,11 @@ class RoleMappingController extends Controller
                 $ins['status'] = 'inactive';
             }
             $data = RoleMapping::updateOrCreate(['id' => $id], $ins);
+            if($request->role_id==2){
+                $user=User::find($request->staff_id);
+                $user->is_super_admin=1;
+                $user->update();
+            }
             $error = 0;
             $message = 'Added successfully';
         } else {
