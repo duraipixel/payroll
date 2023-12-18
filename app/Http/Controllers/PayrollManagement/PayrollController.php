@@ -61,7 +61,7 @@ class PayrollController extends Controller
         $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
 
-        $employees = User::where('status', 'active')->orderBy('name', 'asc')->whereNull('is_super_admin')->where('institute_id',session()->get('staff_institute_id'))->get();
+        $employees = User::where('status', 'active')->orderBy('name', 'asc')->where('institute_id',session()->get('staff_institute_id'))->get();
         $param = [
             'employees' => $employees,
             'month_no' => $month_no,

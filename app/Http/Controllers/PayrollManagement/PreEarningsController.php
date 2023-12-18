@@ -94,8 +94,7 @@ class PreEarningsController extends Controller
         $date = $request->date;
         $salary_date = date('Y-m-01', strtotime( $date ) );
         $title = 'Add ' . ucwords(str_replace('_', ' ', $page_type));
-        $employees = User::whereNull('is_super_admin')
-            ->where(['status' => 'active', 'transfer_status' => 'active'])
+        $employees = User::where(['status' => 'active', 'transfer_status' => 'active'])
             ->where('verification_status', 'approved')
             ->get();
         $nature_of_employees = NatureOfEmployment::where('status', 'active')->get();
@@ -123,8 +122,7 @@ class PreEarningsController extends Controller
         $employee_id = $request->employee_id ?? ['all'];
         $salary_date = $request->salary_date;
         $page_type = $request->page_type;
-        $employees = User::whereNull('is_super_admin')
-            ->where('verification_status', 'approved')
+        $employees = User::where('verification_status', 'approved')
             ->when(current($employee_id) != 'all', function ($query) use ($employee_id) {
                 $query->whereIn('users.id', $employee_id);
             })

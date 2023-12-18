@@ -476,7 +476,7 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
                 NotificationHelper::createNotification($user->reporting_manager_id,$user->id,'Leave',NULL,$message);
                  }
             }
-                $users=User::where('is_super_admin',1)->get();
+                $users=User::get();
 
                 foreach($users as $staff){
                 NotificationHelper::createNotification($staff->id,$user->id,'Leave',NULL,$message);

@@ -29,7 +29,7 @@ class IncomeTaxController extends Controller
     public function index(Request $request)
     {
 
-        $employees = User::where('status', 'active')->orderBy('name', 'asc')->whereNull('is_super_admin')->get();
+        $employees = User::where('status', 'active')->orderBy('name', 'asc')->get();
         $params = array(
             'employees' => $employees
         );

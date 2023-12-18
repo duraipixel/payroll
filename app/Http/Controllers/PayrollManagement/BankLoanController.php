@@ -27,7 +27,7 @@ class BankLoanController extends Controller
                 ),
             )
         );
-        $employees = User::where('status', 'active')->whereNull('is_super_admin')->get();
+        $employees = User::where('status', 'active')->get();
         return view('pages.payroll_management.loan.index', compact('breadcrums', 'employees'));
     }
 
@@ -159,7 +159,7 @@ class BankLoanController extends Controller
                 ),
             )
         );
-        $employees = User::where('status', 'active')->whereNull('is_super_admin')->orderBy('name', 'asc')->get();
+        $employees = User::where('status', 'active')->orderBy('name', 'asc')->get();
         return view('pages.payroll_management.lic.index', compact('breadcrums', 'employees'));
     }
 

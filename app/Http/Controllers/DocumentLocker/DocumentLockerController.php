@@ -43,7 +43,7 @@ class DocumentLockerController extends Controller
 
         ])->when(!is_null($auth_user->reporting_manager_id), function ($q) use ($auth_user) {
             $q->where('reporting_manager_id', $auth_user->id);
-        })->where('is_super_admin', '=', null)
+        })
         ->InstituteBased()
         ->get();
 
@@ -95,7 +95,7 @@ class DocumentLockerController extends Controller
             ])->with(['position.department', 'position.designation'])->select('*')
             ->when( !empty( $staff_id ), function($q) use($staff_id){
                 $q->where('users.id', $staff_id);
-            })->where('is_super_admin', '=', null)->InstituteBased();
+            })->InstituteBased();
             $status = $request->get('status');
             $datatable_search = $request->datatable_search ?? '';
             $key_search = $request->search['value'];
@@ -229,26 +229,26 @@ class DocumentLockerController extends Controller
         $user = '';
         $staff_id = array();
         if ($request->staff_id != '') {
-            $user = User::where('is_super_admin', '=', null)->where('id', $request->staff_id)->get();
+            $user = User::where('id', $request->staff_id)->get();
         } else {
             if ($request->emp_nature_id != '' &&  $request->work_place_id != '') {
                 $app_details = StaffAppointmentDetail::where('nature_of_employment_id', $request->emp_nature_id)->where('place_of_work_id', $request->work_place_id)->get();
                 foreach ($app_details as $app_det) {
                     $staff_id[] = $app_det->staff_id;
                 }
-                $user = User::where('is_super_admin', '=', null)->whereIn('id', $staff_id)->get();
+                $user = User::whereIn('id', $staff_id)->get();
             } else if ($request->emp_nature_id != '' &&  $request->work_place_id == '') {
                 $app_details = StaffAppointmentDetail::where('nature_of_employment_id', $request->emp_nature_id)->get();
                 foreach ($app_details as $app_det) {
                     $staff_id[] = $app_det->staff_id;
                 }
-                $user = User::where('is_super_admin', '=', null)->whereIn('id', $staff_id)->get();
+                $user = User::whereIn('id', $staff_id)->get();
             } else if ($request->emp_nature_id == '' &&  $request->work_place_id != '') {
                 $app_details = StaffAppointmentDetail::where('place_of_work_id', $request->work_place_id)->get();
                 foreach ($app_details as $app_det) {
                     $staff_id[] = $app_det->staff_id;
                 }
-                $user = User::where('is_super_admin', '=', null)->whereIn('id', $staff_id)->get();
+                $user = User::whereIn('id', $staff_id)->get();
             }
         }
         return view('pages.document_locker.table_ajax', compact('user'));

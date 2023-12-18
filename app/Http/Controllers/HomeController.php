@@ -35,7 +35,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user_count = User::where('status','active')->whereNull('is_super_admin')->InstituteBased()->Academic()->count();
+        $user_count = User::where('status','active')->InstituteBased()->Academic()->count();
         // ->Academic()
         $from_date = date('Y-m-1');
         $to_date = date('Y-m-t');
@@ -178,7 +178,7 @@ class HomeController extends Controller
         $s_date = date('Y-m-d', strtotime($start_date));
         $e_date = date('Y-m-d', strtotime($end_date));
 
-        $user_count = User::whereNull('is_super_admin')->InstituteBased()->Academic()->count();
+        $user_count = User::InstituteBased()->Academic()->count();
         $from_date = $s_date;
         $to_date = $e_date;
         $month = date('m', strtotime($s_date));

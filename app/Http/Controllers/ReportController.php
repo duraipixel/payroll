@@ -41,7 +41,7 @@ class ReportController extends Controller
     {
 
         if ($request->ajax()) {
-            $details = User::with(['personal', 'position'])->whereNull('is_super_admin')->orderBy('society_emp_code', 'desc')->where('institute_id',session()->get('staff_institute_id'))->get();
+            $details = User::with(['personal', 'position'])->orderBy('society_emp_code', 'desc')->where('institute_id',session()->get('staff_institute_id'))->get();
             $params = ['details' => $details];
             return view('pages.reports.profile._table_content', $params);
         }
@@ -99,7 +99,7 @@ class ReportController extends Controller
         $history_Data   = $this->repository->getServiceHistory($employee_id, $department_id );
         $history        = current( $history_Data );
         $paginate_link  = end( $history_Data );
-        $employees      = User::whereNull('is_super_admin')->where('verification_status', 'approved')->where('institute_id',session()->get('staff_institute_id'))->get();
+        $employees      = User::where('verification_status', 'approved')->where('institute_id',session()->get('staff_institute_id'))->get();
         $departments    = Department::all();
         $academic_info  = AcademicYear::find(academicYearId());
         $academic_title = 'HISTORY OF SERVICE ( '.$academic_info->from_year.' - '.$academic_info->to_year.' )';

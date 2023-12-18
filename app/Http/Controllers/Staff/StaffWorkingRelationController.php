@@ -63,7 +63,7 @@ class StaffWorkingRelationController extends Controller
         $relation_types = RelationshipType::where('status', 'active')->get();
         $id = $working_info->staff_id;
         $other_staff = User::with('institute')->where('status', 'active')
-                        ->where('is_super_admin', null)
+                       
                         ->when($id != null, function($q) use($id){
                             $q->where('id', '!=', $id);
                         })
