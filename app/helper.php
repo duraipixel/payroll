@@ -322,7 +322,7 @@ if (!function_exists('getTalents')) {
 }
 
 if (!function_exists('generateLeaveForm')) {
-    function generateLeaveForm($leave_id)
+    function generateLeaveForm($leave_id,$type='leave')
     {  
         $leave_info = StaffLeave::find($leave_id);
         $leave_count=0;
@@ -420,7 +420,13 @@ if (!function_exists('generateLeaveForm')) {
 
                 break;
         }
-        return true;
+        if($type=='download'){
+           $path=storage_path('app/'.$filename);
+        return Response::download($path);
+        }else{
+            return true;
+        }
+        
     }
 
     function buildTree($reportee_id)

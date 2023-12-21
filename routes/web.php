@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 
-
+ Route::get('leave/document/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'Leavedocument'])->name('leave.document');
 
  Route::get('test/entry/{month}/{institute_id}/{academic_id}', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'leaveAvailableDays'])->name('test.entry');
 
