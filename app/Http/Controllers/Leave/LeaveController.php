@@ -23,7 +23,11 @@ use Illuminate\Support\Facades\Session;
 use App\Models\AcademicYear;
 use App\Helpers\NotificationHelper;
 class LeaveController extends Controller
-{
+{   
+    public function Leavedocument(Request $request,$id){
+        $data=generateLeaveForm($id,'download');
+        return $data;
+    }
     public function leaveCountDays(Request $request){
        
        if($request->type=='grid'){
@@ -162,7 +166,17 @@ class LeaveController extends Controller
                     return number_format($row['granted_days'],1);
                 })
                 ->addColumn('action', function ($row) {
-                    $url = Storage::url($row->document);
+                    $url='';
+                   
+                    if(isset($row->document)&& !empty($row->document)){
+                     $document = storage_path('app/'.$row->document);
+                      if(file_exists($document)){
+                        $url = Storage::url('app/'.$row->document);
+
+                      }
+
+                    }
+                   
                     $approve_btn = '';
                     $edit = '';
                     if (isset($row->approved_document) && !empty($row->approved_document)) {
@@ -195,9 +209,17 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
 
                     }
                     if (access()->buttonAccess('leaves.list', 'add_edit')) {
-                        $edit_btn = '<a href="' . asset('public' . $url) . '" target="_blank" tooltip="Leave form"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+
+                        if(isset($url) && $url!=''){
+                      $edit_btn = '<a href="' . asset($url) . '" target="_blank" tooltip="Leave form"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                                 <i class="fa fa-download"></i>
                             </a>';
+                        }else{
+                            $edit_btn = '<a href="' . url('leave/document/' . $row->id) . '" target="_blank" tooltip="Leave form"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                                <i class="fa fa-download"></i>
+                            </a>';
+                        }
+                        
 
                     } else {
                         $edit_btn = '';

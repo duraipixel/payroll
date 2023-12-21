@@ -84,6 +84,7 @@
                 <td style="width:30%;">Date</td>
                 <td style="width:50%;">Leave Type</td>
             </tr>
+            @if(!empty($leave_days))
             @foreach(json_decode($leave_days ?? []) as $key=>$day)
             <tr>
                 <td style="width:10%;"></td>
@@ -92,6 +93,7 @@
                 <td style="width:50%;text-transform:capitalize;">{{$day->type}}</td>
             <tr>
             @endforeach
+            @endif
         </tr>
         <tr>
             <td class="noborder-e" style="width:5%;text-align:center;height:100px">08.</td>
@@ -112,7 +114,7 @@
             <td class="noborder-e" style="width:5%;text-align:center"> B.</td>
             <td class="noborder-x" style="width:45%;text-align:left"> No. of days Granted   </td>
             <td class="noborder-x" style="width:5%;text-align:center">:</td>
-            <td class="noborder-s" style="width:45%;text-align:left"> {{ number_format($granted_days,1) ?? '' }} </td>
+            <td class="noborder-s" style="width:45%;text-align:left"> @if(!empty($granted_days)) {{ number_format($granted_days,1)}} @else @endif </td>
         </tr>
         <tr>
             <td class="noborder-e" style="width:5%;text-align:center"> C.</td>
@@ -141,6 +143,7 @@
                 <td style="width:30%;">Leave Type</td>
                 <td style="width:50%;">Status</td>
             </tr>
+              @if(!empty($leave_days))
             @foreach(json_decode($leave_days ?? []) as $key=>$day)
             <tr>
               
@@ -150,6 +153,8 @@
                 <td style="width:50%;">{{($day->check==1)?'Approved' : 'Rejected' }}</td>
             </tr>
             @endforeach
+               @endif
+
         </tr>
         @endif
         <tr>
