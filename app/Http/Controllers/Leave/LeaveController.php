@@ -211,7 +211,7 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
                     if (access()->buttonAccess('leaves.list', 'add_edit')) {
 
                         if(isset($url) && $url!=''){
-                      $edit_btn = '<a href="' . asset($url) . '" target="_blank" tooltip="Leave form"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                    $edit_btn = '<a href="' . url('leave/document/' . $row->id) . '" target="_blank" tooltip="Leave form"  class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
                                 <i class="fa fa-download"></i>
                             </a>';
                         }else{
