@@ -165,7 +165,7 @@ class="menu-item menu-accordion @if (request()->routeIs(['staff.register', 'staf
 </span>
 
 <div class="menu-sub menu-sub-accordion menu-active-bg">
-@if (access()->hasAccess('staff.register', ['view','add_edit']))
+@if (access()->hasAccess('staff.register'))
     <div class="menu-item">
         <a class="menu-link  @if (request()->routeIs(['staff.register'])) active @endif"
             href="{{ route('staff.register') }}">
