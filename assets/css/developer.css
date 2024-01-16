@@ -36,3 +36,10 @@ color:#0061fd !important;
 body {
     overflow-x: hidden !important;
 }
+.d_none{
+display: none;
+}
+.d_block{
+display: block !important;
+}
+

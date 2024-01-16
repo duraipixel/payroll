@@ -19,7 +19,8 @@ use App\Models\Master\Institution;
 use DB;
 use Yajra\DataTables\Contracts\DataTable;
 use App\Models\Announcement\Announcement;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 class AnnouncementController extends Controller
 {
     public function index(Request $request)
@@ -120,6 +121,22 @@ class AnnouncementController extends Controller
             $ins['announcement_type'] = $request->type;
             $ins['from_date'] = $request->from_date;
             $ins['to_date'] = $request->to_date;
+            $ins['message'] = $request->an_message;
+            $ins['upload_type'] = $request->upload_type;
+            if($request->upload_type=='link'){
+            $ins['upload_data'] = $request->link;
+            }
+            if($request->upload_type=='file'){
+            if ($request->hasFile('file')) {
+            $files = $request->file('file');
+            $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
+            $directory              = 'announcement';
+            $filename               = $directory . '/' . $imageName;
+            Storage::disk('public')->put($filename, File::get($files));
+            $ins['upload_data'] = $filename;
+             }
+        
+            }
             $ins['message'] = $request->an_message;
             $ins['announcement_created_id'] = Auth::user()->id;          
             if($request->status)

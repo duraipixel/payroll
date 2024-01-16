@@ -78,5 +78,26 @@
         tabContent[0].firstElementChild.classList.add('show')
         tabContent[0].firstElementChild.classList.add('active')
         console.log(tabContent[0].firstElementChild.classList)
+function addDocument( id = '') {
+
+             $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var formMethod = "addEdit" ;
+            $.ajax({
+                url: "{{url('document-locker/model')}}",
+                type: 'POST',
+                data: {
+                    id: id,
+                    
+                },
+                success: function(res) {
+                     $('#kt_dynamic_app').modal('show');
+                    $('#kt_dynamic_app').html(res);
+                }
+            })
+} 
     </script>
 @endsection

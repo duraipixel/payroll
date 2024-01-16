@@ -23,7 +23,10 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\SalaryApprovalLog;
 use DB;
 use Yajra\DataTables\DataTables;
-
+use App\Models\Master\DocumentType;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 class DocumentLockerController extends Controller
 {
     public function index(Request $request)
@@ -213,14 +216,16 @@ class DocumentLockerController extends Controller
     {
 
         $user            = User::find($id);
-        $personal_doc    = StaffDocument::where('staff_id', $id)->get();
+        $personal_doc    = StaffDocument::where('staff_id', $id)->whereIn('document_type_id',[1,2,3,4,5,6])->get();
         $education_doc   = StaffEducationDetail::where('staff_id', $id)->get();
         $experince_doc   = StaffWorkExperience::where('staff_id', $id)->get();
         $acadamic_id     = academicYearId();
         $leave_doc       = StaffLeave::where('staff_id', $id)->where('academic_id', $acadamic_id)->get();
         $appointment_doc = StaffAppointmentDetail::where('staff_id', $id)->get();
         $salary_doc      = StaffSalary::where('staff_id', $id)->get();
-        return view('pages.document_locker.document_view', compact('user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc'));
+       $other_docs    = StaffDocument::whereNotIn('document_type_id',[1,2,3,4,5,6])->where('staff_id',$id)->get();
+        // $other_doc    = StaffDocument::where('staff_id', $id)->whereNotIn('',[])->get();
+        return view('pages.document_locker.document_view', compact('user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc','other_docs'));
         
     }
 
@@ -266,5 +271,57 @@ class DocumentLockerController extends Controller
         } else {
             return response()->json(['place_of_work' => '', 'emp_nature' => '']);
         }
+    }
+    public function add_edit(Request $request)
+    {
+        $user = $request->id;
+        $info = [];
+        $title = 'Add Other Document';
+        $from = 'Document';
+        $staff_document=StaffDocument::select('document_type_id')->where('staff_id',$user)->get();
+        $document_types=DocumentType::whereNotIn('id',$staff_document)->get();
+        $content = view('pages.document_locker.add_edit_form',compact('info','title', 'from','document_types','user'));
+         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+    }
+    public function save(Request $request)
+    {
+        $id = $request->id ?? '';
+        $validator      = Validator::make($request->all(), [
+            'document_type' => 'required',
+            'document_name' => 'required',
+            'document' => 'required',
+        ]);
+        $staff=User::find($request->user_id);
+        $date=Carbon::now()->format('Y-m-d');
+        $time=time();
+        if ($validator->passes()) {
+             $passport_id = DocumentType::find($request->document_type);
+                $ins_aa = [];
+                $ins_aa['academic_id'] = academicYearId();
+                $ins_aa['staff_id'] = $request->user_id;
+                $ins_aa['document_type_id'] = $passport_id->id;
+                $ins_aa['description'] = Null;
+                $ins_aa['doc_number'] = $request->document_name;
+                $ins_aa['doc_date'] =null;
+           if ($request->hasFile('document')) {
+                $file = $request->file('document');
+                $imageName = $staff->institute_emp_code.'_'.$passport_id->name.'_'.$date.$time.'.'.$file->getClientOriginalExtension();
+                $directory              = 'staff/' . $staff->emp_code . '/other-document';
+                $filename               = $directory . '/' . $imageName;
+                Storage::disk('public')->put($filename,file_get_contents($file));
+               
+            $ins_aa['multi_file'] = $filename;
+            $ins_aa['verification_status'] = 'Approved';
+            
+        }
+           StaffDocument::Create($ins_aa);
+            $error = 0;
+            $message = 'Added successfully';
+
+        } else {
+            $error = 1;
+            $message = $validator->errors()->all();
+        }
+        return response()->json(['error' => $error, 'message' => $message, 'inserted_data' => $staff]);
     }
 }
