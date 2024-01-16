@@ -61,7 +61,7 @@
         </div>
         </div>
     </div>
-    <div class="row">
+     <div class="row">
         <div class="col-6">
             <div class="fv-row form-group mb-10">
             <label class="form-label required" for="">
@@ -89,6 +89,41 @@
             @endif
         </div>
     </div>
+    <div class="row">
+         <div class="col-6">
+            <div class="fv-row form-group mb-10">
+                <label class="form-label" for="">
+                    Upload Type
+                </label>
+                <div >
+                    <input type="radio" id="link" class="form-check-input" value="link" name="upload_type" @if(isset($info->upload_type) && $info->upload_type == 'link') checked  @endif >
+                    <label class="pe-3" for="active">Link</label>
+                    <input type="radio" id="file" class="form-check-input" value="file" name="upload_type" @if(isset($info->upload_type) && $info->upload_type == 'file') checked  @endif>
+                    <label for="inactive">Image</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="fv-row form-group mb-10">
+            <label class="form-label" for="">
+             </label>
+            <div class="link  @if(isset($info->upload_type) && $info->upload_type == 'link') d_block  @else d_none @endif" > 
+                 <input type="link" name="link" class="form-control"  @if(isset($info->upload_type) && $info->upload_type == 'link') value="{{$info->upload_data}}"  @endif  >
+                 @if(isset($info->upload_type) && $info->upload_type == 'link')
+                 <a onclick="mypopup()"><i class="fa fa-eye" aria-hidden="true"></i>
+                        </a>
+                   @endif 
+             </div>
+             <div class="file  @if(isset($info->upload_type) && $info->upload_type == 'file') d_block @else d_none @endif"> 
+                 <input type="file" name="file" class="form-control" value="">
+                  @if(isset($info->upload_type) && $info->upload_type == 'file')
+                  <a onclick="mypopup()"><i class="fa fa-eye" aria-hidden="true"></i>
+                        </a>
+                  @endif 
+             </div>
+            </div>
+        </div>
+    </div>
         
     
    
@@ -104,7 +139,48 @@
         </button>
     </div>
 </form>
-
+<div class="modal fade" id="kt_popup" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                            transform="rotate(-45 6 17.3137)" fill="currentColor" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                            transform="rotate(45 7.41422 6)" fill="currentColor" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-10 px-lg-10" id="dynamic_content">
+                <!--begin::Stepper-->
+                            @if(isset($info->upload_type) && $info->upload_type == 'link')
+            <iframe class="mt-3" src="{{$info->upload_data}}" title="{{ $info->message??''}}" sandbox="allow-popups">
+                  </iframe>
+            @endif
+            @if(isset($info->upload_type) && $info->upload_type == 'file')
+                  <img src="{{url('public/storage/' .$info->upload_data)}}" >
+                        
+            @endif
+                <!--end::Stepper-->
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+</div>
+</div>
 <script>
     function typeCheck()
     {
@@ -148,7 +224,13 @@ var KTAppEcommerceSaveBranch = function () {
 								message: 'Select Type is Required'
 							},
 						}
-					},
+					},'radio': {
+                        validators: {
+                            notEmpty: {
+                                message: 'Upload type filed is Required'
+                            },
+                        }
+                    },
                     'an_message': {
 						validators: {
 							notEmpty: {
@@ -231,7 +313,18 @@ var KTAppEcommerceSaveBranch = function () {
         }
     };
 }();
-
+$('input[name=upload_type]').on('click',function(){
+   if(this.value=='file'){
+    $('.link').removeClass('d_block');
+    $('.link').addClass('d_none');
+    $('.file').addClass('d_block');
+}
+if(this.value=='link'){
+    $('.file').removeClass('d_block');
+    $('.file').addClass('d_none');
+    $('.link').addClass('d_block');
+}
+});
 KTUtil.onDOMContentLoaded(function () {
     KTAppEcommerceSaveBranch.init();
 });

@@ -6,7 +6,7 @@ use App\Models\Scopes\AcademicScope;
 use App\Models\Scopes\InstitutionScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Casts\Attribute;
 class Announcement extends Model
 {
     use HasFactory;
@@ -20,9 +20,11 @@ class Announcement extends Model
         'message',
         'announcement_created_id',
         'sort_order',
+        'upload_type',
+        'upload_data',
         'status'
     ];
-
+    protected $appends=['upload_url'];
     public function scopeAcademic($query)
     {
         if( session()->get('academic_id') && !empty( session()->get('academic_id') ) ){
@@ -37,6 +39,14 @@ class Announcement extends Model
 
             return $query->where('announcements.institute_id', session()->get('staff_institute_id'));
         }
+    }
+     public function getUploadUrlAttribute()
+    {
+       if($this->upload_type=='file'){
+        return url('public/storage/'.$this->upload_data);
+        }
+
+        return $this->upload_data;
     }
 
 }

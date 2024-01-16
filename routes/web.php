@@ -180,7 +180,9 @@ Route::group(['middleware' => 'auth'],  function () {
 
 
     
-    //Document Locker Start    
+    //Document Locker Start  
+    Route::post('/document-locker/model', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'add_edit'])->name('user.document_locker.model')->middleware(['checkAccess:view']);  
+     Route::post('/document-locker/save', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'save'])->name('user.document_locker.save')->middleware(['checkAccess:view']);    
     Route::get('/user/document-locker', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'index'])->name('user.document_locker')->middleware(['checkAccess:view']); 
     Route::get('/user/document-locker/show/{id}', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'documentView'])->name('user.dl_view');
     Route::post('/user/search-staff', [App\Http\Controllers\DocumentLocker\DocumentLockerController::class, 'searchData'])->name('user.search_staff'); 

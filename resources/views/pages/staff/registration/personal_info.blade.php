@@ -89,6 +89,7 @@ class="form-input" />
 <tbody>
 <tr>
     <th>Aadhaar</th>
+    <input type="hidden" name="aadhar_type" value="aadhar_type">
     <td>
         <input name="aadhar_name" id="aadhar_name"
             value="{{ $staff_details->aadhaar->description ?? '' }}" class="form-input "
@@ -129,6 +130,7 @@ class="form-input" />
 <tr>
     <th>Pan</th>
     <td>
+         <input type="hidden" name="pancard_type" value="pancard_type">
         <input name="pancard_name" class="form-input " placeholder="Name"
             value="{{ $staff_details->pan->description ?? '' }}" />
     </td>
@@ -171,6 +173,7 @@ class="form-input" />
 <tr>
     <th>Ration Card</th>
     <td>
+        <input type="hidden" name="ration_type" value="ration_type">
         <input name="ration_card_name" class="form-input " placeholder="Name"
             value="{{ $staff_details->ration->description ?? '' }}" />
     </td>
@@ -214,6 +217,7 @@ class="form-input" />
 <tr>
     <th>Driving Licence</th>
     <td>
+        <input type="hidden" name="licence_type" value="licence_type">
         <input name="license_name" class="form-input " placeholder="Name"
             value="{{ $staff_details->driving_license->description ?? '' }}" />
     </td>
@@ -256,6 +260,7 @@ class="form-input" />
 <tr>
     <th>Voter ID</th>
     <td>
+        <input type="hidden" name="voter_type" value="voter_type">
         <input name="voter_name" class="form-input " placeholder="Name"
             value="{{ $staff_details->voter->description ?? '' }}" />
     </td>
@@ -298,6 +303,7 @@ class="form-input" />
 <tr>
     <th>Passport</th>
     <td>
+        <input type="hidden" name="passport_type" value="passport_type">
         <input name="passport_name" id="passport_name" class="form-input "
             placeholder="Passport Name"
             value="{{ $staff_details->passport->description ?? '' }}" />

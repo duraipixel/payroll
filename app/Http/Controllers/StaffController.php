@@ -297,7 +297,7 @@ class StaffController extends Controller
 
             $data = User::updateOrCreate(['emp_code' => $previous_code], $ins);
 
-            if ($request->aadhar_name && !empty($request->aadhar_name)) {
+            if ($request->aadhar_type) {
                 $aadhar_id = DocumentType::where('name', 'Adhaar')->orwhere('name', 'Aadhaar')->first();
                 $ins_aa = [];
                 $ins_aa['academic_id'] = $academic_id;
@@ -336,7 +336,7 @@ class StaffController extends Controller
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $aadhar_id->id], $ins_aa);
             }
 
-            if ($request->pancard_name && !empty($request->pancard_name)) {
+            if ($request->pancard_type) {
                 $pan_id = DocumentType::where('name', 'Pan Card')->first();
                 $ins_aa = [];
                 $ins_aa['academic_id'] = $academic_id;
@@ -375,7 +375,7 @@ class StaffController extends Controller
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $pan_id->id], $ins_aa);
             }
 
-            if ($request->ration_card_name && !empty($request->ration_card_name)) {
+            if ($request->ration_type) {
                 $ration_id = DocumentType::where('name', 'Ration Card')->first();
                 $ins_aa = [];
                 $ins_aa['academic_id'] = $academic_id;
@@ -416,7 +416,7 @@ class StaffController extends Controller
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $ration_id->id], $ins_aa);
             }
 
-            if ($request->license_name && !empty($request->license_name)) {
+            if ($request->licence_type) {
                 $license_id = DocumentType::where('name', 'Driving License')->first();
                 $ins_aa = [];
                 $ins_aa['academic_id'] = $academic_id;
@@ -457,7 +457,7 @@ class StaffController extends Controller
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $license_id->id], $ins_aa);
             }
 
-            if ($request->voter_name && !empty($request->voter_name)) {
+            if ($request->voter_type) {
 
                 $voter_id = DocumentType::where('name', 'Voter ID')->first();
                 $ins_aa = [];
@@ -498,7 +498,7 @@ class StaffController extends Controller
                 StaffDocument::updateOrCreate(['staff_id' => $data->id, 'document_type_id' => $voter_id->id], $ins_aa);
             }
 
-            if ($request->passport_name && !empty($request->passport_name)) {
+            if ($request->passport_type) {
 
                 $passport_id = DocumentType::where('name', 'Passport')->first();
                 $ins_aa = [];

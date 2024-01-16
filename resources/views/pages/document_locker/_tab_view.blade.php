@@ -1,6 +1,18 @@
 <div class="d-flex align-items-center justify-content-between">
     <h3> Document Locker </h3>
     <button type="button" class="btn btn-info-blue">Locker No: #{{ $user->locker_no ?? '' }}</button>
+         <button onclick="addDocument('{{$user->id}}')" type="button" class="btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5" title="" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Click Here to add More">
+<span id="kt_engage_demos_label">
+<span class="svg-icon svg-icon-3">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor">
+</rect>
+<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor"></rect>
+</svg>
+</span>
+Add Other Document
+</span>
+</button>
 </div>
 <section>
     <div class="nav nav-tabs d-flex" style=" flex-wrap: inherit !important;" id="myTab" role="tablist">
@@ -39,6 +51,10 @@
             <button class="nav-link  p-5" id="v-pills-salary-tab" data-bs-toggle="pill" data-bs-target="#v-pills-salary"
                 type="button" role="tab" aria-controls="v-pills-salary" aria-selected="false">Salary Slip</button>
         @endif
+        <button class="nav-link  p-5" id="v-pills-other-document-tab" data-bs-toggle="pill"
+                data-bs-target="#v-pills-other-document" type="button" role="tab" aria-controls="v-pills-other-document"
+                aria-selected="false">Other Documents
+        </button>
     </div>
     <div class="tab-content p-4 bg-white border" id="v-pills-tabContent">
         {{-- show active --}}
@@ -535,5 +551,53 @@
                 </table>
             </div>
         @endif
+    <div class="tab-pane fade" id="v-pills-other-document" role="tabpanel" aria-labelledby="v-pills-other-document-tab">
+    <div class="d-flex align-items-center justify-content-between">
+    <h3></h3>
+   </div>
+   <br>
+                <table
+                    class="p-10 table align-middle text-center table-hover table-bordered table-striped fs-7 no-footer">
+                    <thead class="bg-primary p-10">
+
+                        <tr class="text-start text-center text-muted fw-bolder fs-7 text-uppercase gs-0">
+                            <th class="text-center text-white ps-3">Document Type</th>
+                            <th class="text-center text-white ps-3">Document Name</th>
+                            <th class="text-center text-white ps-3">Uploaded Date</th>
+                            <th class="text-center text-white">Download</th>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                         @if(count($other_docs)>0)
+                         @foreach ($other_docs as $other_doc)
+                        <tr>
+                            <td> {{ $other_doc->documentType->name ?? '' }}</td>
+                            <td> {{ $other_doc->doc_number ?? '' }}</td>
+                             <td> {{ $personal_docs->documentType->created_at ?? '' }}</td>
+                            @php
+                $document=storage_path('app/public/' . $other_doc->multi_file);
+                            @endphp
+                            @if(file_exists($document))
+                            <td>
+                                <a href="{{ url('storage/app/public' . '/' . $other_doc->multi_file) }}"
+                                    class="btn btn-icon btn-active-info btn-light-info mx-1 w-50px h-50px"
+                                    target="_blank">
+                                    <i class="fa fa-eye"></i></a>
+                            </td>
+                            @else
+                             <td>-</td>
+                            @endif
+                        </tr>
+                    @endforeach
+                    @else
+                        <tr>
+                            <td colspan="6"> <strong>Other Documents not Uploaded</strong> </td>
+                        </tr>
+                    @endif
+                    </tbody>
+                </table>
+            </div>
+      
     </div>
 </section>

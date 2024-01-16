@@ -114,5 +114,6 @@
             chart.appear(1000, 100);
 
         });
+     
     </script>
 @endsection
