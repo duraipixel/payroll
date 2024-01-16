@@ -325,10 +325,10 @@ KTUtil.onDOMContentLoaded(function () {
         $('#kt_popup').modal('show');
         $('#dynamic_content1').empty();
         if(type=='link'){
-        $('#dynamic_content1').append('<iframe style="top: 0; left: 0; width: 100%; height: 100%;  class="mt-3" src="'+value+'" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"></iframe>')  
+        $('#dynamic_content1').append('<iframe style="width: 600px;height: 400px;"  class="mt-3" src="'+value+'" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"></iframe>')  
         } 
         if(type=='file'){
-         $('#dynamic_content1').append('<img src="'+value+'">')  
+         $('#dynamic_content1').append('<img style="width: 600px;height: 400px;"src="'+value+'">')  
          }
         
         }
