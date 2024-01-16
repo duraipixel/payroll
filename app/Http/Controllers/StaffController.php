@@ -1322,6 +1322,7 @@ class StaffController extends Controller
         $personal_doc    = StaffDocument::where('staff_id', $staff_id)->get();
         $education_doc   = StaffEducationDetail::where('staff_id', $staff_id)->get();
         $experince_doc   = StaffWorkExperience::where('staff_id', $staff_id)->get();
+        $other_docs    = StaffDocument::whereNotIn('document_type_id',[1,2,3,4,5,6])->where('staff_id',$staff_id)->get();
         $acadamic_id     = academicYearId();
         $leave_doc       = StaffLeave::where('staff_id', $staff_id)->where('academic_id', $acadamic_id)->get();
         $appointment_doc = StaffAppointmentDetail::where('staff_id', $staff_id)->get();
@@ -1341,7 +1342,7 @@ class StaffController extends Controller
                 ->where('attendance_status', 'Present')->where('status','active')->count();
         $absence=AttendanceManualEntry::where('employment_id',$user->id)->where('academic_id', $acadamic_id)
                 ->where('attendance_status', 'Absence')->where('status','active')->count();
-        return view('pages.overview.index', compact('info', 'breadcrums', 'user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc', 'from_view','total_year','loans','working_days','present','absence'));
+        return view('pages.overview.index', compact('info', 'breadcrums', 'user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc', 'from_view','total_year','loans','working_days','present','absence','other_docs'));
 
     }
 

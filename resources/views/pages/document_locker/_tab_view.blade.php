@@ -1,6 +1,7 @@
 <div class="d-flex align-items-center justify-content-between">
     <h3> Document Locker </h3>
     <button type="button" class="btn btn-info-blue">Locker No: #{{ $user->locker_no ?? '' }}</button>
+    @if(request()->route()->getName()=='user.dl_view')
          <button onclick="addDocument('{{$user->id?? ''}}')" type="button" class="btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5" title="" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Click Here to add More">
 <span id="kt_engage_demos_label">
 <span class="svg-icon svg-icon-3">
@@ -13,6 +14,7 @@
 Add Other Document
 </span>
 </button>
+@endif
 </div>
 <section>
     <div class="nav nav-tabs d-flex" style=" flex-wrap: inherit !important;" id="myTab" role="tablist">
@@ -51,10 +53,12 @@ Add Other Document
             <button class="nav-link  p-5" id="v-pills-salary-tab" data-bs-toggle="pill" data-bs-target="#v-pills-salary"
                 type="button" role="tab" aria-controls="v-pills-salary" aria-selected="false">Salary Slip</button>
         @endif
+        @if(request()->route()->getName()!='overview')
         <button class="nav-link  p-5" id="v-pills-other-document-tab" data-bs-toggle="pill"
                 data-bs-target="#v-pills-other-document" type="button" role="tab" aria-controls="v-pills-other-document"
                 aria-selected="false">Other Documents
         </button>
+        @endif
     </div>
     <div class="tab-content p-4 bg-white border" id="v-pills-tabContent">
         {{-- show active --}}
