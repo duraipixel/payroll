@@ -90,10 +90,10 @@
         $('#dynamic_content').empty();
         console.log(value);
         if(type=='link'){
-        $('#dynamic_content').append('<iframe style="top: 0; left: 0; width: 100%; height: 100%;  class="mt-3" src="'+value+'" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"></iframe>')  
+        $('#dynamic_content').append('<iframe style="width: 600px;height: 400px;"  class="mt-3" src="'+value+'" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"></iframe>')  
         } 
         if(type=='file'){
-         $('#dynamic_content').append('<img src="'+value+'">')  
+         $('#dynamic_content').append('<img style="width: 600px;height: 400px;" src="'+value+'">')  
          }
         
         }
