@@ -90,7 +90,7 @@
         $('#dynamic_content').empty();
         console.log(value);
         if(type=='link'){
-        $('#dynamic_content').append('<iframe class="mt-3" src="'+value+'" sandbox="allow-popups"></iframe>')  
+        $('#dynamic_content').append('<iframe style="top: 0; left: 0; width: 100%; height: 100%;  class="mt-3" src="'+value+'" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"></iframe>')  
         } 
         if(type=='file'){
          $('#dynamic_content').append('<img src="'+value+'">')  

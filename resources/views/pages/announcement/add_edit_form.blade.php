@@ -109,15 +109,17 @@
              </label>
             <div class="link  @if(isset($info->upload_type) && $info->upload_type == 'link') d_block  @else d_none @endif" > 
                  <input type="link" name="link" class="form-control"  @if(isset($info->upload_type) && $info->upload_type == 'link') value="{{$info->upload_data}}"  @endif  >
+                  <br>
                  @if(isset($info->upload_type) && $info->upload_type == 'link')
-                 <a onclick="mypopup()"><i class="fa fa-eye" aria-hidden="true"></i>
+                 <a onclick="mypopup('{{$info->upload_type}}','{{$info->upload_url}}')"><i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
                    @endif 
              </div>
              <div class="file  @if(isset($info->upload_type) && $info->upload_type == 'file') d_block @else d_none @endif"> 
                  <input type="file" name="file" class="form-control" value="">
+                 <br>
                   @if(isset($info->upload_type) && $info->upload_type == 'file')
-                  <a onclick="mypopup()"><i class="fa fa-eye" aria-hidden="true"></i>
+                  <a onclick="mypopup('{{$info->upload_type}}','{{$info->upload_url}}')"><i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
                   @endif 
              </div>
@@ -163,17 +165,7 @@
             </div>
             <!--end::Modal header-->
             <!--begin::Modal body-->
-            <div class="modal-body py-lg-10 px-lg-10" id="dynamic_content">
-                <!--begin::Stepper-->
-                            @if(isset($info->upload_type) && $info->upload_type == 'link')
-            <iframe class="mt-3" src="{{$info->upload_data}}" title="{{ $info->message??''}}" sandbox="allow-popups">
-                  </iframe>
-            @endif
-            @if(isset($info->upload_type) && $info->upload_type == 'file')
-                  <img src="{{url('public/storage/' .$info->upload_data)}}" >
-                        
-            @endif
-                <!--end::Stepper-->
+            <div class="modal-body py-lg-10 px-lg-10" id="dynamic_content1">
             </div>
             <!--end::Modal body-->
         </div>
@@ -329,5 +321,15 @@ KTUtil.onDOMContentLoaded(function () {
     KTAppEcommerceSaveBranch.init();
 });
     
-    
+     function mypopup(type,value){
+        $('#kt_popup').modal('show');
+        $('#dynamic_content1').empty();
+        if(type=='link'){
+        $('#dynamic_content1').append('<iframe style="top: 0; left: 0; width: 100%; height: 100%;  class="mt-3" src="'+value+'" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share;"></iframe>')  
+        } 
+        if(type=='file'){
+         $('#dynamic_content1').append('<img src="'+value+'">')  
+         }
+        
+        }
 </script>

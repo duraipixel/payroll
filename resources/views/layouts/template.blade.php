@@ -426,6 +426,7 @@
             // Navigate to the updated URL
             window.location.href = updatedUrl;
         }
+   
         
     </script>
 </body>
