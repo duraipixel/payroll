@@ -1,7 +1,7 @@
 <div class="d-flex align-items-center justify-content-between">
     <h3> Document Locker </h3>
     <button type="button" class="btn btn-info-blue">Locker No: #{{ $user->locker_no ?? '' }}</button>
-         <button onclick="addDocument('{{$user->id}}')" type="button" class="btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5" title="" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Click Here to add More">
+         <button onclick="addDocument('{{$user->id?? ''}}')" type="button" class="btn btn-flex h-35px bg-body btn-color-gray-700 btn-active-color-gray-900 shadow-sm fs-6 px-4 rounded-top-0 mt-5" title="" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="Click Here to add More">
 <span id="kt_engage_demos_label">
 <span class="svg-icon svg-icon-3">
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -569,7 +569,7 @@ Add Other Document
 
                     </thead>
                     <tbody>
-                         @if(count($other_docs)>0)
+                         @if(isset($other_docs)&&count($other_docs)>0)
                          @foreach ($other_docs as $other_doc)
                         <tr>
                             <td> {{ $other_doc->documentType->name ?? '' }}</td>
