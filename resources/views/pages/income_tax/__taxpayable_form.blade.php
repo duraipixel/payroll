@@ -133,7 +133,7 @@
                 {{-- @if( isset($statement_data->staffTaxSeparation->march) && !empty( $statement_data->staffTaxSeparation->march ) )
                 @else  --}}
                 @if( isset( $statement_data->lock_calculation ) && $statement_data->lock_calculation == 'no')
-                <button type="button" id="tax_btn" class="btn btn-primary btn-sm d-none" onclick="submitTaxSeperationCalc()"> Save11 </button>
+                <button type="button" id="tax_btn" class="btn btn-primary btn-sm d-none" onclick="submitTaxSeperationCalc()"> Save </button>
                 @endif
             </div>
         </form>
@@ -151,11 +151,11 @@
         amount = parseFloat(element.value);
         tax_payment = parseFloat(tax_payment);
 
-        if (amount > maximum_limit) {
-            toastr.error('Error', 'Maximum limit ' + maximum_limit + ' you can enter');
-            element.value = '';
-            return false;
-        }
+        // if (amount > maximum_limit) {
+        //     toastr.error('Error', 'Maximum limit ' + maximum_limit + ' you can enter');
+        //     element.value = '';
+        //     return false;
+        // }
 
         var earnings = 0;
         console.log(maximum_limit, ' maximum_limit');
