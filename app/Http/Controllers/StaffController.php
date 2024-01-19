@@ -205,7 +205,10 @@ class StaffController extends Controller
 
         $step = getRegistrationSteps($id);
         $tax_scheme=TaxScheme::where('status', 'active')->get();
+        $leave_mapping=[];
+        if(isset($staff_details->appointment->employment_nature)){
         $leave_mapping=$staff_details->appointment->employment_nature->leave_mapping;
+        }
         $params = array(
             'breadcrums' => $breadcrums,
             'institutions' => $institutions,
