@@ -12,7 +12,7 @@ use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
 use App\Models\User;
-
+use App\Http\Controllers\PayrollManagement\IncomeTaxController;
 class TaxCalculationRepository
 {
     public function generateStatementForStaff($staff_id)
@@ -216,7 +216,6 @@ class TaxCalculationRepository
             }
         }
         if( $statement_id ) {
-           
             generateIncomeTaxStatementPdfByStaff($statement_id);
             return true;
         } else {

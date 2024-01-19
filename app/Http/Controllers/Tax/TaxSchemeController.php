@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Repositories\TaxCalculationRepository;
+use App\Models\Staff\StaffTaxSeperation;
 class TaxSchemeController extends Controller
 {   
     private $taxRepository; 
@@ -161,6 +162,7 @@ class TaxSchemeController extends Controller
             $staff->tax_scheme_id=$request->scheme_id;
             $staff->update();
             ItStaffStatement::where('academic_id', academicYearId())->where('staff_id',$request->staff_id)->delete();
+           StaffTaxSeperation::where('academic_id', academicYearId())->where('staff_id',$request->staff_id)->delete();
             $this->taxRepository->generateStatementForStaff($request->staff_id);
             $error = 0;
             $message = 'You set current Scheme!';

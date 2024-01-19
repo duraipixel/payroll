@@ -151,11 +151,11 @@
         amount = parseFloat(element.value);
         tax_payment = parseFloat(tax_payment);
 
-        if (amount > maximum_limit) {
-            toastr.error('Error', 'Maximum limit ' + maximum_limit + ' you can enter');
-            element.value = '';
-            return false;
-        }
+        // if (amount > maximum_limit) {
+        //     toastr.error('Error', 'Maximum limit ' + maximum_limit + ' you can enter');
+        //     element.value = '';
+        //     return false;
+        // }
 
         var earnings = 0;
         console.log(maximum_limit, ' maximum_limit');

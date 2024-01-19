@@ -96,7 +96,7 @@
                     <th> {{ $total_gross }} </th>
                     <th> {{ $total_epf }} </th>
                     <th> {{ $total_lic }} </th>
-                    <th> {{ $total_tax }} </th>
+                    <th> {{ $total_tax }}</th>
                     <th></th>
                 </tr>
             </tfoot>
