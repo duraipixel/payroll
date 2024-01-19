@@ -19,11 +19,14 @@ class TaxCalculationRepository
     {
 
         $staff_details = User::find($staff_id);
+        if($staff_details->tax_scheme_id==''){
+         return ['error' =>1, 'message' =>'Please set schema then create incometax calculation'];
+        }
         $academic_data = AcademicYear::find(academicYearId());
         $statement_info = ItStaffStatement::where('staff_id', $staff_id)->where(['academic_id' => academicYearId(), 'status' => 'active'])->first();
 
         $info =  $statement_info;
-        $current_tax_schemes = TaxScheme::where('is_current', 'yes')->first();
+        $current_tax_schemes = TaxScheme::find($staff_details->tax_scheme_id);
         // dd( $staff_details->staffBankInterest80TTADedcution );
         if ($academic_data) {
 

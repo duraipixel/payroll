@@ -127,8 +127,25 @@
                 },
                 success: function(res) {
                     unloading();
+                if( res.error == 1 ) {
+                Swal.fire({
+                                title: "Error!",
+                                text: res.message,
+                                icon: "danger",
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-danger"
+                                },
+                                timer: 3000
+                            });
+                        }
                     $('#staff_tax_pane').html(res);
-                }
+
+                },error: function(xhr, err) {
+                                    if (xhr.status == 403) {
+                                        toastr.error(xhr.statusText, 'UnAuthorized Access');
+                                    }
+                                }
             })
         }
 

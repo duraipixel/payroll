@@ -134,9 +134,11 @@ if (!function_exists('getRegistrationSteps')) {
             }
 
             $step = 6;
+            $step = 7;
             $appointment_data = StaffAppointmentDetail::where('staff_id', $staff_id)->first();
+
             if ($appointment_data) {
-                $step = 7;
+                $step = 8;
             }
         }
         return $step;

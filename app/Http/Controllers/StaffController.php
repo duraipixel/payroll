@@ -63,6 +63,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Models\Tax\TaxScheme;
 use DataTables;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
 use Carbon\Carbon;
@@ -203,7 +204,8 @@ class StaffController extends Controller
         $order_models = AppointmentOrderModel::where('status', 'active')->get();
 
         $step = getRegistrationSteps($id);
-
+        $tax_scheme=TaxScheme::where('status', 'active')->get();
+        $leave_mapping=$staff_details->appointment->employment_nature->leave_mapping;
         $params = array(
             'breadcrums' => $breadcrums,
             'institutions' => $institutions,
@@ -253,7 +255,9 @@ class StaffController extends Controller
             'place_of_works' => $place_of_works ?? [],
             'order_models' => $order_models ?? [],
             'class_details' => $class_details ?? [],
-            'subject_details' => $subject_details ?? []
+            'subject_details' => $subject_details ?? [],
+            'tax_scheme'=>$tax_scheme??[],
+            'leave_mappings'=>$leave_mapping??[]
         );
 
         return view('pages.staff.registration.index', $params);
@@ -1342,6 +1346,7 @@ class StaffController extends Controller
                 ->where('attendance_status', 'Present')->where('status','active')->count();
         $absence=AttendanceManualEntry::where('employment_id',$user->id)->where('academic_id', $acadamic_id)
                 ->where('attendance_status', 'Absence')->where('status','active')->count();
+
         return view('pages.overview.index', compact('info', 'breadcrums', 'user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc', 'from_view','total_year','loans','working_days','present','absence','other_docs'));
 
     }
