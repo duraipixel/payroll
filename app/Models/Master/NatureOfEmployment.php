@@ -25,6 +25,10 @@ class NatureOfEmployment extends Model implements Auditable
     {
         return $this->hasMany(StaffAppointmentDetail::class, 'nature_of_employment_id', 'id');
     }
+      public function leave_mapping()
+    {
+        return $this->hasMany(LeaveMapping::class, 'nature_of_employment_id', 'id');
+    }
     public function cl()
     {
         return $this->hasOne(LeaveMapping::class, 'nature_of_employment_id', 'id')->where('leave_head_id',1);

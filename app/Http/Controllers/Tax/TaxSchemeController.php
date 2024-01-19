@@ -13,8 +13,15 @@ use App\Models\PayrollManagement\ItStaffStatement;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Repositories\TaxCalculationRepository;
 class TaxSchemeController extends Controller
-{
+{   
+    private $taxRepository; 
+    public function __construct(TaxCalculationRepository $taxRepository)
+    {
+        $this->taxRepository = $taxRepository;
+    }
+
     public function index(Request $request)
     {
         $breadcrums = array(
@@ -139,21 +146,29 @@ class TaxSchemeController extends Controller
 
     public function setCurrent(Request $request)
     {
-        $id             = $request->id;
-        $staff_id             = $request->staff_id;
-        if( $id ){
-
+        $data='';
+        $validator      = Validator::make($request->all(), [
+            'scheme_id' => 'required',
+        ],[
+            'scheme_id.required'=>'Scheme is required']);
+        
+        if ($validator->passes()) {
             TaxScheme::where('status', 'active')->update(['is_current' => 'no']);
-            $info           = TaxScheme::find($id);
+            $info           = TaxScheme::find($request->scheme_id);
             $info->is_current   = 'yes';
             $info->update();
-            $staff=User::find($staff_id);
-            $staff->tax_scheme_id=$id;
+            $staff=User::find($request->staff_id);
+            $staff->tax_scheme_id=$request->scheme_id;
             $staff->update();
-            return response()->json(['message' => "You set current Scheme!", 'status' => 0]);
+            ItStaffStatement::where('academic_id', academicYearId())->where('staff_id',$request->staff_id)->delete();
+            $this->taxRepository->generateStatementForStaff($request->staff_id);
+            $error = 0;
+            $message = 'You set current Scheme!';
         } else {
-            return response()->json(['message' => "Scheme is required!", 'status' => 1]);
+            $error = 1;
+            $message = $validator->errors()->all();
         }
+        return response()->json(['error' => $error, 'message' => $message, 'inserted_data' => $data]);
     }
 
     public function delete(Request $request)

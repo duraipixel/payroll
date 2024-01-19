@@ -160,7 +160,21 @@
                 @include('pages.staff.registration.medical_info')
             </div>
         </section>
-
+         <h3>
+            <div class="media">
+                <div class="bd-wizard-step-icon text-center">
+                    <i class="icon-xl la la-briefcase-medical"></i>
+                </div>
+                <div class="media-body text-center">
+                    <div class="bd-wizard-step-title"> Other Information</div>
+                </div>
+            </div>
+        </h3>
+        <section>
+            <div class="">
+                @include('pages.staff.registration.other_information.index')
+            </div>
+        </section>
         <h3>
             <div class="media">
                 <div class="bd-wizard-step-icon text-center">
@@ -184,7 +198,6 @@
         }
 
         async function checkGoFurther(form_no) {
-
             switch (form_no) {
                 case 0:
                     return await validatePersonalForm();
@@ -208,13 +221,11 @@
                 case 5:
                     return await validateMedicalForm();
                     break;
-
                 case 6:
-                    return await validateAppointmentForm();
+                    return await ValidationSchemeSetCurrent();
                     break;
-
                 case 7:
-
+                    return await validateAppointmentForm();
                     break;
 
                 default:
