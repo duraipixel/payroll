@@ -22,7 +22,7 @@
                 <label for="" class="">Select a income tax regime to submit and declare IT</label>
                 <div class="mt-5">
                     <select name="scheme_id" id="scheme_id" class="form-control w-200px table-select">
-                        <option selected value="">--select--</option>
+                        <option selected value="">--Select scheme--</option>
                         @if (isset($tax_scheme) && !empty($tax_scheme))
                             @foreach ($tax_scheme as $item)
                                 <option value="{{ $item->id }}" @if (isset($staff_details->tax_scheme_id) && $staff_details->tax_scheme_id == $item->id) selected @endif>
