@@ -555,6 +555,16 @@ class User extends Authenticatable implements Auditable
             return $this->hasMany(StaffEducationDetail::class, 'staff_id', 'id');
         }
     }
+     public function degree()
+    {
+        if ($this->status == 'transferred') {
+
+            return $this->hasOne(StaffEducationDetail::class, 'staff_id', 'refer_user_id')->orderBy('created_at', 'desc');
+        } else {
+
+            return $this->hasOne(StaffEducationDetail::class, 'staff_id', 'id')->orderBy('created_at', 'desc');
+        }
+    }
 
     public function careers()
     {

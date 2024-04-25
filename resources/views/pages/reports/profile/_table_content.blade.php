@@ -33,7 +33,9 @@
               <td>{{ $item->short_name ?? '' }}</td>
             <td>{{ $item->personal->pincode ?? '' }}</td>
             <td>{{ $item->position->department->name ?? '' }}</td>
-            <td>{{ $item->position->division->name ?? '' }}</td>AS
+            <td>{{ $item->position->division->name ?? '' }}</td>
+            <td>{{ $item->aadhaar->doc_number ?? '' }}</td>
+            <td>{{ $item->degree->course_name ?? '' }}</td>
         </tr>
     @endforeach
 @else

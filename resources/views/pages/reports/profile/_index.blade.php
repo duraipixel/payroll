@@ -65,6 +65,8 @@
                                     <th>Pincode</th>
                                     <th>Department</th>
                                     <th>Division</th>
+                                <th>Aadhaar No</th>
+                                <th>Educational </th>
                                 </tr>
                             </thead>
 
