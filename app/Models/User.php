@@ -559,10 +559,10 @@ class User extends Authenticatable implements Auditable
     {
         if ($this->status == 'transferred') {
 
-            return $this->hasOne(StaffEducationDetail::class, 'staff_id', 'refer_user_id')->orderBy('created_at', 'desc');
+            return $this->hasOne(StaffEducationDetail::class, 'staff_id', 'refer_user_id')->where('education_type','!=',1);
         } else {
 
-            return $this->hasOne(StaffEducationDetail::class, 'staff_id', 'id')->orderBy('created_at', 'desc');
+            return $this->hasOne(StaffEducationDetail::class, 'staff_id', 'id')->where('education_type','!=',1);
         }
     }
 
