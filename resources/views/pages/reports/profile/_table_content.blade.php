@@ -35,11 +35,7 @@
             <td>{{ $item->position->department->name ?? '' }}</td>
             <td>{{ $item->position->division->name ?? '' }}</td>
             <td>{{ $item->aadhaar->doc_number ?? '' }}</td>
-            <td>@if(isset($item->degree)&& count($item->degree)>0)
-                @foreach($item->degree as $index =>$degree)
-                {{$degree->course_name}}@if(!$loop->last),@endif
-                @endforeach
-            @endif </td>
+            <td>@if(isset($item->degree)&& count($item->degree)>0)@foreach($item->degree as $index => $degree){{ $degree->course_name }}{{ $index < count($item->degree) - 1 ? ', ' : '' }}@endforeach @endif</td>
         </tr>
     @endforeach
 @else
