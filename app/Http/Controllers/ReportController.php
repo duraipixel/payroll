@@ -1389,7 +1389,7 @@ class ReportController extends Controller
         })
          ->editColumn('el_accumalted', function ($row) {
             $el_accumalted = getLeaveMapping($row->id,academicYearId(),'el')? getLeaveMapping($row->id,academicYearId(),'el')->accumulated : 0;
-            $accumulated_leave=getLeaveMapping($row->id,academicYearId(),'el')->accumulated_leave ??0;
+            $accumulated_leave=getLeaveMapping($row->id,academicYearId(),'el')->leave_days ??0;
             return $el_accumalted-$accumulated_leave ?? 0;
         })->editColumn('el_year', function ($row) {
              $el_year = getLeaveMapping($row->id,academicYearId(),'el')->leave_days ?? 0;
