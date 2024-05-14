@@ -1397,8 +1397,8 @@ class ReportController extends Controller
         })
         ->editColumn('el_total', function ($row) {
             $el_total = getLeaveMapping($row->id,academicYearId(),'el')? getLeaveMapping($row->id,academicYearId(),'el')->accumulated :0; 
-            $el_leave=getLeaveMapping($row->id,academicYearId(),'el')->leave_days??0;
-            return $el_total-$el_leave ?? 0;
+            
+            return $el_total ?? 0;
         })
 
         ->editColumn('ml_eligible', function ($row) {
