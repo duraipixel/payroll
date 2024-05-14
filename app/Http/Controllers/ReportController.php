@@ -1382,13 +1382,13 @@ class ReportController extends Controller
         })
         ->editColumn('el_balance', function ($row) use ($fromDate,$toDate) {
             $elAvailed = getLeaveDays($row->leaves, 'Earned Leave');
-            $el_total = getLeaveMapping($row->id,academicYearId(),'el')->accumulated ?? 0;
+            $el_total = getLeaveMapping($row->id,academicYearId(),'el')? getLeaveMapping($row->id,academicYearId(),'el')->accumulated : 0;
         $el_data=StaffELEntry::where('staff_id',$row->id)->where('academic_id',academicYearId())->whereBetween('from_date', [$fromDate, $toDate])
         ->whereBetween('to_date', [$fromDate, $toDate])->select(DB::raw('SUM(leave_days) as total_days'))->first();
             return ($el_total - ($elAvailed + $el_data->total_days)) ?? 0;
         })
          ->editColumn('el_accumalted', function ($row) {
-            $el_accumalted = getLeaveMapping($row->id,academicYearId(),'el')->accumulated ?? 0;
+            $el_accumalted = getLeaveMapping($row->id,academicYearId(),'el')? getLeaveMapping($row->id,academicYearId(),'el')->accumulated : 0;
             $accumulated_leave=getLeaveMapping($row->id,academicYearId(),'el')->accumulated_leave ??0;
             return $el_accumalted-$accumulated_leave ?? 0;
         })->editColumn('el_year', function ($row) {
@@ -1396,7 +1396,7 @@ class ReportController extends Controller
             return $el_year ?? 0;
         })
         ->editColumn('el_total', function ($row) {
-            $el_total = getLeaveMapping($row->id,academicYearId(),'el')->accumulated ?? 0; 
+            $el_total = getLeaveMapping($row->id,academicYearId(),'el')? getLeaveMapping($row->id,academicYearId(),'el')->accumulated :0; 
             $el_leave=getLeaveMapping($row->id,academicYearId(),'el')->leave_days??0;
             return $el_total-$el_leave ?? 0;
         })
