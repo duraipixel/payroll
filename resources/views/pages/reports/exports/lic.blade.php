@@ -39,11 +39,11 @@
               <td>{{$details['staff']->appointment->joining_date ?? ''}}</td>
               <td>{{$details['staff']->institute_emp_code ?? ''}}</td>
               <td>{{$details['staff']->name ?? ''}}</td>
-              <td>{{$details->policy_no ?? ''}}</td>
-               <td>{{$details->amount ?? ''}}</td>
-              <td>{{$details->start_date ?? ''}}</td>
-              <td>{{$details->end_date ?? ''}}</td>
-            <td>{{$details->every_month_amount ?? ''}}</td>
+              <td>{{$details->StaffInsurance->policy_no ?? ''}}</td>
+               <td>{{$details->StaffInsurance->amount ?? ''}}</td>
+              <td>{{$details->StaffInsurance->start_date ?? ''}}</td>
+              <td>{{$details->StaffInsurance->end_date ?? ''}}</td>
+            <td>{{$details->amount ?? ''}}</td>
           </tr>
           @endforeach
            @else 

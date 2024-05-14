@@ -1,20 +1,20 @@
 <div class="row g-3 mb-6 mb-xl-9">
-    <div class="col-xl-3 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-4 col-md-6">
         @include('pages.dashboard.noti_card._employee')
     </div>
-    <div class="col-xl-3 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-4 col-md-6">
         @include('pages.dashboard.noti_card._leave_approval')
     </div>
-    <div class="col-xl-3 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-4 col-md-6">
         @include('pages.dashboard.noti_card._birthday')
     </div>
-    <div class="col-xl-3 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-4 col-md-6">
         @include('pages.dashboard.noti_card._anniversary')
     </div>
-    <div class="col-xl-3 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-4 col-md-6">
         @include('pages.dashboard.noti_card._announcement')
     </div>
-    <div class="col-xl-3 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-4 col-md-6">
         @include('pages.dashboard.noti_card._doc_approval')
     </div>
 </div>

@@ -10,6 +10,7 @@ use App\Models\Staff\StaffEducationDetail;
 use App\Models\Staff\StaffFamilyMember;
 use App\Models\Staff\StaffHealthDetail;
 use App\Models\Staff\StaffKnownLanguage;
+use App\Models\Staff\StaffLeaveMapping;
 use App\Models\Staff\StaffNominee;
 use App\Models\Staff\StaffPersonalInfo;
 use App\Models\Staff\StaffProfessionalData;
@@ -23,6 +24,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Role\Permission;
 use App\Helpers\AccessGuard;
+use App\Models\Staff\StaffELEntry;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\ItTabulation;
@@ -1020,17 +1022,48 @@ function getStaffLeaveRequestStatus($staff_id, $date)
         ->where('from_date', '<=', $date)->where('to_date', '>=', $date)
         ->first();
 
-    $status = 'No Leave Request Raised';
+     $status = '-';
     if ($info) {
         if ($info->status == 'pending') {
-            $status = 'Leave Approval Pending';
+            $status = 'Pending';
         } else {
-            $status  = 'Leave Approved';
+            $status  = 'Approved';
         }
     }
     return $status;
 }
+function getStaffLeaveRequestType($staff_id, $date)
+{
+    // dump( $date );
+    // dump( $staff_id );
+   $info = StaffLeave::where('staff_id', $staff_id)
+        ->where('from_date', '<=', $date)->where('to_date', '>=', $date)
+        ->first();
 
+     $status = 'U/A';
+    if ($info) {
+            $status  = $info->leave_category;
+        
+    }
+    return $status;
+}
+function getSortStaffLeaveType($staff_id, $date)
+{
+    // dump( $date );
+    // dump( $staff_id );
+
+   $info = StaffLeave::where('staff_id', $staff_id)
+        ->where('from_date', '<=', $date)->where('to_date', '>=', $date)
+        ->first();
+
+     $status = 'U/A';
+    if ($info) {
+            $status  = formatWord($info->leave_category);
+            
+        
+    }
+    return $status;
+}
 function getGlobalAcademicYear()
 {
 
@@ -1152,16 +1185,16 @@ function reportMenu()
     return $groupedData;
 }
 
-function monthDays($month)
+function monthDays($month,$year='')
 {
-    $year = date('Y');
+    $year = ($year !='') ? $year : date('Y');
     $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
     return $daysInMonth;
 }
 
-function getStartAndEndDateOfMonth($month)
+function getStartAndEndDateOfMonth($month,$year='')
 {
-    $year      = date('Y');
+    $year      = ($year !='') ? $year : date('Y');
     $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
     $endDate   = Carbon::createFromDate($year, $month, 1)->endOfMonth();
     return [
@@ -1357,4 +1390,81 @@ function findMonthBetweenDates($start_date, $end_date) {
     return $howeverManyMonths;
 
 }
+if (!function_exists('formatWord')) {
+    function formatWord($name)
+    {
+    $words = explode(' ', $name);
+    $initials = [];
+    foreach ($words as $word) {
+    $initials[] = strtoupper(substr($word, 0, 1));
+    }
+    return implode('', $initials);
+    }
+}
+if (!function_exists('leave_data')) {
+    function leaveData($staff_id,$year,$leave_category)
+    {
+      $leave_datas=StaffLeave::where('staff_id',$staff_id)->whereYear('from_date',$year)->select(DB::raw('SUM(granted_days) as total_days'),)->where('leave_category',$leave_category)
+            ->groupBy('leave_category')->first();
+            
+    return $leave_datas->total_days??'0.00';
+    }
+
+    if (!function_exists('getLeaveDays')) {
+    function getLeaveDays($leaves, $category)
+    {
+    $totalDays = 0;
+    foreach ($leaves as $leave) {
+        if ($leave->leave_category == $category) {
+            $totalDays += $leave->granted_days;
+        }
+    }
+    return $totalDays;
+    }
+   }
+  if (!function_exists('getYearsBetween')) {
+   function getYearsBetween($startYear, $endYear){
+    $years = [];
+    if ($startYear > $endYear) {
+        return $years;
+    }
+    for ($year = $startYear; $year <= $endYear; $year++) {
+        $years[] = $year;
+    }
+    return $years;
+   }
+  }
+  if (!function_exists('getLeaveMapping')) {
+   function getLeaveMapping($staff_id, $acadamic_id,$type){
+    if($type=='cl'){
+        $leave_head_id=1;
+    }else if($type=='el'){
+        $leave_head_id=2;
+    }else if($type=='ml'){
+        $leave_head_id=3;
+    }else{
+        $leave_head_id=5;
+    }
+    $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('leave_head_id',$leave_head_id)->where('acadamic_id',$acadamic_id)->select('id','staff_id','leave_head_id','acadamic_id','no_of_leave  as leave_days','carry_forward_count','accumulated')->first();
+    return $data;
+  }
+  }
+  if (!function_exists('getLeaveELEntry')) {
+   function getLeaveELEntry($staff_id, $academic_id,$fromDate,$toDate){
+     $el_data=StaffELEntry::where('staff_id',$staff_id)->where('academic_id',$academic_id)->whereBetween('from_date', [$fromDate, $toDate])
+        ->whereBetween('to_date', [$fromDate, $toDate])->select(DB::raw('SUM(leave_days) as total_days'))->first();
+        return $el_data;
+   }
+   }
+    if (!function_exists('StaffleaveAllocated')) {
+   function StaffleaveAllocated($staff_id, $academic_id){
+    $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('acadamic_id',$academic_id)->get();
+    return $data ??[];
+   }
+}
+   
+
+
+}
+
 

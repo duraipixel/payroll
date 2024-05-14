@@ -7,6 +7,7 @@ use App\Models\Leave\StaffLeave;
 use App\Models\Master\AppointmentOrderModel;
 use App\Models\Master\AttendanceScheme;
 use App\Models\Master\Bank;
+use App\Models\Staff\StaffLeaveMapping;
 use App\Models\Master\BankBranch;
 use App\Models\Master\BloodGroup;
 use App\Models\Master\Board;
@@ -57,6 +58,7 @@ use App\Models\Staff\StaffTrainingDetail;
 use App\Models\Staff\StaffWorkExperience;
 use App\Models\Staff\StaffWorkingRelation;
 use App\Models\User;
+use App\Models\AttendanceManagement\LeaveMapping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -71,6 +73,7 @@ use PDF;
 use App\Models\CalendarDays;
 use App\Models\Staff\StaffBankLoan;
 use App\Models\AcademicYear;
+use App\Models\AttendanceManagement\LeaveHead;
 class StaffController extends Controller
 {
    public function StaffDocumentDelete(Request $request)
@@ -205,10 +208,8 @@ class StaffController extends Controller
 
         $step = getRegistrationSteps($id);
         $tax_scheme=TaxScheme::where('status', 'active')->get();
-        $leave_mapping=[];
-        if(isset($staff_details->appointment->employment_nature)){
-        $leave_mapping=$staff_details->appointment->employment_nature->leave_mapping;
-        }
+        $leave_mapping=StaffLeaveMapping::where('staff_id',$id)->where('acadamic_id',academicYearId())->get();
+        $first_appointment = StaffAppointmentDetail::where('staff_id', $id)->orderBy('staff_id', 'asc')->first();
         $params = array(
             'breadcrums' => $breadcrums,
             'institutions' => $institutions,
@@ -260,7 +261,8 @@ class StaffController extends Controller
             'class_details' => $class_details ?? [],
             'subject_details' => $subject_details ?? [],
             'tax_scheme'=>$tax_scheme??[],
-            'leave_mappings'=>$leave_mapping??[]
+            'leave_mappings'=>$leave_mapping??[],
+            'first_appointment'=>$first_appointment
         );
 
         return view('pages.staff.registration.index', $params);
@@ -1338,7 +1340,6 @@ class StaffController extends Controller
         $info = User::find( $user->id);
 
         $from_year=AcademicYear::find(academicYearId());
-         academicYearId();
         $year=$from_year->from_year;
         $firstDayOfYear = date("$year-01-01"); 
         $lastDayOfYear = date("$year-12-31");
@@ -1467,5 +1468,39 @@ class StaffController extends Controller
         }
 
         return array('error' => $error, 'message' => $message );
+    }
+     public function Information_add_edit(Request $request)
+    {
+        $id = $request->id;
+        $info = [];
+        $title = 'Edit Leave Mapping';
+        $teaching_types=[];
+        $employment_nature = [];
+       
+        if(isset($id) && !empty($id))
+        {
+            $info = StaffLeaveMapping::find($id);
+            $title = 'Update Leave Mapping';
+            $leave_head=LeaveHead::find($info->leave_head_id);
+        }
+
+         $content = view('pages.staff.registration.other_information.add_edit_form',compact('info','title','leave_head'));
+         return view('layouts.modal.dynamic_modal', compact('content', 'title','leave_head'));
+    }
+     public function UpdateLeaveMapping(Request $request)
+    {    
+         $id=$request->id;
+         if($id){
+         $info = StaffLeaveMapping::find($id);
+         $info->no_of_leave=$request->no_of_leave;
+         $info->save();
+         $error = 0;
+
+         $message = 'Updated successfully';
+         }else {
+            $error = 1;
+            $message = 'Data Not Found';
+        }
+    return array('error' => $error, 'message' => $message );
     }
 }

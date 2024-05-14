@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth', 'prefix' => 'reports'],  function () {
     Route::get('/export', [ReportController::class, 'commonExport'])->name('reports.export');
+    Route::get('leave-statement/export', [ReportExportController::class, 'LeaveStatement'])->name('reports.leave.statement.export');
+     Route::get('el-entry-statement/export/{user_id}', [ReportExportController::class, 'ELEntryStatement'])->name('reports.el.entry.export');
+
     Route::get('/attendance/export', [ReportController::class, 'attendance_export'])->name('reports.attendance.export');
     Route::get('/staff/export', [StaffReportController::class, 'staff_export'])->name('reports.staff.export');
     Route::get('/service/history/export', [ReportController::class, 'serviceHistoryExport'])->name('reports.service.history.export');

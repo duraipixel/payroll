@@ -5,7 +5,7 @@ namespace App\Models\Staff;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Models\User;
 class StaffLoanEmi extends Model
 {
     use HasFactory;
@@ -23,5 +23,11 @@ class StaffLoanEmi extends Model
         'loan_type', //school, bank loan
         'status'   //'active','inactive', 'paid'
     ];
+    public function staff() {
+        return $this->hasOne(User::class, 'id', 'staff_id');
+    }
+    public function StaffLoan() {
+        return $this->hasOne(StaffBankLoan::class, 'id', 'staff_loan_id');
+    }
 
 }

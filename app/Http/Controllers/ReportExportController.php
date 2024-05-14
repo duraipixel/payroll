@@ -8,7 +8,9 @@ use App\Exports\Reports\AttendanceReport;
 use App\Models\AcademicYear;
 use App\Models\Master\Department;
 use App\Models\User;
+use App\Models\Staff\StaffELEntry;
 use App\Models\PayrollManagement\StaffSalaryPattern;
+use App\Models\Staff\StaffLeaveMapping;
 use App\Models\PayrollManagement\SalaryField;
 use App\Repositories\ReportRepository;
 use Maatwebsite\Excel\Facades\Excel;
@@ -17,6 +19,8 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\Payroll;
 use DataTables;
 use Carbon\Carbon;
+use App\Models\Staff\StaffLoanEmi;
+use App\Models\Staff\StaffInsuranceEmi;
 use App\Models\Staff\StaffBankLoan;
 use App\Models\Staff\StaffInsurance;
 use App\Models\PayrollManagement\HoldSalary;
@@ -25,6 +29,8 @@ use App\Models\Staff\StaffSalaryPreEarning;
 use App\Models\PayrollManagement\ItStaffStatement;
 
 ##.export
+use App\Exports\Reports\ELEntryExport;
+use App\Exports\Reports\LeaveStatementExport;
 use App\Exports\Reports\EpfExport;
 use App\Exports\Reports\EsiExport;
 use App\Exports\Reports\IncomeTaxExport;
@@ -153,13 +159,16 @@ class ReportExportController extends Controller
     return Excel::download(new ResignationExport($data??[]),'resignation_export.xlsx');   
     }
     function bankloan(Request $request){
-        $academic_info = AcademicYear::find(academicYearId());
         $datatable_search=$request->datatable_search;
         $month = $request->month ?? date('m');
-        $year=$academic_info->from_year;
-        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
-        $from_date = date('Y-m-01', strtotime($dates));
-        $data=StaffBankLoan::with('staff','staff.appointment','emione')
+        $academic_info = AcademicYear::find( academicYearId());
+        if( $academic_info ) {
+            $from_year = $academic_info->from_year.'-'.$month.'-01';
+            $start_date = date('Y-m-d', strtotime($from_year) );
+            $year = date('Y', strtotime($start_date) );
+         }
+         $data=StaffLoanEmi::with('staff','staff.appointment','StaffLoan')
+       ->whereMonth('emi_date',$month)->whereYear('emi_date',$year)
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
@@ -168,33 +177,30 @@ class ReportExportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })
-        ->when(!empty($from_date), function ($query) use ($from_date) {
-            return $query->where(function ($q) use ($from_date) {
-
-                $q->whereHas('emione', function($jq) use($from_date){
-                $jq->where('emi_month',$from_date);
-                    
-                    });
-            });
-
-        })->get();
+        })->orderBy('emi_date','desc')->get();
 
          return Excel::download(new BankLoanExport($data??[]),'banloan_export.xlsx');   
     }
     function lic(Request $request){
     $datatable_search=$request->data_search;
     $month = $request->month ?? date('m');
-    $data=StaffInsurance::with('staff','staff.appointment')
-     ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
-               
-        return $query->where(function ($q) use ($datatable_search) {
-            $q->whereHas('staff', function($jq) use($datatable_search){
-            $jq->where('name', 'like', "%{$datatable_search}%")
-            ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
-                });
-        });
-    })->whereMonth('start_date',$month)->orderBy('start_date','desc')->get();
+    $academic_info = AcademicYear::find( academicYearId());
+        if( $academic_info ) {
+            $from_year = $academic_info->from_year.'-'.$month.'-01';
+            $start_date = date('Y-m-d', strtotime($from_year) );
+            $year = date('Y', strtotime($start_date) );
+        }
+   $data=StaffInsuranceEmi::with('staff','staff.appointment','StaffInsurance')
+        ->whereMonth('emi_date',$month)->whereYear('emi_date',$year)
+         ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+                   
+            return $query->where(function ($q) use ($datatable_search) {
+                $q->whereHas('staff', function($jq) use($datatable_search){
+                $jq->where('name', 'like', "%{$datatable_search}%")
+                ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                    });
+            });
+        })->orderBy('emi_date','desc')->get();
     return Excel::download(new LicExport($data??[]),'lic_export.xlsx');   
     }
     function lop(Request $request) {
@@ -335,7 +341,38 @@ class ReportExportController extends Controller
         }         
        
         return Excel::download(new BankDisbursement($data??[]),'bank_disbursement_export.xlsx');
-        
+    }
+    function LeaveStatement(Request $request) {
+    $datatable_search=$request->data_search;
+    $month = $request->month ?? date('m');
+    $academic_info = AcademicYear::find(academicYearId());
+    $year=$academic_info->from_year;
+    $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+    $data=[];
+    $fromDate = date('Y-m-01', strtotime($dates));
+    $toDate = date('Y-m-t', strtotime($dates));
+    $institute_id=session()->get('staff_institute_id');
+        $data = User::with('leaves')
+    ->InstituteBased()->when(!empty($month), function ($query) use($fromDate,$toDate){
+        $query->whereHas('leaves', function($q) use($fromDate,$toDate){
+       $q->whereBetween('from_date', [$fromDate, $toDate])
+        ->whereBetween('to_date', [$fromDate, $toDate]);
+        $q->where('status','approved');
+        });  
+        })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+
+                return $query->where(function ($q) use ($datatable_search) {
+                $q->where('name', 'like', "%{$datatable_search}%")
+            ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                    
+                });
+        })->get();   
+    return Excel::download(new LeaveStatementExport($data??[],$fromDate,$toDate),'leave_statement_export.xlsx');
+    }
+    function ELEntryStatement(Request $request,$user_id) {
+    $el_entries=StaffLeaveMapping::where('staff_id',$user_id)->where('leave_head_id',2)
+    ->get();   
+    return Excel::download(new ELEntryExport($el_entries??[]),'el_statement_export.xlsx');
     }
 
 }

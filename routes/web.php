@@ -7,9 +7,21 @@ use App\Http\Controllers\ReportController;
 
  Route::get('leave/document/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'Leavedocument'])->name('leave.document');
 
+Route::get('staff/leave-entry', [App\Http\Controllers\SettingsController::class, 'AutoloadEntryLeave'])->name('staff.leave.entry');
+
+Route::get('staff/leave/mapping/auto', [App\Http\Controllers\Leave\LeaveController::class, 'StaffLeaveMapping'])->name('staff.leave.mapping');
+Route::post('staff/leave/mapping', [App\Http\Controllers\StaffController::class, 'UpdateLeaveMapping'])->name('save.staff-leave-mapping');
  Route::get('test/entry/{month}/{institute_id}/{academic_id}', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'leaveAvailableDays'])->name('test.entry');
 
  Route::post('/month-wise-variation', [ReportController::class, 'MonthWiseVariation'])->name('reports.month.wise.variation');
+
+Route::get('staff/el-summary/{id}', [App\Http\Controllers\SettingsController::class, 'StaffElsummary'])->name('staff.el.summary');
+Route::post('staff/el-summary/update', [App\Http\Controllers\SettingsController::class, 'StaffElsummaryUpdate'])->name('staff.el.summary.update');
+Route::post('staff/el-summary/delete', [App\Http\Controllers\SettingsController::class, 'StaffElsummaryDelete'])->name('staff.el.summary.delete');
+
+Route::post('year-end-process/update', [App\Http\Controllers\SettingsController::class, 'YEPUpdate'])->name('yep.update');
+
+Route::post('staff/el-edit', [App\Http\Controllers\SettingsController::class, 'StaffElsummaryEdit'])->name('staff.el.summary.edit');
 
   Route::get('/notification-redirect/{id}', [App\Http\Controllers\NotificationController::class, 'redirect'])->name('notification.redirect');
 
@@ -40,7 +52,9 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('/get/dashboard/view', [App\Http\Controllers\HomeController::class, 'getDashboardView'])->name('get.dashboard.view');
     Route::post('/set/institution', [App\Http\Controllers\HomeController::class, 'setInstitution'])->name('set.institution');
     Route::post('/open/modal', [App\Http\Controllers\CommonController::class, 'openAddModal'])->name('modal.open');
-
+    #..Year End Process
+    Route::get('year-end-process', [App\Http\Controllers\SettingsController::class, 'ListYEP'])->name('setting.menu');
+    #...
     Route::post('/get/institution/staff/code', [App\Http\Controllers\Master\InstitutionController::class, 'getInstituteStaffCode'])->name('institute.staff.code');
     
     Route::post('/get/branch', [App\Http\Controllers\Master\BankBranchController::class, 'getBankBranches'])->name('branch.all');
@@ -87,6 +101,7 @@ Route::group(['middleware' => 'auth'],  function () {
     });
 
     //Bulk upload for staff information staff
+    Route::post('staff/leave-mapping', [App\Http\Controllers\StaffController::class, 'Information_add_edit'])->name('staff.leave-mapping.edit');
     Route::get('/staff/bulk', [App\Http\Controllers\Staff\BulkUploadController::class, 'index'])->name('staff.bulk'); 
     Route::post('/bulk/save', [App\Http\Controllers\Staff\BulkUploadController::class, 'store'])->name('staff.save'); 
     Route::post('/bulk/save/old', [App\Http\Controllers\Staff\BulkUploadController::class, 'oldEntry'])->name('staff.old.save'); 
@@ -158,7 +173,9 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::get('/leaves/overview/view/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'overviewView'])->name('leaves.overview.view'); 
     Route::post('/leaves/staff/info', [App\Http\Controllers\Leave\LeaveController::class, 'getStaffLeaveInfo'])->name('leaves.staff.info'); 
     Route::get('/working/days', [App\Http\Controllers\Leave\LeaveController::class, 'setWorkingDays'])->name('leaves.set.workingday'); 
-    Route::post('/leaves/add', [App\Http\Controllers\Leave\LeaveController::class, 'addEditModal'])->name('leaves.add_edit'); 
+    Route::get('/leaves/add', [App\Http\Controllers\Leave\LeaveController::class, 'addEditModal'])->name('leaves.add');
+    Route::get('/leaves/add/{id}/{type}', [App\Http\Controllers\Leave\LeaveController::class, 'addEditModal'])->name('leaves.add_edit');
+
     Route::post('/leaves/save', [App\Http\Controllers\Leave\LeaveController::class, 'saveLeaveRequest'])->name('save.leaves'); 
     Route::post('/leaves/delete', [App\Http\Controllers\Leave\LeaveController::class, 'deleteLeave'])->name('delete.leaves'); 
     Route::post('/leave/available', [App\Http\Controllers\Leave\LeaveController::class, 'leaveAvailableDays'])->name('get.staff.leave.available'); 
@@ -465,7 +482,3 @@ Route::group(['middleware' => 'auth'],  function () {
     include 'crud.php';
     
 });
-
-// Route::fallback(function () {   // if you want to override 404 page you can use
-//     echo 'tsing';
-// });

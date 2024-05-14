@@ -145,7 +145,7 @@
                     name: 'Policy No'
                 },
                 {
-                    data: 'amount',
+                    data: 'total_amount',
                     name: 'Amount'
                 },
                 {
@@ -157,7 +157,7 @@
                     name: 'End Date'
                 },
                 {
-                    data: 'every_month_amount',
+                    data: 'amount',
                     name: 'Sal Dedn Amount'
                 },
                 

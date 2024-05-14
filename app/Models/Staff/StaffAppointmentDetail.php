@@ -84,7 +84,11 @@ class StaffAppointmentDetail extends Model implements Auditable
         return $this->hasOne(AppointmentOrderModel::class, 'id', 'appointment_order_model_id');
     }
 
-    public function leaveAllocated()
+    public function StaffleaveAllocated()
+    {
+        return $this->hasMany(StaffLeaveMapping::class, 'staff_id', 'staff_id')->select('id','staff_id','leave_head_id','no_of_leave  as leave_days');
+    }
+     public function leaveAllocated()
     {
         return $this->hasMany(LeaveMapping::class, 'nature_of_employment_id', 'nature_of_employment_id');
     }
@@ -95,4 +99,21 @@ class StaffAppointmentDetail extends Model implements Auditable
                 ->groupBy('nature_of_employment_id', 'academic_id')
                 ->selectRaw('sum(CAST(leave_mappings.leave_days AS DECIMAL(10, 2))) as total_leave, nature_of_employment_id, academic_id');
     }
+    public function cl()
+    {
+        return $this->hasOne(StaffLeaveMapping::class, 'staff_id', 'staff_id')->where('leave_head_id',1)->select('id','staff_id','leave_head_id','no_of_leave  as leave_days');
+    }
+     public function gl()
+    {
+        return $this->hasOne(StaffLeaveMapping::class, 'staff_id', 'staff_id')->where('leave_head_id',5)->select('id','staff_id','leave_head_id','no_of_leave  as leave_days');
+    }
+    public function el()
+    {
+        return $this->hasOne(StaffLeaveMapping::class, 'staff_id', 'staff_id')->where('leave_head_id',2)->select('id','staff_id','leave_head_id','no_of_leave  as leave_days','carry_forward_count');
+    }
+     public function ml()
+    {
+        return $this->hasOne(StaffLeaveMapping::class, 'staff_id', 'staff_id')->where('leave_head_id',3)->select('id','staff_id','leave_head_id','no_of_leave  as leave_days');
+    }
+
 }

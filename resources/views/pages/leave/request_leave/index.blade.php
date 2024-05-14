@@ -27,7 +27,7 @@
                     @endphp
                     @if (access()->buttonAccess($route_name, 'add_edit'))
                         <button type="button" class="btn btn-primary btn-sm" id="add_modal"
-                            onclick="getRequestLeaveModal()">
+                            onclick="window.location.href = '{{ route('leaves.add') }}'">
                             {!! plusSvg() !!} Request Leave
                         </button>
                     @endif
@@ -104,45 +104,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
     <script>
-        function approveLeave(id) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "{{ route('leaves.add_edit') }}",
-                type: 'POST',
-                data: {
-                    id: id,
-                    type: 'approved',
-                },
-                success: function(res) {
-                    $('#kt_dynamic_app').modal('show');
-                    $('#kt_dynamic_app').html(res);
-                }
-            })
-        }
-        function editLeave(id) {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "{{ route('leaves.add_edit') }}",
-                type: 'POST',
-                data: {
-                    id: id,
-                    type: 'edit',
-                },
-                success: function(res) {
-                    $('#kt_dynamic_app').modal('show');
-                    $('#kt_dynamic_app').html(res);
-                }
-            })
-        }
-
         var dtTable = $('#leave_table').DataTable({
 
             processing: true,
@@ -236,28 +197,6 @@
             dtTable.draw();
             e.preventDefault();
         });
-
-        function getRequestLeaveModal(id = '') {
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "{{ route('leaves.add_edit') }}",
-                type: 'POST',
-                data: {
-                    id: id,
-                },
-                success: function(res) {
-                    $('#kt_dynamic_app').modal('show');
-                    $('#kt_dynamic_app').html(res);
-                }
-            })
-
-        }
-
         function deleteLeave(id) {
             Swal.fire({
                 text: "Are you sure you would like to delete Leave?",
