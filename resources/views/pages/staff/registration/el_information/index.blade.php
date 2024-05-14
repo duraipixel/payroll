@@ -62,6 +62,9 @@
     </div>
 </div>
 <script>
+     async function ValidationEl() {
+     return false;
+    }
     $('#leave_table_length').hide();
      var id="{{$staff_details->id}}";
      var url = "{{ route('staff.el.summary', ['id' => ':id']) }}";
