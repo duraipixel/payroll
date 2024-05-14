@@ -57,20 +57,38 @@ class AttendanceRepository extends Controller
             ->editColumn('reporting_manager', function($row) {
                 return $row->reportingManager()->name ?? '';
             } )
-            ->addColumn('leave_status', function($row){
-                $leave_status = 'n/a';
+            ->addColumn('leave_type', function($row){
+                $text = '-';
+                $class = 'danger';
+                if( $row->attendance_status == 'Absence') {
+                    
+                    $text = getStaffLeaveRequestType($row->employment_id, $row->attendance_date);
+                    if( $text == 'Pending' ) {
+                        $class = 'warning';
+                    } else if( $text == 'Approved') {
+                        $class = 'success';
+                    }
+                    
+
+                }
+                $leave_type = '<a href="javascript:void(0);" class="small btn btn-sm btn-light-'.$class.'">'.$text.'</a>';
+                return $leave_type;
+            })
+             ->addColumn('leave_status', function($row){
+                $text = '-';
+                 $class = 'danger';
                 if( $row->attendance_status == 'Absence') {
                     
                     $text = getStaffLeaveRequestStatus($row->employment_id, $row->attendance_date);
-                    $class = 'danger';
-                    if( $text == 'Leave Approval Pending' ) {
+                    if( $text == 'Pending' ) {
                         $class = 'warning';
-                    } else if( $text == 'Leave Approved') {
+                    } else if( $text == 'Approved') {
                         $class = 'success';
                     }
-                    $leave_status = '<a href="javascript:void(0);" class="small btn btn-sm btn-light-'.$class.'">'.$text.'</a>';
+                   
 
                 }
+                 $leave_status = '<a href="javascript:void(0);" class="small btn btn-sm btn-light-'.$class.'">'.$text.'</a>';
                 return $leave_status;
             })
             ->addColumn('action', function ($row) {
@@ -88,7 +106,7 @@ class AttendanceRepository extends Controller
 
                 return $edit_btn . $del_btn;
             })
-            ->rawColumns(['action', 'status', 'leave_status']);
+            ->rawColumns(['action', 'status', 'leave_status','leave_type']);
         return $datatables->make(true);
     }
 }

@@ -74,8 +74,11 @@
                             <th class=" text-white px-2">
                                 Reason
                             </th>
-                            <th class=" text-white px-2 w-200px">
+                             <th class=" text-white px-2 w-200px">
                                 Leave Status
+                            </th>
+                            <th class=" text-white px-2 w-200px">
+                                Leave Type
                             </th>
                             <th class=" text-white px-2">
                                 Status
@@ -149,6 +152,9 @@
             {
                 data: 'leave_status',
                 name: 'leave_status'
+            },{
+                data: 'leave_type',
+                name: 'leave_type'
             },
             {
                 data: 'status',

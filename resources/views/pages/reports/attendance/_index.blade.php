@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="card-footer p-2 bg-light">
-                {!! $attendance->links('vendor.pagination.bootstrap-5') !!}
+                {!! $attendance->appends($parameters)->links('vendor.pagination.bootstrap-5') !!}
             </div>
         </div>
     </section>

@@ -51,13 +51,13 @@
               <td>{{$details['staff']->appointment->designation->name?? ''}}</td>
                
 
-              <td>{{$details->bank_name ?? ''}}</td>
-              <td>{{$details->loan_ac_no ?? ''}}</td>
-              <td>{{$details->loan_start_date ?? ''}}</td>
+              <td>{{$details->StaffLoan->bank_name ?? ''}}</td>
+              <td>{{$details->StaffLoan->loan_ac_no ?? ''}}</td>
+              <td>{{$details->StaffLoan->loan_start_date ?? ''}}</td>
               <td>{{$details->loan_end_date ?? ''}}</td>
-               <td>{{$details->loan_amount ?? ''}}</td>
-              <td>{{$details->emione->staff_loan_id?? ''}}</td>
-              <td>{{$details->emione->amount?? ''}}</td>
+               <td>{{$details->StaffLoan->loan_amount ?? ''}}</td>
+              <td></td>
+              <td>{{$details->amount?? ''}}</td>
              
               
                 

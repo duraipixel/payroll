@@ -204,10 +204,10 @@
                 }
             });
             $.ajax({
-                url: "{{ route('leaves.add_edit') }}",
-                type: 'POST',
+                url: "{{ route('leaves.add_edit', ['id' => ':id', 'type' => 'edit']) }}",
+                type: 'GET',
                 data: {
-                    id: id,
+                   
                 },
                 success: function(res) {
                     $('#kt_dynamic_app').modal('show');

@@ -1,5 +1,5 @@
 <a class="card d-block" href="{{ route('staff.list') }}">
-    <div class="card-body p-3">
+    <div class="card-body p-4">
         <div class="row m-0">
             <div class="col-lg-4">
                 <span class="svg-icon svg-icon-primary svg-icon-3x">
@@ -24,14 +24,19 @@
                 </span>
             </div>
             <div class="col-lg-8 p-0">
-                <div class="fs-5 fw-bolder mb-2">Manage Users
-                    @if ($user_count ?? 0)
-                        <span class="badge bg-danger">{{ $user_count ?? 0 }}</span>
+                <div class="fs-5 fw-bolder mb-2">Approved Staffs
+                    @if ($approved_user_count ?? 0)
+                        <span class="badge bg-danger">{{ $approved_user_count ?? 0 }}</span>
                     @endif
                 </div>
-                <div class="fs-8 fw-bold text-gray-400">
-                    {{ $last_user_added ? 'Last Added :  ' . date('d M Y', strtotime($last_user_added->created_at)) : '' }}
+                <div class="fs-5 fw-bolder mb-2">Unapproved Staffs
+                    @if ($pending_user_count ?? 0)
+                        <span class="badge bg-danger">{{ $pending_user_count ?? 0 }}</span>
+                    @endif
                 </div>
+                <!-- <div class="fs-8 fw-bold text-gray-400">
+                    {{ $last_user_added ? 'Last Added :  ' . date('d M Y', strtotime($last_user_added->created_at)) : '' }}
+                </div> -->
             </div>
         </div>
     </div>

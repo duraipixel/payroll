@@ -81,4 +81,5 @@ class StaffReportController extends Controller
         }
         return  Pdf::loadHTML($temp)->setPaper('a4')->download(); //stream
     }
+    
 }

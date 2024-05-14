@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\AttendanceManagement\Holiday;
 use App\Models\AttendanceManagement\LeaveHead;
 use App\Models\CalendarDays;
+use App\Models\CalenderYear;
 use App\Models\Leave\StaffLeave;
 use App\Models\PayrollManagement\Payroll;
 use App\Models\User;
+use App\Models\Staff\StaffLeaveMapping;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
@@ -189,11 +191,12 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
                     }
                     if ($row->status == 'pending') {
                        if(access()->buttonAccess('leaves.list', 'add_edit')){
-                         $approve_btn = '<a href="javascript:void(0);" onclick="approveLeave(' . $row->id . ')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" > 
-                                            <i class="fa fa-check"></i></a>';
-                         $edit = '<a href="javascript:void(0);" onclick="editLeave(' . $row->id.')" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px" >
-                        <i class="fa fa-edit"></i>
-                        </a>';
+                         $approve_btn ='<a href="' . url("/leaves/add", ['id' => $row->id,'type' => 'approved']) . '" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px">
+    <i class="fa fa-check"></i>
+</a>';
+                         $edit = '<a href="' . url("/leaves/add", ['id' => $row->id,'type' => 'edit']) . '" class="btn btn-icon btn-active-success btn-light-success mx-1 w-30px h-30px">
+    <i class="fa fa-edit"></i>
+</a>';
                     }else{
                          $approve_btn = '';
                         $edit='';
@@ -238,19 +241,19 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
         return view('pages.leave.request_leave.index', compact('breadcrums'));
     }
 
-    public function addEditModal(Request $request)
+    public function addEditModal(Request $request,$id='',$type='')
     {   
+
         $title = 'Add Leave Request';
-        $id = $request->id;
+        $id = $id;
         $info = '';
         $taken_leave  = [];
         $leave_count=0;
-        $type='';
         if ($id) {
             $title = 'Approve Leave Request';
             $info = StaffLeave::find($id);
-            $type = $request->type;
-            $taken_leave = StaffLeave::where('staff_id', $info->staff_id)->where('from_date', '<', $info->from_date)->get();
+            $type = $type;
+            $taken_leave = StaffLeave::where('staff_id', $info->staff_id)->whereYear('from_date',date('Y', strtotime($info->from_date)))->get();
             foreach($taken_leave as $leave){
                 $leave_count+=$leave->granted_days;
 
@@ -518,7 +521,7 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
             $error = 1;
             $message = $validator->errors()->all();
         }
-        return response()->json(['error' => $error, 'message' => $message]);
+        return response()->json(['error' => $error, 'message' => $message,$type]);
     }
 
     public function overview(Request $request)
@@ -745,4 +748,37 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
 
         return array('error' => $error, 'message' => $message);
     }
+    public function StaffLeaveMapping(Request $request)
+    {
+    //     $users=User::where('status','active')->get();
+    //     foreach($users as $user){
+    // if(isset($user->appointment) && isset($user->appointment->leaveAllocated) && count($user->appointment->leaveAllocated)>0){
+    //     foreach($user->appointment->leaveAllocated as $leaveAllocated){
+    //     $new=new StaffLeaveMapping;
+    //     $new->staff_id=$user->id;
+    //     $new->leave_head_id=$leaveAllocated->leave_head_id;
+    //     $new->no_of_leave_actual=$leaveAllocated->leave_days;
+    //     if($leaveAllocated->carry_forward=='yes'){
+    //     $new->carry_forward_count=$leaveAllocated->leave_days;
+    //     }else{
+    //     $new->carry_forward_count=0;
+    //     }
+    //     $new->no_of_leave=$leaveAllocated->leave_days;
+    //     $new->save();
+    //     }
+    // }
+    //     }
+        $years=getYearsBetween(1984,2024);
+        foreach($years as $year){
+            $calander=new CalenderYear;
+            $calander->year=$year;
+            $calander->from_month=1;
+            $calander->to_month=12;
+            $calander->status='active';
+            $calander->save();
+
+        }
+        dd(1);
+    }
+    
 }

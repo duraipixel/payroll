@@ -21,12 +21,11 @@
                             ->route()
                             ->getName();
                     @endphp
-                    <!-- @if (access()->buttonAccess($route_name, 'export'))
-                        <a type="button" class="btn btn-light-primary btn-sm me-3" href="{{ route('other-income.export') }}">
-                            {!! exportSvg() !!}
-                            Export
-                        </a>
-                    @endif -->
+            @if (access()->buttonAccess($route_name, 'export'))
+              <button onclick="this.form.action = '{{ route('reports.leave.statement.export') }}'" type="submit"
+                            class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+            @endif
+                            &nbsp;&nbsp;
                 </div>
                 <!-- @if (access()->buttonAccess($route_name, 'export'))
                  <button onclick="this.form.action = '{{ route('reports.arrear.export') }}'" type="submit"
@@ -131,6 +130,7 @@
 
             processing: true,
             serverSide: true,
+            ordering: false,
             order: [
                 [0, "DESC"]
             ],
@@ -183,13 +183,13 @@
                     data: 'gl_availed',
                     name: 'Availed'
                 },{
-                    data: 'eol_reason',
+                    data: 'el_accumalted',
                     name: 'Accumalted'
                 },{
-                    data: 'eol_reason',
+                    data: 'el_year',
                     name: 'current yr'
                 },{
-                    data: 'eol_reason',
+                    data: 'el_total',
                     name: 'Total'
                 },{
                     data: 'el_availed',

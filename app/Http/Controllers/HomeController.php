@@ -35,13 +35,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user_count = User::where('status','active')->InstituteBased()->Academic()->count();
+        $pending_user_count = User::where('verification_status','pending')->InstituteBased()->Academic()->count();
+        $approved_user_count = User::where('verification_status','approved')->InstituteBased()->Academic()->count();
         // ->Academic()
         $from_date = date('Y-m-1');
         $to_date = date('Y-m-t');
         $month = date('m');
         $end = date('t');
-
+        $user_count=User::where('status','active')->InstituteBased()->Academic()->count();
         $dob = StaffPersonalInfo::whereRaw("CONVERT(VARCHAR(5), dob, 110) >= '" . $month . "-01' and CONVERT(VARCHAR(5), dob, 110) <= '" . $month . "-" . $end . "'")
             ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
             ->when(session()->get('staff_institute_id'), function ($q) {
@@ -71,7 +72,18 @@ class HomeController extends Controller
 
         $result_month_for = date('1 M, Y') . ' - ' . date('t M, Y');
         $last_user_added = User::orderBy('created_at', 'desc')->InstituteBased()->Academic()->first();
-
+    $leave_approved = StaffLeave::where('staff_leaves.status', 'approved')
+            ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
+            ->when(session()->get('staff_institute_id'), function ($q) {
+                $q->where('users.institute_id', session()->get('staff_institute_id'));
+            })->Academic()
+    ->get();
+    $leave_pending = StaffLeave::where('staff_leaves.status', 'pending')
+            ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
+            ->when(session()->get('staff_institute_id'), function ($q) {
+                $q->where('users.institute_id', session()->get('staff_institute_id'));
+            })->Academic()
+            ->get();
         $leave_approval = StaffLeave::where('staff_leaves.status', 'pending')
             ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
             ->when(session()->get('staff_institute_id'), function ($q) {
@@ -128,12 +140,16 @@ class HomeController extends Controller
 
 
         $params = array(
+            'pending_user_count'=>$pending_user_count,
+            'approved_user_count'=>$approved_user_count,
             'user_count' => $user_count,
             'last_user_added' => $last_user_added,
             'dob' => $dob,
             'result_month_for' => $result_month_for,
             'anniversary' => $anniversary,
             'leave_approval' => $leave_approval,
+            'leave_approved' => $leave_approved,
+            'leave_pending' => $leave_pending,
             'announcement' => $announcement,
             'document_approval' => $document_approval,
             'nature_of_works' => $nature_of_works,
@@ -168,7 +184,7 @@ class HomeController extends Controller
     }
 
     public function getDashboardView(Request $request)
-    {
+    {   
         $start_date = $request->start_date;
         $end_date = $request->end_date;
 
@@ -217,7 +233,18 @@ class HomeController extends Controller
                 $q->where('users.institute_id', session()->get('staff_institute_id'));
             })->Academic()
             ->get();
-
+$leave_approved = StaffLeave::where('staff_leaves.status', 'approved')
+            ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
+            ->when(session()->get('staff_institute_id'), function ($q) {
+                $q->where('users.institute_id', session()->get('staff_institute_id'));
+            })->Academic()
+    ->get();
+    $leave_pending = StaffLeave::where('staff_leaves.status', 'pending')
+            ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
+            ->when(session()->get('staff_institute_id'), function ($q) {
+                $q->where('users.institute_id', session()->get('staff_institute_id'));
+            })->Academic()
+            ->get();
         $announcement = Announcement::whereRaw("CAST(created_at AS DATE) BETWEEN '" . $from_date . "' and '" . $to_date . "'")
             ->Academic()
             ->InstituteBased()
@@ -261,6 +288,8 @@ class HomeController extends Controller
             'result_month_for' => $result_month_for,
             'anniversary' => $anniversary,
             'leave_approval' => $leave_approval,
+            'leave_approved' => $leave_approved,
+            'leave_pending' => $leave_pending,
             'announcement' => $announcement,
             'document_approval' => $document_approval,
             'announcement_list'=>$announcement_list,

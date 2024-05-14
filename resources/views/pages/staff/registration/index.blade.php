@@ -8,6 +8,53 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bd-wizard.css') }}">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <style type="text/css">
+        .popup {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  position: fixed;
+  .popup__content {
+    width: 80%;
+    overflow:auto;
+    padding: 50px;
+    background: white;
+    color: black;
+    position: relative;
+    top: 50%;
+    left: 59%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    .close {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      width: 20px;
+      display: block;
+      span {
+        cursor: pointer;
+        position: fixed;
+        width: 20px;
+        height: 3px;
+        background: #099ccc;
+        &:nth-child(1) {
+          transform: rotate(45deg);
+        }
+        &:nth-child(2) {
+          transform: rotate(135deg);
+        }
+      }
+    }
+  }
+}
+    </style>
     @if (isset($staff_details) && !empty($staff_details))
         <script>
             var formStep = '{{ $step }}';
@@ -173,6 +220,21 @@
         <section>
             <div class="">
                 @include('pages.staff.registration.other_information.index')
+            </div>
+        </section>
+         <h3>
+            <div class="media">
+                <div class="bd-wizard-step-icon text-center">
+                    <i class="icon-xl la la-briefcase-medical"></i>
+                </div>
+                <div class="media-body text-center">
+                    <div class="bd-wizard-step-title"> EL Summary</div>
+                </div>
+            </div>
+        </h3>
+        <section>
+            <div class="">
+                @include('pages.staff.registration.el_information.index')
             </div>
         </section>
         <h3>

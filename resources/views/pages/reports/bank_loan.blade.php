@@ -176,7 +176,7 @@
                     name: 'Instalment no'
                 },
                  {
-                    data: 'balance_due',
+                    data: 'amount',
                     name: 'Balance due'
                 },   
             ],

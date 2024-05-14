@@ -227,6 +227,20 @@ class="menu-item menu-accordion @if (request()->routeIs(['staff.register', 'staf
 </span>
 </div>
 @endif
+<div class="menu-item ">
+<span class="menu-link @if (request()->routeIs(['setting.menu'])) active @endif">
+<span class="menu-icon">
+
+    <i class="fa fa-bullhorn"></i>
+
+</span>
+<span class="menu-title">
+    <a class="text-white" href="{{ route('setting.menu') }}">
+        Year End Process</span>
+</a>
+
+</span>
+</div>
 @if (access()->hasAccess(['appointment.orders']))
 <div class="menu-item ">
 <span class="menu-link @if (request()->routeIs(['appointment.orders'])) active @endif">
@@ -373,7 +387,7 @@ class="menu-item menu-accordion  @if (request()->routeIs([
     'leaves.list',
     'holiday',
     'leaves.overview',
-    'leaves.set.workingday','leave-cancellation'
+    'leaves.set.workingday','leave-cancellation','leaves.add','leaves.add_edit'
 ])) hover show @endif">
 <span class="menu-link">
 <span class="menu-icon">
@@ -397,7 +411,7 @@ class="menu-item menu-accordion  @if (request()->routeIs([
 <div class="menu-sub menu-sub-accordion menu-active-bg">
 
     <div class="menu-item">
-        <a class="menu-link @if (request()->routeIs(['leaves.list'])) active @endif"
+        <a class="menu-link @if (request()->routeIs(['leaves.list','leaves.add','leaves.add_edit'])) active @endif"
             href="{{ route('leaves.list') }}">
             <span class="menu-bullet">
                 <span class="bullet bullet-dot"></span>
