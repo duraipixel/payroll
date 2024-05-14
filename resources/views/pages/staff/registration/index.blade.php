@@ -287,6 +287,9 @@
                     return await ValidationSchemeSetCurrent();
                     break;
                 case 7:
+                    return await ValidationEl();
+                    break;
+                case 8:
                     return await validateAppointmentForm();
                     break;
 

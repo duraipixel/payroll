@@ -121,7 +121,7 @@ class SettingsController extends Controller
             $datatables =  Datatables::of($data)
                 ->addIndexColumn()
                 ->editColumn('year', function ($row) {
-                   return $row->academicYaer->from_year;
+                   return ($row->academicYaer !=null)? $row->academicYaer->from_year : '';
                 })
                ->editColumn('el_availed', function ($row) {
                   return $row->availed;
