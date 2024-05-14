@@ -32,10 +32,10 @@
         
         <div class="col-sm-3"> <label for="" class="form-label mt-4">Acadamic Year</label></div>
         <div class="col-sm-3">
-            <input type="date" class="form-control " name="from_date" value="{{$acadamic_fromDate}}" required>
+            <input type="date" class="form-control " name="from_date" value="{{$acadamic_fromDate ?? ''}}" required>
         </div>
         <div class="col-sm-3">
-            <input type="date" class="form-control" name="to_date" value="{{$acadamic_toDate}}" required>
+            <input type="date" class="form-control" name="to_date" value="{{$acadamic_toDate ?? ''}}" required>
         </div>
         <input type="hidden" name="type" value="academic">
         <div class="col-sm-3"> <button class="btn btn-primary btn-sm mt-2" type="button" id="set_acadamic" onclick="SetAcadamicYear()"> Update </button></div>
@@ -46,10 +46,10 @@
          <div class="row mt-4">
         <div class="col-sm-3"> <label for="" class="form-label mt-4">Calender Year</label></div>
         <div class="col-sm-3">
-            <input type="date" class="form-control" name="from_date" value="{{$calender_fromDate}}" required >
+            <input type="date" class="form-control" name="from_date" value="{{$calender_fromDate ?? ''}}" required >
         </div>
         <div class="col-sm-3">
-            <input type="date" class="form-control" name="to_date" value="{{$calender_toDate}}" required>
+            <input type="date" class="form-control" name="to_date" value="{{$calender_toDate ?? ''}}" required>
         </div>
         <input type="hidden" name="type" value="calender">
         <div class="col-sm-3"> <button class="btn btn-primary btn-sm mt-2" type="button" id="set_calender" onclick="SetCalenderYear()"> Update </button></div>
