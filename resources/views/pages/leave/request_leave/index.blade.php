@@ -18,6 +18,17 @@
                 </div>
             </div>
             <div class="card-toolbar">
+                <div > 
+                 <select name="leave_status" autofocus id="leave_status" class="form-select form-select-lg select2-option">
+         <option value="">--Select Leave Status--</option>
+         <option value="all"> All </option>
+         <option value="pending">Pending</option>
+         <option value="approved">Approved</option>
+         <option value="rejected">Rejected</option>
+                </select>
+            </div>
+            </div>
+            <div class="card-toolbar">
                 <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
                     @php
@@ -116,6 +127,7 @@
                 "url": "{{ route('leaves.list') }}",
                 "data": function(d) {
                     d.datatable_search = $('#leave_dataTable_search').val();
+                    d.leave_status = $('#leave_status').val();
                 }
             },
 
@@ -175,7 +187,9 @@
             "aaSorting": [],
             "pageLength": 25
         });
-
+        document.querySelector('#leave_status').addEventListener("change", function(e) {
+            dtTable.ajax.reload();
+        });
         $('.dataTables_wrapper').addClass('position-relative');
         $('.dataTables_info').addClass('position-absolute');
         $('.dataTables_filter label input').addClass('form-control form-control-solid w-250px ps-14');
