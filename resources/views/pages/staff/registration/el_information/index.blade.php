@@ -1,5 +1,5 @@
 <div class="card">
-    <form action="{{ route('reports.el.entry.export',['user_id'=>$staff_details->id]) }}" class="input-group w-auto d-inline"
+    <form action="{{ route('reports.el.entry.export',['user_id'=>$staff_details ? $staff_details->id : 0]) }}" class="input-group w-auto d-inline"
                         method="GET">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
@@ -17,7 +17,7 @@
                             ->getName();
                     @endphp
         
-              <button onclick="this.form.action = '{{ route('reports.el.entry.export',['user_id'=>$staff_details->id]) }}'" type="submit"
+              <button onclick="this.form.action = '{{ route('reports.el.entry.export',['user_id'=>$staff_details ? $staff_details->id : 0]) }}'" type="submit"
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
             
                             &nbsp;&nbsp;
@@ -66,7 +66,7 @@
      return false;
     }
     $('#leave_table_length').hide();
-     var id="{{$staff_details->id}}";
+     var id="{{$staff_details->id ?? 0}}";
      var url = "{{ route('staff.el.summary', ['id' => ':id']) }}";
      url = url.replace(':id', id);
      var dtTable = $('#leave_table').DataTable({
