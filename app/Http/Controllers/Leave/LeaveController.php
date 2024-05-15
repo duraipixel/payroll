@@ -140,9 +140,10 @@ class LeaveController extends Controller
                  });
             $status = $request->get('status');
             $keywords = $request->datatable_search ?? '';
+            $leave_status = $request->leave_status ?? '';
             $datatables =  Datatables::of($data)
            
-                ->filter(function ($query) use ($status, $keywords) {
+                ->filter(function ($query) use ($status, $keywords,$leave_status) {
                     if ($keywords) {
                         // $date = date('Y-m-d', strtotime($keywords));
                         return $query->where(function ($q) use ($keywords) {
@@ -150,6 +151,11 @@ class LeaveController extends Controller
                             // ->orWhereDate('staff_leaves.created_at', $date);
                         });
                     }
+                    if($leave_status && $leave_status!=''&& $leave_status!='all'){
+                    return $query->where(function($q) use($leave_status){
+                         $q->where('staff_leaves.status',$leave_status);
+                    });
+                  }
                 })
                 ->addIndexColumn()
                 ->editColumn('status', function ($row) {

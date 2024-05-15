@@ -78,6 +78,9 @@
                                     Heads
                                 </th>
                                 <th class="text-center text-white">
+                                    Teaching Type
+                                </th>
+                                <th class="text-center text-white">
                                     No of Leave Days
                                 </th>
                                 <th class="text-center text-white">
@@ -129,6 +132,10 @@
                 {
                     data: 'head_name',
                     name: 'head_name'
+                },
+                {
+                    data: 'teaching_type',
+                    name: 'teaching_type'
                 },
                 {
                     data: 'leave_days',

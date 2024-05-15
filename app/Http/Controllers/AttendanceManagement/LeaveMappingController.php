@@ -61,6 +61,9 @@ class LeaveMappingController extends Controller
 
             })
             ->addIndexColumn()
+             ->editColumn('teaching_type', function ($row) {
+                return $row->teaching ? $row->teaching->name : '';
+             })
             ->editColumn('status', function ($row) {
                  $route_name = request()->route()->getName(); 
                 if( access()->buttonAccess($route_name,'add_edit') )
