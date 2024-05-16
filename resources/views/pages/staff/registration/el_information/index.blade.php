@@ -1,7 +1,82 @@
 <div class="card">
-    <form action="{{ route('reports.el.entry.export',['user_id'=>$staff_details ? $staff_details->id : 0]) }}" class="input-group w-auto d-inline"
-                        method="GET">
-        <div class="card-header border-0 pt-6">
+    @php
+     $start_year='';
+     $end_year='';
+     $el_granted=0;
+     $el_accumulated=0;
+     $el_availed=0;
+     $el_balance=0;
+     if(count($el_count)>0){
+     $firstItem = $el_count[0];
+     $lastItem = $el_count[count($el_count)-1];
+     foreach($el_count as $key =>$el_data){
+        if($el_data === $firstItem) {
+            $start_year=$el_data->calanderYear->year;
+        }
+        if($el_data === $lastItem) {
+
+          $end_year=$el_data->calanderYear->year;
+          $el_accumulated=$el_data->accumulated;
+          
+         }
+         $el_granted +=$el_data->no_of_leave_actual;
+         $el_balance=$el_data->carry_forward_count;
+         $el_availed +=$el_data->availed;
+         
+
+     }
+     }
+    @endphp
+<div class="col-sm-12">
+            <div class="mb-2 d-flex justify-content-between">
+                <div class="p-2 px-4 border border-2 w-200px" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; text-align: center;">
+                    <div class="fw-bold">
+                        Year
+                    </div>
+                    <div class="badge badge-light-info fs-6">
+                        @if(isset($start_year) && $start_year !='')
+                       {{$start_year}} - {{$end_year}}
+                       @endif
+                    </div>
+                </div>
+                <div class="p-2 px-4 border border-2 w-200px" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;text-align: center;">
+                    <div class="fw-bold">
+                        EL Granted
+                    </div>
+                    <div class="badge badge-light-success fs-6">
+                        {{$el_granted}}
+                    </div>
+                </div>
+                <div class="p-2 px-4 border border-2 w-200px" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;text-align: center;">
+                    <div class="fw-bold">
+                       EL Accumulated
+                    </div>
+                    <div class="badge badge-light-warning fs-6">
+                        {{$el_accumulated}}
+                    </div>
+                </div>
+                <div class="p-2 px-4 border border-2 w-200px" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;text-align: center;">
+                    <div class="fw-bold">
+                       EL Availed
+                    </div>
+                    <div class="badge badge-light-primary fs-6">
+                      
+                        {{$el_availed}}
+                    </div>
+                </div>
+                  <div class="p-2 px-4 border border-2 w-200px" style="box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;text-align: center;">
+                    <div class="fw-bold">
+                       EL Balance
+                    </div>
+                    <div class="badge badge-light-primary fs-6">
+                      
+                        {{$el_balance}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    <form action="{{ route('reports.el.entry.export',['user_id'=>$staff_details ? $staff_details->id : 0]) }}" class="input-group w-auto d-inline"method="GET">
+        <div class="card-header border-0">
             <div class="card-title">
                 <!-- <div class="d-flex align-items-center position-relative my-1">
                     {!! searchSvg() !!}

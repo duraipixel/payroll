@@ -1405,8 +1405,8 @@ if (!function_exists('formatWord')) {
 if (!function_exists('leave_data')) {
     function leaveData($staff_id,$year,$leave_category)
     {
-      $leave_datas=StaffLeave::where('staff_id',$staff_id)->whereYear('from_date',$year)->select(DB::raw('SUM(granted_days) as total_days'),)->where('leave_category',$leave_category)
-            ->groupBy('leave_category')->first();
+      $leave_datas=StaffLeave::where('staff_id',$staff_id)->where('leave_category',$leave_category)->whereYear('from_date',$year)->select(DB::raw('SUM(granted_days) as total_days'))
+        ->groupBy('leave_category')->first();
             
     return $leave_datas->total_days??'0.00';
     }
