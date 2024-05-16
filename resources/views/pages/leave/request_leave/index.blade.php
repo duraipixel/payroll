@@ -141,7 +141,7 @@
                 },
                 {
                     data: 'institute_code',
-                    name: 'Institute Code'
+                    name: 'institute_code'
                 },
                 {
                     data: 'designation',
@@ -153,11 +153,11 @@
                 },
                 {
                     data: 'from_date',
-                    name: 'From Date'
+                    name: 'from_date'
                 },
                 {
                     data: 'to_date',
-                    name: 'To Date'
+                    name: 'to_date'
                 },
                 {
                     data: 'no_of_days',

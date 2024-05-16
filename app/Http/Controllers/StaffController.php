@@ -7,6 +7,7 @@ use App\Models\Leave\StaffLeave;
 use App\Models\Master\AppointmentOrderModel;
 use App\Models\Master\AttendanceScheme;
 use App\Models\Master\Bank;
+use App\Models\Staff\StaffELEntry;
 use App\Models\Staff\StaffLeaveMapping;
 use App\Models\Master\BankBranch;
 use App\Models\Master\BloodGroup;
@@ -210,6 +211,7 @@ class StaffController extends Controller
         $tax_scheme=TaxScheme::where('status', 'active')->get();
         $leave_mapping=StaffLeaveMapping::where('staff_id',$id)->where('acadamic_id',academicYearId())->get();
         $first_appointment = StaffAppointmentDetail::where('staff_id', $id)->orderBy('staff_id', 'asc')->first();
+    $el_count = StaffLeaveMapping::where('staff_id', $id)->where('leave_head_id', 2)->get();
         $params = array(
             'breadcrums' => $breadcrums,
             'institutions' => $institutions,
@@ -262,7 +264,8 @@ class StaffController extends Controller
             'subject_details' => $subject_details ?? [],
             'tax_scheme'=>$tax_scheme??[],
             'leave_mappings'=>$leave_mapping??[],
-            'first_appointment'=>$first_appointment
+            'first_appointment'=>$first_appointment,
+            'el_count'=>$el_count
         );
 
         return view('pages.staff.registration.index', $params);

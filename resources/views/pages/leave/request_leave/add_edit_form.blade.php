@@ -368,7 +368,8 @@
               @include('pages.leave.request_leave.el_form')
               @endif
             </div>
-            @if (isset($info) && !empty($info)&& $type=='approved')
+
+            @if (isset($info) && !empty($info)&& $type=='approved' || $type=='edit')
             <div class="row">
               <div class="col-sm-12">
                 <label for="" class="text-warning">
@@ -389,6 +390,7 @@
                           <th>Type</th>
                           <th>Allocated</th>
                           <th>Availed</th>
+                          <th>Balance</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -407,8 +409,10 @@
                           @php
                           $carbonDate = \Carbon\Carbon::parse($info->from_date);
                           $took_leaves=leaveData($info->staff_id,$carbonDate->format('Y'),$item->leave_head->name);
+                          $balance=$item->no_of_leave - $took_leaves;
                           @endphp
                           <td>{{$took_leaves??'0.00'}}</td>
+                           <td>{{number_format($balance,2)??'0.00'}}</td>
                         </tr>
                         @endforeach
                         @endif
@@ -421,7 +425,13 @@
 
                 </div>
               </div>
+              @else
+             <!--  <div class="row" id="leave_approvel">
+              <div class="col-sm-12">
+              </div>
+            </div> -->
               @endif
+              
 
             </div>
 
@@ -933,6 +943,10 @@ error: function(error) {
 //$('#staff_name').attr('disabled', true);
               $('#input-close').removeClass('d-none');
               $('#reporting_id').val(res.data?.reporting?.name);
+var tabledata = $('#leave_approvel');
+tabledata.append('');
+let row='<label for="" class="text-warning">Maternity Leave is only applicable for female staff</label></div><div class="col-sm-8"><h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - 0 &nbsp;&nbsp;&nbsp;  <a href="#" id="taken_data"><i class="fa fa-eye"></i></a><h6 class="fs-6 mt-3 alert alert-info">Leave Summary</h6><div class="table-wrap table-responsive " style="max-height: 400px;"><table id="nature_table_staff" class="table table-hover table-bordered"><thead class="bg-dark text-white"><tr><th>Type</th><th>Allocated</th><th>Availed</th></tr></thead><tbody><tr><td>1</td><td class="text-center">2</td><td>0.00</td></tr></tbody></table></div></div><div class="col-sm-4">';
+              tabledata.append(row);
             }
           }
         })
@@ -1000,7 +1014,8 @@ error: function(error) {
           autoUpdateInput: false,
           locale: {
             cancelLabel: 'Clear'
-          }
+          },
+          minDate: moment().startOf('day')
         });
 
         $('input[name="requested_date"]').on('apply.daterangepicker', function(ev, picker) {
