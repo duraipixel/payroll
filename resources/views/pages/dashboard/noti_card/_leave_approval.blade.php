@@ -1,4 +1,4 @@
-<a class="card d-block" href="{{ route('staff.list') }}">
+<a class="card d-block" href="{{ route('leaves.list') }}">
     <div class="card-body p-3">
         <div class="row m-0">
             <div class="col-lg-4">
