@@ -61,7 +61,7 @@ class BankLoanController extends Controller
 
             // dd( $request->all() );
             $id = $request->id ?? '';
-            $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
+            $staff_id = $request->staff_id ?? auth()->user()->id;
             $staff_info = User::find($staff_id);
             $bank_info = Bank::find($request->bank_id);
             $ins['staff_id'] = $staff_id;
@@ -191,7 +191,7 @@ class BankLoanController extends Controller
         if ($validator->passes()) {
 
             $id = $request->id ?? '';
-            $staff_id = auth()->user()->is_super_admin ? $request->staff_id : auth()->user()->id;
+            $staff_id =$request->staff_id ?? auth()->user()->id;
             $staff_info = User::find($staff_id);
 
             $ins['staff_id'] = $staff_id;
