@@ -35,8 +35,8 @@
         @if (isset($data) && count($data)>0)
         @foreach($data as $details)
           <tr>
-              <td>{{$details['staff']->appointment->work_place->name ?? ''}}</td>
-              <td>{{$details['staff']->appointment->joining_date ?? ''}}</td>
+              <td>{{$details['staff']->firstAppointment->work_place->name ?? ''}}</td>
+              <td>{{$details['staff']->firstAppointment->joining_date ?? ''}}</td>
               <td>{{$details['staff']->institute_emp_code ?? ''}}</td>
               <td>{{$details['staff']->name ?? ''}}</td>
               <td>{{$details->StaffInsurance->policy_no ?? ''}}</td>
