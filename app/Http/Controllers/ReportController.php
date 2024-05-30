@@ -168,6 +168,7 @@ class ReportController extends Controller
             $year = date('Y', strtotime($start_date) );
         }
         $data=StaffLoanEmi::with('staff','staff.appointment','StaffLoan')
+        ->whereHas('StaffLoan')
        ->whereMonth('emi_date',$month)->whereYear('emi_date',$year)
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
@@ -187,11 +188,11 @@ class ReportController extends Controller
         })->editColumn('emp_id', function ($row) {
                     return $row['staff']->institute_emp_code ?? '';
         })->editColumn('place', function ($row) {
-                    return $row['staff']->appointment->work_place->name ?? '';
+                    return $row['staff']->firstAppointment->work_place->name ?? '';
         })->editColumn('doj', function ($row) {
-                    return $row['staff']->appointment->joining_date ?? '';
+                    return $row['staff']->firstAppointment->joining_date ?? '';
         })->editColumn('designation', function ($row) {
-                    return $row['staff']->appointment->designation->name?? '';
+                    return $row['staff']->firstAppointment->designation->name?? '';
         })->editColumn('bank_name', function ($row) {
                     return $row->StaffLoan->bank_name?? '';
         })->editColumn('loan_ac_no', function ($row) {
@@ -228,6 +229,7 @@ class ReportController extends Controller
             $year = date('Y', strtotime($start_date) );
         }
         $data=StaffInsuranceEmi::with('staff','staff.appointment','StaffInsurance')
+        ->whereHas('StaffInsurance')
         ->whereMonth('emi_date',$month)->whereYear('emi_date',$year)
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
@@ -247,9 +249,9 @@ class ReportController extends Controller
         })->editColumn('emp_id', function ($row) {
                     return $row['staff']->institute_emp_code ?? '';
         })->editColumn('place', function ($row) {
-                    return $row['staff']->appointment->work_place->name ?? '';
+                    return $row['staff']->firstAppointment->work_place->name ?? '';
         })->editColumn('doj', function ($row) {
-                    return $row['staff']->appointment->joining_date ?? '';
+                    return $row['staff']->firstAppointment->joining_date ?? '';
         })->editColumn('policy_no', function ($row) {
                     return $row['StaffInsurance']->policy_no ?? '';
         })->editColumn('start_date', function ($row) {
@@ -294,11 +296,11 @@ class ReportController extends Controller
         })->editColumn('emp_id', function ($row) {
                     return $row['staff']->institute_emp_code ?? '';
         })->editColumn('place', function ($row) {
-                    return $row['staff']->appointment->work_place->name ?? '';
+                    return $row['staff']->firstAppointment->work_place->name ?? '';
         })->editColumn('doj', function ($row) {
-                    return $row['staff']->appointment->joining_date ?? '';
+                    return $row['staff']->firstAppointment->joining_date ?? '';
         })->editColumn('designation', function ($row) {
-                    return $row['staff']->appointment->designation->name?? '';
+                    return $row['staff']->firstAppointment->designation->name?? '';
         })->editColumn('net_salary', function ($row) {
                     return 0;
         });
