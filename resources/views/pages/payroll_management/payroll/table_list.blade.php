@@ -88,6 +88,9 @@
     </div>
     
     <script>
+        $('#staff_id').select2({
+            theme: 'bootstrap-5'
+        })
         var month_no = '{{ $month_no }}';
         var dates = '{{ $dates }}';
         getTableDataPayrollList();

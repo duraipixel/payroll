@@ -26,7 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\PayrollManagement\ItStaffStatement;
 class OverviewController extends Controller
 {
 
@@ -157,6 +157,17 @@ class OverviewController extends Controller
                 $ins['payroll_lock'] = null;
             }
             $message = 'Payroll process ' . $status . ' Successfully';
+        }
+        if ($mode == 'tax_lock_calculation') {
+            if ($status == 'lock') {
+                ItStaffStatement::where('academic_id',academicYearId())->update(['lock_calculation'=>'yes']);
+                $message = 'Tax Lock Calculation locked Successfully';
+
+            } else {
+                ItStaffStatement::where('academic_id',academicYearId())->update(['lock_calculation'=>'no']);
+                $message = 'Tax Lock Calculation unlocked Successfully';
+            }
+            $ins['tax_lock_calculation'] =$status;
         }
         PayrollPermission::updateOrCreate(['payout_month' => $payout_date, 'academic_id' => academicYearId()], $ins);
         $error = 0;
