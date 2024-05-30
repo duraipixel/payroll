@@ -25,6 +25,7 @@ use App\Repositories\PayrollRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use App\Models\Staff\StaffTaxSeperation;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PayrollManagement\ItStaffStatement;
 class OverviewController extends Controller
@@ -160,11 +161,37 @@ class OverviewController extends Controller
         }
         if ($mode == 'tax_lock_calculation') {
             if ($status == 'lock') {
-                ItStaffStatement::where('academic_id',academicYearId())->update(['lock_calculation'=>'yes']);
-                $message = 'Tax Lock Calculation locked Successfully';
+        ItStaffStatement::where('academic_id',academicYearId())->update(['lock_calculation'=>'yes']);
+            $incomes = ItStaffStatement::where('academic_id',academicYearId())->get();
+            foreach($incomes as $income){
+            $income_info=ItStaffStatement::find($income->id);
+            if ($income_info) {
+            $total_income_tax_payable=$income_info->total_income_tax_payable??0;
+            $tax_amount=($total_income_tax_payable/4);
+            $ins['academic_id'] = academicYearId();
+            $ins['staff_id'] = $income_info->staff_id;
+            $ins['income_tax_id'] = $income_info->id;
+            $ins['april'] =0;
+            $ins['may'] = 0;
+            $ins['june'] = 0;
+            $ins['july'] = 0;
+            $ins['august'] = 0;
+            $ins['september'] = 0;
+            $ins['october'] = 0;
+            $ins['november'] = 0;
+            $ins['december'] = $tax_amount??0;
+            $ins['january'] = $tax_amount??0;
+            $ins['february'] = $tax_amount??0;
+            $ins['march'] = $tax_amount??0;
+            $ins['total_tax'] = $total_income_tax_payable;
+            StaffTaxSeperation::updateOrCreate(['staff_id' => $income_info->staff_id, 'income_tax_id' => $income_info->id], $ins);
+            ItStaffStatement::where('id', $income_info->id)->update(['is_staff_calculation_done' => 'yes']);
+            }
+            }
+            $message = 'Tax Lock Calculation locked Successfully';
 
             } else {
-                ItStaffStatement::where('academic_id',academicYearId())->update(['lock_calculation'=>'no']);
+                ItStaffStatement::where('academic_id',academicYearId())->update(['lock_calculation'=>'no','is_staff_calculation_done' => 'no']);
                 $message = 'Tax Lock Calculation unlocked Successfully';
             }
             $ins['tax_lock_calculation'] =$status;
