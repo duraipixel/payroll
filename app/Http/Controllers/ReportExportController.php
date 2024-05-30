@@ -168,6 +168,7 @@ class ReportExportController extends Controller
             $year = date('Y', strtotime($start_date) );
          }
          $data=StaffLoanEmi::with('staff','staff.appointment','StaffLoan')
+          ->whereHas('StaffLoan')
        ->whereMonth('emi_date',$month)->whereYear('emi_date',$year)
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
@@ -191,6 +192,7 @@ class ReportExportController extends Controller
             $year = date('Y', strtotime($start_date) );
         }
    $data=StaffInsuranceEmi::with('staff','staff.appointment','StaffInsurance')
+        ->whereHas('StaffInsurance')
         ->whereMonth('emi_date',$month)->whereYear('emi_date',$year)
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
