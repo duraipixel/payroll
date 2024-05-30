@@ -230,6 +230,19 @@
                             </span>
                         </div>
                     </div>
+                    <div class="d-flex p-3 fs-4 border border-3 align-items-center">
+                        <div class="w-50">
+                            Lock Calculation
+                           
+                        </div>
+                        <div class="payroll-radio w-50 h-25 d-flex justify-content-end">
+                            <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->tax_lock_calculation == 'unlock') active @endif" role="button"
+                                onclick="setPayrollSetting('tax_lock_calculation', 'unlock', this)"> Unlock </span>
+                            <span class="pl-btn payroll @if (isset($lock_info) && $lock_info->tax_lock_calculation == 'lock') active @endif" role="button"
+                                onclick="setPayrollSetting('tax_lock_calculation', 'lock', this)"> Lock
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -333,6 +346,8 @@
                         msg = 'Payroll';
                     } else if( mode_name == 'payroll_lock') {
                         msg = 'Payroll Lock';
+                    }else if( mode_name == 'tax_lock_calculation') {
+                        msg = 'Tax Lock Calculation';
                     } else { 
                         msg = 'It Statement Employee View';
                     }

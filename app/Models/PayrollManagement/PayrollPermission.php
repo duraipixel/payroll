@@ -19,7 +19,8 @@ class PayrollPermission extends Model
         'added_by',
         'updated_by',
         'payroll_id',
-        'payroll_lock'
+        'payroll_lock',
+        'tax_lock_calculation'
     ];
 
 }

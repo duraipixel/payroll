@@ -14,6 +14,8 @@
         $round_off_taxable_gross_income = $statement_data->round_off_taxable_gross_income;
         $month_salary = $round_off_taxable_gross_income / 12;
         $allowed_max_tax = getPercentageAmount(40, $month_salary);
+        $monthly_amount=($statement_data->total_income_tax_payable/4) ?? 0;
+        $allowedMonths = ['December', 'January', 'February', 'March'];
         
     @endphp
     <div class="col-sm-4 off-sm-4">
@@ -31,7 +33,8 @@
                     <th class="p-2"> {{ ucfirst($item) }} </th>
                     <td>
                         <input type="text" class="form-input text-end tax_month price"
-                            onkeyup="return getTotalTaxPay(this)" value="{{ $statement_data->staffTaxSeparation->$item ?? 0 }}" @if( isset($statement_data->staffTaxSeparation->$item) && !empty( $statement_data->staffTaxSeparation->$item ) ) readonly @endif name="{{$item}}_amount">
+                            onkeyup="return getTotalTaxPay(this)" 
+                    value="{{ in_array(ucfirst($item), $allowedMonths) ?  $statement_data->staffTaxSeparation->$item ?? $monthly_amount  : $statement_data->staffTaxSeparation->$item ?? 0 }}"  @if( isset($statement_data->staffTaxSeparation->$item) && !empty( $statement_data->staffTaxSeparation->$item ) ) readonly @endif name="{{$item}}_amount">
                     </td>
                 </tr>
                 @endforeach
