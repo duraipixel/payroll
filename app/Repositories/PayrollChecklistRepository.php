@@ -102,7 +102,6 @@ class PayrollChecklistRepository extends Controller
                     $query1->orWhere('is_till_active', 'yes');
                 });
             })->where('institute_id',session()->get('staff_institute_id'))->count();
-
         $response['pending_it'] = User::with('appointment')->join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
             ->where('verification_status', 'approved')
             ->where('users.status', 'active')
