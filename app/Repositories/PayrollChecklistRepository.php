@@ -120,6 +120,8 @@ class PayrollChecklistRepository extends Controller
         $process = false;
         if ($response['verified_user'] == $response['pending_it']) {
             $process = true;
+        }else if ($response['verified_user'] != 0){
+            $process = true;
         }
         $response['process_it'] = $process;
         return $response;
