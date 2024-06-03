@@ -11,6 +11,7 @@ use App\Models\PayrollManagement\Payroll;
 use App\Models\PayrollManagement\SalaryField;
 use App\Models\PayrollManagement\StaffSalary;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\AcademicYear;
 class SalaryReportController extends Controller
 {
@@ -22,11 +23,12 @@ class SalaryReportController extends Controller
         return view('pages.reports.staff.salary-register.index', ['users' =>  $users, "month" => $month]);
     }
     function salary_register_export(Request $request) {
-    $academic=AcademicYear::find(academicYearId());
+      $academic=AcademicYear::find(academicYearId());
         $month_no = $request->month;
         $year = $academic->from_year;
         $dates =  Carbon::now()->month($month_no)->year($year)->day(1)->format("Y-m-d");
-        $staff_id = $request->staff_id;
+        $staff=User::where('name', 'LIKE', '%' . $request->name . '%')->first();
+        $staff_id=$staff->id;
         $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
         $deductions_field = SalaryField::where('salary_head_id', 2)
             ->where(function ($query) {
@@ -43,9 +45,10 @@ class SalaryReportController extends Controller
         $to_date = date('Y-m-t', strtotime($dates));
         $working_days = date('t', strtotime($dates));
         // $payroll_date = date('Y-m-d', strtotime( $dates.'-1 month') );
-        
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->first();
+        $institute_id=session()->get('staff_institute_id');
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',$institute_id)->where('academic_id',$academic->id)->first();
         $payroll_id = $payroll->id ?? '';
+
         if( $payroll ) {
 
             $salary_info = StaffSalary::when(!empty($payroll_id), function($query) use($payroll_id){
@@ -56,7 +59,6 @@ class SalaryReportController extends Controller
                             } )
                             ->get();
         }
-       
         return Excel::download(new SalaryRegisterExport($earings_field??'',$deductions_field??'',$salary_info?? [],$payroll??''),'salary_register_export.xlsx');
     }
 }
