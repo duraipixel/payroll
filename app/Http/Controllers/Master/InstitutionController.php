@@ -131,6 +131,7 @@ class InstitutionController extends Controller
             $ins['society_id'] = $request->society_id;
             $ins['name'] = $request->institute_name;
             $ins['code'] = $request->institute_code;
+            $ins['website'] = $request->website;
             $ins['address'] = $request->address;
             $ins['status'] = $request->status ?? 'active';
             if( isset( $id ) && !empty( $id )) {

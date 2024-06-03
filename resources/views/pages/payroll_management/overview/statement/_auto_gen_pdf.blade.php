@@ -40,10 +40,12 @@ th,td {
         <td width="50%" style="text-align: center;text-transform: uppercase;">{{ $institution_name ?? '' }}<br>
              {{ $institution_address ?? '' }}–<br>
             605001<br>
-            URL : www.amalorpavamschool.org<br><br>
+            URL : {{$institution_website ?? 'www.amalorpavamschool.org'}}<br><br>
             SALARY SLIP FOR THE MONTH<br>
             OF {{ $pay_month ?? '' }}</td>
-        <td  width="20%" style="text-align: center;"><img src="{{ asset('public' . $logo) }}" width=150></td>
+        <td  width="20%" style="text-align: center;">
+        <img src="{{ asset('public' . $logo) }}" width=150>
+    </td>
     </tr>
     
     <!-----2 row--->
@@ -183,13 +185,13 @@ th,td {
         <th width="25%">GROSS SALARY</th>
         <td width="15%">{{$info->gross_salary}}</td>
         <th width="25%">GROSS DEDUCTION</th>
-        <td width="15%">@if(isset($others)) {{$others ?? 0.00 }} @else 0.00 @endif</td>
+        <td width="15%">{{$info->total_deductions}}</td>
     </tr>
 </table>
 <table  class="tabl-border-none" style="background:rgb(199, 196, 196);text-align: center;" >
     <tr class="br-bot">
         <th width="50%">NET SALARY</th>
-        <th width="50%">{{$info->total_earnings}}</th>
+        <th width="50%">{{$info->net_salary}}</th>
         </tr>
 </table>
 <table  class="tabl-border-none" >

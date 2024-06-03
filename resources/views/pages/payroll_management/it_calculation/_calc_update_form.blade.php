@@ -68,7 +68,7 @@
             }
         </style>
         <center style="text-align: center;width:100%;font-size:13px;font-weight:bold;margin-bottom:5px;">
-            STATEMENT FOR CALCULATION OF INCOME TAX FOR THE YEAR {{ $info->academic->from_year }}-{{ $info->academic->to_year }}
+            STATEMENT FOR CALCULATION OF INCOME TAX FOR THE YEAR {{ $info->academic->from_year }}-{{ $info->academic->to_year }}  @if(isset($info->tax_scheme_id)) <b> [  {{($info->tax_scheme_id==1)? 'Old Scheme' : 'New Scheme'}}  ]</b> @endif
         </center>
         <table class="tax-calculation-table">
             <tr>

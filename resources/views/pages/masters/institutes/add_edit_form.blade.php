@@ -38,6 +38,15 @@
                 value="{{ $info->code ?? '' }}" required>
         </div>
     </div>
+    <div class="fv-row form-group mb-10">
+        <label class="form-label required" for="">
+           Website
+        </label>
+        <div>
+            <input type="text" class="form-control" name="website" id="website"
+                value="{{ $info->website ?? '' }}" required>
+        </div>
+    </div>
     <div class="form-group mb-10">
         <label class="form-label" for="">
             Institute Address
@@ -120,6 +129,12 @@
                             validators: {
                                 notEmpty: {
                                     message: 'Institute Name is required'
+                                }
+                            }
+                        },'website': {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Institute Website is required'
                                 }
                             }
                         },

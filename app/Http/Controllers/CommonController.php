@@ -322,13 +322,14 @@ class CommonController extends Controller
     public function payrollDownload(Request $request,$id)
     {
         $info=StaffSalary::with('staff.familyMembers','staff.pancard','staff.pf','staff.esi','staff.position','staff.appointment','fields','staff.leavesApproved')->find($id);
-        // dd($info->fields);
        $date_string = $info->salary_year . '-' . $info->salary_month . '-01';
         $date = date('d/M/Y', strtotime($date_string));
 
         $params = [
             'institution_name' => $info->staff->institute->name ?? '',
             'institution_address' => $info->staff->institute->address ?? '',
+            'institution_logo' => $info->staff->institute->logo ?? '',
+             'institution_website' => $info->staff->institute->website ?? '',
             'pay_month' => 'Pay Slip for the month of ' . $info->salary_month . '-' . $info->salary_year,
             'info' => $info,
             'date' => $date
@@ -403,7 +404,7 @@ class CommonController extends Controller
         }
         }
         $params['leave_types']=$head_leave;
-        $params['word']=$this->numberToWord($info->total_earnings) ?? '';
+        $params['word']=$this->numberToWord($info->net_salary) ?? '';
        
 
         $file_name = time() .'_'. $info->staff->institute_emp_code . '.pdf';
