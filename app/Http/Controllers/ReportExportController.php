@@ -369,7 +369,7 @@ class ReportExportController extends Controller
                     
                 });
         })->get();   
-    return Excel::download(new LeaveStatementExport($data??[],$fromDate,$toDate),'leave_statement_export.xlsx');
+    return Excel::download(new LeaveStatementExport($data??[],$fromDate,$toDate,$institute_id),'leave_statement_export.xlsx');
     }
     function ELEntryStatement(Request $request,$user_id) {
     $el_entries=StaffLeaveMapping::where('staff_id',$user_id)->where('leave_head_id',2)

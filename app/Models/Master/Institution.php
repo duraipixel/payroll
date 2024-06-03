@@ -37,7 +37,8 @@ class Institution extends Model implements Auditable
         'address',
         'status',
         'addedBy',
-        'updatedBy'
+        'updatedBy',
+        'website'
     ];
     public function society()
     {
