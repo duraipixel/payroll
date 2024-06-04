@@ -601,6 +601,19 @@ if (!function_exists('generateLeaveForm')) {
     {
         return Institution::find($id);
     }
+     function getInstituteName($id)
+    {
+        $instute=Institution::find($id);
+        if($instute){
+            return $instute->name;
+
+        }
+        return '';
+    }
+    function getMonthName($date)
+    {
+        return date('F', strtotime($date));
+    }
 
     function getSalarySelectedFields($staff_id, $staff_salary_id, $field_id)
     {
@@ -746,6 +759,16 @@ function previousSalaryData($pattern_id, $field_id)
 {
     return StaffSalaryPatternField::where('staff_salary_pattern_id', $pattern_id)
         ->where('field_id', $field_id)->first();
+}
+function SalaryPrecentage($pattern_id, $field_id)
+{
+    $staff_sallary=StaffSalaryPatternField::where('staff_salary_pattern_id', $pattern_id)
+        ->where('field_id', $field_id)->first();
+        if($staff_sallary){
+           return $staff_sallary->percentage??0;
+
+        }
+        return 0;
 }
 
 function getITSlabeInfo($from_amount, $to_amount, $slug)

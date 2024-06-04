@@ -27,8 +27,22 @@ class SalaryReportController extends Controller
         $month_no = $request->month;
         $year = $academic->from_year;
         $dates =  Carbon::now()->month($month_no)->year($year)->day(1)->format("Y-m-d");
-        $staff=User::where('name', 'LIKE', '%' . $request->name . '%')->first();
-        $staff_id=$staff->id;
+        $staff_id=User::where('institute_id',session()->get('staff_institute_id'))->with(['salary' => function ($q) use ($request) {
+            if (!empty($request->month)) {
+                $q->where('salary_month', date('F', mktime(0, 0, 0, $request->month, 1)));
+            }
+        }])->when(!empty($request->name), function ($q) use ($request) {
+            $q->where('name', 'LIKE', '%' . $request->name . '%');
+        })->whereHas('position.department', function ($q) use ($request) {
+            if (!empty($request->department)) $q->where('id', '=', $request->department);
+        })->when(in_array(request()->route()->getName(),['reports.retirement','reports.retirement.export']), function ($q) use ($request) {
+            $q->whereIn('users.id', function ($query) {
+                $query->select('staff_id')
+                        ->from('staff_retired_resigned_details')
+                        ->groupBy('staff_id')
+                        ->havingRaw('COUNT(*) = 1');
+            });
+        })->pluck('id');
         $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
         $deductions_field = SalaryField::where('salary_head_id', 2)
             ->where(function ($query) {
@@ -55,7 +69,7 @@ class SalaryReportController extends Controller
                                 $query->where('payroll_id', $payroll_id);
                             })
                             ->when( !empty( $staff_id ), function( $query ) use($staff_id) {
-                                $query->where('staff_id', $staff_id);
+                                $query->whereIN('staff_id', $staff_id);
                             } )
                             ->get();
         }

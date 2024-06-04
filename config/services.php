@@ -44,7 +44,8 @@ return [
         'staff.list' => 'Staff List',
         'staff.bulk' => 'Bulk Upload',
         'reporting' => 'Reporting Manager',
-        'staff.transfer' => 'Staff Transfer'
+        'staff.transfer' => 'Staff Transfer',
+        'staff.el.summary'=>'Staff El Summary'
     ],
     'document_locker' => [
         'user.document_locker' => 'List',
@@ -87,7 +88,8 @@ return [
         'other-income' => 'Other Income',
         'professional-tax' => 'Professional Tax',
         'holdsalary' => 'Hold Salary',
-        'payroll.overview' => 'Payroll Overview'        
+        'payroll.overview' => 'Payroll Overview'  
+              
     ],
     
     'gratuity_calculations' =>

@@ -107,7 +107,11 @@ class SalaryCreationController extends Controller
                             foreach ($items->fields as $item_fields) {
                                 if (isset($_POST['amount_' . $item_fields->id])) {
                                     $amount = $_POST['amount_' . $item_fields->id] ?? 0;
-                                    $ins[] = array('field_id' => $item_fields->id, 'name' => $item_fields->name, 'amount' => !empty($amount) ? $amount : 0, 'reference_type' => $items->name, 'reference_id' => $items->id);
+                                    $percentage= $_POST['tax_' . $item_fields->id] ?? 0;
+                                    $add_percentage= $_POST['precentage_' . $item_fields->id] ?? 0;
+                                    $ins[] = array('field_id' => $item_fields->id,'percentage' => $percentage??'',
+                                        'add_percentage'=>(int)$add_percentage??0,
+                                        'name' => $item_fields->name, 'amount' => !empty($amount) ? $amount : 0, 'reference_type' => $items->name, 'reference_id' => $items->id);
                                     if ($items->name == 'EARNINGS') {
                                         $earnings += !empty($amount) ? $amount : 0;
                                     } else {
@@ -121,7 +125,7 @@ class SalaryCreationController extends Controller
                 $net_pay = $earnings - $deductions;
                 // dd( $net_pay );
                 $payout_month = date('Y-m-01', strtotime($request->payout_month));
-
+                  //dd($ins);
                 if (!empty($ins)) {
                     /**
                      * 1. check exists
@@ -179,7 +183,7 @@ class SalaryCreationController extends Controller
                         $field_data['field_id'] = $items_pay['field_id'];
                         $field_data['field_name'] = $items_pay['name'];
                         $field_data['amount'] = $items_pay['amount'];
-                        $field_data['percentage'] = '';
+                        $field_data['percentage'] =(int)$items_pay['add_percentage']+(int)$items_pay['percentage'];
                         $field_data['reference_type'] = $items_pay['reference_type'];
                         $field_data['reference_id'] = $items_pay['reference_id'];
                         StaffSalaryPatternField::create($field_data);

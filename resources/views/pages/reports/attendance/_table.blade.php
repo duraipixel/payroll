@@ -6,6 +6,9 @@
             @for ($i = 1; $i <= $no_of_days; $i++)
                 <th class="text-center"><small class="fw-bold">{{ $i }}</small></th>
             @endfor
+            <th class="text-center"><small class="fw-bold">Month Total Days</small></th>
+            <th class="text-center"><small class="fw-bold">Month Present Days</small></th>
+            <th class="text-center"><small class="fw-bold">Month Absent Days</small></th>
             <th class="text-center"><small class="fw-bold">Total Days</small></th>
             <th class="text-center"><small class="fw-bold">Present Days</small></th>
             <th class="text-center"><small class="fw-bold">Absent Days</small></th>
@@ -17,12 +20,19 @@
             <tr>
                 <td><small style="font-size: 10px">{{ $item->name }}</small></td>
                 <td><small style="font-size: 10px">{{ $item->society_emp_code }}</small></td>
+                @php
+                $present=0;
+                @endphp
                 @if (count($item->Attendance))
                 @for ($i = 0; $i < $no_of_days; $i++)
                     @php
                         $search_date = date('Y-m-d', strtotime($start_date . ' + ' . $i . ' days'));
                         $attendanceRecord = $item->Attendance->where('attendance_date', $search_date)->first();
                         $status = $attendanceRecord ? $attendanceRecord->attendance_status : '';
+                        
+                        if($status =='Present'){
+                        $present +=1;
+                        }
                     @endphp
 
                     <td>
@@ -41,6 +51,9 @@
                         <td class="text-center" style="color:red;font-size: 10px;"><b>U/A</b></td>
                     @endfor
                 @endif
+                <td>{{ $month_days }}</td>
+                <td>{{ $present }}</td>
+                <td>{{ $month_days-$present}}</td>
                 <td>{{ count($item->Attendance) }}</td>
                 <td>{{ count($item->AttendancePresent) }}</td>
                 <td>{{ abs(count($item->Attendance) - count($item->AttendancePresent)) }}</td>
