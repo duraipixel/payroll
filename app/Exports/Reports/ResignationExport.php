@@ -7,13 +7,15 @@ use Maatwebsite\Excel\Concerns\FromView;
 
 class ResignationExport implements FromView
 {
-    public $data;
-    function __construct($data)
+     public $data,$institute_id,$from_date;
+    function __construct($data,$institute_id,$from_date)
     {
         $this->data = $data;
+        $this->institute_id = $institute_id;
+        $this->from_date = $from_date;
     }
     public function view() : View
     {
-        return view('pages.reports.exports.resignation', ['data' =>  $this->data]);
+        return view('pages.reports.exports.resignation', ['data' =>  $this->data,'institute_id' =>  $this->institute_id,'from_date' =>  $this->from_date]);
     }
 }

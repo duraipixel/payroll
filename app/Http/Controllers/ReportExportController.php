@@ -55,6 +55,7 @@ class ReportExportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
+        $institute_id=session()->get('staff_institute_id');
         $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
@@ -71,7 +72,7 @@ class ReportExportController extends Controller
             })->orderby('created_at','desc')->get();
         }
           
-         return Excel::download(new EpfExport($data??[]),'epf_export.xlsx');   
+         return Excel::download(new EpfExport($data??[],$institute_id??'',$dates??''),'epf_export.xlsx');   
 
     }
     function esi(Request $request) {
@@ -84,6 +85,7 @@ class ReportExportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
+        $institute_id=session()->get('staff_institute_id');
         $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll){
@@ -99,11 +101,16 @@ class ReportExportController extends Controller
                 });
             })->orderby('created_at','desc')->get();
         }
-    return Excel::download(new EsiExport($data??[]),'esi_export.xlsx');   
+    return Excel::download(new EsiExport($data??[],$institute_id??'',$from_date??''),'esi_export.xlsx');   
     }
     function IncomeTax(Request $request) {
         $datatable_search=$request->data_search;
+        $academic=AcademicYear::find(academicYearId());
         $month = $request->month ?? date('m');
+        $year = $academic->from_year;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+        $from_date = date('Y-m-01', strtotime($dates));
+        $institute_id=session()->get('staff_institute_id');
         $data=ItStaffStatement::with('staff')->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
@@ -112,13 +119,23 @@ class ReportExportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->where('academic_id',academicYearId())->whereMonth('created_at',$month)->orderby('created_at','desc')->get();
-    return Excel::download(new IncomeTaxExport($data??[]),'incometax_export.xlsx');   
+        })->where('academic_id',academicYearId())->whereMonth('created_at',$month)
+        ->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderby('created_at','desc')->get();
+    return Excel::download(new IncomeTaxExport($data??[],$institute_id??'',$from_date??''),'incometax_export.xlsx');   
     }
     function bonus(Request $request) {
 
         $datatable_search=$request->data_search;
+        $academic=AcademicYear::find(academicYearId());
         $month = $request->month ?? date('m');
+        $year = $academic->from_year;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+        $from_date = date('Y-m-01', strtotime($dates));
+        $institute_id=session()->get('staff_institute_id');
         $data=StaffSalaryPreEarning::where('earnings_type','bonus')->with('staff')->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
@@ -127,12 +144,22 @@ class ReportExportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->where('academic_id',academicYearId())->whereMonth('salary_month',$month)->orderby('created_at','desc')->get();
-    return Excel::download(new BonusExport($data??[]),'bonus_export.xlsx');   
+        })->where('academic_id',academicYearId())->whereMonth('salary_month',$month)
+        ->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderby('created_at','desc')->get();
+    return Excel::download(new BonusExport($data??[],$institute_id??'',$from_date??''),'bonus_export.xlsx');   
     }
     function arrear(Request $request) {
      $datatable_search=$request->data_search;
-        $month = $request->month ?? date('m');
+    $academic=AcademicYear::find(academicYearId());
+    $month = $request->month ?? date('m');
+    $year = $academic->from_year;
+    $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+    $from_date = date('Y-m-01', strtotime($dates));
+    $institute_id=session()->get('staff_institute_id');
         $data=StaffSalaryPreEarning::where('earnings_type','arrear')->with('staff')->whereMonth('created_at',$month)->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
@@ -141,12 +168,21 @@ class ReportExportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->orderby('created_at','desc')->get();
-     return Excel::download(new ArrerExport($data??[]),'bonus_export.xlsx');   
+        })->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderby('created_at','desc')->get();
+     return Excel::download(new ArrerExport($data??[],$institute_id??'',$from_date??''),'arrer_export.xlsx');   
     }
     function resignation(Request $request){
         $datatable_search=$request->data_search;
+        $academic=AcademicYear::find(academicYearId());
         $month = $request->month ?? date('m');
+        $year = $academic->from_year;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+        $from_date = date('Y-m-01', strtotime($dates));
+        $institute_id=session()->get('staff_institute_id');
         $data=StaffRetiredResignedDetail::where('types','resigned')->with('staff')->where('institute_id',session()->get('staff_institute_id'))->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
@@ -156,7 +192,7 @@ class ReportExportController extends Controller
                     });
             });
         })->where('academic_id',academicYearId())->whereMonth('last_working_date',$month)->orderby('last_working_date','desc')->get();
-    return Excel::download(new ResignationExport($data??[]),'resignation_export.xlsx');   
+    return Excel::download(new ResignationExport($data??[],$institute_id??'',$from_date??''),'resignation_export.xlsx');   
     }
     function bankloan(Request $request){
         $datatable_search=$request->datatable_search;
@@ -167,7 +203,8 @@ class ReportExportController extends Controller
             $start_date = date('Y-m-d', strtotime($from_year) );
             $year = date('Y', strtotime($start_date) );
          }
-         $data=StaffLoanEmi::with('staff','staff.appointment','StaffLoan')
+        $institute_id=session()->get('staff_institute_id');
+        $data=StaffLoanEmi::with('staff','staff.appointment','StaffLoan')
           ->whereHas('StaffLoan')
        ->whereMonth('emi_date',$month)->whereYear('emi_date',$year)
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
@@ -178,9 +215,13 @@ class ReportExportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->orderBy('emi_date','desc')->get();
+        })->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderBy('emi_date','desc')->get();
 
-         return Excel::download(new BankLoanExport($data??[]),'banloan_export.xlsx');   
+         return Excel::download(new BankLoanExport($data??[],$institute_id??'',$start_date??''),'banloan_export.xlsx');   
     }
     function lic(Request $request){
     $datatable_search=$request->data_search;
@@ -191,6 +232,7 @@ class ReportExportController extends Controller
             $start_date = date('Y-m-d', strtotime($from_year) );
             $year = date('Y', strtotime($start_date) );
         }
+    $institute_id=session()->get('staff_institute_id');
    $data=StaffInsuranceEmi::with('staff','staff.appointment','StaffInsurance')
         ->whereHas('StaffInsurance')
         ->whereMonth('emi_date',$month)->whereYear('emi_date',$year)
@@ -202,12 +244,16 @@ class ReportExportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->orderBy('emi_date','desc')->get();
-    return Excel::download(new LicExport($data??[]),'lic_export.xlsx');   
+        })->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderBy('emi_date','desc')->get();
+    return Excel::download(new LicExport($data??[],$institute_id??'',$start_date??''),'lic_export.xlsx');   
     }
     function lop(Request $request) {
-         $datatable_search=$request->data_search;
-               $academic=AcademicYear::find(academicYearId());
+        $datatable_search=$request->data_search;
+        $academic=AcademicYear::find(academicYearId());
         $month = $request->month ?? date('m');
         $year = $academic->from_year;
         $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
@@ -233,7 +279,12 @@ class ReportExportController extends Controller
     }
     function holdsalary(Request $request) {
         $datatable_search=$request->data_search;
+        $academic=AcademicYear::find(academicYearId());
         $month = $request->month ?? date('m');
+        $year = $academic->from_year;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+        $from_date = date('Y-m-01', strtotime($dates));
+        $institute_id=session()->get('staff_institute_id');
         $data=HoldSalary::with('staff','staff.appointment')->where('institute_id',session()->get('staff_institute_id'))
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
@@ -243,17 +294,25 @@ class ReportExportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->where('academic_id',academicYearId())->whereMonth('hold_month',$month)->orderBy('hold_month','desc')->get();
-        return Excel::download(new HoldsalaryExport($data??[]),'holdsalary_export.xlsx');   
+        })->where('academic_id',academicYearId())->whereMonth('hold_month',$month)
+        ->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderBy('hold_month','desc')->get();
+        return Excel::download(new HoldsalaryExport($data??[],$institute_id??'',$from_date??''),'holdsalary_export.xlsx');   
     }
     function professionaltax(Request $request) {
         $datatable_search=$request->data_search;
+        $academic=AcademicYear::find(academicYearId());
         $month = $request->month ?? date('m');
-        $dates ='2023-08-01';
+        $year = $academic->from_year;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
+        $institute_id=session()->get('staff_institute_id');
+       $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->where('academic_id',academicYearId())->first();
             $payroll_id = $payroll->id ?? '';
             if($payroll){
                 $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -266,14 +325,18 @@ class ReportExportController extends Controller
                     ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                         });
                 });
-            })->orderby('created_at','desc')->whereMonth('salary_processed_on',$month)->get();
-            }  
-        return Excel::download(new LopExport($data??[]),'professionaltax_export.xlsx');   
+            })->orderby('created_at','desc')->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->get();
+        } 
+        return Excel::download(new LopExport($data??[],$institute_id??'',$from_date??''),'professionaltax_export.xlsx');   
     }
      function SalaryAcquitance(Request $request) {
         $datatable_search=$request->data_search;
         $academic=AcademicYear::find(academicYearId());
-       $month = $request->month ?? date('m');
+        $month = $request->month ?? date('m');
         $year = $academic->from_year;
         $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
         $staff_id = $request->staff_id;
@@ -285,7 +348,7 @@ class ReportExportController extends Controller
             })->get();
         
         $payroll_id = $request->payroll_id;
-        
+        $institute_id=session()->get('staff_institute_id');
         // $nature_id = $request->nature_id;
         
         
@@ -312,7 +375,7 @@ class ReportExportController extends Controller
             })->orderby('created_at','desc')->get();
         }
        
-        return Excel::download(new SalaryAcquitanceExport($earings_field??'',$deductions_field??'',$salary_info?? [],$payroll??''),'salaryregister_export.xlsx');
+        return Excel::download(new SalaryAcquitanceExport($earings_field??'',$deductions_field??'',$salary_info?? [],$payroll??'',$institute_id??'',$dates??''),'salary_acquitance_export.xlsx');
         
     }
     function BankDisbursement(Request $request) {
@@ -324,6 +387,7 @@ class ReportExportController extends Controller
         $data=[];
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
+        $institute_id=session()->get('staff_institute_id');
         $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
         if($payroll_id){
@@ -342,7 +406,7 @@ class ReportExportController extends Controller
 
         }         
        
-        return Excel::download(new BankDisbursement($data??[]),'bank_disbursement_export.xlsx');
+        return Excel::download(new BankDisbursement($data??[],$institute_id??'',$from_date??''),'bank_disbursement_export.xlsx');
     }
     function LeaveStatement(Request $request) {
     $datatable_search=$request->data_search;

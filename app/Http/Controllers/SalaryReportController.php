@@ -27,6 +27,7 @@ class SalaryReportController extends Controller
         $month_no = $request->month;
         $year = $academic->from_year;
         $dates =  Carbon::now()->month($month_no)->year($year)->day(1)->format("Y-m-d");
+        $institute_id=session()->get('staff_institute_id');
         $staff_id=User::where('institute_id',session()->get('staff_institute_id'))->with(['salary' => function ($q) use ($request) {
             if (!empty($request->month)) {
                 $q->where('salary_month', date('F', mktime(0, 0, 0, $request->month, 1)));
@@ -73,6 +74,6 @@ class SalaryReportController extends Controller
                             } )
                             ->get();
         }
-        return Excel::download(new SalaryRegisterExport($earings_field??'',$deductions_field??'',$salary_info?? [],$payroll??''),'salary_register_export.xlsx');
+        return Excel::download(new SalaryRegisterExport($earings_field??'',$deductions_field??'',$salary_info?? [],$payroll??'',$institute_id??'',$dates??''),'salary_register_export.xlsx');
     }
 }
