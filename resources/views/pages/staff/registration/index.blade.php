@@ -222,6 +222,7 @@
                 @include('pages.staff.registration.other_information.index')
             </div>
         </section>
+   @if (access()->hasAccess('staff.el.summary', 'view'))
          <h3>
             <div class="media">
                 <div class="bd-wizard-step-icon text-center">
@@ -237,6 +238,7 @@
                 @include('pages.staff.registration.el_information.index')
             </div>
         </section>
+    @endif
         <h3>
             <div class="media">
                 <div class="bd-wizard-step-icon text-center">

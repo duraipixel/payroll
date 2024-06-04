@@ -192,8 +192,10 @@
 
             let types = $(en).data('id');
             if (en.checked) {
-                
+                var inputName = $(`#${types}_input`).attr("name");
                 $(`#${types}_input`).attr('disabled', false);
+                var intValue = parseInt(inputName.match(/\d+/)[0]);
+                $(`#addtional_tax_${intValue}`).attr('disabled', false);
                 if (types.toLowerCase() == 'epf') {
                     /*
                     get pf amount based on nature of employement
