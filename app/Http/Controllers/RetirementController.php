@@ -21,8 +21,8 @@ class RetirementController extends Controller
     }
 
     function export(Request $request)
-    {
+    {    $institute_id=session()->get('staff_institute_id');
         $users = $this->collection($request)->get();
-        return Excel::download(new RetirementExport($users), 'retirement-report.xlsx');
+        return Excel::download(new RetirementExport($users,$institute_id??''), 'retirement-report.xlsx');
     }
 }

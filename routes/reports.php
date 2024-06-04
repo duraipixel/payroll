@@ -26,7 +26,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'reports'],  function () {
     Route::get('/incometax/export', [ReportExportController::class, 'incometax'])->name('reports.incometax.export');
     Route::get('/bonus/export', [ReportExportController::class, 'bonus'])->name('reports.bonus.export');
     
-    Route::get('/bank/disbursement/export', [ReportExportController::class, 'BankDisbursement '])->name('reports.bank.disbursement.export');
+    Route::get('/bank/disbursement/export', [ReportExportController::class, 'BankDisbursement'])->name('reports.bank.disbursement.export');
 
 
     Route::get('/arrear/export', [ReportExportController::class, 'arrear'])->name('reports.arrear.export');

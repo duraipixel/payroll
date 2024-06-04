@@ -167,7 +167,10 @@ class ReportController extends Controller
             $start_date = date('Y-m-d', strtotime($from_year) );
             $year = date('Y', strtotime($start_date) );
         }
-        $data=StaffLoanEmi::with('staff','staff.appointment','StaffLoan')
+        $institute_id=session()->get('staff_institute_id');
+        $data=StaffLoanEmi::with(['staff'=> function ($query) use($institute_id) {
+            $query->where('institute_id', $institute_id);
+          },'staff.appointment','StaffLoan'])
         ->whereHas('StaffLoan')
        ->whereMonth('emi_date',$month)->whereYear('emi_date',$year)
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
@@ -178,7 +181,11 @@ class ReportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->orderBy('emi_date','desc')->get();
+        })->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderBy('emi_date','desc')->get();
         if($request->ajax()){
         $datatables =  Datatables::of($data)
         ->addIndexColumn()
@@ -228,6 +235,7 @@ class ReportController extends Controller
             $start_date = date('Y-m-d', strtotime($from_year) );
             $year = date('Y', strtotime($start_date) );
         }
+        $institute_id=session()->get('staff_institute_id');
         $data=StaffInsuranceEmi::with('staff','staff.appointment','StaffInsurance')
         ->whereHas('StaffInsurance')
         ->whereMonth('emi_date',$month)->whereYear('emi_date',$year)
@@ -239,7 +247,11 @@ class ReportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->orderBy('emi_date','desc')->get();
+        })->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderBy('emi_date','desc')->get();
         if($request->ajax()){
         $datatables =  Datatables::of($data)
         ->addIndexColumn()
@@ -277,6 +289,7 @@ class ReportController extends Controller
         );
         $datatable_search=$request->datatable_search;
         $month = $request->month ?? date('m');
+        $institute_id=session()->get('staff_institute_id');
         $data=HoldSalary::with('staff','staff.appointment')->where('institute_id',session()->get('staff_institute_id'))
          ->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
@@ -286,7 +299,12 @@ class ReportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->where('academic_id',academicYearId())->whereMonth('hold_month',$month)->orderBy('hold_month','desc')->get();
+        })->where('academic_id',academicYearId())->whereMonth('hold_month',$month)
+        ->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderBy('hold_month','desc')->get();
         if($request->ajax()){
         $datatables =  Datatables::of($data)
         ->addIndexColumn()
@@ -468,6 +486,7 @@ class ReportController extends Controller
         );
         $datatable_search=$request->datatable_search;
         $month = $request->month ?? date('m');
+         $institute_id=session()->get('staff_institute_id');
         $data=StaffSalaryPreEarning::where('earnings_type','bonus')->with('staff')->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
@@ -476,7 +495,12 @@ class ReportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->where('academic_id',academicYearId())->whereMonth('salary_month',$month)->orderby('created_at','desc')->get();
+        })->where('academic_id',academicYearId())->whereMonth('salary_month',$month)
+        ->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderby('created_at','desc')->get();
         if($request->ajax()){
         $datatables =  Datatables::of($data)
         ->addIndexColumn()
@@ -509,6 +533,7 @@ class ReportController extends Controller
         );
         $datatable_search=$request->datatable_search;
         $month = $request->month ?? date('m');
+         $institute_id=session()->get('staff_institute_id');
         $data=StaffSalaryPreEarning::where('earnings_type','arrear')->with('staff')->whereMonth('created_at',$month)->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
@@ -517,7 +542,11 @@ class ReportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->orderby('created_at','desc')->get();
+        })->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->orderby('created_at','desc')->get();
         if($request->ajax()){
         $datatables =  Datatables::of($data)
         ->addIndexColumn()
@@ -549,6 +578,7 @@ class ReportController extends Controller
         );
         $datatable_search=$request->datatable_search;
         $month = $request->month ?? date('m');
+         $institute_id=session()->get('staff_institute_id');
         $data=ItStaffStatement::with('staff')->when(!empty($datatable_search), function ($query) use ($datatable_search) {
                    
             return $query->where(function ($q) use ($datatable_search) {
@@ -557,7 +587,12 @@ class ReportController extends Controller
                 ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                     });
             });
-        })->where('academic_id',academicYearId())->whereMonth('created_at',$month)->orderby('created_at','desc')->get();
+        })->where('academic_id',academicYearId())->whereMonth('created_at',$month)
+        ->when($institute_id, function ($q) use($institute_id) {
+            $q->whereHas('staff', function ($query) use ($institute_id) {
+            $query->Where('institute_id', $institute_id);
+              });
+         })->orderby('created_at','desc')->get();
 
         if($request->ajax()){
         $datatables =  Datatables::of($data)
@@ -590,12 +625,13 @@ class ReportController extends Controller
         $datatable_search=$request->datatable_search;
         $month = $request->month ?? date('m');
         $academic_info = AcademicYear::find(academicYearId());
-       $year=$academic_info->from_year;
+        $year=$academic_info->from_year;
         $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
         $data=[];
+        $institute_id=session()->get('staff_institute_id');
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->where('academic_id',academicYearId())->first();
             $payroll_id = $payroll->id ?? '';
             if($payroll){
                 $data = StaffSalary::with('staff')->when(!empty($payroll_id), function($query) use($payroll_id){
@@ -608,7 +644,11 @@ class ReportController extends Controller
                     ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
                         });
                 });
-            })->orderby('created_at','desc')->get();
+            })->orderby('created_at','desc')->when($institute_id, function ($q) use($institute_id) {
+        $q->whereHas('staff', function ($query) use ($institute_id) {
+        $query->Where('institute_id', $institute_id);
+          });
+         })->get();
             }         
             if($request->ajax()){
             $datatables =  Datatables::of($data)

@@ -1,5 +1,11 @@
 <table border="1">
     <thead>
+          <tr>
+    <th colspan="12" style="text-align: center;"> {{getInstituteName($institute_id)}}, PUDUCHERRY</th>
+    </tr>
+    <tr>
+     <th colspan="12" style="text-align: center; text-transform: capitalize">BANK LOAN REPORT FOR THE MONTH OF {{getMonthName($start_date)}}</th>
+    </tr>
         <tr>
                              
                             <th>
@@ -54,9 +60,9 @@
               <td>{{$details->StaffLoan->bank_name ?? ''}}</td>
               <td>{{$details->StaffLoan->loan_ac_no ?? ''}}</td>
               <td>{{$details->StaffLoan->loan_start_date ?? ''}}</td>
-              <td>{{$details->loan_end_date ?? ''}}</td>
+              <td>{{$details->StaffLoan->loan_end_date ?? ''}}</td>
                <td>{{$details->StaffLoan->loan_amount ?? ''}}</td>
-              <td></td>
+              <td>{{$details->StaffLoan->loan_end_date ?? ''}}</td>
               <td>{{$details->amount?? ''}}</td>
              
               

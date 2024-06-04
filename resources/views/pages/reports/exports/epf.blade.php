@@ -1,5 +1,11 @@
 <table border="1">
     <thead>
+         <tr>
+    <th colspan="13" style="text-align: center;"> {{getInstituteName($institute_id)}}, PUDUCHERRY</th>
+    </tr>
+    <tr>
+     <th colspan="13" style="text-align: center; text-transform: capitalize">EPF  REPORT FOR THE MONTH OF {{getMonthName($from_date)}}</th>
+    </tr>
         <tr>
                        
                         <th>

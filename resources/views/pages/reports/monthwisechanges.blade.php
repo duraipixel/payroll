@@ -141,14 +141,13 @@
             order: [
                 [0, "DESC"]
             ],
-            
+            type: 'POST',
             ajax: {
-                "url": "{{ route('reports.month.wise.variation') }}",
-                "method":"POST",
+                "url": "{{ route('reports.month.wise.variation.report') }}",
                 headers: {'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')},
                 "data": function(d) {
                     d.datatable_search = $('#data_search').val();
-                     d.month = $('#month').val();
+                  d.month = $('#month').val();
                 }
             },
 
@@ -299,11 +298,7 @@
         $('.dataTables_filter label input').addClass('form-control form-control-solid w-250px ps-14');
         $('.dataTables_filter').addClass('position-absolute end-0 top-0');
         $('.dataTables_length label select').addClass('form-control form-control-solid');
-
-        document.querySelector('#data_search').addEventListener("keyup", function(e) {
-            dtTable.draw();
-        });
-         document.querySelector('#month').addEventListener("change", function(e) {
+        document.querySelector('#month').addEventListener("change", function(e) {
             dtTable.draw();
         });
     </script>

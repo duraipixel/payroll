@@ -1,5 +1,11 @@
 <table border="1">
     <thead>
+    <tr>
+    <th colspan="20" style="text-align: center;"> {{getInstituteName($institute_id)}}, PUDUCHERRY</th>
+    </tr>
+    <tr>
+     <th colspan="20" style="text-align: center; text-transform: capitalize">SALARY REGISTER VERIFICATION DETAILS FOR THE MONTH OF {{getMonthName($dates)}}</th>
+    </tr>
         <tr>
             <th> S. No. </th>
             <th> Division </th>
