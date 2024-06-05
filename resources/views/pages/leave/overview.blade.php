@@ -53,7 +53,7 @@
                     <button class="btn btn-danger btn-sm" type="button">Clear</button>
                 </div>
                  <div class="col-sm-6">
-                    <a href="{{url('leaves/overview/list')}}" class="btn btn-danger" type="button">View</a>
+                    <a onClick="getStaffView()"class="btn btn-danger" type="button">View</a>
                 </div>
             </div>
         </div>
@@ -223,7 +223,10 @@
         function displayMessage(message) {
             toastr.success(message, 'Event');
         }
-
+        function getStaffView() {
+        var staff_id = document.getElementById("staff_id");
+         window.location.href = "{{url('leaves/overview/list')}}?staff_id="+staff_id.value;
+        }
         function getStaffLeaves(staff_id) {
             $.ajaxSetup({
                 headers: {

@@ -560,7 +560,6 @@ border-radius: 5px;
 
             var start = moment().subtract(29, 'days');
             var end = moment();
-            console.log(end, 'end');
 
             function cb(start, end) {
                 $('#search_home_date span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -677,7 +676,6 @@ border-radius: 5px;
                     query: this.value,
                 },
                 success: function(res) {
-                    console.log(res);
                     if (res && res.length > 0) {
                         $('#typeadd-search-panel1').removeClass('d-none');
                         let panel = '';
@@ -736,32 +734,40 @@ border-radius: 5px;
                 }
             },
             "columns": [{
-                    "data": "institute_emp_code"
+                    "data": "institute_emp_code",
+                    "name":"institute_emp_code"
                 },
                 {
-                    "data": "name"
+                    "data": "name",
+                    "name":"name"
                 },
                 {
-                    "data": "emp_code"
+                    "data": "emp_code",
+                    "name":"emp_code"
 
                 },{ 
-                    "data": "Casual Leave"
+                    "data": "Casual Leave",
+                    "name":"Casual Leave"
                    
                 },
                 { 
-                    "data": "Earned Leave"
+                    "data": "Earned Leave",
+                    "name":"Earned Leave"
                    
                 }
                 ,{ 
-                    "data": "Maternity Leave"
+                    "data": "Maternity Leave",
+                    "name":"Maternity Leave"
                    
                 }
                 ,{ 
-                    "data": "Extra Ordinary Leave"
+                    "data": "Extra Ordinary Leave",
+                    "name":"Extra Ordinary Leave"
                    
                 }
                 ,{ 
-                    "data": "Granted Leave"
+                    "data": "Granted Leave",
+                    "name":"Granted Leave"
                    
                 },{ 
                     "data": "lop",
@@ -773,7 +779,8 @@ border-radius: 5px;
                    
                 },
                 {
-                    "data": "action"
+                    "data": "action",
+                    "name":"actions"
                 
                 },
             ],
