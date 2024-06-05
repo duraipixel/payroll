@@ -650,7 +650,7 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
          $leave=StaffLeave::where('staff_id',$row['id'])->where('leave_category',$head->name)->where('academic_id',academicYearId())->where('status','approved')->get();
         $as=0;
         foreach($leave as $leave_count){
-            $as+=$leave_count->granted_days;
+            $as+=$leave_count->granted_days??0;
      
         }
            return '<span class="badge">'.($head->leave_day->leave_days ?? 0).'</span> of <span class="badge">'.($as ?? 0).'</span>';
