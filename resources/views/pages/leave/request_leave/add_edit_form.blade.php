@@ -286,7 +286,7 @@
               </div>
               <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
               <div class="col-sm-7">
-                <select name="leave_category_id" id="leave_category_id" class="form-control">
+                <select name="leave_category_id" id="leave_category_id" class="form-control"   @if (isset($info->leave_category_id) && $info->leave_category_id) disabled @endif>
                   <option value="">-select-</option>
                   @isset($leave_category)
                   @foreach ($leave_category as $citem)
@@ -412,7 +412,7 @@
                           $balance=$item->no_of_leave - $took_leaves;
                           @endphp
                           <td>{{$took_leaves??'0.00'}}</td>
-                           <td>{{number_format($balance,2)??'0.00'}}</td>
+                          <td>{{number_format($balance,2)??'0.00'}}</td>
                         </tr>
                         @endforeach
                         @endif
@@ -426,12 +426,12 @@
                 </div>
               </div>
               @else
-             <!--  <div class="row" id="leave_approvel">
-              <div class="col-sm-12">
+              <div class="row" id="leave_approvel">
+                <div class="col-sm-12">
+                </div>
               </div>
-            </div> -->
               @endif
-              
+
 
             </div>
 
@@ -445,7 +445,7 @@
                 </div>
                 <div class="col-sm-7 position-relative" id="typeahed-click">
                   <input type="text" name="staff_name" value="{{ $info->staff_info->name ?? '' }}"
-                  id="staff_name" class="form-control">
+                  id="staff_name" class="form-control" @if (isset($info->staff_info)) disabled @endif>
                   <span id="input-close" class="d-none">
                     {!! cancelSvg() !!}
                   </span>
@@ -705,6 +705,14 @@
     </div>
   </div>
 </div>
+<section class="popup1">
+  <div class="popup__content1">
+    <div class="close1">
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</section>
 <section class="popup">
   <div class="popup__content">
     <div class="close">
@@ -770,7 +778,6 @@
       </div>
     </section>
     @endsection
-
     @section('add_on_script')
     <script>
       $("#taken_data").click(function() {
@@ -779,7 +786,16 @@
       $(".close").click(function() {
         $(".popup").fadeOut(500);
       });
-
+      $("#taken_data1").click(function() {
+        alert('hi');
+        $(".popup1").fadeIn(500);
+      });
+      $(".close1").click(function() {
+        $(".popup1").fadeOut(500);
+      });
+      function handleEyeIconClick() {
+        $(".popup1").fadeIn(500);
+      }
       $('input:checkbox').change(function() {
         var formData = $('#new').find('input').serialize();
 
@@ -943,10 +959,12 @@ error: function(error) {
 //$('#staff_name').attr('disabled', true);
               $('#input-close').removeClass('d-none');
               $('#reporting_id').val(res.data?.reporting?.name);
-var tabledata = $('#leave_approvel');
-tabledata.append('');
-let row='<label for="" class="text-warning">Maternity Leave is only applicable for female staff</label></div><div class="col-sm-8"><h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - 0 &nbsp;&nbsp;&nbsp;  <a href="#" id="taken_data"><i class="fa fa-eye"></i></a><h6 class="fs-6 mt-3 alert alert-info">Leave Summary</h6><div class="table-wrap table-responsive " style="max-height: 400px;"><table id="nature_table_staff" class="table table-hover table-bordered"><thead class="bg-dark text-white"><tr><th>Type</th><th>Allocated</th><th>Availed</th></tr></thead><tbody><tr><td>1</td><td class="text-center">2</td><td>0.00</td></tr></tbody></table></div></div><div class="col-sm-4">';
+              var tabledata = $('#leave_approvel');
+              tabledata.append('');
+              let row='<label for="" class="text-warning">Maternity Leave is only applicable for female staff</label></div><div class="col-sm-8"><h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - 0 &nbsp;&nbsp;&nbsp;  <a href="#" id="taken_data1"><i class="fa fa-eye"></i></a><h6 class="fs-6 mt-3 alert alert-info">Leave Summary</h6><div class="table-wrap table-responsive " style="max-height: 400px;"><table id="nature_table_staff" class="table table-hover table-bordered"><thead class="bg-dark text-white"><tr><th>Type</th><th>Allocated</th><th>Availed</th></tr></thead><tbody><tr><td>1</td><td class="text-center">2</td><td>0.00</td></tr></tbody></table></div></div><div class="col-sm-4">';
               tabledata.append(row);
+              tabledata.on('click', '#taken_data1', handleEyeIconClick);
+
             }
           }
         })
@@ -973,9 +991,9 @@ let row='<label for="" class="text-warning">Maternity Leave is only applicable f
         return new Date(dmy[2], dmy[1] - 1, dmy[0]);
       }
 
-      var staff_id_alt = 356;
 
-      function getStaffLeaveDays(staff_id_alt, start_date, end_date) {  
+
+      function getStaffLeaveDays(staff_id_alt, start_date, end_date,leave_type) {  
         $.ajaxSetup({
           headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -988,7 +1006,8 @@ let row='<label for="" class="text-warning">Maternity Leave is only applicable f
           data: {
             staff_id: staff_id_alt,
             leave_start: start_date,
-            leave_end: end_date
+            leave_end: end_date,
+            leave_type: leave_type
           },
           success: function(response) {
 
@@ -1015,7 +1034,7 @@ let row='<label for="" class="text-warning">Maternity Leave is only applicable f
           locale: {
             cancelLabel: 'Clear'
           },
-          minDate: moment().startOf('day')
+          // minDate: moment().startOf('day')
         });
 
         $('input[name="requested_date"]').on('apply.daterangepicker', function(ev, picker) {
@@ -1028,8 +1047,9 @@ let row='<label for="" class="text-warning">Maternity Leave is only applicable f
 
           let requested_days = datediff(parseDate(start_date), parseDate(end_date));
 //$('#no_of_days').val(requested_days + 1);
-
-          getStaffLeaveDays(staff_id_alt, picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
+      var staff_id_alt =$('#staff_id').val();
+      var leave_type =document.getElementById("leave_category_id").value;
+          getStaffLeaveDays(staff_id_alt, picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'),leave_type)
         });
 
         $('input[name="requested_date"]').on('cancel.daterangepicker', function(ev, picker) {
