@@ -222,7 +222,6 @@
                 @include('pages.staff.registration.other_information.index')
             </div>
         </section>
-   @if (access()->hasAccess('staff.el.summary', 'view'))
          <h3>
             <div class="media">
                 <div class="bd-wizard-step-icon text-center">
@@ -235,10 +234,11 @@
         </h3>
         <section>
             <div class="">
+                 @if (access()->hasAccess('staff.el.summary', 'view'))
                 @include('pages.staff.registration.el_information.index')
+                @endif
             </div>
         </section>
-    @endif
         <h3>
             <div class="media">
                 <div class="bd-wizard-step-icon text-center">
@@ -257,6 +257,9 @@
     </div>
 
     <script>
+    async function ValidationEl() {
+     return false;
+    }
         function goToNext() {
             return false;
         }
