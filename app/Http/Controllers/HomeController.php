@@ -211,7 +211,7 @@ class HomeController extends Controller
             ->orderByRaw("CASE
                 WHEN CONVERT(VARCHAR(5), dob, 110) > '" . $month . "-" . $start_day . "' THEN 1
                 ELSE 0
-            END DESC;")->get();
+            END ASC;")->get();
 
         $anniversary = StaffPersonalInfo::whereRaw("CONVERT(VARCHAR(5), marriage_date, 110) >= '" . $month . "-" . $start_day . "' and CONVERT(VARCHAR(5), marriage_date, 110) <= '" . $end_month . "-" . $end . "'")
             ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
@@ -221,7 +221,7 @@ class HomeController extends Controller
             ->orderByRaw("CASE
                 WHEN CONVERT(VARCHAR(5), marriage_date, 110) > '" . date('m') . "-" . date('d') . "' THEN 1
                 ELSE 0
-            END DESC;")->get();
+            END ASC;")->get();
 
         // $result_month_for = date('1 M, Y').' - '.date('t M, Y');
         $result_month_for = date('d M, Y', strtotime($s_date)) . ' - ' . date('d M, Y', strtotime($e_date));
