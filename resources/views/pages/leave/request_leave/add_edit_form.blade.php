@@ -962,7 +962,7 @@ error: function(error) {
               var tabledata = $('#leave_approvel');
               tabledata.append('');
               let row='<label for="" class="text-warning">Maternity Leave is only applicable for female staff</label></div><div class="col-sm-8"><h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - 0 &nbsp;&nbsp;&nbsp;  <a href="#" id="taken_data1"><i class="fa fa-eye"></i></a><h6 class="fs-6 mt-3 alert alert-info">Leave Summary</h6><div class="table-wrap table-responsive " style="max-height: 400px;"><table id="nature_table_staff" class="table table-hover table-bordered"><thead class="bg-dark text-white"><tr><th>Type</th><th>Allocated</th><th>Availed</th></tr></thead><tbody><tr><td>1</td><td class="text-center">2</td><td>0.00</td></tr></tbody></table></div></div><div class="col-sm-4">';
-              tabledata.append(row);
+              tabledata.append('');
               tabledata.on('click', '#taken_data1', handleEyeIconClick);
 
             }

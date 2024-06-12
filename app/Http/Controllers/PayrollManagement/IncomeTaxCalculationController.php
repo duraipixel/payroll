@@ -254,7 +254,8 @@ class IncomeTaxCalculationController extends Controller
     }
 
     public function generateAllStatement(Request $request) {
-
+           ini_set("max_execution_time", 0);
+           ini_set('memory_limit', '-1');
         $error = 0;
         $generated = $this->taxRepository->generateIncomeTaxStatemenForAll();
         $message = 'Successfully generated';
