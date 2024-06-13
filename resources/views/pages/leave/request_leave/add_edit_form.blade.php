@@ -24,7 +24,7 @@
       background: white;
       color: black;
       position: relative;
-      top: 50%;
+      top: 63%;
       left: 59%;
       transform: translate(-50%, -50%);
       box-sizing: border-box;
@@ -260,8 +260,17 @@
   left: 50%;
 }
 }
+.tresponse th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
 .tresponse{
   height: 500px !important; 
+ overflow-y: scroll !important;
+}
+.popupresponse{
+  height: 200px !important; 
  overflow-y: scroll !important;
 }
 
@@ -723,7 +732,7 @@
       <span></span>
     </div>
     @if( isset( $taken_leave ) && count( $taken_leave ) > 0 )
-    <div class="table-wrap table-responsive ">
+    <div class="table-wrap table-responsive popupresponse">
       <table id="leave_table_staff" class="table table-hover table-bordered" >
         <thead class="bg-dark text-white">
           <tr>
@@ -965,7 +974,7 @@ error: function(error) {
               var tabledata = $('#leave_approvel');
               tabledata.append('');
               let row='<label for="" class="text-warning">Maternity Leave is only applicable for female staff</label></div><div class="col-sm-8"><h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - 0 &nbsp;&nbsp;&nbsp;  <a href="#" id="taken_data1"><i class="fa fa-eye"></i></a><h6 class="fs-6 mt-3 alert alert-info">Leave Summary</h6><div class="table-wrap table-responsive " style="max-height: 400px;"><table id="nature_table_staff" class="table table-hover table-bordered"><thead class="bg-dark text-white"><tr><th>Type</th><th>Allocated</th><th>Availed</th></tr></thead><tbody><tr><td>1</td><td class="text-center">2</td><td>0.00</td></tr></tbody></table></div></div><div class="col-sm-4">';
-              tabledata.append('');
+              tabledata.append(row);
               tabledata.on('click', '#taken_data1', handleEyeIconClick);
 
             }
