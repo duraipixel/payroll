@@ -24,7 +24,7 @@
       background: white;
       color: black;
       position: relative;
-      top: 63%;
+      top: 48%;
       left: 59%;
       transform: translate(-50%, -50%);
       box-sizing: border-box;
@@ -264,13 +264,20 @@
   position: sticky;
   top: 0;
   z-index: 1;
+  background-color: #181c32;
+}
+.popupresponse th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #181c32;
 }
 .tresponse{
   height: 500px !important; 
  overflow-y: scroll !important;
 }
 .popupresponse{
-  height: 200px !important; 
+  height: 150px !important; 
  overflow-y: scroll !important;
 }
 
