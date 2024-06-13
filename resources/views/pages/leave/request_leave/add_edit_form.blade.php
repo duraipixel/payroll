@@ -260,7 +260,10 @@
   left: 50%;
 }
 }
-
+.tresponse{
+  height: 500px !important; 
+ overflow-y: scroll !important;
+}
 
 /*  End Toggle Switch  */
 
@@ -547,7 +550,7 @@
               @if( isset( $info->leave_days ))id="new" @else id="grid"  @endif>
               @csrf
 
-              <div class="col-sm-12 "  @if(isset( $info->leave_days )&& $type=='approved')@else style="padding-left:50px"; @endif>
+              <div class="col-sm-12 tresponse"  @if(isset( $info->leave_days )&& $type=='approved')@else style="padding-left:50px"; @endif>
                 @if( isset( $info->leave_days )&& $type=='approved') 
                 @php
                 $table=json_decode($info->leave_days);
