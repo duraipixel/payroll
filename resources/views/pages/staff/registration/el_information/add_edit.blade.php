@@ -92,10 +92,8 @@
 
     $("#submit").on('click',function(event){
     var formdata = $("#add_name").serialize();
-      console.log(formdata);
-      
       event.preventDefault()
-      
+        $("#submit").attr("disabled", 'disabled');
       $.ajax({
         url   :"{{route('staff.el.summary.update')}}",
         type  :"POST",
@@ -104,8 +102,10 @@
         success:function(result){
           $("#add_name")[0].reset();
           toastr.success("El Leave added successfully");
-        $('#kt_dynamic_app').modal('hide');
-          dtTable.draw();
+        $("#submit").removeAttr("disabled");
+        dtTable.draw();
+        },error: function(xhr, err) {
+        $("#submit").removeAttr("disabled");         
         }
       });
       
