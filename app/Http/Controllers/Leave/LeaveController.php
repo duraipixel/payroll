@@ -122,9 +122,14 @@ class LeaveController extends Controller
             foreach ($holidays as $holiday) {
             $leave[]=$holiday->calendar_date;       
             }
-            $total_days=array_diff($days,$leave);
             $all_days =  sizeof($days);
             $leave_days = sizeof($days) - ($holidays->count());
+          if($request->leave_type !=2){
+            $total_days=array_diff($days,$leave);
+            
+           }else{
+            $total_days =$days;
+           }
             return response()->json(['leave_days' => $leave_days, 'total_days' => $total_days]);
             //return sizeof($days);
             // $age = array("dates"=>$days, "leaves"=>$leaves, "holidays"=>$holidays, "week_off"=>$week_off);

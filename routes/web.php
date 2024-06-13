@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 
  Route::get('leave/document/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'Leavedocument'])->name('leave.document');
+ Route::get('test/entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserELEntryLeave'])->name('test.entry');
 
 Route::get('staff/leave-entry', [App\Http\Controllers\SettingsController::class, 'AutoloadEntryLeave'])->name('staff.leave.entry');
 Route::get('staff/leave-entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserAutoloadEntryLeave'])->name('staff.single.leave.entry');
