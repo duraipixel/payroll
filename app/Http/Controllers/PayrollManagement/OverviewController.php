@@ -298,7 +298,8 @@ class OverviewController extends Controller
 
     public function setPayrollProcessing(Request $request)
     {
-        
+        ini_set("max_execution_time", 0);
+        ini_set('memory_limit', '-1');
         $date = $request->date;
         $payout_id = $request->payout_id;
         $payroll_points = $request->payroll_points;
