@@ -771,11 +771,11 @@ border-radius: 5px;
                    
                 },{ 
                     "data": "lop",
-                    "name":"LOP"
+                    "name":"lop"
                    
                 },{ 
                     "data": "extened_leave",
-                    "name":"Extened Leave"
+                    "name":"extened_leave"
                    
                 },
                 {

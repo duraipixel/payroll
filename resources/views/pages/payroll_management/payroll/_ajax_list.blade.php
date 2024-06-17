@@ -214,9 +214,9 @@ $others +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->nam
                 @endforeach
                 @if(count($salary_info)>0)
                   <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="sticky-col first-col px-3"></td>
+                    <td class="sticky-col first-col px-3"></td>
+                    <td class="sticky-col first-col px-3"></td>
                     <td></td>
                     <td></td>
                     <td>{{amountFormat($basic)}}</td>
