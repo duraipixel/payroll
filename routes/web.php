@@ -324,6 +324,7 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('payroll/statement/list',[App\Http\Controllers\PayrollManagement\OverviewController::class,'payrollStatementList'])->name('payroll.statement.list');
     Route::get('payroll/statement/export/{payroll_id}/{staff_id?}',[App\Http\Controllers\PayrollManagement\OverviewController::class,'exportStatement'])->name('payroll.statement.export');
 
+    Route::post('payroll/statement/temp/export',[App\Http\Controllers\PayrollManagement\OverviewController::class,'payrollTempExport'])->name('reports.payroll.temp.export');
     Route::get('payroll/list',[App\Http\Controllers\PayrollManagement\PayrollController::class,'index'])->name('payroll.list');
     Route::post('payroll/processed/list',[App\Http\Controllers\PayrollManagement\PayrollController::class,'processedList'])->name('payroll.processed.list');
     Route::post('payroll/ajax/list',[App\Http\Controllers\PayrollManagement\PayrollController::class,'getAjaxProcessedList'])->name('payroll.ajax.list');
