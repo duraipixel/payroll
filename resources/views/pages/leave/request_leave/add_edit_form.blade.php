@@ -305,7 +305,7 @@
               </div>
               <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
               <div class="col-sm-7">
-                <select name="leave_category_id" id="leave_category_id" class="form-control"   @if (isset($info->leave_category_id) && $info->leave_category_id) disabled @endif>
+                <select name="leave_category_id" id="leave_category_id" class="form-control"  onchange="triggerstaff()">
                   <option value="">-select-</option>
                   @isset($leave_category)
                   @foreach ($leave_category as $citem)
@@ -446,8 +446,7 @@
               </div>
               @else
               <div class="row" id="leave_approvel">
-                <div class="col-sm-12">
-                </div>
+               
               </div>
               @endif
 
@@ -681,8 +680,8 @@
                     @endif
                   </tbody>
                 </table>
-                @else
-                <table class="table table-bordered old_table">
+                @endif
+                <table class="table table-bordered old_table" id="old_table" style="display:none;">
                   <thead class="bg-dark text-white">
                     <tr>
                       <th scope="col"><b>Date</b></th>
@@ -692,14 +691,12 @@
 
                     </tr>
                   </thead>
-                  <input type="hidden" value="grid" name="type">
+                
 
                   <tbody>
+                  <input type="hidden" value="grid" name="type">
                   </tbody>
                 </table>
-
-
-                @endif
               </div>
 
 
@@ -799,6 +796,21 @@
     @endsection
     @section('add_on_script')
     <script>
+       function triggerstaff(){
+        var staff_id_alt =$('#staff_id').val();
+        var leave_type =document.getElementById("leave_category_id").value;
+        var requested_value =document.getElementById("requested_date").value;
+        let [startDateStr, endDateStr] = requested_value.split(" - ");
+          function formatDate(dateStr) {
+              let [day, month, year] = dateStr.split("/");
+              month = month.length === 1 ? '0' + month : month;
+              day = day.length === 1 ? '0' + day : day;
+              return `${year}-${month}-${day}`;
+          }
+          let start_date = formatDate(startDateStr);
+          let end_date = formatDate(endDateStr);
+          getStaffLeaveDays(staff_id_alt, start_date, end_date,leave_type);
+        }
       $("#taken_data").click(function() {
         $(".popup").fadeIn(500);
       });
@@ -848,7 +860,11 @@ error: function(error) {
 
         var formData = $('#edittable').find('input').serialize();
 
-
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
         $.ajax({
 url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
 type: 'POST',
@@ -864,11 +880,8 @@ error: function(error) {
 }
 });
       });
-      $('#grid,#radio').on('change',function() {
-
-        var formData = $('#grid').find('input').serialize();
-
-
+$('#grid,#radio').on('change',function() {
+    var formData = $('#grid').find('input').serialize();
         $.ajax({
 url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
 type: 'POST',
@@ -883,7 +896,24 @@ error: function(error) {
   console.error('Error:', error);
 }
 });
-      });
+});
+$('#old_table,#radio').on('change',function() {
+    var formData = $('#old_table tbody').find('input').serialize();
+    $('#no_of_days').val('');
+$.ajax({
+url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
+type: 'POST',
+data: formData,
+dataType: 'json',
+success: function(day) {
+  $('#no_of_days').val(day);
+},
+error: function(error) {
+// Handle any errors here
+  console.error('Error:', error);
+}
+});
+});
       $('#leave_category_id').change(function() {
         let leave_category_id = $(this).val();
 
@@ -961,6 +991,7 @@ error: function(error) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
         });
+        $('#leave_data').empty();
         $.ajax({
           url: "{{ route('get.staff.leave.info') }}",
           type: 'POST',
@@ -980,7 +1011,7 @@ error: function(error) {
               $('#reporting_id').val(res.data?.reporting?.name);
               var tabledata = $('#leave_approvel');
               tabledata.append('');
-              let row='<label for="" class="text-warning">Maternity Leave is only applicable for female staff</label></div><div class="col-sm-8"><h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - 0 &nbsp;&nbsp;&nbsp;  <a href="#" id="taken_data1"><i class="fa fa-eye"></i></a><h6 class="fs-6 mt-3 alert alert-info">Leave Summary</h6><div class="table-wrap table-responsive " style="max-height: 400px;"><table id="nature_table_staff" class="table table-hover table-bordered"><thead class="bg-dark text-white"><tr><th>Type</th><th>Allocated</th><th>Availed</th></tr></thead><tbody><tr><td>1</td><td class="text-center">2</td><td>0.00</td></tr></tbody></table></div></div><div class="col-sm-4">';
+              let row=' <div class="col-sm-12" id="leave_data"><label for="" class="text-warning">Maternity Leave is only applicable for female staff</label><div class="col-sm-8"><h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - 0 &nbsp;&nbsp;&nbsp;  <a href="#" id="taken_data1"><i class="fa fa-eye"></i></a><h6 class="fs-6 mt-3 alert alert-info">Leave Summary</h6><div class="table-wrap table-responsive " style="max-height: 400px;"><table id="nature_table_staff" class="table table-hover table-bordered"><thead class="bg-dark text-white"><tr><th>Type</th><th>Allocated</th><th>Availed</th></tr></thead><tbody><tr><td>1</td><td class="text-center">2</td><td>0.00</td></tr></tbody></table></div></div><div class="col-sm-4"><div>';
               tabledata.append(row);
               tabledata.on('click', '#taken_data1', handleEyeIconClick);
 
@@ -1030,9 +1061,11 @@ error: function(error) {
           },
           success: function(response) {
 
-            $('#edittable').hide("");
+            $('#edittable').empty();
+            $('#edittable').hide();
+            $('#old_table').show();
             $('#grid').show("slow");
-            var tableBody = $('#grid tbody');
+            var tableBody = $('#old_table tbody');
 
             $.each(response.total_days, function(index, item) {
               var row = '<tr>' +
@@ -1047,10 +1080,11 @@ error: function(error) {
       }
 
       $(function() {
-
+       
         $('input[name="requested_date"]').daterangepicker({
           autoUpdateInput: false,
           locale: {
+            format: 'DD/MM/YYYY',
             cancelLabel: 'Clear'
           },
           // minDate: moment().startOf('day')
@@ -1066,15 +1100,15 @@ error: function(error) {
 
           let requested_days = datediff(parseDate(start_date), parseDate(end_date));
 //$('#no_of_days').val(requested_days + 1);
-      var staff_id_alt =$('#staff_id').val();
-      var leave_type =document.getElementById("leave_category_id").value;
+            var staff_id_alt =$('#staff_id').val();
+            var leave_type =document.getElementById("leave_category_id").value;
           getStaffLeaveDays(staff_id_alt, picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'),leave_type)
         });
 
         $('input[name="requested_date"]').on('cancel.daterangepicker', function(ev, picker) {
           $(this).val('');
         });
-
+       
         $('input[name="holiday_date"]').daterangepicker({
           singleDatePicker: true,
           showDropdowns: true,
