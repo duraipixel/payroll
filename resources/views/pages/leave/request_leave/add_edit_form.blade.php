@@ -305,7 +305,7 @@
               </div>
               <input type="hidden" name="id" value="{{ $info->id ?? '' }}">
               <div class="col-sm-7">
-                <select name="leave_category_id" id="leave_category_id" class="form-control"  onchange="triggerstaff()">
+                <select name="leave_category_id" id="leave_category_id" class="form-control"  @if (isset($info) && isset($info->leave_category_id)) disabled  @endif onchange="triggerstaff()">
                   <option value="">-select-</option>
                   @isset($leave_category)
                   @foreach ($leave_category as $citem)
@@ -315,6 +315,9 @@
                   @endforeach
                   @endisset
                 </select>
+                 @if (isset($info) && isset($info->leave_category_id))
+                <input type="hidden" name="leave_category_id" value="{{$info->leave_category_id}}">
+                @endif
               </div>
             </div>
             <div class="fv-row form-group mb-3 row">
@@ -571,7 +574,7 @@
                 $table=json_decode($info->leave_days);
                 @endphp
                 @if(isset($table[0]->cancell))
-                <table class="table table-bordered" >
+                <table class="table table-bordered"  >
                   <thead class="bg-dark text-white">
                     <tr>
                       <th scope="col"><b>Date</b></th>
@@ -615,7 +618,7 @@
                   <input type="hidden" name="leave_id" value="{{$info->id}}">
                 </table>
                 @else
-                <table class="table table-bordered" >
+                <table class="table table-bordered" id="approved_leave" >
                   <thead class="bg-dark text-white">
                     <tr>
                       <th scope="col"><b>Date</b></th>
@@ -828,8 +831,12 @@
         $(".popup1").fadeIn(500);
       }
       $('input:checkbox').change(function() {
-        var formData = $('#new').find('input').serialize();
-
+        var formData = $('#approved_leave tbody').find('input').serialize();
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
         $.ajax({
 url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
 type: 'POST',
@@ -856,9 +863,10 @@ error: function(error) {
 }
 });
       });
-      $('#edittable,#radio1').on('change',function() {
+$('#edittable,#radio1').on('change',function() {
 
-        var formData = $('#edittable').find('input').serialize();
+        var formData = $('#edittable tbody').find('input').serialize();
+        formData += '&type=grid';
 
         $.ajaxSetup({
           headers: {
@@ -880,26 +888,10 @@ error: function(error) {
 }
 });
       });
-$('#grid,#radio').on('change',function() {
-    var formData = $('#grid').find('input').serialize();
-        $.ajax({
-url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
-type: 'POST',
-data: formData,
-dataType: 'json',
-success: function(day) {
-//console.log(response);
-  $('#no_of_days').val(day);
-},
-error: function(error) {
-// Handle any errors here
-  console.error('Error:', error);
-}
-});
-});
 $('#old_table,#radio').on('change',function() {
     var formData = $('#old_table tbody').find('input').serialize();
-    $('#no_of_days').val('');
+    formData += '&type=grid';
+    $('#no_of_days').empty();
 $.ajax({
 url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
 type: 'POST',
