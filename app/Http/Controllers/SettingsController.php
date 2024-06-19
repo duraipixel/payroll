@@ -486,7 +486,7 @@ class SettingsController extends Controller
         $el_entry->leave_mapping_id=$request->leave_mapping_id;
         $el_entry->academic_id=$request->academic_id;
         $el_entry->calender_id=$request->calendar_id;
-        $el_entry->from_date=$toDate;
+        $el_entry->from_date=$fromDate;
         $el_entry->to_date=$toDate;
         $el_entry->leave_days=$leaveAvailed;
         $el_entry->remarks=$leaveRemarks;
