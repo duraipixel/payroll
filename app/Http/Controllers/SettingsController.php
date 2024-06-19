@@ -152,12 +152,15 @@ class SettingsController extends Controller
         $type = $request->type;
         $info = [];
         $title = $type.' EL Summary';
-        if (isset($id) && !empty($id)) {
+        if (isset($id) && !empty($id) && $type !='single') {
             $info = StaffLeaveMapping::with('elentries')->find($id);
             $title =  $type.' EL Summary';
           
+        }else{
+          $info = StaffELEntry::find($id);
+          $title =  'Edit EL Summary';
         }
-        
+        //dd($info );
         $content = view('pages.staff.registration.el_information.add_edit', compact('info', 'title','type'));
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
@@ -477,6 +480,18 @@ class SettingsController extends Controller
     $toDates = $request->input('to_date');
     $availed = $request->input('availed');
     $remarks = $request->input('remarks');
+    if(isset($request->type)  && $request->type=='single'){
+      $el_entry=StaffELEntry::find($request->id);
+      $el_entry->staff_id=$request->staff_id;
+      $el_entry->leave_mapping_id=$request->leave_mapping_id;
+      $el_entry->academic_id=$request->academic_id;
+      $el_entry->calender_id=$request->calendar_id;
+      $el_entry->from_date=$request->from_date;
+      $el_entry->to_date=$request->to_date;
+      $el_entry->leave_days=$request->leave_days;
+      $el_entry->remarks=$request->remarks;
+      $el_entry->update();
+    }else{
     foreach ($fromDates as $index => $fromDate) {
     $toDate = $toDates[$index];
     $leaveAvailed = $availed[$index];
@@ -491,6 +506,7 @@ class SettingsController extends Controller
         $el_entry->leave_days=$leaveAvailed;
         $el_entry->remarks=$leaveRemarks;
         $el_entry->save();
+    }
     }
     $this->UserELEntryLeave($request->staff_id);
     return true;

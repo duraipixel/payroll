@@ -91,18 +91,15 @@ class LeaveController extends Controller
 
         if ($request->ajax()) {
             $staff_id = $request->staff_id;
-            if($request->leave_type==2){
                 $period = CarbonPeriod::create($request->leave_start, $request->leave_end);
                 $period->toArray();
 
-            }else{
-
-            $periods= CarbonPeriod::create($request->leave_start, $request->leave_end);
-                $period= $periods->filter(function ($date){
-                return !$date->isSaturday() && !$date->isSunday();
-                });
-                $period->toArray();
-            }
+            // $periods= CarbonPeriod::create($request->leave_start, $request->leave_end);
+            //     $period= $periods->filter(function ($date){
+            //     return !$date->isSaturday() && !$date->isSunday();
+            //     });
+            //     $period->toArray();
+            
             
 
             $holidays = CalendarDays::whereBetween('calendar_date', [$request->leave_start, $request->leave_end])->whereIn('days_type',['holiday','week_off'])->select('calendar_date')->get();

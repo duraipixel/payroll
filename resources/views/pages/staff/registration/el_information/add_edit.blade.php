@@ -18,6 +18,27 @@
         <input type="submit" class="btn btn-success" name="submit" id="submit" value="Submit">
     </form>
 </div>
+@elseif($type=='single')
+<div class="fv-row form-group mb-10"> 
+   
+    <form name="add_name" id="add_name">
+         <input type="hidden" name="staff_id" value="{{ $info->staff_id ?? '' }}">
+         <input type="hidden" name="leave_mapping_id" value="{{ $info->leave_mapping_id ?? '' }}">
+         <input type="hidden" name="academic_id" value="{{ $info->academic_id ?? '' }}">
+         <input type="hidden" name="calendar_id" value="{{$info->calender_id ?? '' }}">
+        <table class="table table-bordered table-hover">
+            <tr>
+                 <input type="hidden" name="id" value="{{$info->id}}">
+                 <input type="hidden" name="type" value="single">
+                <td><input type="date" name="from_date" placeholder="Enter From Date" class="form-control name_list" value="{{ date('Y-m-d', strtotime($info->from_date)) ?? '' }}" id="selected_date"/></td>
+                <td><input type="date" name="to_date" placeholder="Enter To Date" class="form-control name_email" value="{{date('Y-m-d', strtotime($info->to_date)) ?? '' }}"/></td>
+                <td><input type="number" name="leave_days"  placeholder="Leave" class="form-control" value="{{$info->leave_days ?? '' }}"/></td>
+                <td><input type="text" name="remarks"  placeholder="Enter Remarks" class="form-control" value="{{$info->remarks ?? '' }}"/></td>
+            </tr>
+        </table>
+        <input type="submit" class="btn btn-success" name="submit" id="submit" value="Submit">
+    </form>
+</div>
 @else
 <div class="fv-row form-group mb-10"> 
     <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
@@ -53,6 +74,8 @@
 
                 </td>
                 <td class="text-dark fw-bolder text-hover-primary fs-6">
+                <a href="javascript:void(0);"  onclick="getElModal({{$elentry->id}})" class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                                    <i class="fa fa-edit"></i>
                   <a href="javascript:void(0);" onclick="deleteLeave({{$elentry->id}})" class="btn btn-icon btn-active-danger btn-light-danger mx-1 w-30px h-30px"> 
                                 <svg class="svg-inline--fa fa-trash" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M135.2 17.69C140.6 6.848 151.7 0 163.8 0H284.2C296.3 0 307.4 6.848 312.8 17.69L320 32H416C433.7 32 448 46.33 448 64C448 81.67 433.7 96 416 96H32C14.33 96 0 81.67 0 64C0 46.33 14.33 32 32 32H128L135.2 17.69zM394.8 466.1C393.2 492.3 372.3 512 346.9 512H101.1C75.75 512 54.77 492.3 53.19 466.1L31.1 128H416L394.8 466.1z"></path></svg></a>
 
@@ -77,7 +100,7 @@
      addamount += 700;
      console.log('amount: ' + addamount);
    i++;
-      $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="date" name="from_date[]" placeholder="Enter From Date" class="form-control name_list"/></td><td><input type="date" name="to_date[]" placeholder="Enter To Date" class="form-control name_email"/></td> <td><input type="number" name="availed[]" value="" placeholder="Leave" class="form-control total_amount"/> <td><input type="text" name="remarks[]" value="" placeholder="Enter Remarks" class="form-control total_amount"/></td></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');  
+      $('#dynamic_field').append('<tr id="row'+i+'"><td><input type="date" name="from_date[]" placeholder="Enter From Date" class="form-control name_list"/></td><td><input type="date" name="to_date[]" placeholder="Enter To Date" class="form-control name_email"/></td> <td><input type="number" name="availed[]" placeholder="Leave" class="form-control total_amount"/> <td><input type="text" name="remarks[]"  placeholder="Enter Remarks" class="form-control total_amount"/></td></td><td><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove">X</button></td></tr>');  
     });
 
   $(document).on('click', '.btn_remove', function(){  
@@ -101,6 +124,7 @@
         cache :false,
         success:function(result){
           $("#add_name")[0].reset();
+          $('#kt_dynamic_app').modal('hide');
           toastr.success("El Leave added successfully");
         $("#submit").removeAttr("disabled");
         dtTable.draw();
@@ -136,6 +160,29 @@
         }
 
         }
-    
-    
+        function getElModal( id = '',type='single') {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        var formMethod = "addEdit" ;
+        $.ajax({
+            url: "{{ route('staff.el.summary.edit') }}",
+            type: 'POST',
+            data: {
+                id: id,
+                type: type,
+                
+            },
+            success: function(res) {
+                $('#kt_dynamic_app').modal('show');
+                $('#kt_dynamic_app').html(res);
+                
+            }
+        })
+
+        }
+
 </script>
