@@ -1,112 +1,15 @@
 @php
-$basic=0;
-$da=0;
-$hra=0;
-$ta=0;
-$pba=0;
-$pbada=0;
-$dsa=0;
-$mna=0;
-$arrear=0;
-$others=0;
-$bonus=0;
-$esi=0;
-$bankloan=0;
-$lic=0;
-$pt=0;
-$it=0;
-$darrear=0;
-$contributions=0;
-$epf=0;
-$dother=0;
-$oloan=0;
-$others=0;
-$contribution1=0;
-if(isset($salary_info) && !empty($salary_info)){
-foreach ($salary_info as $key=>$item){
-
-if(isset($earings_field)&&!empty($earings_field)){
+if (isset($earings_field) && !empty($earings_field)){
 foreach ($earings_field as $eitem){
-if($eitem->name=='Basic Pay'){
-$basic +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
-}
-if($eitem->name=='Dearness Allowance'){
-$da +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
-}
-if($eitem->name=='House Rent Allowance'){
-$hra +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
-}
-if($eitem->name=='Traveling Allowance'){
-$ta +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
-}
-if($eitem->name=='Performance Based Allowance'){
-$pba +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
-}
-if($eitem->name=='Performance Based Allowance Dearness Allowance'){
-$pbada +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
-}
-if($eitem->name=='Dedication & Sincerity Allowance'){
-$dsa +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
-}
-if($eitem->name=='Medical & Nutrition Allowance'){
-$mna +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
-}
-if($eitem->name=='ARREAR'){
-$arrear +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
-}
-if($eitem->name=='Others'){
-$others +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
-}
-if($eitem->name=='Bonus'){
-$bonus +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);  
+${$eitem->short_name}=0;
 }
 }
-}
-if(isset($deductions_field)&& !empty($deductions_field)){
-foreach($deductions_field as $sitem){
-
-if($sitem->name=="Employees' State Insurance"){
-$esi +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-if($sitem->name=='Bank Loan'){
-$bankloan +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-if($sitem->name=='Life Insurance Corporation'){
-$lic +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-if($sitem->name=='Professional Tax'){
-$pt +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-if($sitem->name=='Income Tax'){
-$it +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-if($sitem->name=='Arrears'){
-$darrear +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-if($sitem->name=='Contributions'){
-$contributions +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-if($sitem->name=='Employee Provident Fund'){
-$epf +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-if($sitem->name=='OTHER'){
-$dother +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-if($sitem->name=='Contribution'){
-$contribution1 +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-
-if($sitem->name=='OTHER LOAN'){
-$oloan +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
-}
-if($sitem->name=='Others'){
-$others +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS'); 
+if (isset($deductions_field) && !empty($deductions_field)){
+foreach ($deductions_field as $sitem){
+ ${$sitem->short_name}=0;
 }
 }
-}
-}
-}
-@endphp 
+@endphp  
 <table class="table align-middle  table-hover table-bordered table-striped fs-7 no-footer" id="revision_table">
     <thead class="bg-primary">
         <tr class="text-start text-muted fw-bolder fs-7 text-uppercase align-middle gs-0">
@@ -171,6 +74,9 @@ $others +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->nam
                     </td>
                     @if (isset($earings_field) && !empty($earings_field))
                         @foreach ($earings_field as $eitem)
+                        @php
+                                ${$eitem->short_name}+=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name);
+                        @endphp
                             <td class="px-3">
                                 {{ amountFormat(getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $eitem->name)) }}
                             </td>
@@ -181,6 +87,9 @@ $others +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->nam
                     @endif
                     @if (isset($deductions_field) && !empty($deductions_field))
                         @foreach ($deductions_field as $sitem)
+                        @php
+                            ${$sitem->short_name}+=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS');
+                        @endphp
                             <td class="px-3">
                                 {{ amountFormat(getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->name, 'DEDUCTIONS')) }}
                             </td>
@@ -205,31 +114,17 @@ $others +=getStaffSalaryFieldAmount($item->staff->id, $item->id, '', $sitem->nam
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{amountFormat($basic)}}</td>
-                    <td>{{amountFormat($da)}}</td>
-                    <td>{{amountFormat($hra)}}</td>
-                    <td>{{amountFormat($ta)}}</td>
-                    <td>{{amountFormat($pba)}}</td>
-                    <td>{{amountFormat($pbada)}}</td>
-                    <td>{{amountFormat($dsa)}}</td>
-                    <td>{{amountFormat($mna)}}</td>
-                    <td>{{amountFormat($arrear)}}</td>
-                    <td>{{amountFormat($others)}}</td>
-                    <td>{{amountFormat($bonus)}}</td>
+                    @if (isset($earings_field) && !empty($earings_field))
+                    @foreach ($earings_field as $eitem)
+                    <td>{{ amountFormat(${$eitem->short_name}) }}</td>
+                    @endforeach
+                    @endif
                     <td>{{amountFormat($gross_salary)}}</td>
-                    <td>{{amountFormat($esi)}}</td>
-                    <td>{{amountFormat($bankloan)}}</td>
-                    <td>{{amountFormat($lic)}}</td>
-                    <td>{{amountFormat($pt)}}</td>
-                    <td>{{amountFormat($it)}}</td>
-                    <td>{{amountFormat($darrear)}}</td>
-                    <td>{{amountFormat($contributions)}}</td>
-                    <td>{{amountFormat($epf)}}</td>
-                    <td>{{amountFormat($dother)}}</td>
-                    <td>{{amountFormat($contribution1)}}</td>
-                    
-                    <td>{{amountFormat($oloan)}}</td>
-                    <td>{{amountFormat($others)}}</td>
+                    @if (isset($deductions_field) && !empty($deductions_field))
+                     @foreach ($deductions_field as $sitem)
+                     <td>{{ amountFormat(${$sitem->short_name}) }}</td> 
+                     @endforeach
+                     @endif
                     <td>{{amountFormat($total_deductions)}}</td>
                     <td>{{amountFormat($net_salary)}}</td>
                   </tr>
