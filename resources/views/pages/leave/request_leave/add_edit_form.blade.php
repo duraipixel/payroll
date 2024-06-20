@@ -1298,7 +1298,6 @@ error: function(error) {
                     processData: false,
                     contentType: false,
                     success: function(res) {
-// Disable submit button whilst loading
                       submitButton.disabled = false;
                       submitButton.removeAttribute(
                         'data-kt-indicator');
@@ -1321,6 +1320,8 @@ error: function(error) {
                         window.location.href = Leave_list;
                         dtTable.draw();
                       }
+                    }, error: function(xhr, status, error) {
+                      submitButton.disabled = false;
                     }
                   })
 
