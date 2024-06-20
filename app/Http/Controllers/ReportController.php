@@ -337,7 +337,7 @@ class ReportController extends Controller
             )
         );
         $datatable_search=$request->datatable_search;
-               $academic=AcademicYear::find(academicYearId());
+        $academic=AcademicYear::find(academicYearId());
         $month = $request->month ?? date('m');
         $year = $academic->from_year;
         $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");

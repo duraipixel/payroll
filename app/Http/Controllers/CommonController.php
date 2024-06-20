@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Leave\StaffLeave;
 use Barryvdh\DomPDF\Facade\Pdf;
 use \NumberFormatter;
+use App\Models\AcademicYear;
 class CommonController extends Controller
 {    
     public function numberToWord($num = '')
@@ -289,10 +290,57 @@ class CommonController extends Controller
     function getStaffLeaveInfo(Request $request) {
         
         $staff_id = $request['staff_id'];
-
+        $academic=AcademicYear::find(academicYearId());
         $data = User::with(['position.designation', 'reporting'])->find($staff_id);
+        $leave_count=0;
+        $taken_leave =  StaffLeave::where('staff_id', $staff_id)->whereYear('from_date',$academic->from_year)->get();
+    
+        foreach($taken_leave as $leave){
+            $leave_count+=$leave->granted_days;
+    
+        }
+        $tbody_view='';
+        $staffleavesHead=StaffleaveAllocated($staff_id,academicYearId());
+        if (isset($staffleavesHead) && count($staffleavesHead) > 0) {
+            foreach ($staffleavesHead as $item) {
+                $leave_head_name = $item->leave_head->name ?? '';
+                $no_of_leave = $item->no_of_leave ?? 0;
+                $took_leaves = leaveData($staff_id, $academic->from_year, $leave_head_name);
+                $balance = $no_of_leave - $took_leaves;
         
-        return array('data' => $data);
+                // Append table row to $leave_view
+                $tbody_view .= '<tr>
+                    <td>' . $leave_head_name . '</td>
+                    <td class="text-center">' . $no_of_leave . '</td>
+                    <td>' . $took_leaves . '</td>
+                    <td>' . number_format($balance, 2) . '</td>
+                </tr>';
+            }
+        }
+        $leave_view='<div class="col-sm-12" id="leave_data">
+        <label for="" class="text-warning">Maternity Leave is only applicable for female staff</label>
+        <div class="col-sm-8">
+            <h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - '.$leave_count.'&nbsp;&nbsp;&nbsp; <a href="#" id="taken_data1" onclick="viewLeave()"><i class="fa fa-eye"></i></a></h6>
+            <h6 class="fs-6 mt-3 alert alert-info">Leave Summary</h6>
+            <div class="table-wrap table-responsive" style="max-height: 400px;">
+                <table id="nature_table_staff" class="table table-hover table-bordered">
+                    <thead class="bg-dark text-white">
+                        <tr>
+                            <th>Type</th>
+                            <th>Allocated</th>
+                            <th>Availed</th>
+                        </tr>
+                    </thead>
+                    <tbody>'.$tbody_view.
+                    '</tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <!-- Placeholder content for the right column -->
+        </div>
+    </div>';
+        return array('data' => $data,'leave_view'=>$leave_view);
     }
 
     public function getLeaveForm(Request $request)

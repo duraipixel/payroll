@@ -87,6 +87,24 @@ class LeaveController extends Controller
        
       
     }
+    public function previouesLeave(Request $request)
+    {
+        $id = $request->id;
+        $taken_leave = [];
+        $title = 'Leave';
+        $leave_count=0;
+        $academic=AcademicYear::find(academicYearId());
+        if (isset($id) && !empty($id)) {
+            $taken_leave = StaffLeave::where('staff_id', $id)->whereYear('from_date',$academic->from_year)->get();
+
+            foreach($taken_leave as $leave){
+                $leave_count+=$leave->granted_days;
+
+            }
+          
+        }
+        return view('pages.leave.request_leave.Leave_previous', compact('title','taken_leave'));
+    }
     public function leaveAvailableDays(Request $request){
 
         if ($request->ajax()) {
@@ -739,6 +757,7 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
             ->groupBy('leave_category')
     ->select('leave_category',\DB::raw('SUM(granted_days) as leaves'))
     ->get();
+    
         return view('pages.leave._staff_leave_details', compact('user', 'leaves', 'month', 'working_days', 'holidays', 'week_off'));
     }
 
