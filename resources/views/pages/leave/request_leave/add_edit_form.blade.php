@@ -4,7 +4,43 @@
 @endsection
 @section('content')
 <style>
-
+  .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    left:6%;
+  }
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 69%; /* Could be more or less, depending on screen size */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+  }
+  @keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+  }
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
   .popup {
     width: 100%;
     height: 100%;
@@ -574,7 +610,7 @@
                 $table=json_decode($info->leave_days);
                 @endphp
                 @if(isset($table[0]->cancell))
-                <table class="table table-bordered"  >
+                <table class="table table-bordered"  id="table_cancellation">
                   <thead class="bg-dark text-white">
                     <tr>
                       <th scope="col"><b>Date</b></th>
@@ -614,8 +650,10 @@
                         -
                       @endif</td>
                     </tr>
-                  @endforeach</tbody>
+                  @endforeach
                   <input type="hidden" name="leave_id" value="{{$info->id}}">
+                </tbody>
+                 
                 </table>
                 @else
                 <table class="table table-bordered" id="approved_leave" >
@@ -724,14 +762,6 @@
     </div>
   </div>
 </div>
-<section class="popup1">
-  <div class="popup__content1">
-    <div class="close1">
-      <span></span>
-      <span></span>
-    </div>
-  </div>
-</section>
 <section class="popup">
   <div class="popup__content">
     <div class="close">
@@ -796,6 +826,15 @@
         @endif
       </div>
     </section>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="modalContent">
+    </div>
+  </div>
+</div>
     @endsection
     @section('add_on_script')
     <script>
@@ -830,7 +869,7 @@
       function handleEyeIconClick() {
         $(".popup1").fadeIn(500);
       }
-      $('input:checkbox').change(function() {
+$('#approved_leave input:checkbox').change(function() {
         var formData = $('#approved_leave tbody').find('input').serialize();
         $.ajaxSetup({
           headers: {
@@ -862,7 +901,40 @@ error: function(error) {
   console.error('Error:', error);
 }
 });
-      });
+});
+$('#table_cancellation input:checkbox').change(function() {
+        var formData = $('#table_cancellation tbody').find('input').serialize();
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        $.ajax({
+url: "{{ route('get.staff.leave.count') }}", // Replace with your Laravel route
+type: 'POST',
+data: formData,
+dataType: 'json',
+success: function(day) {
+
+  if(day==0){
+
+    $('#leave_granted_no').prop('checked', true);
+
+
+  }else{
+
+    $('#leave_granted_yes').prop('checked', true);
+
+  }
+
+  $('#no_of_days_granted').val(day);
+},
+error: function(error) {
+// Handle any errors here
+  console.error('Error:', error);
+}
+});
+});
 $('#edittable,#radio1').on('change',function() {
 
         var formData = $('#edittable tbody').find('input').serialize();
@@ -976,7 +1048,29 @@ error: function(error) {
           }
         })
       })
-
+      function viewLeave(){
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var formMethod = "addEdit" ;
+            $.ajax({
+                url: "{{ route('staff.previous.leave') }}",
+                type: 'POST',
+                data: {
+                    id: $('#staff_id').val(),
+                    type: '',
+                    
+                },
+                success: function(res) {
+                  var modal = document.getElementById("myModal");
+                    modal.style.display = "block";
+                    $('#modalContent').html(res);
+                    
+                }
+            })
+      }
       function getStaffLeaveInfo(staff_id) {   
         $.ajaxSetup({
           headers: {
@@ -1003,8 +1097,7 @@ error: function(error) {
               $('#reporting_id').val(res.data?.reporting?.name);
               var tabledata = $('#leave_approvel');
               tabledata.append('');
-              let row=' <div class="col-sm-12" id="leave_data"><label for="" class="text-warning">Maternity Leave is only applicable for female staff</label><div class="col-sm-8"><h6 class="fs-6 mt-3 alert alert-danger">Total Leave Taken - 0 &nbsp;&nbsp;&nbsp;  <a href="#" id="taken_data1"><i class="fa fa-eye"></i></a><h6 class="fs-6 mt-3 alert alert-info">Leave Summary</h6><div class="table-wrap table-responsive " style="max-height: 400px;"><table id="nature_table_staff" class="table table-hover table-bordered"><thead class="bg-dark text-white"><tr><th>Type</th><th>Allocated</th><th>Availed</th></tr></thead><tbody><tr><td>1</td><td class="text-center">2</td><td>0.00</td></tr></tbody></table></div></div><div class="col-sm-4"><div>';
-              tabledata.append(row);
+              tabledata.append(res.leave_view);
               tabledata.on('click', '#taken_data1', handleEyeIconClick);
 
             }
@@ -1248,4 +1341,18 @@ error: function(error) {
         KTAppEcommerceSaveBranch.init();
       });
     </script>
+    <script>
+// Get the modal
+var modal = document.getElementById("myModal");
+function closeModal() {
+  modal.style.display = "none";
+}
+
+// Close the modal if the user clicks outside of it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
     @endsection
