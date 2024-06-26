@@ -117,7 +117,7 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::post('/add/kyc', [App\Http\Controllers\StaffController::class, 'insertKycData'])->name('staff.save.kyc');
         Route::post('/add/position', [App\Http\Controllers\StaffController::class, 'insertEmployeePosition'])->name('staff.save.employee_position');
         Route::post('/add/education', [App\Http\Controllers\StaffController::class, 'insertEducationDetails'])->name('staff.save.education_details');
-        Route::post('/get/draftData', [App\Http\Controllers\StaffController::class, 'getStaffDraftData'])->name('staff.get.draft.data');
+        Route::get('/get/draftData', [App\Http\Controllers\StaffController::class, 'getStaffDraftData'])->name('staff.get.draft.data');
         Route::post('/add/familyData', [App\Http\Controllers\StaffController::class, 'checkFamilyData'])->name('staff.save.familyPhase');
         Route::post('/get/staff/handling', [App\Http\Controllers\StaffController::class, 'getStaffHandlingDetails'])->name('get.staff.handling.details');
 
