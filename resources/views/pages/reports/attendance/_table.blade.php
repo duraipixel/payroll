@@ -34,10 +34,6 @@
                         
                         if($status =='Present'){
                         $present +=1;
-                        }elseif($status=='Absence'){
-
-                        }else{
-                            $present +=1;
                         }
                     @endphp
 
