@@ -18,14 +18,14 @@
         <!--end::Table head-->
         <!--begin::Table body-->
         <tbody>
-            @isset($nominee_details)
+            @if(isset($nominee_details) && count($nominee_details)>0)
                 @foreach ($nominee_details as $item)
                     <tr>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ ucwords($item->nominee->first_name) }}
+                            {{ ucwords($item->nominee->first_name??'') }}
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ ucwords($item->relationship->name) }}</td>
+                            {{ ucwords($item->relationship->name??'') }}</td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{-- {{ date('d-m-Y', strtotime($item->dob)) }} --}}
                             {{ commonDateFormat($item->dob) }}
@@ -80,7 +80,7 @@
                     </tr>
                 @endforeach
 
-            @endisset
+            @endif
 
         </tbody>
         <!--end::Table body-->
