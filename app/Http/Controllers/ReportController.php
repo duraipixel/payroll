@@ -66,7 +66,7 @@ class ReportController extends Controller
         ->select('users.*','staff_appointment_details.place_of_work_id')
         ->when(!is_null($request->place_of_work),function($q) use ($request){
             $q->where('place_of_work_id', $request->place_of_work);
-        })->get();
+        });
     }
 
     function attendance_index(Request $request)
