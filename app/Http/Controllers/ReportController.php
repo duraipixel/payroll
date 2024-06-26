@@ -87,7 +87,7 @@ class ReportController extends Controller
         }
 
         $place_of_work = $request->place_of_work ?? null;
-        $date          = getStartAndEndDateOfMonth($month,$year);
+        $date          = getStartAndEndDateOfYear($year);
         $month_days    = monthDays($month,$year);
 
         $perPage = (!empty($request->limit) && $request->limit === 'all') ? 100000000000000000000 : $request->limit;

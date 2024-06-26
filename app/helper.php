@@ -1226,6 +1226,16 @@ function getStartAndEndDateOfMonth($month,$year='')
         'end_date' => $endDate->format('Y-m-d')
     ];
 }
+function getStartAndEndDateOfYear($year='')
+{
+    $year      = ($year !='') ? $year : date('Y');
+    $startDate = Carbon::createFromDate($year,1, 1)->startOfMonth();
+    $endDate   = Carbon::createFromDate($year,12, 1)->endOfMonth();
+    return [
+        'start_date' => $startDate->format('Y-m-d'),
+        'end_date' => $endDate->format('Y-m-d')
+    ];
+}
 function placeOfWork()
 {
     return PlaceOfWork::latest()->get();
