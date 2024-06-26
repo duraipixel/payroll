@@ -32,6 +32,10 @@
                         
                         if($status =='Present'){
                         $present +=1;
+                        }elseif($status=='Absence'){
+
+                        }else{
+                            $present +=1;
                         }
                     @endphp
 
@@ -39,7 +43,7 @@
                     @if($status === 'Present')
                         <b style="color:green;font-size: 10px;">P</b>
                     @elseif($status=='Absence')
-                        <b style="color:red;font-size: 10px;">{{ getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date) }}</b>
+                        <b style="color:blue;font-size: 10px;">{{ getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date) }}</b>
                     @else
                         <b style="color:red;font-size: 10px;">U/A</b>
                     @endif
