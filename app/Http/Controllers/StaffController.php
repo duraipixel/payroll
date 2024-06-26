@@ -567,7 +567,7 @@ class StaffController extends Controller
     {
         $code  = $request->code;
 
-        $users = User::where('id', 722)->get();
+        $users = User::all();
        foreach ($users as $user) {
         $currentProfileImage = $user->image;
      
