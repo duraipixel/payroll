@@ -567,21 +567,10 @@ class StaffController extends Controller
     {
         $code  = $request->code;
 
-        $users = User::all();
-       foreach ($users as $user) {
-        $currentProfileImage = $user->image;
-     
-        if ($currentProfileImage) {
-            $originalFilename = basename($currentProfileImage);
-            $extension = pathinfo($originalFilename, PATHINFO_EXTENSION);
-            $newFilename = $user->institute_emp_code.'.'.$extension;
-            $newPath = 'staff/' . $user->emp_code . '/profile/' . $newFilename;
-            Storage::disk('public')->move($currentProfileImage, $newPath);
-            $user->image = $newPath;
-            $user->save();
-        }
-    }
-    
+        $staff_details = User::where('verification_status', $code)
+            ->where('emp_code', 'like', '%%')->get();
+       return $staff_details;
+       
     }
     function removeDirectory($path) {
         // Check if the path exists and is a directory
