@@ -29,6 +29,7 @@ use App\Models\AttendanceManagement\AttendanceManualEntry;
 use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\ItTabulation;
 use App\Models\Master\Institution;
+use App\Models\CalendarDays;
 use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\PayrollManagement\OtherIncome;
 use App\Models\PayrollManagement\PayrollPermission;
@@ -1319,8 +1320,16 @@ function getDaySalaryAmount($gross, $month_length)
 {
     return round($gross / $month_length);
 }
-
-
+function getAttendanceYear($year='')
+{
+    $count=CalendarDays::whereYear('calendar_date', $year)->where('days_type','working_day')->count();
+    return $count ?? 0;
+}
+function getAttendanceYearMonth($month,$year='')
+{
+    $count=CalendarDays::whereYear('calendar_date', $year)->whereMonth('calendar_date', $month)->where('days_type','working_day')->count();
+    return $count ?? 0;
+}
 function taxPaidPayroll($staff_id, $salary_pattern_id)
 {
     /**

@@ -22,6 +22,8 @@
                 <td><small style="font-size: 10px">{{ $item->society_emp_code }}</small></td>
                 @php
                 $present=0;
+                $month_total= getAttendanceYearMonth(date('m', strtotime($start_date)),date('Y', strtotime($start_date)));
+                $year_total=getAttendanceYear(date('Y', strtotime($start_date)));
                 @endphp
                 @if (count($item->Attendance))
                 @for ($i = 0; $i < $no_of_days; $i++)
@@ -59,12 +61,12 @@
                         <td class="text-center" style="color:red;font-size: 10px;"><b>U/A</b></td>
                     @endfor
                 @endif
-                <td>{{ $month_days }}</td>
+                <td>{{ $month_total }}</td>
                 <td>{{ $present }}</td>
-                <td>{{ $month_days-$present}}</td>
-                <td>{{ count($item->Attendance) }}</td>
+                <td>{{ $month_total-$present}}</td>
+                <td>{{ $year_total }}</td>
                 <td>{{ count($item->AttendancePresent) }}</td>
-                <td>{{ abs(count($item->Attendance) - count($item->AttendancePresent)) }}</td>
+                <td>{{ abs($year_total - count($item->AttendancePresent)) }}</td>
             </tr>
         @endforeach
     </tbody>
