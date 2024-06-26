@@ -489,6 +489,15 @@ class User extends Authenticatable implements Auditable
             return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'id')->orderby('from_appointment', 'asc');
         }
     }
+    public function TeachingAppointment()
+    {
+        if ($this->status == 'transferred') {
+            return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'refer_user_id')->where('nature_of_employment_id',2)->orderby('from_appointment', 'asc');
+        } else {
+
+            return $this->hasOne(StaffAppointmentDetail::class, 'staff_id', 'id')->where('nature_of_employment_id',2)->orderby('from_appointment', 'asc');
+        }
+    }
 
     public function reporting()
     {
