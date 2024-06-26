@@ -569,9 +569,27 @@ class StaffController extends Controller
 
         $staff_details = User::where('verification_status', $code)
             ->where('emp_code', 'like', '%%')->get();
-        dd($staff_details);
+       return $staff_details;
     }
-
+    function removeDirectory($path) {
+        // Check if the path exists and is a directory
+        if (file_exists($path) && is_dir($path)) {
+            $files = scandir($path);
+            foreach ($files as $file) {
+                if ($file != '.' && $file != '..') {
+                    $currentPath = $path . '/' . $file;
+                    // Remove files or recursively remove directories
+                    if (is_dir($currentPath)) {
+                        removeDirectory($currentPath);
+                    } else {
+                        unlink($currentPath);
+                    }
+                }
+            }
+            // Remove the directory itself
+            rmdir($path);
+        }
+    }
     public function insertKycData(Request $request)
     {
 
@@ -631,13 +649,14 @@ class StaffController extends Controller
             $ins['status'] = 'active';
            
             if ($request->hasFile('profile_image')) {
-
+                $directory_path= storage_path('app/public/staff/' . $staff_info->emp_code . '/profile');
+                if (file_exists($directory_path)) {
+                    $this->removeDirectory($directory_path);
+                }
                 $files = $request->file('profile_image');
-                $imageName = uniqid() . Str::replace(' ', "-", $files->getClientOriginalName());
-
-                $directory              = 'staff/' . $staff_info->emp_code . '/profile';
+                $imageName =$staff_info->institute_emp_code.'.'.$files->getClientOriginalExtension();
+                $directory='staff/' . $staff_info->emp_code . '/profile';
                 $filename               = $directory . '/' . $imageName;
-
                 Storage::disk('public')->put($filename, File::get($files));
                 // $ins['image'] = $filename;
                 $staff_info->image = $filename;
@@ -751,6 +770,7 @@ class StaffController extends Controller
         }
         return response()->json(['error' => $error, 'message' => $message, 'id' => $id ?? '']);
     }
+   
 
     public function insertEmployeePosition(Request $request)
     {
