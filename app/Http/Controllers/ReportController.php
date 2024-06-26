@@ -56,7 +56,7 @@ class ReportController extends Controller
     }
 
     function attendance_collection($request, $date) {
-        return User::where('institute_id',session()->get('staff_institute_id'))->with(['AttendancePresent', 'Attendance' => function ($query) use ($date) {
+        return User::where('institute_id',session()->get('staff_institute_id'))->with(['Attendance', 'AttendancePresent' => function ($query) use ($date) {
             $query->whereBetween('attendance_date', [$date['start_date'], $date['end_date']]);
         }])
         ->leftJoin('staff_appointment_details', function($join){
