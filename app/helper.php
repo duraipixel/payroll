@@ -1080,7 +1080,7 @@ function getSortStaffLeaveType($staff_id, $date)
         ->where('from_date', '<=', $date)->where('to_date', '>=', $date)
         ->first();
 
-     $status = 'U/A';
+     $status = '';
     if ($info) {
             $status  = formatWord($info->leave_category);
             

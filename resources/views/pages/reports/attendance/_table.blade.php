@@ -43,7 +43,11 @@
                     @if($status === 'Present')
                         <b style="color:green;font-size: 10px;">P</b>
                     @elseif($status=='Absence')
-                        <b style="color:blue;font-size: 10px;">{{ getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date) }}</b>
+                    @if(getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date)=='')
+                    <b style="color:red;font-size: 10px;">U/A</b>
+                    @else
+                     <b style="color:blue;font-size: 10px;">{{ getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date) }}</b>
+                     @endif
                     @else
                         <b style="color:red;font-size: 10px;">U/A</b>
                     @endif
