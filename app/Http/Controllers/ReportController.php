@@ -61,12 +61,12 @@ class ReportController extends Controller
         }])
         ->leftJoin('staff_appointment_details', function($join){
             $join->on('staff_appointment_details.staff_id', '=','users.id')
-                   ;
+                    ;
         })
         ->select('users.*','staff_appointment_details.place_of_work_id')
         ->when(!is_null($request->place_of_work),function($q) use ($request){
             $q->where('place_of_work_id', $request->place_of_work);
-        });
+        })->where('staff_appointment_details.academic_id', academicYearId());
     }
 
     function attendance_index(Request $request)
