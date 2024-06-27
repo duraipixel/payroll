@@ -1330,6 +1330,11 @@ function getAttendanceYearMonth($month,$year='')
     $count=CalendarDays::whereYear('calendar_date', $year)->whereMonth('calendar_date', $month)->where('days_type','working_day')->count();
     return $count ?? 0;
 }
+function getCalanderStatus($date)
+{
+    $count=CalendarDays::where('calendar_date', $date)->first();
+    return $count->days_type??'';
+}
 function taxPaidPayroll($staff_id, $salary_pattern_id)
 {
     /**

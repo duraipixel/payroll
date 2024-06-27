@@ -33,8 +33,9 @@
                         $status = $attendanceRecord ? $attendanceRecord->attendance_status : '';
                         
                         if($status =='Present'){
-                        $present +=1;
+                          $present +=1;
                         }
+                        $calander_status=getCalanderStatus($search_date);
                     @endphp
 
                     <td>
@@ -44,17 +45,23 @@
                     @if(getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date)=='')
                     <b style="color:red;font-size: 10px;">U/A</b>
                     @else
-                     <b style="color:blue;font-size: 10px;">{{ getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date) }}</b>
-                     @endif
+                    <b style="color:blue;font-size: 10px;">{{ getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date) }}</b>
+                    @endif
                     @else
-                        <b style="color:red;font-size: 10px;">U/A</b>
+                    @if(isset($calander_status) && !empty($calander_status))
+                    @if($calander_status=='holiday' || $calander_status=='week_off')
+                    <b style="color:black;font-size: 10px;">WO</b>
+                    @else
+                    <b style="color:red;font-size: 10px;">U/A</b>
+                    @endif
+                    @endif
                     @endif
                     </td>
-                    {{-- <td class="text-center"> {{ $search_date }}</td> --}}
+                    
                 @endfor
                 @else 
                     @for ($i = 0; $i < $month_days; $i++)
-                        <td class="text-center" style="color:red;font-size: 10px;"><b>U/A</b></td>
+                        <td class="text-center" style="color:yellow;font-size: 10px;"><b>U/A</b></td>
                     @endfor
                 @endif
                 <td>{{ $month_total }}</td>
