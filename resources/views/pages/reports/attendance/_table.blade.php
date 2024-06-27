@@ -61,7 +61,15 @@
                 @endfor
                 @else 
                     @for ($i = 0; $i < $month_days; $i++)
-                        <td class="text-center" style="color:red;font-size: 10px;"><b>U/A</b></td>
+                    <td  class="text-center">
+                    @if(isset($calander_status) && !empty($calander_status))
+                    @if($calander_status=='holiday' || $calander_status=='week_off')
+                    <b style="color:black;font-size: 10px;">WO</b>
+                    @else
+                    <b style="color:red;font-size: 10px;">U/A</b>
+                    @endif
+                    @endif
+                    </td>
                     @endfor
                 @endif
                 <td>{{ $month_total }}</td>
