@@ -1373,7 +1373,7 @@ class="menu-item menu-accordion
 @php
 $in_routes = array_column($reports, 'route');
 @endphp
-@if (access()->hasAccess([$in_routes]))
+@if (access()->hasAccess($in_routes))
 <div data-kt-menu-trigger="click"
 class="menu-item menu-accordion @if (request()->routeIs($in_routes)) hover show @endif">
 <span class="menu-link">
