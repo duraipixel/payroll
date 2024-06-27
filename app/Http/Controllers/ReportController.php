@@ -61,7 +61,7 @@ class ReportController extends Controller
         }])
         ->leftJoin('staff_appointment_details', function($join){
             $join->on('staff_appointment_details.staff_id', '=','users.id')
-                    ->where('staff_appointment_details.academic_id', academicYearId());
+                   ;
         })
         ->select('users.*','staff_appointment_details.place_of_work_id')
         ->when(!is_null($request->place_of_work),function($q) use ($request){

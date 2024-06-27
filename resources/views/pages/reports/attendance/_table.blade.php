@@ -61,7 +61,7 @@
                 @endfor
                 @else 
                     @for ($i = 0; $i < $month_days; $i++)
-                        <td class="text-center" style="color:yellow;font-size: 10px;"><b>U/A</b></td>
+                        <td class="text-center" style="color:red;font-size: 10px;"><b>U/A</b></td>
                     @endfor
                 @endif
                 <td>{{ $month_total }}</td>
