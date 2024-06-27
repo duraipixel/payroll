@@ -1369,11 +1369,11 @@ class="menu-item menu-accordion
 </div>
 </div>
 @endif
-@if (access()->hasAccess(['reports.profile']))
 @foreach (reportMenu() as $name => $reports)
 @php
 $in_routes = array_column($reports, 'route');
 @endphp
+@if (access()->hasAccess([$in_routes]))
 <div data-kt-menu-trigger="click"
 class="menu-item menu-accordion @if (request()->routeIs($in_routes)) hover show @endif">
 <span class="menu-link">
@@ -1401,8 +1401,9 @@ class="menu-item menu-accordion @if (request()->routeIs($in_routes)) hover show 
     @endif
 </div>
 </div>
-@endforeach
 @endif
+@endforeach
+
 </div>
 <!--end::Menu-->
 </div>
