@@ -39,6 +39,7 @@ class AttendanceRepository extends Controller
                     return $query->where(function ($q) use ($keywords, $date) {
 
                         $q->where('users.name', 'like', "%{$keywords}%")
+                            ->orWhere('users.institute_emp_code', 'like', "%{$keywords}%")
                             ->orWhere('leave_statuses.name', 'like', "%{$keywords}%")
                             ->orWhere('reason', 'like', "%{$keywords}%")
                             ->orWhereDate('attendance_date', $date);
