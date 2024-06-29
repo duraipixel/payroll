@@ -68,7 +68,7 @@ class ReportController extends Controller
         })
         ->select('users.*','staff_appointment_details.place_of_work_id')
         ->when(!is_null($request->place_of_work),function($q) use ($request){
-            $q->where('place_of_work_id', $request->place_of_work);
+            $q->where('place_of_work_id', $request->place_of_work)->where('is_till_active','yes');
         });
         // if(isset( $request->place_of_work) && !empty( $request->place_of_work)){
         //     $query->where('staff_appointment_details.academic_id', academicYearId());
