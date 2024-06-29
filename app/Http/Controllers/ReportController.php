@@ -116,9 +116,10 @@ class ReportController extends Controller
             $no_of_days = date('t', strtotime($start_date) );
             $year = date('Y', strtotime($start_date) );
         }
-        $date        = getStartAndEndDateOfMonth($month,$year);
+        $date          = getStartAndEndDateOfYear($year);
+        $date_month          = getStartAndEndDateOfMonth($month,$year);
         $month_days  = monthDays($month,$year);
-        $attendance  = $this->attendance_collection($request,$date)->get();
+        $attendance  = $this->attendance_collection($request,$date,$date_month)->get();
         return Excel::download(new AttendanceReport($attendance, $month_days,$no_of_days,$start_date),'attendance.xlsx');
     }
 
