@@ -1072,6 +1072,7 @@ function getStaffLeaveRequestType($staff_id, $date)
     }
     return $status;
 }
+
 function getSortStaffLeaveType($staff_id, $date)
 {
     // dump( $date );
@@ -1083,9 +1084,26 @@ function getSortStaffLeaveType($staff_id, $date)
 
      $status = '';
     if ($info) {
-            $status  = formatWord($info->leave_category);
-            
-        
+        if(isset($info->leave_days)){
+              $json_data=json_decode($info->leave_days);
+              $result = collect($json_data)->firstWhere('date', $date);
+              if ($result) {
+                  $type = $result->type;
+                  if($type){
+                    if($type=='forenoon'){
+                        $status  = formatWord($info->leave_category).'/P';
+                    }elseif($type=='afternoon'){
+                        $status  = 'P/'.formatWord($info->leave_category);
+                    }elseif($type=='both'){
+                    $status  = formatWord($info->leave_category); 
+
+                    }
+                  }
+                 
+              }
+              
+        }
+          
     }
     return $status;
 }
