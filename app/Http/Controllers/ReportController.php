@@ -55,8 +55,11 @@ class ReportController extends Controller
     {
     }
 
-    function attendance_collection($request, $date) {
-        $query=User::where('institute_id',session()->get('staff_institute_id'))->with(['Attendance', 'AttendancePresent' => function ($query) use ($date) {
+    function attendance_collection($request, $date,$date_month='') {
+        $query=User::where('institute_id',session()->get('staff_institute_id'))->with(['Attendance' => function ($query) use ($date_month) {
+            $query->whereBetween('attendance_date', [$date_month['start_date'], $date_month['end_date']]);
+        }])
+        ->with(['AttendancePresent' => function ($query) use ($date) {
             $query->whereBetween('attendance_date', [$date['start_date'], $date['end_date']]);
         }])
         ->leftJoin('staff_appointment_details', function($join){
@@ -93,10 +96,11 @@ class ReportController extends Controller
 
         $place_of_work = $request->place_of_work ?? null;
         $date          = getStartAndEndDateOfYear($year);
+        $date_month          = getStartAndEndDateOfMonth($month,$year);
         $month_days    = monthDays($month,$year);
 
         $perPage = (!empty($request->limit) && $request->limit === 'all') ? 100000000000000000000 : $request->limit;
-        $attendance    = $this->attendance_collection($request,$date)->paginate($perPage);
+        $attendance    = $this->attendance_collection($request,$date,$date_month)->paginate($perPage);
        
         return view('pages.reports.attendance._index', compact('attendance', 'month_days','month','place_of_work', 'start_date', 'no_of_days','parameters'));
     }
