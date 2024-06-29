@@ -49,7 +49,8 @@ class StaffTransferController extends Controller
                     return commonDateFormat($row->effective_from);
                 })
                 ->editColumn('status', function ($row) {
-                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" ">' . ucfirst($row->status) . '</a>';
+                    $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'approved') ? 'success' : (($row->status == 'pending') ? 'primary' : 'danger'))
+                    . '" ">' . ucfirst($row->status) . '</a>';
                     return $status;
                 })
                 ->editColumn('action', function ($row) {
