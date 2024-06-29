@@ -68,7 +68,9 @@
                     @for ($i = 0; $i < $month_days; $i++)
                     <td  class="text-center">
                     @if(isset($calander_status) && !empty($calander_status))
-                    @if($calander_status=='holiday' || $calander_status=='week_off')
+                    @if($calander_status->days_type=='holiday')
+                    <b style="color:black;font-size: 10px;">{{$key_word ??'WO'}}</b>
+                    @elseif($calander_status->days_type=='week_off')
                     <b style="color:black;font-size: 10px;">WO</b>
                     @else
                     <b style="color:red;font-size: 10px;">U/A</b>
