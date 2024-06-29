@@ -1351,7 +1351,7 @@ function getAttendanceYearMonth($month,$year='')
 function getCalanderStatus($date)
 {
     $count=CalendarDays::where('calendar_date', $date)->first();
-    return $count->days_type??'';
+    return $count??'';
 }
 function taxPaidPayroll($staff_id, $salary_pattern_id)
 {
