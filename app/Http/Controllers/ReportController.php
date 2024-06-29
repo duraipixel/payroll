@@ -116,6 +116,7 @@ class ReportController extends Controller
             $no_of_days = date('t', strtotime($start_date) );
             $year = date('Y', strtotime($start_date) );
         }
+        $place_of_work = $request->place_of_work ?? null;
         $date          = getStartAndEndDateOfYear($year);
         $date_month          = getStartAndEndDateOfMonth($month,$year);
         $month_days  = monthDays($month,$year);
