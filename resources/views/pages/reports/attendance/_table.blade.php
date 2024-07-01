@@ -41,42 +41,43 @@
                         }
                     @endphp
 
-                    <td>
                     @if($status === 'Present')
-                        <b style="color:green;font-size: 10px;">P</b>
+                        <td  class="text-center" style="color:green;font-size: 10px;"><b style="font-weight:bold">P</b></td>
                     @elseif($status=='Absence')
                     @if(getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date)=='')
-                    <b style="color:red;font-size: 10px;">U/A</b>
+                    <td  class="text-center" style="color:red;font-size: 10px;"><b>U/A</b></td>
                     @else
-                    <b style="color:blue;font-size: 10px;">{{ getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date) }}</b>
+                    <td  class="text-center" style="color:blue;font-size: 10px;"><b>{{ getSortStaffLeaveType($item->id,$attendanceRecord->attendance_date) }}</b></td>
                     @endif
                     @else
                     @if(isset($calander_status) && !empty($calander_status->days_type))
                     @if($calander_status->days_type=='holiday')
-                    <b style="color:black;font-size: 10px;">{{$key_word ??'WO'}}</b>
+                    <td  class="text-center" style="color:black;font-size: 10px;"><b>{{$key_word ??'WO'}}</b></td>
                     @elseif($calander_status->days_type=='week_off')
-                    <b style="color:black;font-size: 10px;">WO</b>
+                    <td  class="text-center" style="color:black;font-size: 10px;"><b>WO</b></td>
                     @else
-                    <b style="color:red;font-size: 10px;">U/A</b>
+                    <td  class="text-center" style="color:red;font-size: 10px;"><b>U/A</b></td>
                     @endif
                     @endif
                     @endif
-                    </td>
+                   
                     
                 @endfor
                 @else 
                     @for ($i = 0; $i < $month_days; $i++)
-                    <td  class="text-center">
+                  
                     @if(isset($calander_status) && !empty($calander_status))
                     @if($calander_status->days_type=='holiday')
-                    <b style="color:black;font-size: 10px;">{{$key_word ??'WO'}}</b>
+                    <td  class="text-center" style="color:black;font-size: 10px;"><b>{{$key_word ??'WO'}}</b></td>
                     @elseif($calander_status->days_type=='week_off')
-                    <b style="color:black;font-size: 10px;">WO</b>
+                    <td  class="text-center" style="color:black;font-size: 10px;"><b>WO</b></td>
                     @else
-                    <b style="color:red;font-size: 10px;">U/A</b>
+                    <td  class="text-center" style="color:red;font-size: 10px;"><b>U/A</b></td>
                     @endif
+                    @else
+                    <td  class="text-center" style="color:red;font-size: 10px;"><b>U/A</b></td>
                     @endif
-                    </td>
+                    
                     @endfor
                 @endif
                 <td>{{ $month_total }}</td>
