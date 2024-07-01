@@ -66,12 +66,12 @@ class ReportController extends Controller
         }])
         ->with(['appointment' => function ($query) use ($place_of_work) {
             if (!is_null($place_of_work)) {
-                $query->where('place_of_work_id', $place_of_work)->where('is_till_active', 'yes');
+                $query->where('place_of_work_id', $place_of_work);
             }
         }])
         ->when(!is_null($place_of_work), function ($query) use ($place_of_work) {
             $query->whereHas('appointment', function ($q) use ($place_of_work) {
-                $q->where('place_of_work_id', $place_of_work)->where('is_till_active', 'yes');
+                $q->where('place_of_work_id', $place_of_work);
             });
         })->distinct();
        
