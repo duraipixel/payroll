@@ -8,6 +8,7 @@
     @include('layouts.parts.meta')
     @include('layouts.stylelinks')
     @include('layouts.scripts')
+    
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -429,6 +430,31 @@
         }
    
         
+    </script>
+      <script>
+        window.addEventListener("DOMContentLoaded", function() {
+            loading();
+            const ButtonClick = document.querySelector('button[type="botton"]');
+            const submitButton = document.querySelector('button[type="submit"]');
+            submitButton.addEventListener('click', function(event) {
+                loading();
+            setTimeout(() => {
+                unloading();
+            },5000);
+            });
+            ButtonClick.addEventListener('click', function(event) {
+                loading();
+            setTimeout(() => {
+                unloading();
+            },1000);
+            });
+          
+        });
+        window.addEventListener("load", function() {
+            unloading();
+        });
+          unloading();
+       
     </script>
 </body>
 
