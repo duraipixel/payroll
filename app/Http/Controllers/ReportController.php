@@ -56,21 +56,25 @@ class ReportController extends Controller
     }
 
     function attendance_collection($request, $date,$date_month='') {
-        $query=User::where('institute_id',session()->get('staff_institute_id'))->with(['Attendance' => function ($query) use ($date_month) {
+        $place_of_work=$request->place_of_work;
+        $query=User::where('institute_id', session()->get('staff_institute_id'))
+        ->with(['Attendance' => function ($query) use ($date_month) {
             $query->whereBetween('attendance_date', [$date_month['start_date'], $date_month['end_date']]);
         }])
         ->with(['AttendancePresent' => function ($query) use ($date) {
             $query->whereBetween('attendance_date', [$date['start_date'], $date['end_date']]);
         }])
-        ->leftJoin('staff_appointment_details', function($join){
-            $join->on('staff_appointment_details.staff_id', '=','users.id')
-                    ;
-        })
-        ->select('users.*','staff_appointment_details.place_of_work_id')
-        ->when(!is_null($request->place_of_work),function($q) use ($request){
-            $q->where('place_of_work_id', $request->place_of_work)->where('is_till_active','yes');
-        })->distinct()
-        ->groupBy('users.id', 'users.name', 'users.email', 'users.institute_id','users.last_name','users.division_id','users.short_name','users.first_name_tamil', 'users.first_name', 'users.emp_code','users.email_verified_at','users.institute_emp_code','users.password','users.academic_id','users.society_emp_code','users.updated_at','users.created_at','users.remember_token','staff_appointment_details.place_of_work_id','users.tax_scheme_id','users.refer_user_id' ,'users.transfer_status' ,'users.deleted_at' ,'users.updatedBy','users.locker_no','users.image','users.is_top_level','users.addedBy' ,'users.is_super_admin','users.status','users.verification_status','users.profile_status','users.joining_date','users.reporting_manager_id');
+        ->with(['appointment' => function ($query) use ($place_of_work) {
+            if (!is_null($place_of_work)) {
+                $query->where('place_of_work_id', $place_of_work)->where('is_till_active', 'yes');
+            }
+        }])
+        ->when(!is_null($place_of_work), function ($query) use ($place_of_work) {
+            $query->whereHas('appointment', function ($q) use ($place_of_work) {
+                $q->where('place_of_work_id', $place_of_work)->where('is_till_active', 'yes');
+            });
+        })->distinct();
+       
         return $query;
     }
 
