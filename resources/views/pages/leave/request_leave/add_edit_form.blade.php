@@ -513,6 +513,12 @@
 
                     </ul>
                   </div>
+                  <br>
+                  @if(isset($info->staff_info) && isset($info->staff_info->image))
+                  <img id="staff_image" src="{{ env('IMAGE_URL') . '/' . $info->staff_info->image }}" style="width:25%;">
+                  @else
+                  <img id="staff_image" src="" style="width:25%;">
+                  @endif
                 </div>
               </div>
               <div class="fv-row form-group mb-3 row">
@@ -1091,6 +1097,7 @@ error: function(error) {
               $('#designation').val(res.data?.position?.designation?.name);
               $('#staff_id').val(res.data.id);
               $('#staff_name').val(res.data.name);
+              $('#staff_image').attr('src', '{{ env('IMAGE_URL') }}/' + res.data.image);
               $('#typeadd-panel').addClass('d-none');
 //$('#staff_name').attr('disabled', true);
               $('#input-close').removeClass('d-none');
