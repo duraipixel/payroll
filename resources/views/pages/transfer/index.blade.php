@@ -99,11 +99,9 @@
                                         Transfer Status
                                     </th>
                                     <th class="px-3 text-white">
-                                       Action
+                                    Remark
                                     </th>
-                                    <th class="px-3 text-white">
-                                        Remark
-                                     </th>
+                                   
                                 </tr>
                             </thead>
 
@@ -177,17 +175,13 @@
                     name: 'new_institution_code'
                 },
                 {
-                    data: 'new_institution_code',
-                    name: 'new_institution_code'
-                },
-                {
                     data: 'status',
                     name: 'status',
                    
                 },
                 {
                     data: 'action',
-                    name: 'action',
+                    name: 'Remark',
                     orderable: false,
                     searchable: false
                 },
