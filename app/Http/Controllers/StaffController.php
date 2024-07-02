@@ -1173,8 +1173,14 @@ class StaffController extends Controller
                  $route_name = request()->route()->getName();
                    
                     if( access()->buttonAccess($route_name, 'add_edit') &&  $post_val->transfer_status == 'active' ){
-
-                        $status_btn = '<a href="javascript:void(0);" class="badge badge-light-' . (($post_val->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($post_val->status) . '" onclick="return staffChangeStatus(' . $post_val->id . ',\'' . ($post_val->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($post_val->status) . '</a>';
+                        $status_class = ($post_val->status == 'active') ? 'success' :
+                        (in_array($post_val->status, ['resigned', 'retired', 'expired']) ? 'danger' :
+                        ($post_val->status == 'transferred' ? 'primary' : 'warning'));
+                        $status_btn = '<a href="javascript:void(0);" class="badge badge-light-' . $status_class . '" tooltip="Click to ' . ucwords($post_val->status) . '"';
+                        if ($post_val->status == 'active' || $post_val->status == 'inactive') {
+                            $status_btn .= ' onclick="return staffChangeStatus(' . $post_val->id . ', \'' . ($post_val->status == 'active' ? 'inactive' : 'active') . '\')"';
+                        }
+                        $status_btn .= '>' . ucfirst($post_val->status) . '</a>';
                     } else {
                         $edit_btn = '';
                         $del_btn = '';

@@ -244,10 +244,10 @@
                 </div>
                 <div class="col-lg-4">
                     <label class="form-label ">Status</label>
-                    <select name="status" class="select2-option">
+                    <select name="status" class="select2-option" id="status">
                             <option value="" selected>--Select Status--</option>
                             <option value="active"   @if (isset($staff_details->status) && $staff_details->status == 'active') selected @endif>Active</option>
-                            <option value="inactive"   @if (isset($staff_details->status) && $staff_details->status == 'inactive') selected @endif>In Active</option>
+                            <option value="inactive"   @if (isset($staff_details->status) && $staff_details->status == 'inactive') selected @endif>In-Active</option>
                             <option value="transferred"  @if (isset($staff_details->status) && $staff_details->status == 'transferred') selected @endif>Transferred</option>
                             <option value="retired"   @if (isset($staff_details->status) && $staff_details->status =='retired') selected @endif>Retired</option>
                             <option value="resigned"   @if (isset($staff_details->status) && $staff_details->status == 'resigned') selected @endif>Resigned</option>
@@ -668,7 +668,8 @@
             'emergency_no',
             'contact_address',
             'permanent_address',
-            'is_super_admin'
+            'is_super_admin',
+            'status'
         ];
 
         $('.kyc-form-errors').remove();
