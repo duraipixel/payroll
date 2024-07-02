@@ -625,6 +625,9 @@ class StaffController extends Controller
              * 2.insert in staff_bank_details
              * 3.insert in staff_pf_esi_details
              */
+            if(isset($request->status) && !empty($request->status)){
+                $staff_info->status=$request->status;
+            }
             $staff_info->is_super_admin=$request->is_super_admin;
             $staff_info->save();
             $ins['academic_id'] = $academic_id;

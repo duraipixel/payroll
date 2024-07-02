@@ -18,6 +18,8 @@ Route::post('staff/leave/mapping', [App\Http\Controllers\StaffController::class,
 
  Route::post('/month-wise-variation', [ReportController::class, 'MonthWiseVariation'])->name('reports.month.wise.variation');
 
+ Route::post('staff/el-add', [App\Http\Controllers\SettingsController::class, 'StaffElAdd'])->name('staff.el.add');
+Route::post('staff/el-summary-add', [App\Http\Controllers\SettingsController::class, 'StaffElsummaryAdd'])->name('staff.el.summary.add');
 Route::get('staff/el-summary/{id}', [App\Http\Controllers\SettingsController::class, 'StaffElsummary'])->name('staff.el.summary');
 Route::post('staff/el-summary/update', [App\Http\Controllers\SettingsController::class, 'StaffElsummaryUpdate'])->name('staff.el.summary.update');
 Route::post('staff/el-summary/delete', [App\Http\Controllers\SettingsController::class, 'StaffElsummaryDelete'])->name('staff.el.summary.delete');

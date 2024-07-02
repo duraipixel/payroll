@@ -131,20 +131,50 @@ class SettingsController extends Controller
                   return $row->carry_forward_count;
                 })
                 ->addColumn('action', function ($row) {
+                        $add_btn = '<a href="javascript:void(0);"  onclick="getElAddModal(' . $row->id . ', \'edit\')" class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
+                                   <i class="fa fa-edit"></i>
+                          </a>';
                         $edit_btn = '<a href="javascript:void(0);"  onclick="getElModal(' . $row->id . ', \'edit\')" class="btn btn-icon btn-active-primary btn-light-primary mx-1 w-30px h-30px" > 
-                                    <i class="fa fa-edit"></i>
+                                      <i class="fa fa-plus" aria-hidden="true"></i>
                                 </a>';
                         $view_btn = '<a href="javascript:void(0);"  onclick="getElModal(' . $row->id . ', \'view\')" class="btn btn-icon btn-active-info btn-light-info mx-1 w-30px h-30px" >  
                                     <i class="fa fa-eye"></i>
                                 </a>';
                     
                     
-                    return $edit_btn . $view_btn;
+                    return $add_btn. $edit_btn . $view_btn;
                 })
                 ->rawColumns(['action']);
            return $datatables->make(true);
         }
         return view('pages.staff.registration.el_information.index', compact('breadcrums'));
+    }
+   public function StaffElsummaryAdd(Request $request)
+    {
+        $id = $request->id;
+        $type = $request->type;
+        $info = [];
+        $title = $type.' EL Entry';
+        if (isset($id) && !empty($id)) {
+            $info = StaffLeaveMapping::find($id);
+            $title =  $type.' EL Entry';
+          
+        }
+        //dd($info );
+        $content = view('pages.staff.registration.el_information.add', compact('info', 'title','type'));
+        return view('layouts.modal.dynamic_modal', compact('content', 'title'));
+    }
+    public function StaffElAdd(Request $request)
+    {
+        $id = $request->id;
+        $info = StaffLeaveMapping::find($id);
+        if(!$info){
+          return 'not fount';
+        }
+        $info->no_of_leave=$request->no_of_leave;
+        //$info->update();        
+        
+        return true;
     }
      public function StaffElsummaryEdit(Request $request)
     {

@@ -240,8 +240,20 @@
                             </a>
                         @endif
                     </div>
+                  
                 </div>
-                
+                <div class="col-lg-4">
+                    <label class="form-label ">Status</label>
+                    <select name="status" class="select2-option">
+                            <option value="" selected>--Select Status--</option>
+                            <option value="active"   @if (isset($staff_details->status) && $staff_details->status == 'active') selected @endif>Active</option>
+                            <option value="inactive"   @if (isset($staff_details->status) && $staff_details->status == 'inactive') selected @endif>In Active</option>
+                            <option value="transferred"  @if (isset($staff_details->status) && $staff_details->status == 'transferred') selected @endif>Transferred</option>
+                            <option value="retired"   @if (isset($staff_details->status) && $staff_details->status =='retired') selected @endif>Retired</option>
+                            <option value="resigned"   @if (isset($staff_details->status) && $staff_details->status == 'resigned') selected @endif>Resigned</option>
+                            <option value="expired"   @if (isset($staff_details->status) && $staff_details->status == 'expired') selected @endif>Expired</option>
+                        </select>
+                    </div>
                 <div class="row">
 
                     <div class="col-lg-4 mb-5">
