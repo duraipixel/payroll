@@ -3,7 +3,9 @@
         <tr>
             <th class="text-center"><small class="fw-bold">Staff Name</small></th>
             <th class="text-center"><small class="fw-bold">EMP code</small></th>
+            @if( Route::currentRouteName() !="reports.attendance.export")
             <th class="text-center"><small class="fw-bold">Profile </small></th>
+            @endif
             <th class="text-center"><small class="fw-bold">Designation </small></th>
             @for ($i = 1; $i <= $no_of_days; $i++)
                 <th class="text-center"><small class="fw-bold">{{ $i }}</small></th>
@@ -33,7 +35,9 @@
             @endphp
                 <td><small style="font-size: 10px">{{ $item->name }}</small></td>
                 <td><small style="font-size: 10px">{{ $item->society_emp_code }}</small></td>
+                @if( Route::currentRouteName() !="reports.attendance.export")
                 <td><small style="font-size: 10px"><img src="{{$image}}" style="width:30px;height:30px;"></small></td>
+                @endif
                 <td><small style="font-size: 10px">{{ $item->position->designation->name ??''}}</small></td>
                 @php
                 $present=0;
