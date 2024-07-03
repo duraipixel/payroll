@@ -52,7 +52,7 @@
                         onclick="changeTransferStatus('rejected')">
                         Reject
                     </button>
-                    @if (access()->buttonAccess('staff.transfer.add', 'add_edit'))
+                    @if (access()->buttonAccess('staff.transfer', 'add_edit'))
                     <a href="{{ route('staff.transfer.add') }}" class="btn btn-primary btn-sm ms-3" >
                         Add New transfer
                     </a>
