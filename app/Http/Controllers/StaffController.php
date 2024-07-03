@@ -1067,13 +1067,14 @@ class StaffController extends Controller
                 ])
                
                 ->when(!empty($staff_datable_search), function ($q) use ($search_text) {
-                    $q->where('users.name', 'like', "%{$search_text}%")
-                        ->orWhere('users.status', 'like', "%{$search_text}%")
-                        ->orWhere('users.email', 'like', "%{$search_text}%")
-                        ->orWhere('users.emp_code', 'like', "%{$search_text}%")
-                        ->orWhere('users.society_emp_code', 'like', "%{$search_text}%")
-                        ->orWhere('users.institute_emp_code', 'like', "%{$search_text}%")
-                        ->orWhere('users.first_name_tamil', 'like', "%{$search_text}%");
+                    $q->where('users.id',$search_text);
+                    // $q->where('users.name', 'like', "%{$search_text}%")
+                        // ->orWhere('users.status', 'like', "%{$search_text}%")
+                        // ->orWhere('users.email', 'like', "%{$search_text}%")
+                        // ->orWhere('users.emp_code', 'like', "%{$search_text}%")
+                        // ->orWhere('users.society_emp_code', 'like', "%{$search_text}%")
+                        // ->orWhere('users.institute_emp_code', 'like', "%{$search_text}%")
+                        // ->orWhere('users.first_name_tamil', 'like', "%{$search_text}%");
                 })
                 ->when(!empty( $verification_status ), function($q) use($verification_status){
                     $q->where('users.verification_status', $verification_status);
@@ -1209,8 +1210,9 @@ class StaffController extends Controller
 
             return json_encode($get_json_data);
         }
+        $users=User::where('status','!=','inactive')->get();
         $institutions = Institution::where('status', 'active')->get();
-        return view('pages.staff.list', compact('breadcrums', 'institutions'));
+        return view('pages.staff.list', compact('breadcrums', 'institutions','users'));
     }
 
     public function list1(Request $request)
