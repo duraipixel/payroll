@@ -1185,7 +1185,7 @@ class StaffController extends Controller
                     } else {
                         $edit_btn = '';
                         $del_btn = '';
-                        $status_btn = '<a href="javascript:void(0);" class="badge badge-light-success" ">' . ucfirst($post_val->transfer_status) . '</a>';
+                        $status_btn = '<a href="javascript:void(0);" class="badge badge-light-danger" ">' . ucfirst($post_val->transfer_status) . '</a>';
 
                     }
                                 
