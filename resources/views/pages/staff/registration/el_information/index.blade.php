@@ -244,25 +244,5 @@
                 }
             })
     }
-    $("#el_submit").on('click',function(event){
-    var formdata = $("#add_el").serialize();
-      event.preventDefault()
-        $("#submit").attr("disabled", 'disabled');
-      $.ajax({
-        url   :"{{route('staff.el.add')}}",
-        type  :"POST",
-        data  :formdata,
-        cache :false,
-        success:function(result){
-          $("#add_el")[0].reset();
-          $('#kt_dynamic_app').modal('hide');
-          toastr.success("El Updated successfully");
-        $("#el_submit").removeAttr("disabled");
-        dtTable.draw();
-        },error: function(xhr, err) {
-        $("#el_submit").removeAttr("disabled");         
-        }
-      });
-      
-    });
+   
 </script>
