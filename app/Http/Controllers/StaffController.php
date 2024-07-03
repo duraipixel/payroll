@@ -625,6 +625,9 @@ class StaffController extends Controller
              * 2.insert in staff_bank_details
              * 3.insert in staff_pf_esi_details
              */
+            if(isset($request->status) && !empty($request->status)){
+                $staff_info->status=$request->status;
+            }
             $staff_info->is_super_admin=$request->is_super_admin;
             $staff_info->save();
             $ins['academic_id'] = $academic_id;
@@ -1064,13 +1067,14 @@ class StaffController extends Controller
                 ])
                
                 ->when(!empty($staff_datable_search), function ($q) use ($search_text) {
-                    $q->where('users.name', 'like', "%{$search_text}%")
-                        ->orWhere('users.status', 'like', "%{$search_text}%")
-                        ->orWhere('users.email', 'like', "%{$search_text}%")
-                        ->orWhere('users.emp_code', 'like', "%{$search_text}%")
-                        ->orWhere('users.society_emp_code', 'like', "%{$search_text}%")
-                        ->orWhere('users.institute_emp_code', 'like', "%{$search_text}%")
-                        ->orWhere('users.first_name_tamil', 'like', "%{$search_text}%");
+                    $q->where('users.id',$search_text);
+                    // $q->where('users.name', 'like', "%{$search_text}%")
+                        // ->orWhere('users.status', 'like', "%{$search_text}%")
+                        // ->orWhere('users.email', 'like', "%{$search_text}%")
+                        // ->orWhere('users.emp_code', 'like', "%{$search_text}%")
+                        // ->orWhere('users.society_emp_code', 'like', "%{$search_text}%")
+                        // ->orWhere('users.institute_emp_code', 'like', "%{$search_text}%")
+                        // ->orWhere('users.first_name_tamil', 'like', "%{$search_text}%");
                 })
                 ->when(!empty( $verification_status ), function($q) use($verification_status){
                     $q->where('users.verification_status', $verification_status);
@@ -1170,8 +1174,14 @@ class StaffController extends Controller
                  $route_name = request()->route()->getName();
                    
                     if( access()->buttonAccess($route_name, 'add_edit') &&  $post_val->transfer_status == 'active' ){
-
-                        $status_btn = '<a href="javascript:void(0);" class="badge badge-light-' . (($post_val->status == 'active') ? 'success' : 'danger') . '" tooltip="Click to ' . ucwords($post_val->status) . '" onclick="return staffChangeStatus(' . $post_val->id . ',\'' . ($post_val->status == 'active' ? 'inactive' : 'active') . '\')">' . ucfirst($post_val->status) . '</a>';
+                        $status_class = ($post_val->status == 'active') ? 'success' :
+                        (in_array($post_val->status, ['resigned', 'retired', 'expired']) ? 'danger' :
+                        ($post_val->status == 'transferred' ? 'primary' : 'warning'));
+                        $status_btn = '<a href="javascript:void(0);" class="badge badge-light-' . $status_class . '" tooltip="Click to ' . ucwords($post_val->status) . '"';
+                        if ($post_val->status == 'active' || $post_val->status == 'inactive') {
+                            $status_btn .= ' onclick="return staffChangeStatus(' . $post_val->id . ', \'' . ($post_val->status == 'active' ? 'inactive' : 'active') . '\')"';
+                        }
+                        $status_btn .= '>' . ucfirst($post_val->status) . '</a>';
                     } else {
                         $edit_btn = '';
                         $del_btn = '';
@@ -1200,8 +1210,9 @@ class StaffController extends Controller
 
             return json_encode($get_json_data);
         }
+        $users=User::where('status','!=','inactive')->get();
         $institutions = Institution::where('status', 'active')->get();
-        return view('pages.staff.list', compact('breadcrums', 'institutions'));
+        return view('pages.staff.list', compact('breadcrums', 'institutions','users'));
     }
 
     public function list1(Request $request)

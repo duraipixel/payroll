@@ -25,11 +25,24 @@
 
                             {!! searchSvg() !!}
                         </span>
-                        <input type="text" name="datatable_search" data-kt-user-table-filter="search"
+                        <!-- <input type="text" name="datatable_search" data-kt-user-table-filter="search"
                             id="staff_datable_search" class="form-control  w-250px ps-14"
-                            placeholder="Search user">
-                    </div>&nbsp;&nbsp; 
+                            placeholder="Search user"> -->
+                            <div class="form-group mx-3 w-300px">
+                        <select name="staff_datable_search" id="staff_datable_search" class="form-control form-control-sm ">
+                            <option value="">All</option>
+                            @isset($users)
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}"  data-image="{{ asset('public/storage/' .$user->image) }}" @if (isset($staff_datable_search) && $staff_datable_search == $user->id) selected @endif >
+                                        {{ $user->name }} - {{ $user->institute_emp_code }}
+                                    </option>
+                                @endforeach
+                            @endisset
+                        </select>
 
+                    </div>
+                    </div>&nbsp;&nbsp; 
+                    
                     <div class="form-group">
                         <select name="verification_status" id="verification_status" class="form-control">
                             <option value=""> All Profile Status </option>
@@ -48,7 +61,7 @@
                             <option value=""> All Institution </option>
                             @if (isset($institutions) && !empty($institutions))
                                 @foreach ($institutions as $item)
-                                    <option value="{{ $item->id }}"> {{ $item->name }}</option>
+                                <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             @endif
                         </select>
@@ -117,6 +130,23 @@
 
 @section('add_on_script')
     <script> 
+        $(document).ready(function() {
+        $('#staff_datable_search').select2({
+             theme: 'bootstrap-5',
+            templateResult: formatOption
+        });
+
+        function formatOption(option) {
+            if (!option.id) {
+                return option.text;
+            }
+             console.log($(option.element).data('image') );
+            var $option = $(
+                '<span><img src="' + $(option.element).data('image') + '" class="img-option"style="height:30px;width:30px;"/> ' + option.text + '</span>'
+            );
+            return $option;
+        }
+    });
 $('#page_search').val(1);
         var staff_Table = $('#staff_table').DataTable({
             processing: true,
@@ -169,10 +199,12 @@ $('#page_search').val(1);
             ]
 
         });
-        
-        document.querySelector('#staff_datable_search').addEventListener("keyup", function(e) {
+        $('#staff_datable_search').change(function() {
             staff_Table.ajax.reload();
-        });
+        })
+        // document.querySelector('#staff_datable_search').addEventListener("keyup", function(e) {
+        //     staff_Table.ajax.reload();
+        // });
         document.querySelector('#verification_status').addEventListener("change", function(e) {
             staff_Table.ajax.reload();
         });

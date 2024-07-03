@@ -139,7 +139,7 @@ class LeaveController extends Controller
             }
             $all_days =  sizeof($days);
             $leave_days = sizeof($days) - ($holidays->count());
-          if($request->leave_type !=2){
+          if($request->leave_type !=2 && $request->leave_type !=4){
             $total_days=array_diff($days,$leave);
             
            }else{
