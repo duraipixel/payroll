@@ -20,6 +20,7 @@ class EnsureUserHasAccess
             if( auth()->user()->is_super_admin ) {
 
             } else {
+                
                 if( !access()->check_access($access_menu) ) {
                     abort(403);
                 }

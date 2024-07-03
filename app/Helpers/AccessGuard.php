@@ -127,6 +127,7 @@ class AccessGuard
 
                 }
             }
+          
             $module = implode('.', $module_route);
         }
         
@@ -135,7 +136,9 @@ class AccessGuard
             if (isset($module) && !empty($module)) {
 
                 if (!empty($permission_module)) {
-                    
+                    if(in_array($module,['staff.transfer','staff.transfer.add','staff.transfer.do','staff.transfer.modal','staff.transfer.status','get.institute.staff'])) {
+                        $module='staff.transfer';
+                    }
                     if ($permission_module == 'add_edit') {
                         $menu_check = Permission::where('role_id', $role_id)->where('add_edit_menu', '1')->where('route_name', $module)->first();
                     } else if ($permission_module == 'view') {
