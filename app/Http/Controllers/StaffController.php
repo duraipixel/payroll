@@ -1210,7 +1210,7 @@ class StaffController extends Controller
 
             return json_encode($get_json_data);
         }
-        $users=User::where('status','!=','inactive')->get();
+        $users=User::where('institute_id', $datatable_institute_id)->get();
         $institutions = Institution::where('status', 'active')->get();
         return view('pages.staff.list', compact('breadcrums', 'institutions','users'));
     }
