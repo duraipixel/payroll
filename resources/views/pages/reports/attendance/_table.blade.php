@@ -3,6 +3,8 @@
         <tr>
             <th class="text-center"><small class="fw-bold">Staff Name</small></th>
             <th class="text-center"><small class="fw-bold">EMP code</small></th>
+            <th class="text-center"><small class="fw-bold">Profile </small></th>
+            <th class="text-center"><small class="fw-bold">Designation </small></th>
             @for ($i = 1; $i <= $no_of_days; $i++)
                 <th class="text-center"><small class="fw-bold">{{ $i }}</small></th>
             @endfor
@@ -18,8 +20,21 @@
         @foreach ($attendance as $item)
        
             <tr>
+            @php
+            $profile_image='';
+            if (isset($item->image) && !empty($item->image)) {
+                $profile_image=storage_path('app/public/' . $item->image);
+            }
+            if(file_exists($profile_image)){
+            $image=asset('public/storage/' .$item->image);
+            }else{
+            $image=url('/').'/assets/images/no_Image.jpg';
+            }
+            @endphp
                 <td><small style="font-size: 10px">{{ $item->name }}</small></td>
                 <td><small style="font-size: 10px">{{ $item->society_emp_code }}</small></td>
+                <td><small style="font-size: 10px"><img src="{{$image}}" style="width:30px;height:30px;"></small></td>
+                <td><small style="font-size: 10px">{{ $item->position->designation->name ??''}}</small></td>
                 @php
                 $present=0;
                 $month_total= getAttendanceYearMonth(date('m', strtotime($start_date)),date('Y', strtotime($start_date)));
