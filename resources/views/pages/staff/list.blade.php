@@ -33,7 +33,18 @@
                             <option value="">All</option>
                             @isset($users)
                                 @foreach ($users as $user)
-                                    <option value="{{ $user->id }}"  data-image="{{ asset('public/storage/' .$user->image) }}" @if (isset($staff_datable_search) && $staff_datable_search == $user->id) selected @endif >
+                                @php
+                                $profile_image='';
+                            if (isset($user->image) && !empty($user->image)) {
+                                $profile_image=storage_path('app/public/' . $user->image);
+                            }
+                            if(file_exists($profile_image)){
+                            $image=asset('public/storage/' .$user->image);
+                            }else{
+                            $image=url('/').'/assets/images/no_Image.jpg';
+                            }
+                            @endphp
+                                    <option value="{{ $user->id }}"  data-image="{{$image}}" @if (isset($staff_datable_search) && $staff_datable_search == $user->id) selected @endif >
                                         {{ $user->name }} - {{ $user->institute_emp_code }}
                                     </option>
                                 @endforeach
