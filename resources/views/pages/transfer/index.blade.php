@@ -52,6 +52,12 @@
                         onclick="changeTransferStatus('rejected')">
                         Reject
                     </button>
+                    @php
+                $route_name = request()
+                    ->route()
+                    ->getName();
+                
+            @endphp
                     @if (access()->buttonAccess($route_name, 'add_edit'))
                     <a href="{{ route('staff.transfer.add') }}" class="btn btn-primary btn-sm ms-3" >
                         Add New transfer
