@@ -101,10 +101,10 @@
                                         Institution Code
                                     </th>
                                     <th class="px-3 text-white">
-                                        Email
+                                        Designation
                                     </th>
                                     <th class="px-3 text-white">
-                                        Mobile No
+                                       Profile
                                     </th>
                                     <th class="px-3 text-white">
                                         Status
@@ -169,13 +169,13 @@
                     name: 'institute_emp_code'
                 },
                 {
-                    data: 'email',
-                    name: 'email'
+                    data: 'Designation',
+                    name: 'Designation'
                 },
 
                 {
-                    data: 'phone_no',
-                    name: 'phone_no'
+                    data: 'Profile',
+                    name: 'Profile'
                 },
                 {
                     data: 'status',

@@ -96,17 +96,28 @@ class StaffTransferController extends Controller
                         $status = '<input type="checkbox" role="button" name="transfer[]" class="transfer_check" value="' . $row->id . '">';
                         return $status;
                     })
-                    ->editColumn('email', function ($row) {
-                        return $row->personal?->email ?? 'n/a';
+                    ->editColumn('Designation', function ($row) {
+                        return $row->position->designation->name ?? '';
                     })
-                    ->editColumn('phone_no', function ($row) {
-                        return $row->personal?->phone_no ?? 'n/a';
+                    ->editColumn('Profile', function ($row) {
+                        $profile_image = '';
+                        if (isset($row->image) && !empty($row->image)) {
+                            $profile_image = storage_path('app/public/' . $row->image);
+                        }
+                        
+                        if (file_exists($profile_image)) {
+                            $image = asset('public/storage/' . $row->image);
+                        } else {
+                            $image = url('/assets/images/no_Image.jpg');
+                        }
+                        
+                        return '<img src="' . $image . '" style="width:30px;height:30px;">';
                     })
                     ->editColumn('status', function ($row) {
                         $status = '<a href="javascript:void(0);" class="badge badge-light-' . (($row->status == 'active') ? 'success' : 'danger') . '" ">' . ucfirst($row->status) . '</a>';
                         return $status;
                     })
-                    ->rawColumns(['status', 'checkbox']);
+                    ->rawColumns(['status', 'checkbox','Profile']);
                 return $datatables->make(true);
             }
         } else {
