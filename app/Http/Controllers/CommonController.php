@@ -329,6 +329,7 @@ class CommonController extends Controller
                             <th>Type</th>
                             <th>Allocated</th>
                             <th>Availed</th>
+                             <th>Balance</th>
                         </tr>
                     </thead>
                     <tbody>'.$tbody_view.
