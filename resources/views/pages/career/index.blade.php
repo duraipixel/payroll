@@ -60,6 +60,12 @@
                                     Emp Code
                                 </th>
                                 <th class="text-center text-white">
+                                Designation
+                                </th>
+                                <th class="text-center text-white">
+                                Profile
+                                </th>
+                                <th class="text-center text-white">
                                     Reason
                                 </th>
                                 <th class="text-center text-white">
@@ -114,6 +120,14 @@
                 {
                     data: 'staff.society_emp_code',
                     name: 'staff.society_emp_code'
+                },
+                {
+                    data: 'Designation',
+                    name: 'Designation'
+                },
+                {
+                    data: 'Profile',
+                    name: 'Profile'
                 },
                 {
                     data: 'reason',

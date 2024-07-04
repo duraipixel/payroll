@@ -58,6 +58,23 @@ class CareerTransitionController extends Controller
                     $created_at = Carbon::createFromFormat('Y-m-d H:i:s', $row['created_at'])->format('d-m-Y');
                     return $created_at;
                 })
+                ->editColumn('Designation', function ($row) {
+                    return $row->staff->position->designation->name ?? '';
+                })
+                ->editColumn('Profile', function ($row) {
+                    $profile_image = '';
+                    if (isset($row->staff) && !empty($row->staff->image)) {
+                        $profile_image = storage_path('app/public/' . $row->staff->image);
+                    }
+                    
+                    if (file_exists($profile_image)) {
+                        $image = asset('public/storage/' . $row->staff->image);
+                    } else {
+                        $image = url('/assets/images/no_Image.jpg');
+                    }
+                    
+                    return '<img src="' . $image . '" style="width:30px;height:30px;">';
+                })
                 ->addColumn('action', function ($row) {
                     $route_name = request()->route()->getName();
                     $edit_btn = $del_btn = '';
@@ -72,7 +89,7 @@ class CareerTransitionController extends Controller
                     }
                     return $edit_btn . $del_btn;
                 })
-                ->rawColumns(['action', 'status']);
+                ->rawColumns(['action', 'status','Profile']);
             return $datatables->make(true);
         }
 

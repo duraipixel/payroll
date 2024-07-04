@@ -80,6 +80,23 @@ class GratuityController extends Controller
                     $created_at = ucwords(str_replace('_', ' ', $row['cause_of_ending_service']));
                     return $created_at;
                 })
+                ->editColumn('Designation', function ($row) {
+                    return $row->staff->position->designation->name ?? '';
+                })
+                ->editColumn('Profile', function ($row) {
+                    $profile_image = '';
+                    if (isset($row->staff) && !empty($row->staff->image)) {
+                        $profile_image = storage_path('app/public/' . $row->staff->image);
+                    }
+                    
+                    if (file_exists($profile_image)) {
+                        $image = asset('public/storage/' . $row->staff->image);
+                    } else {
+                        $image = url('/assets/images/no_Image.jpg');
+                    }
+                    
+                    return '<img src="' . $image . '" style="width:30px;height:30px;">';
+                })
                 ->addColumn('action', function ($row) use($page_type) {
                     $route_name = request()->route()->getName();
                     if (access()->buttonAccess($route_name, 'add_edit')) {
@@ -97,7 +114,7 @@ class GratuityController extends Controller
                     }
                     return $edit_btn . $del_btn;
                 })
-                ->rawColumns(['action', 'verification_status']);
+                ->rawColumns(['action', 'verification_status','Profile']);
             return $datatables->make(true);
         }
 
