@@ -1084,6 +1084,9 @@ error: function(error) {
           }
         });
         $('#leave_data').empty();
+        $('#leave_approvel').hide();
+        var tabledata = $('#leave_approvel');
+        tabledata.empty();
         $.ajax({
           url: "{{ route('get.staff.leave.info') }}",
           type: 'POST',
@@ -1103,6 +1106,7 @@ error: function(error) {
 //$('#staff_name').attr('disabled', true);
               $('#input-close').removeClass('d-none');
               $('#reporting_id').val(res.data?.reporting?.name);
+              $('#leave_approvel').show();
               var tabledata = $('#leave_approvel');
               
               tabledata.append('');
