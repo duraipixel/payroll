@@ -65,6 +65,12 @@
                                     Emp Code
                                 </th>
                                 <th class="text-center text-white">
+                                Designation
+                                </th>
+                                <th class="text-center text-white">
+                                Profile
+                                </th>
+                                <th class="text-center text-white">
                                     Cause of ending Service
                                 </th>
                                 <th class="text-center text-white">
@@ -124,6 +130,14 @@
                 {
                     data: 'staff.institute_emp_code',
                     name: 'emp_code'
+                },
+                {
+                    data: 'Designation',
+                    name: 'Designation'
+                },
+                {
+                    data: 'Profile',
+                    name: 'Profile'
                 },
                 {
                     data: 'cause_of_ending_service',
