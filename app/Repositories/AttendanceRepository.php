@@ -92,6 +92,23 @@ class AttendanceRepository extends Controller
                  $leave_status = '<a href="javascript:void(0);" class="small btn btn-sm btn-light-'.$class.'">'.$text.'</a>';
                 return $leave_status;
             })
+            ->editColumn('Designation', function ($row) {
+                return $row->user->position->designation->name ?? '';
+            })
+            ->editColumn('Profile', function ($row) {
+                $profile_image = '';
+                if (isset($row->user) && !empty($row->user->image)) {
+                    $profile_image = storage_path('app/public/' . $row->user->image);
+                }
+                
+                if (file_exists($profile_image)) {
+                    $image = asset('public/storage/' . $row->user->image);
+                } else {
+                    $image = url('/assets/images/no_Image.jpg');
+                }
+                
+                return '<img src="' . $image . '" style="width:30px;height:30px;">';
+            })
             ->addColumn('action', function ($row) {
                 $route_name = request()->route()->getName();
                 $edit_btn = $del_btn = '';
@@ -107,7 +124,7 @@ class AttendanceRepository extends Controller
 
                 return $edit_btn . $del_btn;
             })
-            ->rawColumns(['action', 'status', 'leave_status','leave_type']);
+            ->rawColumns(['action', 'status', 'leave_status','leave_type','Profile']);
         return $datatables->make(true);
     }
 }

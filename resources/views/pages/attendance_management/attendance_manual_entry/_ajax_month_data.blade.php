@@ -62,6 +62,12 @@
                                 Staff Code
                             </th>
                             <th class=" text-white px-2">
+                            Designation
+                            </th>
+                            <th class=" text-white px-2">
+                            Profile
+                            </th>
+                            <th class=" text-white px-2">
                                 From Time
                             </th>
                             <th class=" text-white px-2">
@@ -131,6 +137,14 @@
             {
                 data: 'institute_emp_code',
                 name: 'institute_emp_code'
+            },
+            {
+                data: 'Designation',
+                name: 'Designation'
+            },
+            {
+                data: 'Profile',
+                name: 'Profile'
             },
             {
                 data: 'from_time',
