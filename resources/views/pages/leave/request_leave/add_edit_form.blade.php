@@ -1097,12 +1097,14 @@ error: function(error) {
               $('#designation').val(res.data?.position?.designation?.name);
               $('#staff_id').val(res.data.id);
               $('#staff_name').val(res.data.name);
+              $('#staff_image').show();
               $('#staff_image').attr('src', '{{ env('IMAGE_URL') }}/' + res.data.image);
               $('#typeadd-panel').addClass('d-none');
 //$('#staff_name').attr('disabled', true);
               $('#input-close').removeClass('d-none');
               $('#reporting_id').val(res.data?.reporting?.name);
               var tabledata = $('#leave_approvel');
+              
               tabledata.append('');
               tabledata.append(res.leave_view);
               tabledata.on('click', '#taken_data1', handleEyeIconClick);
@@ -1120,6 +1122,7 @@ error: function(error) {
         $('#typeadd-panel').removeClass('d-none');
         $('#staff_name').attr('disabled', false);
         $('#input-close').addClass('d-none');
+        $('#staff_image').hide();
         $('#reporting_id').val('');
       })
 
