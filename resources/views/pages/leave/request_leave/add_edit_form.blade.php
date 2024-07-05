@@ -1159,7 +1159,10 @@ error: function(error) {
             leave_type: leave_type
           },
           success: function(response) {
-
+          if(response.type=='retired'){
+            alert('Staff is Resigned/Retired');
+            window.location.reload();
+          }else{
             $('#edittable').empty();
             $('#edittable').hide();
             $('#old_table').show();
@@ -1173,6 +1176,7 @@ error: function(error) {
               '</tr>';
               tableBody.append(row);
             });
+          }
 
           }
         })
