@@ -24,6 +24,7 @@ use App\Models\Master\Designation;
 use Illuminate\Support\Facades\Session;
 use App\Models\AcademicYear;
 use App\Helpers\NotificationHelper;
+use App\Models\Staff\StaffRetiredResignedDetail;
 class LeaveController extends Controller
 {   
     public function Leavedocument(Request $request,$id){
@@ -109,6 +110,10 @@ class LeaveController extends Controller
 
         if ($request->ajax()) {
             $staff_id = $request->staff_id;
+            $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$request->leave_start)->pluck('staff_id');
+            if(count($resigned)>0 && in_array((int)$staff_id,$resigned->toArray())){
+                return response()->json(['type'=>'retired']);   
+            }
                 $period = CarbonPeriod::create($request->leave_start, $request->leave_end);
                 $period->toArray();
 
@@ -145,7 +150,7 @@ class LeaveController extends Controller
            }else{
             $total_days =$days;
            }
-            return response()->json(['leave_days' => $leave_days, 'total_days' => $total_days]);
+            return response()->json(['type'=>'leave' ,'leave_days' => $leave_days, 'total_days' => $total_days]);
             //return sizeof($days);
             // $age = array("dates"=>$days, "leaves"=>$leaves, "holidays"=>$holidays, "week_off"=>$week_off);
             // return json_encode($age);
