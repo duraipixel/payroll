@@ -15,6 +15,7 @@ use App\Models\Leave\StaffLeave;
 use Barryvdh\DomPDF\Facade\Pdf;
 use \NumberFormatter;
 use App\Models\AcademicYear;
+use App\Models\Staff\StaffRetiredResignedDetail;
 class CommonController extends Controller
 {    
     public function numberToWord($num = '')
@@ -268,8 +269,8 @@ class CommonController extends Controller
         $query = $request['query'];
         $data = [];
         if( $query ) {
-
-            $data = User::with('position.designation')
+            $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',date('Y-m-d'))->pluck('staff_id');
+            $data = User::whereNotIn('id',$resigned)->with('position.designation')
                         ->where(function($q) use($query) {
                             $q->where('name', 'like', "%{$query}%");
                             $q->orWhere('emp_code', 'like', "%{$query}%");

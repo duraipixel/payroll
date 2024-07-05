@@ -56,8 +56,9 @@ class ReportController extends Controller
     }
 
     function attendance_collection($request, $date,$date_month='') {
+        $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$date_month['start_date'])->pluck('staff_id');
         $place_of_work=$request->place_of_work;
-        $query=User::where('institute_id', session()->get('staff_institute_id'))
+        $query=User::whereNotIn('id',$resigned)->where('institute_id', session()->get('staff_institute_id'))
         ->with(['Attendance' => function ($query) use ($date_month) {
             $query->whereBetween('attendance_date', [$date_month['start_date'], $date_month['end_date']]);
         }])
@@ -73,7 +74,7 @@ class ReportController extends Controller
             $query->whereHas('appointment', function ($q) use ($place_of_work) {
                 $q->where('place_of_work_id', $place_of_work);
             });
-        })->distinct();
+        })->where('transfer_status','active')->distinct();
        
         return $query;
     }
