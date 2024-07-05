@@ -506,11 +506,13 @@ class SettingsController extends Controller
       }
       return true;
     }
-    public function UserEntrylevelLeave($user_id)
+    public function UserEntrylevelLeave($user_id,$nature_id)
     {
         
       ini_set("max_execution_time", 0);
-      $user = User::find($user_id);
+      $user = User::with(['TeachingAppointment' => function ($query) use ($nature_id) {
+        $query->where('nature_of_employment_id',$nature_id);
+        }])->find($user_id);
       $years = [];
       if (isset($user->TeachingAppointment)) {
         $years = getYearsBetween(
