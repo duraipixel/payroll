@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Leave\StaffLeave;
 use Barryvdh\DomPDF\Facade\Pdf;
 use \NumberFormatter;
+use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\AcademicYear;
 class CommonController extends Controller
 {    
@@ -290,6 +291,12 @@ class CommonController extends Controller
     function getStaffLeaveInfo(Request $request) {
         
         $staff_id = $request['staff_id'];
+        if(isset($request->date) && !empty($request->date)){
+        $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$request->date)->pluck('staff_id');
+            if(count($resigned)>0 && in_array((int)$staff_id,$resigned->toArray())){
+                return array('type'=>'retired','data' => '','leave_view'=>'');  
+        }
+        }
         $academic=AcademicYear::find(academicYearId());
         $data = User::with(['position.designation', 'reporting'])->find($staff_id);
         $leave_count=0;
@@ -341,7 +348,7 @@ class CommonController extends Controller
             <!-- Placeholder content for the right column -->
         </div>
     </div>';
-        return array('data' => $data,'leave_view'=>$leave_view);
+        return array('type'=>'staff','data' => $data,'leave_view'=>$leave_view);
     }
 
     public function getLeaveForm(Request $request)
