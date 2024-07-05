@@ -277,7 +277,7 @@ class CommonController extends Controller
                             $q->orWhere('society_emp_code', 'like', "%{$query}%");
                         })
                         ->InstituteBased()
-                        ->where(['status' => 'active', 'transfer_status' => 'active'])
+                        ->where(['status' => 'active'])
                         // ->Academic()                       
                         ->get();
 
