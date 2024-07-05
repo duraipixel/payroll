@@ -1078,6 +1078,18 @@ error: function(error) {
             })
       }
       function getStaffLeaveInfo(staff_id) {   
+        var requested_value =document.getElementById("requested_date").value;
+        var start_date ='';
+        if(requested_value){
+        let [startDateStr, endDateStr] = requested_value.split(" - ");
+          function formatDate(dateStr) {
+              let [day, month, year] = dateStr.split("/");
+              month = month.length === 1 ? '0' + month : month;
+              day = day.length === 1 ? '0' + day : day;
+              return `${year}-${month}-${day}`;
+          }
+           start_date = formatDate(startDateStr);
+        }
         $.ajaxSetup({
           headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -1092,10 +1104,25 @@ error: function(error) {
           type: 'POST',
           data: {
             staff_id: staff_id,
+            date:start_date
           },
           success: function(res) {
-
-            if (res.data) {
+          if(res.type && res.type=='retired'){
+            Swal.fire({
+                text: "Staff is Resigned/Retired",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "Refresh",
+                customClass: {
+                    confirmButton: "btn btn-danger",
+                }
+            }).then(function(result) {
+           
+            window.location.reload();
+            });
+          }
+            if (res.data && res.type=='staff') {
               $('#staff_code').val(res.data.institute_emp_code);
               $('#designation').val(res.data?.position?.designation?.name);
               $('#staff_id').val(res.data.id);
@@ -1160,8 +1187,19 @@ error: function(error) {
           },
           success: function(response) {
           if(response.type=='retired'){
-            alert('Staff is Resigned/Retired');
+            Swal.fire({
+                text: "Staff is Resigned/Retired",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "Refresh",
+                customClass: {
+                    confirmButton: "btn btn-danger",
+                }
+            }).then(function(result) {
+           
             window.location.reload();
+            });
           }else{
             $('#edittable').empty();
             $('#edittable').hide();
