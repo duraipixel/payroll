@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AttendanceManagement\AttendanceManualEntry;
 use Carbon\Carbon;
 use DataTables;
+use App\Models\Staff\StaffRetiredResignedDetail;
 
 class AttendanceRepository extends Controller
 {
@@ -17,8 +18,8 @@ class AttendanceRepository extends Controller
         $start_date = date('Y-m-1',  strtotime($attendance_date ));
         $ends_date = date('Y-m-t',  strtotime($attendance_date ));
         $attendance_status = $request['attendance_status'] ?? '';
-        
-        $data = AttendanceManualEntry::select('attendance_manual_entries.*', 'users.name as staff_name', 'leave_statuses.name as leave_status_name')
+        $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$start_date)->pluck('staff_id');
+        $data = AttendanceManualEntry::whereNotIn('employment_id',$resigned)->select('attendance_manual_entries.*', 'users.name as staff_name', 'leave_statuses.name as leave_status_name')
             ->leftJoin('users', 'users.id', '=', 'attendance_manual_entries.employment_id')
             ->leftJoin('leave_statuses', 'leave_statuses.id', '=', 'attendance_manual_entries.attendance_status_id')
             ->where('attendance_date', '>=', $start_date )
