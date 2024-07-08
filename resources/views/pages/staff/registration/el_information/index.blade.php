@@ -75,7 +75,7 @@
                 </div>
             </div>
         </div>
-    <form action="{{ route('reports.el.entry.export',['user_id'=>$staff_details ? $staff_details->id : 0]) }}" class="input-group w-auto d-inline"method="GET">
+  
         <div class="card-header border-0">
             <div class="card-title">
                 <!-- <div class="d-flex align-items-center position-relative my-1">
@@ -91,17 +91,23 @@
                             ->route()
                             ->getName();
                     @endphp
-        
-              <button onclick="this.form.action = '{{ route('reports.el.entry.export',['user_id'=>$staff_details ? $staff_details->id : 0]) }}'" type="submit"
+                    <form method="POST" action="{{ route('staff.el.gentrate', ['id'=>$staff_details ? $staff_details->id : 0]) }}">
+                        @csrf
+                    <button  type="submit"
+                    class="btn btn-sm btn-success"> <i class="fa fa-spinner" aria-hidden="true"></i> &nbsp; Gentrate</button>
+                    </form>
+                    &nbsp;&nbsp;
+                    <form action="{{ route('reports.el.entry.export',['user_id'=>$staff_details ? $staff_details->id : 0]) }}" class="input-group w-auto d-inline"method="GET">
+              <button onclick="this.form.action = '{{ route('reports.el.entry.export',['user_id'=>$staff_details ? $staff_details->id : 0]) }}'" 
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
-            
+                            </form>
                             &nbsp;&nbsp;
                 </div>
                 
                             &nbsp;&nbsp;
             </div>
         </div>
-    </form>
+  
   <div class="card-body py-4">
         <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
             <div class="table-responsive">

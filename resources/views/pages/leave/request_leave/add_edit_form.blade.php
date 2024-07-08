@@ -1128,7 +1128,7 @@ error: function(error) {
               $('#staff_id').val(res.data.id);
               $('#staff_name').val(res.data.name);
               $('#staff_image').show();
-              $('#staff_image').attr('src', '{{ env('IMAGE_URL') }}/' + res.data.image);
+              $('#staff_image').attr('src', res.image);
               $('#typeadd-panel').addClass('d-none');
 //$('#staff_name').attr('disabled', true);
               $('#input-close').removeClass('d-none');
