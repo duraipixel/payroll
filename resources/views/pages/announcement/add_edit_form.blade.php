@@ -23,7 +23,7 @@
                     Select Type 
                 </label>
                 <div >
-                    <select name="type" class="form-control" id="type" onchange="return typeCheck();">
+                    <select name="type" class="form-control announcement_type" id="type" onchange="return typeCheck();">
                         <option value="">--Select Announcement Type--</option>
                         <option data-id="1"
                         @if(isset($info->announcement_type) && $info->announcement_type == 'Full Time') selected @endif
@@ -174,6 +174,21 @@
 </div>
 </div>
 <script>
+   $(document).ready(function() {
+        $('#institute_id').select2({
+            width: '100%' ,
+            placeholder: 'Select an Institute',
+        dropdownParent: $('#dynamic_form'),
+        theme: 'bootstrap-5',
+    });
+    $('.announcement_type').select2({
+            width: '100%' ,
+            placeholder: 'Select an Announcement Type',
+        dropdownParent: $('#dynamic_form'),
+        theme: 'bootstrap-5',
+    });
+  });
+  
     function typeCheck()
     {
         var type_id=$('#type option:selected').data('id');

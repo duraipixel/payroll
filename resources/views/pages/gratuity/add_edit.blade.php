@@ -143,6 +143,9 @@
 
 @section('add_on_script')
     <script>
+        $('#staff_id').select2({
+            theme: 'bootstrap-5'
+        });
         function getStaffGratuityFormDetails(staff_id) {
 
             $.ajaxSetup({

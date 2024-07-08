@@ -3,7 +3,6 @@
     @include('layouts.parts.breadcrum')
 @endsection
 @section('content')
-
 <div class="card">
     <div class="card-header border-0 pt-6">
         <div class="card-title">

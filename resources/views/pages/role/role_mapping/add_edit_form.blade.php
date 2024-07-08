@@ -57,6 +57,20 @@
 </form>
 
 <script>
+$(document).ready(function() {
+   $('#staff_id').select2({
+        theme: 'bootstrap-5',
+        width: '100%',
+            placeholder: 'Select an Staff',
+        dropdownParent: $('#dynamic_form')
+    });
+    $('#role_id').select2({
+            width: '100%' ,
+            placeholder: 'Select an Role',
+        dropdownParent: $('#dynamic_form'),
+        theme: 'bootstrap-5',
+    });
+  });
     var from = '{{ $from ?? '' }}';
 
 var KTAppEcommerceSaveBranch = function () {
