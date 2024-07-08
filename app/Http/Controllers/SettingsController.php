@@ -820,5 +820,133 @@ class SettingsController extends Controller
       }
       return true;
     }
+    public function UserEntrylevelGentrate($user_id)
+    {
+        
+      ini_set("max_execution_time", 0);
+      $user = User::find($user_id);
+      $years = [];
+      if (isset($user->firstAppointment)) {
+        $years = getYearsBetween(
+          date("Y", strtotime($user->firstAppointment->from_appointment)),
+          date("Y")
+        );
+      }
+      if (count($years) > 0) {
+        foreach ($years as $year) {
+          $acadamic_id = AcademicYear::where("from_year", $year)->first();
+          $calender_id = CalenderYear::where("year", $year)->first();
+          if (
+            isset($user->firstAppointment) &&
+            isset($user->firstAppointment->leaveAllocated) &&
+            count($user->firstAppointment->leaveAllocated) > 0 &&
+            isset($acadamic_id)
+          ) {
+            foreach (
+              $user->firstAppointment->leaveAllocated
+              as $leaveAllocated
+            ) {
+              if($leaveAllocated->teaching_type==$user->firstAppointment->teaching_type_id){
+              $new["staff_id"] = $user->id;
+              $new["leave_head_id"] = $leaveAllocated->leave_head_id;
+              $new["no_of_leave_actual"] =
+              $leaveAllocated->leave_days;
+              if (
+                $leaveAllocated->carry_forward == "yes" &&
+                $leaveAllocated->leave_head_id == 2
+              ) {
+                $previous_data = StaffLeaveMapping::where(
+                  "staff_id",
+                  $user->id
+                )->where("leave_head_id",2)
+                ->where("calender_id", $calender_id->id - 1)
+                ->first();
+                $total = leaveData(
+                  $user->id,
+                  $year,
+                  "Earned Leave"
+                );
+                $manual_entry = StaffELEntry::where(
+                  "staff_id",
+                  $user->id
+                )
+                ->where("academic_id", $acadamic_id->id)
+                ->select(
+                  DB::raw("SUM(leave_days) as total_days")
+                )
+                ->first();
+                if ($previous_data) {
+                  $data_p = StaffLeaveMapping::where(
+                    "staff_id",
+                    $user->id
+                  )->where("leave_head_id",2)
+                  ->where("calender_id", $calender_id->id)
+                  ->first();
+               
+                  if(isset($data_p) && (int)$leaveAllocated->leave_days != (int)$data_p->no_of_leave){
+                    $leave_total=$data_p->no_of_leave;
+                  }else{
+                    $leave_total=$leaveAllocated->leave_days;
+                  }
+                  $new["carry_forward_count"] =
+                  $previous_data->carry_forward_count +
+                  $leave_total -
+                  $total -
+                  $manual_entry->total_days;
+                  $new["accumulated"] =
+                  (int) $previous_data->carry_forward_count +
+                  $leave_total ??
+                  0;
+                  $new["no_of_leave"] = $leave_total;
+                } else {
+                  
+                  $data_p = StaffLeaveMapping::where(
+                    "staff_id",
+                    $user->id
+                  )->where("leave_head_id",2)
+                  ->where("calender_id", $calender_id->id)
+                  ->first();
+                  if(isset($data_p) &&  (int)$leaveAllocated->leave_days !=  (int)$data_p->no_of_leave){
+                    $n_leave_days=$data_p->no_of_leave;
+                  }else{
+                    $n_leave_days=$leaveAllocated->leave_days/2;
+                  }
+                  $new["carry_forward_count"] =
+                  $n_leave_days -
+                  $total -
+                  $manual_entry->total_days;
+                  $new["accumulated"] =
+                  (int) $n_leave_days ?? 0;
+                   $new["no_of_leave"] = $n_leave_days;
+                }
+                $new["availed"] =
+                (int) $total +
+                (int) $manual_entry->total_days ??
+                0;
+               
+               
+              } else {
+                $new["carry_forward_count"] = 0;
+              }
+             
+  
+              $new["acadamic_id"] = $acadamic_id->id;
+              $new["calender_id"] = $calender_id->id;
+              StaffLeaveMapping::updateOrCreate(
+                [
+                  "staff_id" => $user->id,
+                  "acadamic_id" => $acadamic_id->id,
+                   "leave_head_id" =>
+                    $leaveAllocated->leave_head_id,
+                ],
+                $new
+              );
+            }
+           }
+          }
+        }
+      }
+      return redirect()->route('staff.register', ['id' => $user_id]);
+    }
     
 }

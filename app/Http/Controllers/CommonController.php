@@ -348,7 +348,16 @@ class CommonController extends Controller
             <!-- Placeholder content for the right column -->
         </div>
     </div>';
-        return array('type'=>'staff','data' => $data,'leave_view'=>$leave_view);
+    $profile_image='';
+    if (isset($data->image) && !empty($data->image)) {
+        $profile_image=storage_path('app/public/' . $data->image);
+    }
+    if(file_exists($profile_image)){
+    $image=asset('public/storage/' .$data->image);
+    }else{
+    $image=url('/').'/assets/images/no_Image.jpg';
+    }
+        return array('type'=>'staff','data' => $data,'leave_view'=>$leave_view,'image'=>$image);
     }
 
     public function getLeaveForm(Request $request)

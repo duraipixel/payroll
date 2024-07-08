@@ -7,7 +7,7 @@ use App\Http\Controllers\ReportController;
 
  Route::get('leave/document/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'Leavedocument'])->name('leave.document');
  Route::get('test/entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserELEntryLeave'])->name('test.entry');
- 
+ Route::post('staff/el-gentrate/{id}', [App\Http\Controllers\SettingsController::class, 'UserEntrylevelGentrate'])->name('staff.el.gentrate');
  Route::get('test/el-entry/{id}/{nature_id}', [App\Http\Controllers\SettingsController::class, 'UserEntrylevelLeave'])->name('test.el.entry');
 Route::get('staff/leave-entry', [App\Http\Controllers\SettingsController::class, 'AutoloadEntryLeave'])->name('staff.leave.entry');
 Route::get('staff/leave-entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserAutoloadEntryLeave'])->name('staff.single.leave.entry');
