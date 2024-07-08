@@ -514,10 +514,25 @@
                     </ul>
                   </div>
                   <br>
+                  
                   @if(isset($info->staff_info) && isset($info->staff_info->image))
-                  <img id="staff_image" src="{{ env('IMAGE_URL') . '/' . $info->staff_info->image }}" style="width:25%;">
+                  @php
+                      $profile_image='';
+                      if (isset($info->staff_info->image) && !empty($info->staff_info->image)) {
+                          $profile_image=storage_path('app/public/' . $info->staff_info->image);
+                      }
+                      if(file_exists($profile_image)){
+                      $image=asset('public/storage/' .$info->staff_info->image);
+                      }else{
+                      $image=url('/').'/assets/images/no_Image.jpg';
+                      }
+                  @endphp
+                  <img id="staff_image" src="{{ $image }}" style="width:25%;">
                   @else
-                  <img id="staff_image" src="" style="width:25%;">
+                  @php
+                  $image=url('/').'/assets/images/no_Image.jpg';
+                  @endphp
+                  <img id="staff_image" src="{{ $image }}" style="width:25%;">
                   @endif
                 </div>
               </div>
