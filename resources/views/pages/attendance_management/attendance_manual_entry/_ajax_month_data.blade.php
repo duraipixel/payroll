@@ -108,6 +108,13 @@
 
 
 <script>
+$(document).ready(function() {
+    $('#attendance_status').select2({
+        width: '100%' ,
+        placeholder: 'Select an Attendance Status',
+        theme: 'bootstrap-5',
+    });
+});
     var dtTable = $('#attendance_manual_entry_table').DataTable({
 
         processing: true,
