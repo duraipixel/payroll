@@ -171,8 +171,19 @@ class SettingsController extends Controller
         if(!$info){
           return 'not fount';
         }
+        $before=StaffLeaveMapping::where('leave_head_id',2)->where('staff_id',$info->staff_id)
+                         ->where('id', '<', $id)
+                         ->get()->last();
+        if(isset($before) && !empty($before) && !empty($before->accumulated)){
+        $info->accumulated =(int)$before->accumulated+(int)$request->el_granted;
+        $info->carry_forward_count=(int)$request->el_granted+(int)$before->carry_forward_count;
+        }else{
+        $info->accumulated=(int)$request->el_granted;
+        $info->carry_forward_count=(int)$request->el_granted;
+        }
         $info->no_of_leave=$request->el_granted;
-        if($info->save()){
+       
+        if($info->update()){
           $this->TestELEntry($info->staff_id);
         }      
         return true;
@@ -186,6 +197,7 @@ class SettingsController extends Controller
         if (isset($id) && !empty($id) && $type !='single') {
             $info = StaffLeaveMapping::with('elentries')->find($id);
             $title =  $type.' EL Summary';
+          
           
         }else{
           $info = StaffELEntry::find($id);
@@ -822,7 +834,8 @@ class SettingsController extends Controller
     }
     public function UserEntrylevelGentrate($user_id)
     {
-        
+      StaffLeaveMapping::where("staff_id",$user_id)->delete();
+
       ini_set("max_execution_time", 0);
       $user = User::find($user_id);
       $years = [];
@@ -842,11 +855,14 @@ class SettingsController extends Controller
             count($user->firstAppointment->leaveAllocated) > 0 &&
             isset($acadamic_id)
           ) {
+           
             foreach (
               $user->firstAppointment->leaveAllocated
               as $leaveAllocated
             ) {
+             
               if($leaveAllocated->teaching_type==$user->firstAppointment->teaching_type_id){
+              
               $new["staff_id"] = $user->id;
               $new["leave_head_id"] = $leaveAllocated->leave_head_id;
               $new["no_of_leave_actual"] =
@@ -876,6 +892,7 @@ class SettingsController extends Controller
                 )
                 ->first();
                 if ($previous_data) {
+                  
                   $data_p = StaffLeaveMapping::where(
                     "staff_id",
                     $user->id
@@ -899,7 +916,7 @@ class SettingsController extends Controller
                   0;
                   $new["no_of_leave"] = $leave_total;
                 } else {
-                  
+                 
                   $data_p = StaffLeaveMapping::where(
                     "staff_id",
                     $user->id
@@ -909,7 +926,14 @@ class SettingsController extends Controller
                   if(isset($data_p) &&  (int)$leaveAllocated->leave_days !=  (int)$data_p->no_of_leave){
                     $n_leave_days=$data_p->no_of_leave;
                   }else{
+                    $month=Carbon::parse($user->firstAppointment->from_appointment)->month;
+                  
+                    if($month >= 1 && $month <= 6){
+                    $n_leave_days=$leaveAllocated->leave_days;
+                    }else{
+                     
                     $n_leave_days=$leaveAllocated->leave_days/2;
+                    }
                   }
                   $new["carry_forward_count"] =
                   $n_leave_days -
@@ -927,6 +951,15 @@ class SettingsController extends Controller
                
               } else {
                 $new["carry_forward_count"] = 0;
+                $month=Carbon::parse($user->firstAppointment->from_appointment)->month;
+                    if($month >= 1 && $month <= 6){
+                      $new["no_of_leave"]=$leaveAllocated->leave_days;
+                      $new["accumulated"] =$leaveAllocated->leave_days;
+                    }else{
+                    $new["no_of_leave"]=$leaveAllocated->leave_days/2;
+                    $new["accumulated"] =$leaveAllocated->leave_days/2;
+                    }
+                   
               }
              
   
