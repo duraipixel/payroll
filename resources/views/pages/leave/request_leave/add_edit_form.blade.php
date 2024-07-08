@@ -532,7 +532,9 @@
                   @php
                   $image=url('/').'/assets/images/no_Image.jpg';
                   @endphp
+                  @if(request()->route()->getName() !='leaves.add')
                   <img id="staff_image" src="{{ $image }}" style="width:25%;">
+                  @endif
                   @endif
                 </div>
               </div>

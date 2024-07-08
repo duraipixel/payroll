@@ -146,6 +146,11 @@
              theme: 'bootstrap-5',
             templateResult: formatOption
         });
+        $('#verification_status').select2({
+        width: '100%' ,
+        placeholder: 'Select an Status',
+        theme: 'bootstrap-5',
+        });
 
         function formatOption(option) {
             if (!option.id) {
