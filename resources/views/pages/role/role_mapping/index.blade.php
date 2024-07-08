@@ -10,6 +10,7 @@
     #role_mapping_table th {
         padding: 5px;
     }
+
 </style>
 <div class="card">
     <div class="card-header border-0 pt-6">

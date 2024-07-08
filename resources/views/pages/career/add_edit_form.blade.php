@@ -7,8 +7,8 @@
             Staff Name
         </label>
         <div>
-            <select class="form-control" name="staff_id" id="staff_id">
-                <option value="">--select--</option>
+            <select class="form-control staff_select2" name="staff_id" id="staff_id" data-width="100%">
+                <option value=""></option>
                 @if (isset($users) && !empty($users))
                     @foreach ($users as $item)
                         <option value="{{ $item->id }}" @if( isset( $info->staff_id ) && $info->staff_id == $item->id ) selected @endif> {{ $item->name }} - {{ $item->institute_emp_code }} </option>
@@ -90,6 +90,14 @@
 </form>
 
 <script>
+     $(document).ready(function() {
+        $('.staff_select2').select2({
+            width: '100%' ,
+            placeholder: 'Select an Staff',
+        dropdownParent: $('#dynamic_form'),
+        theme: 'bootstrap-5',
+    });
+  });
     function validateCareerForm() {
         var careerform_error = false;
 
