@@ -132,11 +132,20 @@
 </form>
 
 <script>
+     $(document).ready(function() {
     $('#employee_id').select2({ 
         dropdownParent: $('#kt_dynamic_app'),
         theme: 'bootstrap-5',
         width: '100%'
     });
+   
+    $('#leave_status_id').select2({
+        dropdownParent: $('#kt_dynamic_app'),
+        width: '100%' ,
+        placeholder: 'Select an Leave Status',
+        theme: 'bootstrap-5',
+    });
+});
     var KTAppEcommerceSaveLeaveMapping = function() {
         const handleSubmit = () => {
             // Define variables
