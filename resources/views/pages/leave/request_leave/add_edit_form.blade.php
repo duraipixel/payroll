@@ -529,12 +529,7 @@
                   @endphp
                   <img id="staff_image" src="{{ $image }}" style="width:25%;">
                   @else
-                  @php
-                  $image=url('/').'/assets/images/no_Image.jpg';
-                  @endphp
-                  @if(request()->route()->getName() !='leaves.add')
-                  <img id="staff_image" src="{{ $image }}" style="width:25%;">
-                  @endif
+                  <img id="staff_image" src="" style="width:25%;">
                   @endif
                 </div>
               </div>
