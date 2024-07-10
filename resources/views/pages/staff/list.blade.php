@@ -154,7 +154,7 @@
             }
              console.log($(option.element).data('image') );
             var $option = $(
-                '<span><img src="' + $(option.element).data('image') + '" class="img-option"style="height:30px;width:30px;"/> ' + option.text + '</span>'
+                '<span><img src="' + $(option.element).data('image') + '" class="img-option"style="height:45px;width:70px;"/> ' + option.text + '</span>'
             );
             return $option;
         }
