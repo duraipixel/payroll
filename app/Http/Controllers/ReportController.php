@@ -58,6 +58,7 @@ class ReportController extends Controller
     function attendance_collection($request, $date,$date_month='') {
         $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$date_month['start_date'])->pluck('staff_id');
         $place_of_work=$request->place_of_work;
+        $department_id=$request->department_id;
         $query=User::whereNotIn('id',$resigned)->where('institute_id', session()->get('staff_institute_id'))
         ->with(['Attendance' => function ($query) use ($date_month) {
             $query->whereBetween('attendance_date', [$date_month['start_date'], $date_month['end_date']]);
@@ -70,9 +71,19 @@ class ReportController extends Controller
                 $query->where('place_of_work_id', $place_of_work);
             }
         }])
+        ->with(['position' => function ($query) use ($department_id) {
+            if (!is_null($department_id)) {
+                $query->where('department_id', $department_id);
+            }
+        }])
+        ->when(!is_null($department_id), function ($query) use ($department_id) {
+            $query->whereHas('position', function ($q) use ($department_id) {
+                $q->where('department_id', $department_id);
+            });
+        })
         ->when(!is_null($place_of_work), function ($query) use ($place_of_work) {
             $query->whereHas('appointment', function ($q) use ($place_of_work) {
-                $q->where('place_of_work_id', $place_of_work);
+                $q->where('department_id', $place_of_work);
             });
         })->where('transfer_status','active')->distinct();
        
@@ -87,8 +98,10 @@ class ReportController extends Controller
         $parameters = [
         'month' => $month,
         'place_of_work' => $request->place_of_work,
+        'department_id'=>$request->department_id,
         ];
         $academic_info = AcademicYear::find( academicYearId());
+        $department = Department::where('status', 'active')->orderBy('name', 'asc')->get();
         if( $academic_info ) {
             $from_year = $academic_info->from_year.'-'.$month.'-01';
             $start_date = date('Y-m-d', strtotime($from_year) );
@@ -97,6 +110,7 @@ class ReportController extends Controller
         }
 
         $place_of_work = $request->place_of_work ?? null;
+        $department_id=$request->department_id?? null;
         $date          = getStartAndEndDateOfYear($year);
         $date_month          = getStartAndEndDateOfMonth($month,$year);
         $month_days    = monthDays($month,$year);
@@ -104,7 +118,7 @@ class ReportController extends Controller
         $perPage = (!empty($request->limit) && $request->limit === 'all') ? 100000000000000000000 : $request->limit;
         $attendance    = $this->attendance_collection($request,$date,$date_month)->paginate($perPage);
        
-        return view('pages.reports.attendance._index', compact('attendance', 'month_days','month','place_of_work', 'start_date', 'no_of_days','parameters'));
+        return view('pages.reports.attendance._index', compact('department','attendance', 'month_days','month','place_of_work', 'start_date', 'no_of_days','parameters','department_id'));
     }
 
     function attendance_export(Request $request) {
