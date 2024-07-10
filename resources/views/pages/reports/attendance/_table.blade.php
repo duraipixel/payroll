@@ -7,6 +7,7 @@
             <th class="text-center"><small class="fw-bold">Profile </small></th>
             @endif
             <th class="text-center"><small class="fw-bold">Designation </small></th>
+            <th class="text-center"><small class="fw-bold">Department </small></th>
             @for ($i = 1; $i <= $no_of_days; $i++)
                 <th class="text-center"><small class="fw-bold">{{ $i }}</small></th>
             @endfor
@@ -39,6 +40,7 @@
                 <td><small style="font-size: 10px"><img src="{{$image}}" style="width:30px;height:30px;"></small></td>
                 @endif
                 <td><small style="font-size: 10px">{{ $item->position->designation->name ??''}}</small></td>
+                <td><small style="font-size: 10px">@if(isset($item->position->department)) {{ $item->position->department->name }} @endif</small></td>
                 @php
                 $present=0;
                 $month_total= getAttendanceYearMonth(date('m', strtotime($start_date)),date('Y', strtotime($start_date)));
