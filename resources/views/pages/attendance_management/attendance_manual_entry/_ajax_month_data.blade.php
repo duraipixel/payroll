@@ -18,7 +18,9 @@
                     <option value="Absence">Absence</option>
                 </select>
             </div>
+            
         </div>
+        
         <div class="card-toolbar">
             <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
                 @php
@@ -41,6 +43,14 @@
 
             
         </div>
+        <div class="card-title">
+            <label>From date</label>
+             <input type="date" id="from_date"
+            class="form-control form-control-solid w-250px ps-14">
+            <label>To date</label>
+            <input type="date" id="to_date"
+            class="form-control form-control-solid w-250px ps-14" placeholder="To date">
+    </div>
         <!--end::Card toolbar-->
     </div>
 
@@ -108,13 +118,13 @@
 
 
 <script>
-$(document).ready(function() {
-    $('#attendance_status').select2({
-        width: '100%' ,
-        placeholder: 'Select an Attendance Status',
-        theme: 'bootstrap-5',
-    });
-});
+// $(document).ready(function() {
+//     $('#attendance_status').select2({
+//         width: '100%' ,
+//         placeholder: 'Select an Attendance Status',
+//         theme: 'bootstrap-5',
+//     });
+// });
     var dtTable = $('#attendance_manual_entry_table').DataTable({
 
         processing: true,
@@ -129,6 +139,8 @@ $(document).ready(function() {
                 d.datatable_search = $('#leave_mapping_dataTable_search').val();
                 d.dates = '{{ $dates }}';
                 d.attendance_status = $('#attendance_status').val();
+                d.from_date = $('#from_date').val();
+                d.to_date = $('#to_date').val();
             }
         },
 
@@ -224,6 +236,10 @@ $(document).ready(function() {
     $('#search-form').on('reset', function(e) {
         $('select[name=filter_status]').val(0).change();
 
+        dtTable.draw();
+        e.preventDefault();
+    });
+    $('#from_date, #to_date').on('change', function(e) {
         dtTable.draw();
         e.preventDefault();
     });

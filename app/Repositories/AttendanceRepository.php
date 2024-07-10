@@ -15,6 +15,8 @@ class AttendanceRepository extends Controller
     {
         
         $attendance_date = $request['dates'];
+        $from_date =$request['from_date'];
+        $to_date = $request['to_date'];
         $start_date = date('Y-m-1',  strtotime($attendance_date ));
         $ends_date = date('Y-m-t',  strtotime($attendance_date ));
         $attendance_status = $request['attendance_status'] ?? '';
@@ -26,6 +28,8 @@ class AttendanceRepository extends Controller
             ->where('attendance_date', '<=', $ends_date )
             ->when(!empty( $attendance_status), function($q) use($attendance_status) {
                 $q->where('attendance_status', $attendance_status);
+            })->when(!empty($from_date) && !empty($to_date), function($q) use($from_date, $to_date) {
+                $q->whereBetween('attendance_date',[$from_date, $to_date]);
             })
             ->where('users.institute_id', session()->get('staff_institute_id'));
 
