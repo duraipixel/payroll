@@ -11,7 +11,16 @@
         #staff_table_filter {
             display: none;
         }
-      
+        .select2-container--default .select2-selection--single {
+            min-width: 200px; /* Adjust the minimum width as needed */
+        }
+
+        .select2-results__option {
+            overflow: hidden;
+            text-overflow: ellipsis; /* Adds ellipsis (...) to indicate truncated text */
+            white-space: nowrap; /* Prevents text from wrapping */
+            font-size: 14px; /* Adjust font size as needed */
+        }
       
     </style>
     <div class="card">
@@ -145,6 +154,7 @@
         $(document).ready(function() {
         $('#staff_datable_search').select2({
              theme: 'bootstrap-5',
+             width: 'resolve' ,
             templateResult: formatOption,
             
         });
