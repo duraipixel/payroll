@@ -44,8 +44,8 @@
         data-kt-menu-placement="bottom-end">
 
         <a href="#"> 
-        <i class="fas fa-bell" style="font-size: 40px;"></i>
-        <span class="badge bg-danger badgebell"> {{ auth()->user()->count ?? 0}}</span> 
+        <i class="fas fa-bell" style="font-size: 35px;"></i>
+        <span class="badge bg-danger badgebell" style="font-size: 10px;"> {{ auth()->user()->count ?? 0}}</span> 
         </a>
         </div>&nbsp; &nbsp;
             <div class="btn p-0 px-2 btn-light d-flex align-items-center justify-content-center">

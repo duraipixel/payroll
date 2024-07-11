@@ -3236,7 +3236,7 @@ textarea.form-control-lg {
 }
 
 .input-group> :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
-  margin-left: -1px;
+  margin-left: 12px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }

@@ -12,6 +12,7 @@
             display: none;
         }
       
+      
     </style>
     <div class="card">
 
@@ -45,7 +46,7 @@
                             }
                             @endphp
                                     <option value="{{ $user->id }}"  data-image="{{$image}}" @if (isset($staff_datable_search) && $staff_datable_search == $user->id) selected @endif >
-                                        {{ $user->name }} - {{ $user->institute_emp_code }}
+                                       {{ $user->name }} - {{ $user->institute_emp_code }}
                                     </option>
                                 @endforeach
                             @endisset
@@ -144,9 +145,9 @@
         $(document).ready(function() {
         $('#staff_datable_search').select2({
              theme: 'bootstrap-5',
-            templateResult: formatOption
+            templateResult: formatOption,
+            
         });
-      
 
         function formatOption(option) {
             if (!option.id) {
@@ -154,7 +155,7 @@
             }
              console.log($(option.element).data('image') );
             var $option = $(
-                '<span><img src="' + $(option.element).data('image') + '" class="img-option"style="height:45px;width:70px;"/> ' + option.text + '</span>'
+                '<span><img src="' + $(option.element).data('image') + '" class="img-option"style="height:64px;width:64px;"/> ' + option.text + '</span>'
             );
             return $option;
         }
