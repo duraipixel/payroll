@@ -11,6 +11,16 @@
         #staff_table_filter {
             display: none;
         }
+        .select2-container--default .select2-selection--single {
+            min-width: 200px; /* Adjust the minimum width as needed */
+        }
+
+        .select2-results__option {
+            overflow: hidden;
+            text-overflow: ellipsis; /* Adds ellipsis (...) to indicate truncated text */
+            white-space: nowrap; /* Prevents text from wrapping */
+            font-size: 14px; /* Adjust font size as needed */
+        }
       
     </style>
     <div class="card">
@@ -45,7 +55,7 @@
                             }
                             @endphp
                                     <option value="{{ $user->id }}"  data-image="{{$image}}" @if (isset($staff_datable_search) && $staff_datable_search == $user->id) selected @endif >
-                                        {{ $user->name }} - {{ $user->institute_emp_code }}
+                                       {{ $user->name }} - {{ $user->institute_emp_code }}
                                     </option>
                                 @endforeach
                             @endisset
@@ -144,9 +154,10 @@
         $(document).ready(function() {
         $('#staff_datable_search').select2({
              theme: 'bootstrap-5',
-            templateResult: formatOption
+             width: 'resolve' ,
+            templateResult: formatOption,
+            
         });
-      
 
         function formatOption(option) {
             if (!option.id) {
@@ -154,7 +165,7 @@
             }
              console.log($(option.element).data('image') );
             var $option = $(
-                '<span><img src="' + $(option.element).data('image') + '" class="img-option"style="height:45px;width:70px;"/> ' + option.text + '</span>'
+                '<span><img src="' + $(option.element).data('image') + '" class="img-option"style="height:64px;width:64px;"/> ' + option.text + '</span>'
             );
             return $option;
         }
