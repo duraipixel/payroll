@@ -834,7 +834,7 @@ class SettingsController extends Controller
     }
     public function UserEntrylevelGentrate($user_id)
     {
-      StaffLeaveMapping::where("staff_id",$user_id)->delete();
+      //StaffLeaveMapping::where("staff_id",$user_id)->delete();
 
       ini_set("max_execution_time", 0);
       $user = User::find($user_id);
