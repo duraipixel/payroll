@@ -198,9 +198,11 @@ class SettingsController extends Controller
         if (isset($id) && !empty($id) && $type !='single') {
             $info = StaffLeaveMapping::with('elentries')->find($id);
             $acadamic=AcademicYear::find($info->acadamic_id);
-            $leave_datas=StaffLeave::where('leave_category_id',2)->where('staff_id',$info->staff_id)
-            ->whereYear('from_date',$acadamic->from_year)
-            ->orwhereYear('to_date',$acadamic->from_year)->select('id','staff_id','leave_category','from_date','to_date','granted_days','reason')->where('status','approved')->get();
+            $leave_datas=StaffLeave::where('staff_id',$info->staff_id)->where('leave_category','Earned Leave')->where('leave_category_id',2)
+            ->where(function($query) use ($acadamic) {
+              $query->whereYear('from_date', $acadamic->from_year)
+                    ->orWhereYear('to_date', $acadamic->from_year);
+            })->select('id','staff_id','leave_category','from_date','to_date','granted_days','reason','leave_category_id')->where('status','approved')->get();
            
             $title =  $type.' EL Summary';
           
