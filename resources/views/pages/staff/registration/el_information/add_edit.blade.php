@@ -86,6 +86,46 @@
             @endif
         </tbody>
     </table>
+    <br>
+    <h5>Leave EL Entries</h5>
+    <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
+
+<thead>
+    <tr class="fw-bolder text-muted">
+        <th class="min-w-50px">From Date</th>
+        <th class="min-w-120px">To Date</th>
+        <th class="min-w-120px">Leave Days</th>
+        <th class="min-w-120px">Reason</th>
+    </tr>
+</thead>
+
+<tbody>
+    @if(count($leave_datas)>0)
+    @foreach($leave_datas as $leave_data )
+    <tr>
+        <td class="text-dark fw-bolder text-hover-primary fs-6">
+            {{ date('d-M-Y',strtotime($leave_data->from_date))}}
+        </td>
+
+        <td class="text-dark fw-bolder text-hover-primary fs-6">
+             {{ date('d-M-Y',strtotime($leave_data->to_date))}}
+          
+        </td>
+        <td class="text-dark fw-bolder text-hover-primary fs-6">
+            {{$leave_data->granted_days}}
+
+        </td>
+        <td class="text-dark fw-bolder text-hover-primary fs-6">
+            {{$leave_data->reason}}
+
+        </td>
+     
+    </tr>
+    
+    @endforeach
+    @endif
+</tbody>
+</table>
 </div>
 @endif
 <script>

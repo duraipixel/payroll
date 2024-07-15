@@ -193,9 +193,15 @@ class SettingsController extends Controller
         $id = $request->id;
         $type = $request->type;
         $info = [];
+        $leave_datas=[];
         $title = $type.' EL Summary';
         if (isset($id) && !empty($id) && $type !='single') {
             $info = StaffLeaveMapping::with('elentries')->find($id);
+            $acadamic=AcademicYear::find($info->acadamic_id);
+            $leave_datas=StaffLeave::where('leave_category','Earned Leave')->where('staff_id',$info->staff_id)
+            ->whereYear('from_date',$acadamic->from_year)
+            ->orwhereYear('to_date',$acadamic->to_year)->select('id','staff_id','leave_category','from_date','to_date','granted_days','reason')->where('status','approved')->get();
+           
             $title =  $type.' EL Summary';
           
           
@@ -204,7 +210,7 @@ class SettingsController extends Controller
           $title =  'Edit EL Summary';
         }
         //dd($info );
-        $content = view('pages.staff.registration.el_information.add_edit', compact('info', 'title','type'));
+        $content = view('pages.staff.registration.el_information.add_edit', compact('info', 'title','type','leave_datas'));
         return view('layouts.modal.dynamic_modal', compact('content', 'title'));
     }
      public function AutoloadEntryLeave(Request $request)
