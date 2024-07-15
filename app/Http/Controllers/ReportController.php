@@ -97,7 +97,7 @@ class ReportController extends Controller
             $query->whereHas('appointment', function ($q) use ($place_of_work) {
                 $q->where('department_id', $place_of_work);
             });
-        })->where('transfer_status','active')->distinct();
+        })->where('status','active')->where('transfer_status','active')->distinct();
        
         return $query;
     }

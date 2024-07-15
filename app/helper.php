@@ -1187,14 +1187,18 @@ if (!function_exists('isFemale')) {
 }
 
 function getStaffImage($image_path)
-{
+{    
+    $profile_image='';
     if (isset($image_path) && !empty($image_path)) {
-
-        $profile_image = Storage::url($image_path);
-        return asset('public' . $profile_image);
-    } else {
-        return false;
+    $profile_image=storage_path('app/public/' . $image_path);
     }
+    if(file_exists($profile_image)){
+        return asset('public/storage/' .$image_path);
+    }else{
+        return url('/').'/assets/images/no_Image.jpg';
+    }
+    return false;
+
 }
 
 function reportMenu()
