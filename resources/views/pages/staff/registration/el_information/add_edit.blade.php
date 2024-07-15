@@ -112,7 +112,7 @@
           
         </td>
         <td class="text-dark fw-bolder text-hover-primary fs-6">
-            {{$leave_data->granted_days}}
+            {{ number_format($leave_data->granted_days,1)}}
 
         </td>
         <td class="text-dark fw-bolder text-hover-primary fs-6">
