@@ -20,8 +20,18 @@
                     <form action="{{ route('reports.attendance') }}" class="input-group w-auto d-inline" method="GET">
                         <button onclick="this.form.action = '{{ route('reports.attendance.export') }}'" type="submit"
                             class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+                        <select name="division_id" id="division_id" class="form-select form-select-sm w-auto d-inline" >
+                            <option value="">--Select Division--</option>
+                            @isset($divisions)
+                                @foreach ($divisions as $item)
+                                    <option value="{{ $item->id }}" {{ $item->id == $division_id ? 'selected' : '' }}>
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            @endisset
+                        </select>
                      <select name="department_id"  class="form-select form-select-sm w-auto d-inline" id="department_id"
-                            class="form-select form-select-lg select2-option">
+                           >
                             <option value="">--Select Department--</option>
                             @isset($department)
                                 @foreach ($department as $item)
