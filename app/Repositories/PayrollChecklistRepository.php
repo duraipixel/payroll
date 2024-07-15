@@ -62,29 +62,29 @@ class PayrollChecklistRepository extends Controller
 
     public function getEmployeePendingPayroll()
     {
-
-        $response['pending_approval'] = User::with('appointment')->where('verification_status', 'pending')
-            ->whereNull('is_super_admin')
+        $response['pending_approval'] = User::with('lastAppointment')->where('verification_status', 'pending')
+             ->whereNotNull('society_emp_code') 
             ->where('status', 'active')
             ->where('transfer_status', 'active')
-            ->whereHas('appointment', function ($query) {
-                $query->where(function($query1) {
-                    $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
-                    $query1->orWhere('is_till_active', 'yes');
-                });
-            })->where('institute_id',session()->get('staff_institute_id'))
+            // ->whereHas('lastAppointment', function ($query) {
+            //     $query->where(function($query1) {
+            //         $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+                    
+            //     });
+            // })
             ->count();
 
-        $response['approved'] = User::with('appointment')->where('verification_status', 'approved')
-            ->whereNull('is_super_admin')
+        $response['approved'] = User::with('lastAppointment')->where('verification_status', 'approved')
+        ->where('institute_id',session()->get('staff_institute_id'))
             ->where('status', 'active')
             ->where('transfer_status', 'active')
-            ->whereHas('appointment', function ($query) {
-                $query->where(function($query1) {
-                    $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
-                    $query1->orWhere('is_till_active', 'yes');
-                });
-            })->where('institute_id',session()->get('staff_institute_id'))
+            ->whereNotNull('society_emp_code') 
+            // ->whereHas('lastAppointment', function ($query) {
+            //     $query->where(function($query1) {
+            //         $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+                  
+            //     });
+            // })
             ->count();
         return $response;
     }

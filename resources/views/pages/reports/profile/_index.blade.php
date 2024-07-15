@@ -105,6 +105,7 @@
         getProfileReports();
 
         function getProfileReports() {
+            loading();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -120,8 +121,9 @@
                     loading();
                 },
                 success: function(res) {
+                    loading();
                     $('#profile_report_content').html(res);
-                    unloading();
+                   
                     setTimeout(() => {
                         $('#profile_table').DataTable({
                             dom: 'Blfrtip',
@@ -147,7 +149,13 @@
                             "btn btn-light-primary me-3 btn-sm border shadow-sm border-primary")
                         $('.buttons-excel').removeClass("dt-button  buttons-html5")
                     }, 100);
-                }
+                },
+                error: function(xhr, status, error) {
+                    unloading();
+                },
+                complete: function() {
+                    unloading();
+              }
             })
         }
     </script>
