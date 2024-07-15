@@ -29,6 +29,7 @@ use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\Staff\StaffSalaryPreEarning;
 use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\Master\Division;
+use App\Models\Staff\StaffTransfer;
 class ReportController extends Controller
 {
     public $repository;
@@ -57,11 +58,12 @@ class ReportController extends Controller
     }
 
     function attendance_collection($request, $date,$date_month='') {
-        $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$date_month['start_date'])->pluck('staff_id');
         $place_of_work=$request->place_of_work;
         $department_id=$request->department_id;
         $division_id=$request->division_id;
-        $query=User::whereNotIn('id',$resigned)->where('institute_id', session()->get('staff_institute_id'))
+        $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$date_month['start_date'])->pluck('staff_id');
+        $transfer=StaffTransfer::whereDate('effective_from','<=',$date_month['end_date'])->where('status','approved')->pluck('staff_id');
+        $query=User::whereNotIn('id',$resigned)->whereNotIn('id',$transfer)->where('institute_id', session()->get('staff_institute_id'))
         ->with(['Attendance' => function ($query) use ($date_month) {
             $query->whereBetween('attendance_date', [$date_month['start_date'], $date_month['end_date']]);
         }])
@@ -97,8 +99,7 @@ class ReportController extends Controller
             $query->whereHas('appointment', function ($q) use ($place_of_work) {
                 $q->where('department_id', $place_of_work);
             });
-        })->where('status','active')->where('transfer_status','active')->distinct();
-       
+        })->where('status','!=','inactive')->distinct();
         return $query;
     }
 
