@@ -200,7 +200,7 @@ class SettingsController extends Controller
             $acadamic=AcademicYear::find($info->acadamic_id);
             $leave_datas=StaffLeave::where('leave_category_id',2)->where('staff_id',$info->staff_id)
             ->whereYear('from_date',$acadamic->from_year)
-            ->orwhereYear('to_date',$acadamic->to_year)->select('id','staff_id','leave_category','from_date','to_date','granted_days','reason')->where('status','approved')->get();
+            ->orwhereYear('to_date',$acadamic->from_year)->select('id','staff_id','leave_category','from_date','to_date','granted_days','reason')->where('status','approved')->get();
            
             $title =  $type.' EL Summary';
           
