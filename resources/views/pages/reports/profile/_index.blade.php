@@ -67,6 +67,7 @@
                                     <th>Division</th>
                                 <th>Aadhaar No</th>
                                 <th>Educational </th>
+                                <th>Status </th>
                                 </tr>
                             </thead>
 
