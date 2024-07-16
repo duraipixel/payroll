@@ -2,7 +2,9 @@
 @section('content')
     <section style="min-height: 93vh" class="p-3">
         <div class="card shadow border border-secondary rounded">
-            <div class="bg-light border-bottom p-2 d-flex align-items-center justify-content-between">
+        <div class="bg-light border-bottom p-2 d-flex align-items-center justify-content-between">   <b  >Attendance Report</b>
+       </div>
+        <div class="bg-light border-bottom p-2 d-flex align-items-center justify-content-between">
                 <div>
                     <select name="limit" onchange="setTableLimit(this)" class="border shadow-sm">
                         @for ($i = 0; $i < 10; $i++)
@@ -14,12 +16,11 @@
                         @endfor
                         <option {{ request()->limit === 'all' ? 'selected' : '' }} value="all">All</option>
                     </select>
-                    <b>Attendance Report</b>
-                </div>
-                <div class="d-flex">
+                    &nbsp;&nbsp;&nbsp;
                     <form action="{{ route('reports.attendance') }}" class="input-group w-auto d-inline" method="GET">
-                        <button onclick="this.form.action = '{{ route('reports.attendance.export') }}'" type="submit"
-                            class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
+                     
+                    <input type="text" name="search" placeholder="Search User"  value="{{ request()->input('search') }}" class="form-control w-auto d-inline" style="height: 34.33px;">
+
                         <select name="division_id" id="division_id" class="form-select form-select-sm w-auto d-inline" >
                             <option value="">--Select Division--</option>
                             @isset($divisions)
@@ -48,16 +49,21 @@
                                     {{ $place->name }}</option>
                             @endforeach
                         </select>
-                        <select name="month" class="form-select form-select-sm w-auto d-inline">
+                        
+                        <select name="month" class="form-select form-select-sm w-auto d-inline mt-3">
                             @for ($m = 1; $m <= 12; $m++)
                                 <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
                                     {{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
                             @endfor
                         </select>
+                        <div class="bg-light border-bottom m-2" style="text-align: right;">
+                        <button onclick="this.form.action = '{{ route('reports.attendance.export') }}'" type="submit"
+                        class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
                         <button onclick="this.form.action = '{{ route('reports.attendance') }}';" type="submit"
                             class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Find</button>
                         <a href="{{ route('reports.attendance') }}" class="btn btn-sm btn-warning"><i
                                 class="fa fa-repeat"></i></a>
+                           </div>
                     </form>
                 </div>
             </div>
