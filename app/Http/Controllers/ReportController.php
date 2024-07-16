@@ -60,10 +60,14 @@ class ReportController extends Controller
     function attendance_collection($request, $date,$date_month='') {
         $place_of_work=$request->place_of_work;
         $department_id=$request->department_id;
+        $search=$request->search;
         $division_id=$request->division_id;
         $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$date_month['start_date'])->pluck('staff_id');
         $transfer=StaffTransfer::whereDate('effective_from','<=',$date_month['end_date'])->where('status','approved')->pluck('staff_id');
-        $query=User::whereNotIn('id',$resigned)->whereNotIn('id',$transfer)->where('institute_id', session()->get('staff_institute_id'))
+        $query=User::where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+                ->orWhere('institute_emp_code', 'like', "%{$search}%");
+        })->whereNotIn('id',$resigned)->whereNotIn('id',$transfer)->where('institute_id', session()->get('staff_institute_id'))
         ->with(['Attendance' => function ($query) use ($date_month) {
             $query->whereBetween('attendance_date', [$date_month['start_date'], $date_month['end_date']]);
         }])
@@ -95,9 +99,14 @@ class ReportController extends Controller
                 $q->where('division_id', $division_id);
             });
         })
+        ->when(!is_null($department_id), function ($query) use ($department_id) {
+            $query->whereHas('position', function ($q) use ($department_id) {
+                $q->where('department_id', $department_id);
+            });
+        })
         ->when(!is_null($place_of_work), function ($query) use ($place_of_work) {
             $query->whereHas('appointment', function ($q) use ($place_of_work) {
-                $q->where('department_id', $place_of_work);
+                $q->where('place_of_work_id', $place_of_work);
             });
         })->where('status','!=','inactive')->distinct();
         return $query;
