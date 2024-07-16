@@ -36,7 +36,7 @@
             <td>{{ $item->position->division->name ?? '' }}</td>
             <td>{{ $item->aadhaar->doc_number ?? '' }}</td>
             <td>@if(isset($item->degree)&& count($item->degree)>0)@foreach($item->degree as $index => $degree){{ $degree->course_name }}{{ $index < count($item->degree) - 1 ? ', ' : '' }}@endforeach @endif</td>
-            
+            <td>@if(isset($item->lastAppointment) && isset($item->lastAppointment->work_place ))  {{$item->lastAppointment->work_place->name}} @endif</td>
             <td style="text-transform: capitalize;"> 
                 @if ($item->transfer_status !='active')
                     {{ $item->transfer_status ?? '' }}

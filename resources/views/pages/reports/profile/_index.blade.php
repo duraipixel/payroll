@@ -67,6 +67,7 @@
                                     <th>Division</th>
                                 <th>Aadhaar No</th>
                                 <th>Educational </th>
+                                <th>Place of work</th>
                                 <th>Status </th>
                                 </tr>
                             </thead>
@@ -154,7 +155,7 @@
                     unloading();
                 },
                 complete: function() {
-                    unloading();
+                     unloading();
               }
             })
         }
