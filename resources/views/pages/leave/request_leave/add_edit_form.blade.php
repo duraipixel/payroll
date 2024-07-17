@@ -1202,7 +1202,7 @@ error: function(error) {
             Swal.fire({
                 text: "Staff is Resigned/Retired",
                 icon: "warning",
-                showCancelButton: true,
+                showCancelButton: false,
                 buttonsStyling: false,
                 confirmButtonText: "Refresh",
                 customClass: {

@@ -17,6 +17,7 @@
                             @endforeach
                         @endisset
                     </select>
+                    <lable id="staff_err" class="staff_err" style="color:red">Please choose another Staff This Staff Already Resigned/Retired</label>
                 </div>
             </div>
         </div>
@@ -261,4 +262,35 @@
     KTUtil.onDOMContentLoaded(function() {
         KTAppEcommerceSaveLeaveMapping.init();
     });
+    $("#employee_id,#attendance_date").change(function() {
+        $('#staff_err').addClass('staff_err');
+         getStaffLeaveDays($('#employee_id').val(), $('#attendance_date').val(), $('#attendance_date').val(),'');
+        
+    });
+    function getStaffLeaveDays(staff_id_alt, start_date, end_date,leave_type) {  
+        $.ajaxSetup({
+          headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+        });
+        $("#grid tbody").empty();
+        $.ajax({
+          url: "{{ route('get.staff.leave.available') }}",
+          type: 'POST',
+          data: {
+            staff_id: staff_id_alt,
+            leave_start: start_date,
+            leave_end: end_date,
+            leave_type: leave_type
+          },
+          success: function(response) {
+          if(response.type=='retired'){
+           $('#staff_err').removeClass('staff_err');
+           $('#attendance_date').val('');
+          
+            }
+
+          }
+        })
+      }
 </script>
