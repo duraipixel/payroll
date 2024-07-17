@@ -279,6 +279,7 @@ class CommonController extends Controller
                         })
                         ->InstituteBased()
                         ->where(['status' => 'active'])
+                        ->where('transfer_status' ,'active')
                         // ->Academic()                       
                         ->get();
 
