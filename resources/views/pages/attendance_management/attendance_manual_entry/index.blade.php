@@ -4,7 +4,9 @@
 @endsection
 @section('content')
     <style>
-        
+        .staff_err{
+            display:none;
+        }
     </style>
     <div class="card">
         <div class="month_row d-flex">
