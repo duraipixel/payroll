@@ -29,14 +29,14 @@
             <td>{{ $item->personal->permanent_address ?? '' }}</td>
             <td>{{ $item->personal->marital_status ?? '' }}</td>
             <td>{{ isset($item->personal->marriage_date) && !empty($item->personal->marriage_date ) ? commonDateFormat($item->personal->marriage_date) : '' }}</td>
-             <td>{{ $item->TeachingAppointment->joining_date ?? '' }}</td>
-              <td>{{ $item->short_name ?? '' }}</td>
+            <td>{{ $item->TeachingAppointment->joining_date ?? '' }}</td>
+            <td>{{ $item->short_name ?? '' }}</td>
             <td>{{ $item->personal->pincode ?? '' }}</td>
             <td>{{ $item->position->department->name ?? '' }}</td>
             <td>{{ $item->position->division->name ?? '' }}</td>
             <td>{{ $item->aadhaar->doc_number ?? '' }}</td>
             <td>@if(isset($item->degree)&& count($item->degree)>0)@foreach($item->degree as $index => $degree){{ $degree->course_name }}{{ $index < count($item->degree) - 1 ? ', ' : '' }}@endforeach @endif</td>
-            <td>@if(isset($item->lastAppointment) && isset($item->lastAppointment->work_place ))  {{$item->lastAppointment->work_place->name}} @endif</td>
+            <td>@if(isset($item->lastAppointment) && isset($item->lastAppointment->work_place ))  {{ $item->lastAppointment->work_place->name }} @endif</td>
             <td style="text-transform: capitalize;"> 
                 @if ($item->transfer_status !='active')
                     {{ $item->transfer_status ?? '' }}
