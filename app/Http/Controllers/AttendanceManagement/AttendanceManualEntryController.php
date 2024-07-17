@@ -181,7 +181,7 @@ class AttendanceManualEntryController extends Controller
         $info = [];
         $title = 'Add Attendance Manual Entry';
         $employee_details = User::
-                            where(['status' => 'active', 'transfer_status' => 'active'])
+                            where(['status' => 'active'])
                             ->InstituteBased()->get();
         $leave_status = LeaveStatus::where('status', 'active')->get();
         $leave_heads = LeaveHead::where('status', 'active')->get();
