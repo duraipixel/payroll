@@ -332,7 +332,10 @@ if (!function_exists('generateLeaveForm')) {
     {  
         $leave_info = StaffLeave::find($leave_id);
         $leave_count=0;
-        $taken_leave = StaffLeave::where('staff_id', $leave_info->staff_id)->where('from_date', '<', $leave_info->from_date)->get();
+        $academic=AcademicYear::find(academicYearId());
+        $startDate = Carbon::createFromDate($academic->from_year, 1, 1)->toDateString();
+        $endDate = Carbon::createFromDate($academic->from_year, 12, 31)->toDateString();
+        $taken_leave = StaffLeave::whereBetween('from_date',[$startDate,$endDate])->where('staff_id', $leave_info->staff_id)->where('from_date', '<', $leave_info->from_date)->get();
         foreach($taken_leave as $leave){
             $leave_count+=$leave->granted_days;
 

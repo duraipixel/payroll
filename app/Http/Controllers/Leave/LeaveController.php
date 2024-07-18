@@ -169,7 +169,10 @@ class LeaveController extends Controller
 
         if ($request->ajax()) {
             $institute_id=session()->get('staff_institute_id');
-            $data = StaffLeave::select('staff_leaves.*', 'users.name as staff_name','users.institute_emp_code as institute_code')->with(['staff_info'])
+            $academic=AcademicYear::find(academicYearId());
+            $startDate = Carbon::createFromDate($academic->from_year, 1, 1)->toDateString();
+            $endDate = Carbon::createFromDate($academic->from_year, 12, 31)->toDateString();
+            $data = StaffLeave::whereBetween('from_date',[$startDate,$endDate])->select('staff_leaves.*', 'users.name as staff_name','users.institute_emp_code as institute_code')->with(['staff_info'])
                 ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
              ->when($institute_id, function ($q) use($institute_id) {
             $q->Where('users.institute_id', $institute_id);
