@@ -297,6 +297,10 @@ class CommonController extends Controller
             if(count($resigned)>0 && in_array((int)$staff_id,$resigned->toArray())){
                 return array('type'=>'retired','data' => '','leave_view'=>'');  
         }
+        $transfer=StaffTransfer::where('from_institution_id',session()->get('staff_institute_id'))->whereDate('effective_from','<=',$date_month['end_date'])->where('status','approved')->pluck('staff_id');
+        if(count($transfer)>0 && in_array((int)$staff_id,$transfer->toArray())){
+            return array('type'=>'retired','data' => '','leave_view'=>'');  
+    }
         }
         $academic=AcademicYear::find(academicYearId());
         $data = User::with(['position.designation', 'reporting'])->find($staff_id);
