@@ -354,6 +354,8 @@ class OverviewController extends Controller
          * 2. Make entries in database         
          * 3. Make Payroll Log for payroll generation History
          */
+        ini_set("max_execution_time", 0);
+        ini_set('memory_limit', '-1');
         $total_net_pay = $request->total_net_pay;
         $working_day = $request->working_day;
         $payout_id = $request->payout_id;
@@ -797,7 +799,8 @@ class OverviewController extends Controller
 
     public function exportStatement(Request $request)
     {
-
+        ini_set("max_execution_time", 0);
+        ini_set('memory_limit', '-1');
         $payroll_id = $request->payroll_id;
         $staff_id = $request->staff_id;
 
@@ -815,6 +818,7 @@ class OverviewController extends Controller
         $month_start = date('Y-m-01', strtotime($payroll_date));
         $month_end = date('Y-m-t', strtotime($payroll_date));
         $payout_data = $this->checklistRepository->getToPayEmployee($request->date);
-        return Excel::download(new PayrollTempExport($payout_data,$date,$payout_id,$payroll_date,$month_start,$month_end), 'payroll__temp_statement.xlsx');
+        return Excel::download(new PayrollStatementExport($payout_id,''), 'payroll_statement.xlsx');
+        // return Excel::download(new PayrollTempExport($payout_data,$date,$payout_id,$payroll_date,$month_start,$month_end), 'payroll__temp_statement.xlsx');
     }
 }
