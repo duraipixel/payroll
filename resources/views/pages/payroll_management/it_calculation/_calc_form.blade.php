@@ -171,6 +171,7 @@
         }).then(function(result) {
 
             if (result.value) {
+                loading();
                 var formData = $('#it_statement_form').serialize();
                 var staff_id = $('#staff_id').val();
                 $.ajaxSetup({
@@ -186,7 +187,7 @@
                         $('#it_statement_form').addClass('blur_loading_3px');
                     },
                     success: function(res) {
-
+                        unloading();
                         $('#it_statement_form').removeClass('blur_loading_3px');
                         if (res.error == 1) {
                             toastr.error('Error', res.message);

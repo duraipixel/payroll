@@ -93,16 +93,23 @@ class PayrollChecklistRepository extends Controller
     public function getPendingITEntry()
     {
 
-        $response['verified_user'] = User::with('appointment')->where('verification_status', 'approved')
-            ->whereNull('is_super_admin')
-            ->where('status', 'active')
-            ->where('transfer_status', 'active')
-            ->whereHas('appointment', function ($query) {
-                $query->where(function($query1) {
-                    $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
-                    $query1->orWhere('is_till_active', 'yes');
-                });
-            })->where('institute_id',session()->get('staff_institute_id'))->count();
+        $response['verified_user'] = User::with('appointment')
+        ->where('verification_status', 'approved')
+                ->where('institute_id',session()->get('staff_institute_id'))
+                ->where('status', 'active')
+                ->where('transfer_status', 'active')
+                ->whereNotNull('society_emp_code') 
+                // ->where('verification_status', 'approved')
+                //     ->whereNull('is_super_admin')
+                //     ->where('status', 'active')
+                //     ->where('transfer_status', 'active')
+                //     ->whereHas('appointment', function ($query) {
+                //         $query->where(function($query1) {
+                //             $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+                //             $query1->orWhere('is_till_active', 'yes');
+                //         });
+                    // })->where('institute_id',session()->get('staff_institute_id'))
+            ->count();
         $response['pending_it'] = User::with('appointment')->join('it_staff_statements', 'it_staff_statements.staff_id', '=', 'users.id')
             ->where('verification_status', 'approved')
             ->where('users.status', 'active')
@@ -110,13 +117,14 @@ class PayrollChecklistRepository extends Controller
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
             ->where('it_staff_statements.status', 'active')
             ->where('it_staff_statements.lock_calculation', 'yes')
-            ->whereNull('is_super_admin')
-            ->whereHas('appointment', function ($query) {
-                $query->where(function($query1) {
-                    $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
-                    $query1->orWhere('is_till_active', 'yes');
-                });
-            })->where('institute_id',session()->get('staff_institute_id'))->count();
+            // ->whereNull('is_super_admin')
+            // ->whereHas('appointment', function ($query) {
+            //     $query->where(function($query1) {
+            //         $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+            //         $query1->orWhere('is_till_active', 'yes');
+            //     });
+            // })
+            ->where('institute_id',session()->get('staff_institute_id'))->count();
 
         $process = false;
         if ($response['verified_user'] == $response['pending_it']) {
