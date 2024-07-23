@@ -96,6 +96,7 @@ class LeaveHeadController extends Controller
         $data = '';
         $validator      = Validator::make($request->all(), [
             'leave_head' => 'required|string|unique:leave_heads,name,' . $id .',id,deleted_at,NULL',
+            'leave_code' => 'required|string|unique:leave_heads,code,' . $id .',id,deleted_at,NULL',
         ]);
         
         if ($validator->passes()) {
