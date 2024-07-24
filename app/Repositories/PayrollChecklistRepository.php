@@ -163,7 +163,7 @@ class PayrollChecklistRepository extends Controller
             ->where('verification_status', 'approved')
             ->where('it_staff_statements.academic_id', session()->get('academic_id'))
             ->where('it_staff_statements.status', 'active')
-            ->whereNull('is_super_admin')
+            // ->whereNull('is_super_admin')
             ->where('users.status', 'active')
             ->when($show_resigned === true, function($wquery) use($month_start, $month_end){
 
@@ -178,12 +178,12 @@ class PayrollChecklistRepository extends Controller
                 $query->where('users.transfer_status', 'active');
             })
             ->whereNull('hold_salaries.hold_month')
-            ->whereHas('appointment', function ($query) {
-                $query->where(function($query1) {
-                    $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
-                    $query1->orWhere('is_till_active', 'yes');
-                });
-            })
+            // ->whereHas('appointment', function ($query) {
+            //     $query->where(function($query1) {
+            //         $query1->orWhere('to_appointment', '>=', date('Y-m-d'));
+            //         $query1->orWhere('is_till_active', 'yes');
+            //     });
+            // })
             ->get();
 
         return $users;
