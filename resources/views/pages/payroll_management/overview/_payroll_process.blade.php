@@ -55,6 +55,7 @@ foreach ($deductions_field as $sitem){
         <div class="text-end">
         <form method="POST" action="{{ route('reports.payroll.temp.export') }}">
             @csrf
+            <input type="hidden" name="date" value="{{ $date }}">
             <input type="hidden" name="payout_data" value="{{ $date }}">
             <input type="hidden" name="payout_id" value="{{ $payout_id }}">
             <input type="hidden" name="process_it" value="{{ $process_it }}">
