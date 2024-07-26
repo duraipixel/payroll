@@ -1,3 +1,4 @@
+
 @php
 if (isset($earings_field) && !empty($earings_field)){
 foreach ($earings_field as $eitem){
@@ -9,11 +10,13 @@ foreach ($deductions_field as $sitem){
  ${$sitem->short_name}=0;
 }
 }
-
- $month = date('F', strtotime($date));
-$month_length = date('t', strtotime($payroll_date));
 @endphp 
-<table class="table align-middle  table-hover table-bordered table-striped fs-7 no-footer"
+        
+            @php
+                $month = date('F', strtotime($date));
+                $month_length = date('t', strtotime($payroll_date));
+            @endphp
+                        <table class="table align-middle  table-hover table-bordered table-striped fs-7 no-footer"
                             id="revision_table">
                             <thead class="bg-primary">
                                 <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
@@ -275,3 +278,4 @@ $month_length = date('t', strtotime($payroll_date));
                             </tbody>
 
                         </table>
+

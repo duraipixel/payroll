@@ -810,15 +810,17 @@ class OverviewController extends Controller
     {   
         ini_set("max_execution_time", 0);
         ini_set('memory_limit', '-1');
-        $date=$request->date;
+
+        $date = $request->date;
         $payout_id = $request->payout_id;
         $payroll_points = $request->payroll_points;
         $process_it = $request->process_it;
         $payroll_date = date('Y-m-d', strtotime($date . '-1 month'));
         $month_start = date('Y-m-01', strtotime($payroll_date));
         $month_end = date('Y-m-t', strtotime($payroll_date));
-        $payout_data = $this->checklistRepository->getToPayEmployee($request->date);
-        return Excel::download(new PayrollStatementExport($payout_id,''), 'payroll_statement.xlsx');
-        // return Excel::download(new PayrollTempExport($payout_data,$date,$payout_id,$payroll_date,$month_start,$month_end), 'payroll__temp_statement.xlsx');
+        $payout_data = $this->checklistRepository->getToPayEmployee($date);
+       // return Excel::download(new PayrollStatementExport($payout_id,''), 'payroll_statement.xlsx');
+
+        return Excel::download(new PayrollTempExport($payout_data,$date,$payout_id,$payroll_date,$month_start,$month_end), 'payroll__temp_statement.xlsx');
     }
 }
