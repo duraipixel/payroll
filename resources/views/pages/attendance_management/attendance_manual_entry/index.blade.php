@@ -7,6 +7,9 @@
         .staff_err{
             display:none;
         }
+        .select2-container--focus{
+            border: 1px solid black !important;
+        }
     </style>
     <div class="card">
         <div class="month_row d-flex">
