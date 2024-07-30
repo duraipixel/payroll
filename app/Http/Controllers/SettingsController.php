@@ -863,12 +863,11 @@ class SettingsController extends Controller
             count($user->firstAppointment->leaveAllocated) > 0 &&
             isset($acadamic_id)
           ) {
-           
             foreach (
               $user->firstAppointment->leaveAllocated
               as $leaveAllocated
             ) {
-             
+           
               if($leaveAllocated->teaching_type==$user->firstAppointment->teaching_type_id){
               
               $new["staff_id"] = $user->id;
@@ -879,6 +878,7 @@ class SettingsController extends Controller
                 $leaveAllocated->carry_forward == "yes" &&
                 $leaveAllocated->leave_head_id == 2
               ) {
+              
                 $previous_data = StaffLeaveMapping::where(
                   "staff_id",
                   $user->id
@@ -907,12 +907,12 @@ class SettingsController extends Controller
                   )->where("leave_head_id",2)
                   ->where("calender_id", $calender_id->id)
                   ->first();
-               
-                  if(isset($data_p) && (int)$leaveAllocated->leave_days != (int)$data_p->no_of_leave){
-                    $leave_total=$data_p->no_of_leave;
-                  }else{
+          
+                  // if(isset($data_p) && (int)$leaveAllocated->leave_days != (int)$data_p->no_of_leave){
+                  //   $leave_total=$data_p->no_of_leave;
+                  // }else{
                     $leave_total=$leaveAllocated->leave_days;
-                  }
+                  // }
                   $new["carry_forward_count"] =
                   $previous_data->carry_forward_count +
                   $leave_total -
@@ -931,9 +931,9 @@ class SettingsController extends Controller
                   )->where("leave_head_id",2)
                   ->where("calender_id", $calender_id->id)
                   ->first();
-                  if(isset($data_p) &&  (int)$leaveAllocated->leave_days !=  (int)$data_p->no_of_leave){
-                    $n_leave_days=$data_p->no_of_leave;
-                  }else{
+                  // if(isset($data_p) &&  (int)$leaveAllocated->leave_days !=  (int)$data_p->no_of_leave){
+                  //   $n_leave_days=$data_p->no_of_leave;
+                  // }else{
                     $month=Carbon::parse($user->firstAppointment->from_appointment)->month;
                   
                     if($month >= 1 && $month <= 6){
@@ -942,7 +942,8 @@ class SettingsController extends Controller
                      
                     $n_leave_days=$leaveAllocated->leave_days/2;
                     }
-                  }
+                
+                  // dd( $n_leave_days);
                   $new["carry_forward_count"] =
                   $n_leave_days -
                   $total -
@@ -960,6 +961,7 @@ class SettingsController extends Controller
               } else {
                 $new["carry_forward_count"] = 0;
                 $month=Carbon::parse($user->firstAppointment->from_appointment)->month;
+               
                     if($month >= 1 && $month <= 6){
                       $new["no_of_leave"]=$leaveAllocated->leave_days;
                       $new["accumulated"] =$leaveAllocated->leave_days;
@@ -973,12 +975,12 @@ class SettingsController extends Controller
   
               $new["acadamic_id"] = $acadamic_id->id;
               $new["calender_id"] = $calender_id->id;
+              
               StaffLeaveMapping::updateOrCreate(
                 [
                   "staff_id" => $user->id,
                   "acadamic_id" => $acadamic_id->id,
-                   "leave_head_id" =>
-                    $leaveAllocated->leave_head_id,
+                   "leave_head_id" =>$leaveAllocated->leave_head_id,
                 ],
                 $new
               );
