@@ -146,7 +146,10 @@
         placeholder: 'Select an Leave Status',
         theme: 'bootstrap-5',
     });
+    
+   
 });
+
     var KTAppEcommerceSaveLeaveMapping = function() {
         const handleSubmit = () => {
             // Define variables

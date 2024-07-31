@@ -61,6 +61,10 @@
                         if($status =='Present'){
                           $present +=1;
                         }
+
+                        if($status =='Absence' ){
+                          $present +=  getSortStaffDatewise($item->id,$attendanceRecord->attendance_date);
+                        }
                         $calander_status=getCalanderStatus($search_date);
                         if(isset($calander_status) && !empty($calander_status->comments)){
                             $key_word=formatWord($calander_status->comments);

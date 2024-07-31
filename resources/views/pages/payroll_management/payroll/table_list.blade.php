@@ -112,8 +112,11 @@
                     month_no: month_no,
                     dates: dates,
                     staff_id:staff_id
+                },beforeSend:function() {
+                    loading();
                 },
                 success: function(res) {
+                    unloading();
                     $('#dataTagForPayroll').html(res);
                 },
                 error: function(xhr, err) {
