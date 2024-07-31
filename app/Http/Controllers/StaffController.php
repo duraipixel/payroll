@@ -999,10 +999,11 @@ class StaffController extends Controller
                 ),
             )
         );
+       
         if ($request->ajax()) {
             $staff_datable_search = $request->staff_datable_search;
-
             $totalFilteredRecord = $totalDataRecord = $draw_val = "";
+            $designation=$request->designation_data;
             $columns_list = array(
                 0 => 'name',
                 1 => 'society_code',
@@ -1032,6 +1033,11 @@ class StaffController extends Controller
                 ->when(!empty( $verification_status ), function($q) use($verification_status){
                     $q->where('users.verification_status', $verification_status);
                 })
+                ->when(!empty( $designation ), function($q) use($designation){
+                    $q->whereHas('appointment', function($query) use ($designation){
+                     $query->where('designation_id', $designation);
+                 });
+                 })
                 ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
                     $q->where('users.institute_id', $datatable_institute_id);
                 })
@@ -1079,6 +1085,11 @@ class StaffController extends Controller
                 ->when(!empty( $verification_status ), function($q) use($verification_status){
                     $q->where('users.verification_status', $verification_status);
                 })
+                ->when(!empty( $designation ), function($q) use($designation){
+                   $q->whereHas('appointment', function($query) use ($designation){
+                    $query->where('designation_id', $designation);
+                });
+                })
                 ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
                     $q->where('users.institute_id', $datatable_institute_id);
                 })
@@ -1123,6 +1134,11 @@ class StaffController extends Controller
                 ->when(!empty( $verification_status ), function($q) use($verification_status){
                     $q->where('users.verification_status', $verification_status);
                 })
+                ->when(!empty( $designation ), function($q) use($designation){
+                    $q->whereHas('appointment', function($query) use ($designation){
+                     $query->where('designation_id', $designation);
+                 });
+                 })
                 ->when(!empty( $datatable_institute_id ), function($q) use($datatable_institute_id){
                     $q->where('users.institute_id', $datatable_institute_id);
                 })
@@ -1212,7 +1228,9 @@ class StaffController extends Controller
         }
         $users=User::where('institute_id',session()->get('staff_institute_id'))->get();
         $institutions = Institution::where('status', 'active')->get();
-        return view('pages.staff.list', compact('breadcrums', 'institutions','users'));
+        $designations = Designation::where('status', 'active')->orderBy('name', 'asc')->get();
+        $designation=$request->designation_data;
+        return view('pages.staff.list', compact('breadcrums', 'institutions','users','designations','designation'));
     }
 
     public function list1(Request $request)
