@@ -62,19 +62,30 @@
                         </select>
 
                     </div>
-                    </div>&nbsp;&nbsp; 
+                    </div>&nbsp;
                     
+                  
                     <div class="form-group">
-                        <select name="verification_status" id="verification_status" class="form-control">
+                    <select name="designation" id="designation_data" class="form-select form-select-sm w-auto d-inline">
+                            <option value="">-- Designation --</option>
+                            @foreach ($designations as $designation_data)
+                                <option value="{{ $designation_data->id }}" {{ $designation_data->id == $designation ? 'selected' : '' }}>
+                                    {{ $designation_data->name }}</option>
+                            @endforeach
+                        </select>
+                        </div>
+                        &nbsp;
+                        <div class="form-group">
+                        <select name="verification_status" id="verification_status" class="form-control" style="width:152px;height:35px;">
                             <option value=""> All Profile Status </option>
                             <option value="pending">Pending</option>
                             <option value="approved">Approved</option>
                         </select>
                     </div>
-&nbsp;&nbsp;      <div class="form-group">
-            <input type="number" name="page_search"
+&nbsp;      <div class="form-group" >
+                   <input type="number" name="page_search"
                             id="page_search" class="form-control  w-250px ps-14"
-                            placeholder="Go to Page" value="1">
+                            placeholder="Go to Page" value="1" style="width:100px !important;height:35px;">
                     </div>
 
                     {{-- <div class="form-group">
@@ -158,6 +169,11 @@
             templateResult: formatOption,
             
         });
+        $('#designation_data').select2({
+             theme: 'bootstrap-5',
+             width: 'resolve' 
+        });
+        
 
         function formatOption(option) {
             if (!option.id) {
@@ -184,7 +200,7 @@ $('#page_search').val(1);
                     d._token = "{{ csrf_token() }}",
                         d.staff_datable_search = $('#staff_datable_search').val(),
                         d.verification_status = $('#verification_status').val(),
-                        // d.start = (($('#page_search').val() * 25),
+                        d.designation_data = $('#designation_data').val(),
                         d.datatable_institute_id = $('#datatable_institute_id').val()
 
                 }
@@ -225,6 +241,10 @@ $('#page_search').val(1);
         $('#staff_datable_search').change(function() {
             staff_Table.ajax.reload();
         })
+        $('#designation_data').change(function() {
+            staff_Table.ajax.reload();
+        })
+        
         // document.querySelector('#staff_datable_search').addEventListener("keyup", function(e) {
         //     staff_Table.ajax.reload();
         // });

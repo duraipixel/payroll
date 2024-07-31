@@ -89,8 +89,13 @@ class StaffAppointmentDetail extends Model implements Auditable
         return $this->hasMany(StaffLeaveMapping::class, 'staff_id', 'staff_id')->select('id','staff_id','leave_head_id','no_of_leave  as leave_days');
     }
      public function leaveAllocated()
-    {
+    { 
+
+        if(isset($this->teaching_type_id)){
+        return $this->hasMany(LeaveMapping::class, 'nature_of_employment_id', 'nature_of_employment_id')->where('teaching_type',$this->teaching_type_id);
+        }else{
         return $this->hasMany(LeaveMapping::class, 'nature_of_employment_id', 'nature_of_employment_id');
+        }
     }
 
     public function leaveAllocatedYear()
