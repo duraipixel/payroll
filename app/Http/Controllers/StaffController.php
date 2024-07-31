@@ -1034,7 +1034,7 @@ class StaffController extends Controller
                     $q->where('users.verification_status', $verification_status);
                 })
                 ->when(!empty( $designation ), function($q) use($designation){
-                    $q->whereHas('appointment', function($query) use ($designation){
+                    $q->whereHas('position', function($query) use ($designation){
                      $query->where('designation_id', $designation);
                  });
                  })
@@ -1086,7 +1086,7 @@ class StaffController extends Controller
                     $q->where('users.verification_status', $verification_status);
                 })
                 ->when(!empty( $designation ), function($q) use($designation){
-                   $q->whereHas('appointment', function($query) use ($designation){
+                   $q->whereHas('position', function($query) use ($designation){
                     $query->where('designation_id', $designation);
                 });
                 })
@@ -1135,7 +1135,7 @@ class StaffController extends Controller
                     $q->where('users.verification_status', $verification_status);
                 })
                 ->when(!empty( $designation ), function($q) use($designation){
-                    $q->whereHas('appointment', function($query) use ($designation){
+                    $q->whereHas('position', function($query) use ($designation){
                      $query->where('designation_id', $designation);
                  });
                  })
@@ -1209,6 +1209,7 @@ class StaffController extends Controller
                     $postnestedData['name'] = $post_val->name;
                     $postnestedData['society_code'] = $post_val->society_emp_code;
                     $postnestedData['institute_code'] = $post_val->institute_emp_code;
+                    $postnestedData['designation'] = $post_val->position->designation->name ?? 'n/a';
                     $postnestedData['profile'] = $profile_status;
                     $postnestedData['status'] = $status_btn;
                     $postnestedData['actions'] = '<div class="w-100 text-end">' . $edit_btn . $view_btn . $print_btn . $del_btn . '</div>';
