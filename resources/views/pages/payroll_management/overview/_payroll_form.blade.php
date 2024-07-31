@@ -267,7 +267,7 @@
     }
 
     function doPayrollProcess() {
-
+        loading();
         var total_check = 4;
         var arrays = []
         var checkboxes = document.querySelectorAll('input[type=checkbox]:checked')
@@ -295,7 +295,8 @@
             return false;
 
         }
-
+        loading();
         $('#checklist_form').submit();
+        $('#kt_dynamic_app').hide();
     }
 </script>

@@ -256,7 +256,8 @@ class OverviewController extends Controller
 
     public function processPayrollModal(Request $request)
     {
-
+        ini_set("max_execution_time", 0);
+        ini_set('memory_limit', '-1');
         $date = $request->date;
         $payout_id = $request->payout_id;
 
@@ -275,6 +276,7 @@ class OverviewController extends Controller
 
         $leave_data = $this->checklistRepository->getPendingRequestLeave($date);
         $employee_data = $this->checklistRepository->getEmployeePendingPayroll();
+        
         $income_tax_data = $this->checklistRepository->getPendingITEntry();
         $hold_salary_employee = $this->checklistRepository->getHoldSalaryEmployee($date);
         $resigned_or_retired = $this->checklistRepository->getResignedRetired($date);
@@ -282,10 +284,11 @@ class OverviewController extends Controller
         $is_entried_min_attendance = $leave_data['total_present'] ?? 0;
 
         $title = 'Payroll Process Confirmation';
+
         $params = array(
             'date' => $date,
             'payout_id' => $payout_id,
-            'leave_data' => $leave_data,
+            'leave_data' => $leave_data??'',
             'title' => $title,
             'employee_data' => $employee_data,
             'income_tax_data' => $income_tax_data,
@@ -293,7 +296,7 @@ class OverviewController extends Controller
             'is_entried_min_attendance' => $is_entried_min_attendance,
             'resigned_or_retired' => $resigned_or_retired
         );
-
+        
         return view('pages.payroll_management.overview._payroll_form', $params);
     }
 

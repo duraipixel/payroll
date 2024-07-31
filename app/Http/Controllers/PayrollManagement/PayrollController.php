@@ -73,7 +73,8 @@ class PayrollController extends Controller
     }
 
     public function getAjaxProcessedList(Request $request) {
-
+        ini_set("max_execution_time", 0);
+        ini_set('memory_limit', '-1');
         $month_no = $request->month_no;
         $dates = $request->dates;
         $staff_id = $request->staff_id;

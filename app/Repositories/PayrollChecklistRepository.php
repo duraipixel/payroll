@@ -9,6 +9,7 @@ use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\PayrollManagement\SalaryField;
 use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\User;
+use App\Models\Leave\StaffLeave;
 
 class PayrollChecklistRepository extends Controller
 {
@@ -34,29 +35,24 @@ class PayrollChecklistRepository extends Controller
         })->where('institute_id',session()->get('staff_institute_id'))
             ->where('attendance_status', 'Present')
             ->get();
-            
-
-        if (isset($attendance) && !empty($attendance)) {
-            $not_requested = $approval_pending = $approved_leave = 0;
-            foreach ($attendance as $item) {
-
-                $status =  getStaffLeaveRequestStatus($item->employment_id, $item->attendance_date);
-                if ($status == 'Leave Approval Pending') {
-                    $approval_pending += 1;
-                } else if ($status == 'Leave Approved') {
-                    $approved_leave += 1;
-                } else {
-                    $not_requested += 1;
-                }
-            }
-        }
-
-        $response['total_taken_leaves'] = count($attendance);
-        $response['leave_request_pending'] = $not_requested;
-        $response['leave_approval_pending'] = $approval_pending;
-        $response['approved_leave'] = $approved_leave;
-        $response['total_present'] = count( $present_attendance );
-
+            $pending_leave=StaffLeave::selectRaw('SUM(no_of_days) as taken_leave')->where('from_date', '<=', $start_date)->where('to_date', '>=', $end_date)->where('status','pending')->first();
+            $approve_leave=StaffLeave::selectRaw('SUM(granted_days) as taken_leave')->where('from_date', '<=', $start_date)->where('to_date', '>=', $end_date)->where('status','approved')->first();
+            $approval_pending=$pending_leave->taken_leave ?? 0;
+            $approved_leave=$approve_leave->taken_leave ?? 0;
+            // if (isset($attendance) && !empty($attendance)) {
+            //     $not_requested = 0;
+            //     foreach ($attendance as $item) {
+            //         $status=StaffLeave::where('from_date', '<=', $item->attendance_date)->where('to_date', '>=', $item->attendance_date)->where('staff_id',$item->employment_id)->first();
+            //         if (!$status){
+            //             $not_requested += 1;
+            //         }
+            //     }
+            // }
+            $response['total_taken_leaves'] = count($attendance);
+            $response['leave_request_pending'] = (int) ((count($attendance)==0)?0 : (count($attendance) -  $approval_pending -  $approved_leave));
+            $response['leave_approval_pending'] = (int) $approval_pending ?? 0;
+            $response['approved_leave'] =  (int) $approved_leave ?? 0;
+            $response['total_present'] = count( $present_attendance );
         return $response;
     }
 

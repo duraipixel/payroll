@@ -1054,7 +1054,7 @@ function getStaffLeaveRequestStatus($staff_id, $date)
     if ($info) {
         if ($info->status == 'pending') {
             $status = 'Pending';
-        } else {
+        } else if(($info->status == 'approved')) {
             $status  = 'Approved';
         }
     }
@@ -1108,6 +1108,36 @@ function getSortStaffLeaveType($staff_id, $date)
         }
           
     }
+    return $status;
+}
+function getSortStaffDatewise($staff_id, $date)
+{
+   $info = StaffLeave::where('staff_id', $staff_id)
+        ->where('from_date', '<=', $date)->where('to_date', '>=', $date)
+        ->first();
+
+        $status = 0;
+    if ($info) {
+        
+        if(isset($info->leave_days)){
+              $json_data=json_decode($info->leave_days);
+              $result = collect($json_data)->firstWhere('date', $date);
+              if ($result) {
+                  $type = $result->type;
+                  if($type){
+                    if($type=='forenoon'){
+                        $status  = 0.5;
+                    }elseif($type=='afternoon'){
+                        $status  =0.5;
+                    }
+                  }
+                 
+              }
+              
+        }
+          
+    }
+
     return $status;
 }
 function getGlobalAcademicYear()
@@ -1482,7 +1512,7 @@ if (!function_exists('leave_data')) {
             
     return $leave_datas->total_days??'0.00';
     }
-
+}
     if (!function_exists('getLeaveDays')) {
     function getLeaveDays($leaves, $category)
     {
@@ -1538,6 +1568,6 @@ if (!function_exists('leave_data')) {
    
 
 
-}
+
 
 
