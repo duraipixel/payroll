@@ -102,7 +102,7 @@
         }
 
         function listPayrollGenerated() {
-
+            loading();
             var payroll_id = $('#payroll_id').val();
             var staff_id = $('#staff_id').val();
             
@@ -111,11 +111,16 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            loading();
             $.ajax({
                 url: "{{ route('payroll.statement.list') }}",
                 type: 'POST',
                 data: { payroll_id: payroll_id, staff_id:staff_id},
+                beforeSend: function(){
+                    loading();
+                },
                 success: function(res) {
+                    unloading();
                     $('#dataTagForPayroll').html(res);
                 }
             })
