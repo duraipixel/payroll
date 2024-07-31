@@ -139,6 +139,10 @@
                                     Institution Code
                                 </th>
                                 <th class="text-white text-start ps-3">
+                                       Designation
+                                </th>
+                                
+                                <th class="text-white text-start ps-3">
                                     Profile Completion
                                 </th>
                                 <th class="text-white">
@@ -213,6 +217,9 @@ $('#page_search').val(1);
                 },
                 {
                     "data": "institute_code"
+                },
+                {
+                    "data":"designation"
                 },
                 {
                     "data": "profile"
