@@ -211,7 +211,7 @@ class StaffController extends Controller
         $tax_scheme=TaxScheme::where('status', 'active')->get();
         $leave_mapping=StaffLeaveMapping::where('staff_id',$id)->where('acadamic_id',academicYearId())->get();
         $first_appointment = StaffAppointmentDetail::where('staff_id', $id)->orderBy('staff_id', 'asc')->first();
-    $el_count = StaffLeaveMapping::where('staff_id', $id)->where('leave_head_id', 2)->get();
+    $el_count = StaffLeaveMapping::where('staff_id', $id)->where('leave_head_id', 2)->Orderby('calender_id','asc')->get();
         $params = array(
             'breadcrums' => $breadcrums,
             'institutions' => $institutions,
