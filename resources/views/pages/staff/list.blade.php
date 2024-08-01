@@ -55,7 +55,7 @@
                             }
                             @endphp
                                     <option value="{{ $user->id }}"  data-image="{{$image}}" @if (isset($staff_datable_search) && $staff_datable_search == $user->id) selected @endif >
-                                       {{ $user->name }} - {{ $user->institute_emp_code }}
+                                       {{ $user->name }} - {{ $user->institute_emp_code }} {{ $user->society_emp_code}}
                                     </option>
                                 @endforeach
                             @endisset

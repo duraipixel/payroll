@@ -1075,6 +1075,79 @@ function getStaffLeaveRequestType($staff_id, $date)
     }
     return $status;
 }
+function getStaffAppointment($staff_id, $appointment_year)
+{   
+  
+    $arrays=StaffAppointmentDetail::select('id',DB::raw('YEAR(from_appointment) as year'))->where('staff_id',$staff_id)->get();
+    $data=$arrays->toArray();
+    $filteredData = array_filter($data, function ($item) use ($appointment_year) {
+        $year = (int)$item['year']; 
+        return $year <= $appointment_year;
+    });
+    if(count($filteredData)>0){
+        return end($filteredData);
+    }
+    return [];
+    
+}
+function getStaffAppointmentYear($year,$id)
+{   
+  
+    $data=StaffAppointmentDetail::whereYear('from_appointment',$year)->where('id',$id)->first();
+  
+    return isset($data)? 1 : 0;
+    
+}
+function getStaffMonthSeprate($month)
+{   
+    $division='';
+    if($month==1){
+        $division='';
+    }elseif($month==2){
+        $division='';
+    }elseif($month==3){
+        $division='';
+    }
+    elseif($month==4){
+        $division='';
+    }
+    elseif($month==5){
+        $division='';
+    }
+    elseif($month==6){
+        $division='';
+    }
+    elseif($month==7){
+        $division=2;
+    }
+    elseif($month==8){
+        $division=2;
+    }
+    elseif($month==9){
+        $division=2;
+    }
+    elseif($month==10){
+        $division=2;
+    }
+    elseif($month==11){
+        $division=2;
+    } elseif($month==12){
+        $division=2;
+    }
+  
+    return $division;
+    
+}
+function appointmentLaeve($id)
+{   
+  
+    $data=StaffAppointmentDetail::find($id);
+    if($data){
+        return $data->leaveAllocated;
+    }
+    return [];
+    
+}
 
 function getSortStaffLeaveType($staff_id, $date)
 {

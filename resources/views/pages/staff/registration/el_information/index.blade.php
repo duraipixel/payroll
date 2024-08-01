@@ -204,7 +204,7 @@
        $('.dataTables_wrapper').addClass('position-relative');
         $('.dataTables_info').addClass('position-absolute');
       function getElModal( id = '',type='') {
-
+           loading();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -218,8 +218,11 @@
                     id: id,
                     type: type,
                     
+                },beforeSend:function() {
+                    loading();
                 },
                 success: function(res) {
+                    unloading();
                     $('#kt_dynamic_app').modal('show');
                     $('#kt_dynamic_app').html(res);
                     
@@ -228,7 +231,7 @@
 
         }
     function getElAddModal( id = '',type='') {
-       
+        loading();
         $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -242,8 +245,11 @@
                     id: id,
                     type: type,
                     
+                },beforeSend:function() {
+                    loading();
                 },
                 success: function(res) {
+                    unloading();
                     $('#kt_dynamic_app').modal('show');
                     $('#kt_dynamic_app').html(res);
                     
