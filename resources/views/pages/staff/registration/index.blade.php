@@ -94,6 +94,14 @@
                 </div>
                 <div class="p-2 px-4 border border-2 w-200px">
                     <div class="fw-bold">
+                       Institute Code:
+                    </div>
+                    <div class="badge badge-light-danger fs-6">
+                        {{ $staff_details->institute_emp_code ?? 'n/a' }}
+                    </div>
+                </div>
+                <div class="p-2 px-4 border border-2 w-200px">
+                    <div class="fw-bold">
                         Designation
                     </div>
                     <div class="badge badge-light-warning fs-6">
