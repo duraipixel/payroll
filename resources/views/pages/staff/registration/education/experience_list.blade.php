@@ -21,7 +21,7 @@
                             {{ strtoupper($item->institute->name) }}
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
-                            {{ strtoupper($item->designation->name) }}
+                            {{ strtoupper($item->designation->name ?? '') }}
                         </td>
                         <td class="text-dark fw-bolder text-hover-primary fs-6">
                             {{ commonDateFormat($item->from) }} - {{ commonDateFormat($item->to) }}
