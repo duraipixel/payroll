@@ -33,4 +33,8 @@ class SalaryField extends Model
     public function employeeNature() {
         return $this->hasOne(NatureOfEmployment::class, 'id', 'nature_id');
     }
+    public function Fieldlogs()
+    {
+        return $this->hasMany(SalaryPercentageLog::class, 'salary_field_id', 'id');
+    }
 }
