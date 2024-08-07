@@ -6,6 +6,7 @@ use App\Exports\SalaryFieldExport;
 use App\Http\Controllers\Controller;
 use App\Models\Master\NatureOfEmployment;
 use App\Models\PayrollManagement\SalaryField;
+use App\Models\PayrollManagement\SalaryPercentageLog;
 use App\Models\PayrollManagement\SalaryFieldCalculationItem;
 use App\Models\PayrollManagement\SalaryHead;
 use Illuminate\Http\Request;
@@ -120,7 +121,7 @@ class SalaryFieldController extends Controller
         $nature = NatureOfEmployment::where('status', 'active')->get();
         $from = 'master';
         if (isset($id) && !empty($id)) {
-            $info = SalaryField::find($id);
+            $info = SalaryField::with('Fieldlogs')->find($id);
             $title = 'Update Salary Fields';
             
             $nature_id = $info->nature_id;
@@ -130,7 +131,7 @@ class SalaryFieldController extends Controller
                     ->where('status', 'active')
                     ->orderBy('order_in_salary_slip')->get();
             
-            
+          
         }
 
         $params = array(
@@ -170,9 +171,12 @@ class SalaryFieldController extends Controller
             'percentage' => 'required_if:entry_type,==,calculation',
             'multi_field' => 'required_if:entry_type,==,calculation'
         ]);
-
         if ($validator->passes()) {            
-
+            if(isset($request->changed_percentage)){
+                $percentage=$request->changed_percentage;
+            }else{
+                $percentage=$request->percentage;
+            }
             $multi_field = $request->multi_field ?? [];
             $ins['academic_id'] = academicYearId();
             $ins['name']        = $request->name;
@@ -204,7 +208,18 @@ class SalaryFieldController extends Controller
                 $field_ins['parent_field_id'] = $data->id;
                 $field_ins['multi_field_id'] = implode(',', $multi_field);
                 $field_ins['field_name'] = implode(',', $field_name);
-                $field_ins['percentage'] = $request->percentage ?? null;
+                $field_ins['percentage'] = $percentage ?? null;
+                if(isset($request->changed_percentage) && isset($request->effective_from)){
+                $log_ins=[];
+                $field_ins['effective_from'] =$request->effective_from ?? null;
+                $log_ins['salary_field_id'] = $data->id;
+                $log_ins['initial_percentage'] =$request->initial_percentage;
+                $log_ins['new_percentage'] =$request->changed_percentage;
+                $log_ins['effective_from'] = $request->effective_from;
+                
+                SalaryPercentageLog::updateOrCreate(['salary_field_id' => $data->id], $log_ins);
+
+                }
                 
                 SalaryFieldCalculationItem::updateOrCreate(['parent_field_id' => $data->id], $field_ins);
             }

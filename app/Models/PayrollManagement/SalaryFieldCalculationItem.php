@@ -15,7 +15,8 @@ class SalaryFieldCalculationItem extends Model
         'field_name',
         'percentage',
         'order_by',
-        'multi_field_id'
+        'multi_field_id',
+        'effective_from'
     ];
 
     public function parentField() {
