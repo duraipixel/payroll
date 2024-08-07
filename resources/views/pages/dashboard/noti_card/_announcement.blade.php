@@ -26,9 +26,12 @@
             </div>
             <div class="col-lg-8  p-0">
                 <div class="fs-5 fw-bolder mb-2">Announcement
-                    @if ($announcement)
+                    @if ($announcement!=0)
                         <span class="badge bg-danger">{{ $announcement }}</span>
+                    @else
+                        <span class="badge bg-danger">0</span>
                     @endif
+
                 </div>
                 <div class="fs-8 fw-bold text-gray-400">{{ $result_month_for ?? '' }}</div>
             </div>

@@ -215,16 +215,16 @@ class StaffTransferController extends Controller
 
                    
                     $clonedUser->refer_user_id = $user_info->id;
-                    $clonedUser->status='transferred';
+                    $clonedUser->status='active';
                     $clonedUser->save();
-                    // $user_info->status='transferred';
-                    // $user_info->save();
+                    $user_info->status='transferred';
+                    $user_info->save();
 
 
                  
-                    $user_info->institute_id = $transfer_info->to_institution_id;
-                    $user_info->institute_emp_code = $transfer_info->new_institution_code;
-                    $user_info->save();
+                    $clonedUser->institute_id = $transfer_info->to_institution_id;
+                    $clonedUser->institute_emp_code = $transfer_info->new_institution_code;
+                    $clonedUser->save();
 
                 } else if ($status == 'rejected') {
                     $transfer_info = StaffTransfer::find($transfer_id);

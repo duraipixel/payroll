@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
+use App\Models\Staff\StaffRetiredResignedDetail;
+use App\Models\Staff\StaffTransfer;
 class HomeController extends Controller
 {
     /**
@@ -35,15 +37,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $pending_user_count = User::where('verification_status','pending')->InstituteBased()->Academic()->count();
-        $approved_user_count = User::where('verification_status','approved')->InstituteBased()->Academic()->count();
+        
         // ->Academic()
         $from_date = date('Y-m-1');
         $to_date = date('Y-m-t');
         $month = date('m');
         $end = date('t');
-        $user_count=User::where('status','active')->InstituteBased()->Academic()->count();
-        $dob = StaffPersonalInfo::whereRaw("CONVERT(VARCHAR(5), dob, 110) >= '" . $month . "-01' and CONVERT(VARCHAR(5), dob, 110) <= '" . $month . "-" . $end . "'")
+        $current_date=date('Y-m-d');
+        $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$current_date)->pluck('staff_id');
+        $transfer=StaffTransfer::where('from_institution_id',session()->get('staff_institute_id'))->whereDate('effective_from','<=',$current_date)->where('status','approved')->pluck('staff_id');
+        $user_count=User::where('status','active')->whereNotIn('id',$resigned)->whereNotIn('id',$transfer)->InstituteBased()->Academic()->count();
+        $pending_user_count = User::where('verification_status','pending')->whereNotIn('id',$resigned)->whereNotIn('id',$transfer)->InstituteBased()->Academic()->count();
+        $approved_user_count = User::where('verification_status','approved')->whereNotIn('id',$resigned)->whereNotIn('id',$transfer)->InstituteBased()->Academic()->count();
+        $dob = StaffPersonalInfo::whereNotIn('staff_id',$resigned)->whereNotIn('staff_id',$transfer)->whereRaw("CONVERT(VARCHAR(5), dob, 110) >= '" . $month . "-01' and CONVERT(VARCHAR(5), dob, 110) <= '" . $month . "-" . $end . "'")
             ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
             ->when(session()->get('staff_institute_id'), function ($q) {
                 $q->where('users.institute_id', session()->get('staff_institute_id'));
@@ -57,7 +63,7 @@ class HomeController extends Controller
             ->orderByRaw("MONTH(dob), DAY(dob)")
             ->get();
 
-        $anniversary = StaffPersonalInfo::whereRaw("CONVERT(VARCHAR(5), marriage_date, 110) >= '" . $month . "-01' and CONVERT(VARCHAR(5), marriage_date, 110) <= '" . $month . "-" . $end . "'")
+        $anniversary = StaffPersonalInfo::whereNotIn('staff_id',$resigned)->whereNotIn('staff_id',$transfer)->whereRaw("CONVERT(VARCHAR(5), marriage_date, 110) >= '" . $month . "-01' and CONVERT(VARCHAR(5), marriage_date, 110) <= '" . $month . "-" . $end . "'")
             ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
             ->when(session()->get('staff_institute_id'), function ($q) {
                 $q->where('users.institute_id', session()->get('staff_institute_id'));
@@ -71,7 +77,7 @@ class HomeController extends Controller
             ->get();
 
         $result_month_for = date('1 M, Y') . ' - ' . date('t M, Y');
-        $last_user_added = User::orderBy('created_at', 'desc')->InstituteBased()->Academic()->first();
+    $last_user_added = User::orderBy('created_at', 'desc')->InstituteBased()->Academic()->first();
     $leave_approved = StaffLeave::where('staff_leaves.status', 'approved')
             ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
             ->when(session()->get('staff_institute_id'), function ($q) {
@@ -110,7 +116,7 @@ class HomeController extends Controller
             ->Academic()
             ->get();
 
-        $gender_calculation = StaffPersonalInfo::select(
+        $gender_calculation = StaffPersonalInfo::whereNotIn('staff_id',$resigned)->whereNotIn('staff_id',$transfer)->select(
             DB::raw("SUM(CASE WHEN gender = 'Female' THEN 1 ELSE 0 END) AS total_female"),
             DB::raw("SUM(CASE WHEN gender = 'Male' THEN 1 ELSE 0 END) AS total_male"),
             DB::raw("SUM(CASE WHEN gender NOT IN ('Female', 'Male') THEN 1 ELSE 0 END) AS total_other")
@@ -193,16 +199,18 @@ class HomeController extends Controller
 
         $s_date = date('Y-m-d', strtotime($start_date));
         $e_date = date('Y-m-d', strtotime($end_date));
-
-        $user_count = User::InstituteBased()->Academic()->count();
         $from_date = $s_date;
         $to_date = $e_date;
         $month = date('m', strtotime($s_date));
         $end_month = date('m', strtotime($e_date));
         $start_day = date('d', strtotime($s_date));
         $end = date('d', strtotime($e_date));
-
-        $dob = StaffPersonalInfo::whereRaw("CONVERT(VARCHAR(5), dob, 110) >= '" . $month . "-" . $start_day . "' and CONVERT(VARCHAR(5), dob, 110) <= '" . $end_month . "-" . $end . "'")
+        $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$from_date)->pluck('staff_id');
+        $transfer=StaffTransfer::where('from_institution_id',session()->get('staff_institute_id'))->whereDate('effective_from','<=',$from_date)->where('status','approved')->pluck('staff_id');
+        $user_count=User::where('status','active')->whereNotIn('id',$resigned)->whereNotIn('id',$transfer)->InstituteBased()->Academic()->count();
+        $pending_user_count = User::where('verification_status','pending')->whereNotIn('id',$resigned)->whereNotIn('id',$transfer)->InstituteBased()->Academic()->count();
+        $approved_user_count = User::where('verification_status','approved')->whereNotIn('id',$resigned)->whereNotIn('id',$transfer)->InstituteBased()->Academic()->count();
+        $dob = StaffPersonalInfo::whereNotIn('staff_id',$resigned)->whereNotIn('staff_id',$transfer)->whereRaw("CONVERT(VARCHAR(5), dob, 110) >= '" . $month . "-" . $start_day . "' and CONVERT(VARCHAR(5), dob, 110) <= '" . $end_month . "-" . $end . "'")
             ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
             ->when(session()->get('staff_institute_id'), function ($q) {
                 $q->where('users.institute_id', session()->get('staff_institute_id'));
@@ -213,7 +221,7 @@ class HomeController extends Controller
                 ELSE 0
             END ASC;")->get();
 
-        $anniversary = StaffPersonalInfo::whereRaw("CONVERT(VARCHAR(5), marriage_date, 110) >= '" . $month . "-" . $start_day . "' and CONVERT(VARCHAR(5), marriage_date, 110) <= '" . $end_month . "-" . $end . "'")
+        $anniversary = StaffPersonalInfo::whereNotIn('staff_id',$resigned)->whereNotIn('staff_id',$transfer)->whereRaw("CONVERT(VARCHAR(5), marriage_date, 110) >= '" . $month . "-" . $start_day . "' and CONVERT(VARCHAR(5), marriage_date, 110) <= '" . $end_month . "-" . $end . "'")
             ->join('users', 'users.id', '=', 'staff_personal_info.staff_id')
             ->when(session()->get('staff_institute_id'), function ($q) {
                 $q->where('users.institute_id', session()->get('staff_institute_id'));
@@ -233,7 +241,7 @@ class HomeController extends Controller
                 $q->where('users.institute_id', session()->get('staff_institute_id'));
             })->Academic()
             ->get();
-$leave_approved = StaffLeave::where('staff_leaves.status', 'approved')
+           $leave_approved = StaffLeave::where('staff_leaves.status', 'approved')
             ->join('users', 'users.id', '=', 'staff_leaves.staff_id')
             ->when(session()->get('staff_institute_id'), function ($q) {
                 $q->where('users.institute_id', session()->get('staff_institute_id'));
@@ -248,7 +256,7 @@ $leave_approved = StaffLeave::where('staff_leaves.status', 'approved')
         $announcement = Announcement::whereRaw("CAST(created_at AS DATE) BETWEEN '" . $from_date . "' and '" . $to_date . "'")
             ->Academic()
             ->InstituteBased()
-            ->get();
+            ->count();
           $announcement_list= Announcement::
           whereRaw("CAST(created_at AS DATE) BETWEEN '" . $from_date . "' and '" . $to_date . "'")
              ->Academic()
@@ -264,7 +272,7 @@ $leave_approved = StaffLeave::where('staff_leaves.status', 'approved')
             ->Academic()
             ->get();
 
-        $gender_calculation = StaffPersonalInfo::select(
+        $gender_calculation = StaffPersonalInfo::whereNotIn('staff_id',$resigned)->whereNotIn('staff_id',$transfer)->select(
             DB::raw("SUM(CASE WHEN gender = 'Female' THEN 1 ELSE 0 END) AS total_female"),
             DB::raw("SUM(CASE WHEN gender = 'Male' THEN 1 ELSE 0 END) AS total_male"),
             DB::raw("SUM(CASE WHEN gender NOT IN ('Female', 'Male') THEN 1 ELSE 0 END) AS total_other")
@@ -281,7 +289,8 @@ $leave_approved = StaffLeave::where('staff_leaves.status', 'approved')
         $designations = Designation::with('staffEnrollments')->where('status', 'active')->get();
 
         $params = array(
-
+            'pending_user_count'=>$pending_user_count,
+            'approved_user_count'=>$approved_user_count,
             'user_count' => $user_count,
             'last_user_added' => $last_user_added,
             'dob' => $dob,
