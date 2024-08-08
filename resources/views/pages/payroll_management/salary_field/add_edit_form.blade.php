@@ -227,6 +227,8 @@
       <th scope="col">Initial Percentage</th>
       <th scope="col">Changed Percentag</th>
       <th scope="col">Effective From</th>
+      <th scope="col">Payout Month</th>
+      <th scope="col">Remarks</th>
     </tr>
   </thead>
   <tbody>
@@ -236,6 +238,8 @@
       <td>{{$log->initial_percentage }}</td>
       <td>{{$log->new_percentage }}</td>
       <td>{{date('d-m-Y',strtotime($log->effective_from)) }}</td>
+      <td>{{$log->payout_month }}</td>
+      <td>{{$log->remarks }}</td>
     </tr>
   @endforeach
   </tbody>

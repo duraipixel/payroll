@@ -12,7 +12,9 @@ class SalaryPercentageLog extends Model
     protected $fillable = ['salary_field_id',
     'initial_percentage',
     'new_percentage',
-    'effective_from'
+    'effective_from',
+    'remarks',
+    'payout_month'
      ];
     public function sallery_fields()
     {
