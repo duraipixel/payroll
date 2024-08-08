@@ -13,6 +13,7 @@ use App\Repositories\ReportRepository;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use App\Models\AttendanceManagement\AttendanceManualEntry;
 use DB;
 use App\Models\Leave\StaffLeave;
 use App\Models\PayrollManagement\StaffSalary;
@@ -30,13 +31,16 @@ use App\Models\Staff\StaffSalaryPreEarning;
 use App\Models\PayrollManagement\ItStaffStatement;
 use App\Models\Master\Division;
 use App\Models\Staff\StaffTransfer;
+use App\Repositories\CronRepository;
 class ReportController extends Controller
 {
-    public $repository;
+    public $repository,$cronrepository;
 
-    public function __construct(ReportRepository $repository) {
+    public function __construct(ReportRepository $repository,CronRepository $cronrepository) {
         $this->repository = $repository;
+        $this->cronrepository = $cronrepository;
     }
+   
 
     function index()
     {
@@ -119,6 +123,11 @@ class ReportController extends Controller
     {
         set_time_limit(0);
         ini_set('memory_limit', '-1');
+        $previous_data=AttendanceManualEntry::whereBetween('attendance_date', [date('Y-m-d', strtotime('-1 day')), date('Y-m-d', strtotime('-1 day'))])->count();
+        if($previous_data==0){
+            $this->cronrepository->getDataByDate(date('Y-m-d', strtotime('-1 day')));
+        }
+        dd(2);
         $month         = $request->month ?? date('m');
         $parameters = [
         'month' => $month,
@@ -142,7 +151,7 @@ class ReportController extends Controller
         $date          = getStartAndEndDateOfYear($year);
         $date_month          = getStartAndEndDateOfMonth($month,$year);
         $month_days    = monthDays($month,$year);
-
+      
         $perPage = (!empty($request->limit) && $request->limit === 'all') ? 100000000000000000000 : $request->limit;
         $attendance    = $this->attendance_collection($request,$date,$date_month)->paginate($perPage);
        
