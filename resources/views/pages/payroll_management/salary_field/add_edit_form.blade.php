@@ -122,7 +122,7 @@
                 <div class="w-100">
                     <input type="text" class="form-control field-input numberonly" id="basic_input"
                         value="{{ $info->field_items->percentage ?? '' }}" placeholder="Percentage %" name="percentage"
-                        id="" required>
+                        id="" readonly>
                 </div>
             </div>
         </div>
@@ -159,7 +159,55 @@
             </div>
         </div>
     </div>
-
+    <div class="fv-row form-group mb-10  @if (isset($info->entry_type) && $info->entry_type == 'manual') d-none @elseif(!isset($info->entry_type)) d-none @endif"
+        id="calcuation-pane">
+       
+        <div class="row" id="field-item-pane">
+     
+            <div class="col-sm-6">
+            <h5>Change Percentage</h5>
+            <input type="hidden" class="form-control field-input" id="basic_input"
+                        value="{{ $info->field_items->percentage ?? '' }}" placeholder="Percentage %" name="initial_percentage"
+                        id="" required>
+            <input type="text" class="form-control field-input numberonly" id="basic_input"
+                        value="{{ $info->field_items->percentage ?? '' }}" placeholder="Percentage %" name="changed_percentage"
+                        id="" required>
+            </div>
+            
+            <div class="col-sm-6">
+            <h5>Effective From</h5>
+                <div class="w-100">
+                    <input type="date" class="form-control field-input" id="date"
+                        value="{{ $info->field_items->effective_from ?? '' }}" placeholder="Percentage %" name="effective_from"
+                        id="" required>
+                </div>
+            </div>
+    </div>
+    <br>
+    <div class="row" id="field-item-pane">
+    <div class="col-sm-6">
+    <h5> Payout Month </h5>
+          <div class="w-100">
+            <select name="payout_month" id="payout_month" class="form-control" required>
+              <option value="">-select-</option>
+              @if (isset($payout_year) && !empty($payout_year))
+              @foreach ($payout_year as $item)
+              <option value="{{ $item }}"> {{ date('F Y', strtotime($item)) }}
+              </option>
+              @endforeach
+              @endif
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-6">
+        <h5> Remarks </h5>
+          <div class="w-100">
+          <textarea name="remarks" class="form-control" id="remarks" cols="30" rows="3"
+          placeholder="Remarks"></textarea>
+          </div>
+        </div>
+    </div>
+    <br>
     <div class="form-group mb-10 text-end">
         <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
         <button type="button" class="btn btn-primary" id="form-submit-btn">
@@ -168,6 +216,31 @@
             </span>
         </button>
     </div>
+    <hr>
+   
+    @if(count($info->Fieldlogs)>0)
+  
+    <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Initial Percentage</th>
+      <th scope="col">Changed Percentag</th>
+      <th scope="col">Effective From</th>
+    </tr>
+  </thead>
+  <tbody>
+  @foreach($info->Fieldlogs as $key=>$log)
+    <tr>
+      <th scope="row">{{$key+1}}</th>
+      <td>{{$log->initial_percentage }}</td>
+      <td>{{$log->new_percentage }}</td>
+      <td>{{date('d-m-Y',strtotime($log->effective_from)) }}</td>
+    </tr>
+  @endforeach
+  </tbody>
+</table>
+@endif
 </form>
 
 <script>

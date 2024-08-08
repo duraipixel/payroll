@@ -16,7 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\AcademicYear;
 class SalaryFieldController extends Controller
 {
     public function index(Request $request)
@@ -112,8 +112,16 @@ class SalaryFieldController extends Controller
     }
 
     public function add_edit(Request $request)
-    {
+    {   
 
+        $acYear = AcademicYear::find(academicYearId());
+        $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
+        $end_year = '01-' . $acYear->to_month . '-' . $acYear->to_year;
+        $start_Date = date('Y-m-d', strtotime($start_year));
+        $payout_year=[];
+        for ($i = 0; $i < 12; $i++) {
+            $payout_year[] = date('Y-m-d', strtotime($start_Date . ' + ' . $i . ' months'));
+        }
         $id = $request->id;
         $info = [];
         $title = 'Add Salary Fields';
@@ -140,7 +148,8 @@ class SalaryFieldController extends Controller
             'heads' => $heads,
             'from' => $from,
             'nature' => $nature,
-            'fields' => $fields ?? []
+            'fields' => $fields ?? [],
+            'payout_year'=>$payout_year
         );
 
         $content = view('pages.payroll_management.salary_field.add_edit_form', $params);
