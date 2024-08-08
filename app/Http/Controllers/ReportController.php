@@ -127,7 +127,7 @@ class ReportController extends Controller
         if($previous_data==0){
             $this->cronrepository->getDataByDate(date('Y-m-d', strtotime('-1 day')));
         }
-        dd(2);
+ 
         $month         = $request->month ?? date('m');
         $parameters = [
         'month' => $month,
