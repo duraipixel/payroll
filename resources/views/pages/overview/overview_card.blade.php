@@ -29,7 +29,13 @@
                     <div class="d-flex flex-column">
                         <div class="d-flex align-items-center mb-2">
                             <a href="#" class="text-gray-900 text-hover-primary fs-4 fw-bolder me-1">{{ $info->name }}</a>
-                            <a href="#" class="btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3">{{ ucfirst($info->status) }}</a>
+                            <a href="#" class="btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3">
+                           @if ($info->transfer_status=='active')    
+                            {{ ucfirst($info->status) }}
+                            @else
+                            {{ ucfirst($info->transfer_status) }}
+                             @endif
+                            </a>
                         </div>
                         <div class="d-flex flex-wrap fw-bold fs-6 mb-4 pe-2">
                             @isset($info->personal->gender)

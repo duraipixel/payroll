@@ -20,6 +20,7 @@ trait ReportHelper
             $q->whereIn('users.id', function ($query) {
                 $query->select('staff_id')
                         ->from('staff_retired_resigned_details')
+                        ->where('types','retired')
                         ->groupBy('staff_id')
                         ->havingRaw('COUNT(*) = 1');
             });
