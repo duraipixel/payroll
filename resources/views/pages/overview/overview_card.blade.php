@@ -19,8 +19,8 @@
                         <img alt="user" src="{{ asset('assets/images/no_Image.jpg') }}" />
                         @endif
                     @endif
-                    <div  class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px">
-                    </div>
+                    <!-- <div  class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-white h-20px w-20px">
+                    </div> -->
                 </div>
             </div>
 
@@ -29,7 +29,18 @@
                     <div class="d-flex flex-column">
                         <div class="d-flex align-items-center mb-2">
                             <a href="#" class="text-gray-900 text-hover-primary fs-4 fw-bolder me-1">{{ $info->name }}</a>
-                            <a href="#" class="btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3">
+                            @php
+                                    $status_class = 'success';
+                                    if ($info->transfer_status == 'active' && $info->status !='transferred') {
+                                    
+                                        $status_class = ($info->status == 'active') ? 'success' : 'danger';
+                                    } else {
+                                        $status_class = in_array($info->transfer_status, ['resigned', 'retired', 'expired']) 
+                                            ? 'danger' 
+                                            : ($info->status == 'transferred' ? 'primary' : 'warning');
+                                    }
+                                @endphp
+                            <a href="#" class="btn btn-sm btn-light-{{$status_class}} fw-bolder ms-2 fs-8 py-1 px-3">
                            @if ($info->transfer_status=='active')    
                             {{ ucfirst($info->status) }}
                             @else
