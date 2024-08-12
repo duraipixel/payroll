@@ -11,7 +11,7 @@ use App\Http\Controllers\ReportController;
  Route::get('test/el-entry/{id}/{nature_id}', [App\Http\Controllers\SettingsController::class, 'UserEntrylevelLeave'])->name('test.el.entry');
 Route::get('staff/leave-entry', [App\Http\Controllers\SettingsController::class, 'AutoloadEntryLeave'])->name('staff.leave.entry');
 Route::get('staff/leave-entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserAutoloadEntryLeave'])->name('staff.single.leave.entry');
-
+Route::post('attendance/trigger', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'attendanceEntryTrigger'])->name('attendance.manual.trigger');
 Route::get('staff/leave/mapping/auto', [App\Http\Controllers\Leave\LeaveController::class, 'StaffLeaveMapping'])->name('staff.leave.mapping');
 Route::post('staff/leave/mapping', [App\Http\Controllers\StaffController::class, 'UpdateLeaveMapping'])->name('save.staff-leave-mapping');
  Route::get('test/entry/{month}/{institute_id}/{academic_id}', [App\Http\Controllers\AttendanceManagement\AttendanceManualEntryController::class, 'leaveAvailableDays'])->name('test.entry');
@@ -321,7 +321,9 @@ Route::group(['middleware' => 'auth'],  function () {
     Route::post('payroll/create',[App\Http\Controllers\PayrollManagement\OverviewController::class,'createPayroll'])->name('payroll.create');
     Route::post('payroll/process/modal',[App\Http\Controllers\PayrollManagement\OverviewController::class,'processPayrollModal'])->name('payroll.process.modal');
     Route::post('payroll/processing',[App\Http\Controllers\PayrollManagement\OverviewController::class,'setPayrollProcessing'])->name('payroll.set.processing');
+    Route::get('payroll/processing/{id}',[App\Http\Controllers\PayrollManagement\OverviewController::class,'setPayrollProcessingBYId'])->name('payroll.set.processing.id');
     Route::post('payroll/processing/continue',[App\Http\Controllers\PayrollManagement\OverviewController::class,'continuePayrollProcessing'])->name('payroll.continue.processing');
+    Route::get('payroll/processing/continue/{id}',[App\Http\Controllers\PayrollManagement\OverviewController::class,'payrollStatementById'])->name('payroll.continue.processing.id');
     Route::post('payroll/completed',[App\Http\Controllers\PayrollManagement\OverviewController::class,'doPayrollProcessing'])->name('payroll.do.processing');
     Route::get('payroll/statement/{id}',[App\Http\Controllers\PayrollManagement\OverviewController::class,'payrollStatement'])->name('payroll.statement');
     Route::post('payroll/statement/list',[App\Http\Controllers\PayrollManagement\OverviewController::class,'payrollStatementList'])->name('payroll.statement.list');
