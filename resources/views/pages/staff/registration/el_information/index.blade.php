@@ -94,7 +94,7 @@
                     <form method="POST" action="{{ route('staff.el.gentrate', ['id'=>$staff_details ? $staff_details->id : 0]) }}">
                         @csrf
                     <button  type="submit"
-                    class="btn btn-sm btn-success"> <i class="fa fa-spinner" aria-hidden="true"></i> &nbsp; Gentrate</button>
+                    class="btn btn-sm btn-success"> <i class="fa fa-spinner" aria-hidden="true"></i> &nbsp; Generate</button>
                     </form>
                     &nbsp;&nbsp;
                     <form action="{{ route('reports.el.entry.export',['user_id'=>$staff_details ? $staff_details->id : 0]) }}" class="input-group w-auto d-inline"method="GET">
