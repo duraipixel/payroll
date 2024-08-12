@@ -19,12 +19,14 @@ use App\Models\CalendarDays;
 use App\Models\Leave\StaffLeave;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use App\Repositories\CronRepository;
 class AttendanceManualEntryController extends Controller
 {
     private AttendanceRepository $repository;
 
-    public function __construct(AttendanceRepository $repository) {
+    public function __construct(AttendanceRepository $repository,CronRepository $cronrepository) {
         $this->repository = $repository;
+        $this->cronrepository = $cronrepository;
     }
 
     public function index(Request $request)
@@ -231,5 +233,12 @@ class AttendanceManualEntryController extends Controller
             $staff_taken_leave = AttendanceManualEntry::where('employment_id', $staff_id)->where('academic_id', $academic_id)->get();
             return response()->json(['status' => 1]);
         }
+    }
+    public function attendanceEntryTrigger(Request $request)
+    { 
+       
+        $date=$request->date;
+        $data= $this->cronrepository->getDataByDate(date('Y-m-d', strtotime($date)));
+        return response()->json(['status' => true,'data'=>$data]);
     }
 }

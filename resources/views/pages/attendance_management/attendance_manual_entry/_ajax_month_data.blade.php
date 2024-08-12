@@ -3,6 +3,10 @@
         #attendance_manual_entry_table td {
             padding-left: 10px;
         }
+.btn:not(.btn-outline):not(.btn-dashed):not(.border-hover):not(.border-active):not(.btn-flush):not(.btn-icon) {
+  border: 0;
+     padding: 1rem 1rem  !important;
+}
     </style>
     <div class="card-header border-0 pt-6">
         <div class="card-title">
@@ -18,11 +22,16 @@
                     <option value="Absence">Absence</option>
                 </select>
             </div>
-            
-        </div>
-        
-        <div class="card-toolbar">
-            <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+            <div class="mx-2">
+            <input type="date" class="form-control" name="a_date"
+                value="" id="a_date" required>
+             </div>
+             <div class="mx-2">
+             <button type="button" class="btn btn-primary" id="generate">
+                       Generate
+            </button>
+            </div>
+            <div class="mx-2">
                 @php
                     $route_name = request()
                         ->route()
@@ -33,16 +42,20 @@
                         {!! exportSvg() !!}Export
                     </a>
                 @endif
+                </div>
+                <div class="mx-2">
                 @if (access()->buttonAccess('att-manual-entry', 'add_edit'))
                     <button type="button" class="btn btn-primary" id="add_modal" onclick="getLeaveMappingModal()">
-                        {!! plusSvg() !!} Add Attendance Manual Entry
+                        {!! plusSvg() !!} Add Entry
                     </button>
                 @endif
 
             </div>
-
-            
         </div>
+   
+       </br>
+       
+       
         <div class="card-title">
             <label>From date</label>
              <input type="date" id="from_date"
@@ -50,7 +63,7 @@
             <label>To date</label>
             <input type="date" id="to_date"
             class="form-control form-control-solid w-250px ps-14" placeholder="To date">
-    </div>
+       </div>
         <!--end::Card toolbar-->
     </div>
 
@@ -368,4 +381,31 @@
             }
         });
     }
+          $('#generate').on('click',function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $.ajax({
+                    url: "{{ route('attendance.manual.trigger') }}",
+                    type: 'POST',
+                    data: {
+                    date:$('#a_date').val(),
+                    },beforeSend:function() {
+                    loading();
+                    },
+                    success: function(res) {
+                    unloading();
+                        dtTable.ajax.reload();
+                    },
+                    error: function(xhr, err) {
+                        unloading();
+                      
+                    }
+                });
+            
+
+    })
 </script>
