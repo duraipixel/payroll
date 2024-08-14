@@ -288,7 +288,7 @@ class StaffController extends Controller
 
             $previous_code = $request->previous_code ?? date('dmyhis');
             
-            $isExistUser = User::where('emp_code', $previous_code)->first();
+            $isExistUser = User::find($id);
 
             $academic_id = academicYearId();
             $ins['name'] = $request->name;
@@ -307,7 +307,7 @@ class StaffController extends Controller
                 $ins['addedBy'] = auth()->id();
             }
 
-            $data = User::updateOrCreate(['emp_code' => $previous_code], $ins);
+            $data = User::updateOrCreate(['id' => $id], $ins);
 
             if ($request->aadhar_type) {
                 $aadhar_id = DocumentType::where('name', 'Adhaar')->orwhere('name', 'Aadhaar')->first();
