@@ -1093,9 +1093,14 @@ function getStaffAppointment($staff_id, $appointment_year)
 function getStaffAppointmentYear($year,$id)
 {   
   
-    $data=StaffAppointmentDetail::whereYear('from_appointment',$year)->where('id',$id)->first();
+    $data=StaffAppointmentDetail::where('staff_id',$id)->get();
+    if(isset($data) && $data[0]->from_appointment==$year){
+        return 1;
+    }else{
+        return 0;
+    }
   
-    return isset($data)? 1 : 0;
+    return 0;
     
 }
 function getStaffMonthSeprate($month)
