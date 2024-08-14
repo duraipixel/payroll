@@ -906,7 +906,7 @@ class SettingsController extends Controller
                     )->where("leave_head_id",2)
                     ->where("calender_id", $calender_id->id)
                     ->first();
-                    if(getStaffAppointmentYear($year,$entry['id'])==1){
+                    if(getStaffAppointmentYear($year,$user->id)==1){
                       $month=Carbon::parse($appointment->from_appointment)->month;
                       $division=getStaffMonthSeprate($month);
                        if(isset($division) && !empty($division)){
