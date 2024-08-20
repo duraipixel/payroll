@@ -3,7 +3,8 @@
         <div class="col-sm-12">
             @include('pages.overview.others.loans')
             @include('pages.overview.others.insurance')
-        </div>
+             @include('pages.overview.others.retired')
+        
         {{-- @include('pages.overview.others.resignation')
         @include('pages.overview.others.retirement') --}}
     </div>
