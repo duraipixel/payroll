@@ -25,6 +25,7 @@ use App\Models\Master\Language;
 use App\Models\Master\Nationality;
 use App\Models\Master\NatureOfEmployment;
 use App\Models\Master\OtherSchool;
+use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\Master\OtherSchoolPlace;
 use App\Models\Master\PlaceOfWork;
 use App\Models\Master\ProfessionType;
@@ -1404,8 +1405,8 @@ class StaffController extends Controller
                 ->where('attendance_status', 'Present')->where('status','active')->count();
         $absence=AttendanceManualEntry::where('employment_id',$user->id)->where('academic_id', $acadamic_id)
                 ->where('attendance_status', 'Absence')->where('status','active')->count();
-
-        return view('pages.overview.index', compact('info', 'breadcrums', 'user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc', 'from_view','total_year','loans','working_days','present','absence','other_docs'));
+        $retired=StaffRetiredResignedDetail::where('staff_id',$user->id)->where('status','active')->get();
+        return view('pages.overview.index', compact('info', 'breadcrums', 'user', 'personal_doc', 'salary_doc', 'education_doc', 'experince_doc', 'leave_doc', 'appointment_doc', 'from_view','total_year','loans','working_days','present','absence','other_docs','retired'));
 
     }
 
