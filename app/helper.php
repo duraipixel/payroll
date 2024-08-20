@@ -574,7 +574,8 @@ if (!function_exists('generateLeaveForm')) {
                 $allocated_total_leave = $total_leaves->total;
             }
         }
-        $leaves = StaffLeave::selectRaw('SUM(no_of_days) as taken_leave')->where('staff_id', $staff_id)->where('academic_id',academicYearId())
+        $leaves = StaffLeave::selectRaw('SUM(granted_days) as taken_leave')->where('staff_id', $staff_id)
+        // ->where('academic_id',academicYearId())
             ->where('status', 'approved')
             ->first();
         if ($leaves) {
@@ -589,6 +590,7 @@ if (!function_exists('generateLeaveForm')) {
             'balance_leave' => $balance_leave
         );
     }
+
 
     function attendanceYear()
     {
