@@ -66,9 +66,10 @@ class ReportController extends Controller
         $department_id=$request->department_id;
         $search=$request->search;
         $division_id=$request->division_id;
-        $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$date_month['start_date'])->pluck('staff_id');
-        $transfer=StaffTransfer::where('from_institution_id',session()->get('staff_institute_id'))->whereDate('effective_from','<=',$date_month['end_date'])->where('status','approved')->pluck('staff_id');
-       
+        $resignations=StaffRetiredResignedDetail::where('last_working_date','<=',$date_month['start_date'])->pluck('staff_id');
+        $transfers=StaffTransfer::where('from_institution_id',session()->get('staff_institute_id'))->whereDate('effective_from','<=',$date_month['end_date'])->where('status','approved')->pluck('staff_id');
+        $transfer= User::whereIn('id', $transfers)->pluck('name');
+        $resigned= User::whereIn('id', $resignations)->pluck('name');
         $query=User::InstituteBased()->where(function ($q) use ($search) {
             $q->where('name', 'like', "%{$search}%")
                 ->orWhere('institute_emp_code', 'like', "%{$search}%");
@@ -114,7 +115,7 @@ class ReportController extends Controller
             $query->whereHas('appointment', function ($q) use ($place_of_work) {
                 $q->where('place_of_work_id', $place_of_work);
             });
-        })->whereNotIn('status',['inactive'])->whereNotIn('id',$resigned)->whereNotIn('id',$transfer)->distinct();
+        })->whereNotIn('status',['inactive'])->whereNotIn('name',$resigned)->whereNotIn('name',$transfer)->distinct();
         
         return $query;
     }
@@ -123,10 +124,10 @@ class ReportController extends Controller
     {
         set_time_limit(0);
         ini_set('memory_limit', '-1');
-        $previous_data=AttendanceManualEntry::whereBetween('attendance_date', [date('Y-m-d', strtotime('-1 day')), date('Y-m-d', strtotime('-1 day'))])->count();
-        if($previous_data==0){
-            $this->cronrepository->getDataByDate(date('Y-m-d', strtotime('-1 day')));
-        }
+        // $previous_data=AttendanceManualEntry::whereBetween('attendance_date', [date('Y-m-d', strtotime('-1 day')), date('Y-m-d', strtotime('-1 day'))])->count();
+        // if($previous_data==0){
+        //     $this->cronrepository->getDataByDate(date('Y-m-d', strtotime('-1 day')));
+        // }
  
         $month         = $request->month ?? date('m');
         $parameters = [
