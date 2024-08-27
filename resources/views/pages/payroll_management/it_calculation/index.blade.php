@@ -89,7 +89,8 @@
         });
 
         function listTaxCalculation(lock_calculation = '') {
-            
+            alert(1);
+            loading();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -104,6 +105,7 @@
                 },
                 success: function(res) {
                     unloading();
+                   
                     $('#staff_tax_pane').html(res);
                 }
             })

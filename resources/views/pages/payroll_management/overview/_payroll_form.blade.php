@@ -299,4 +299,5 @@
         $('#checklist_form').submit();
         $('#kt_dynamic_app').hide();
     }
+    
 </script>

@@ -82,7 +82,7 @@
 
         <div class="card-body py-4">
             <div class="dataTables_wrapper dt-bootstrap4 no-footer"  id="dataTagForPayroll">
-                    {{-- @include('pages.payroll_management.overview.statement._list') --}}
+                   @include('pages.payroll_management.overview.statement._list') 
             </div>
         </div>
     </div>
@@ -101,31 +101,31 @@
             listPayrollGenerated()
         }
 
-        function listPayrollGenerated() {
-            loading();
-            var payroll_id = $('#payroll_id').val();
-            var staff_id = $('#staff_id').val();
+        // function listPayrollGenerated() {
+        //     loading();
+        //     var payroll_id = $('#payroll_id').val();
+        //     var staff_id = $('#staff_id').val();
             
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            loading();
-            $.ajax({
-                url: "{{ route('payroll.statement.list') }}",
-                type: 'POST',
-                data: { payroll_id: payroll_id, staff_id:staff_id},
-                beforeSend: function(){
-                    loading();
-                },
-                success: function(res) {
-                    unloading();
-                    $('#dataTagForPayroll').html(res);
-                }
-            })
+        //     $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
+        //     loading();
+        //     $.ajax({
+        //         url: "{{ route('payroll.statement.list') }}",
+        //         type: 'POST',
+        //         data: { payroll_id: payroll_id, staff_id:staff_id},
+        //         beforeSend: function(){
+        //             loading();
+        //         },
+        //         success: function(res) {
+        //             unloading();
+        //             $('#dataTagForPayroll').html(res);
+        //         }
+        //     })
 
-        }
+        // }
 
         function exportExcelPayroll() {
 

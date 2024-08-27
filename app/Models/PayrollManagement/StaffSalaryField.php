@@ -18,7 +18,9 @@ class StaffSalaryField extends Model
         'percentage',
         'reference_type',
         'reference_id',
-        'short_name'
+        'short_name',
+         'verify_status'
     ];
+   
 
 }

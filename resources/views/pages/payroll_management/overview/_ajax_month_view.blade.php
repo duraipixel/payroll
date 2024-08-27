@@ -365,7 +365,7 @@
                         }
                     }).then(function(result) {
                         if (result.value) {
-
+                            loading();
                             $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -380,8 +380,15 @@
                                     mode: mode_name,
                                     payout_date: payout_date,
                                     payout_id: payout_id
+                                }, 
+                                beforeSend: function(){
+                                      loading();
+                                            
                                 },
                                 success: function(res) {
+                                    unloading();
+                                    
+                
                                     // dtTable.ajax.reload();
                                     $('.' + mode_name).removeClass('active');
                                     $(element).addClass('active');
@@ -395,9 +402,11 @@
                                         },
                                         timer: 3000
                                     });
-                                    getPayrollOverviewInfo('{{ $date }}', '{{ $month_start_no }}');
+                                    window.location.reload();
+                                     getPayrollOverviewInfo('{{ $date }}', '{{ $month_start_no }}');
                                 },
                                 error: function(xhr, err) {
+                                    unloading();
                                     if (xhr.status == 403) {
                                         toastr.error(xhr.statusText, 'UnAuthorized Access');
                                     }
@@ -413,7 +422,7 @@
         <div class="container h-400px justify-content-center">
             @if (isset($previous_payroll) && !empty($previous_payroll))
                 <div class="h-400px d-flex justify-content-center align-items-center d-none" id="payroll-loading">
-                    <img src="{{ asset('assets/images/payroll-loading.gif') }}" width="200" alt="">
+                    <img src="{{ asset('assets/images/payroll-loading.gif') }}" width="1000" height="1000"alt="">
                     <div class="text-muted">
                         Please wait while creating Payroll
                     </div>
