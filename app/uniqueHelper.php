@@ -223,6 +223,7 @@ if (!function_exists('salaryNo')) {
                 $number = $new_no . $salary_no;
             }
         } 
+     
         return $number;
     }
 }
