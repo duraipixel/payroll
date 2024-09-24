@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReportController;
 
+
+Route::get('payroll/upload', [App\Http\Controllers\SettingsController::class, 'PayrollBulkUpload'])->name('payroll.bulk.upload');
+
+Route::post('payroll/upload', [App\Http\Controllers\SettingsController::class, 'importPayroll'])->name('payroll.bulk.upload.save');
  Route::get('leave/document/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'Leavedocument'])->name('leave.document');
  Route::get('test/entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserELEntryLeave'])->name('test.entry');
  Route::post('staff/el-gentrate/{id}', [App\Http\Controllers\SettingsController::class, 'UserEntrylevelGentrate'])->name('staff.el.gentrate');
