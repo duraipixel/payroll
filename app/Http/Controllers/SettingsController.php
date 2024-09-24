@@ -12,10 +12,12 @@ use DataTables;
 use App\Models\User;
 use Carbon\Carbon;
 use DB;
+use App\Imports\PayrollImport;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Leave\StaffLeave;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+
 class SettingsController extends Controller
 {
     
@@ -995,4 +997,30 @@ class SettingsController extends Controller
       return redirect()->route('staff.register', ['id' => $user_id]);
     }
     
+    function PayrollBulkUpload()
+    {
+        return view('pages.payroll_management.bulk upload.index');
+    }
+    public function importPayroll(Request $request) 
+    {  
+      $validator=$this->validate($request, [
+        'file' => 'required|mimes:xlsx, xls',     
+       
+    ],
+    [
+        'file.required' => 'You must need to upload the excel file!',    
+      
+    ]);  
+      $exampleImport = new PayrollImport;
+      $excel_import=Excel::import($exampleImport, $request->file);
+      if($excel_import)
+      {
+          return back()->with('success','Excel Uploaded successfully!');
+      }
+      else
+      {
+          return back()->with('error','Excel Not Uploaded. Please try again later !');
+      }   
+        
+    }
 }

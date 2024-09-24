@@ -525,7 +525,8 @@ $payroll_menu = [
             'earnings.index', 
             'earnings.add',
             'deductions.index', 
-            'deductions.add'
+            'deductions.add',
+            'payroll.bulck.upload'
         ];
 @endphp
 <div data-kt-menu-trigger="click"
@@ -887,6 +888,17 @@ class="menu-item menu-accordion @if (request()->routeIs($tax_menu)) hover show @
     </div>
 </div>
 @endif
+<div class="menu-sub menu-sub-accordion menu-active-bg">
+    <div class="menu-item">
+        <a class="menu-link  @if (request()->routeIs(['payroll.bulk.upload'])) active @endif"
+            href="{{ route('payroll.bulk.upload') }}">
+            <span class="menu-bullet">
+                <span class="bullet bullet-dot"></span>
+            </span>
+            <span class="menu-title">Payroll Bulk Upload</span>
+        </a>
+    </div>
+</div>
 
 
 </div>
