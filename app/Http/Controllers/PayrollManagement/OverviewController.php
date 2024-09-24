@@ -30,16 +30,18 @@ use App\Models\Staff\StaffTaxSeperation;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PayrollManagement\ItStaffStatement;
 use DB;
+use App\Repositories\TaxCalculationRepository;
 class OverviewController extends Controller
 {
 
     private $checklistRepository;
     private $payrollRepository;
-
-    public function __construct(PayrollChecklistRepository $checklistRepository, PayrollRepository $payrollRepository)
+    private $taxRepository;
+    public function __construct(PayrollChecklistRepository $checklistRepository, PayrollRepository $payrollRepository,TaxCalculationRepository $taxRepository)
     {
         $this->checklistRepository = $checklistRepository;
         $this->payrollRepository = $payrollRepository;
+        $this->taxRepository = $taxRepository;
     }
 
     public function index()
@@ -202,7 +204,9 @@ class OverviewController extends Controller
     //     return array('error' => $error, 'message' => $message);
     // }
     public function setPermission(Request $request)
-    {
+    {    
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
         try {
             $status = $request->status;
             $mode = $request->mode;
@@ -254,9 +258,14 @@ class OverviewController extends Controller
                             ->where('verification_status', 'approved')
                             ->where('transfer_status', 'active')
                             ->chunk(100, function($incomes) use ($ins,$academicId) {
+                            
                                 foreach ($incomes as $income) {
-                                    $income_info = ItStaffStatement::where('staff_id', $income->id)->first();
-                                    if ($income_info) {
+                                    $income_data = ItStaffStatement::where('academic_id',academicYearId())->where('staff_id',$income->id)->first();
+                                    if(empty($income_data)){
+                                       $this->taxRepository->generateStatementForStaff($income->id);
+                                    }
+                                    $income_info = ItStaffStatement::where('academic_id',academicYearId())->where('staff_id',$income->id)->first();
+                                    if (isset($income_info) ){
                                         $total_income_tax_payable = $income_info->total_income_tax_payable ?? 0;
                                         $tax_amount = $total_income_tax_payable / 4;
     
@@ -455,7 +464,6 @@ class OverviewController extends Controller
             ->get();
 
         $payout_data = $this->checklistRepository->getToPayEmployee($date);
-       
         if (isset($payout_data) && count($payout_data)) {
 
             StaffSalary::where('payroll_id', $payout_id)->update(['status' => 'inactive']);
@@ -566,7 +574,7 @@ class OverviewController extends Controller
                 }
                 $net_pay = $earnings - $deductions;
                 if (!empty($used_fields)) {
-                  
+                
                     $staff_id = $value->id;
                     $sal['staff_id'] = $staff_id;
                     $sal['payroll_id'] = $payout_id;
@@ -591,6 +599,7 @@ class OverviewController extends Controller
                 }
             }
         }   
+        if(isset($ins)){
             $chunks = array_chunk($ins, $batchSize);
             foreach ($chunks as $chunk1) {
                 foreach ($chunk1 as $item) {
@@ -614,13 +623,14 @@ class OverviewController extends Controller
             }
             }
             }
+             }
             });
         }
        
         catch (\Throwable $e) {
           dd($e);
         }
-        return redirect()->route('payroll.set.processing.id', ['id' => $payout_id]);
+        return redirect()->route('payroll.set.processing.id', ['id' => $payout_id ?? '']);
     }
 
 

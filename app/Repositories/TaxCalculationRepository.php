@@ -17,7 +17,8 @@ class TaxCalculationRepository
 {
     public function generateStatementForStaff($staff_id)
     {
-
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
         $staff_details = User::find($staff_id);
         if($staff_details->tax_scheme_id==''){
          return ['error' =>1, 'message' =>'Please set schema then create incometax calculation'];
