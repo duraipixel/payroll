@@ -17,7 +17,8 @@ use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Leave\StaffLeave;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
-
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\File;
 class SettingsController extends Controller
 {
     
@@ -1003,8 +1004,9 @@ class SettingsController extends Controller
     }
     public function importPayroll(Request $request) 
     {  
+    
       $validator=$this->validate($request, [
-        'file' => 'required|mimes:xlsx, xls',     
+        'file' => 'required',     
        
     ],
     [
