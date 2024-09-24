@@ -83,11 +83,11 @@ class PayrollImport implements ToCollection,WithHeadingRow
             $field_data['percentage'] =0;
             $field_data['reference_type'] = ($field->salary_head_id==1)? 'EARNINGS': 'DEDUCTIONS';
             $field_data['reference_id'] =$field->salary_head_id;
-            $salary_info=StaffSalaryPatternField::updateOrCreate(['staff_id' => $staff->id,'staff_salary_pattern_id'=> $salary_info->id],$field_data);
+             StaffSalaryPatternField::updateOrCreate(['staff_id' => $staff->id,'staff_salary_pattern_id'=> $salary_info->id],$field_data);
             $field_data['staff_salary_pattern_id'] = $history_info->id;
             StaffSalaryPatternFieldHistory::create($field_data);
             }
-        }
+         }
         }
       }
     }
