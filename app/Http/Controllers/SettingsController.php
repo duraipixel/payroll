@@ -1006,7 +1006,7 @@ class SettingsController extends Controller
     {  
     
       $validator=$this->validate($request, [
-        'file' => 'required|mimes:xlsx, xls',     
+        'file' => 'required',     
        
     ],
     [
