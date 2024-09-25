@@ -58,7 +58,13 @@
                          <input class="form-control" type="file" name="file" id="file">
 
                      </div>
-                   
+                     <div class="col-lg-6 mb-5">
+
+                        
+                        <a  class="btn btn-primary" href="{{ route('bulk.sample.download') }}">Download</a> <br><label class="form-label">Download Sample Excel</label>
+                        
+                        </div>
+
                      <div class="col-lg-6 mb-12">
 
                          <button type="submit" class="btn btn-success">Submit</button>
