@@ -7,7 +7,7 @@ use App\Http\Controllers\ReportController;
 
 
 Route::get('payroll/upload', [App\Http\Controllers\SettingsController::class, 'PayrollBulkUpload'])->name('payroll.bulk.upload');
-
+Route::get('sample/xls',[App\Http\Controllers\SettingsController::class,'SampleXls'])->name('bulk.sample.download');
 Route::post('payroll/upload', [App\Http\Controllers\SettingsController::class, 'importPayroll'])->name('payroll.bulk.upload.save');
  Route::get('leave/document/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'Leavedocument'])->name('leave.document');
  Route::get('test/entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserELEntryLeave'])->name('test.entry');
@@ -311,6 +311,7 @@ Route::group(['middleware' => 'auth'],  function () {
         Route::post('/view',[App\Http\Controllers\LogController::class,'view'])->name('logs.view');
     });
     // Settings Start
+
     Route::get('account/settings',[App\Http\Controllers\Account\SettingsController::class,'index'])->name('account.settings');
     #Attendance 
     Route::get('attendance/overview',[App\Http\Controllers\AttendanceManagement\OverviewController::class,'index'])->name('attendance.overview');

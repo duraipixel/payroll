@@ -1025,4 +1025,12 @@ class SettingsController extends Controller
       }   
         
     }
+    public function SampleXls()
+    {
+        $filePath = public_path('Excel_Format\samplepayroll.xls');
+        $fileName = 'PayrollBulkUpload.xls';
+
+        return response()->download($filePath, $fileName);
+    }
+    
 }
