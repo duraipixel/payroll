@@ -82,7 +82,12 @@
                     @else
                     @if(isset($calander_status) && !empty($calander_status->days_type))
                     @if($calander_status->days_type=='holiday')
-                    <td  class="text-center" style="color:black;font-size: 10px;"><b>{{$key_word ??'WO'}}</b></td>
+                    <td  class="text-center" style="color:black;font-size: 10px;"><b>
+                    @if(!empty(getSortStaffLeaveType($item->id,$search_date)))
+                    {{ getSortStaffLeaveType($item->id,$search_date) }}
+                    @else
+                        {{$key_word ??'WO'}}
+                    @endif</b></td>
                     @elseif($calander_status->days_type=='week_off')
                     <td  class="text-center" style="color:black;font-size: 10px;"><b>WO</b></td>
                     @else
