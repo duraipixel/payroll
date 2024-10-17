@@ -50,7 +50,7 @@ class PayrollController extends Controller
     }
 
     public function processedList(Request $request) {
-        ini_set("max_execution_time", 0);
+ ini_set("max_execution_time", 0);
         ini_set('memory_limit', '-1');
         $month_no = $request->month_no;
         $dates = $request->dates;
@@ -58,8 +58,6 @@ class PayrollController extends Controller
         $to_date = date('Y-m-t', strtotime($dates));
         $working_days = date('t', strtotime($dates));
         $staff_id=$request->staff_id ??'';
-        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
-        $payroll_id = $payroll->id ?? '';
         $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
         $deductions_field = SalaryField::where('salary_head_id', 2)
             ->where(function ($query) {
@@ -94,7 +92,8 @@ class PayrollController extends Controller
             'salary_info' => $salary_info ?? [],
             'payroll' => $payroll ?? ''
         ];
-        return view('pages.payroll_management.payroll.table_list', $param );
+        $content = view('pages.payroll_management.payroll.table_list', $param);
+        return $content;
 
     }
 
