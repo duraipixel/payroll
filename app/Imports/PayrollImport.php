@@ -40,6 +40,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
         ini_set('memory_limit', '-1');
     //     DB::transaction(function() use ($rows
     //     ) {
+        //StaffSalaryPattern::update(["is_current"=>'no']);
     //   foreach($rows as $row){
       
     //     $dateTime = Date::excelToDateTimeObject($row["effective_from"]);
