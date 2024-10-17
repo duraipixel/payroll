@@ -234,8 +234,8 @@ class PayrollImport implements ToCollection,WithHeadingRow
                     $ins=[];
                     foreach ($payout_data as $key => $value) {
                         $staff_info = User::find($value->id);
-                        $pattern=StaffSalaryPattern::find($value->currentSalaryPattern->id);
-                        if (isset($pattern) && !empty($pattern)) {
+                        if (isset($value->currentSalaryPattern->id) && !empty($value->currentSalaryPattern->id)) {
+                            $pattern=StaffSalaryPattern::find($value->currentSalaryPattern->id);
                         
                         
                             $staff_id = $value->id;
