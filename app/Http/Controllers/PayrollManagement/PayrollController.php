@@ -50,23 +50,49 @@ class PayrollController extends Controller
     }
 
     public function processedList(Request $request) {
-
+        ini_set("max_execution_time", 0);
+        ini_set('memory_limit', '-1');
         $month_no = $request->month_no;
         $dates = $request->dates;
         $from_date = date('Y-m-01', strtotime($dates));
         $to_date = date('Y-m-t', strtotime($dates));
         $working_days = date('t', strtotime($dates));
-        // $payroll_date = date('Y-m-d', strtotime( $dates.'-1 month') );
-        
+        $staff_id=$request->staff_id ??'';
         $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';
+        $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
+        $deductions_field = SalaryField::where('salary_head_id', 2)
+            ->where(function ($query) {
+                $query->where('is_static', 'yes');
+                $query->orWhere('nature_id', 3);
+            })->get();
+        $institute_id=session()->get('staff_institute_id');
+        $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
+        $payroll_id = $payroll->id ?? '';
+        if( $payroll ) {
 
+            $salary_info = StaffSalary::when(!empty($payroll_id), function($query) use($payroll_id){
+                                $query->where('payroll_id', $payroll_id);
+                            })
+                            ->when( !empty( $staff_id ), function( $query ) use($staff_id) {
+                                $query->where('staff_id', $staff_id);
+                            } )
+                            ->when($institute_id, function ($q) use($institute_id) {
+             $q->whereHas('staff', function ($query) use ($institute_id) {
+            $query->Where('institute_id', $institute_id);
+                 });
+              })->get();
+        }
         $employees = User::where('status', 'active')->orderBy('name', 'asc')->where('institute_id',session()->get('staff_institute_id'))->get();
         $param = [
             'employees' => $employees,
             'month_no' => $month_no,
             'dates' => $dates,
-            'payroll_id' => $payroll_id
+            'payroll_id' => $payroll_id,
+            'earings_field' => $earings_field,
+            'deductions_field' => $deductions_field,
+            'salary_info' => $salary_info ?? [],
+            'payroll' => $payroll ?? ''
         ];
         return view('pages.payroll_management.payroll.table_list', $param );
 
