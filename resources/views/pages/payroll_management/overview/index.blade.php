@@ -19,9 +19,10 @@
                 if( $i ==  0) {
                     $start_year = $dates;
                 }
+                $curremnt= \Carbon\Carbon::now()->month;
             @endphp
                 <div id="payroll_month_{{ $months }}" role="button"
-                    class="payroll_month @if ($i == 0) active @endif"
+                    class="payroll_month @if ($curremnt === $months) active @endif"
                     onclick="getPayrollOverviewInfo('{{ $dates }}', {{ $months }})">
                     {{-- <div class="month_name">{{ date('M', mktime(0, 0, 0, $months, 10)) }}</div> --}}
                     <div class="month_name">{{ date('M', strtotime($dates)) }}</div>

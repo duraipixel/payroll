@@ -391,6 +391,7 @@ class CommonController extends Controller
     }
     public function payrollDownload(Request $request,$id)
     {
+        ini_set("max_execution_time", 0);
         $info=StaffSalary::with('staff.familyMembers','staff.pancard','staff.pf','staff.esi','staff.position','staff.appointment','fields','staff.leavesApproved')->find($id);
        $date_string = $info->salary_year . '-' . $info->salary_month . '-01';
         $date = date('d/M/Y', strtotime($date_string));
