@@ -72,7 +72,7 @@
                 },
                 success: function(res) {
                     unloading();
-                    $('#payroll_processed_containter').html( res );
+                     $('#payroll_processed_containter').html( res );
                 },
                 error: function(xhr, err) {
                     if (xhr.status == 403) {
