@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 
 class PayrollController extends Controller
 {
+    protected $pageNumber = 1;
+    protected $perPage = 10;
 
     public function __construct()
     {
@@ -52,6 +54,12 @@ class PayrollController extends Controller
     public function processedList(Request $request) {
  ini_set("max_execution_time", 0);
         ini_set('memory_limit', '-1');
+        if ($request->has('page')) {
+            $this->pageNumber = $request->get('page');
+        }
+        if ($request->has('per_page')) {
+            $this->perPage = $request->get('per_page');
+        }
         $month_no = $request->month_no;
         $dates = $request->dates;
         $from_date = date('Y-m-01', strtotime($dates));
@@ -79,7 +87,7 @@ class PayrollController extends Controller
              $q->whereHas('staff', function ($query) use ($institute_id) {
             $query->Where('institute_id', $institute_id);
                  });
-              })->get();
+              })->paginate($this->perPage, ['*'], 'page', $this->pageNumber);
         }
         $employees = User::where('status', 'active')->orderBy('name', 'asc')->where('institute_id',session()->get('staff_institute_id'))->get();
         $param = [
@@ -90,8 +98,11 @@ class PayrollController extends Controller
             'earings_field' => $earings_field,
             'deductions_field' => $deductions_field,
             'salary_info' => $salary_info ?? [],
-            'payroll' => $payroll ?? ''
+            'payroll' => $payroll ?? '',
+            'page'=>($this->pageNumber==0)?1:$this->pageNumber,
+            'pageNumber'=>count($salary_info??[]),
         ];
+      
         $content = view('pages.payroll_management.payroll.table_list', $param);
         return $content;
 

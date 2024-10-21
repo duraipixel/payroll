@@ -152,12 +152,36 @@ foreach ($deductions_field as $sitem){
 
     </table>
 </div>
-<div class="p3">
-    Total Generated : {{ count($salary_info) }}
-</div>
 
-{{-- <div class="row">
-    <div class="col-sm-12 text-end mt-3">
-        <a href="{{ route('payroll.overview') }}" class="btn btn-dark"> Move to Payroll Overview </a>
+
+<div class="row">
+<section id="paginations" class="section table-footer footer-form px-4 pagination">
+  <div>
+    <div class="paginate">
+      <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="pagination">
+        <div class="btn-group" role="group" aria-label="First group">
+          <button type="button" class="btn btn-outline-secondary btn-light btn-sm" id="down" value={{$pageNumber}}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M11.5 8a.5.5 0 0 1-.5-.5H5.707l2.646-2.646a.5.5 0 1 1-.708-.708l-3 3a.5.5 0 0 1 0 .708l3 3a.5.5 0 1 1 .708-.708L5.707 8H11a.5.5 0 0 1 .5-.5z"/>
+</svg>
+
+        
+
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-light btn-sm">
+            <span id="from"></span>{{$perPage  ?? 0}} of {{$pageNumber?? 0}}<span id="to"></span>
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-light btn-sm" id="up" value={{$pageNumber}}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
+</svg>
+
+          </button>
+        </div>
+      </div>
     </div>
-</div> --}}
+  </div>
+</section>
+   
+</div> 
+
