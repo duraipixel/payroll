@@ -100,7 +100,7 @@ class PayrollController extends Controller
             'salary_info' => $salary_info ?? [],
             'payroll' => $payroll ?? '',
             'page'=>($this->pageNumber==0)?1:$this->pageNumber,
-            'pageNumber'=>count($salary_info??[]),
+            'pageNumber'=>(($this->pageNumber==0)?1:$this->pageNumber) * count($salary_info??[]),
         ];
       
         $content = view('pages.payroll_management.payroll.table_list', $param);

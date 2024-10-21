@@ -238,7 +238,7 @@ foreach ($deductions_field as $sitem){
     </table>
 </div>
 <div class="p3">
-    Total Generated : {{ count($salary_info) }}
+    Total Generated : {{ $pageNumber }}
 </div>
 <div class="row">
 <section id="paginations" class="section table-footer footer-form px-4 pagination">
@@ -282,13 +282,16 @@ foreach ($deductions_field as $sitem){
       
         var month_no = '{{ $month_no }}';
         var dates = '{{ $dates }}';
+
         $('#up').on('click', function () {
          
-            var p=this.value+1;
+            var p =parseInt(this.value);
+             p +=1;
             getPayrollProcessedList(dates, month_no,p);
         });
         $('#down').on('click', function () {
-            var p=this.value-1;
+            var p =parseInt(this.value);
+             p -=1;
             getPayrollProcessedList(dates, month_no,p);
         });
         getTableDataPayrollList();
