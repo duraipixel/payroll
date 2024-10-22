@@ -201,44 +201,27 @@ class PayrollImport implements ToCollection,WithHeadingRow
                 $working_day = date('t', strtotime($payroll_date));
                 try {
                 DB::transaction(function() use ($date,$payout_id,$payroll_date,$salary_month,$salary_year,$month_length,$total_net_pay,
-                $working_day,$month_start,$month_end,$batchSize
+                $working_day,$month_start,$month_end,$batchSize,$rows
                 ) {
                 $earings_field = SalaryField::where('salary_head_id', 1)
-                    ->where(function ($query) {
-                        $query->where('is_static', 'yes')
-                            ->orWhere(function ($q) {
-                                $q->where('nature_id', 3)
-                                    ->where('short_name', '!=', 'ARR');
-                            });
-                    })
-                    ->orderBy('order_in_salary_slip')
                     ->get();
         
                 $deductions_field = SalaryField::where('salary_head_id', 2)
-                    ->where(function ($query) {
-                        $query->where('is_static', 'yes')
-                            ->orWhere(function ($q) {
-                                $q->where('nature_id', 3)
-                                    ->where('short_name', '!=', 'CONTRIBUTION')
-                                    ->where('short_name', '!=', 'OTHER');
-                            });
-                    })
                     ->get();
                     
                     $payCheck = new PayrollChecklistRepository();
                     $payout_data = $payCheck->getToPayEmployee($date);
                     // dd($payout_data);
-                if (isset($payout_data) && count($payout_data)) {
+                if (isset($rows) && count($rows)) {
         
                     StaffSalary::where('payroll_id', $payout_id)->update(['status' => 'inactive']);
                     $ins=[];
-                    foreach ($payout_data as $key => $value) {
-                        $staff_info = User::find($value->id);
-                        if (isset($value->currentSalaryPattern->id) && !empty($value->currentSalaryPattern->id)) {
-                            $pattern=StaffSalaryPattern::find($value->currentSalaryPattern->id);
-                        
-                        
-                            $staff_id = $value->id;
+                    foreach ($rows as $key => $row) {
+                        $staff_info =User::where('institute_emp_code',$row["inst_emp_code"])->first();
+                        $total_earnings=0;
+                        $total_deductions=0;
+                        if (isset($staff_info) && !empty($staff_info)) {
+                            $staff_id = $staff_info->id;
                             $sal['staff_id'] = $staff_id;
                             $sal['payroll_id'] = $payout_id;
                             $sal['salary_month'] = $salary_month;
@@ -246,16 +229,12 @@ class PayrollImport implements ToCollection,WithHeadingRow
                             $sal['is_salary_processed'] = 'yes';
                             $sal['status'] = 'active';
                             
-                            $sal['salary_pattern_id'] = $value->currentSalaryPattern->id;
+                            $sal['salary_pattern_id'] = $staff_info->currentSalaryPattern->id ?? 1;
                             $sal['working_days'] = $working_day;
-                            $sal['worked_days'] = $value->workedDays->count();
+                            $sal['worked_days'] = $staff_info->workedDays->count();
                             $sal['other_description'] = NUll;
                             $sal['salary_date'] = $payroll_date;
                             $sal['salary_no'] =  salaryNo();
-                            $sal['total_earnings'] = $pattern->total_earnings;
-                            $sal['total_deductions'] = $pattern->total_deductions;
-                            $sal['gross_salary'] = $pattern->gross_salary;
-                            $sal['net_salary'] = $pattern->net_salary;
                             $sal['is_salary_processed'] = 'yes';
                             $sal['status'] = 'active';
                             $sal['salary_processed_on']= date('Y-m-d H:i:s');
@@ -267,44 +246,117 @@ class PayrollImport implements ToCollection,WithHeadingRow
                               ],
                               $sal
                           );
-                          if (isset($earings_field) && !empty($earings_field)) {
-                         
-                            foreach ($earings_field as $eitem) {
-                                $amounts = getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $eitem->name, 'EARNINGS', $eitem->short_name);
-                                if (isset($amounts)) {
-                                    $used_fields= [
-                                        'percentage' => 0,
-                                        'staff_id' => $value->id,
-                                        'field_id' => $eitem->id,
-                                        'field_name' => $eitem->name,
-                                        'reference_type' => 'EARNINGS',
-                                        'reference_id' => 1,
-                                        'short_name' => $eitem->short_name,
-                                        'staff_salary_id'=>$sallary_f_id->id,
-                                        'amount' => $amounts,
-                                    ];
-                                    StaffSalaryField::updateOrCreate($used_fields,['staff_id'=>$staff_id,'staff_salary_id'=>$sallary_f_id->id,'field_id'=> $used_fields['field_id']]);
+                        
+                            if (isset($earings_field) && !empty($earings_field)) {
+                            
+                                foreach ($earings_field as $eitem) {
+                                       if($eitem->entry_type=="calculation"){
+                                        $valuesArray = explode(',', $eitem->field_items->field_name);
+                                        $amount=($eitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])];
+                                        $used_fields= [
+                                            'percentage' => 0,
+                                            'staff_id' => $staff_info->id,
+                                            'field_id' => $eitem->id,
+                                            'field_name' => $eitem->name,
+                                            'reference_type' => 'EARNINGS',
+                                            'reference_id' => 1,
+                                            'short_name' => $eitem->short_name,
+                                            'staff_salary_id'=>$sallary_f_id->id,
+                                            'amount' => $amount,
+                                        ];
+                                        $total_earnings +=$amount;
+                                       }else{
+                                        $amount=$row[strtolower($eitem->short_name)] ?? 0;
+                                        $used_fields= [
+                                            'percentage' => 0,
+                                            'staff_id' => $staff_info->id,
+                                            'field_id' => $eitem->id,
+                                            'field_name' => $eitem->name,
+                                            'reference_type' => 'EARNINGS',
+                                            'reference_id' => 1,
+                                            'short_name' => $eitem->short_name,
+                                            'staff_salary_id'=>$sallary_f_id->id,
+                                            'amount' => $amount,
+                                            
+                                        ];
+                                        $total_earnings +=$amount;
+                                       }
+                                   
+                                StaffSalaryField::updateOrCreate($used_fields,['staff_id'=>$staff_id,'staff_salary_id'=>$sallary_f_id->id,'field_id'=> $eitem->id]);
+                                    
                                 }
                             }
-                        }
-        
-                        if (isset($deductions_field) && !empty($deductions_field)) {
-                            foreach ($deductions_field as $sitem) {
-                                $tmp= [
-                                    'percentage' => 0,
-                                     'staff_id' => $value->id,
-                                    'field_id' => $sitem->id,
-                                    'field_name' => $sitem->name,
-                                    'reference_type' => 'DEDUCTIONS',
-                                    'reference_id' => 2,
-                                    'short_name' => $sitem->short_name,
-                                    'staff_salary_id'=>$sallary_f_id->id,
-                                    'amount'=> getStaffPatterFieldAmount($value->id, $value->currentSalaryPattern->id, '', $sitem->name, 'DEDUCTIONS') ?? 0
-                                ];
-                                StaffSalaryField::updateOrCreate($tmp,['staff_id'=>$staff_id,'staff_salary_id'=>$sallary_f_id->id,'field_id'=> $tmp['field_id']]);
+            
+                            if (isset($deductions_field) && !empty($deductions_field)) {
+                                foreach ($deductions_field as $sitem) {
+                                    if($sitem->entry_type=="calculation"){
+                                        $valuesArray = explode(',', $sitem->field_items->field_name);
+                                        $amount=($sitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])];
+                                        $tmp= [
+                                            'percentage' => 0,
+                                            'staff_id' => $staff_info->id,
+                                            'field_id' => $sitem->id,
+                                            'field_name' => $sitem->name,
+                                            'reference_type' => 'DEDUCTIONS',
+                                            'reference_id' => 1,
+                                            'short_name' => $eitem->short_name,
+                                            'staff_salary_id'=>$sallary_f_id->id,
+                                            'amount' => $amount,
+                                        ];
+                                        $total_deductions +=$deduct_amount;
+                                       }else{
+                                        switch (strtolower(trim($sitem->short_name))) {
+                                            case 'it':
+                                                $deduct_amount = staffMonthTax($staff_info->id, strtolower($salary_month));
+                                                break;
+                                            case 'bank loan':
+                                                $bank_loan_amount = getStaffPatterFieldAmount($staff_info->id, $staff_info->currentSalaryPattern->id ?? 1 , '', $sitem->name, 'DEDUCTIONS');
+                                                $other_bank_loan_amount = getBankLoansAmount($staff_info->id, $date);
+                                                $bank_loan_amount += $other_bank_loan_amount['total_amount'] ?? 0;
+                                                if (!empty($other_bank_loan_amount['emi'])) {
+                                                    $used_loans[] = $other_bank_loan_amount['emi'];
+                                                }
+                                                $deduct_amount = $bank_loan_amount;
+                                                break;
+                                            case 'lic':
+                                                $insurance_amount = getStaffPatterFieldAmount($staff_info->id, $staff_info->currentSalaryPattern->id ?? 1 , '', $sitem->name, 'DEDUCTIONS');
+                                                $other_insurance_amount = getInsuranceAmount($staff_info->id, $date);
+                                                $insurance_amount += $other_insurance_amount['total_amount'] ?? 0;
+                                                if (!empty($other_insurance_amount['emi'])) {
+                                                    $used_insurance[] = $other_insurance_amount['emi'];
+                                                }
+                                                $deduct_amount = $insurance_amount;
+                                                break;
+                                            default:
+                                                $deduct_amount = getStaffPatterFieldAmount($staff_info->id, $staff_info->currentSalaryPattern->id ?? 1 , '', $sitem->name, 'DEDUCTIONS');
+                                                $other_deductions = getDeductionInfo($staff_info->id, strtolower(Str::singular($sitem->short_name)), $date);
+                                                $deduct_amount += isset($other_deductions->amount) ? $other_deductions->amount : 0;
+                                                break;
+                                        }
+                                        
+                                    $tmp= [
+                                        'percentage' => 0,
+                                        'staff_id' => $staff_info->id,
+                                        'field_id' => $sitem->id,
+                                        'field_name' => $sitem->name,
+                                        'reference_type' => 'DEDUCTIONS',
+                                        'reference_id' => 2,
+                                        'short_name' => $sitem->short_name,
+                                        'staff_salary_id'=>$sallary_f_id->id,
+                                        'amount'=> $deduct_amount
+                                    ];
+                                    $total_deductions +=$deduct_amount;
+                                }
+                                    StaffSalaryField::updateOrCreate($tmp,['staff_id'=>$staff_id,'staff_salary_id'=>$sallary_f_id->id,'field_id'=> $tmp['field_id']]);
+                                }
                             }
-                        }
-                         
+                            
+                            $sallary_f_id->total_earnings = $total_earnings;
+                            $sallary_f_id->total_deductions = $total_deductions;
+                            $sallary_f_id->gross_salary = $total_earnings;
+                            $sallary_f_id->net_salary= $total_earnings - $total_deductions;
+                            $sallary_f_id->update();
+                          
                         }
                       }
                     }

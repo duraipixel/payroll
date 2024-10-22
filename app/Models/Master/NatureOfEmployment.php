@@ -3,6 +3,7 @@
 namespace App\Models\Master;
 use App\Models\AttendanceManagement\LeaveMapping;
 use App\Models\Staff\StaffAppointmentDetail;
+use App\Models\Staff\PayrollManagement\SalaryField;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -44,6 +45,26 @@ class NatureOfEmployment extends Model implements Auditable
      public function ml()
     {
         return $this->hasOne(LeaveMapping::class, 'nature_of_employment_id', 'id')->where('leave_head_id',3);
+    }
+    public function BA()
+    {
+        return $this->hasMany(SalaryField::class, 'nature_of_employment_id', 'nature_id')->where('short_name','Basic');
+    }
+    public function DA()
+    {
+        return $this->hasMany(SalaryField::class, 'nature_of_employment_id', 'nature_id')->where('short_name','DA');
+    }
+    public function HRA()
+    {
+        return $this->hasMany(SalaryField::class, 'nature_of_employment_id', 'nature_id')->where('short_name','HRA');
+    }
+    public function PBA()
+    {
+        return $this->hasMany(SalaryField::class, 'nature_of_employment_id', 'nature_id')->where('short_name','PBA');
+    }
+    public function PBADA()
+    {
+        return $this->hasMany(SalaryField::class, 'nature_of_employment_id', 'nature_id')->where('short_name','PBADA');
     }
     
 }

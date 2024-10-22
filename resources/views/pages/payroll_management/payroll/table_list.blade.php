@@ -238,8 +238,40 @@ foreach ($deductions_field as $sitem){
     </table>
 </div>
 <div class="p3">
-    Total Generated : {{ count($salary_info) }}
+    Total Generated : {{ $pageNumber }}
 </div>
+<div class="row">
+<section id="paginations" class="section table-footer footer-form px-4 pagination">
+  <div>
+    <div class="paginate">
+      <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="pagination">
+        <div class="btn-group" role="group" aria-label="First group">
+          <button type="button" class="btn btn-outline-secondary btn-light btn-sm down" id="down" value={{$page}}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M11.5 8a.5.5 0 0 1-.5-.5H5.707l2.646-2.646a.5.5 0 1 1-.708-.708l-3 3a.5.5 0 0 1 0 .708l3 3a.5.5 0 1 1 .708-.708L5.707 8H11a.5.5 0 0 1 .5-.5z"/>
+</svg>
+
+        
+
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-light btn-sm">
+            <span id="from"></span> @if($pageNumber===0) 0 @else {{$page  ?? 0}} @endif of {{$pageNumber}}<span id="to"></span>
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-light btn-sm up" id="up" value={{$page}}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"/>
+</svg>
+
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+   
+</div> 
+
+
         </div>
     </div>
     
@@ -247,8 +279,21 @@ foreach ($deductions_field as $sitem){
         $('#staff_id').select2({
             theme: 'bootstrap-5'
         })
+      
         var month_no = '{{ $month_no }}';
         var dates = '{{ $dates }}';
+
+        $('#up').on('click', function () {
+         
+            var p =parseInt(this.value);
+             p +=1;
+            getPayrollProcessedList(dates, month_no,p);
+        });
+        $('#down').on('click', function () {
+            var p =parseInt(this.value);
+             p -=1;
+            getPayrollProcessedList(dates, month_no,p);
+        });
         getTableDataPayrollList();
 
         // function getTableDataPayrollList() {
@@ -299,5 +344,42 @@ foreach ($deductions_field as $sitem){
        
 
         }
+        
+        function getPayrollProcessedList(dates, month_no,page='') {
+
+$('.payroll_month').removeClass('active');
+$('#payroll_month_' + month_no).addClass('active');
+
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+
+$.ajax({
+    url: "{{ route('payroll.processed.list') }}",
+    type: 'POST',
+    data: {
+        month_no: month_no,
+        dates:dates,
+        page:page,
+    },
+    beforeSend:function() {
+        loading();
+    },
+    success: function(res) {
+        unloading();
+         $('#payroll_processed_containter').html( res );
+    },
+    error: function(xhr, err) {
+        if (xhr.status == 403) {
+            toastr.error(xhr.statusText, 'UnAuthorized Access');
+        }
+    }
+});
+
+}
+
     </script>
+   
 {{-- @endif --}}
