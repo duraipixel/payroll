@@ -440,13 +440,13 @@
                 loading();
             setTimeout(() => {
                 unloading();
-            },900000);
+            },1800000);
             });
             ButtonClick.addEventListener('click', function(event) {
                 loading();
             setTimeout(() => {
                 unloading();
-            },900000);
+            },1800000);
             });
           
         });
