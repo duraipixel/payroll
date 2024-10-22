@@ -88,6 +88,17 @@ class PayrollController extends Controller
             $query->Where('institute_id', $institute_id);
                  });
               })->paginate($this->perPage, ['*'], 'page', $this->pageNumber);
+            $salary_count = StaffSalary::when(!empty($payroll_id), function($query) use($payroll_id){
+                $query->where('payroll_id', $payroll_id);
+            })
+            ->when( !empty( $staff_id ), function( $query ) use($staff_id) {
+                $query->where('staff_id', $staff_id);
+            } )
+            ->when($institute_id, function ($q) use($institute_id) {
+            $q->whereHas('staff', function ($query) use ($institute_id) {
+            $query->Where('institute_id', $institute_id);
+            });
+            })->count();
         }
         $employees = User::where('status', 'active')->orderBy('name', 'asc')->where('institute_id',session()->get('staff_institute_id'))->get();
         $param = [
@@ -99,6 +110,7 @@ class PayrollController extends Controller
             'deductions_field' => $deductions_field,
             'salary_info' => $salary_info ?? [],
             'payroll' => $payroll ?? '',
+            'salary_count'=>$salary_count ?? 0,
             'page'=>($this->pageNumber==0)?1:$this->pageNumber,
             'pageNumber'=>(($this->pageNumber==0)?1:$this->pageNumber) * count($salary_info??[]),
         ];
