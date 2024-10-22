@@ -238,7 +238,7 @@ foreach ($deductions_field as $sitem){
     </table>
 </div>
 <div class="p3">
-    Total Generated : {{ $pageNumber }}
+    Total Generated : {{ $salary_count }}
 </div>
 <div class="row">
 <section id="paginations" class="section table-footer footer-form px-4 pagination">
@@ -294,40 +294,40 @@ foreach ($deductions_field as $sitem){
              p -=1;
             getPayrollProcessedList(dates, month_no,p);
         });
-        getTableDataPayrollList();
+      
 
-        // function getTableDataPayrollList() {
+        function getTableDataPayrollList() {
 
-        //     var staff_id = $('#staff_id').val();
+            var staff_id = $('#staff_id').val();
 
-        //     $.ajaxSetup({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         }
-        //     });
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-        //     $.ajax({
-        //         url: "{{ route('payroll.ajax.list') }}",
-        //         type: 'POST',
-        //         data: {
-        //             month_no: month_no,
-        //             dates: dates,
-        //             staff_id:staff_id
-        //         },beforeSend:function() {
-        //             loading();
-        //         },
-        //         success: function(res) {
-        //             unloading();
-        //             $('#dataTagForPayroll').html(res);
-        //         },
-        //         error: function(xhr, err) {
-        //             if (xhr.status == 403) {
-        //                 toastr.error(xhr.statusText, 'UnAuthorized Access');
-        //             }
-        //         }
-        //     });
+            $.ajax({
+                url: "{{ route('payroll.processed.list') }}",
+                type: 'POST',
+                data: {
+                    month_no: month_no,
+                    dates: dates,
+                    staff_id:staff_id,
+                },beforeSend:function() {
+                    loading();
+                },
+                success: function(res) {
+                    unloading();
+                    $('#payroll_processed_containter').html(res);
+                },
+                error: function(xhr, err) {
+                    if (xhr.status == 403) {
+                        toastr.error(xhr.statusText, 'UnAuthorized Access');
+                    }
+                }
+            });
 
-        // }
+        }
 
         function exportExcelPayroll() {
 

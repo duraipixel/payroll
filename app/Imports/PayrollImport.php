@@ -203,11 +203,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                 DB::transaction(function() use ($date,$payout_id,$payroll_date,$salary_month,$salary_year,$month_length,$total_net_pay,
                 $working_day,$month_start,$month_end,$batchSize,$rows
                 ) {
-                $earings_field = SalaryField::where('salary_head_id', 1)
-                    ->get();
-        
-                $deductions_field = SalaryField::where('salary_head_id', 2)
-                    ->get();
+              
                     
                     $payCheck = new PayrollChecklistRepository();
                     $payout_data = $payCheck->getToPayEmployee($date);
@@ -217,10 +213,16 @@ class PayrollImport implements ToCollection,WithHeadingRow
                     StaffSalary::where('payroll_id', $payout_id)->update(['status' => 'inactive']);
                     $ins=[];
                     foreach ($rows as $key => $row) {
+                       
                         $staff_info =User::where('institute_emp_code',$row["inst_emp_code"])->first();
-                        $total_earnings=0;
-                        $total_deductions=0;
+                       
+                     $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id',  $staff_info->appointment->employment_nature->id?? 1 )
+                        ->get();
+                     $deductions_field = SalaryField::where('salary_head_id', 2)->where('nature_id',  $staff_info->appointment->employment_nature->id ?? 1 )
+                        ->get();
                         if (isset($staff_info) && !empty($staff_info)) {
+                            $total_earnings=0;
+                            $total_deductions=0;
                             $staff_id = $staff_info->id;
                             $sal['staff_id'] = $staff_id;
                             $sal['payroll_id'] = $payout_id;
@@ -252,7 +254,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                 foreach ($earings_field as $eitem) {
                                        if($eitem->entry_type=="calculation"){
                                         $valuesArray = explode(',', $eitem->field_items->field_name);
-                                        $amount=($eitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])];
+                                        $C_amount=($eitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])];
                                         $used_fields= [
                                             'percentage' => 0,
                                             'staff_id' => $staff_info->id,
@@ -262,11 +264,11 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                             'reference_id' => 1,
                                             'short_name' => $eitem->short_name,
                                             'staff_salary_id'=>$sallary_f_id->id,
-                                            'amount' => $amount,
+                                            'amount' => round($C_amount),
                                         ];
-                                        $total_earnings +=$amount;
+                                        $total_earnings +=round($C_amount);
                                        }else{
-                                        $amount=$row[strtolower($eitem->short_name)] ?? 0;
+                                        $M_amount=$row[strtolower($eitem->short_name)] ?? 0;
                                         $used_fields= [
                                             'percentage' => 0,
                                             'staff_id' => $staff_info->id,
@@ -276,12 +278,12 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                             'reference_id' => 1,
                                             'short_name' => $eitem->short_name,
                                             'staff_salary_id'=>$sallary_f_id->id,
-                                            'amount' => $amount,
+                                            'amount' => round($M_amount),
                                             
                                         ];
-                                        $total_earnings +=$amount;
+                                        $total_earnings +=round($M_amount);
                                        }
-                                   
+                                
                                 StaffSalaryField::updateOrCreate($used_fields,['staff_id'=>$staff_id,'staff_salary_id'=>$sallary_f_id->id,'field_id'=> $eitem->id]);
                                     
                                 }
@@ -291,7 +293,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                 foreach ($deductions_field as $sitem) {
                                     if($sitem->entry_type=="calculation"){
                                         $valuesArray = explode(',', $sitem->field_items->field_name);
-                                        $amount=($sitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])];
+                                        $D_amount=($sitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])];
                                         $tmp= [
                                             'percentage' => 0,
                                             'staff_id' => $staff_info->id,
@@ -301,9 +303,9 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                             'reference_id' => 1,
                                             'short_name' => $eitem->short_name,
                                             'staff_salary_id'=>$sallary_f_id->id,
-                                            'amount' => $amount,
+                                            'amount' => round($D_amount),
                                         ];
-                                        $total_deductions +=$deduct_amount;
+                                        $total_deductions +=round($D_amount);
                                        }else{
                                         switch (strtolower(trim($sitem->short_name))) {
                                             case 'it':
@@ -343,18 +345,18 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                         'reference_id' => 2,
                                         'short_name' => $sitem->short_name,
                                         'staff_salary_id'=>$sallary_f_id->id,
-                                        'amount'=> $deduct_amount
+                                        'amount'=> round($deduct_amount)
                                     ];
-                                    $total_deductions +=$deduct_amount;
+                                    $total_deductions +=round($deduct_amount);
                                 }
                                     StaffSalaryField::updateOrCreate($tmp,['staff_id'=>$staff_id,'staff_salary_id'=>$sallary_f_id->id,'field_id'=> $tmp['field_id']]);
                                 }
                             }
                             
-                            $sallary_f_id->total_earnings = $total_earnings;
-                            $sallary_f_id->total_deductions = $total_deductions;
-                            $sallary_f_id->gross_salary = $total_earnings;
-                            $sallary_f_id->net_salary= $total_earnings - $total_deductions;
+                            $sallary_f_id->total_earnings = round($total_earnings);
+                            $sallary_f_id->total_deductions = round($total_deductions);
+                            $sallary_f_id->gross_salary = round($total_earnings);
+                            $sallary_f_id->net_salary= round($total_earnings) - round($total_deductions);
                             $sallary_f_id->update();
                           
                         }
