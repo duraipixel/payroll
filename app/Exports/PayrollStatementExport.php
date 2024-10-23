@@ -23,7 +23,7 @@ class PayrollStatementExport implements FromView
     {
 
         $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
-        $deductions_field = SalaryField::where('salary_head_id', 2)
+        $deductions_field = SalaryField::where('salary_head_id', 2)->where('nature_id', 3)
             ->where(function ($query) {
                 $query->where('is_static', 'yes');
                 $query->orWhere('nature_id', 3);

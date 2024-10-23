@@ -1521,11 +1521,13 @@ function getInsuranceAmount($staff_id, $date)
     $arr = [];
     $total_amount = 0;
     $loan_details = StaffInsurance::where(['status' => 'active', 'staff_id' => $staff_id])->get();
+   
     if (isset($loan_details) && !empty($loan_details)) {
         foreach ($loan_details as $item) {
             if (isset($item->emi) && count($item->emi) > 0) {
                 foreach ($item->emi as $emi_item) {
                     $tmp = [];
+                  
                     if ($emi_item->emi_month == $date && $emi_item->status == 'active') {
 
                         $tmp['amount'] = $emi_item->amount;

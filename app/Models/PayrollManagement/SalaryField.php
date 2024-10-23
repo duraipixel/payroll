@@ -37,4 +37,9 @@ class SalaryField extends Model
     {
         return $this->hasMany(SalaryPercentageLog::class, 'salary_field_id', 'id');
     }
+    public function PrecentageLog()
+    {
+        return $this->hasOne(SalaryPercentageLog::class, 'salary_field_id', 'id')->orderBy('id', 'desc');
+    }
+    
 }

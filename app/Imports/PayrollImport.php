@@ -118,7 +118,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
     //   }
     //   });
       $dateTime = Date::excelToDateTimeObject($rows[0]["payroll_from"]);
-      $date=$dateTime->format('Y-d-m');
+      $date=$dateTime->format('Y-m-d');
       $payroll_date = $date;
       $from_date = date('Y-m-01', strtotime($payroll_date));
       $to_date = date('Y-m-t', strtotime($payroll_date));
@@ -187,10 +187,9 @@ class PayrollImport implements ToCollection,WithHeadingRow
             });
                 ini_set("max_execution_time", 0);
                 ini_set('memory_limit', '-1');
-                $date = $date;
                 $batchSize = 4000;
                 $payout_id = $payroll->id;
-                $payroll_date = date('Y-m-d', strtotime($date . '-1 month'));
+                $payroll_date = date('Y-m-d', strtotime($date));
                 $salary_month = date('F', strtotime($payroll_date));
                 $salary_year = date('Y', strtotime($payroll_date));
                 $month_length = date('t', strtotime($payroll_date));
@@ -207,7 +206,6 @@ class PayrollImport implements ToCollection,WithHeadingRow
                     
                     $payCheck = new PayrollChecklistRepository();
                     $payout_data = $payCheck->getToPayEmployee($date);
-                    // dd($payout_data);
                 if (isset($rows) && count($rows)) {
         
                     StaffSalary::where('payroll_id', $payout_id)->update(['status' => 'inactive']);
@@ -254,7 +252,23 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                 foreach ($earings_field as $eitem) {
                                        if($eitem->entry_type=="calculation"){
                                         $valuesArray = explode(',', $eitem->field_items->field_name);
-                                        $C_amount=($eitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])];
+                                        $C_amount=0;
+                                        if(isset($valuesArray[0]) && !empty($valuesArray[0])){
+                                            if(isset($eitem->PrecentageLog) && !empty($eitem->PrecentageLog)){
+                                                $percentage=$eitem->PrecentageLog->new_percentage;
+                                            }else{
+                                                $percentage=$eitem->field_items->percentage;
+                                            }
+                                            $C_amount +=($percentage/100)* $row[strtolower($valuesArray[0])];
+                                        }
+                                        if(isset($valuesArray[1]) && !empty($valuesArray[1])){
+                                            if($valuesArray[1]=="DA"){
+                                                $da=($eitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])]; 
+                                                $C_amount +=($eitem->field_items->percentage/100)* $da;
+                                            }
+                                           
+                                        }
+                                        
                                         $used_fields= [
                                             'percentage' => 0,
                                             'staff_id' => $staff_info->id,
@@ -293,7 +307,27 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                 foreach ($deductions_field as $sitem) {
                                     if($sitem->entry_type=="calculation"){
                                         $valuesArray = explode(',', $sitem->field_items->field_name);
-                                        $D_amount=($sitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])];
+                                      
+                                     $D_amount=0;
+                                    if(isset($valuesArray[0]) && !empty($valuesArray[0])){
+                                        if(isset($sitem->PrecentageLog) && !empty($sitem->PrecentageLog)){
+                                            $percentage=$sitem->PrecentageLog->new_percentage;
+                                        }else{
+                                            $percentage=$sitem->field_items->percentage;
+                                        }
+                                        $D_amount +=($percentage/100)* $row[strtolower($valuesArray[0])]; 
+                                    }
+                                  
+                                    if(isset($valuesArray[1]) && !empty($valuesArray[1])){
+                                        if($valuesArray[1]=="DA"){
+                                            $da_field = SalaryField::where('salary_head_id', 1)->where('nature_id',  $staff_info->appointment->employment_nature->id?? 1 )->where('short_name','DA')->first();                                            $da=($sitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])]; 
+                                           
+                                            $D_amount +=($da_field->field_items->percentage/100)* $da;
+                                        }
+                                        
+                                    }
+                                  
+                                      
                                         $tmp= [
                                             'percentage' => 0,
                                             'staff_id' => $staff_info->id,
@@ -301,7 +335,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                             'field_name' => $sitem->name,
                                             'reference_type' => 'DEDUCTIONS',
                                             'reference_id' => 1,
-                                            'short_name' => $eitem->short_name,
+                                            'short_name' => $sitem->short_name,
                                             'staff_salary_id'=>$sallary_f_id->id,
                                             'amount' => round($D_amount),
                                         ];
@@ -309,30 +343,72 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                        }else{
                                         switch (strtolower(trim($sitem->short_name))) {
                                             case 'it':
-                                                $deduct_amount = staffMonthTax($staff_info->id, strtolower($salary_month));
+                                                $deduct_amount = staffMonthTax($value->id, strtolower($salary_month));
                                                 break;
-                                            case 'bank loan':
-                                                $bank_loan_amount = getStaffPatterFieldAmount($staff_info->id, $staff_info->currentSalaryPattern->id ?? 1 , '', $sitem->name, 'DEDUCTIONS');
-                                                $other_bank_loan_amount = getBankLoansAmount($staff_info->id, $date);
-                                                $bank_loan_amount += $other_bank_loan_amount['total_amount'] ?? 0;
+                                            case 'loan':
+                                                $other_bank_loan_amount = getBankLoansAmount($staff_info->id, $payroll_date);
                                                 if (!empty($other_bank_loan_amount['emi'])) {
                                                     $used_loans[] = $other_bank_loan_amount['emi'];
                                                 }
-                                                $deduct_amount = $bank_loan_amount;
+                                           
+                                                if (!empty($used_loans)) {
+                                                    $staff_loan_id = [];
+                                                    foreach ($used_loans as $loan_items) {
+                                                        if (isset($loan_items['details']) && !empty($loan_items['details'])) {
+                                
+                                                            $info = StaffLoanEmi::find($loan_items['details']->id);
+                                                            $info->status = 'paid';
+                                                            $info->save();
+                                                            $staff_loan_id[]  = $loan_items['details']->staff_loan_id;
+                                                        }
+                                                    }
+                                                    if (!empty($staff_loan_id)) {
+                                                        $staff_loan_id = array_unique($staff_loan_id);
+                                                        foreach ($staff_loan_id as $loan_ids) {
+                                                            $loan_info = StaffBankLoan::with('paid_emi')->find($loan_ids);
+                                                            if ($loan_info && $loan_info->period_of_loans == $loan_info->paid_emi()->count()) {
+                                                                $loan_info->status = 'completed';
+                                                                $loan_info->save();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                $deduct_amount = $other_bank_loan_amount['total_amount']??0;
                                                 break;
                                             case 'lic':
-                                                $insurance_amount = getStaffPatterFieldAmount($staff_info->id, $staff_info->currentSalaryPattern->id ?? 1 , '', $sitem->name, 'DEDUCTIONS');
-                                                $other_insurance_amount = getInsuranceAmount($staff_info->id, $date);
-                                                $insurance_amount += $other_insurance_amount['total_amount'] ?? 0;
+                                            
+                                                $other_insurance_amount = getInsuranceAmount($staff_info->id, $payroll_date);
+                                             
                                                 if (!empty($other_insurance_amount['emi'])) {
                                                     $used_insurance[] = $other_insurance_amount['emi'];
                                                 }
-                                                $deduct_amount = $insurance_amount;
+                                                if (!empty($used_insurance)) {
+                                                    $staff_ins_id = [];
+                                                    foreach ($used_insurance as $loan_items) {
+                                                        if (isset($loan_items['details']) && !empty($loan_items['details'])) {
+                                
+                                                            $info = StaffInsuranceEmi::find($loan_items['details']->id);
+                                                            $info->status = 'paid';
+                                                            $info->save();
+                                
+                                                            $staff_ins_id[]  = $loan_items['details']->staff_ins_id;
+                                                        }
+                                                    }
+                                                    if (!empty($staff_ins_id)) {
+                                                        $staff_ins_id = array_unique($staff_ins_id);
+                                                        foreach ($staff_ins_id as $loan_ids) {
+                                                            $loan_info = StaffInsurance::with('paid_emi')->find($loan_ids);
+                                                            if ($loan_info && $loan_info->period_of_loans == $loan_info->paid_emi()->count()) {
+                                                                $loan_info->status = 'completed';
+                                                                $loan_info->save();
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                $deduct_amount =  $other_insurance_amount['total_amount'] ??0;
                                                 break;
                                             default:
-                                                $deduct_amount = getStaffPatterFieldAmount($staff_info->id, $staff_info->currentSalaryPattern->id ?? 1 , '', $sitem->name, 'DEDUCTIONS');
-                                                $other_deductions = getDeductionInfo($staff_info->id, strtolower(Str::singular($sitem->short_name)), $date);
-                                                $deduct_amount += isset($other_deductions->amount) ? $other_deductions->amount : 0;
+                                                $deduct_amount = $row[strtolower($sitem->short_name)] ?? 0;
                                                 break;
                                         }
                                         

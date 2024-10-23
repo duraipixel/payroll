@@ -208,18 +208,11 @@
         </div>
     </div>
     <br>
-    <div class="form-group mb-10 text-end">
-        <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
-        <button type="button" class="btn btn-primary" id="form-submit-btn">
-            <span class="indicator-label">
-                Submit
-            </span>
-        </button>
-    </div>
-    <hr>
    
-    @if(count($info->Fieldlogs)>0)
-  
+   
+   
+    @if(isset($info->Fieldlogs) && count($info->Fieldlogs)>0)
+    <hr>
     <table class="table table-bordered">
   <thead>
     <tr>
@@ -245,6 +238,15 @@
   </tbody>
 </table>
 @endif
+    </div>
+<div class="form-group mb-10 text-end">
+        <button type="button" class="btn btn-light-primary" data-bs-dismiss="modal"> Cancel </button>
+        <button type="button" class="btn btn-primary" id="form-submit-btn">
+            <span class="indicator-label">
+                Submit
+            </span>
+        </button>
+    </div>
 </form>
 
 <script>
