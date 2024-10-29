@@ -11,7 +11,7 @@
             <div>
                 @php
                     $months = 4;
-                    $dates = date('Y-03-01');
+                    $dates =$search_date;
                 @endphp
                 <select name="salary_month" id="salary_month" class="form-control form-control-sm">
                     @for ($i = 0; $i < 12; $i++)

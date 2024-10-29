@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
 use Illuminate\Validation\Rule;
-
+use App\Models\AcademicYear;
 class PreEarningsController extends Controller
 {
     public function index(Request $request)
@@ -26,14 +26,17 @@ class PreEarningsController extends Controller
                 ),
             )
         );
-        $search_date = date('Y-m-d');
+        $acYear = AcademicYear::find(academicYearId());
+        $from_year = $acYear->from_year;
+        $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
+        $search_date = date('Y-m-d', strtotime($start_year));
 
         return view('pages.payroll_management.earnings.index', compact('breadcrums', 'title', 'page_type', 'search_date'));
     }
 
     public function tableView(Request $request)
     {
-
+       
         $search_date = $request->dates;
         $month_no = $request->month_no;
         $page_type = $request->page_type;
@@ -89,7 +92,10 @@ class PreEarningsController extends Controller
 
     public function add(Request $request)
     {
-
+        $acYear = AcademicYear::find(academicYearId());
+        $from_year = $acYear->from_year;
+        $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
+        $search_date = date('Y-m-d', strtotime($start_year));
         $page_type = $request->type;
         $date = $request->date;
         $salary_date = date('Y-m-01', strtotime( $date ) );
@@ -111,7 +117,8 @@ class PreEarningsController extends Controller
             'nature_of_employees' => $nature_of_employees,
             'earnings_details' => $earnings_details,
             'earning_ids' => $earning_ids,
-            'salary_date' => $salary_date
+            'salary_date' => $salary_date,
+            'search_date'=>$search_date
         ];
         return view('pages.payroll_management.earnings.add_form', $params);
     }

@@ -12,7 +12,7 @@
         <div class="month_row d-flex">
             @php
                 $months = 4;
-                $dates = date('Y-03-01');
+                $dates = $search_date;
             @endphp
             @for ($i = 0; $i < 12; $i++)
                 @php
