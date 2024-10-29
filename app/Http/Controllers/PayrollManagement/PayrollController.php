@@ -67,11 +67,14 @@ class PayrollController extends Controller
         $working_days = date('t', strtotime($dates));
         $staff_id=$request->staff_id ??'';
         $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
-        $deductions_field = SalaryField::where('salary_head_id', 2)->where('nature_id', 3)
-            ->where(function ($query) {
-                $query->where('is_static', 'yes');
-                $query->orWhere('nature_id', 3);
-            })->get();
+        $deductions_field = SalaryField::where('salary_head_id', 2)
+        ->where(function ($query) {
+            $query->whereNull('nature_id')
+                  ->orWhere('nature_id', 3);
+        })
+        ->whereNull('deleted_at')
+        ->orderBy('order_in_salary_slip', 'asc')
+        ->get();
         $institute_id=session()->get('staff_institute_id');
         $payroll = Payroll::where('from_date', $from_date)->where('to_date', $to_date)->where('institute_id',session()->get('staff_institute_id'))->first();
         $payroll_id = $payroll->id ?? '';

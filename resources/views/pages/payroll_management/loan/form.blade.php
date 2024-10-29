@@ -2,6 +2,20 @@
     <div class="row">
         <div class="col-sm-8">
             <div class="row">
+            <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="" class="required">Staff Loan Type</label>
+                        <select name="staff_loan_type" id="staff_loan_type" class="form-control">
+                            <option value="">--select loan type--</option>
+                        <option value="personal_loan" @if (isset($loan_info->loan_type) && $loan_info->loan_type == "personal_loan") selected @endif>
+                                    Personal Loan</option>
+                        <option value="home_loan" @if (isset($loan_info->loan_type) && $loan_info->loan_type == "home_loan") selected @endif>
+                                    Home Loan</option>
+                        <option value="other_loan" @if (isset($loan_info->loan_type) && $loan_info->loan_type == "other_loan") selected @endif>
+                                    Other Loan</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         <input type="hidden" name="staff_id" id="emp_staff_id"
@@ -175,6 +189,7 @@
             'ifsc_code',
             'loan_type',
             'amount',
+            'staff_loan_type',
             'period_of_loan'
         ];
 

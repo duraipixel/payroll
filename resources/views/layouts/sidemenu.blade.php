@@ -526,7 +526,7 @@ $payroll_menu = [
             'earnings.add',
             'deductions.index', 
             'deductions.add',
-            'payroll.bulck.upload'
+            'payroll.bulk.upload'
         ];
 @endphp
 <div data-kt-menu-trigger="click"
@@ -707,7 +707,7 @@ class="menu-item menu-accordion @if (request()->routeIs($deduct_menu)) hover sho
         </div>
     @endif
     @if (access()->hasAccess('deductions', 'view'))
-        <div class="menu-item">
+        <!-- <div class="menu-item">
             <a class="menu-link @if (request()->routeIs('deductions.index') && request()->route('type') === 'arrear') active @endif"
                 href="{{ route('deductions.index', ['type' => 'arrear']) }}">
                 <span class="menu-bullet">
@@ -715,7 +715,7 @@ class="menu-item menu-accordion @if (request()->routeIs($deduct_menu)) hover sho
                 </span>
                 <span class="menu-title">Arrears</span>
             </a>
-        </div>
+        </div> -->
     @endif
     @if (access()->hasAccess('deductions', 'view'))
         <div class="menu-item">

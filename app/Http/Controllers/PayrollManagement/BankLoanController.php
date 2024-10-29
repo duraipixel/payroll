@@ -50,6 +50,7 @@ class BankLoanController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
+            'staff_loan_type'=>'required',
             'bank_id' => 'required',
             'ifsc_code' => 'required',
             'account_no' => 'required',
@@ -69,7 +70,7 @@ class BankLoanController extends Controller
             $ins['bank_name'] = $bank_info->name;
             $ins['ifsc_code'] = $request->ifsc_code;
             $ins['loan_ac_no'] = $request->account_no;
-            // $ins['loan_type_id'] = $request->staff_id;
+            $ins['loan_type'] = $request->staff_loan_type;
             $ins['loan_due'] = $request->loan_type;
             $ins['every_month_amount'] = $request->every_month_amount;
             $ins['loan_amount'] = $request->amount;
