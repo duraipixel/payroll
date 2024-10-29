@@ -14,6 +14,7 @@ class StaffBankLoan extends Model
     protected $fillable = [
         'staff_id',
         'bank_id',
+        'loan_type',
         'bank_name',	
         'ifsc_code',	
         'loan_ac_no',	

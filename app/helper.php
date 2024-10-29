@@ -1487,12 +1487,12 @@ function taxPaidPayroll($staff_id, $salary_pattern_id)
     return $info ?? 0;
 }
 
-function getBankLoansAmount($staff_id, $date)
+function getBankLoansAmount($staff_id, $date,$type=NULL)
 {
 
     $arr = [];
     $total_amount = 0;
-    $loan_details = StaffBankLoan::where(['status' => 'active', 'staff_id' => $staff_id])->get();
+    $loan_details = StaffBankLoan::where(['status' => 'active', 'staff_id' => $staff_id,'loan_type'=>$type])->get();
     if (isset($loan_details) && !empty($loan_details)) {
         foreach ($loan_details as $item) {
             if (isset($item->emi) && count($item->emi) > 0) {
