@@ -117,8 +117,8 @@ class PayrollImport implements ToCollection,WithHeadingRow
     //     }
     //   }
     //   });
-      $dateTime = Date::excelToDateTimeObject($rows[0]["payroll_from"]);
-      $date=$dateTime->format('Y-m-d');
+      $dateTime =  date('Y-m-d', strtotime('2024-01-01'));
+      $date= date('Y-m-d', strtotime('2024-01-01'));
       $payroll_date = $date;
       $from_date = date('Y-m-01', strtotime($payroll_date));
       $to_date = date('Y-m-t', strtotime($payroll_date));
@@ -213,7 +213,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                     foreach ($rows as $key => $row) {
                        
                      $staff_info =User::where('institute_emp_code',$row["inst_emp_code"])->first();
-                     $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id',  $staff_info->appointment->employment_nature->id?? 1 )
+                     $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id',  $staff_info->appointment->employment_nature->id?? 3 )
                         ->get();
                      $deductions_field = SalaryField::where('salary_head_id', 2)
                      ->where(function ($query) {
@@ -341,8 +341,10 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                     if(isset($valuesArray[1]) && !empty($valuesArray[1])){
                                         if($valuesArray[1]=="DA"){
                                             $da_field = SalaryField::where('salary_head_id', 1)->where('nature_id',  $staff_info->appointment->employment_nature->id?? 1 )->where('short_name','DA')->first();                                            $da=($sitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])]; 
-                                           
+                                           if(isset($da_field) && isset($da_field->field_items)){
                                             $D_amount +=($da_field->field_items->percentage/100)* $da;
+                                           }
+                                            
                                         }
                                         
                                     }
