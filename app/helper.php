@@ -1646,6 +1646,15 @@ if (!function_exists('leave_data')) {
     $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('acadamic_id',$academic_id)->get();
     return $data ??[];
    }
+   if (!function_exists('getLoanDetsils')) {
+
+    function getLoanDetsils($staff_id, $salary_id){
+        $salary = StaffSalary::find($salary_id);
+        $loan_details = StaffBankLoan::where(['status' => 'active', 'staff_id' => $staff_id])->get();
+        return $loan_details??[];
+        
+    }
+   }
 }
    
 

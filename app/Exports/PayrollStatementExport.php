@@ -21,7 +21,6 @@ class PayrollStatementExport implements FromView
 
      public function view(): View
     {
-
         $earings_field = SalaryField::where('salary_head_id', 1)->where('nature_id', 3)->get();
         $deductions_field =SalaryField::where('salary_head_id', 2)
         ->where(function ($query) {

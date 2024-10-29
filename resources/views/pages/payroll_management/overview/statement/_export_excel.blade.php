@@ -49,6 +49,7 @@ foreach ($deductions_field as $sitem){
                 </th>
             @endif
             <th class="px-3 text-white w-100px">Net Pay</th>
+            <th class="px-3 text-white w-100px">Loan Details</th>
         </tr>
     </thead>
 
@@ -107,7 +108,17 @@ foreach ($deductions_field as $sitem){
                     <td class="px-3">
                         {{ RsFormat($item->net_salary) }}
                     </td>
-                </tr>
+                    <td class="px-3">
+                        @php
+                        $loan_datas=getLoanDetsils($item->staff->id, $item->id);
+                        @endphp
+                        @if(isset($loan_datas) && count($loan_datas)>0)
+                        @foreach ($loan_datas as $loan)
+                        {{$loan->loan_type}} : {{$loan->bank_name}}<br/>
+                        @endforeach
+                        @else
+                        -
+                        @endif
                 @php
                     $gross_salary +=$item->gross_salary;
                     $net_salary +=$item->net_salary;
@@ -134,6 +145,7 @@ foreach ($deductions_field as $sitem){
                      @endif
                     <td>{{amountFormat($total_deductions)}}</td>
                     <td>{{amountFormat($net_salary)}}</td>
+                   
                   </tr>
                   @endif
                   @else
