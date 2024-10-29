@@ -364,9 +364,6 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                         $total_deductions +=round($D_amount);
                                        }else{
                                         switch (strtolower(trim($sitem->short_name))) {
-                                            case 'it':
-                                                $deduct_amount = staffMonthTax($staff_info->id, strtolower($salary_month));
-                                                break;
                                             case 'contributions':
                                                 $amount=StaffSalaryPreDeduction::where('staff_id',$staff_info->id)->where('deduction_type','contribution')->where('salary_month',$payroll_date)->where('status','active')->sum('amount');
                                                 $deduct_amount = $amount??0;
