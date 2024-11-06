@@ -35,9 +35,13 @@
     @if ($hitem['staff_details']->earnedLeaves && count($hitem['staff_details']->earnedLeaves) > 0)
     <tfoot>
         @php
+        $accumulated=0;
+        $sanctionted=0;
+        if(isset($hitem['staff_details']->appointment) && isset($hitem['staff_details']->appointment->nature_of_employment_id)){
             $accumulated = getLeaveAccumulated($hitem['staff_details']->appointment->nature_of_employment_id, 'Earned Leave', $hitem['staff_details'] );
             $sanctionted = getAcademicLeaveAllocated( academicYearId(), $hitem['staff_details']->appointment->nature_of_employment_id, 'Earned Leave' );
-            $el_total = $accumulated + $sanctionted;
+        }
+        $el_total = $accumulated + $sanctionted;
         @endphp
         <tr>
             <td> a. </td>
