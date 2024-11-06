@@ -179,6 +179,8 @@ class ReportController extends Controller
     }
 
     public function serviceHistoryIndex(Request $request) {
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
         $employee_id    = $request->employee ?? '';
         $department_id  = $request->department ?? '';
         $history_Data   = $this->repository->getServiceHistory($employee_id, $department_id );
@@ -193,7 +195,8 @@ class ReportController extends Controller
     }
 
     public function serviceHistoryExport(Request $request) {
-
+        set_time_limit(0);
+        ini_set('memory_limit', '-1');
         $employee_id = $request->employee ?? '';
         $department_id = $request->department ?? '';
 
