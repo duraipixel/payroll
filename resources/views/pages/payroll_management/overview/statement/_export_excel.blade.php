@@ -73,10 +73,12 @@ foreach ($deductions_field as $sitem){
                         {{ $item->staff->name ?? '' }}
                     </td>
                     <td class="px-3">
+                        @if(isset($item->staff->firstAppointment) && isset($item->staff->firstAppointment->joining_date))
                     {{ $item->staff->firstAppointment->joining_date ? 
-        \Carbon\Carbon::parse($item->staff->firstAppointment->joining_date)->format('d-m-Y') : 
-        ' ' 
-    }}
+                        \Carbon\Carbon::parse($item->staff->firstAppointment->joining_date)->format('d-m-Y') : 
+                        ' ' 
+                    }}
+                    @endif
                     </td>
                     <td class="px-3">
                         {{ $item->staff->appointment->employment_nature->name ?? '' }}
