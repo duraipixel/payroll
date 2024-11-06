@@ -26,6 +26,9 @@ foreach ($deductions_field as $sitem){
               Staff Nature
             </th>
             <th class="px-3 text-white">
+              Staff Designation 
+            </th>
+            <th class="px-3 text-white">
                 Workdays
             </th>
             @if (isset($earings_field) && !empty($earings_field))
@@ -77,6 +80,9 @@ foreach ($deductions_field as $sitem){
                     </td>
                     <td class="px-3">
                         {{ $item->staff->appointment->employment_nature->name ?? '' }}
+                    </td>
+                    <td class="px-3">
+                        {{ $item->staff->position->designation->name ?? '' }}
                     </td>
 
                     <td class="px-3">
