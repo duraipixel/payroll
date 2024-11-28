@@ -117,8 +117,8 @@ class PayrollImport implements ToCollection,WithHeadingRow
     //     }
     //   }
     //   });
-      $dateTime =  date('Y-m-d', strtotime('2024-01-01'));
-      $date= date('Y-m-d', strtotime('2024-01-01'));
+      $dateTime =  date('Y-m-d', strtotime('2024-03-01'));
+      $date= date('Y-m-d', strtotime('2024-03-01'));
       $payroll_date = $date;
       $from_date = date('Y-m-01', strtotime($payroll_date));
       $to_date = date('Y-m-t', strtotime($payroll_date));
@@ -264,7 +264,9 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                             }else{
                                                 $percentage=$eitem->field_items->percentage;
                                             }
+                                           
                                             $C_amount +=($percentage/100)* $row[strtolower($valuesArray[0])];
+                                           
                                         }
                                         if(isset($valuesArray[1]) && !empty($valuesArray[1])){
                                             if($valuesArray[1]=="DA"){

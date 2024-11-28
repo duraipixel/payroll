@@ -143,6 +143,7 @@ foreach ($deductions_field as $sitem){
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
                     @if (isset($earings_field) && !empty($earings_field))
                     @foreach ($earings_field as $eitem)
                     <td>{{ amountFormat(${$eitem->short_name}) }}</td>
