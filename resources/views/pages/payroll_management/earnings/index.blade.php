@@ -12,14 +12,15 @@
         <div class="month_row d-flex">
             @php
                 $months = 4;
-                $dates = $search_date;
+                $dates = $search_date1;
+              
             @endphp
             @for ($i = 0; $i < 12; $i++)
                 @php
                     $dates = date('Y-m-d', strtotime($dates . '+1 months'));
                 @endphp
                 <div id="payroll_month_{{ $months }}" role="button"
-                    class="payroll_month @if (date('m') == $months) active @endif"
+                    class="payroll_month @if (date('m') == date('m', strtotime($dates))) active @endif"
                     onclick="getEarningsView('{{ $dates }}', {{ $months }})">
                     {{-- <div class="month_name">{{ date('M', mktime(0, 0, 0, $months, 10)) }}</div> --}}
                     <div class="month_name">{{ date('M', strtotime($dates)) }}</div>

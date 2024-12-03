@@ -41,7 +41,7 @@
                                     @foreach ($employees as $items)
 
                                         <option value="{{ $items->id }}" @if( isset( $earning_ids ) && in_array( $items->id, $earning_ids )) selected="selected" @endif>{{ $items->name }} -
-                                            {{ $items->institute_emp_code }}</option>
+                                            {{ $items->society_emp_code }}</option>
                                     @endforeach
                                 @endif
                             </select>
