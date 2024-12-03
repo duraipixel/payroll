@@ -28,7 +28,7 @@ class PreEarningsController extends Controller
         );
         $acYear = AcademicYear::find(academicYearId());
         $from_year = $acYear->from_year;
-        $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
+        $start_year = '01-03-' . $acYear->from_year;
         $search_date1 = date('Y-m-d', strtotime($start_year));
         $search_date=date('Y-m-01');
 

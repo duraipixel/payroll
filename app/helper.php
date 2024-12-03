@@ -542,6 +542,7 @@ if (!function_exists('generateLeaveForm')) {
 
         return 'Rs.' . $amount ?? 0;
     }
+    
 
     function getTotalLeaveCount($staff_id)
     {
