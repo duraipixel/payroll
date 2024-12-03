@@ -27,9 +27,10 @@ class PreDeductionController extends Controller
         $acYear = AcademicYear::find(academicYearId());
         $from_year = $acYear->from_year;
         $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
-        $search_date = date('Y-m-d', strtotime($start_year));
+        $search_date1 = date('Y-m-d', strtotime($start_year));
+        $search_date=date('Y-m-01');
 
-        return view('pages.payroll_management.deductions.index', compact('breadcrums', 'title', 'page_type', 'search_date'));
+        return view('pages.payroll_management.deductions.index', compact('breadcrums', 'title', 'page_type', 'search_date','search_date1'));
     }
 
     public function tableView(Request $request)
@@ -37,7 +38,8 @@ class PreDeductionController extends Controller
 
         $acYear = AcademicYear::find(academicYearId());
         $from_year = $acYear->from_year;
-        $start_year = '01-' . $acYear->from_month . '-' . $acYear->from_year;
+        $start_year = $request->dates;
+
         $search_date = date('Y-m-d', strtotime($start_year));
         $month_no = $request->month_no;
         $page_type = $request->page_type;

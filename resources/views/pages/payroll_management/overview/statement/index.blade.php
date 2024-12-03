@@ -49,7 +49,7 @@
                             @isset($employees)
                                 @foreach ($employees as $item)
                                     <option value="{{ $item->id }}" @if (isset($staff_id) && $staff_id == $item->id) selected @endif>
-                                        {{ $item->name }} - {{ $item->institute_emp_code }}
+                                        {{ $item->name }} - {{ $item->society_emp_code }}
                                     </option>
                                 @endforeach
                             @endisset

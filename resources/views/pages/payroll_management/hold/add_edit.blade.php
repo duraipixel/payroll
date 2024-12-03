@@ -28,7 +28,7 @@
                         <option value="{{ $item->id }}" 
                             @if(isset($salary_detail) && isset($salary_detail->staff_id))
                             {{$salary_detail->staff_id==$item->id ? 'selected' : '' }}@endif>
-                            {{ $item->name }} - {{ $item->institute_emp_code }}
+                            {{ $item->name }} - {{ $item->society_emp_code }}
                         </option>
                     @endforeach
                 @endisset
