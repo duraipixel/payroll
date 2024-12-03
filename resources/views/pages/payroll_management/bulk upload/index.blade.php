@@ -82,6 +82,43 @@
              @endif
              <!--end::Card body-->
          </div>
+         <div class="card-body">
+             <h5> Payroll Head Bulk Upload </h5>
+        <form method="POST" action="{{ route('payroll.bulk.head.upload.save') }}" enctype="multipart/form-data">
+                 @csrf
+                 <div class="row">
+                     <!--begin::Input group-->
+                     <div class="col-lg-6 mb-5">
+
+
+                         <input class="form-control" type="file" name="file" id="file">
+
+                     </div>
+                     <div class="col-lg-6 mb-5">
+
+                        
+                        <a  class="btn btn-primary" href="{{ route('bulk.head.sample.download') }}">Download</a> <br><label class="form-label">Download Sample Excel</label>
+                        
+                        </div>
+
+                     <div class="col-lg-6 mb-12">
+
+                         <button type="submit" class="btn btn-success">Submit</button>
+
+                     </div>
+
+                 </div>
+             </form>
+             @if ($errors->any())
+                 <?php $i = 1; ?>
+                 @foreach ($errors->all() as $error)
+                     <li style="list-style:none;color:red ">{{ $i }}. {{ $error }}</li>
+                     <?php $i++; ?>
+                 @endforeach
+             @endif
+             <!--end::Card body-->
+         </div>
+    </div>
          <script src="{{ asset('assets/js/jquery.steps.min.js') }}"></script>
          <script src="{{ asset('assets/js/bd-wizard.js') }}"></script>
          <!--end::Card-->
