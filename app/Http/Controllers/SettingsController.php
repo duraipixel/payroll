@@ -13,6 +13,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DB;
 use App\Imports\PayrollImport;
+use App\Imports\PayrollHeadImport;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Leave\StaffLeave;
 use Illuminate\Support\Facades\Validator;
@@ -1028,6 +1029,36 @@ class SettingsController extends Controller
     public function SampleXls()
     {
         $filePath = public_path('Excel_Format\samplepayroll.xls');
+        $fileName = 'PayrollBulkUpload.xls';
+
+        return response()->download($filePath, $fileName);
+    }
+    public function PayrollHeadBulkUpload(Request $request) 
+    {  
+    
+      $validator=$this->validate($request, [
+        'file' => 'required',     
+       
+    ],
+    [
+        'file.required' => 'You must need to upload the excel file!',    
+      
+    ]);  
+      $exampleImport = new PayrollHeadImport;
+      $excel_import=Excel::import($exampleImport, $request->file);
+      if($excel_import)
+      {
+          return back()->with('success','Excel Uploaded successfully!');
+      }
+      else
+      {
+          return back()->with('error','Excel Not Uploaded. Please try again later !');
+      }   
+        
+    }
+    public function SampleHeadXls()
+    {
+        $filePath = public_path('Excel_Format\head.xls');
         $fileName = 'PayrollBulkUpload.xls';
 
         return response()->download($filePath, $fileName);
