@@ -22,7 +22,7 @@
                 $curremnt= \Carbon\Carbon::now()->month;
             @endphp
                 <div id="payroll_month_{{ $months }}" role="button"
-                    class="payroll_month @if ($curremnt === $months) active @endif"
+                    class="payroll_month @if(date('m') == date('m', strtotime($dates))) active @endif"
                     onclick="getPayrollOverviewInfo('{{ $dates }}', {{ $months }})">
                     {{-- <div class="month_name">{{ date('M', mktime(0, 0, 0, $months, 10)) }}</div> --}}
                     <div class="month_name">{{ date('M', strtotime($dates)) }}</div>
@@ -49,7 +49,7 @@
 @section('add_on_script')
     <script>
         @if($start_month == 4 )
-        getPayrollOverviewInfo('{{ $start_year }}', '{{ $start_month }}');
+        getPayrollOverviewInfo('{{ $start_year }}',date('m'));
         @endif
 
         function getPayrollOverviewInfo(dates, month_no) {

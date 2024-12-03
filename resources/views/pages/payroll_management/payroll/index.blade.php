@@ -19,7 +19,7 @@
                 }
             @endphp
                 <div id="payroll_month_{{ $months }}" role="button"
-                    class="payroll_month @if ($i == 0) active @endif"
+                    class="payroll_month @if(date('m') == date('m',strtotime($dates))) active @endif"
                     onclick="getPayrollProcessedList('{{ $dates }}', {{ $months }})">
                     {{-- <div class="month_name">{{ date('M', mktime(0, 0, 0, $months, 10)) }}</div> --}}
                     <div class="month_name">{{ date('M', strtotime($dates)) }}</div>
@@ -46,7 +46,7 @@
 @section('add_on_script')
     <script>
         @if($start_month == 4 )
-        getPayrollProcessedList('{{ $start_year }}', '{{ $start_month }}');
+        getPayrollProcessedList('{{ $start_year }}', date('m'));
         @endif
 
         function getPayrollProcessedList(dates, month_no) {
