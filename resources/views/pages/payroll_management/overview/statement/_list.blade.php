@@ -85,7 +85,7 @@
                             </td>
                         @endif
                         <td class="px-3">
-                            {{ RsFormat($item->net_salary) }}
+                            {{ amountFormat($item->net_salary) }}
                         </td>
                     </tr>
                 @endforeach
