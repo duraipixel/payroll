@@ -42,8 +42,8 @@ class PayrollHeadImport implements ToCollection,WithHeadingRow
                 $ins['staff_id'] = $staff->id;
                 $ins['salary_month'] = $salary_month;
                 $ins['academic_id'] = academicYearId();
-                $ins['amount'] = $row['arr'];
-                $ins['remarks'] = $row['bonus'] ?? null;
+                $ins['amount'] = $row['bonus'];
+                $ins['remarks'] = $row['remarks'] ?? null;
                 $ins['earnings_type'] = 'bonus';
                 $ins['status'] = 'active';
                 $ins['added_by'] = auth()->user()->id;

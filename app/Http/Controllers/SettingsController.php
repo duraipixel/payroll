@@ -1028,8 +1028,8 @@ class SettingsController extends Controller
     }
     public function SampleXls()
     {
-        $filePath = public_path('Excel_Format\samplepayroll.xls');
-        $fileName = 'PayrollBulkUpload.xls';
+        $filePath = public_path('Excel_Format\samplepayroll.xlsx');
+        $fileName = 'PayrollBulkUpload.xlsx';
 
         return response()->download($filePath, $fileName);
     }
@@ -1058,8 +1058,8 @@ class SettingsController extends Controller
     }
     public function SampleHeadXls()
     {
-        $filePath = public_path('Excel_Format\head.xls');
-        $fileName = 'PayrollHeadBulkUpload.xls';
+        $filePath = public_path('Excel_Format\head.xlsx');
+        $fileName = 'PayrollHeadBulkUpload.xlsx';
 
         return response()->download($filePath, $fileName);
     }
