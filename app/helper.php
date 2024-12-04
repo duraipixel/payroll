@@ -542,6 +542,7 @@ if (!function_exists('generateLeaveForm')) {
 
         return 'Rs.' . $amount ?? 0;
     }
+    
 
     function getTotalLeaveCount($staff_id)
     {
@@ -1270,7 +1271,7 @@ function RsFormat($amount)
 
 function amountFormat($amount)
 {
-    return number_format($amount, 2);
+    return str_replace(',', '',number_format($amount, 2));
 }
 
 function payrollCheck($month, $module)

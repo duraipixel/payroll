@@ -37,7 +37,7 @@ class PayrollStatementExport implements FromView
                         where('payroll_id', $payroll_id)
                         ->when( !empty( $staff_id ), function( $query ) use($staff_id) {
                             $query->where('staff_id', $staff_id);
-                        } )
+                        } )->where('staff_id','!=',1)
                         ->get();
 
         $params = [
