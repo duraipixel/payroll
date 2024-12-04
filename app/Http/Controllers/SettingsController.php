@@ -1059,7 +1059,7 @@ class SettingsController extends Controller
     public function SampleHeadXls()
     {
         $filePath = public_path('Excel_Format\head.xls');
-        $fileName = 'PayrollBulkUpload.xls';
+        $fileName = 'PayrollHeadBulkUpload.xls';
 
         return response()->download($filePath, $fileName);
     }
