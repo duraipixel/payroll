@@ -351,7 +351,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                         
                                     }
                                   
-                                      if(isset($staff_info->appointment) && isset($staff_info->appointment->employment_nature) && isset($staff_info->appointment->employment_nature->id)&& $staff_info->appointment->employment_nature->id==5 && $sitem->short_name=='EPF'){
+                                      if(isset($staff_info->appointment) && isset($staff_info->appointment->employment_nature) && isset($staff_info->appointment->employment_nature->id)&& in_array($staff_info->appointment->employment_nature->id, [5, 4, 1]) && $sitem->short_name=='EPF'){
                                         $D_amount=0;
                                       }
                                         $tmp= [
