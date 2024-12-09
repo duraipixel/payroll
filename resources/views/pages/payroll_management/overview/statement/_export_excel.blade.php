@@ -53,6 +53,7 @@ foreach ($deductions_field as $sitem){
             @endif
             <th class="px-3 text-white w-100px">Net Pay</th>
             <th class="px-3 text-white w-100px">Loan Details</th>
+             <th class="px-3 text-white w-100px">Remarks</th>
         </tr>
     </thead>
 
@@ -130,6 +131,10 @@ foreach ($deductions_field as $sitem){
                         @else
                         -
                         @endif
+                    </td>
+                    <td class="px-3">
+                    {{is_remarks($item->staff->id,$item->salary_date)}}
+                    </td>
                 @php
                     $gross_salary +=$item->gross_salary;
                     $net_salary +=$item->net_salary;
