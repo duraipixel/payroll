@@ -63,7 +63,7 @@ class PayrollLoanImport implements ToCollection,WithHeadingRow
                     );
                 }
             }
-                  if (count($emi_details) > 0 && count($emi_details) > 0) {
+                  if (isset($emi_details) && count($emi_details) > 0) {
                     StaffLoanEmi::where('staff_loan_id', $loan_info->id)->update(['status' => 'inactive']);
                     foreach($emi_details as $emi_detail){
                         $emi_date=date('Y-m-d', strtotime($emi_detail["emi_month"]));
@@ -82,16 +82,16 @@ class PayrollLoanImport implements ToCollection,WithHeadingRow
                     }
                     }
            }else{
-            $emi_details = $rows->filter(function ($item) use ($row) {
+            $emi_detailes = $rows->filter(function ($item) use ($row) {
                 return $item['type'] === 'child' && $item['type_id'] === $row['type_id'];
             });
            
             
-            if (count($emi_details) > 0 && count($emi_details) > 0) {
+            if (isset($emi_detailes)  && count($emi_detailes) > 0) {
                 StaffLoanEmi::where('staff_loan_id', $loan_info->id)->update(['status' => 'inactive']);
-                foreach($emi_details as $emi_detail){
+                foreach($emi_detailes as $emi_detail){
 
-                       $date =Date::excelToDateTimeObject($row["loan_start_date"]);
+                       $date =Date::excelToDateTimeObject($emi_detail["loan_start_date"]);
                        $emi_date=$date->format('Y-d-m');
                        $check_date = date('Y-m-01', strtotime($emi_date));
                        $ins = [];
