@@ -12,6 +12,10 @@ Route::get('sample/xls',[App\Http\Controllers\SettingsController::class,'SampleX
 Route::post('payroll/head/upload', [App\Http\Controllers\SettingsController::class, 'PayrollHeadBulkUpload'])->name('payroll.bulk.head.upload.save');
 Route::get('sample/head/xls',[App\Http\Controllers\SettingsController::class,'SampleHeadXls'])->name('bulk.head.sample.download');
 
+Route::post('payroll/loan/upload', [App\Http\Controllers\SettingsController::class, 'PayrollLoanBulkUpload'])->name('payroll.bulk.loan.upload.save');
+Route::get('sample/loan/xls',[App\Http\Controllers\SettingsController::class,'SampleLoanXls'])->name('bulk.loan.sample.download');
+
+
 Route::post('payroll/upload', [App\Http\Controllers\SettingsController::class, 'importPayroll'])->name('payroll.bulk.upload.save');
  Route::get('leave/document/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'Leavedocument'])->name('leave.document');
  Route::get('test/entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserELEntryLeave'])->name('test.entry');

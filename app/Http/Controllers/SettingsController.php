@@ -13,6 +13,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use DB;
 use App\Imports\PayrollImport;
+use App\Imports\PayrollLoanImport;
 use App\Imports\PayrollHeadImport;
 use App\Models\Staff\StaffAppointmentDetail;
 use App\Models\Leave\StaffLeave;
@@ -1060,6 +1061,36 @@ class SettingsController extends Controller
     {
         $filePath = public_path('Excel_Format\head.xlsx');
         $fileName = 'PayrollHeadBulkUpload.xlsx';
+
+        return response()->download($filePath, $fileName);
+    }
+    public function PayrollLoanBulkUpload(Request $request) 
+    {  
+    
+      $validator=$this->validate($request, [
+        'file' => 'required',     
+       
+    ],
+    [
+        'file.required' => 'You must need to upload the excel file!',    
+      
+    ]);  
+      $exampleImport = new PayrollLoanImport;
+      $excel_import=Excel::import($exampleImport, $request->file);
+      if($excel_import)
+      {
+          return back()->with('success','Excel Uploaded successfully!');
+      }
+      else
+      {
+          return back()->with('error','Excel Not Uploaded. Please try again later !');
+      }   
+        
+    }
+    public function SampleLoanXls()
+    {
+        $filePath = public_path('Excel_Format\loan.xlsx');
+        $fileName = 'LoanBulkUpload.xlsx';
 
         return response()->download($filePath, $fileName);
     }
