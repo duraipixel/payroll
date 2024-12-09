@@ -50,13 +50,13 @@
                             data-bs-toggle="tab" role="tab" href="#kt_customer_details_invoices_7"
                             aria-selected="false">Others</a>
                     </li>
-                    @if( isset(auth()->user()->password ) && auth()->user()->password !=null )
+                
                     <li class="nav-item" role="presentation">
-                        <a id="password_tab" class="nav-link text-active-primary" data-bs-toggle="tab"
-                            role="tab" href="#kt_customer_password_tab" aria-selected="false">Change
+                        <a id="kt_referrals_2024_tab" class="nav-link text-active-primary" data-bs-toggle="tab"
+                            role="tab" href="#kt_customer_details_invoices_8" aria-selected="false">Change
                             Password</a>
                     </li>
-                    @endif
+                   
                 </ul>
             </div>
         </div>
@@ -88,7 +88,7 @@
                 <div id="kt_customer_details_invoices_7" class="py-0 tab-pane fade" role="tabpanel">
                     @include('pages.overview.others.index')
                 </div>
-                <div id="kt_customer_password_tab" class="py-0 tab-pane fade" role="tabpanel">
+                <div id="kt_customer_details_invoices_8" class="py-0 tab-pane fade" role="tabpanel">
                     @include('pages.overview.password.form')
                 </div>
             </div>
