@@ -48,6 +48,7 @@ use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
 use Carbon\Carbon;
+use App\Models\PayrollManagement\HoldSalary;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Models\Master\Department;
@@ -1657,7 +1658,34 @@ if (!function_exists('leave_data')) {
     }
    }
 }
-   
+if (!function_exists('is_remarks')) {
+    function is_remarks($staff_id,$pay_month)
+    {
+       $hold=HoldSalary::where('staff_id',$staff_id)->where('hold_month',$pay_month)->first();
+       $predeductions=StaffSalaryPreDeduction::where(['salary_month' => $pay_month, 'staff_id' => $staff_id])->
+       get();
+       $preearnings=StaffSalaryPreEarning::where(['salary_month' => $pay_month, 'staff_id' => $staff_id])->
+       get();
+       $remarks='';
+       if(isset($hold) && !empty($hold->release_remarks)){
+        $remarks .='hold salary- '.$hold->release_remarks;
+       }
+       foreach($predeductions as $deduction){
+        if(isset($deduction) && !empty($deduction->remarks)){
+            $deduction_remarks=$deduction->deduction_type.'- '.$deduction->remarks;
+            $remarks .= (!empty($remarks) ? ' , ' : '') . $deduction_remarks;
+        }
+       }
+       foreach($preearnings as $earning){
+        if(isset($earning) && !empty($earning->remarks)){
+            $earning_remarks=$earning->earnings_type.'- '.$earning->remarks;
+            $remarks .= (!empty($remarks) ? ' , ' : '') . $earning_remarks;
+        }
+       }
+       return $remarks;
+      
+    }
+}
 
 
 
