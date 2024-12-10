@@ -87,6 +87,7 @@
         });
 
         if( !accountPasswordErrors ){
+         loading();
             var forms = $('#dynamic_form')[0];
                     var formData = new FormData(forms);
             $.ajax({
@@ -100,8 +101,10 @@
                             if( res.error == 0 ) {
                                 toastr.success(res.message);
                                 document.getElementById("dynamic_form").reset();
+                                 unloading();
                             } else{
                                 if( res.message ) {
+                                 unloading();
                                     res.message.forEach(element => {
                                         toastr.error("Error", element);
                                     });
