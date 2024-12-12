@@ -330,7 +330,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                     if($sitem->entry_type=="calculation"){
                                         $valuesArray = explode(',', $sitem->field_items->field_name);
                                       
-                                     $D_amount=0;
+                                        $D_amount=0;
                                     if(isset($valuesArray[0]) && !empty($valuesArray[0])){
                                         if(isset($sitem->PrecentageLog) && !empty($sitem->PrecentageLog)){
                                             $percentage=$sitem->PrecentageLog->new_percentage;
@@ -342,9 +342,14 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                   
                                     if(isset($valuesArray[1]) && !empty($valuesArray[1])){
                                         if($valuesArray[1]=="DA"){
-                                            $da_field = SalaryField::where('salary_head_id', 1)->where('nature_id',  $staff_info->appointment->employment_nature->id?? 1 )->where('short_name','DA')->first();                                            $da=($sitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])]; 
-                                           if(isset($da_field) && isset($da_field->field_items)){
-                                            $D_amount +=($da_field->field_items->percentage/100)* $da;
+                                            $da_field = SalaryField::with('PrecentageLog')->where('salary_head_id', 1)->where('nature_id',  $staff_info->appointment->employment_nature->id?? 1 )->where('short_name','DA')->first();                                            $da=($sitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])]; 
+                                            if(isset($da_field->PrecentageLog) && !empty($da_field->PrecentageLog)){
+                                                $percentage=$da_field->PrecentageLog->new_percentage;
+                                            }else{
+                                                $percentage=$da_field->field_items->percentage;
+                                            }
+                                            if(isset($da_field) && isset($da_field->field_items)){
+                                              $D_amount +=($percentage/100)* $da;
                                            }
                                             
                                         }
