@@ -78,7 +78,7 @@ class PayrollLoanImport implements ToCollection,WithHeadingRow
                         $ins['loan_type'] = 'Bank Loan';
                         $ins['status'] = 'active';
  
-                        StaffLoanEmi::updateOrCreate(['staff_loan_id' => $loan_info->id, 'emi_date' => $emi_date], $ins);
+                        StaffLoanEmi::updateOrCreate(['staff_loan_id' => $loan_info->id, 'emi_month' => $check_date], $ins);
                     }
                     }
            }else{
