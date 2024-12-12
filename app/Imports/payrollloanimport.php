@@ -78,35 +78,25 @@ class PayrollLoanImport implements ToCollection,WithHeadingRow
                         $ins['loan_type'] = 'Bank Loan';
                         $ins['status'] = 'active';
  
-                        StaffLoanEmi::updateOrCreate(['staff_loan_id' => $loan_info->id, 'emi_date' => $emi_date], $ins);
+                        StaffLoanEmi::updateOrCreate(['staff_loan_id' => $loan_info->id, 'emi_month' => $check_date], $ins);
                     }
                     }
            }else{
-            $emi_detailes = $rows->filter(function ($item) use ($row) {
-                return $item['type'] === 'child' && $item['type_id'] === $row['type_id'];
-            });
-           
-            
-            if (isset($emi_detailes)  && count($emi_detailes) > 0) {
-                StaffLoanEmi::where('staff_loan_id', $loan_info->id)->update(['status' => 'inactive']);
-                foreach($emi_detailes as $emi_detail){
-
-                       $date =Date::excelToDateTimeObject($emi_detail["loan_start_date"]);
-                       $emi_date=$date->format('Y-d-m');
-                       $check_date = date('Y-m-01', strtotime($emi_date));
-                       $ins = [];
-                       $ins['staff_id'] = $staff_id;
-                       $ins['staff_loan_id'] = $loan_info->id;
-                       $ins['emi_date'] = $emi_date;
-                       $ins['emi_month'] = $check_date;
-                       $ins['amount'] = $emi_detail['pay_amount'] ?? 0;
-                       $ins['loan_mode'] = $row['loan_type'];
-                       $ins['loan_type'] = 'Bank Loan';
-                       $ins['status'] = 'active';
-
-                       StaffLoanEmi::updateOrCreate(['staff_loan_id' => $loan_info->id, 'emi_date' => $emi_date], $ins);
-                   }
-                }
+            $date =Date::excelToDateTimeObject($row["loan_start_date"]);
+            $emi_date=$date->format('Y-d-m');
+            $check_date = date('Y-m-01', strtotime($emi_date));
+            $ins = [];
+            $ins['staff_id'] = $staff_id;
+            $ins['staff_loan_id'] = $loan_info->id;
+            $ins['emi_date'] = $emi_date;
+            $ins['emi_month'] = $check_date;
+            $ins['amount'] = $row['pay_amount'] ?? 0;
+            $ins['loan_mode'] = $row['loan_type'];
+            $ins['loan_type'] = 'Bank Loan';
+            $ins['status'] = 'active';
+            StaffLoanEmi::updateOrCreate(['staff_loan_id' => $loan_info->id, 'emi_date' => $emi_date], $ins);
+    
+                
            }
             
          }
