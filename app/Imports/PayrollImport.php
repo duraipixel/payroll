@@ -342,11 +342,16 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                   
                                     if(isset($valuesArray[1]) && !empty($valuesArray[1])){
                                         if($valuesArray[1]=="DA"){
-                                            $da_field = SalaryField::with('PrecentageLog')->where('salary_head_id', 1)->where('nature_id',  $staff_info->appointment->employment_nature->id?? 1 )->where('short_name','DA')->first();                                            $da=($sitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])]; 
+                                            $da_field = SalaryField::with('PrecentageLog','field_items')->where('salary_head_id', 1)->where('nature_id',  $staff_info->appointment->employment_nature->id?? 1 )->where('short_name','DA')->first();                                            $da=($sitem->field_items->percentage/100)* $row[strtolower($valuesArray[0])]; 
                                             if(isset($da_field->PrecentageLog) && !empty($da_field->PrecentageLog)){
                                                 $percentage=$da_field->PrecentageLog->new_percentage;
                                             }else{
-                                                $percentage=$da_field->field_items->percentage;
+                                                if(isset($da_field->field_items)){
+                                                    $percentage=$da_field->field_items->percentage;
+                                                }else{
+                                                    $percentage=12;
+                                                }
+                                              
                                             }
                                             if(isset($da_field) && isset($da_field->field_items)){
                                               $D_amount +=($percentage/100)* $da;
