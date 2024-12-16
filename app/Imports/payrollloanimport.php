@@ -82,7 +82,7 @@ class PayrollLoanImport implements ToCollection,WithHeadingRow
                     }
                     }
            }else{
-            $date =Date::excelToDateTimeObject($row["loan_start_date"]);
+            $date =Date::excelToDateTimeObject($row["emi_loan_date"]);
             $emi_date=$date->format('Y-d-m');
             $check_date = date('Y-m-01', strtotime($emi_date));
             $ins = [];
@@ -90,7 +90,7 @@ class PayrollLoanImport implements ToCollection,WithHeadingRow
             $ins['staff_loan_id'] = $loan_info->id;
             $ins['emi_date'] = $emi_date;
             $ins['emi_month'] = $check_date;
-            $ins['amount'] = $row['pay_amount'] ?? 0;
+            $ins['amount'] = $row['emi_pay_amount'] ?? 0;
             $ins['loan_mode'] = $row['loan_type'];
             $ins['loan_type'] = 'Bank Loan';
             $ins['status'] = 'active';
