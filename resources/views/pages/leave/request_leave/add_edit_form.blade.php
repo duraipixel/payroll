@@ -462,14 +462,14 @@
                             {{ $item->leave_head->name ?? '' }}
                           </td>
                           <td class="text-center">
-                            {{ $item->no_of_leave ?? 0 }}
+                            {{ $item->no_of_leave_actual ?? 0 }}
                           </td>
                           @php
                           $carbonDate = \Carbon\Carbon::parse($info->from_date);
                           $took_leaves=leaveData($info->staff_id,$carbonDate->format('Y'),$item->leave_head->name);
-                          $balance=$item->no_of_leave - $took_leaves;
+                          $balance=$item->no_of_leave_actual - $took_leaves;
                           @endphp
-                          <td>{{$took_leaves??'0.00'}}</td>
+                          <td>{{$took_leaves??'0.00'}} </td>
                           <td>{{number_format($balance,2)??'0.00'}}</td>
                         </tr>
                         @endforeach
@@ -1217,6 +1217,7 @@ error: function(error) {
             $('#edittable').hide();
             $('#old_table').show();
             $('#grid').show("slow");
+            getStaffLeaveInfo(staff_id_alt);
             var tableBody = $('#old_table tbody');
 
             $.each(response.total_days, function(index, item) {

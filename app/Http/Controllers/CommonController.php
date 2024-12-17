@@ -16,6 +16,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use \NumberFormatter;
 use App\Models\Staff\StaffRetiredResignedDetail;
 use App\Models\AcademicYear;
+use App\Models\Staff\StaffTransfer;
 class CommonController extends Controller
 {    
     public function numberToWord($num = '')
@@ -297,7 +298,7 @@ class CommonController extends Controller
             if(count($resigned)>0 && in_array((int)$staff_id,$resigned->toArray())){
                 return array('type'=>'retired','data' => '','leave_view'=>'');  
         }
-        $transfer=StaffTransfer::where('from_institution_id',session()->get('staff_institute_id'))->whereDate('effective_from','<=',$date_month['end_date'])->where('status','approved')->pluck('staff_id');
+        $transfer=StaffTransfer::where('from_institution_id',session()->get('staff_institute_id'))->whereDate('effective_from','<=',$request->date)->where('status','approved')->pluck('staff_id');
         if(count($transfer)>0 && in_array((int)$staff_id,$transfer->toArray())){
             return array('type'=>'retired','data' => '','leave_view'=>'');  
     }
@@ -305,7 +306,7 @@ class CommonController extends Controller
         $academic=AcademicYear::find(academicYearId());
         $data = User::with(['position.designation', 'reporting'])->find($staff_id);
         $leave_count=0;
-        $taken_leave =  StaffLeave::where('staff_id', $staff_id)->whereYear('from_date',$academic->from_year)->get();
+        $taken_leave =  StaffLeave::where('staff_id', $staff_id)->whereYear('from_date',date('Y',strtotime($request->date)))->get();
     
         foreach($taken_leave as $leave){
             $leave_count+=$leave->granted_days;
@@ -316,8 +317,9 @@ class CommonController extends Controller
         if (isset($staffleavesHead) && count($staffleavesHead) > 0) {
             foreach ($staffleavesHead as $item) {
                 $leave_head_name = $item->leave_head->name ?? '';
-                $no_of_leave = $item->no_of_leave ?? 0;
-                $took_leaves = leaveData($staff_id, $academic->from_year, $leave_head_name);
+                $no_of_leave = $item->no_of_leave_actual ?? 0;
+                $took_leaves = leaveData($staff_id, date('Y',strtotime($request->date)), $leave_head_name);
+ 
                 $balance = $no_of_leave - $took_leaves;
         
                 // Append table row to $leave_view

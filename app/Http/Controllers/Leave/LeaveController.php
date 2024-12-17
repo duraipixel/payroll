@@ -348,7 +348,23 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
 
             $from_date = date('Y-m-d', strtotime(str_replace('/', '-', current($req_dates))));
             $end_date = date('Y-m-d', strtotime(str_replace('/', '-', end($req_dates))));
-
+            if(empty($id)){
+            $leave_head= LeaveHead::find($request->leave_category_id);
+            $staffleavesHead=StaffleaveAllocated($request->staff_id,academicYearId());
+            $used_leave=leaveData($request->staff_id,date('Y',strtotime($from_date)),$leave_head->name);
+            $key = $staffleavesHead->firstWhere('leave_head_id', $request->leave_category_id);
+            if(isset($used_leave) && isset($leave_head)){
+            $remaining_leave = $key['no_of_leave_actual'] - $used_leave;
+                if ($request->no_of_days > $remaining_leave) {
+                    $error = 1;
+                    $message = [
+                      'You have only ' . $remaining_leave . ' day(s) of leave left for this year. You cannot apply for ' . $request->no_of_days . ' day(s). Please contact the administrator.'
+                    ];
+                    return response()->json(['error' => $error, 'message' => $message]);
+                }
+            }
+        }
+   
             /**
              * Check already request to that date
              */
