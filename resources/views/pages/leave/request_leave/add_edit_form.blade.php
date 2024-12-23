@@ -457,6 +457,7 @@
                         @endphp
                         @if (isset($staffleavesHead) && count($staffleavesHead) > 0)
                         @foreach ($staffleavesHead as $item)
+                        $no_of_leave=0;
                          if($item->leave_head->id==2){
                             $no_of_leave = $item->carry_forward_count ?? 0;
                         }else{
