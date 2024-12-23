@@ -314,11 +314,15 @@ class CommonController extends Controller
         }
         $tbody_view='';
         $staffleavesHead=StaffleaveAllocated($staff_id,academicYearId());
+                $cal_date=$academic->from_year;
+                if(isset($request->date)){
+                    $cal_date= date('Y',strtotime($request->date));
+                }
         if (isset($staffleavesHead) && count($staffleavesHead) > 0) {
             foreach ($staffleavesHead as $item) {
                 $leave_head_name = $item->leave_head->name ?? '';
                 $no_of_leave = $item->no_of_leave ?? 0;
-                $took_leaves = leaveData($staff_id, date('Y',strtotime($request->date)), $leave_head_name);
+                $took_leaves = leaveData($staff_id,$cal_date, $leave_head_name);
  
                 $balance = $no_of_leave - $took_leaves;
         
