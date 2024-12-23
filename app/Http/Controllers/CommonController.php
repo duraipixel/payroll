@@ -293,20 +293,25 @@ class CommonController extends Controller
     function getStaffLeaveInfo(Request $request) {
         
         $staff_id = $request['staff_id'];
+        $academic=AcademicYear::find(academicYearId());
+        $cal_date=$academic->from_year;
+        if(isset($request->date)){
+            $cal_date= date('Y',strtotime($request->date));
+        }
         if(isset($request->date) && !empty($request->date)){
         $resigned=StaffRetiredResignedDetail::where('last_working_date','<=',$request->date)->pluck('staff_id');
             if(count($resigned)>0 && in_array((int)$staff_id,$resigned->toArray())){
                 return array('type'=>'retired','data' => '','leave_view'=>'');  
-        }
+          }
         $transfer=StaffTransfer::where('from_institution_id',session()->get('staff_institute_id'))->whereDate('effective_from','<=',$request->date)->where('status','approved')->pluck('staff_id');
         if(count($transfer)>0 && in_array((int)$staff_id,$transfer->toArray())){
             return array('type'=>'retired','data' => '','leave_view'=>'');  
-    }
+         }
         }
-        $academic=AcademicYear::find(academicYearId());
+
         $data = User::with(['position.designation', 'reporting'])->find($staff_id);
         $leave_count=0;
-        $taken_leave =  StaffLeave::where('staff_id', $staff_id)->whereYear('from_date',date('Y',strtotime($request->date)))->get();
+        $taken_leave =  StaffLeave::where('staff_id', $staff_id)->whereYear('from_date',$cal_date)->get();
     
         foreach($taken_leave as $leave){
             $leave_count+=$leave->granted_days;
@@ -314,10 +319,7 @@ class CommonController extends Controller
         }
         $tbody_view='';
         $staffleavesHead=StaffleaveAllocated($staff_id,academicYearId());
-                $cal_date=$academic->from_year;
-                if(isset($request->date)){
-                    $cal_date= date('Y',strtotime($request->date));
-                }
+               
         if (isset($staffleavesHead) && count($staffleavesHead) > 0) {
             foreach ($staffleavesHead as $item) {
                 $leave_head_name = $item->leave_head->name ?? '';
