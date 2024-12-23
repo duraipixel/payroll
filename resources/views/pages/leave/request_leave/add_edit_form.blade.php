@@ -457,12 +457,18 @@
                         @endphp
                         @if (isset($staffleavesHead) && count($staffleavesHead) > 0)
                         @foreach ($staffleavesHead as $item)
-                        $no_of_leave=0;
-                         if($item->leave_head->id==2){
+                         @php
+                         $no_of_leave=0;
+                          $carbonDate = \Carbon\Carbon::parse($info->from_date);
+                          $took_leaves=leaveData($info->staff_id,$carbonDate->format('Y'),$item->leave_head->name);
+                           if($item->leave_head->id==2){
                             $no_of_leave = $item->carry_forward_count ?? 0;
                         }else{
                             $no_of_leave = $item->no_of_leave ?? 0;
                         }
+                          $balance=$no_of_leave - $took_leaves;
+                          @endphp
+                        
                         <tr>
                           <td>
                             {{ $item->leave_head->name ?? '' }}
@@ -470,11 +476,7 @@
                           <td class="text-center">
                             {{ $no_of_leave ?? 0 }}
                           </td>
-                          @php
-                          $carbonDate = \Carbon\Carbon::parse($info->from_date);
-                          $took_leaves=leaveData($info->staff_id,$carbonDate->format('Y'),$item->leave_head->name);
-                          $balance=$no_of_leave - $took_leaves;
-                          @endphp
+                         
                           <td>{{$took_leaves??'0.00'}} </td>
                           <td>{{number_format($balance,2)??'0.00'}}</td>
                         </tr>
