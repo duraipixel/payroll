@@ -354,7 +354,12 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
             $used_leave=leaveData($request->staff_id,date('Y',strtotime($from_date)),$leave_head->name);
             $key = $staffleavesHead->firstWhere('leave_head_id', $request->leave_category_id);
             if(isset($used_leave) && isset($leave_head)){
-            $remaining_leave = $key['no_of_leave'] - $used_leave;
+                if($request->leave_category_id==2){
+                    $remaining_leave = $key['carry_forward_count'] - $used_leave;
+                }else{
+                    $remaining_leave = $key['no_of_leave'] - $used_leave;
+                }
+            
                 if ($request->no_of_days > $remaining_leave) {
                     $error = 1;
                     $message = [
