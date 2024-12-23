@@ -323,7 +323,12 @@ class CommonController extends Controller
         if (isset($staffleavesHead) && count($staffleavesHead) > 0) {
             foreach ($staffleavesHead as $item) {
                 $leave_head_name = $item->leave_head->name ?? '';
-                $no_of_leave = $item->no_of_leave ?? 0;
+                if($item->leave_head->id==2){
+                    $no_of_leave = $item->carry_forward_count ?? 0;
+                }else{
+                    $no_of_leave = $item->no_of_leave ?? 0;
+                }
+               
                 $took_leaves = leaveData($staff_id,$cal_date, $leave_head_name);
  
                 $balance = $no_of_leave - $took_leaves;
