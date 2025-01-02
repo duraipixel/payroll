@@ -353,7 +353,7 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
             $staffleavesHead=StaffleaveAllocated($request->staff_id,academicYearId());
             $used_leave=leaveData($request->staff_id,date('Y',strtotime($from_date)),$leave_head->name);
             $key = $staffleavesHead->firstWhere('leave_head_id', $request->leave_category_id);
-            if(isset($used_leave) && isset($leave_head)){
+            if(isset($used_leave) && isset($leave_head) && isset($key)){
                 if($request->leave_category_id==2){
                     $remaining_leave = $key['carry_forward_count'] - $used_leave;
                 }else{
