@@ -1645,7 +1645,17 @@ if (!function_exists('leave_data')) {
    }
     if (!function_exists('StaffleaveAllocated')) {
    function StaffleaveAllocated($staff_id, $academic_id){
-    $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('acadamic_id',$academic_id)->get();
+    $user=User::with('personal')->find($staff_id);
+    if(isset($user) && isset($user->personal)  && isset(($user->personal->gender))){
+            if($user->personal->gender=="male"){
+                $data=StaffLeaveMapping::whereNotIn('leave_head_id',['3'])->where('staff_id',$staff_id)->where('acadamic_id',$academic_id)->get();
+            }else{
+                $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('acadamic_id',$academic_id)->get(); 
+            }
+    }else{
+        $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('acadamic_id',$academic_id)->get();
+    }
+
     return $data ??[];
    }
    if (!function_exists('getLoanDetsils')) {
