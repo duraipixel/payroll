@@ -84,9 +84,10 @@ class SettingsController extends Controller
         }
           $data=new CalenderYear;
           $data->year=date('Y',strtotime($request->from_date));
-          $data->calendar_date=$request->to_date;
-          $data->month=sprintf("%02d", date('m',strtotime($request->from_date)));
-          $data->acadamic_id=$acadamic->id;
+          //$data->calendar_date=$request->to_date;
+          $data->from_month=sprintf("%02d", date('m',strtotime($request->from_date)));
+          $data->to_month=sprintf("%02d", date('m',strtotime($request->to_date)));
+          //$data->acadamic_id=$acadamic->id;
           if($data->save()){
           $error = 0;
           $message = ['CalenderYear updated successfully'];
@@ -95,15 +96,14 @@ class SettingsController extends Controller
 
         }else{
         $acadamic=AcademicYear::where('is_current',1)->first();
-        $mapping=StaffLeaveMapping::where('acadamic_id',$acadamic->id)->first();
         $calender=CalenderYear::orderBy('id','desc')->first();
+        $mapping=StaffLeaveMapping::where('acadamic_id',$acadamic->id)->first();
         if($mapping){
             $error = 1;
             $message = ['Year End Process already Reset successfully'];
         return response()->json(['error' => $error, 'message' => $message]);
         }
-
-           $this->AutoloadYearLeave($calender->year);
+          $this->AutoloadYearLeave($calender->year);
            $error = 0;
           $message = ['Year End Process Reset successfully'];
           return response()->json(['error' => $error, 'message' => $message]);
@@ -685,7 +685,7 @@ class SettingsController extends Controller
          $users=User::where('status','active')->get();
          // $leave_mapping=StaffLeaveMapping::where('staff_id',$id)->where('acadamic_id',academicYearId())->get();
         foreach($users as $user){
-        $acadamic_id=AcademicYear::where('from_year',$year)->first();
+        $acadamic_id=AcademicYear::where('from_year',$year)->orWhere('to_year',$year)->first();
             $calender_id=CalenderYear::where('year',$year)->first();
         if(isset($user->appointment) && isset($user->appointment->leaveAllocated) && count($user->appointment->leaveAllocated)>0 && isset($acadamic_id)){
         foreach($user->appointment->leaveAllocated as $leaveAllocated){
@@ -712,7 +712,7 @@ class SettingsController extends Controller
            
             $new['acadamic_id']=$acadamic_id->id;
             $new['calender_id']=$calender_id->id;
-             StaffLeaveMapping::updateOrCreate(['staff_id'=>$user->id,'acadamic_id'=>$acadamic_id->id], $new);
+             StaffLeaveMapping::updateOrCreate(['staff_id'=>$user->id,'acadamic_id'=>$acadamic_id->id,'calender_id'=>$calender_id->id], $new);
             }
            } 
         }

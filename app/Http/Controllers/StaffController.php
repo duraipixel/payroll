@@ -75,6 +75,7 @@ use PDF;
 use App\Models\CalendarDays;
 use App\Models\Staff\StaffBankLoan;
 use App\Models\AcademicYear;
+use App\Models\CalenderYear;
 use App\Models\AttendanceManagement\LeaveHead;
 class StaffController extends Controller
 {
@@ -210,9 +211,17 @@ class StaffController extends Controller
 
         $step = getRegistrationSteps($id);
         $tax_scheme=TaxScheme::where('status', 'active')->get();
-        $leave_mapping=StaffLeaveMapping::where('staff_id',$id)->where('acadamic_id',academicYearId())->get();
+        $aca=AcademicYear::find(academicYearId());
+        $start_array=array('04','05','06','07','08','09','10','11','12');
+        if(in_array($month=date('m'),$start_array)){
+            $year=$aca->from_year;
+        }else{
+            $year=$aca->to_year;
+        }
+        $calendar=CalenderYear::where('year',$year)->first();
+        $leave_mapping=StaffLeaveMapping::where('staff_id',$id)->where('calender_id',$calendar->id)->get();
         $first_appointment = StaffAppointmentDetail::where('staff_id', $id)->orderBy('staff_id', 'asc')->first();
-    $el_count = StaffLeaveMapping::where('staff_id', $id)->where('leave_head_id', 2)->Orderby('calender_id','asc')->get();
+        $el_count = StaffLeaveMapping::where('staff_id', $id)->where('leave_head_id', 2)->Orderby('calender_id','asc')->get();
         $params = array(
             'breadcrums' => $breadcrums,
             'institutions' => $institutions,
