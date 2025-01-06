@@ -47,6 +47,7 @@ use App\Models\Staff\StaffTaxSeperation;
 use App\Models\Tax\TaxScheme;
 use App\Models\Tax\TaxSection;
 use App\Models\Tax\TaxSectionItem;
+use App\Models\CalenderYear;
 use Carbon\Carbon;
 use App\Models\PayrollManagement\HoldSalary;
 use Illuminate\Support\Facades\DB;
@@ -1227,6 +1228,7 @@ function getGlobalAcademicYear()
 
     if (!session()->has('global_academic_year')) {
         $academic = AcademicYear::where('status', 'active')->orderBy('from_year', 'desc')->get();
+      
         session()->put('global_academic_year', $academic);
     }
     return session()->get('global_academic_year');
@@ -1644,16 +1646,25 @@ if (!function_exists('leave_data')) {
    }
    }
     if (!function_exists('StaffleaveAllocated')) {
-   function StaffleaveAllocated($staff_id, $academic_id){
+   function StaffleaveAllocated($month=null,$staff_id, $academic_id){
+    $month_data=$month?? date('m');
+    $aca=AcademicYear::find(academicYearId());
+    $start_array=array('04','05','06','07','08','09','10','11','12');
+    if(in_array($month_data,$start_array)){
+        $year=$aca->from_year;
+    }else{
+        $year=$aca->to_year;
+    }
+    $calendar=CalenderYear::where('year',$year)->first();
     $user=User::with('personal')->find($staff_id);
     if(isset($user) && isset($user->personal)  && isset(($user->personal->gender))){
             if($user->personal->gender=="male"){
-                $data=StaffLeaveMapping::whereNotIn('leave_head_id',['3'])->where('staff_id',$staff_id)->where('acadamic_id',$academic_id)->get();
+                $data=StaffLeaveMapping::whereNotIn('leave_head_id',['3'])->where('staff_id',$staff_id)->where('calender_id',$calendar->id)->get();
             }else{
-                $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('acadamic_id',$academic_id)->get(); 
+                $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('calender_id',$calendar->id)->get(); 
             }
     }else{
-        $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('acadamic_id',$academic_id)->get();
+        $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('calender_id',$calendar->id)->get();
     }
 
     return $data ??[];
