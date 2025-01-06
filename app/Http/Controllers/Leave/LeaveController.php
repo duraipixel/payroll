@@ -95,9 +95,21 @@ class LeaveController extends Controller
         $title = 'Leave';
         $leave_count=0;
         $academic=AcademicYear::find(academicYearId());
+        $month_data=date('d',strtotime($request->month));
+       if(isset($request->month)){
+        $start_array=array('04','05','06','07','08','09','10','11','12');
+        if(in_array($month_data,$start_array)){
+            $year=$academic->from_year;
+        }else{
+            $year=$academic->to_year;
+        }
+       }
+        else{
+            $year=$academic->from_year;
+        }
+     
         if (isset($id) && !empty($id)) {
-            $taken_leave = StaffLeave::where('staff_id', $id)->whereYear('from_date',$academic->from_year)->get();
-
+            $taken_leave = StaffLeave::where('staff_id', $id)->whereYear('from_date',$year)->get();
             foreach($taken_leave as $leave){
                 $leave_count+=$leave->granted_days;
 
@@ -350,7 +362,7 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
             $end_date = date('Y-m-d', strtotime(str_replace('/', '-', end($req_dates))));
             if(empty($id)){
             $leave_head= LeaveHead::find($request->leave_category_id);
-            $staffleavesHead=StaffleaveAllocated($request->staff_id,academicYearId());
+            $staffleavesHead=StaffleaveAllocated(date('m',strtotime($from_date)),$request->staff_id,academicYearId());
             $used_leave=leaveData($request->staff_id,date('Y',strtotime($from_date)),$leave_head->name);
             $key = $staffleavesHead->firstWhere('leave_head_id', $request->leave_category_id);
             if(isset($used_leave) && isset($leave_head) && isset($key)){

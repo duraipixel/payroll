@@ -318,7 +318,8 @@ class CommonController extends Controller
     
         }
         $tbody_view='';
-        $staffleavesHead=StaffleaveAllocated($staff_id,academicYearId());
+        $month=date('m',strtotime($request->date)) ?? date('m');
+        $staffleavesHead=StaffleaveAllocated($month,$staff_id,academicYearId());
                
         if (isset($staffleavesHead) && count($staffleavesHead) > 0) {
             foreach ($staffleavesHead as $item) {

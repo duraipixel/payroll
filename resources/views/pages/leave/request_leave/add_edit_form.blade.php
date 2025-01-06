@@ -371,7 +371,7 @@
                 @elseif(isset( $info->from_date ) && !empty( $info->from_date ) && $type=='edit')
                 <input type="text" name="requested_date" id="requested_date"
                 value="{{ isset($info->from_date) ? date('d/m/Y', strtotime($info->from_date)) . ' - ' . date('d/m/Y', strtotime($info->to_date)) : '' }}"
-                class="form-control">
+                class="form-control" >
                 @else
                 <input type="text" name="requested_date" id="requested_date"
                 value="{{ isset($info->from_date) ? date('d/m/Y', strtotime($info->from_date)) . ' - ' . date('d/m/Y', strtotime($info->to_date)) : '' }}"
@@ -453,7 +453,8 @@
                       </thead>
                       <tbody>
                         @php
-                        $staffleavesHead=StaffleaveAllocated($info->staff_info->id,academicYearId());
+                        $infod = \Carbon\Carbon::parse($info->from_date);
+                        $staffleavesHead=StaffleaveAllocated($infod->format('m'),$info->staff_info->id,academicYearId());
                         @endphp
                         @if (isset($staffleavesHead) && count($staffleavesHead) > 0)
                         @foreach ($staffleavesHead as $item)
@@ -1081,12 +1082,15 @@ error: function(error) {
                 }
             });
             var formMethod = "addEdit" ;
+             var requested_value =document.getElementById("requested_date").value;
+            let [startDateStr, endDateStr] = requested_value.split(" - ");
             $.ajax({
                 url: "{{ route('staff.previous.leave') }}",
                 type: 'POST',
                 data: {
                     id: $('#staff_id').val(),
                     type: '',
+                    month:startDateStr,
                     
                 },
                 success: function(res) {
