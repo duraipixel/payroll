@@ -36,7 +36,7 @@
             class="form-control form-control-solid w-250px ps-14" placeholder="To date">
             </div>
             </div>
-            <div class="card-toolbar" style="padding-left: 876px;">
+            <div class="card-toolbar" style="padding-left: 780px;">
                 <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
                     @php
