@@ -11,24 +11,32 @@
     <div class="card">
         <div class="card-header border-0 pt-6">
             <div class="card-title">
-                <div class="d-flex align-items-center position-relative my-1">
+                <div class="d-flex align-items-center position-relative my-1"  style="padding-right: 10px;">
                     {!! searchSvg() !!}
                     <input type="text" data-kt-user-table-filter="search" id="leave_dataTable_search"
                         class="form-control form-control-solid w-250px ps-14" placeholder="Search Leave Request">
                 </div>
-            </div>
-            <div class="card-toolbar">
-                <div > 
-                 <select name="leave_status" autofocus id="leave_status" class="form-select form-select-lg select2-option">
+           
+                <div style="padding-right: 10px;"> 
+        <select name="leave_status" autofocus id="leave_status" class="form-select form-select-lg select2-option">
          <option value="">--Select Leave Status--</option>
          <option value="all"> All </option>
          <option value="pending">Pending</option>
          <option value="approved">Approved</option>
          <option value="rejected">Rejected</option>
-                </select>
+        </select>
+
+            </div>
+            <div  style="padding-right: 10px;">
+         <input type="date" id="from_date"
+            class="form-control form-control-solid w-250px ps-14">
+           
+            </div>
+            <div  style="padding-right: 10px;">  <input type="date" id="to_date"
+            class="form-control form-control-solid w-250px ps-14" placeholder="To date">
             </div>
             </div>
-            <div class="card-toolbar">
+            <div class="card-toolbar" style="padding-left: 876px;">
                 <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
 
                     @php
@@ -128,6 +136,8 @@
                 "data": function(d) {
                     d.datatable_search = $('#leave_dataTable_search').val();
                     d.leave_status = $('#leave_status').val();
+                    d.from_date = $('#from_date').val();
+                    d.to_date = $('#to_date').val();
                 }
             },
 
@@ -208,6 +218,10 @@
         $('#search-form').on('reset', function(e) {
             $('select[name=filter_status]').val(0).change();
 
+            dtTable.draw();
+            e.preventDefault();
+        });
+         $('#from_date, #to_date').on('change', function(e) {
             dtTable.draw();
             e.preventDefault();
         });
