@@ -1230,6 +1230,7 @@ error: function(error) {
             $('#old_table').show();
             $('#grid').show("slow");
             getStaffLeaveInfo(staff_id_alt);
+             $("#old_table tbody").empty();
             var tableBody = $('#old_table tbody');
 
             $.each(response.total_days, function(index, item) {
