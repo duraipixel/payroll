@@ -210,22 +210,28 @@ $('#page_search').val(1);
                 }
             },
             "columns": [{
-                    "data": "name"
+                    "data": "name",
+                    defaultContent: ''
                 },
                 {
-                    "data": "society_code"
+                    "data": "society_code",
+                    defaultContent: ''
                 },
                 {
-                    "data": "institute_code"
+                    "data": "institute_code",
+                    defaultContent: ''
                 },
                 {
-                    "data":"designation"
+                    "data":"designation",
+                    defaultContent: ''
                 },
                 {
-                    "data": "profile"
+                    "data": "profile",
+                    defaultContent: ''
                 },
                 {
-                    "data": "status"
+                    "data": "status",
+                    defaultContent: ''
                 },
                 {
                     "data": "actions",

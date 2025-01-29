@@ -144,41 +144,51 @@
             columns: [{
                     data: 'created_at',
                     name: 'created_at',
+                    defaultContent: ''
                 },
                 {
                     data: 'staff_name',
-                    name: 'staff_name'
+                    name: 'staff_name',
+                    defaultContent: ''
                 },
                 {
                     data: 'institute_code',
-                    name: 'institute_code'
+                    name: 'institute_code',
+                    defaultContent: ''
                 },
                 {
                     data: 'designation',
-                    name: 'designation'
+                    name: 'designation',
+                    defaultContent: ''
                 },
                 {
                     data: 'leave_category',
-                    name: 'leave_category'
+                    name: 'leave_category',
+                    defaultContent: ''
                 },
                 {
                     data: 'from_date',
-                    name: 'from_date'
+                    name: 'from_date',
+                    defaultContent: ''
                 },
                 {
                     data: 'to_date',
-                    name: 'to_date'
+                    name: 'to_date',
+                    defaultContent: ''
                 },
                 {
                     data: 'no_of_days',
-                    name: 'no_of_days'
+                    name: 'no_of_days',
+                    defaultContent: ''
                 },{
                     data: 'granted_days',
-                    name: 'granted_days'
+                    name: 'granted_days',
+                    defaultContent: ''
                 },
                 {
                     data: 'status',
-                    name: 'status'
+                    name: 'status',
+                    defaultContent: ''
                 },
 
                 {

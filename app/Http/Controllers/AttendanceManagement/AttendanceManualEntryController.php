@@ -41,7 +41,7 @@ class AttendanceManualEntryController extends Controller
             )
         );
         $acYear = AcademicYear::find(academicYearId());
-        $from_year = $acYear->from_year;
+        $from_year = $request->year ?? date('Y');
         return view('pages.attendance_management.attendance_manual_entry.index', compact('breadcrums', 'from_year'));
 
     }
@@ -184,6 +184,7 @@ class AttendanceManualEntryController extends Controller
         $title = 'Add Attendance Manual Entry';
         $employee_details = User::
                             where(['status' => 'active'])
+                            ->where('transfer_status','active')
                             ->InstituteBased()->get();
         $leave_status = LeaveStatus::where('status', 'active')->get();
         $leave_heads = LeaveHead::where('status', 'active')->get();

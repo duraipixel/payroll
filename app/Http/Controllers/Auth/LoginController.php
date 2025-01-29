@@ -39,15 +39,36 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+        try {
+            // Check database connection by executing a simple query
+            \DB::connection()->getPdo();
 
-        $academic = AcademicYear::where('status', 'active')->where('is_current', 1)->first();
-        if ($academic) {
-            Session::put('academic_id', $academic->id);
+            // If needed, you can log the connection name or database name
+            $connection = \DB::connection()->getName();
+            $database = \DB::connection()->getDatabaseName();
+
+            \Log::info("Database connected successfully. Connection: {$connection}, Database: {$database}");
+        } catch (\Exception $e) {
+            // Handle database connection failure
+            \Log::error("Database connection failed: " . $e->getMessage());
+
+            // Optionally, abort the request or handle it gracefully
+            abort(500, 'Database connection failed. Please check your configuration.');
         }
-        
+
+        // Example of setting session if the database connection is successful
+        try {
+            $academic = AcademicYear::where('status', 'active')->where('is_current', 1)->first();
+
+            if ($academic) {
+                Session::put('academic_id', $academic->id);
+            }
+        } catch (\Exception $e) {
+            \Log::error("Failed to retrieve academic year: " . $e->getMessage());
+        }
+
         $this->middleware('guest')->except('logout');
     }
-
     protected function authenticated(Request $request, $user)
     {
        

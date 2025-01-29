@@ -130,8 +130,10 @@ class ReportController extends Controller
         // }
  
         $month         = $request->month ?? date('m');
+        $year         = $request->year ?? date('Y');
         $parameters = [
         'month' => $month,
+        'year'=>$year,
         'place_of_work' => $request->place_of_work,
         'department_id'=>$request->department_id,
         'division_id'=>$request->division_id,
@@ -140,7 +142,7 @@ class ReportController extends Controller
         $department = Department::where('status', 'active')->orderBy('name', 'asc')->get();
         $divisions=Division::where('status', 'active')->orderBy('name', 'asc')->get();
         if( $academic_info ) {
-            $from_year = $academic_info->from_year.'-'.$month.'-01';
+            $from_year = $year.'-'.$month.'-01';
             $start_date = date('Y-m-d', strtotime($from_year) );
             $no_of_days = date('t', strtotime($start_date) );
             $year = date('Y', strtotime($start_date) );
@@ -163,9 +165,10 @@ class ReportController extends Controller
         set_time_limit(0);
         ini_set('memory_limit', '-1');
         $month       = $request->month ?? date('m');
+        $year         = $request->year ?? date('Y');
         $academic_info = AcademicYear::find( academicYearId());
         if( $academic_info ) {
-            $from_year = $academic_info->from_year.'-'.$month.'-01';
+            $from_year = $year.'-'.$month.'-01';
             $start_date = date('Y-m-d', strtotime($from_year) );
             $no_of_days = date('t', strtotime($start_date) );
             $year = date('Y', strtotime($start_date) );

@@ -35,12 +35,27 @@
 
                     $months++;
                 }
+
                 @endphp
             @endfor
+            <select id="year-picker" onchange="updateUrlWithYear()">
+        @php
+            // Set the range of years (e.g., 10 years before and 10 years after the current year)
+            $currentYear = request()->get('year') ?? date('Y');
+            $startYear = date('Y') - 40;  // 10 years ago
+            $endYear = date('Y') + 1;    // 10 years in the future
+        @endphp
+
+        @for ($year = $startYear; $year <= $endYear; $year++)
+            <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
+        @endfor
+    </select>
         </div>
+        
     </div>
     <div class="card mt-3">
         <div class="payroll_info" id="attendance_overview_container">
+            
            {{-- @include('pages.attendance_management.attendance_manual_entry._ajax_month_data') --}}
         </div>
     </div>
@@ -79,5 +94,17 @@
         }
 
         
+    </script>
+    <script>
+        function updateUrlWithYear() {
+            var selectedYear = document.getElementById("year-picker").value;
+            var currentUrl = window.location.href;
+
+            if (currentUrl.includes('?')) {
+                window.location.href = currentUrl.replace(/(.*\?year=)(\d+)/, `$1${selectedYear}`);
+            } else {
+                window.location.href = currentUrl + '?year=' + selectedYear;
+            }
+        }
     </script>
 @endsection
