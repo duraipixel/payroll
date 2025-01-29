@@ -56,6 +56,18 @@
                                     {{ date('F', mktime(0, 0, 0, $m, 1)) }}</option>
                             @endfor
                         </select>
+                        <select id="year"name="year" class="form-select form-select-sm w-auto d-inline mt-3">
+        @php
+            // Set the range of years (e.g., 10 years before and 10 years after the current year)
+            $currentYear = request()->get('year') ?? date('Y');
+            $startYear = date('Y') - 40;  // 10 years ago
+            $endYear = date('Y') + 1;    // 10 years in the future
+        @endphp
+
+        @for ($year = $startYear; $year <= $endYear; $year++)
+            <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
+        @endfor
+    </select>
                         <div class="bg-light border-bottom m-2" style="text-align: right;">
                         <button onclick="this.form.action = '{{ route('reports.attendance.export') }}'" type="submit"
                         class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>

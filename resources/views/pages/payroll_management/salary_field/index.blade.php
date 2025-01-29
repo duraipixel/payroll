@@ -142,32 +142,39 @@
 
             columns: [{
                     data: 'nature',
-                    name: 'nature'
+                    name: 'nature',
+                    defaultContent: ''
                 },
                 {
                     data: 'salary_head',
-                    name: 'salary_head'
+                    name: 'salary_head',
+                    defaultContent: ''
                 },
 
                 {
                     data: 'name',
-                    name: 'name'
+                    name: 'name',
+                    defaultContent: ''
                 },
                 {
                     data: 'short_name',
-                    name: 'short_name'
+                    name: 'short_name',
+                    defaultContent: ''
                 },
                 {
                     data: 'entry_type',
-                    name: 'entry_type'
+                    name: 'entry_type',
+                    defaultContent: ''
                 },
                 {
                     data: 'order_in_salary_slip',
-                    name: 'order_in_salary_slip'
+                    name: 'order_in_salary_slip',
+                    defaultContent: ''
                 },
                 {
                     data: 'status',
-                    name: 'status'
+                    name: 'status',
+                    defaultContent: ''
                 },
 
                 {

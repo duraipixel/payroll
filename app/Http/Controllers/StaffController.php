@@ -218,12 +218,13 @@ class StaffController extends Controller
         }else{
             $year=$aca->to_year;
         }
-        if($staff_details->personal->gender=="male"){
+        $calendar=CalenderYear::where('year',$year)->first();
+        if( isset($staff_details) && $staff_details->personal->gender=="male"){
             $leave_mapping=StaffLeaveMapping::whereNotIn('leave_head_id',['3'])->where('staff_id',$id)->where('calender_id',$calendar->id)->get();
         }else{
             $leave_mapping=StaffLeaveMapping::where('staff_id',$id)->where('calender_id',$calendar->id)->get(); 
         }
-        $calendar=CalenderYear::where('year',$year)->first();
+       
         $first_appointment = StaffAppointmentDetail::where('staff_id', $id)->orderBy('staff_id', 'asc')->first();
         $el_count = StaffLeaveMapping::where('staff_id', $id)->where('leave_head_id', 2)->Orderby('calender_id','asc')->get();
         $params = array(
