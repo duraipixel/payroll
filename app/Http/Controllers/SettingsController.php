@@ -249,7 +249,7 @@ class SettingsController extends Controller
                     "from_year",
                     $year
                   )->first();
-                  $calender_id = CalenderYear::where("year", $year)->first();
+                  $calender_id = CalenderYear::find(42);
                   if (isset($acadamic_id)) {
                     foreach (
                       $user->firstAppointment->leaveAllocated
