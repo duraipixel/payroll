@@ -1659,9 +1659,9 @@ if (!function_exists('leave_data')) {
     $user=User::with('personal')->find($staff_id);
     if(isset($user) && isset($user->personal)  && isset(($user->personal->gender))){
             if($user->personal->gender=="male"){
-                $data=StaffLeaveMapping::whereNotIn('leave_head_id',['3'])->where('staff_id',$staff_id)->where('calender_id',$calendar->id)->get();
+                $data=StaffLeaveMapping::whereNotIn('leave_head_id',['3'])->where('staff_id',$staff_id)->where('calender_id',$calendar->id)->get()->unique('leave_head_id');
             }else{
-                $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('calender_id',$calendar->id)->get(); 
+                $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('calender_id',$calendar->id)->get()->unique('leave_head_id'); 
             }
     }else{
         $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('calender_id',$calendar->id)->get();
