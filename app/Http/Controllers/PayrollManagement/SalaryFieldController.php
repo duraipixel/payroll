@@ -228,7 +228,7 @@ class SalaryFieldController extends Controller
                 $log_ins['remarks'] = $request->remarks;
                 $log_ins['payout_month'] = $request->payout_month;
                 
-                SalaryPercentageLog::updateOrCreate(['salary_field_id' => $data->id], $log_ins);
+                SalaryPercentageLog::updateOrCreate(['salary_field_id' => $data->id,'new_percentage' => $request->changed_percentage], $log_ins);
 
                 }
                 
