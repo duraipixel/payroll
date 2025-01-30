@@ -61,18 +61,24 @@
         </tr>
         <tr>
             <td class="noborder-e" style="width:5%;text-align:center">05.</td>
+            <td class="noborder-x" style="width:45%;text-align:left">Leave Category</td>
+            <td class="noborder-x" style="width:5%;text-align:center">:</td>
+            <td class="noborder-s" style="width:45%;text-align:left">{{ $leave_category ?? '' }}</td>
+        </tr>
+        <tr>
+            <td class="noborder-e" style="width:5%;text-align:center">06.</td>
             <td class="noborder-x" style="width:45%;text-align:left">Dates requested</td>
             <td class="noborder-x" style="width:5%;text-align:center">:</td>
             <td class="noborder-s" style="width:45%;text-align:left">{{ $date_requested ?? '' }}</td>
         </tr>
         <tr>
-            <td class="noborder-e" style="width:5%;text-align:center">06.</td>
+            <td class="noborder-e" style="width:5%;text-align:center">07.</td>
             <td class="noborder-x" style="width:45%;text-align:left"> Reason for leave </td>
             <td class="noborder-x" style="width:5%;text-align:center">:</td>
             <td class="noborder-s" style="width:45%;text-align:left"> {{ $reason ?? '' }} </td>
         </tr>
         <tr>
-            <td class="noborder-e" style="width:5%;text-align:center">07.</td>
+            <td class="noborder-e" style="width:5%;text-align:center">08.</td>
             <td class="noborder-x" style="width:45%;text-align:left"> Number of  days  taken  so  far </td>
             <td class="noborder-x" style="width:5%;text-align:center">:</td>
             <td class="noborder-s" style="width:45%;text-align:left"> {{ $taken_leave ?? '' }} </td>
@@ -96,7 +102,7 @@
             @endif
         </tr>
         <tr>
-            <td class="noborder-e" style="width:5%;text-align:center;height:100px">08.</td>
+            <td class="noborder-e" style="width:5%;text-align:center;height:100px">09.</td>
             <td class="noborder-x" style="width:45%;text-align:left"> Signature  of  the  Staff </td>
             <td class="noborder-x" style="width:5%;text-align:center">:</td>
             <td class="noborder-s" style="width:45%;text-align:left">  </td>
@@ -118,18 +124,24 @@
         </tr>
         <tr>
             <td class="noborder-e" style="width:5%;text-align:center"> C.</td>
+            <td class="noborder-x" style="width:45%;text-align:left"> Leave Category  </td>
+            <td class="noborder-x" style="width:5%;text-align:center">:</td>
+            <td class="noborder-s" style="width:45%;text-align:left"> {{ $leave_category ?? ''}} </td>
+        </tr>
+        <tr>
+            <td class="noborder-e" style="width:5%;text-align:center"> D.</td>
             <td class="noborder-x" style="width:45%;text-align:left"> Remarks </td>
             <td class="noborder-x" style="width:5%;text-align:center">:</td>
             <td class="noborder-s" style="width:45%;text-align:left"> {{ $remarks ?? '' }} </td>
         </tr>
         <tr>
-            <td class="noborder-e" style="width:5%;text-align:center"> D.</td>
+            <td class="noborder-e" style="width:5%;text-align:center"> E.</td>
             <td class="noborder-x" style="width:45%;text-align:left"> Leave Granted By  </td>
             <td class="noborder-x" style="width:5%;text-align:center">:</td>
             <td class="noborder-s" style="width:45%;text-align:left"> {{ $leave_granted_by ?? ''}}  </td>
         </tr>
         <tr>
-            <td class="noborder-e" style="width:5%;text-align:center"> E.</td>
+            <td class="noborder-e" style="width:5%;text-align:center"> F.</td>
             <td class="noborder-x" style="width:45%;text-align:left"> Designation   </td>
             <td class="noborder-x" style="width:5%;text-align:center">:</td>
             <td class="noborder-s" style="width:45%;text-align:left"> {{ $granted_designation ?? '' }} </td>
@@ -158,7 +170,7 @@
         </tr>
         @endif
         <tr>
-            <td class="noborder-e" style="width:5%;text-align:center;height:100px">F. </td>
+            <td class="noborder-e" style="width:5%;text-align:center;height:100px">G. </td>
             <td class="noborder-x" style="width:45%;text-align:left"> Signature    </td>
             <td class="noborder-x" style="width:5%;text-align:center">:</td>
             <td class="noborder-s" style="width:45%;text-align:left">   </td>
