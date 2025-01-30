@@ -167,23 +167,23 @@
 
             columns: [{
                     data: 'year',
-                    name: 'Year',
+                    name: 'Year',defaultContent: '' 
                 },
                 {
                     data: 'no_of_leave',
-                    name: 'EL Granted'
+                    name: 'EL Granted',defaultContent: '' 
                 },
                 {
                     data: 'accumulated',
-                    name: 'EL Accumulated'
+                    name: 'EL Accumulated',defaultContent: '' 
                 },
                 {
                     data: 'el_availed',
-                    name: 'EL Availed'
+                    name: 'EL Availed',defaultContent: '' 
                 },
                 {
                     data: 'el_balance',
-                    name: 'EL Balance'
+                    name: 'EL Balance',defaultContent: '' 
                 },
                 {
                     data: 'action',
