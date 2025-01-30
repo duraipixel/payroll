@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title> &nbsp;{{ config('app.name', 'AWES') }}</title>
+    <title> &nbsp;h{{ config('app.name', 'AWES') }}</title>
 
     @include('layouts.parts.meta')
     @include('layouts.stylelinks')
