@@ -119,9 +119,8 @@ class PayrollImport implements ToCollection,WithHeadingRow
     //     }
     //   }
     //  });
-      $dateTime = Date::excelToDateTimeObject($rows[0]["payroll_date"]);
-      
-      $date= $dateTime->format('Y-m-d');
+       $dateTime =  date('Y-m-d', strtotime('2024-12-01'));
+       $date= date('Y-m-d', strtotime('2024-12-01'));
       $payroll_date = $date;
       $from_date = date('Y-m-01', strtotime($payroll_date));
       $to_date = date('Y-m-t', strtotime($payroll_date));
