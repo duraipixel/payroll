@@ -20,77 +20,65 @@ class PayrollHeadImport implements ToCollection,WithHeadingRow
     {
         set_time_limit(0);
         ini_set('memory_limit', '-1');
-
-       DB::transaction(function() use ($rows) {
-       foreach($rows as $row){
-         $staff=User::where('institute_emp_code',$row["inst_emp_code"])->first();
-         $dateTime = Date::excelToDateTimeObject($row["payroll_date"]);
-         $salary_month=$dateTime->format('Y-d-m');
-         if(isset($staff)){
-            if(isset($row['arr']) && !empty($row['arr'])){
-                $ins['staff_id'] = $staff->id;
-                $ins['salary_month'] = $salary_month;
-                $ins['academic_id'] = academicYearId();
-                $ins['amount'] = $row['arr'];
-                $ins['remarks'] = $row['remarks'] ?? null;
-                $ins['earnings_type'] = 'arrear';
-                $ins['status'] = 'active';
-                $ins['added_by'] = auth()->user()->id;
-                StaffSalaryPreEarning::updateOrCreate(['staff_id' => $staff->id, 'salary_month' => $salary_month, 'earnings_type' =>'arrear'], $ins);
-            }
-            if(isset($row['bonus']) && !empty($row['bonus'])){
-                $ins['staff_id'] = $staff->id;
-                $ins['salary_month'] = $salary_month;
-                $ins['academic_id'] = academicYearId();
-                $ins['amount'] = $row['bonus'];
-                $ins['remarks'] = $row['remarks'] ?? null;
-                $ins['earnings_type'] = 'bonus';
-                $ins['status'] = 'active';
-                $ins['added_by'] = auth()->user()->id;
-                StaffSalaryPreEarning::updateOrCreate(['staff_id' => $staff->id, 'salary_month' => $salary_month, 'earnings_type' =>'bonus'], $ins);
-            }
-            if(isset($row['others']) && !empty($row['others'])){
-                $ins['staff_id'] = $staff->id;
-                $ins['salary_month'] = $salary_month;
-                $ins['academic_id'] = academicYearId();
-                $ins['amount'] = $row['others'];
-                $ins['remarks'] = $row['remarks'] ?? null;
-                $ins['earnings_type'] = 'other';
-                $ins['status'] = 'active';
-                $ins['added_by'] = auth()->user()->id;
-                StaffSalaryPreEarning::updateOrCreate(['staff_id' => $staff->id, 'salary_month' => $salary_month, 'earnings_type' =>'other'], $ins);
-
-            }
-            if(isset($row['contri']) && !empty($row['contri'])){
-                $ins['staff_id'] = $staff->id;
-                $ins['salary_month'] = $salary_month;
-                $ins['academic_id'] = academicYearId();
-                $ins['amount'] = $row['contri'];
-                $ins['remarks'] = $row['remarks'] ?? null;
-                $ins['deduction_type'] = 'contribution';
-                $ins['status'] = 'active';
-                $ins['added_by'] = auth()->user()->id;
-                StaffSalaryPreDeduction::updateOrCreate(['staff_id' => $staff->id, 'salary_month' => $salary_month, 'deduction_type' =>'contribution'], $ins);
-            }
-            if(isset($row['other']) && !empty($row['other'])){
-                $ins['staff_id'] = $staff->id;
-                $ins['salary_month'] = $salary_month;
-                $ins['academic_id'] = academicYearId();
-                $ins['amount'] = $row['other'];
-                $ins['remarks'] = $row['remarks'] ?? null;
-                $ins['deduction_type'] = 'other';
-                $ins['status'] = 'active';
-                $ins['added_by'] = auth()->user()->id;
-                StaffSalaryPreDeduction::updateOrCreate(['staff_id' => $staff->id, 'salary_month' => $salary_month, 'deduction_type' =>'other'], $ins);
-
-            }
-         }
-         }
-        });
-        return true;
-            
-            
-
+        
+        try {
+            DB::transaction(function() use ($rows) {
+                foreach ($rows as $row) {
+                    $staff = User::where('institute_emp_code', $row["inst_emp_code"])->first();
+        
+                    if (!$staff) {
+                        continue; // Skip if no staff is found
+                    }
+        
+                    $dateTime = Date::excelToDateTimeObject($row["payroll_date"]);
+                    $salary_month = $dateTime->format('Y-m-d'); // Corrected date format (was Y-d-m)
+        
+                    // Define reusable values
+                    $commonData = [
+                        'staff_id' => $staff->id,
+                        'salary_month' => $salary_month,
+                        'academic_id' => academicYearId(),
+                        'status' => 'active',
+                        'added_by' => auth()->user()->id,
+                        'remarks' => $row['remarks'] ?? null,
+                    ];
+        
+                    // Salary Earnings
+                    $earnings = [
+                        'arr'   => 'arrear',
+                        'bonus' => 'bonus',
+                        'others' => 'other',
+                    ];
+                    foreach ($earnings as $key => $earningType) {
+                        if (!empty($row[$key])) {
+                            StaffSalaryPreEarning::updateOrCreate(
+                                ['staff_id' => $staff->id, 'salary_month' => $salary_month, 'earnings_type' => $earningType],
+                                array_merge($commonData, ['amount' => $row[$key], 'earnings_type' => $earningType])
+                            );
+                        }
+                    }
+        
+                    // Salary Deductions
+                    $deductions = [
+                        'contri' => 'contribution',
+                        'other'  => 'other',
+                    ];
+                    foreach ($deductions as $key => $deductionType) {
+                        if (!empty($row[$key])) {
+                            StaffSalaryPreDeduction::updateOrCreate(
+                                ['staff_id' => $staff->id, 'salary_month' => $salary_month, 'deduction_type' => $deductionType],
+                                array_merge($commonData, ['amount' => $row[$key], 'deduction_type' => $deductionType])
+                            );
+                        }
+                    }
+                }
+            });
+        
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Payroll Processing Error: ' . $e->getMessage());
+            return false;
+        }
     }
  
   
