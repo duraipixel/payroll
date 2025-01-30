@@ -352,6 +352,7 @@ if (!function_exists('generateLeaveForm')) {
         $data['no_of_days'] = $leave_info->no_of_days;
         $data['reason'] = $leave_info->reason ?? '';
         $data['status'] = $leave_info->status ?? '';
+        $data['leave_category']=$leave_info->leave_category;
         $data['leave_days'] = $leave_info->leave_days ?? '';
         $data['address'] = $leave_info->address ?? '';
         $data['staff_name'] = $leave_info->staff_info->name;
@@ -363,7 +364,7 @@ if (!function_exists('generateLeaveForm')) {
         $data['remarks'] = $leave_info->remarks ?? null;
         $data['leave_granted_by'] = $leave_info->granted_info->name ?? '';
         $data['granted_designation'] = $leave_info->granted_designation ?? '';
-
+         
         switch (strtolower($leave_info->leave_category)) {
             case 'cl':
                 $data['form_title'] = 'LEAVE';
