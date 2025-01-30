@@ -969,8 +969,8 @@ class SettingsController extends Controller
                         $new["no_of_leave"]=$leaveAllocated->leave_days;
                         $new["accumulated"] =$leaveAllocated->leave_days;
                   }else{
-                        $new["no_of_leave"]=$leaveAllocated->leave_days/2;
-                        $new["accumulated"] =$leaveAllocated->leave_days/2;
+                        $new["no_of_leave"]=$leaveAllocated->leave_days;
+                        $new["accumulated"] =$leaveAllocated->leave_days;
                   }
                      
                 }
