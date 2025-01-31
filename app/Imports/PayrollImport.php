@@ -307,7 +307,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                                 $amount=StaffSalaryPreDeduction::where('staff_id',$staff_info->id)->where('deduction_type','contribution')->whereMonth('salary_month', $month)->whereYear('salary_month', $salary_year)->where('status','active')->sum('amount');
                                                 $deduct_amount = $amount??0;
                                                 break;
-                                            case 'other':
+                                            case 'Other':
                                                 $amount=StaffSalaryPreDeduction::where('staff_id',$staff_info->id)->where('deduction_type','other')->whereMonth('salary_month', $month)->whereYear('salary_month', $salary_year)->where('status','active')->sum('amount');
                                                 $deduct_amount = $amount??0;
                                                 break;
