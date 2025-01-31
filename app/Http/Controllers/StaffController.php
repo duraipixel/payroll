@@ -219,7 +219,7 @@ class StaffController extends Controller
             $year=$aca->to_year;
         }
         $calendar=CalenderYear::where('year',$year)->first();
-        if(isset($id)){
+        if(isset($id) && isset($calendar)){
         if( isset($staff_details) && $staff_details->personal->gender=="male"){
             $leave_mapping=StaffLeaveMapping::whereNotIn('leave_head_id',['3'])->where('staff_id',$id)->where('calender_id',$calendar->id)->get()->unique('leave_head_id'); 
         }else{
