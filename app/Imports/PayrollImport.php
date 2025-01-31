@@ -114,6 +114,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                 $payroll_date = date('Y-m-d', strtotime($date));
                 $salary_month = date('F', strtotime($payroll_date));
                 $salary_year = date('Y', strtotime($payroll_date));
+                $month = date('m', strtotime($payroll_date));
                 $month_length = date('t', strtotime($payroll_date));
                 $total_net_pay = 0;
 
@@ -122,7 +123,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                 $working_day = date('t', strtotime($payroll_date));
                 try {
                 DB::transaction(function() use ($date,$payout_id,$payroll_date,$salary_month,$salary_year,$month_length,$total_net_pay,
-                $working_day,$month_start,$month_end,$batchSize,$rows
+                $working_day,$month_start,$month_end,$batchSize,$rows,$month
                 ) {
               
                     
@@ -215,15 +216,15 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                        }else{
                                         switch (strtolower(trim($eitem->short_name))) {
                                         case 'arr':
-                                        $amount=StaffSalaryPreEarning::where('staff_id',$staff_info->id)->where('earnings_type','arrear')->whereMonth('salary_month', $payroll_date)->whereYear('salary_month', $payroll_date)->where('status','active')->sum('amount');
+                                        $amount=StaffSalaryPreEarning::where('staff_id',$staff_info->id)->where('earnings_type','arrear')->whereMonth('salary_month', $month)->whereYear('salary_month', $salary_year)->where('status','active')->sum('amount');
                                         $M_amount = $amount??0;
                                         break;
                                         case 'bonus':
-                                        $amount=StaffSalaryPreEarning::where('staff_id',$staff_info->id)->where('earnings_type','bonus')->whereMonth('salary_month', $payroll_date)->whereYear('salary_month', $payroll_date)->where('status','active')->sum('amount');
+                                        $amount=StaffSalaryPreEarning::where('staff_id',$staff_info->id)->where('earnings_type','bonus')->whereMonth('salary_month', $month)->whereYear('salary_month', $salary_year)->where('status','active')->sum('amount');
                                         $M_amount = $amount??0;
                                         break;
                                         case 'others':
-                                        $amount=StaffSalaryPreEarning::where('staff_id',$staff_info->id)->where('earnings_type','other')->whereMonth('salary_month', $payroll_date)->whereYear('salary_month', $payroll_date)->where('status','active')->sum('amount');
+                                        $amount=StaffSalaryPreEarning::where('staff_id',$staff_info->id)->where('earnings_type','other')->whereMonth('salary_month', $month)->whereYear('salary_month', $salary_year)->where('status','active')->sum('amount');
                                         $M_amount = $amount??0;
                                         break;
                                         default:
@@ -303,11 +304,11 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                        }else{
                                         switch (strtolower(trim($sitem->short_name))) {
                                             case 'contributions':
-                                                $amount=StaffSalaryPreDeduction::where('staff_id',$staff_info->id)->where('deduction_type','contribution')->whereMonth('salary_month', $payroll_date)->whereYear('salary_month', $payroll_date)->where('status','active')->sum('amount');
+                                                $amount=StaffSalaryPreDeduction::where('staff_id',$staff_info->id)->where('deduction_type','contribution')->whereMonth('salary_month', $month)->whereYear('salary_month', $salary_year)->where('status','active')->sum('amount');
                                                 $deduct_amount = $amount??0;
                                                 break;
                                             case 'others':
-                                                $amount=StaffSalaryPreDeduction::where('staff_id',$staff_info->id)->where('deduction_type','other')->whereMonth('salary_month', $payroll_date)->whereYear('salary_month', $payroll_date)->where('status','active')->sum('amount');
+                                                $amount=StaffSalaryPreDeduction::where('staff_id',$staff_info->id)->where('deduction_type','other')->whereMonth('salary_month', $month)->whereYear('salary_month', $salary_year)->where('status','active')->sum('amount');
                                                 $deduct_amount = $amount??0;
                                                 break;
                                             case 'bank loan':
