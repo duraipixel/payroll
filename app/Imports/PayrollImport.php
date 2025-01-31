@@ -303,7 +303,7 @@ class PayrollImport implements ToCollection,WithHeadingRow
                                         $total_deductions +=round($D_amount);
                                        }else{
                                         switch (strtolower(trim($sitem->short_name))) {
-                                            case 'contributions':
+                                            case 'CONTRI':
                                                 $amount=StaffSalaryPreDeduction::where('staff_id',$staff_info->id)->where('deduction_type','contribution')->whereMonth('salary_month', $month)->whereYear('salary_month', $salary_year)->where('status','active')->sum('amount');
                                                 $deduct_amount = $amount??0;
                                                 break;
