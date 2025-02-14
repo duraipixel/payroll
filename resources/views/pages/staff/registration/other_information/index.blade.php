@@ -53,6 +53,21 @@
 </h3>
 </div>
 <div class="card-body py-3" id="invigilation-pane">
+<div class="row">
+<div class="col-sm-6">
+<label class="card-label">Select Year</label>
+<select name="year" id="yearSelect" class="form-control">
+        @php
+            $currentYear =request('year', date('Y')); 
+        @endphp
+
+        @foreach ($years as $year)
+            <option value="{{ $year->year }}" {{ $year->year == $currentYear ? 'selected' : '' }}>
+                {{ $year->year }}
+            </option>
+        @endforeach
+    </select>
+</div></div>
  <table class="table table-row-bordered table-row-gray-100 align-middle gs-0 gy-3">
 
         <thead>
@@ -99,6 +114,13 @@
   </div>
 </section>
 <script>
+document.getElementById('yearSelect').addEventListener('change', function () {
+    let selectedYear = this.value;
+    let url = new URL(window.location.href); // Get current URL
+    url.searchParams.set('year', selectedYear); // Update/Add 'year' parameter
+    window.location.href = url.toString(); // Redirect to new URL
+});
+
 $("#taken_data").click(function() {
   $(".popup").fadeIn(500);
 });
