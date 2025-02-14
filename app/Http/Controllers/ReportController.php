@@ -20,6 +20,7 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\Payroll;
 use DataTables;
 use Carbon\Carbon;
+use App\Models\CalenderYear;
 use App\Models\Staff\StaffELEntry;
 use App\Models\Staff\StaffLoanEmi;
 use App\Models\Staff\StaffInsuranceEmi;
@@ -1424,120 +1425,120 @@ class ReportController extends Controller
     }
     
     public function LeaveReport(Request $request){
-    $breadcrums = array(
-    'title' => 'Leave Report',
-    'breadcrums' => array(
-    array(
-    'link' => '', 'title' => 'Leave Report'
-    ),
-    )
-    );
-    $datatable_search=$request->datatable_search;
-    $month = $request->month ?? date('m');
-    $academic_info = AcademicYear::find(academicYearId());
-     $year=$academic_info->from_year;
-    $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
-    $data=[];
-    $fromDate = date('Y-m-01', strtotime($dates));
-    $toDate = date('Y-m-t', strtotime($dates));
-    $institute_id=session()->get('staff_institute_id');
-    $data = User::with('leaves')
-    ->InstituteBased()->when(!empty($month), function ($query) use($fromDate,$toDate){
-        $query->whereHas('leaves', function($q) use($fromDate,$toDate){
-       $q->whereBetween('from_date', [$fromDate, $toDate])
-        ->whereBetween('to_date', [$fromDate, $toDate]);
-        $q->where('status','approved');
-        });  
-        })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
+        $breadcrums = array(
+        'title' => 'Leave Report',
+        'breadcrums' => array(
+        array(
+        'link' => '', 'title' => 'Leave Report'
+        ),
+        )
+        );
+        $datatable_search=$request->datatable_search;
+        $month = $request->month ?? date('m');
+        $year = $request->year ?? date('Y');
+        $years=CalenderYear::get();
+        $year_id=CalenderYear::where('year',$year)->first()->id;
+        $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
+        $data=[];
+        $fromDate = date('Y-m-01', strtotime($dates));
+        $toDate = date('Y-m-t', strtotime($dates));
+        $institute_id=session()->get('staff_institute_id');
+        $data = User::with('leaves')
+        ->InstituteBased()->when(!empty($month), function ($query) use($fromDate,$toDate){
+            $query->whereHas('leaves', function($q) use($fromDate,$toDate){
+        $q->whereBetween('from_date', [$fromDate, $toDate])
+            ->whereBetween('to_date', [$fromDate, $toDate]);
+            $q->where('status','approved');
+            });  
+            })->when(!empty($datatable_search), function ($query) use ($datatable_search) {
 
-                return $query->where(function ($q) use ($datatable_search) {
-                $q->where('name', 'like', "%{$datatable_search}%")
-            ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
-                    
-                });
-        });
-              
-    if($request->ajax()){
-        $datatables =  Datatables::of($data)
-        ->addIndexColumn()
-        ->editColumn('name', function ($row) { 
-        
-            return $row->name ?? '';
-        })->editColumn('emp_id', function ($row) {
-            return $row->institute_emp_code ?? '';
-        })->editColumn('doj', function ($row) {
-            return $row['staff_info']->appointment->joining_date ?? '';
-        })->editColumn('designation', function ($row) {
-
-            return $row->appointment->designation->name?? '';
-        })->editColumn('cl_eligible', function ($row) {
-
-    return getLeaveMapping($row->id,academicYearId(),'cl')->leave_days ?? 0;
-        })
-        ->editColumn('cl_availed', function ($row) {
-            return getLeaveDays($row->leaves, 'Casual Leave') ??0;
-        })
-        ->editColumn('cl_balance', function ($row) {
-            $clAvailed = getLeaveDays($row->leaves, 'Casual Leave');
-            $clEligible = getLeaveMapping($row->id,academicYearId(),'cl')->leave_days ?? 0;
-            return ($clEligible - $clAvailed) ?? 0;
-        })
-        ->editColumn('gl_sanctioned', function ($row) {
-            return getLeaveMapping($row->id,academicYearId(),'gl')->leave_days ?? 0;
-        })
-        ->editColumn('gl_availed', function ($row) {
-            return getLeaveDays($row->leaves, 'Maternity Leave');
-        })
-        ->editColumn('el_availed', function ($row) use ($fromDate,$toDate) {
-        $el_data=StaffELEntry::where('staff_id',$row->id)->where('academic_id',academicYearId())->whereBetween('from_date', [$fromDate, $toDate])
-        ->whereBetween('to_date', [$fromDate, $toDate])->select(DB::raw('SUM(leave_days) as total_days'))->first();
-            return getLeaveDays($row->leaves, 'Earned Leave') + $el_data->total_days ?? 0;
-        })
-        ->editColumn('el_balance', function ($row) use ($fromDate,$toDate) {
-            $elAvailed = getLeaveDays($row->leaves, 'Earned Leave');
-            $el_total = getLeaveMapping($row->id,academicYearId(),'el')? getLeaveMapping($row->id,academicYearId(),'el')->accumulated : 0;
-        $el_data=StaffELEntry::where('staff_id',$row->id)->where('academic_id',academicYearId())->whereBetween('from_date', [$fromDate, $toDate])
-        ->whereBetween('to_date', [$fromDate, $toDate])->select(DB::raw('SUM(leave_days) as total_days'))->first();
-            return ($el_total - ($elAvailed + $el_data->total_days)) ?? 0;
-        })
-         ->editColumn('el_accumalted', function ($row) {
-            $el_accumalted = getLeaveMapping($row->id,academicYearId(),'el')? getLeaveMapping($row->id,academicYearId(),'el')->accumulated : 0;
-            $accumulated_leave=getLeaveMapping($row->id,academicYearId(),'el')->leave_days ??0;
-            return $el_accumalted-$accumulated_leave ?? 0;
-        })->editColumn('el_year', function ($row) {
-             $el_year = getLeaveMapping($row->id,academicYearId(),'el')->leave_days ?? 0;
-            return $el_year ?? 0;
-        })
-        ->editColumn('el_total', function ($row) {
-            $el_total = getLeaveMapping($row->id,academicYearId(),'el')? getLeaveMapping($row->id,academicYearId(),'el')->accumulated :0; 
+                    return $query->where(function ($q) use ($datatable_search) {
+                    $q->where('name', 'like', "%{$datatable_search}%")
+                ->orWhere('institute_emp_code', 'like', "%{$datatable_search}%");
+                        
+                    });
+            });
+                
+        if($request->ajax()){
+            $datatables =  Datatables::of($data)
+            ->addIndexColumn()
+            ->editColumn('name', function ($row) { 
             
-            return $el_total ?? 0;
-        })
+                return $row->name ?? '';
+            })->editColumn('emp_id', function ($row) {
+                return $row->institute_emp_code ?? '';
+            })->editColumn('doj', function ($row) {
+                return $row['staff_info']->appointment->joining_date ?? '';
+            })->editColumn('designation', function ($row) {
 
-        ->editColumn('ml_eligible', function ($row) {
-            return getLeaveMapping($row->id,academicYearId(),'ml')->leave_days ?? 0;
-        })
-        ->editColumn('ml_availed', function ($row) {
-            return getLeaveDays($row->leaves, 'Maternity Leave');
-        })
-        ->editColumn('ml_balance', function ($row) {
-            $mlAvailed = getLeaveDays($row->leaves, 'Maternity Leave');
-            $mlEligible = getLeaveMapping($row->id,academicYearId(),'ml')->leave_days?? 0;
-            return ($mlEligible - $mlAvailed) ?? 0;
-        })
-        ->editColumn('eol_availed', function ($row) {
-            return getLeaveDays($row->leaves, 'Extra Ordinary Leave');
-        })
-        ->editColumn('eol_amount', function ($row) {
-            return '';
-        })
-        ->editColumn('eol_reason', function ($row) {
-            return '';
-        });
-                return $datatables->make(true);
+                return $row->appointment->designation->name?? '';
+            })->editColumn('cl_eligible', function ($row) use($year_id) {
+            return getLeaveMapping($row->id,$year_id,'cl')->leave_days ?? 0;
+            })
+            ->editColumn('cl_availed', function ($row) use($year_id) {
+                return getLeaveDays($row->leaves, 'Casual Leave') ??0;
+            })
+            ->editColumn('cl_balance', function ($row)use($year_id) {
+                $clAvailed = getLeaveDays($row->leaves, 'Casual Leave');
+                $clEligible = getLeaveMapping($row->id,$year_id,'cl')->leave_days ?? 0;
+                return ($clEligible - $clAvailed) ?? 0;
+            })
+            ->editColumn('gl_sanctioned', function ($row)use($year_id) {
+                return getLeaveMapping($row->id,$year_id,'gl')->leave_days ?? 0;
+            })
+            ->editColumn('gl_availed', function ($row) use($year_id){
+                return getLeaveDays($row->leaves, 'Maternity Leave');
+            })
+            ->editColumn('el_availed', function ($row) use ($fromDate,$toDate,$year_id) {
+            $el_data=StaffELEntry::where('staff_id',$row->id)->where('calender_id',$year_id)->whereBetween('from_date', [$fromDate, $toDate])
+            ->whereBetween('to_date', [$fromDate, $toDate])->select(DB::raw('SUM(leave_days) as total_days'))->first();
+                return getLeaveDays($row->leaves, 'Earned Leave') + $el_data->total_days ?? 0;
+            })
+            ->editColumn('el_balance', function ($row) use ($fromDate,$toDate,$year_id) {
+                $elAvailed = getLeaveDays($row->leaves, 'Earned Leave');
+                $el_total = getLeaveMapping($row->id,$year_id,'el')? getLeaveMapping($row->id,$year_id,'el')->accumulated : 0;
+            $el_data=StaffELEntry::where('staff_id',$row->id)->where('calender_id',$year_id)->whereBetween('from_date', [$fromDate, $toDate])
+            ->whereBetween('to_date', [$fromDate, $toDate])->select(DB::raw('SUM(leave_days) as total_days'))->first();
+                return ($el_total - ($elAvailed + $el_data->total_days)) ?? 0;
+            })
+            ->editColumn('el_accumalted', function ($row) use($year_id){
+                $el_accumalted = getLeaveMapping($row->id,$year_id,'el')? getLeaveMapping($row->id,$year_id,'el')->accumulated : 0;
+                $accumulated_leave=getLeaveMapping($row->id,$year_id,'el')->leave_days ??0;
+                return $el_accumalted-$accumulated_leave ?? 0;
+            })->editColumn('el_year', function ($row) use($year_id){
+                $el_year = getLeaveMapping($row->id,$year_id,'el')->leave_days ?? 0;
+                return $el_year ?? 0;
+            })
+            ->editColumn('el_total', function ($row) use($year_id){
+                $el_total = getLeaveMapping($row->id,$year_id,'el')? getLeaveMapping($row->id,$year_id,'el')->accumulated :0; 
+                
+                return $el_total ?? 0;
+            })
+
+            ->editColumn('ml_eligible', function ($row)use($year_id) {
+                return getLeaveMapping($row->id,$year_id,'ml')->leave_days ?? 0;
+            })
+            ->editColumn('ml_availed', function ($row) use($year_id){
+                return getLeaveDays($row->leaves, 'Maternity Leave');
+            })
+            ->editColumn('ml_balance', function ($row) use($year_id){
+                $mlAvailed = getLeaveDays($row->leaves, 'Maternity Leave');
+                $mlEligible = getLeaveMapping($row->id,$year_id,'ml')->leave_days?? 0;
+                return ($mlEligible - $mlAvailed) ?? 0;
+            })
+            ->editColumn('eol_availed', function ($row) use($year_id){
+                return getLeaveDays($row->leaves, 'Extra Ordinary Leave');
+            })
+            ->editColumn('eol_amount', function ($row) {
+                return '';
+            })
+            ->editColumn('eol_reason', function ($row) {
+                return '';
+            });
+            return $datatables->make(true);
+        }
+        return view('pages.reports.leave_report', compact('breadcrums','month','years'));
     }
-    return view('pages.reports.leave_report', compact('breadcrums','month'));
-}
     public function BankDisbursement(Request $request){
         $breadcrums = array(
         'title' => 'Bank Disbursement Report',

@@ -34,12 +34,12 @@
 @foreach($data as $leave_detail)
 @php
     $clAvailed = getLeaveDays($leave_detail->leaves, 'Casual Leave');
-    $clEligible = getLeaveMapping($leave_detail->id,academicYearId(),'cl') ? getLeaveMapping($leave_detail->id,academicYearId(),'cl')->leave_days :0;
-    $elAvailed =  getLeaveDays($leave_detail->leaves, 'Earned Leave') +getLeaveELEntry($leave_detail->id,academicYearId(),$from_date,$to_date)->total_days ?? 0;
-    $el_total = getLeaveMapping($leave_detail->id,academicYearId(),'el')? getLeaveMapping($leave_detail->id,academicYearId(),'el')->accumulated : 0;
-    $el_leave=getLeaveMapping($leave_detail->id,academicYearId(),'el')? getLeaveMapping($leave_detail->id,academicYearId(),'el')->leave_days : 0;
+    $clEligible = getLeaveMapping($leave_detail->id,$year_id,'cl') ? getLeaveMapping($leave_detail->id,$year_id,'cl')->leave_days :0;
+    $elAvailed =  getLeaveDays($leave_detail->leaves, 'Earned Leave') +getLeaveELEntry($leave_detail->id,$year_id,$from_date,$to_date)->total_days ?? 0;
+    $el_total = getLeaveMapping($leave_detail->id,$year_id,'el')? getLeaveMapping($leave_detail->id,$year_id,'el')->accumulated : 0;
+    $el_leave=getLeaveMapping($leave_detail->id,$year_id,'el')? getLeaveMapping($leave_detail->id,$year_id,'el')->leave_days : 0;
     $el_accumalted = ($el_total - $el_leave)??0 ;
-    $el_year = getLeaveMapping($leave_detail->id,academicYearId(),'el')? getLeaveMapping($leave_detail->id,academicYearId(),'el')->leave_days : 0;
+    $el_year = getLeaveMapping($leave_detail->id,$year_id,'el')? getLeaveMapping($leave_detail->id,$year_id,'el')->leave_days : 0;
     $ml_eligible=$leave_detail->appointment->ml->leave_days ?? 0;
     $ml_availed=getLeaveDays($leave_detail->leaves, 'Maternity Leave');
 

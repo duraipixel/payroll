@@ -19,6 +19,7 @@ use App\Models\PayrollManagement\StaffSalary;
 use App\Models\PayrollManagement\Payroll;
 use DataTables;
 use Carbon\Carbon;
+use App\Models\CalenderYear;
 use App\Models\Staff\StaffLoanEmi;
 use App\Models\Staff\StaffInsuranceEmi;
 use App\Models\Staff\StaffBankLoan;
@@ -411,8 +412,9 @@ class ReportExportController extends Controller
     function LeaveStatement(Request $request) {
     $datatable_search=$request->data_search;
     $month = $request->month ?? date('m');
-    $academic_info = AcademicYear::find(academicYearId());
-    $year=$academic_info->from_year;
+    $year = $request->year ?? date('Y');
+    $years=CalenderYear::get();
+    $year_id=CalenderYear::where('year',$year)->first()->id;
     $dates =  Carbon::now()->month($month)->year($year)->day(1)->format("Y-m-d");
     $data=[];
     $fromDate = date('Y-m-01', strtotime($dates));
@@ -433,8 +435,9 @@ class ReportExportController extends Controller
                     
                 });
         })->get();   
-    return Excel::download(new LeaveStatementExport($data??[],$fromDate,$toDate,$institute_id),'leave_statement_export.xlsx');
-    }
+    return Excel::download(new LeaveStatementExport($data??[],$fromDate,$toDate,$institute_id,$year_id),'leave_statement_export.xlsx');
+    
+}
     function ELEntryStatement(Request $request,$user_id) {
     $el_entries=StaffLeaveMapping::where('staff_id',$user_id)->where('leave_head_id',2)
     ->get();   

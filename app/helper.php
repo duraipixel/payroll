@@ -1625,7 +1625,7 @@ if (!function_exists('leave_data')) {
    }
   }
   if (!function_exists('getLeaveMapping')) {
-   function getLeaveMapping($staff_id, $acadamic_id,$type){
+   function getLeaveMapping($staff_id, $year_id,$type){
     if($type=='cl'){
         $leave_head_id=1;
     }else if($type=='el'){
@@ -1635,7 +1635,8 @@ if (!function_exists('leave_data')) {
     }else{
         $leave_head_id=5;
     }
-    $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('leave_head_id',$leave_head_id)->where('acadamic_id',$acadamic_id)->select('id','staff_id','leave_head_id','acadamic_id','no_of_leave  as leave_days','carry_forward_count','accumulated')->first();
+
+    $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('leave_head_id',$leave_head_id)->where('calender_id',$year_id)->select('id','staff_id','leave_head_id','acadamic_id','no_of_leave  as leave_days','carry_forward_count','accumulated','calender_id')->first();
     return $data;
   }
   }
