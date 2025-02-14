@@ -105,7 +105,7 @@ class LeaveController extends Controller
         }
        }
         else{
-            $year=$academic->from_year;
+            $year=date('Y');
         }
      
         if (isset($id) && !empty($id)) {
@@ -361,7 +361,7 @@ if(access()->buttonAccess('leaves.list', 'add_edit')){
             $end_date = date('Y-m-d', strtotime(str_replace('/', '-', end($req_dates))));
             if(empty($id)){
             $leave_head= LeaveHead::find($request->leave_category_id);
-            $staffleavesHead=StaffleaveAllocated(date('m',strtotime($from_date)),$request->staff_id,academicYearId());
+            $staffleavesHead=StaffleaveAllocated($request->staff_id,date('Y',strtotime($from_date)));
             $used_leave=leaveData($request->staff_id,date('Y',strtotime($from_date)),$leave_head->name);
             $key = $staffleavesHead->firstWhere('leave_head_id', $request->leave_category_id);
             if(isset($used_leave) && isset($leave_head) && isset($key)){

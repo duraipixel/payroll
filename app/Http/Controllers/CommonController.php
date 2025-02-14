@@ -294,7 +294,7 @@ class CommonController extends Controller
         
         $staff_id = $request['staff_id'];
         $academic=AcademicYear::find(academicYearId());
-        $cal_date=$academic->from_year;
+        $cal_date=date('Y');
         if(isset($request->date)){
             $cal_date= date('Y',strtotime($request->date));
         }
@@ -319,7 +319,7 @@ class CommonController extends Controller
         }
         $tbody_view='';
         $month=date('m',strtotime($request->date)) ?? date('m');
-        $staffleavesHead=StaffleaveAllocated($month,$staff_id,academicYearId());
+        $staffleavesHead=StaffleaveAllocated($staff_id,$cal_date);
                
         if (isset($staffleavesHead) && count($staffleavesHead) > 0) {
             foreach ($staffleavesHead as $item) {

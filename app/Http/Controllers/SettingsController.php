@@ -717,7 +717,7 @@ class SettingsController extends Controller
             $new['no_of_leave']=$leaveAllocated->leave_days;
             $new['acadamic_id']=$acadamic_id->id;
             $new['calender_id']=$calender_id->id;
-             StaffLeaveMapping::updateOrCreate(['staff_id'=>$user->id,'calender_id'=>$calender_id->id,'leave_head_id'=>$leaveAllocated->leave_head_id,'acadamic_id'=>$acadamic_id->id], $new);
+             StaffLeaveMapping::updateOrCreate(['staff_id'=>$user->id,'calender_id'=>$calender_id->id,'leave_head_id'=>$leaveAllocated->leave_head_id], $new);
             }
            } 
         }
@@ -836,7 +836,6 @@ class SettingsController extends Controller
               StaffLeaveMapping::updateOrCreate(
                 [
                   "staff_id" => $user->id,
-                  "acadamic_id" => $acadamic_id->id,
                    "leave_head_id" =>
                     $leaveAllocated->leave_head_id,
                 ],
@@ -927,7 +926,6 @@ class SettingsController extends Controller
                                     [
                                         "staff_id" => $user->id,
                                         "calender_id" => $calendarYear->id,
-                                         "academic_id" =>$academicYear->id,
                                         "leave_head_id" => $leaveAllocated->leave_head_id,
                                     ],
                                     $new

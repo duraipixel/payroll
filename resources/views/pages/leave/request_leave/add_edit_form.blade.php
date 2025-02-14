@@ -454,7 +454,7 @@
                       <tbody>
                         @php
                         $infod = \Carbon\Carbon::parse($info->from_date);
-                        $staffleavesHead=StaffleaveAllocated($infod->format('m'),$info->staff_info->id,academicYearId());
+                        $staffleavesHead=StaffleaveAllocated($info->staff_info->id,$infod->format('Y'));
                         @endphp
                         @if (isset($staffleavesHead) && count($staffleavesHead) > 0)
                         @foreach ($staffleavesHead as $item)
