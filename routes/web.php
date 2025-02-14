@@ -15,7 +15,7 @@ Route::get('sample/head/xls',[App\Http\Controllers\SettingsController::class,'Sa
 Route::post('payroll/loan/upload', [App\Http\Controllers\SettingsController::class, 'PayrollLoanBulkUpload'])->name('payroll.bulk.loan.upload.save');
 Route::get('sample/loan/xls',[App\Http\Controllers\SettingsController::class,'SampleLoanXls'])->name('bulk.loan.sample.download');
 
-
+Route::get('staff/auto-leave-entry/{year}', [App\Http\Controllers\SettingsController::class, 'AutoloadYearLeave'])->name('staff.leave.auto.year');
 Route::post('payroll/upload', [App\Http\Controllers\SettingsController::class, 'importPayroll'])->name('payroll.bulk.upload.save');
  Route::get('leave/document/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'Leavedocument'])->name('leave.document');
  Route::get('test/entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserELEntryLeave'])->name('test.entry');

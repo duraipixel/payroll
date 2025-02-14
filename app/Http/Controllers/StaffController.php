@@ -212,12 +212,7 @@ class StaffController extends Controller
         $step = getRegistrationSteps($id);
         $tax_scheme=TaxScheme::where('status', 'active')->get();
         $aca=AcademicYear::find(academicYearId());
-        $start_array=array('04','05','06','07','08','09','10','11','12');
-        if(in_array($month=date('m'),$start_array)){
-            $year=$aca->from_year;
-        }else{
-            $year=$aca->to_year;
-        }
+        $year=$request->year ?? date('Y');
         $calendar=CalenderYear::where('year',$year)->first();
         if(isset($id) && isset($calendar)){
         if( isset($staff_details) && $staff_details->personal->gender=="male"){
