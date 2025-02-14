@@ -224,7 +224,8 @@ class SettingsController extends Controller
      public function AutoloadEntryLeave(Request $request)
     {
         
-            ini_set("max_execution_time", 0);
+      ini_set("max_execution_time", 0);
+      ini_set('memory_limit', '-1');
             $users = User::where("status", "active")->get();
             foreach ($users as $user) {
               $years = [];
@@ -336,6 +337,7 @@ class SettingsController extends Controller
     public function UserAutoloadEntryLeave($user_id)
     {
       ini_set("max_execution_time", 0);
+      ini_set('memory_limit', '-1');
       $user = User::find($user_id);
       $years = [];
       if (isset($user->firstAppointment)) {
@@ -436,6 +438,7 @@ class SettingsController extends Controller
     {
         
       ini_set("max_execution_time", 0);
+      ini_set('memory_limit', '-1');
       $user = User::find($user_id);
       $years = [];
       if (isset($user->firstAppointment)) {
@@ -536,6 +539,7 @@ class SettingsController extends Controller
     {
         
       ini_set("max_execution_time", 0);
+      ini_set('memory_limit', '-1');
       $user = User::with(['TeachingAppointment' => function ($query) use ($nature_id) {
         $query->where('nature_of_employment_id',$nature_id);
         }])->find($user_id);
@@ -681,7 +685,8 @@ class SettingsController extends Controller
     }
     public function AutoloadYearLeave($year)
     {
-        ini_set('max_execution_time', 0);
+      ini_set("max_execution_time", 0);
+           ini_set('memory_limit', '-1');
          $users=User::where('status','active')->get();
         foreach($users as $user){
             $acadamic_id=AcademicYear::where('from_year',$year)->orWhere('to_year',$year)->first();
@@ -727,6 +732,7 @@ class SettingsController extends Controller
     {
         
       ini_set("max_execution_time", 0);
+      ini_set('memory_limit', '-1');
       $user = User::find($user_id);
       $years = [];
       if (isset($user->firstAppointment)) {
@@ -850,7 +856,8 @@ class SettingsController extends Controller
     }
     public function UserEntrylevelGentrate($user_id)
     {
-        ini_set("max_execution_time", 0);
+      ini_set("max_execution_time", 0);
+      ini_set('memory_limit', '-1');
         $user = User::find($user_id);
         $years = [];
         

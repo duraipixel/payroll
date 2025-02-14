@@ -1647,17 +1647,10 @@ if (!function_exists('leave_data')) {
    }
    }
     if (!function_exists('StaffleaveAllocated')) {
-   function StaffleaveAllocated($month=null,$staff_id, $academic_id){
-    $month_data=$month?? date('m');
-    $aca=AcademicYear::find(academicYearId());
-    $start_array=array('04','05','06','07','08','09','10','11','12');
-    if(in_array($month_data,$start_array)){
-        $year=$aca->from_year;
-    }else{
-        $year=$aca->to_year;
-    }
+   function StaffleaveAllocated($staff_id=null,$year=null){
     $calendar=CalenderYear::where('year',$year)->first();
     $user=User::with('personal')->find($staff_id);
+    if(isset($calendar)){
     if(isset($user) && isset($user->personal)  && isset(($user->personal->gender))){
             if($user->personal->gender=="male"){
                 $data=StaffLeaveMapping::whereNotIn('leave_head_id',['3'])->where('staff_id',$staff_id)->where('calender_id',$calendar->id)->get()->unique('leave_head_id');
@@ -1666,6 +1659,7 @@ if (!function_exists('leave_data')) {
             }
     }else{
         $data=StaffLeaveMapping::where('staff_id',$staff_id)->where('calender_id',$calendar->id)->get();
+    }
     }
 
     return $data ??[];

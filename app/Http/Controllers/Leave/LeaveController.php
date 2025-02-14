@@ -24,6 +24,7 @@ use App\Models\Master\Designation;
 use Illuminate\Support\Facades\Session;
 use App\Models\AcademicYear;
 use App\Helpers\NotificationHelper;
+use DateTime;
 use App\Models\Staff\StaffRetiredResignedDetail;
 class LeaveController extends Controller
 {   
@@ -95,19 +96,12 @@ class LeaveController extends Controller
         $title = 'Leave';
         $leave_count=0;
         $academic=AcademicYear::find(academicYearId());
-        $month_data=date('d',strtotime($request->month));
        if(isset($request->month)){
-        $start_array=array('04','05','06','07','08','09','10','11','12');
-        if(in_array($month_data,$start_array)){
-            $year=$academic->from_year;
-        }else{
-            $year=$academic->to_year;
+        $date = DateTime::createFromFormat('d/m/Y', $request->month);
+        $year = $date ? $date->format('Y') : 'Invalid date';
+       }else{
+        $year=date('Y');
         }
-       }
-        else{
-            $year=date('Y');
-        }
-     
         if (isset($id) && !empty($id)) {
             $taken_leave = StaffLeave::where('staff_id', $id)->whereYear('from_date',$year)->get();
             foreach($taken_leave as $leave){
