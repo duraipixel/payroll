@@ -27,10 +27,13 @@
             @endif
                             &nbsp;&nbsp;
                 </div>
-                <!-- @if (access()->buttonAccess($route_name, 'export'))
-                 <button onclick="this.form.action = '{{ route('reports.arrear.export') }}'" type="submit"
-                            class="btn btn-sm btn-success"><i class="fa fa-table me-2"></i>Export</button>
-                      @endif -->
+                <select name="year" id="year" class="form-select form-select-sm w-auto d-inline">
+                    @foreach ($years as $year)
+                        <option value="{{ $year->year }}">
+                            {{ $year->year }}
+                        </option>
+                    @endforeach
+                </select>
                             &nbsp;&nbsp;
   <select name="month" class="form-select form-select-sm w-auto d-inline" id="month">
                             <option value="">-- select month -- </option>
@@ -140,6 +143,7 @@
                 "data": function(d) {
                     d.datatable_search = $('#data_search').val();
                      d.month = $('#month').val();
+                     d.year=$('#year').val();
                 }
             },
 
@@ -242,6 +246,9 @@
             dtTable.draw();
         });
          document.querySelector('#month').addEventListener("change", function(e) {
+            dtTable.draw();
+        });
+        document.querySelector('#year').addEventListener("change", function(e) {
             dtTable.draw();
         });
     </script>
