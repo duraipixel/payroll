@@ -214,6 +214,7 @@ class StaffController extends Controller
         $aca=AcademicYear::find(academicYearId());
         $year=$request->year ?? date('Y');
         $calendar=CalenderYear::where('year',$year)->first();
+        $years=CalenderYear::get();
         if(isset($id) && isset($calendar)){
         if( isset($staff_details) && $staff_details->personal->gender=="male"){
             $leave_mapping=StaffLeaveMapping::whereNotIn('leave_head_id',['3'])->where('staff_id',$id)->where('calender_id',$calendar->id)->get()->unique('leave_head_id'); 
@@ -279,7 +280,8 @@ class StaffController extends Controller
             'tax_scheme'=>$tax_scheme??[],
             'leave_mappings'=>$leave_mapping??[],
             'first_appointment'=>$first_appointment,
-            'el_count'=>$el_count
+            'el_count'=>$el_count,
+            'years'=>$years
         );
 
         return view('pages.staff.registration.index', $params);
