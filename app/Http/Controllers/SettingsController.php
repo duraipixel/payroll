@@ -926,7 +926,7 @@ class SettingsController extends Controller
                                     $new["accumulated"] = $leaveAllocated->leave_days;
                                 }
                                 
-                                $new["academic_id"] = $academicYear->id;
+                                $new["acadamic_id"] = $academicYear->id;
                                 $new["calender_id"] = $calendarYear->id;
                                 
                                 StaffLeaveMapping::updateOrCreate(

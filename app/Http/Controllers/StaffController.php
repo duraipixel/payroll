@@ -89,7 +89,9 @@ class StaffController extends Controller
      }
     public function register(Request $request, $id = null)
     {
-
+        ini_set("max_execution_time", 0);
+        ini_set('memory_limit', '-1');
+  
         $breadcrums = array(
             'title' => 'Staff Registration Wizard',
             'breadcrums' => array(
