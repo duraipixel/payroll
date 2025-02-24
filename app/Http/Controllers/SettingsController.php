@@ -431,7 +431,7 @@ class SettingsController extends Controller
                                 $new["acadamic_id"] = $academicYear->id;
                                 $new["calender_id"] = $calendarYear->id;
                                 
-                                StaffLeaveMapping::updateOrCreate(
+                                $leave_map= StaffLeaveMapping::updateOrCreate(
                                     [
                                         "staff_id" => $user->id,
                                         "calender_id" => $calendarYear->id,
@@ -439,6 +439,16 @@ class SettingsController extends Controller
                                     ],
                                     $new
                                 );
+                               if($leaveAllocated->leave_head_id == 2){
+                                $manual = StaffELEntry::where("staff_id", $user->id)
+                                ->where("academic_id", $academicYear->id)
+                                ->first();
+                                if(isset($manual)){
+                                  $manual->leave_mapping_id=$leave_map->id;
+                                  $manual->update();
+      
+                                }
+                              }
                             }
                         }
                     }
@@ -529,14 +539,24 @@ class SettingsController extends Controller
                         $new["acadamic_id"] = $acadamic_id->id;
                         $new["calender_id"] = $calender_id->id;
                         
-                        StaffLeaveMapping::updateOrCreate(
+                        $leave_map= StaffLeaveMapping::updateOrCreate(
                             [
                                 "staff_id" => $user->id,
+                                "calender_id" => $calender_id->id,
                                 "leave_head_id" => $leaveAllocated->leave_head_id,
-                                "calender_id" => $calender_id->id
                             ],
                             $new
                         );
+                       if($leaveAllocated->leave_head_id == 2){
+                        $manual = StaffELEntry::where("staff_id", $user->id)
+                        ->where("academic_id", $acadamic_id->id)
+                        ->first();
+                        if(isset($manual)){
+                          $manual->leave_mapping_id=$leave_map->id;
+                          $manual->update();
+
+                        }
+                      }
                       }
                     }
                 }
