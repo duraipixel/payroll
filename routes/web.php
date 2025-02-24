@@ -19,7 +19,7 @@ Route::get('staff/auto-leave-entry/{year}', [App\Http\Controllers\SettingsContro
 Route::post('payroll/upload', [App\Http\Controllers\SettingsController::class, 'importPayroll'])->name('payroll.bulk.upload.save');
  Route::get('leave/document/{id}', [App\Http\Controllers\Leave\LeaveController::class, 'Leavedocument'])->name('leave.document');
  Route::get('test/entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserELEntryLeave'])->name('test.entry');
- Route::post('staff/el-gentrate/{id}', [App\Http\Controllers\SettingsController::class, 'UserEntrylevelGentrate'])->name('staff.el.gentrate');
+ Route::post('staff/el-gentrate/{id}', [App\Http\Controllers\SettingsController::class, 'TestELEntry'])->name('staff.el.gentrate');
  Route::get('test/el-entry/{id}/{nature_id}', [App\Http\Controllers\SettingsController::class, 'UserEntrylevelLeave'])->name('test.el.entry');
 Route::get('staff/leave-entry', [App\Http\Controllers\SettingsController::class, 'AutoloadEntryLeave'])->name('staff.leave.entry');
 Route::get('staff/leave-entry/{id}', [App\Http\Controllers\SettingsController::class, 'UserAutoloadEntryLeave'])->name('staff.single.leave.entry');

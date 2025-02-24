@@ -444,7 +444,7 @@ class SettingsController extends Controller
     
     $user = User::find($user_id);
     $years = [];
-    
+
     if (isset($user->firstAppointment)) {
         $years = getYearsBetween(
             date("Y", strtotime($user->firstAppointment->from_appointment)),
@@ -457,10 +457,10 @@ class SettingsController extends Controller
             $acadamic_id = AcademicYear::where("from_year", $year)->first();
             $calender_id = CalenderYear::where("year", $year)->first();
             $entry = getStaffAppointment($user->id, $year);
-            
+          
             if (isset($entry)) {
                 $entry_value = appointmentLaeve($entry['id']);
-                
+
                 if (isset($entry_value)) {
                     foreach ($entry_value as $leaveAllocated) {
                         $appointment = StaffAppointmentDetail::find($entry['id']);
@@ -471,7 +471,8 @@ class SettingsController extends Controller
                             "no_of_leave_actual" => $leaveAllocated->leave_days,
                         ];
                         
-                        if ($leaveAllocated->carry_forward == "yes" && $leaveAllocated->leave_head_id == 2) {
+                        if ($leaveAllocated->leave_head_id == 2) {
+                            if ( $leaveAllocated->carry_forward == "yes") {  
                             $previous_data = StaffLeaveMapping::where("staff_id", $user->id)
                                 ->where("leave_head_id", 2)
                                 ->where("calender_id", $calender_id->id - 1)
@@ -510,9 +511,9 @@ class SettingsController extends Controller
                             
                             $new["no_of_leave"] = $leave_total;
                             $new["availed"] = (int) $total + (int) $manual_entry->total_days ?? 0;
-                        } else {
-                            $new["carry_forward_count"] = 0;
-                        }
+                            } else {
+                                $new["carry_forward_count"] = 0;
+                            }
                         
                         $new["acadamic_id"] = $acadamic_id->id;
                         $new["calender_id"] = $calender_id->id;
@@ -525,12 +526,13 @@ class SettingsController extends Controller
                             ],
                             $new
                         );
+                      }
                     }
                 }
             }
         }
     }
-    return true;
+    return redirect()->route('staff.register', ['id' => $user_id]);
 }
     function PayrollBulkUpload()
     {
