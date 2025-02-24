@@ -270,7 +270,7 @@ class SettingsController extends Controller
            ini_set('memory_limit', '-1');
          $users=User::where('status','active')->get();
         foreach($users as $user){
-            $academicYear=AcademicYear::where('from_year',$year)->orWhere('to_year',$year)->first();
+            $academicYear=AcademicYear::where("from_year", $year)->first();
             $calendarYear=CalenderYear::where('year',$year)->first();
             if (isset($user->firstAppointment) && isset($year) > 0 && isset($calendarYear)) {
               $entry = getStaffAppointment($user->id, $year);
@@ -328,7 +328,7 @@ class SettingsController extends Controller
                           $new["acadamic_id"] = $academicYear->id;
                           $new["calender_id"] = $calendarYear->id;
                           
-                          StaffLeaveMapping::updateOrCreate(
+                        $leave_map= StaffLeaveMapping::updateOrCreate(
                               [
                                   "staff_id" => $user->id,
                                   "calender_id" => $calendarYear->id,
@@ -336,6 +336,17 @@ class SettingsController extends Controller
                               ],
                               $new
                           );
+                         if($leaveAllocated->leave_head_id == 2){
+                          $manual = StaffELEntry::where("staff_id", $user->id)
+                          ->where("academic_id", $academicYear->id)
+                          ->first();
+                          if(isset($manual)){
+                            $manual->leave_mapping_id=$leave_map->id;
+                            $manual->update();
+
+                          }
+                        }
+                         
                       }
                   }
               }
