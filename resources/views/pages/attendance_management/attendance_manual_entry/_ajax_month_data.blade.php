@@ -160,51 +160,51 @@
         columns: [
             {
                 data: 'attendance_date',
-                name: 'attendance_date'
+                name: 'attendance_date',defaultContent:''
             },
             {
                 data: 'staff_name',
-                name: 'staff_name'
+                name: 'staff_name',defaultContent:''
             },
             {
                 data: 'institute_emp_code',
-                name: 'institute_emp_code'
+                name: 'institute_emp_code',defaultContent:''
             },
             {
                 data: 'Designation',
-                name: 'Designation'
+                name: 'Designation',defaultContent:''
             },
             {
                 data: 'Profile',
-                name: 'Profile'
+                name: 'Profile',defaultContent:''
             },
             {
                 data: 'from_time',
-                name: 'from_time'
+                name: 'from_time',defaultContent:''
             },
             {
                 data: 'to_time',
-                name: 'to_time'
+                name: 'to_time',defaultContent:''
             },
            
             {
                 data: 'attendance_status',
-                name: 'attendance_status'
+                name: 'attendance_status',defaultContent:''
             },
             {
                 data: 'reason',
-                name: 'reason'
+                name: 'reason',defaultContent:''
             },
             {
                 data: 'leave_status',
-                name: 'leave_status'
+                name: 'leave_status',defaultContent:''
             },{
                 data: 'leave_type',
-                name: 'leave_type'
+                name: 'leave_type',defaultContent:''
             },
             {
                 data: 'status',
-                name: 'status'
+                name: 'status',defaultContent:''
             },
 
             {
