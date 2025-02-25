@@ -31,10 +31,10 @@ class LeaveMappingController extends Controller
          $teaching_types=TeachingType::where('status','active')->get();
         if($request->ajax())
         {
-           
+            $academic_id=academicYearId() ?? 48;
             $data = LeaveMapping::select('leave_mappings.*','nature_of_employments.name as nature_emp_name','leave_heads.name as head_name')
             ->leftJoin('nature_of_employments','nature_of_employments.id','=','leave_mappings.nature_of_employment_id')
-            ->leftJoin('leave_heads','leave_heads.id','=','leave_mappings.leave_head_id');
+            ->leftJoin('leave_heads','leave_heads.id','=','leave_mappings.leave_head_id')->where('leave_mappings.academic_id',$academic_id);
             $status = $request->get('status');
             $teaching_type = $request->get('teaching_type');
             $datatable_search = $request->datatable_search ?? '';

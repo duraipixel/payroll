@@ -127,27 +127,27 @@
 
                 {
                     data: 'nature_emp_name',
-                    name: 'nature_emp_name'
+                    name: 'nature_emp_name',defaultContent:''
                 },
                 {
                     data: 'head_name',
-                    name: 'head_name'
+                    name: 'head_name',defaultContent:''
                 },
                 {
                     data: 'teaching_type',
-                    name: 'teaching_type'
+                    name: 'teaching_type',defaultContent:''
                 },
                 {
                     data: 'leave_days',
-                    name: 'leave_days'
+                    name: 'leave_days',defaultContent:''
                 },
                 {
                     data: 'carry_forward',
-                    name: 'carry_forward'
+                    name: 'carry_forward',defaultContent:''
                 },
                 {
                     data: 'status',
-                    name: 'status'
+                    name: 'status',defaultContent:''
                 },
 
                 {
